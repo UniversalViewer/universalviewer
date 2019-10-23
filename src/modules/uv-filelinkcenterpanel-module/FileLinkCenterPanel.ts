@@ -1,7 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {sanitize} from "../../Utils";
-import * as manifesto from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas, IExternalResource, LanguageMap } from "manifesto.js";
 
 export class FileLinkCenterPanel extends CenterPanel {
 
@@ -19,7 +19,7 @@ export class FileLinkCenterPanel extends CenterPanel {
 
         super.create();
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             this.openMedia(resources);
         });
 
@@ -34,17 +34,17 @@ export class FileLinkCenterPanel extends CenterPanel {
         this.title = this.extension.helper.getLabel();
     }
 
-    openMedia(resources: manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
             
-            const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
-            const annotations: manifesto.Annotation[] = canvas.getContent();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
+            const annotations: Annotation[] = canvas.getContent();
 
             let $item: JQuery;
 
             for (let i = 0; i < annotations.length; i++) {
-                const annotation: manifesto.Annotation = annotations[i];
+                const annotation: Annotation = annotations[i];
 
                 if (!annotation.getBody().length) {
                     continue;
@@ -56,7 +56,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                 const $thumb: JQuery = $item.find('img');
                 const $description: JQuery = $item.find('.description');
 
-                const annotationBody: manifesto.AnnotationBody = annotation.getBody()[0];
+                const annotationBody: AnnotationBody = annotation.getBody()[0];
 
                 const id: string | null = annotationBody.getProperty('id');
 
@@ -65,7 +65,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                     $fileName.text(id.substr(id.lastIndexOf('/') + 1));
                 }
 
-                let label: string | null = manifesto.LanguageMap.getValue(annotationBody.getLabel());
+                let label: string | null = LanguageMap.getValue(annotationBody.getLabel());
 
                 if (label) {
                     $label.text(sanitize(label));

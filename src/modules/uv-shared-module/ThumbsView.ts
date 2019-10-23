@@ -1,7 +1,7 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
 import { ExternalResourceType, ViewingDirection } from "@iiif/vocabulary";
-import * as manifesto from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
 import { Dates, Maths, Strings } from "@edsilv/utils";
 
 export class ThumbsView extends BaseView {
@@ -13,7 +13,7 @@ export class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: manifesto.Thumb[];
+    public thumbs: Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -132,14 +132,14 @@ export class ThumbsView extends BaseView {
         let heights: number[] = [];
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: manifesto.Thumb = this.thumbs[i];
+            const thumb: Thumb = this.thumbs[i];
             heights.push(thumb.height);
         }
 
         const medianHeight: number = Maths.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: manifesto.Thumb = this.thumbs[i];
+            const thumb: Thumb = this.thumbs[i];
             thumb.height = medianHeight;
         }
 
@@ -172,12 +172,12 @@ export class ThumbsView extends BaseView {
         let thumbType: string | undefined;
 
         // get the type of the canvas content
-        const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
-        const annotations: manifesto.Annotation[] = canvas.getContent();
+        const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
+        const annotations: Annotation[] = canvas.getContent();
 
         if (annotations.length) {
-            const annotation: manifesto.Annotation = annotations[0];
-            const body: manifesto.AnnotationBody[] = annotation.getBody();
+            const annotation: Annotation = annotations[0];
+            const body: AnnotationBody[] = annotation.getBody();
 
             if (body.length) {
                 const type: ExternalResourceType | null = body[0].getType();
@@ -257,7 +257,7 @@ export class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean {
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         const type: ExternalResourceType | null = canvas.getType();
 
         if (type) {

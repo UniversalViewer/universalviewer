@@ -3,7 +3,7 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
 import { sanitize } from "../../Utils";
 import { Async, Bools } from "@edsilv/utils";
-import * as manifesto from "manifesto.js";
+import { Canvas, IExternalResource, LabelValuePair, LanguageMap, Range } from "manifesto.js";
 
 export class AVCenterPanel extends CenterPanel {
 
@@ -26,7 +26,7 @@ export class AVCenterPanel extends CenterPanel {
 
         const that = this;
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -34,7 +34,7 @@ export class AVCenterPanel extends CenterPanel {
             this._viewCanvas(canvasIndex);           
         });
 
-        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: manifesto.Range | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Range | null) => {
 
             if (!this._observeRangeChanges()) {
                 return;
@@ -74,7 +74,7 @@ export class AVCenterPanel extends CenterPanel {
                         virtualCanvasEnabled: false
                     });
     
-                    const canvas: manifesto.Canvas | null = this.extension.helper.getCurrentCanvas();
+                    const canvas: Canvas | null = this.extension.helper.getCurrentCanvas();
             
                     if (canvas) {
                         this._viewCanvas(this.extension.helper.canvasIndex)
@@ -122,10 +122,10 @@ export class AVCenterPanel extends CenterPanel {
 
                 this._setTitle();
 
-                const range: manifesto.Range | null = this.extension.helper.getRangeById(rangeId);
+                const range: Range | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
-                    const currentRange: manifesto.Range | null = this.extension.helper.getCurrentRange();
+                    const currentRange: Range | null = this.extension.helper.getCurrentRange();
 
                     if (range !== currentRange) {
                         this.component.publish(BaseEvents.RANGE_CHANGED, range);
@@ -154,10 +154,10 @@ export class AVCenterPanel extends CenterPanel {
 
         let title: string = '';
         let value: string | null;
-        let label: manifesto.LanguageMap;
+        let label: LanguageMap;
 
         // get the current range or canvas title
-        const currentRange: manifesto.Range | null = this.extension.helper.getCurrentRange();
+        const currentRange: Range | null = this.extension.helper.getCurrentRange();
 
         if (currentRange) {
             label = currentRange.getLabel();
@@ -165,7 +165,7 @@ export class AVCenterPanel extends CenterPanel {
             label = this.extension.helper.getCurrentCanvas().getLabel();
         }
 
-        value = manifesto.LanguageMap.getValue(label);
+        value = LanguageMap.getValue(label);
 
         if (value) {
             title = value;
@@ -177,7 +177,7 @@ export class AVCenterPanel extends CenterPanel {
             if (currentRange) {
                 if (currentRange.parentRange) {
                     label = currentRange.parentRange.getLabel();
-                    value = manifesto.LanguageMap.getValue(label);
+                    value = LanguageMap.getValue(label);
                 }
             } else {
                 value = this.extension.helper.getLabel();
@@ -199,9 +199,9 @@ export class AVCenterPanel extends CenterPanel {
         for (let i = 0; i < groups.length; i++) {
             const group: manifold.MetadataGroup = groups[i];
 
-            const item: manifesto.LabelValuePair | undefined = group.items.find((el: manifesto.LabelValuePair) => {
+            const item: LabelValuePair | undefined = group.items.find((el: LabelValuePair) => {
                 if (el.label) {
-                    const label: string | null = manifesto.LanguageMap.getValue(el.label);
+                    const label: string | null = LanguageMap.getValue(el.label);
                     if (label && label.toLowerCase() === this.config.options.subtitleMetadataField) {
                         return true;
                     }
@@ -211,7 +211,7 @@ export class AVCenterPanel extends CenterPanel {
             });
 
             if (item) {
-                this.subtitle = manifesto.LanguageMap.getValue(item.value);
+                this.subtitle = LanguageMap.getValue(item.value);
                 break;
             }
         }
@@ -222,11 +222,11 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     private _isCurrentResourceAccessControlled(): boolean {
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         return canvas.externalResource.isAccessControlled();
     }
 
-    openMedia(resources: manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
 
@@ -269,7 +269,7 @@ export class AVCenterPanel extends CenterPanel {
         }, cb);
     }
 
-    private _viewRange(range: manifesto.Range | null): void {
+    private _viewRange(range: Range | null): void {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
@@ -284,7 +284,7 @@ export class AVCenterPanel extends CenterPanel {
     private _viewCanvas(canvasIndex: number): void {
         
         this._whenMediaReady(() => {
-            const canvas: manifesto.Canvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+            const canvas: Canvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
             
             if (this.avcomponent) {
                 this.avcomponent.showCanvas(canvas.id);

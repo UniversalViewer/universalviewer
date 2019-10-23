@@ -12,7 +12,7 @@ import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
-import * as manifesto from "manifesto.js";
+import { Canvas, LanguageMap, Thumb  } from "manifesto.js";
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -39,7 +39,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
@@ -138,11 +138,11 @@ export class Extension extends BaseExtension implements IPDFExtension {
     bookmark() : void {
         super.bookmark();
 
-        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;

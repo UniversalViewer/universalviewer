@@ -3,7 +3,7 @@ import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import { sanitize } from "../../Utils";
 import { MediaType } from "@iiif/vocabulary";
 import * as virtex from "virtex3d";
-import * as manifesto from "manifesto.js";
+import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { Bools } from "@edsilv/utils";
 
 export class VirtexCenterPanel extends CenterPanel {
@@ -27,7 +27,7 @@ export class VirtexCenterPanel extends CenterPanel {
 
         const that = this;
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -87,15 +87,15 @@ export class VirtexCenterPanel extends CenterPanel {
 
     }
 
-    openMedia(resources: manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
 
             this.$viewport.empty();
 
             let mediaUri: string | null = null;
-            let canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
-            const formats: manifesto.AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
             let resourceType: MediaType | null = null;
             // default to threejs format.
             let fileType: any = MediaType.THREEJS;

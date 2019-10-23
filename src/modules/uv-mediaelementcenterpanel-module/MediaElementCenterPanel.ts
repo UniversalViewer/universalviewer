@@ -5,6 +5,7 @@ import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension
 import { sanitize } from "../../Utils";
 import { Dimensions, Size } from "@edsilv/utils";
 import { MediaType } from "@iiif/vocabulary";
+import { AnnotationBody, Canvas, IExternalResource, Rendering } from "manifesto.js";
 
 export class MediaElementCenterPanel extends CenterPanel {
 
@@ -40,7 +41,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -51,7 +52,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     }
 
-    openMedia(resources: manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         const that = this;
 
@@ -59,7 +60,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
             this.$container.empty();
 
-            const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
@@ -70,20 +71,20 @@ export class MediaElementCenterPanel extends CenterPanel {
             const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
             const sources: any[] = [];
 
-            const renderings: manifesto.Rendering[] = canvas.getRenderings();
+            const renderings: Rendering[] = canvas.getRenderings();
             
             if (renderings && renderings.length) {
-                canvas.getRenderings().forEach((rendering: manifesto.Rendering) => {
+                canvas.getRenderings().forEach((rendering: Rendering) => {
                     sources.push({
                         type: rendering.getFormat().toString(),
                         src: rendering.id
                     });
                 });
             } else {
-                const formats: manifesto.AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
+                const formats: AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
 
                 if (formats && formats.length) {
-                    formats.forEach((format: manifesto.AnnotationBody) => {
+                    formats.forEach((format: AnnotationBody) => {
                         
                         const type: MediaType | null = format.getFormat();
 

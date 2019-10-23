@@ -2,6 +2,7 @@ import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-pdf-extension/Events";
 import { Bools } from "@edsilv/utils";
+import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 
 declare var PDFJS: any;
 
@@ -57,7 +58,7 @@ export class PDFCenterPanel extends CenterPanel {
 
         this.$content.prepend(this._$pdfContainer);
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             this.openMedia(resources);
         });
 
@@ -228,15 +229,15 @@ export class PDFCenterPanel extends CenterPanel {
         this._$nextButton.show();
     }
 
-    openMedia(resources: manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         this._$spinner.show();
         
         this.extension.getExternalResources(resources).then(() => {
 
             let mediaUri: string | null = null;
-            let canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
-            const formats: manifesto.AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
             const pdfUri: string = canvas.id;
 
             if (formats && formats.length) {

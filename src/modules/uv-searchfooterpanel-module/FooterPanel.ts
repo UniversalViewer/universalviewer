@@ -8,8 +8,8 @@ import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
 import { sanitize } from "../../Utils";
 import { Bools, Strings } from "@edsilv/utils";
 import * as KeyCodes from "@edsilv/key-codes";
-import * as manifold from "@iiif/manifold";
-import * as manifesto from "manifesto.js";
+import { AnnotationGroup } from "@iiif/manifold";
+import { Canvas, LanguageMap } from "manifesto.js";
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -314,7 +314,7 @@ export class FooterPanel extends BaseFooterPanel {
         return (currentCanvasIndex < lastSearchResultCanvasIndex); 
     }
 
-    getSearchResults(): manifold.AnnotationGroup[] | null {
+    getSearchResults(): AnnotationGroup[] | null {
         return (<ISeadragonExtension>this.extension).annotations;
     }
 
@@ -323,14 +323,14 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     getFirstSearchResultCanvasIndex(): number {
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         if (!searchResults) return -1;
         let firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
         return firstSearchResultCanvasIndex;
     }
 
     getLastSearchResultCanvasIndex(): number {
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();        
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();        
         if (!searchResults) return -1;
         let lastSearchResultCanvasIndex: number = searchResults[searchResults.length - 1].canvasIndex;
         return lastSearchResultCanvasIndex;
@@ -341,7 +341,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updateNextButton(): void {
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {
             if (this.isNextButtonEnabled()) {
@@ -353,7 +353,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updatePrevButton(): void {
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {       
             if (this.isPreviousButtonEnabled()) {
@@ -409,7 +409,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     positionSearchResultPlacemarkers(): void {
 
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
 
         if (!searchResults || !searchResults.length) return;
 
@@ -425,7 +425,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         // for each page with a result, place a marker along the line.
         for (let i = 0; i < searchResults.length; i++) {
-            const result: manifold.AnnotationGroup = searchResults[i];
+            const result: AnnotationGroup = searchResults[i];
             const distance: number = result.canvasIndex * pageWidth;
             const $placemarker: JQuery = $('<div class="searchResultPlacemarker" data-index="' + result.canvasIndex + '"></div>');
 
@@ -487,8 +487,8 @@ export class FooterPanel extends BaseFooterPanel {
         let title: string = "{0} {1}";
 
         if (that.isPageModeEnabled()) {
-            const canvas: manifesto.Canvas = that.extension.helper.getCanvasByIndex(canvasIndex);
-            let label: string | null = manifesto.LanguageMap.getValue(canvas.getLabel());
+            const canvas: Canvas = that.extension.helper.getCanvasByIndex(canvasIndex);
+            let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
             if (!label && this.extension.helper.manifest) {
                 label = this.extension.helper.manifest.options.defaultLabel;
@@ -503,10 +503,10 @@ export class FooterPanel extends BaseFooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        const searchResults: manifold.AnnotationGroup[] | null = that.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = that.getSearchResults();
 
         if (searchResults) {
-            const result: manifold.AnnotationGroup = searchResults[elemIndex];
+            const result: AnnotationGroup = searchResults[elemIndex];
 
             let terms: string = "";
 
@@ -642,8 +642,8 @@ export class FooterPanel extends BaseFooterPanel {
         const index: number = this.extension.helper.canvasIndex;
 
         if (this.isPageModeEnabled()) {
-            const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
-            let label: string | null = manifesto.LanguageMap.getValue(canvas.getLabel());
+            const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
+            let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
             if (!label) {
                 label = this.content.defaultLabel;
@@ -672,7 +672,7 @@ export class FooterPanel extends BaseFooterPanel {
         this.$searchText.removeClass('searching');
     }
 
-    displaySearchResults(results: manifold.AnnotationGroup[], terms?: string): void {
+    displaySearchResults(results: AnnotationGroup[], terms?: string): void {
 
         if (!this.isSearchEnabled()) {
             return;
@@ -720,7 +720,7 @@ export class FooterPanel extends BaseFooterPanel {
     resize(): void {
         super.resize();
 
-        const searchResults: manifold.AnnotationGroup[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
 
         if (searchResults && searchResults.length) {
             this.positionSearchResultPlacemarkers();

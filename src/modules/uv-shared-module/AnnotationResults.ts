@@ -1,4 +1,4 @@
-import * as manifold from "@iiif/manifold";
+import {  } from "@iiif/manifold";
 
 export class AnnotationResults {
     terms?: string;

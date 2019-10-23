@@ -3,6 +3,8 @@ import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Strings } from "@edsilv/utils";
+import { Canvas, Range, Annotation } from "manifesto.js";
+
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $canvasOptions: JQuery;
@@ -78,7 +80,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         super.open(triggerButton);
 
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
@@ -94,7 +96,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
-                    const range: manifesto.Range = canvas.ranges[i];
+                    const range: Range = canvas.ranges[i];
                     const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
@@ -102,7 +104,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-            const images: manifesto.Annotation[] = canvas.getImages();
+            const images: Annotation[] = canvas.getImages();
             if (images.length) {
                 this.$downloadOptions.append(this.$imageOptionsContainer);
             }

@@ -3,8 +3,7 @@ import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {LoginWarningMessages} from "./LoginWarningMessages";
-import IAccessToken = manifesto.IAccessToken;
-import * as manifesto from "manifesto.js";
+import { IAccessToken, IExternalResource, StatusCode, Utils } from "manifesto.js";
 import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
 
@@ -12,9 +11,9 @@ export class Auth09 {
 
     static publish: (event: string, args?: any) => void;
 
-    static loadExternalResources(resourcesToLoad: manifesto.IExternalResource[], storageStrategy: string): Promise<manifesto.IExternalResource[]> {
-        return new Promise<manifesto.IExternalResource[]>((resolve) => {
-            manifesto.Utils.loadExternalResourcesAuth09(
+    static loadExternalResources(resourcesToLoad: IExternalResource[], storageStrategy: string): Promise<IExternalResource[]> {
+        return new Promise<IExternalResource[]>((resolve) => {
+            Utils.loadExternalResourcesAuth09(
                 resourcesToLoad,
                 storageStrategy,
                 Auth09.clickThrough,
@@ -23,17 +22,17 @@ export class Auth09 {
                 Auth09.getAccessToken,
                 Auth09.storeAccessToken,
                 Auth09.getStoredAccessToken,
-                Auth09.handleExternalResourceResponse).then((r: manifesto.IExternalResource[]) => {
+                Auth09.handleExternalResourceResponse).then((r: IExternalResource[]) => {
                     resolve(r);
                 })['catch']((error: any) => {
                     switch(error.name) {
-                        case manifesto.StatusCode.AUTHORIZATION_FAILED.toString():
+                        case StatusCode.AUTHORIZATION_FAILED.toString():
                             Auth09.publish(BaseEvents.LOGIN_FAILED);
                             break;
-                        case manifesto.StatusCode.FORBIDDEN.toString():
+                        case StatusCode.FORBIDDEN.toString():
                             Auth09.publish(BaseEvents.FORBIDDEN);
                             break;
-                        case manifesto.StatusCode.RESTRICTED.toString():
+                        case StatusCode.RESTRICTED.toString():
                             // do nothing
                             break;
                         default:
@@ -43,7 +42,7 @@ export class Auth09 {
         });
     }
 
-    static clickThrough(resource: manifesto.IExternalResource): Promise<void> {
+    static clickThrough(resource: IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             Auth09.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
@@ -67,7 +66,7 @@ export class Auth09 {
         });
     }
 
-    static restricted(resource: manifesto.IExternalResource): Promise<void> {
+    static restricted(resource: IExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
             Auth09.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
@@ -80,7 +79,7 @@ export class Auth09 {
         });
     }
 
-    static login(resource: manifesto.IExternalResource): Promise<void> {
+    static login(resource: IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             const options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
@@ -121,9 +120,9 @@ export class Auth09 {
         });
     }
 
-    static getAccessToken(resource: manifesto.IExternalResource, rejectOnError: boolean): Promise<manifesto.IAccessToken> {
+    static getAccessToken(resource: IExternalResource, rejectOnError: boolean): Promise<IAccessToken> {
 
-        return new Promise<manifesto.IAccessToken>((resolve, reject) => {
+        return new Promise<IAccessToken>((resolve, reject) => {
 
             if (resource.tokenService) {
                 const serviceUri: string = resource.tokenService.id;
@@ -155,7 +154,7 @@ export class Auth09 {
         });
     }
 
-    static storeAccessToken(resource: manifesto.IExternalResource, token: manifesto.IAccessToken, storageStrategy: StorageType): Promise<void> {
+    static storeAccessToken(resource: IExternalResource, token: IAccessToken, storageStrategy: StorageType): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (resource.tokenService) {
                 Storage.set(resource.tokenService.id, token, token.expiresIn, storageStrategy);
@@ -166,9 +165,9 @@ export class Auth09 {
         });
     }
 
-    static getStoredAccessToken(resource: manifesto.IExternalResource, storageStrategy: StorageType): Promise<manifesto.IAccessToken> {
+    static getStoredAccessToken(resource: IExternalResource, storageStrategy: StorageType): Promise<IAccessToken> {
 
-        return new Promise<manifesto.IAccessToken>((resolve, reject) => {
+        return new Promise<IAccessToken>((resolve, reject) => {
 
             let foundItems: StorageItem[] = [];
             let item: StorageItem | null = null;
@@ -202,14 +201,14 @@ export class Auth09 {
             let foundToken: IAccessToken | undefined;
 
             if (foundItems.length) {
-                foundToken = <manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
+                foundToken = <IAccessToken>foundItems[foundItems.length - 1].value;
             }
 
             resolve(foundToken);
         });
     }
 
-    static handleExternalResourceResponse(resource: manifesto.IExternalResource): Promise<any> {
+    static handleExternalResourceResponse(resource: IExternalResource): Promise<any> {
 
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
@@ -234,7 +233,7 @@ export class Auth09 {
                 } else if (resource.error.status === HTTPStatusCode.FORBIDDEN) {
                     const error: Error = new Error();
                     error.message = "Forbidden";
-                    error.name = manifesto.StatusCode.FORBIDDEN.toString();
+                    error.name = StatusCode.FORBIDDEN.toString();
                     reject(error);
                 } else {
                     reject(resource.error.statusText);
@@ -243,7 +242,7 @@ export class Auth09 {
         });
     }
 
-    static handleDegraded(resource: manifesto.IExternalResource): void {
+    static handleDegraded(resource: IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
         Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }

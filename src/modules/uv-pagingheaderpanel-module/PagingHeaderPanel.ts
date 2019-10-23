@@ -7,7 +7,7 @@ import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import { sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
-import * as manifesto from "manifesto.js";
+import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 
 export class PagingHeaderPanel extends HeaderPanel {
 
@@ -114,13 +114,13 @@ export class PagingHeaderPanel extends HeaderPanel {
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
                     const results: string[] = [];
-                    const canvases: manifesto.Canvas[] = this.extension.helper.getCanvases();
+                    const canvases: Canvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()) {
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: manifesto.Canvas = canvases[i];
-                            const label: string | null = manifesto.LanguageMap.getValue(canvas.getLabel());
+                            const canvas: Canvas = canvases[i];
+                            const label: string | null = LanguageMap.getValue(canvas.getLabel());
                             if (label && label.startsWith(term)) {
                                 results.push(label);
                             }
@@ -128,7 +128,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                     } else {
                         // get canvas by index
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: manifesto.Canvas = canvases[i];
+                            const canvas: Canvas = canvases[i];
                             if (canvas.index.toString().startsWith(term)) {
                                 results.push(canvas.index.toString());
                             }
@@ -153,8 +153,8 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
-                const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = sanitize(<string>manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
+                const canvas: Canvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                const label: string = sanitize(<string>LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -198,7 +198,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.extension.helper.getManifestType() === manifesto.ManifestType.MANUSCRIPT){
+        if (this.extension.helper.getManifestType() === ManifestType.MANUSCRIPT){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);
@@ -487,12 +487,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     setSearchFieldValue(index: number): void {
 
-        const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
+        const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
         let value: string | null = null;
 
         if (this.isPageModeEnabled()) {
 
-            const orderLabel: string = <string>manifesto.LanguageMap.getValue(canvas.getLabel());
+            const orderLabel: string = <string>LanguageMap.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";
@@ -540,7 +540,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                 return;
             }
 
-            const asset: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
+            const asset: Canvas = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.pageNotFound);

@@ -2,7 +2,8 @@ import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
 import { sanitize } from "../../Utils";
 import { Bools, Urls } from "@edsilv/utils";
-import * as manifold from "@iiif/manifold";
+import { Range } from "manifesto.js";
+import { UriLabeller } from "@iiif/manifold";
 
 export class MoreInfoRightPanel extends RightPanel {
 
@@ -44,7 +45,7 @@ export class MoreInfoRightPanel extends RightPanel {
             const rangeId: string | null = Urls.getHashParameterFromString('rid', href);
 
             if (rangeId) {
-                const range: manifesto.Range | null = this.extension.helper.getRangeById(rangeId);
+                const range: Range | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
                     this.component.publish(BaseEvents.RANGE_CHANGED, range);
@@ -63,8 +64,8 @@ export class MoreInfoRightPanel extends RightPanel {
         this.metadataComponent.set(this._getData());
     }
 
-    private _getCurrentRange(): manifesto.Range | null {
-        const range: manifesto.Range | null = this.extension.helper.getCurrentRange();
+    private _getCurrentRange(): Range | null {
+        const range: Range | null = this.extension.helper.getCurrentRange();
         return range;
     }
 
@@ -78,7 +79,7 @@ export class MoreInfoRightPanel extends RightPanel {
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
-            licenseFormatter: new manifold.UriLabeller(this.config.license ? this.config.license : {}), 
+            licenseFormatter: new UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.LimitType.LINES,
             limitToRange: Bools.getBool(this.config.options.limitToRange, false),

@@ -12,6 +12,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IIIFResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
+import { Thumb, TreeNode, Range } from "manifesto.js";
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -38,12 +39,12 @@ export class Extension extends BaseExtension implements IAVExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: manifesto.TreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: TreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
     }
@@ -117,7 +118,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
     isLeftPanelEnabled(): boolean {
         let isEnabled: boolean = super.isLeftPanelEnabled();
-        const tree: manifesto.TreeNode | null = this.helper.getTree();
+        const tree: TreeNode | null = this.helper.getTree();
 
         if (tree && tree.nodes.length) {
             isEnabled = true;
@@ -137,7 +138,7 @@ export class Extension extends BaseExtension implements IAVExtension {
         return script;
     }
 
-    treeNodeSelected(node: manifesto.TreeNode): void {
+    treeNodeSelected(node: TreeNode): void {
         const data: any = node.data;
 
         if (!data.type) return;
@@ -156,7 +157,7 @@ export class Extension extends BaseExtension implements IAVExtension {
     }
 
     viewRange(path: string): void {
-        const range: manifesto.Range | null = this.helper.getRangeByPath(path);
+        const range: Range | null = this.helper.getRangeByPath(path);
         if (!range) return;
         this.component.publish(BaseEvents.RANGE_CHANGED, range);
 

@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
+import { TreeNode } from "manifesto.js";
 
 export class TreeView extends BaseView {
 
@@ -29,11 +30,11 @@ export class TreeView extends BaseView {
             data: this.treeData
         });
 
-        this.treeComponent.on('treeNodeSelected', function(node: manifesto.TreeNode) {
+        this.treeComponent.on('treeNodeSelected', function(node: TreeNode) {
             that.component.publish(BaseEvents.TREE_NODE_SELECTED, node);
         }, false);
 
-        this.treeComponent.on('treeNodeMultiSelected', function(node: manifesto.TreeNode) {
+        this.treeComponent.on('treeNodeMultiSelected', function(node: TreeNode) {
             that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
         }, false);
     }
@@ -53,7 +54,7 @@ export class TreeView extends BaseView {
         this.$element.hide();
     }
 
-    public selectNode(node: manifesto.TreeNode): void {
+    public selectNode(node: TreeNode): void {
 
         if (!this.treeComponent.selectedNode) {
 
@@ -69,12 +70,12 @@ export class TreeView extends BaseView {
         this.treeComponent.selectNode(node);        
     }
 
-    public expandNode(node: manifesto.TreeNode, expanded: boolean): void {
+    public expandNode(node: TreeNode, expanded: boolean): void {
         this.treeComponent.expandNode(node, expanded);
     }
 
 
-    public getAllNodes(): manifesto.TreeNode[] {
+    public getAllNodes(): TreeNode[] {
         return this.treeComponent.getAllNodes();
     }
 
@@ -82,7 +83,7 @@ export class TreeView extends BaseView {
         this.treeComponent.deselectCurrentNode();
     }
 
-    public getNodeById(id: string): manifesto.TreeNode {
+    public getNodeById(id: string): TreeNode {
         return this.treeComponent.getNodeById(id);
     }
 

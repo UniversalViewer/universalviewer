@@ -3,7 +3,7 @@ import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
 import { Bools, Files, Strings } from "@edsilv/utils";
-import * as manifesto from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas, LanguageMap, ManifestResource, Rendering } from "manifesto.js";
 import { RenderingFormat, MediaType } from "@iiif/vocabulary";
 
 export class DownloadDialogue extends Dialogue {
@@ -70,20 +70,20 @@ export class DownloadDialogue extends Dialogue {
             // 
 
             // add each file src
-            const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             let renderingFound: boolean = false;
 
-            const renderings: manifesto.Rendering[] = canvas.getRenderings();
+            const renderings: Rendering[] = canvas.getRenderings();
 
             for (let i = 0; i < renderings.length; i++) {
-                const rendering: manifesto.Rendering = renderings[i];
+                const rendering: Rendering = renderings[i];
                 const renderingFormat: RenderingFormat = rendering.getFormat();
                 let format: string = '';
                 if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, <string>manifesto.LanguageMap.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>LanguageMap.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             }
 
@@ -91,11 +91,11 @@ export class DownloadDialogue extends Dialogue {
 
                 let annotationFound: boolean = false;
 
-                const annotations: manifesto.Annotation[] = canvas.getContent();
+                const annotations: Annotation[] = canvas.getContent();
 
                 for (let i = 0; i < annotations.length; i++) {
-                    const annotation: manifesto.Annotation = annotations[i];
-                    const body: manifesto.AnnotationBody[] = annotation.getBody();
+                    const annotation: Annotation = annotations[i];
+                    const body: AnnotationBody[] = annotation.getBody();
 
                     if (body.length) {
                         const format: MediaType | null = body[0].getFormat();
@@ -143,15 +143,15 @@ export class DownloadDialogue extends Dialogue {
         this.$downloadOptions.find('li.dynamic').remove();
     }
 
-    getDownloadOptionsForRenderings(resource: manifesto.ManifestResource, defaultLabel: string, type: DownloadOption): IRenderingOption[] {
-        const renderings: manifesto.Rendering[] = resource.getRenderings();
+    getDownloadOptionsForRenderings(resource: ManifestResource, defaultLabel: string, type: DownloadOption): IRenderingOption[] {
+        const renderings: Rendering[] = resource.getRenderings();
 
         const downloadOptions: any[] = [];
 
         for (let i = 0; i < renderings.length; i++) {
-            const rendering: manifesto.Rendering = renderings[i];
+            const rendering: Rendering = renderings[i];
             if (rendering) {
-                let label: string | null = manifesto.LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
+                let label: string | null = LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
                 const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";
@@ -178,7 +178,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     getCurrentResourceId(): string {
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         return canvas.externalResource.data.id;
     }
 

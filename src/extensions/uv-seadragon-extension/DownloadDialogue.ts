@@ -6,8 +6,8 @@ import {ISeadragonExtension} from "./ISeadragonExtension";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Async, Strings, Bools, Files } from "@edsilv/utils";
 import { MediaType } from "@iiif/vocabulary";
-import * as manifesto from "manifesto.js";
-import Size = manifesto.Size;
+import { Annotation, Canvas, IExternalImageResourceData, Range, Resource, Size, Utils } from "manifesto.js";
+
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $canvasOptions: JQuery;
@@ -95,7 +95,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const label: string = $selectedOption.attr('title');
             const mime: any = $selectedOption.data('mime');
             let type: string = DownloadOption.UNKNOWN;
-            const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             if (this.renderingUrls[<any>id]) {
                 if (mime) {
@@ -168,7 +168,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     open(triggerButton?: HTMLElement) {
         super.open(triggerButton);
 
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
         const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
         const hasNormalDimensions: boolean = rotation % 180 == 0;
@@ -340,7 +340,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
-                    const range: manifesto.Range = canvas.ranges[i];
+                    const range: Range = canvas.ranges[i];
                     const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
@@ -348,7 +348,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-            const images: manifesto.Annotation[] = canvas.getImages();
+            const images: Annotation[] = canvas.getImages();
             for (let i = 0; i < images.length; i++) {
                 const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.IMAGE_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
@@ -475,15 +475,15 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     }
 
-    getCanvasImageResource(canvas: manifesto.Canvas): manifesto.Resource | null {
-        const images: manifesto.Annotation[] = canvas.getImages();
+    getCanvasImageResource(canvas: Canvas): Resource | null {
+        const images: Annotation[] = canvas.getImages();
         if (images[0]) {
             return images[0].getResource();
         }
         return null;
     }
 
-    getCanvasHighResImageUri(canvas: manifesto.Canvas): string {
+    getCanvasHighResImageUri(canvas: Canvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
         
         if (size) {
@@ -505,8 +505,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return '';
     }
 
-    getCanvasMimeType(canvas: manifesto.Canvas): string | null {
-        const resource: manifesto.Resource | null = this.getCanvasImageResource(canvas);
+    getCanvasMimeType(canvas: Canvas): string | null {
+        const resource: Resource | null = this.getCanvasImageResource(canvas);
 
         if (resource) {
             const format: MediaType | null = resource.getFormat();
@@ -519,12 +519,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasDimensions(canvas: manifesto.Canvas): Size | null {
+    getCanvasDimensions(canvas: Canvas): Size | null {
 
         // externalResource may not have loaded yet
         if (canvas.externalResource.data) {
-            const width: number | undefined = (<manifesto.IExternalImageResourceData>canvas.externalResource.data).width;
-            const height: number | undefined = (<manifesto.IExternalImageResourceData>canvas.externalResource.data).height;
+            const width: number | undefined = (<IExternalImageResourceData>canvas.externalResource.data).width;
+            const height: number | undefined = (<IExternalImageResourceData>canvas.externalResource.data).height;
             if (width && height) {
                 return new Size(width, height);
             }
@@ -533,7 +533,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasComputedDimensions(canvas: manifesto.Canvas): Size | null {
+    getCanvasComputedDimensions(canvas: Canvas): Size | null {
         const imageSize: Size | null = this.getCanvasDimensions(canvas);
         const requiredSize: Size | null =  canvas.getMaxDimensions();
 
@@ -559,7 +559,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     private _isLevel0(profile: any): boolean {
         if (!profile || !profile.length) return false;
 
-        return manifesto.Utils.isLevel0ImageProfile(profile[0]);
+        return Utils.isLevel0ImageProfile(profile[0]);
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
@@ -568,7 +568,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             return false;
         }
 
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
         // if the external resource doesn't have a service descriptor or is level 0
         // only allow wholeImageHighRes
@@ -620,7 +620,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return this.options.selectionEnabled;
             case DownloadOption.RANGE_RENDERINGS:                
                 if (canvas.ranges && canvas.ranges.length) {
-                    const range: manifesto.Range = canvas.ranges[0];
+                    const range: Range = canvas.ranges[0];
                     return range.getRenderings().length > 0;
                 }
                 return false;

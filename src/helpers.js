@@ -25,7 +25,7 @@ function createUV(selector, data) {
         resize();
     });
 
-    uv = new UV({
+    uv = new UV.Viewer({
         target: $uv[0],
         data: data
     });

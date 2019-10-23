@@ -1,7 +1,7 @@
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
 import { sanitize } from "../../Utils";
-import * as manifold from "@iiif/manifold";
+import {  } from "@iiif/manifold";
 import { Bools } from "@edsilv/utils";
 
 export class CenterPanel extends BaseView {

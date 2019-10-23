@@ -14,7 +14,8 @@ import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
 import { ExternalResourceType, MediaType } from "@iiif/vocabulary";
-import * as manifesto from "manifesto.js";
+import { LanguageMap, Thumb, Canvas, Annotation, AnnotationBody } from "manifesto.js";
+
 export class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
@@ -47,7 +48,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
@@ -137,16 +138,16 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     bookmark(): void {
         super.bookmark();
 
-        const canvas: manifesto.Canvas = this.extensions.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extensions.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
 
-        if (this.isVideo()){
+        if (this.isVideo()) {
             bookmark.type = ExternalResourceType.MOVING_IMAGE;
         } else {
             bookmark.type = ExternalResourceType.SOUND;
@@ -167,8 +168,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     // todo: use canvas.getThumbnail()
     getPosterImageUri(): string {
 
-        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
-        const annotations: manifesto.Annotation[] = canvas.getContent();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        const annotations: Annotation[] = canvas.getContent();
         
         if (annotations && annotations.length) {
             return annotations[0].getProperty('thumbnail');
@@ -184,16 +185,16 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
     isVideo(): boolean {
 
-        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
-        const annotations: manifesto.Annotation[] = canvas.getContent();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        const annotations: Annotation[] = canvas.getContent();
         
         if (annotations && annotations.length) {
 
-            const formats: manifesto.AnnotationBody[] | null = this.getMediaFormats(canvas);
+            const formats: AnnotationBody[] | null = this.getMediaFormats(canvas);
 
             for (let i = 0; i < formats.length; i++) {
 
-                const format: manifesto.AnnotationBody = formats[i];
+                const format: AnnotationBody = formats[i];
                 const type: MediaType | null = format.getFormat();
 
                 if (type) {

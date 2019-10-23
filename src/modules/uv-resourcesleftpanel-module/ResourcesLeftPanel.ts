@@ -3,7 +3,7 @@ import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {ThumbsView} from "./ThumbsView";
 import { ViewingDirection, MediaType } from "@iiif/vocabulary";
 import { Files } from "@edsilv/utils";
-import * as manifesto from "manifesto.js";
+import { Annotation, LanguageMap, Resource } from "manifesto.js";
 
 export class ResourcesLeftPanel extends LeftPanel {
 
@@ -63,17 +63,17 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        const annotations: manifesto.Annotation[] = this.extension.helper.getCurrentCanvas().getResources();
+        const annotations: Annotation[] = this.extension.helper.getCurrentCanvas().getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();
         }
 
         for (let i = 0; i < annotations.length; i++) {
-            const annotation: manifesto.Annotation = annotations[i];
-            const resource: manifesto.Resource = annotation.getResource();
+            const annotation: Annotation = annotations[i];
+            const resource: Resource = annotation.getResource();
             if (resource) {
-                const label: string | null = manifesto.LanguageMap.getValue(<manifesto.LanguageMap>resource.getLabel());
+                const label: string | null = LanguageMap.getValue(<LanguageMap>resource.getLabel());
 
                 if (label) {
                     const mime: string = Files.simplifyMimeType((<MediaType>resource.getFormat()).toString());

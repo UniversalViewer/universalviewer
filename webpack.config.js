@@ -20,6 +20,9 @@ const config = {
         library: 'UV',
         umdNamedDefine: true
     },
+    node: {
+        net: 'empty'
+    },
     // Add resolve for `tsx` and `ts` files, otherwise Webpack would
     // only look for common JavaScript file extension (.js)
     resolve: {

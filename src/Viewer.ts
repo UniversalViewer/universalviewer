@@ -12,13 +12,13 @@ import {IUVDataProvider} from "./IUVDataProvider";
 import {PubSub} from "./PubSub";
 import { propertiesChanged } from "./Utils";
 import { RenderingFormat, MediaType, ExternalResourceType } from "@iiif/vocabulary";
-import * as manifold from "@iiif/manifold";
-import * as manifesto from "manifesto.js";
+import { Helper, loadManifest } from "@iiif/manifold";
+import { Annotation, AnnotationBody, Canvas, Sequence } from "manifesto.js";
 import { IExtensionCollection } from "./modules/uv-shared-module/IExtensionCollection";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
 
-export default class Viewer extends BaseComponent implements IUVComponent {
+export class Viewer extends BaseComponent implements IUVComponent {
 
     private _extensions: IExtensionCollection;
     private _pubsub: PubSub;
@@ -234,7 +234,7 @@ export default class Viewer extends BaseComponent implements IUVComponent {
 
         const that = this;
 
-        manifold.loadManifest(<manifold.IManifoldOptions>{
+        loadManifest(<manifold.IManifoldOptions>{
             manifestUri: data.manifestUri,
             collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
             manifestIndex: data.manifestIndex || 0,
@@ -242,7 +242,7 @@ export default class Viewer extends BaseComponent implements IUVComponent {
             canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
-        }).then((helper: manifold.Helper) => {
+        }).then((helper: Helper) => {
             
             let trackingLabel: string | null = helper.getTrackingLabel();
 
@@ -251,7 +251,7 @@ export default class Viewer extends BaseComponent implements IUVComponent {
                 window.trackingLabel = trackingLabel;
             }
 
-            let sequence: manifesto.Sequence | undefined;
+            let sequence: Sequence | undefined;
 
             if (data.sequenceIndex !== undefined) {
                 sequence = helper.getSequenceByIndex(data.sequenceIndex);
@@ -262,7 +262,7 @@ export default class Viewer extends BaseComponent implements IUVComponent {
                 }
             }
 
-            let canvas: manifesto.Canvas | undefined;
+            let canvas: Canvas | undefined;
 
             if (data.canvasIndex !== undefined) {
                 canvas = helper.getCanvasByIndex(data.canvasIndex);
@@ -284,11 +284,11 @@ export default class Viewer extends BaseComponent implements IUVComponent {
                 // canvasType will always be "canvas" in IIIF presentation 3.0
                 // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
                 // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
-                const content: manifesto.Annotation[] = canvas.getContent();
+                const content: Annotation[] = canvas.getContent();
                 
                 if (content.length) {
-                    const annotation: manifesto.Annotation = content[0];
-                    const body: manifesto.AnnotationBody[] = annotation.getBody();
+                    const annotation: Annotation = content[0];
+                    const body: AnnotationBody[] = annotation.getBody();
 
                     if (body && body.length) {
                         const format: MediaType | null = body[0].getFormat();
@@ -318,7 +318,7 @@ export default class Viewer extends BaseComponent implements IUVComponent {
 
                     if (canvasType) {
                         // try using canvasType
-                        extension = that._extensions[canvasType.toString()].type;
+                        extension = that._extensions[canvasType].type;
                     }
 
                     // if there isn't an extension for the canvasType, try the format

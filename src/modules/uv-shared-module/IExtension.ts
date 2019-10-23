@@ -3,8 +3,8 @@ import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { MetricType } from "./MetricType";
 import { Shell } from "./Shell";
-import * as manifold from "@iiif/manifold";
-import * as manifesto from "manifesto.js";
+import {  } from "@iiif/manifold";
+import { AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, Manifest, Range } from "manifesto.js";
 
 export interface IExtension {
     $element: JQuery;
@@ -21,14 +21,14 @@ export interface IExtension {
     getAlternateLocale(): ILocale | null;
     getAppUri(): string;
     getCanvasLabels(label: string): string;
-    getCurrentCanvases(): manifesto.Canvas[];
-    getCurrentCanvasRange(): manifesto.Range | null;
+    getCurrentCanvases(): Canvas[];
+    getCurrentCanvasRange(): Range | null;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
-    getExternalResources(resources?: manifesto.IExternalResource[]): Promise<manifesto.IExternalResourceData[]>;
+    getExternalResources(resources?: IExternalResource[]): Promise<IExternalResourceData[]>;
     getIIIFShareUrl(shareManifests?: boolean): string;
     getLocale(): string;
-    getMediaFormats(canvas: manifesto.Canvas): manifesto.AnnotationBody[];
+    getMediaFormats(canvas: Canvas): AnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
     getSerializedLocales(): string | null;
     getSettings(): ISettings;
@@ -58,7 +58,7 @@ export interface IExtension {
     refresh(): void;
     reload(data?: IUVData): void;
     resize(): void;
-    resources: manifesto.IExternalResourceData[] | null;
+    resources: IExternalResourceData[] | null;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
@@ -66,7 +66,7 @@ export interface IExtension {
     shell: Shell;
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
-    viewCollection(collection: manifesto.Collection): void;
-    viewManifest(manifest: manifesto.Manifest): void;
+    viewCollection(collection: Collection): void;
+    viewManifest(manifest: Manifest): void;
     width(): number;
 }

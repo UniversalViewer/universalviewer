@@ -7,14 +7,14 @@ import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISead
 import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
 import { sanitize } from "../../Utils";
 import { Async, Bools, Dimensions } from "@edsilv/utils";
-import * as manifold from "@iiif/manifold";
-import * as manifesto from "manifesto.js";
+import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
+import { Canvas, IExternalResource, IExternalImageResourceData } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary";
 
 export class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
-    currentAnnotationRect: manifold.AnnotationRect;
+    currentAnnotationRect: AnnotationRect;
     currentBounds: any;
     handler: any;
     initialBounds: any;
@@ -24,9 +24,9 @@ export class SeadragonCenterPanel extends CenterPanel {
     items: any[];
     navigatedFromSearch: boolean = false;
     nextButtonEnabled: boolean = false;
-    pages: manifesto.IExternalResource[];
+    pages: IExternalResource[];
     prevButtonEnabled: boolean = false;
-    previousAnnotationRect: manifold.AnnotationRect;
+    previousAnnotationRect: AnnotationRect;
     userData: any;
     viewer: any;
     viewerId: string;
@@ -67,7 +67,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
@@ -413,12 +413,12 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(resources?: manifesto.IExternalResource[]): void {
+    openMedia(resources?: IExternalResource[]): void {
 
         this.$spinner.show();
         this.items = [];
 
-        this.extension.getExternalResources(resources).then((resources: manifesto.IExternalImageResourceData[]) => {
+        this.extension.getExternalResources(resources).then((resources: IExternalImageResourceData[]) => {
 
             this.viewer.close();
 
@@ -456,7 +456,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    getPagePositions(resources: manifesto.IExternalImageResourceData[]): manifesto.IExternalImageResourceData[] {
+    getPagePositions(resources: IExternalImageResourceData[]): IExternalImageResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;
@@ -581,7 +581,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     zoomToInitialAnnotation(): void {
-        let annotationRect: manifold.AnnotationRect | null = this.getInitialAnnotationRect();
+        let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
         
         (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
@@ -592,11 +592,11 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     overlayAnnotations(): void {
-        const annotations: manifold.AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
 
         for (let i = 0; i < annotations.length; i++) {
 
-            const annotation: manifold.AnnotationGroup = annotations[i];
+            const annotation: AnnotationGroup = annotations[i];
             const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
 
             for (let k = 0; k < overlayRects.length; k++) {
@@ -697,7 +697,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
-        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         const dimensions: CroppedImageDimensions | null = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
         if (dimensions) {
@@ -735,9 +735,9 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$canvas.find('.searchOverlay').hide();
     }
 
-    getAnnotationsForCurrentImages(): manifold.AnnotationGroup[] {
-        let annotationsForCurrentImages: manifold.AnnotationGroup[] = [];
-        const annotations: manifold.AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
+    getAnnotationsForCurrentImages(): AnnotationGroup[] {
+        let annotationsForCurrentImages: AnnotationGroup[] = [];
+        const annotations: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
 
         if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -757,25 +757,25 @@ export class SeadragonCenterPanel extends CenterPanel {
         return annotationsForCurrentImages;
     }
 
-    getAnnotationRectsForCurrentImages(): manifold.AnnotationRect[] {
-        const annotations: manifold.AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+    getAnnotationRectsForCurrentImages(): AnnotationRect[] {
+        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
         return annotations.map((x) => { return x.rects; }).reduce((a, b) => { return a.concat(b); });
     }
 
     updateVisibleAnnotationRects(): void {
         // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
 
         for (let i = 0; i < annotationRects.length; i++) {
-            let rect: manifold.AnnotationRect = annotationRects[i];
+            let rect: AnnotationRect = annotationRects[i];
             let viewportBounds: any = this.viewer.viewport.getBounds();
 
             rect.isVisible = Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
         }
     }
 
-    getAnnotationRectIndex(annotationRect: manifold.AnnotationRect): number {
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getAnnotationRectIndex(annotationRect: AnnotationRect): number {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         return annotationRects.indexOf(annotationRect);
     }
 
@@ -784,17 +784,17 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     prevAnnotation(): void {
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : annotationRects.length;
         //const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
-        let foundRect: manifold.AnnotationRect | null = null;
+        let foundRect: AnnotationRect | null = null;
    
         // if there's no currentAnnotationRect selected, index is the total available annotation rects for the current images.
         // minusing 1 makes the index the last of the available rects for the current images.
         for (let i = currentAnnotationRectIndex - 1; i >= 0; i--) {
-            const rect: manifold.AnnotationRect = annotationRects[i];
+            const rect: AnnotationRect = annotationRects[i];
 
             // this was removed as users found it confusing.
             // find the prev visible or non-visible rect.
@@ -822,16 +822,16 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     nextAnnotation(): void {
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : -1;
-        let foundRect: manifold.AnnotationRect | null = null;
+        let foundRect: AnnotationRect | null = null;
 
         // if there's no currentAnnotationRect selected, index is -1.
         // adding 1 makes the index 0 of available rects for the current images.
         for (let i = currentAnnotationRectIndex + 1; i < annotationRects.length; i++) {
-            const rect: manifold.AnnotationRect = annotationRects[i];
+            const rect: AnnotationRect = annotationRects[i];
 
             // this was removed as users found it confusing.
             // find the next visible or non-visible rect.
@@ -850,7 +850,7 @@ export class SeadragonCenterPanel extends CenterPanel {
                 this.navigatedFromSearch = true;
                 this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
-                this.zoomToAnnotation(<manifold.AnnotationRect>foundRect);
+                this.zoomToAnnotation(<AnnotationRect>foundRect);
             }
         } else {
             this.navigatedFromSearch = true;
@@ -858,14 +858,14 @@ export class SeadragonCenterPanel extends CenterPanel {
         }
     }
 
-    getAnnotationRectByIndex(index: number): manifold.AnnotationRect | null {
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getAnnotationRectByIndex(index: number): AnnotationRect | null {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
         return annotationRects[index];
     }
 
-    getInitialAnnotationRect(): manifold.AnnotationRect | null {
-        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getInitialAnnotationRect(): AnnotationRect | null {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
 
         // if we've got this far it means that a reload has happened
@@ -874,7 +874,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if less than, select the first annotation on the current page
         // otherwise default to the first annotation
 
-        const previousAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
+        const previousAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
 
         if (!previousAnnotationRect) {
             if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
@@ -886,7 +886,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         return annotationRects.filter(x => x.canvasIndex === this.extension.helper.canvasIndex)[0];
     }
 
-    zoomToAnnotation(annotationRect: manifold.AnnotationRect): void {
+    zoomToAnnotation(annotationRect: AnnotationRect): void {
         (<ISeadragonExtension>this.extension).previousAnnotationRect = (<ISeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
 
@@ -909,13 +909,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.component.publish(BaseEvents.ANNOTATION_CHANGED);
     }
 
-    highlightAnnotationRect(annotationRect: manifold.AnnotationRect): void {
+    highlightAnnotationRect(annotationRect: AnnotationRect): void {
         const $rect = $('#searchResult-' + annotationRect.canvasIndex + '-' + annotationRect.index);
         $rect.addClass('current');
         $('.searchOverlay').not($rect).removeClass('current');
     }
 
-    getAnnotationOverlayRects(annotationGroup: manifold.AnnotationGroup): any[] {
+    getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
         let newRects: any[] = [];
 
         if (!this.extension.resources) {
@@ -927,11 +927,11 @@ export class SeadragonCenterPanel extends CenterPanel {
         let offsetX: number = 0;
 
         if (index > 0) {
-            offsetX = (<manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
+            offsetX = (<IExternalImageResourceData>this.extension.resources[index - 1]).width;
         }
 
         for (let i = 0; i < annotationGroup.rects.length; i++) {
-            const searchRect: manifold.AnnotationRect = annotationGroup.rects[i];
+            const searchRect: AnnotationRect = annotationGroup.rects[i];
 
             const x: number = (searchRect.x + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
             const y: number = searchRect.y;
