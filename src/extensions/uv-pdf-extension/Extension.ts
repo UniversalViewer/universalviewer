@@ -14,7 +14,7 @@ import { ExternalResourceType } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb  } from "manifesto.js";
 
-export class Extension extends BaseExtension implements IPDFExtension {
+export default class Extension extends BaseExtension implements IPDFExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;

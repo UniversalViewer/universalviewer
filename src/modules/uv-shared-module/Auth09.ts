@@ -223,13 +223,14 @@ export class Auth09 {
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
                     resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR) {
                     // if the browser doesn't support CORS
-                    if (!Modernizr.cors) {
-                        const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
-                        Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
-                        resolve(resource);
-                    } else {
+                    // if (!Modernizr.cors) {
+                    //     const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
+                    //     Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+                    //     resolve(resource);
+                    // } else {
+                        // commented above because only supporting IE11 upwards which has CORS
                         reject(resource.error.statusText);
-                    }
+                    //}
                 } else if (resource.error.status === HTTPStatusCode.FORBIDDEN) {
                     const error: Error = new Error();
                     error.message = "Forbidden";

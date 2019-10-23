@@ -16,7 +16,7 @@ import { Bools, Strings } from "@edsilv/utils";
 import { ExternalResourceType, MediaType } from "@iiif/vocabulary";
 import { LanguageMap, Thumb, Canvas, Annotation, AnnotationBody } from "manifesto.js";
 
-export class Extension extends BaseExtension implements IMediaElementExtension {
+export default class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;

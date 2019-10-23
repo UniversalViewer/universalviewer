@@ -28,7 +28,7 @@ import { IIIFResourceType, ExternalResourceType, ServiceProfile } from "@iiif/vo
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Annotation, Canvas, Thumb, TreeNode, ManifestType, Resource, Range, LanguageMap, Service, Size, Utils } from "manifesto.js";
 
-export class Extension extends BaseExtension implements ISeadragonExtension {
+export default class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;

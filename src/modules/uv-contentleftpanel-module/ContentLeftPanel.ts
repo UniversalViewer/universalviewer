@@ -446,7 +446,7 @@ export class ContentLeftPanel extends LeftPanel {
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
             searchResults: (<ISeadragonExtension>this.extension).annotations,
-            sizingEnabled: Modernizr.inputtypes.range,
+            sizingEnabled: true, // range API is IE11 up
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
             thumbWidth: this.config.options.galleryThumbWidth,

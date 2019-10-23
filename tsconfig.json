@@ -19,7 +19,6 @@
       "@iiif/base-component",
       "jest",
       "jquery",
-      "modernizr", 
       "node"
     ]
   },

@@ -14,7 +14,7 @@ import { IIIFResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 
-export class Extension extends BaseExtension implements IAVExtension {
+export default class Extension extends BaseExtension implements IAVExtension {
 
     $downloadDialogue: JQuery;
     $multiSelectDialogue: JQuery;

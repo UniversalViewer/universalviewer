@@ -10,7 +10,8 @@ import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/Res
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
-export class Extension extends BaseExtension implements IDefaultExtension {
+
+export default class Extension extends BaseExtension implements IDefaultExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;

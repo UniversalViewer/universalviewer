@@ -15,7 +15,7 @@ import { ExternalResourceType } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 
-export class Extension extends BaseExtension implements IVirtexExtension {
+export default class Extension extends BaseExtension implements IVirtexExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;

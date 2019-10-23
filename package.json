@@ -74,7 +74,7 @@
     "@edsilv/jquery-plugins": "1.0.7",
     "@edsilv/key-codes": "1.0.0",
     "@edsilv/utils": "1.0.2",
-    "@iiif/base-component": "2.0.0-pre.3",
+    "@iiif/base-component": "2.0.0-pre.4",
     "@iiif/iiif-av-component": "1.0.0-pre.1",
     "@iiif/iiif-gallery-component": "1.1.15",
     "@iiif/iiif-metadata-component": "1.1.15",
