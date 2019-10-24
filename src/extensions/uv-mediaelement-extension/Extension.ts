@@ -179,7 +179,7 @@ export default class Extension extends BaseExtension implements IMediaElementExt
     }
 
     isVideoFormat(type: string): boolean {
-        const videoFormats: string[] = [MediaType.MP4, MediaType.WEBM];
+        const videoFormats: string[] = [MediaType.VIDEO_MP4, MediaType.WEBM];
         return videoFormats.indexOf(type) != -1;
     }
 

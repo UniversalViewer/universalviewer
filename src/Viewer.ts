@@ -57,6 +57,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
         }
 
         this._extensions = {
+            [Extension.AV]: async () => {
+                const m = await import("./extensions/uv-av-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.AV;
+                return extension;
+            },
             [Extension.MEDIAELEMENT]: async () => {
                 const m = await import("./extensions/uv-mediaelement-extension/Extension") as any;
                 const extension = new m.default();
@@ -433,7 +439,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
             this.extension.component = this;
             this.extension.data = data;
             this.extension.helper = helper;
-            this.extension.name = extension.name;
+            this.extension.name = extension.name; // todo: why is this needed?
             this.extension.create();
         }
     }
