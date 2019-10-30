@@ -4,6 +4,7 @@ import { sanitize } from "../../Utils";
 import { Bools, Urls } from "@edsilv/utils";
 import { Range } from "manifesto.js";
 import { UriLabeller } from "@iiif/manifold";
+import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
 
 export class MoreInfoRightPanel extends RightPanel {
 
@@ -35,7 +36,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$main.append(this.$metadata);
 
-        this.metadataComponent = new IIIFComponents.MetadataComponent({
+        this.metadataComponent = new MetadataComponent({
             target:  <HTMLElement>this.$metadata[0],
             data: this._getData()
         });
@@ -81,7 +82,7 @@ export class MoreInfoRightPanel extends RightPanel {
             helper: this.extension.helper,
             licenseFormatter: new UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.LimitType.LINES,
+            limitType: LimitType.LINES,
             limitToRange: Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,

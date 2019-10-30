@@ -644,7 +644,7 @@ export class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    selectCurrentTreeNodeByRange(): void{
+    selectCurrentTreeNodeByRange(): void {
         if (this.treeView) {
 
             const range: Range | null = this.extension.helper.getCurrentRange();

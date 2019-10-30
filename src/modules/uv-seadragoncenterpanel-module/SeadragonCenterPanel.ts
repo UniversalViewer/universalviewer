@@ -10,6 +10,7 @@ import { Async, Bools, Dimensions } from "@edsilv/utils";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Canvas, IExternalResource, IExternalImageResourceData } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary";
+import "openseadragon";
 
 export class SeadragonCenterPanel extends CenterPanel {
 
@@ -759,7 +760,10 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     getAnnotationRectsForCurrentImages(): AnnotationRect[] {
         const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
-        return annotations.map((x) => { return x.rects; }).reduce((a, b) => { return a.concat(b); });
+        if (annotations.length) {
+            return annotations.map((x) => { return x.rects; }).reduce((a, b) => { return a.concat(b); });
+        }
+        return [];
     }
 
     updateVisibleAnnotationRects(): void {

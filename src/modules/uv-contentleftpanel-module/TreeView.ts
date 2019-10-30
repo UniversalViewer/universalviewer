@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
+import { TreeComponent } from "@iiif/iiif-tree-component";
 
 export class TreeView extends BaseView {
 
@@ -25,7 +26,7 @@ export class TreeView extends BaseView {
 
         const that = this;
 
-        this.treeComponent = new IIIFComponents.TreeComponent({
+        this.treeComponent = new TreeComponent({
             target:  <HTMLElement>this.$tree[0], 
             data: this.treeData
         });
@@ -40,8 +41,10 @@ export class TreeView extends BaseView {
     }
 
     public databind(): void {
-        this.treeComponent.set(this.treeData);
-        this.resize();
+        setTimeout(() => {
+            this.treeComponent.set(this.treeData);
+            this.resize();
+        }, 1);
     }
 
     public show(): void {

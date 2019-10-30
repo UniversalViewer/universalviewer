@@ -247,6 +247,8 @@ export class Auth1 {
 
     static showOutOfOptionsMessages(resource: IExternalResource, service: Service): void {
 
+        console.log(resource);
+
         // if the UV is already showing the info bar, no need to show an error message.
         if (resource.status == HTTPStatusCode.MOVED_TEMPORARILY) {
             return;

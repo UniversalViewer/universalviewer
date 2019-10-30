@@ -1,4 +1,3 @@
-import { IDependencies } from "./IDependencies";
 import { isValidUrl } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
@@ -15,7 +14,6 @@ import { Metric } from "../../modules/uv-shared-module/Metric";
 import { MetricType } from "../../modules/uv-shared-module/MetricType";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
-import { SynchronousRequire } from "../../SynchronousRequire";
 import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, IExternalResourceOptions, IExternalImageResourceData, IManifestoOptions, Manifest, Range, Thumb } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary";
@@ -54,8 +52,8 @@ export class BaseExtension implements IExtension {
 
         const that = this;
 
-        Auth09.publish = this.component.publish;
-        Auth1.publish = this.component.publish;
+        Auth09.publish = this.component.publish.bind(this.component);
+        Auth1.publish = this.component.publish.bind(this.component);
 
         this.$element = $(this.component.options.target);
         this.$element.data("component", this.component);
@@ -572,10 +570,20 @@ export class BaseExtension implements IExtension {
         // create shell and shared views.
         this.shell = new Shell(this.$element);
 
+        this.createModules();
+        this.modulesCreated();
+        this.component.publish(BaseEvents.RESIZE); // initial sizing
+
+        setTimeout(() => {
+            this.render();
+            this.component.publish(BaseEvents.CREATED);
+            this._setDefaultFocus();
+        }, 1);
+        
         // dependencies
-        this.getDependencies((deps: any) => {
-            this.loadDependencies(deps);
-        });
+        // this.getDependencies((deps: any) => {
+        //     this.loadDependencies(deps);
+        // });
     }
 
     createModules(): void {
@@ -600,108 +608,108 @@ export class BaseExtension implements IExtension {
 
     }
 
-    getDependencies(cb: (deps: any) => void): any {
-        const that = this;
+    // getDependencies(cb: (deps: any) => void): any {
+    //     const that = this;
 
-        const depsUri: string = this.data.root + '/lib/' + this.name + '-dependencies';
+    //     const depsUri: string = this.data.root + '/lib/' + this.name + '-dependencies';
 
-        // check if the deps are already loaded
-        const scripts: JQuery = $('script[data-requiremodule]')
-            .filter(function() {
-                const attr: string = $(this).attr('data-requiremodule');
-                return (attr.indexOf(that.name) !== -1 && attr.indexOf('dependencies') !== -1)
-            });
+    //     // check if the deps are already loaded
+    //     const scripts: JQuery = $('script[data-requiremodule]')
+    //         .filter(function() {
+    //             const attr: string = $(this).attr('data-requiremodule');
+    //             return (attr.indexOf(that.name) !== -1 && attr.indexOf('dependencies') !== -1)
+    //         });
 
-        if (!scripts.length) {
+    //     if (!scripts.length) {
 
-            requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
+    //         requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
 
-                // getDeps is a function that accepts a file format.
-                // it uses this to determine which dependencies are appropriate
-                // for example, 'application/vnd.apple.mpegurl' for the AV extension
-                // would return hls.min.js, and not dash.all.min.js.
+    //             // getDeps is a function that accepts a file format.
+    //             // it uses this to determine which dependencies are appropriate
+    //             // for example, 'application/vnd.apple.mpegurl' for the AV extension
+    //             // would return hls.min.js, and not dash.all.min.js.
                 
-                let canvas: Canvas = that.helper.getCurrentCanvas();
-                const mediaFormats: AnnotationBody[] | null = that.getMediaFormats(canvas);
-                let formats: string[] = [];
-                if (mediaFormats && mediaFormats.length) {
-                    formats = mediaFormats.map((f: any) => {
-                        return f.getFormat().toString();
-                    });
-                }
-                const deps: IDependencies = getDeps(formats);
-                const baseUri: string = that.data.root + '/lib/';
+    //             let canvas: Canvas = that.helper.getCurrentCanvas();
+    //             const mediaFormats: AnnotationBody[] | null = that.getMediaFormats(canvas);
+    //             let formats: string[] = [];
+    //             if (mediaFormats && mediaFormats.length) {
+    //                 formats = mediaFormats.map((f: any) => {
+    //                     return f.getFormat().toString();
+    //                 });
+    //             }
+    //             const deps: IDependencies = getDeps(formats);
+    //             const baseUri: string = that.data.root + '/lib/';
 
-                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
-                // check for a requirejs.config that sets a specific path, such as the PDF extension
-                if (deps.sync) {                    
-                    for (let i = 0; i < deps.sync.length; i++) {
-                        const dep: string = deps.sync[i];
-                        if (!dep.startsWith('!')) {
-                            deps.sync[i] = baseUri + dep;
-                        }
-                    }
-                }
+    //             // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+    //             // check for a requirejs.config that sets a specific path, such as the PDF extension
+    //             if (deps.sync) {                    
+    //                 for (let i = 0; i < deps.sync.length; i++) {
+    //                     const dep: string = deps.sync[i];
+    //                     if (!dep.startsWith('!')) {
+    //                         deps.sync[i] = baseUri + dep;
+    //                     }
+    //                 }
+    //             }
 
-                if (deps.async) {                    
-                    for (let i = 0; i < deps.async.length; i++) {
-                        const dep: string = deps.async[i];
-                        if (!dep.startsWith('!')) {
-                            deps.async[i] = baseUri + dep;
-                        }
-                    }
-                }
+    //             if (deps.async) {                    
+    //                 for (let i = 0; i < deps.async.length; i++) {
+    //                     const dep: string = deps.async[i];
+    //                     if (!dep.startsWith('!')) {
+    //                         deps.async[i] = baseUri + dep;
+    //                     }
+    //                 }
+    //             }
                 
-                cb(deps);
+    //             cb(deps);
                 
-            });
-        } else {
-            cb(null);
-        }
-    }
+    //         });
+    //     } else {
+    //         cb(null);
+    //     }
+    // }
 
-    loadDependencies(deps: any): void {
-        const that = this;
+    // loadDependencies(deps: any): void {
+    //     const that = this;
 
-        if (!deps) {
-            that.dependenciesLoaded();
-        } else if (deps.sync) {
-            // load each sync script.
-            // necessary for cases like this: https://github.com/mrdoob/three.js/issues/9602
-            // then load the async scripts
-            SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
-                if (deps.async) {
-                    requirejs(deps.async, function() {
-                        that.dependenciesLoaded(arguments);
-                    });
-                } else {
-                    that.dependenciesLoaded();
-                }
-            });
-        } else if (deps.async) {
-            requirejs(deps.async, function() {
-                that.dependenciesLoaded(arguments);
-            });
-        } else {
-            that.dependenciesLoaded();
-        }
-    }
+    //     if (!deps) {
+    //         that.dependenciesLoaded();
+    //     } else if (deps.sync) {
+    //         // load each sync script.
+    //         // necessary for cases like this: https://github.com/mrdoob/three.js/issues/9602
+    //         // then load the async scripts
+    //         SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
+    //             if (deps.async) {
+    //                 requirejs(deps.async, function() {
+    //                     that.dependenciesLoaded(arguments);
+    //                 });
+    //             } else {
+    //                 that.dependenciesLoaded();
+    //             }
+    //         });
+    //     } else if (deps.async) {
+    //         requirejs(deps.async, function() {
+    //             that.dependenciesLoaded(arguments);
+    //         });
+    //     } else {
+    //         that.dependenciesLoaded();
+    //     }
+    // }
 
-    dependencyLoaded(index: number, dep: any): void {
+    // dependencyLoaded(index: number, dep: any): void {
         
-    }
+    // }
 
-    dependenciesLoaded(...args: any[]): void {
-        this.createModules();
-        this.modulesCreated();
-        this.component.publish(BaseEvents.RESIZE); // initial sizing
+    // dependenciesLoaded(...args: any[]): void {
+    //     this.createModules();
+    //     this.modulesCreated();
+    //     this.component.publish(BaseEvents.RESIZE); // initial sizing
 
-        setTimeout(() => {
-            this.render();
-            this.component.publish(BaseEvents.CREATED);
-            this._setDefaultFocus();
-        }, 1);
-    }
+    //     setTimeout(() => {
+    //         this.render();
+    //         this.component.publish(BaseEvents.CREATED);
+    //         this._setDefaultFocus();
+    //     }, 1);
+    // }
 
     public render(): void {
         if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
@@ -1094,7 +1102,7 @@ export class BaseExtension implements IExtension {
                 }
 
                 Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: IExternalResource[]) => {
-                    
+
                     this.resources = r.map((resource: IExternalResource) => {                        
                         return this._prepareResourceData(resource);
                     });

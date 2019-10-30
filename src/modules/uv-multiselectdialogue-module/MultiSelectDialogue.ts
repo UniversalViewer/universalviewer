@@ -3,6 +3,7 @@ import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import { Bools } from "@edsilv/utils";
+import { GalleryComponent } from "@iiif/iiif-gallery-component";
 
 export class MultiSelectDialogue extends Dialogue {
 
@@ -64,7 +65,7 @@ export class MultiSelectDialogue extends Dialogue {
             viewingDirection: this.extension.helper.getViewingDirection()
         };
 
-        this.galleryComponent = new IIIFComponents.GalleryComponent({
+        this.galleryComponent = new GalleryComponent({
             target:  <HTMLElement>this.$gallery[0]
         });
 

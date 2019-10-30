@@ -14,8 +14,8 @@ export interface IExtension {
     create(): void;
     createModules(): void;
     data: IUVData;
-    dependenciesLoaded(...args: any[]): void;
-    dependencyLoaded(index: number, dep: any, deps: string[]): void;
+    //dependenciesLoaded(...args: any[]): void;
+    //dependencyLoaded(index: number, dep: any, deps: string[]): void;
     exitFullScreen(): void;
     fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
@@ -23,7 +23,7 @@ export interface IExtension {
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Canvas[];
     getCurrentCanvasRange(): Range | null;
-    getDependencies(callback: (deps: any) => void): any;
+    //getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getExternalResources(resources?: IExternalResource[]): Promise<IExternalResourceData[]>;
     getIIIFShareUrl(shareManifests?: boolean): string;
@@ -49,7 +49,7 @@ export interface IExtension {
     isSeeAlsoEnabled(): boolean;
     isWatchMetric(): boolean;
     lastCanvasIndex: number;
-    loadDependencies(deps: any): void;
+    //loadDependencies(deps: any): void;
     metric: MetricType;
     mouseX: number;
     mouseY: number;

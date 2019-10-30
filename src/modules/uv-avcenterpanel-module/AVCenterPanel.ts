@@ -4,6 +4,7 @@ import { Position } from "../uv-shared-module/Position";
 import { sanitize } from "../../Utils";
 import { Async, Bools } from "@edsilv/utils";
 import { Canvas, IExternalResource, LabelValuePair, LanguageMap, Range } from "manifesto.js";
+import { AVComponent } from "@iiif/iiif-av-component";
 
 export class AVCenterPanel extends CenterPanel {
 
@@ -106,9 +107,11 @@ export class AVCenterPanel extends CenterPanel {
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.prepend(this.$avcomponent);
 
-        this.avcomponent = new IIIFComponents.AVComponent({
+        this.avcomponent = new AVComponent({
             target: <HTMLElement>this.$avcomponent[0],
-            posterImageExpanded: this.options.posterImageExpanded
+            data: {
+                posterImageExpanded: this.options.posterImageExpanded
+            }
         });
 
         this.avcomponent.on('mediaready', () => {

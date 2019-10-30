@@ -1,8 +1,3 @@
-define(function () {
-    return function (formats) {
-        return {
-            async: ['TreeComponent', 'GalleryComponent', 'MetadataComponent', 'openseadragon.min']
-            //async: ['TreeComponent', 'iiifgallery.proxy', 'GalleryComponent', 'MetadataComponent', 'openseadragon.min']
-        };
-    };
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deps = ['TreeComponent', 'GalleryComponent', 'MetadataComponent', 'openseadragon.min'];
