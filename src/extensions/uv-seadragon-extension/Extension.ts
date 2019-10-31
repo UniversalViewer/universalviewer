@@ -304,8 +304,8 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
             this.fire(BaseEvents.ANNOTATIONS, obj);
         });
 
-        this.component.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (rect: AnnotationRect) => {
-            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, rect.canvasIndex);
+        this.component.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (rects: AnnotationRect[]) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, rects[0].canvasIndex);
         });
 
         this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {

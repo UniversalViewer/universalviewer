@@ -48,13 +48,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
         this._resize();
     }
 
-    protected async _init(): Promise<boolean> {
+    protected _init(): boolean {
 
-        const success: boolean = await super._init();
-
-        if (!success) {
-            console.error("UV failed to initialise");
-        }
+        super._init();
 
         this._extensions = {
             [Extension.AV]: async () => {
@@ -163,7 +159,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
         this.set(this.options.data);
 
-        return success;
+        return true;
     }
     
     public data(): IUVData {

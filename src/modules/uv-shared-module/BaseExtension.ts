@@ -18,7 +18,7 @@ import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, IExternalResourceOptions, IExternalImageResourceData, IManifestoOptions, Manifest, Range, Thumb } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary";
 import * as KeyCodes from "@edsilv/key-codes";
-import { Async, Bools, Dates, Documents, Objects, Storage, StorageType, Urls, Strings } from "@edsilv/utils";
+import { Bools, Dates, Documents, Objects, Storage, StorageType, Urls, Strings } from "@edsilv/utils";
 
 export class BaseExtension implements IExtension {
 
@@ -916,23 +916,18 @@ export class BaseExtension implements IExtension {
         return [canvasIndex];
     }
 
-    public async getCurrentCanvases(): Promise<Canvas[]> {
-        return new Promise<Canvas[]>((resolve) => {
-            Async.waitFor(() => {
-                return this.helper.canvasIndex !== undefined;
-            }, () => {
-                const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
-                const canvases: Canvas[] = [];
-                
-                for (let i = 0; i < indices.length; i++) {
-                    const index: number = indices[i];
-                    const canvas: Canvas = this.helper.getCanvasByIndex(index);
-                    canvases.push(canvas);
-                }
-                
-                resolve(canvases);
-            });
-        });
+    public getCurrentCanvases(): Canvas[] {
+
+        const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
+        const canvases: Canvas[] = [];
+        
+        for (let i = 0; i < indices.length; i++) {
+            const index: number = indices[i];
+            const canvas: Canvas = this.helper.getCanvasByIndex(index);
+            canvases.push(canvas);
+        }
+        
+        return canvases;
     }
 
     public getCanvasLabels(label: string): string {

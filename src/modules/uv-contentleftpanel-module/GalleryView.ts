@@ -17,23 +17,8 @@ export class GalleryView extends BaseView {
         this.setConfig('contentLeftPanel');
         super.create();
 
-        // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
-
-        // this.component.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
-        //     this.galleryComponent.searchPreviewStart(canvasIndex);
-        // });
-
-        // this.component.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
-        //     this.galleryComponent.searchPreviewFinish();
-        // });
-
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
         this.$element.append(this.$gallery);
-
-        // stencil.js demo
-        // const gallery = document.createElement('iiif-gallery');
-        // gallery.setAttribute('manifest', this.extension.helper.manifest.id);
-        // this.$element[0].appendChild(gallery);
     }
 
     public setup(): void {
@@ -59,9 +44,11 @@ export class GalleryView extends BaseView {
     }
 
     public databind(): void {
-        this.galleryComponent.options.data = this.galleryData;
-        this.galleryComponent.set(this.galleryData);
-        this.resize();
+        setTimeout(() => {
+            this.galleryComponent.options.data = this.galleryData;
+            this.galleryComponent.set(this.galleryData);
+            this.resize();
+        }, 1);
     }
 
     show(): void {

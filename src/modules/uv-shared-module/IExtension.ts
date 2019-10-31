@@ -21,7 +21,7 @@ export interface IExtension {
     getAlternateLocale(): ILocale | null;
     getAppUri(): string;
     getCanvasLabels(label: string): string;
-    getCurrentCanvases(): Promise<Canvas[]>;
+    getCurrentCanvases(): Canvas[];
     getCurrentCanvasRange(): Range | null;
     //getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;

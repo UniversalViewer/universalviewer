@@ -381,7 +381,7 @@ export class ContentLeftPanel extends LeftPanel {
         if (viewingDirection && (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT || viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
-        } else if (viewingHint && ViewingHintEnum === ViewingHintEnum.PAGED) {
+        } else if (viewingHint && viewingHint === ViewingHintEnum.PAGED) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         } else {

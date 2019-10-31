@@ -145,7 +145,7 @@ export class ThumbsView extends BaseView {
 
         this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
 
-        this.$thumbs.undelegate('.thumb', 'click');
+        this.$thumbs.undelegate(".thumb", "click");
 
         this.$thumbs.delegate(".thumb", "click", function (e) {
             e.preventDefault();
@@ -202,21 +202,21 @@ export class ThumbsView extends BaseView {
         for (let i = thumbRange.start; i <= thumbRange.end; i++) {
 
             const $thumb: JQuery = this.getThumbByIndex(i);
-            const $wrap: JQuery = $thumb.find('.wrap');
+            const $wrap: JQuery = $thumb.find(".wrap");
 
             // if no img has been added yet
-            if (!$wrap.hasClass('loading') && !$wrap.hasClass('loaded')) {
-                const visible: string = $thumb.attr('data-visible');
+            if (!$wrap.hasClass("loading") && !$wrap.hasClass("loaded")) {
+                const visible: string = $thumb.attr("data-visible");
 
                 if (visible !== "false") {
-                    $wrap.removeClass('loadingFailed');
-                    $wrap.addClass('loading');
+                    $wrap.removeClass("loadingFailed");
+                    $wrap.addClass("loading");
 
                     if (thumbType) {
                         $wrap.addClass(thumbType);
                     }
 
-                    let src: string = $thumb.attr('data-src');
+                    let src: string = $thumb.attr("data-src");
                     if (that.config.options.thumbsCacheInvalidation && that.config.options.thumbsCacheInvalidation.enabled) {
                         src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Dates.getTimeStamp()}`;
                     }
@@ -224,19 +224,19 @@ export class ThumbsView extends BaseView {
                     // fade in on load.
                     $img.hide();
                     
-                    $img.on('load', function () {
+                    $img.on("load", function () {
                         $(this).fadeIn(fadeDuration, function () {
-                            $(this).parent().switchClass('loading', 'loaded');
+                            $(this).parent().switchClass("loading", "loaded");
                         });
                     });
 
-                    $img.on('error', function () {
-                        $(this).parent().switchClass('loading', 'loadingFailed');
+                    $img.on("error", function () {
+                        $(this).parent().switchClass("loading", "loadingFailed");
                     });
 
                     $wrap.append($img);
                 } else {
-                    $wrap.addClass('hidden');
+                    $wrap.addClass("hidden");
                 }
             }
         }

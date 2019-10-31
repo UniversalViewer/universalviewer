@@ -815,7 +815,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
-                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, foundRect);
+                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
                 this.zoomToAnnotation(foundRect);
             }
