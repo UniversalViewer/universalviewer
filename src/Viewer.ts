@@ -439,7 +439,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
             this.extension.component = this;
             this.extension.data = data;
             this.extension.helper = helper;
-            this.extension.name = extension.name; // todo: why is this needed?
             this.extension.create();
         }
     }

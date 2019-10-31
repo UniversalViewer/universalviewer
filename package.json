@@ -78,7 +78,7 @@
     "@iiif/iiif-av-component": "1.0.0-pre.2",
     "@iiif/iiif-gallery-component": "1.1.17",
     "@iiif/iiif-metadata-component": "1.1.16",
-    "@iiif/iiif-tree-component": "2.0.0-pre.4",
+    "@iiif/iiif-tree-component": "2.0.0-pre.5",
     "@iiif/manifold": "2.0.0-pre.23",
     "@iiif/vocabulary": "1.0.11",
     "@types/modernizr": "3.2.29",

@@ -1,5 +1,4 @@
 export class BaseEvents {
-
     static ACCEPT_TERMS: string                     = 'acceptTerms';
     static ANNOTATION_CANVAS_CHANGED: string        = 'annotationCanvasChanged';
     static ANNOTATION_CHANGED: string               = 'annotationChanged';
@@ -70,6 +69,7 @@ export class BaseEvents {
     static OPEN_THUMBS_VIEW: string                 = 'openThumbsView';
     static OPEN_TREE_VIEW: string                   = 'openTreeView';
     static OPEN: string                             = 'open';
+    static OPENED_EXTERNAL_RESOURCE: string         = 'openedExternalResource';
     static PAGE_DOWN: string                        = 'pageDown';
     static PAGE_UP: string                          = 'pageUp';
     static PLUS: string                             = 'plus';

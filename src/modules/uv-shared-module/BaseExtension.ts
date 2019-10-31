@@ -18,7 +18,7 @@ import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, IExternalResourceOptions, IExternalImageResourceData, IManifestoOptions, Manifest, Range, Thumb } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary";
 import * as KeyCodes from "@edsilv/key-codes";
-import { Bools, Dates, Documents, Objects, Storage, StorageType, Urls, Strings } from "@edsilv/utils";
+import { Async, Bools, Dates, Documents, Objects, Storage, StorageType, Urls, Strings } from "@edsilv/utils";
 
 export class BaseExtension implements IExtension {
 
@@ -71,6 +71,7 @@ export class BaseExtension implements IExtension {
         this.$element.empty();
         this.$element.removeClass();
         this.$element.addClass('uv');
+        this.$element.addClass('loading');
         if (this.data.locales) {
             this.$element.addClass(this.data.locales[0].name.toLowerCase());
         }        
@@ -101,7 +102,7 @@ export class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
-        // events
+        // if this is the first load
         if (!this.data.isReload) {
 
             const visibilityProp: string | null = Documents.getHiddenProp();
@@ -383,9 +384,7 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
-
             const openUri: string = Strings.format(this.data.config.options.openTemplate, this.helper.manifestUri);
-
             window.open(openUri);
         });
 
@@ -396,6 +395,12 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
             this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+        });
+
+        this.component.subscribe(BaseEvents.OPENED_EXTERNAL_RESOURCE, () => {
+            this.$element.removeClass("loading");
+            this.component.publish(BaseEvents.RESIZE);
+            this.fire(BaseEvents.OPENED_EXTERNAL_RESOURCE);
         });
 
         this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
@@ -579,11 +584,6 @@ export class BaseExtension implements IExtension {
             this.component.publish(BaseEvents.CREATED);
             this._setDefaultFocus();
         }, 1);
-        
-        // dependencies
-        // this.getDependencies((deps: any) => {
-        //     this.loadDependencies(deps);
-        // });
     }
 
     createModules(): void {
@@ -606,141 +606,6 @@ export class BaseExtension implements IExtension {
 
     modulesCreated(): void {
 
-    }
-
-    // getDependencies(cb: (deps: any) => void): any {
-    //     const that = this;
-
-    //     const depsUri: string = this.data.root + '/lib/' + this.name + '-dependencies';
-
-    //     // check if the deps are already loaded
-    //     const scripts: JQuery = $('script[data-requiremodule]')
-    //         .filter(function() {
-    //             const attr: string = $(this).attr('data-requiremodule');
-    //             return (attr.indexOf(that.name) !== -1 && attr.indexOf('dependencies') !== -1)
-    //         });
-
-    //     if (!scripts.length) {
-
-    //         requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
-
-    //             // getDeps is a function that accepts a file format.
-    //             // it uses this to determine which dependencies are appropriate
-    //             // for example, 'application/vnd.apple.mpegurl' for the AV extension
-    //             // would return hls.min.js, and not dash.all.min.js.
-                
-    //             let canvas: Canvas = that.helper.getCurrentCanvas();
-    //             const mediaFormats: AnnotationBody[] | null = that.getMediaFormats(canvas);
-    //             let formats: string[] = [];
-    //             if (mediaFormats && mediaFormats.length) {
-    //                 formats = mediaFormats.map((f: any) => {
-    //                     return f.getFormat().toString();
-    //                 });
-    //             }
-    //             const deps: IDependencies = getDeps(formats);
-    //             const baseUri: string = that.data.root + '/lib/';
-
-    //             // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
-    //             // check for a requirejs.config that sets a specific path, such as the PDF extension
-    //             if (deps.sync) {                    
-    //                 for (let i = 0; i < deps.sync.length; i++) {
-    //                     const dep: string = deps.sync[i];
-    //                     if (!dep.startsWith('!')) {
-    //                         deps.sync[i] = baseUri + dep;
-    //                     }
-    //                 }
-    //             }
-
-    //             if (deps.async) {                    
-    //                 for (let i = 0; i < deps.async.length; i++) {
-    //                     const dep: string = deps.async[i];
-    //                     if (!dep.startsWith('!')) {
-    //                         deps.async[i] = baseUri + dep;
-    //                     }
-    //                 }
-    //             }
-                
-    //             cb(deps);
-                
-    //         });
-    //     } else {
-    //         cb(null);
-    //     }
-    // }
-
-    // loadDependencies(deps: any): void {
-    //     const that = this;
-
-    //     if (!deps) {
-    //         that.dependenciesLoaded();
-    //     } else if (deps.sync) {
-    //         // load each sync script.
-    //         // necessary for cases like this: https://github.com/mrdoob/three.js/issues/9602
-    //         // then load the async scripts
-    //         SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
-    //             if (deps.async) {
-    //                 requirejs(deps.async, function() {
-    //                     that.dependenciesLoaded(arguments);
-    //                 });
-    //             } else {
-    //                 that.dependenciesLoaded();
-    //             }
-    //         });
-    //     } else if (deps.async) {
-    //         requirejs(deps.async, function() {
-    //             that.dependenciesLoaded(arguments);
-    //         });
-    //     } else {
-    //         that.dependenciesLoaded();
-    //     }
-    // }
-
-    // dependencyLoaded(index: number, dep: any): void {
-        
-    // }
-
-    // dependenciesLoaded(...args: any[]): void {
-    //     this.createModules();
-    //     this.modulesCreated();
-    //     this.component.publish(BaseEvents.RESIZE); // initial sizing
-
-    //     setTimeout(() => {
-    //         this.render();
-    //         this.component.publish(BaseEvents.CREATED);
-    //         this._setDefaultFocus();
-    //     }, 1);
-    // }
-
-    public render(): void {
-        if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
-            this.component.publish(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
-        }
-
-        if (!this.isCreated || (this.data.manifestIndex !== this.helper.manifestIndex)) {
-            this.component.publish(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
-        }
-
-        if (!this.isCreated || (this.data.sequenceIndex !== this.helper.sequenceIndex)) {
-            this.component.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
-        }
-
-        if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
-            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
-        }
-
-        if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
-
-            if (this.data.rangeId) {
-                const range: Range | null = this.helper.getRangeById(this.data.rangeId);
-
-                if (range) {
-                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
-                } else {
-                    console.warn('range id not found:', this.data.rangeId);
-                }
-            }
-            
-        }
     }
 
     private _setDefaultFocus(): void {
@@ -773,6 +638,38 @@ export class BaseExtension implements IExtension {
 
     refresh(): void {
         this.fire(BaseEvents.REFRESH, null);
+    }
+
+    render(): void {
+        if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
+            this.component.publish(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
+        }
+
+        if (!this.isCreated || (this.data.manifestIndex !== this.helper.manifestIndex)) {
+            this.component.publish(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
+        }
+
+        if (!this.isCreated || (this.data.sequenceIndex !== this.helper.sequenceIndex)) {
+            this.component.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
+        }
+
+        if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
+        }
+
+        if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
+
+            if (this.data.rangeId) {
+                const range: Range | null = this.helper.getRangeById(this.data.rangeId);
+
+                if (range) {
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
+                } else {
+                    console.warn('range id not found:', this.data.rangeId);
+                }
+            }
+            
+        }
     }
 
     private _initLocales(): void {
@@ -1019,17 +916,23 @@ export class BaseExtension implements IExtension {
         return [canvasIndex];
     }
 
-    public getCurrentCanvases(): Canvas[] {
-        const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
-        const canvases: Canvas[] = [];
-        
-        for (let i = 0; i < indices.length; i++) {
-            const index: number = indices[i];
-            const canvas: Canvas = this.helper.getCanvasByIndex(index);
-            canvases.push(canvas);
-        }
-        
-        return canvases;
+    public async getCurrentCanvases(): Promise<Canvas[]> {
+        return new Promise<Canvas[]>((resolve) => {
+            Async.waitFor(() => {
+                return this.helper.canvasIndex !== undefined;
+            }, () => {
+                const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
+                const canvases: Canvas[] = [];
+                
+                for (let i = 0; i < indices.length; i++) {
+                    const index: number = indices[i];
+                    const canvas: Canvas = this.helper.getCanvasByIndex(index);
+                    canvases.push(canvas);
+                }
+                
+                resolve(canvases);
+            });
+        });
     }
 
     public getCanvasLabels(label: string): string {
@@ -1107,6 +1010,8 @@ export class BaseExtension implements IExtension {
                         return this._prepareResourceData(resource);
                     });
 
+                    this.component.publish(BaseEvents.OPENED_EXTERNAL_RESOURCE);
+
                     resolve(this.resources);
                 });
             });
@@ -1118,6 +1023,8 @@ export class BaseExtension implements IExtension {
                     this.resources = r.map((resource: IExternalResource) => {
                         return this._prepareResourceData(resource);
                     });
+
+                    this.component.publish(BaseEvents.OPENED_EXTERNAL_RESOURCE);
 
                     resolve(this.resources);
                 });
