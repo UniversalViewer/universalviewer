@@ -2,7 +2,7 @@ import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
-import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
 import { sanitize } from "../../Utils";
@@ -217,7 +217,7 @@ export class FooterPanel extends BaseFooterPanel {
             this.$searchResultsContainer.hide();
         }
 
-        const autocompleteService: string | null = (<IOpenSeadragonExtension>this.extension).getAutoCompleteUri();
+        const autocompleteService: string | null = (<OpenSeadragonExtension>this.extension).getAutoCompleteUri();
 
         if (autocompleteService) {
 
@@ -261,7 +261,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isSearchEnabled(): boolean {
-        return (<IOpenSeadragonExtension>this.extension).isSearchEnabled();
+        return (<OpenSeadragonExtension>this.extension).isSearchEnabled();
     }
 
     isZoomToSearchResultEnabled(): boolean {
@@ -275,7 +275,7 @@ export class FooterPanel extends BaseFooterPanel {
         const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
 
         // if zoom to search result is enabled and there is a highlighted search result.
-        if (this.isZoomToSearchResultEnabled() && (<IOpenSeadragonExtension>this.extension).currentAnnotationRect) {
+        if (this.isZoomToSearchResultEnabled() && (<OpenSeadragonExtension>this.extension).currentAnnotationRect) {
             
             if (currentCanvasIndex < firstSearchResultCanvasIndex) {
                 return false;
@@ -298,7 +298,7 @@ export class FooterPanel extends BaseFooterPanel {
         const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
 
         // if zoom to search result is enabled and there is a highlighted search result.
-        if (this.isZoomToSearchResultEnabled() && (<IOpenSeadragonExtension>this.extension).currentAnnotationRect) {
+        if (this.isZoomToSearchResultEnabled() && (<OpenSeadragonExtension>this.extension).currentAnnotationRect) {
 
             if (currentCanvasIndex > lastSearchResultCanvasIndex) {
                 return false;
@@ -315,11 +315,11 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     getSearchResults(): AnnotationGroup[] | null {
-        return (<IOpenSeadragonExtension>this.extension).annotations;
+        return (<OpenSeadragonExtension>this.extension).annotations;
     }
 
     getCurrentSearchResultRectIndex(): number {
-        return (<IOpenSeadragonExtension>this.extension).getCurrentAnnotationRectIndex();
+        return (<OpenSeadragonExtension>this.extension).getCurrentAnnotationRectIndex();
     }
 
     getFirstSearchResultCanvasIndex(): number {
@@ -337,7 +337,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     getLastSearchResultRectIndex(): number {
-        return (<IOpenSeadragonExtension>this.extension).getLastAnnotationRectIndex();
+        return (<OpenSeadragonExtension>this.extension).getLastAnnotationRectIndex();
     }
 
     updateNextButton(): void {
@@ -661,7 +661,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString() && !Bools.getBool(this.config.options.forceImageMode, false);
+        return this.config.options.pageModeEnabled && (<OpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString() && !Bools.getBool(this.config.options.forceImageMode, false);
     }
 
     showSearchSpinner(): void {
@@ -697,7 +697,7 @@ export class FooterPanel extends BaseFooterPanel {
 
             $info.show();
 
-            $number.text((<IOpenSeadragonExtension>this.extension).getTotalAnnotationRects());
+            $number.text((<OpenSeadragonExtension>this.extension).getTotalAnnotationRects());
 
             if (results.length === 1) {
                 $foundFor.html(this.content.resultFoundFor);

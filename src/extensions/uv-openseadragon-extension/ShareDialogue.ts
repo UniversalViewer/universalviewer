@@ -1,5 +1,5 @@
 import {Events} from "./Events";
-import {IOpenSeadragonExtension} from "./IOpenSeadragonExtension";
+import OpenSeadragonExtension from "./Extension";
 import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
 
 export class ShareDialogue extends BaseShareDialogue {
@@ -25,10 +25,10 @@ export class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        const xywh: string = <string>(<IOpenSeadragonExtension>this.extension).getViewportBounds();
-        const rotation: number = <number>(<IOpenSeadragonExtension>this.extension).getViewerRotation();
+        const xywh: string = <string>(<OpenSeadragonExtension>this.extension).getViewportBounds();
+        const rotation: number = <number>(<OpenSeadragonExtension>this.extension).getViewerRotation();
 
-        this.code = (<IOpenSeadragonExtension>this.extension).getEmbedScript(
+        this.code = (<OpenSeadragonExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight,

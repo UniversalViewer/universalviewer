@@ -2,7 +2,7 @@ import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
-import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import { sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
@@ -397,7 +397,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && (<OpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     setNavigationTitles(): void {
@@ -451,7 +451,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             return;
         }
 
-        if ((<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled()){
+        if ((<OpenSeadragonExtension>this.extension).isPagingSettingEnabled()){
             this.$oneUpButton.removeClass('on');
             this.$twoUpButton.addClass('on');
         } else {

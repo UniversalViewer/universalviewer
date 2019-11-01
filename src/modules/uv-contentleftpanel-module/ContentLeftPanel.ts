@@ -4,7 +4,7 @@ import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {GalleryView} from "./GalleryView";
-import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
@@ -396,7 +396,7 @@ export class ContentLeftPanel extends LeftPanel {
         }
 
         // add a search result icon for pages with results
-        const searchResults: AnnotationGroup[] | null = (<IOpenSeadragonExtension>this.extension).annotations;
+        const searchResults: AnnotationGroup[] | null = (<OpenSeadragonExtension>this.extension).annotations;
         
         if (searchResults && searchResults.length) {
 
@@ -445,7 +445,7 @@ export class ContentLeftPanel extends LeftPanel {
             minLabelWidth: 20,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
-            searchResults: (<IOpenSeadragonExtension>this.extension).annotations,
+            searchResults: (<OpenSeadragonExtension>this.extension).annotations,
             sizingEnabled: true, // range API is IE11 up
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
@@ -457,8 +457,8 @@ export class ContentLeftPanel extends LeftPanel {
     isPageModeEnabled(): boolean {
         // todo: checks if the panel is being used in the openseadragon extension.
         // pass a `isPageModeEnabled` function to the panel's constructor instead?
-        if (typeof (<IOpenSeadragonExtension>this.extension).getMode === "function") { 
-            return Bools.getBool(this.config.options.pageModeEnabled, true) && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        if (typeof (<OpenSeadragonExtension>this.extension).getMode === "function") { 
+            return Bools.getBool(this.config.options.pageModeEnabled, true) && (<OpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
         return Bools.getBool(this.config.options.pageModeEnabled, true);
     }

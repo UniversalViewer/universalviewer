@@ -2,7 +2,8 @@ import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
-import {IOpenSeadragonExtension} from "./IOpenSeadragonExtension";
+//import {IOpenSeadragonExtension} from "./IOpenSeadragonExtension";
+import OpenSeadragonExtension from "./Extension";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Async, Strings, Bools, Files } from "@edsilv/utils";
 import { MediaType } from "@iiif/vocabulary";
@@ -120,8 +121,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 type = id;
                 switch (type) {
                     case DownloadOption.CURRENT_VIEW:
-                        const viewer: any = (<IOpenSeadragonExtension>that.extension).getViewer();
-                        window.open(<string>(<IOpenSeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
+                        const viewer: any = (<OpenSeadragonExtension>that.extension).getViewer();
+                        window.open(<string>(<OpenSeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
                         break;
                     case DownloadOption.SELECTION:
                         Async.waitFor(() => {
@@ -142,7 +143,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
                         break;
                     case DownloadOption.WHOLE_IMAGE_LOW_RES:
-                        const imageUri: string | null = (<IOpenSeadragonExtension>that.extension).getConfinedImageUri(canvas, that.options.confinedImageSize);
+                        const imageUri: string | null = (<OpenSeadragonExtension>that.extension).getConfinedImageUri(canvas, that.options.confinedImageSize);
 
                         if (imageUri) {
                             window.open(imageUri);
@@ -170,7 +171,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-        const rotation: number = <number>(<IOpenSeadragonExtension>this.extension).getViewerRotation();
+        const rotation: number = <number>(<OpenSeadragonExtension>this.extension).getViewerRotation();
         const hasNormalDimensions: boolean = rotation % 180 == 0;
 
         if (this.isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW)) {
@@ -178,8 +179,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$currentViewAsJpgButton.find('label');
 
             let label: string = this.content.currentViewAsJpg;
-            const viewer = (<IOpenSeadragonExtension>this.extension).getViewer();
-            const dimensions: CroppedImageDimensions | null = (<IOpenSeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
+            const viewer = (<OpenSeadragonExtension>this.extension).getViewer();
+            const dimensions: CroppedImageDimensions | null = (<OpenSeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
 
             // dimensions
             if (dimensions) {
@@ -291,7 +292,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_LOW_RES)) {
             const $input: JQuery = this.$wholeImageLowResAsJpgButton.find('input');
             const $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
-            const size: Size | null = (<IOpenSeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
+            const size: Size | null = (<OpenSeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
             const label = hasNormalDimensions ?
               Strings.format(this.content.wholeImageLowResAsJpg, size.width.toString(), size.height.toString()) :
               Strings.format(this.content.wholeImageLowResAsJpg, size.height.toString(), size.width.toString());
@@ -438,7 +439,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$downloadOptions.find('li.group:visible').last().addClass('lastVisible');
 
-        if ((<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() && (this.config.options.downloadPagingNoteEnabled)) {
+        if ((<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() && (this.config.options.downloadPagingNoteEnabled)) {
             this.$pagingNote.show();
         } else {
             this.$pagingNote.hide();
@@ -492,7 +493,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             if (canvas.externalResource && canvas.externalResource.hasServiceDescriptor()) {
                 const uri_parts: string [] = uri.split('/');
-                const rotation: number = <number>(<IOpenSeadragonExtension>this.extension).getViewerRotation();
+                const rotation: number = <number>(<OpenSeadragonExtension>this.extension).getViewerRotation();
                 uri_parts[uri_parts.length - 2] = String(rotation);
                 uri = uri_parts.join('/');
             }
@@ -575,8 +576,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (!canvas.externalResource.hasServiceDescriptor() || this._isLevel0(canvas.externalResource.data.profile)) {
             if (option === DownloadOption.WHOLE_IMAGE_HIGH_RES) {
                 // if in one-up mode, or in two-up mode with a single page being shown
-                if (!(<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() || 
-                    (<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
+                if (!(<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() || 
+                    (<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
 
                     return true;
                 }
@@ -590,8 +591,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.IMAGE_RENDERINGS:
             case DownloadOption.WHOLE_IMAGE_HIGH_RES:
                 // if in one-up mode, or in two-up mode with a single page being shown
-                if (!(<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() || 
-                    (<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
+                if (!(<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() || 
+                    (<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
                     const maxDimensions: Size | null = canvas.getMaxDimensions();
                     
                     if (maxDimensions) {
@@ -605,7 +606,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 }
                 return false;
             case DownloadOption.WHOLE_IMAGES_HIGH_RES:
-                if ((<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length > 1) {
+                if ((<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length > 1) {
                     return true;
                 }
                 return false;
@@ -615,7 +616,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 if (!size) {
                     return false;
                 }
-                return (!(<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
+                return (!(<OpenSeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.SELECTION:
                 return this.options.selectionEnabled;
             case DownloadOption.RANGE_RENDERINGS:                

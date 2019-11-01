@@ -11,7 +11,7 @@ import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/Exter
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
 import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-import { IOpenSeadragonExtension } from "./IOpenSeadragonExtension";
+//import { IOpenSeadragonExtension } from "./IOpenSeadragonExtension";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
 import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
@@ -28,7 +28,7 @@ import { IIIFResourceType, ExternalResourceType, ServiceProfile } from "@iiif/vo
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Annotation, Canvas, Thumb, TreeNode, ManifestType, Resource, Range, LanguageMap, Service, Size, Utils } from "manifesto.js";
 
-export default class Extension extends BaseExtension implements IOpenSeadragonExtension {
+export default class OpenSeadragonExtension extends BaseExtension  {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;

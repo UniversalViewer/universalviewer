@@ -1,6 +1,6 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
-import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import { Bools } from "@edsilv/utils";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
@@ -81,7 +81,7 @@ export class MultiSelectDialogue extends Dialogue {
     }
 
     isPageModeEnabled(): boolean {
-        return Bools.getBool(this.config.options.pageModeEnabled, true) && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        return Bools.getBool(this.config.options.pageModeEnabled, true) && (<OpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     open(): void {
