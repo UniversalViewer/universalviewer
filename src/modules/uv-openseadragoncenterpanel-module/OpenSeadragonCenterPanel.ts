@@ -1,10 +1,10 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Bounds} from "../../extensions/uv-seadragon-extension/Bounds";
+import {Bounds} from "../../extensions/uv-openseadragon-extension/Bounds";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
-import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
-import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
+import {Events} from "../../extensions/uv-openseadragon-extension/Events";
+import {CroppedImageDimensions} from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
+import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import {IOpenSeadragonExtensionData} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 import { sanitize } from "../../Utils";
 import { Async, Bools, Dimensions } from "@edsilv/utils";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
@@ -12,7 +12,7 @@ import { Canvas, IExternalResource, IExternalImageResourceData } from "manifesto
 import { ViewingDirection } from "@iiif/vocabulary";
 import "openseadragon";
 
-export class SeadragonCenterPanel extends CenterPanel {
+export class OpenSeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
     currentAnnotationRect: AnnotationRect;
@@ -51,7 +51,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     create(): void {
 
-        this.setConfig('seadragonCenterPanel');
+        this.setConfig('openSeadragonCenterPanel');
 
         super.create();
 
@@ -77,7 +77,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
             this.whenCreated(() => {
-                (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+                (<IOpenSeadragonExtension>this.extension).currentAnnotationRect = null;
                 this.clearAnnotations();
             });
         });
@@ -296,16 +296,16 @@ export class SeadragonCenterPanel extends CenterPanel {
         //});
 
         this.viewer.addHandler('resize', (viewer: any) => {
-            this.component.publish(Events.SEADRAGON_RESIZE, viewer);
+            this.component.publish(Events.OPENSEADRAGON_RESIZE, viewer);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animation-start', (viewer: any) => {
-            this.component.publish(Events.SEADRAGON_ANIMATION_START, viewer);
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION_START, viewer);
         });
 
         this.viewer.addHandler('animation', (viewer: any) => {
-            this.component.publish(Events.SEADRAGON_ANIMATION, viewer);
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION, viewer);
         });
 
         this.viewer.addHandler('animation-finish', (viewer: any) => {
@@ -313,11 +313,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             this.updateVisibleAnnotationRects();
 
-            this.component.publish(Events.SEADRAGON_ANIMATION_FINISH, viewer);
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION_FINISH, viewer);
         });
 
         this.viewer.addHandler('rotate', (args: any) => {
-            this.component.publish(Events.SEADRAGON_ROTATION, args.degrees);
+            this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
         });
 
         this.title = this.extension.helper.getLabel();
@@ -528,7 +528,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     openPagesHandler(): void {
 
-        this.component.publish(Events.SEADRAGON_OPEN);
+        this.component.publish(Events.OPENSEADRAGON_OPEN);
 
         if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
@@ -584,8 +584,8 @@ export class SeadragonCenterPanel extends CenterPanel {
     zoomToInitialAnnotation(): void {
         let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
         
-        (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
-        (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+        (<IOpenSeadragonExtension>this.extension).previousAnnotationRect = null;
+        (<IOpenSeadragonExtension>this.extension).currentAnnotationRect = null;
 
         if (annotationRect && this.isZoomToSearchResultEnabled()) {
             this.zoomToAnnotation(annotationRect);
@@ -620,13 +620,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if this is the first load and there are initial bounds, fit to those.
         if (this.isFirstLoad) {
 
-            this.initialRotation = (<ISeadragonExtensionData>this.extension.data).rotation;
+            this.initialRotation = (<IOpenSeadragonExtensionData>this.extension.data).rotation;
 
             if (this.initialRotation) {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = (<ISeadragonExtensionData>this.extension.data).xywh;
+            this.initialBounds = (<IOpenSeadragonExtensionData>this.extension.data).xywh;
 
             if (this.initialBounds) {
                 this.initialBounds = Bounds.fromString(this.initialBounds);
@@ -699,7 +699,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.viewer || !this.viewer.viewport) return null;
 
         const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-        const dimensions: CroppedImageDimensions | null = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
+        const dimensions: CroppedImageDimensions | null = (<IOpenSeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
         if (dimensions) {
             const bounds: Bounds = new Bounds(dimensions.regionPos.x, dimensions.regionPos.y, dimensions.region.width, dimensions.region.height);
@@ -738,7 +738,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     getAnnotationsForCurrentImages(): AnnotationGroup[] {
         let annotationsForCurrentImages: AnnotationGroup[] = [];
-        const annotations: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
+        const annotations: AnnotationGroup[] | null = (<IOpenSeadragonExtension>this.extension).annotations;
 
         if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -789,7 +789,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     prevAnnotation(): void {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const currentAnnotationRect: AnnotationRect | null = (<IOpenSeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : annotationRects.length;
         //const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
@@ -813,7 +813,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (foundRect && this.isZoomToSearchResultEnabled()) {
             // if the rect's canvasIndex is less than the current canvasIndex
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
-                (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
+                (<IOpenSeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
                 this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
@@ -827,7 +827,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     nextAnnotation(): void {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const currentAnnotationRect: AnnotationRect | null = (<IOpenSeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : -1;
         let foundRect: AnnotationRect | null = null;
@@ -850,7 +850,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (foundRect && this.isZoomToSearchResultEnabled()) {
             // if the rect's canvasIndex is greater than the current canvasIndex
             if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-                (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
+                (<IOpenSeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
                 this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
@@ -878,7 +878,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if less than, select the first annotation on the current page
         // otherwise default to the first annotation
 
-        const previousAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
+        const previousAnnotationRect: AnnotationRect | null = (<IOpenSeadragonExtension>this.extension).previousAnnotationRect;
 
         if (!previousAnnotationRect) {
             if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
@@ -891,8 +891,8 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     zoomToAnnotation(annotationRect: AnnotationRect): void {
-        (<ISeadragonExtension>this.extension).previousAnnotationRect = (<ISeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
-        (<ISeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
+        (<IOpenSeadragonExtension>this.extension).previousAnnotationRect = (<IOpenSeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
+        (<IOpenSeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
 
         // if zoomToBoundsEnabled, zoom to the annotation's bounds.
         // otherwise, pan into view preserving the current zoom level.

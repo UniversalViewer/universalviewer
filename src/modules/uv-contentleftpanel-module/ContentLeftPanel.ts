@@ -4,9 +4,9 @@ import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {GalleryView} from "./GalleryView";
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
-import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
 import {TreeView} from "./TreeView";
 import { LanguageMap, Thumb, TreeNode, TreeNodeType, Range } from "manifesto.js";
@@ -396,7 +396,7 @@ export class ContentLeftPanel extends LeftPanel {
         }
 
         // add a search result icon for pages with results
-        const searchResults: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
+        const searchResults: AnnotationGroup[] | null = (<IOpenSeadragonExtension>this.extension).annotations;
         
         if (searchResults && searchResults.length) {
 
@@ -445,7 +445,7 @@ export class ContentLeftPanel extends LeftPanel {
             minLabelWidth: 20,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
-            searchResults: (<ISeadragonExtension>this.extension).annotations,
+            searchResults: (<IOpenSeadragonExtension>this.extension).annotations,
             sizingEnabled: true, // range API is IE11 up
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
@@ -457,8 +457,8 @@ export class ContentLeftPanel extends LeftPanel {
     isPageModeEnabled(): boolean {
         // todo: checks if the panel is being used in the openseadragon extension.
         // pass a `isPageModeEnabled` function to the panel's constructor instead?
-        if (typeof (<ISeadragonExtension>this.extension).getMode === "function") { 
-            return Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        if (typeof (<IOpenSeadragonExtension>this.extension).getMode === "function") { 
+            return Bools.getBool(this.config.options.pageModeEnabled, true) && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
         return Bools.getBool(this.config.options.pageModeEnabled, true);
     }
@@ -637,7 +637,7 @@ export class ContentLeftPanel extends LeftPanel {
     selectCurrentTreeNode(): void {
         // todo: merge selectCurrentTreeNodeByCanvas and selectCurrentTreeNodeByRange
         // the openseadragon extension should keep track of the current range instead of using canvas index
-        if (this.extension.name === 'uv-seadragon-extension') {
+        if (this.extension.name === 'uv-openseadragon-extension') {
             this.selectCurrentTreeNodeByCanvas(); 
         } else {
             this.selectCurrentTreeNodeByRange();

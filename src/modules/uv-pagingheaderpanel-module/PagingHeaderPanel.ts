@@ -1,9 +1,9 @@
 import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
+import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
-import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 import { sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
@@ -397,7 +397,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     setNavigationTitles(): void {
@@ -451,7 +451,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             return;
         }
 
-        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
+        if ((<IOpenSeadragonExtension>this.extension).isPagingSettingEnabled()){
             this.$oneUpButton.removeClass('on');
             this.$twoUpButton.addClass('on');
         } else {

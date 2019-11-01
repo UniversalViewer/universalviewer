@@ -1,7 +1,7 @@
 import {ThumbsView as BaseThumbsView} from "../uv-shared-module/ThumbsView";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
-import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {Events} from "../../extensions/uv-openseadragon-extension/Events";
+import {IOpenSeadragonExtension} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtension";
+import {Mode} from "../../extensions/uv-openseadragon-extension/Mode";
 
 export class ThumbsView extends BaseThumbsView {
     create(): void {
@@ -54,8 +54,8 @@ export class ThumbsView extends BaseThumbsView {
 
     isPageModeEnabled(): boolean {
         // todo: move getMode to BaseExtension. call it getIndexingMode which can be Label or Index
-        if (typeof (<ISeadragonExtension>this.extension).getMode === "function") {
-            return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        if (typeof (<IOpenSeadragonExtension>this.extension).getMode === "function") {
+            return this.config.options.pageModeEnabled && (<IOpenSeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
         return this.config.options.pageModeEnabled;
     }

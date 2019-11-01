@@ -186,7 +186,7 @@
                 "twoUp": "Affichage double page"
             }
         },
-        "seadragonCenterPanel": {
+        "openSeadragonCenterPanel": {
             "content": {
                 "attribution": "Attribution",
                 "goHome": "Retour",

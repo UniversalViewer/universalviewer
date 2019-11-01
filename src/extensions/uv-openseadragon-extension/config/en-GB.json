@@ -169,7 +169,7 @@
         "pagingToggleEnabled": true
       }
     },
-    "seadragonCenterPanel": {
+    "openSeadragonCenterPanel": {
       "options": {
         "animationTime": 0.15,
         "autoHideControls": true,

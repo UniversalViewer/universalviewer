@@ -28,7 +28,7 @@ module.exports = function () {
         uvDefaultExtension: './src/extensions/uv-default-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
         uvPdfExtension: './src/extensions/uv-pdf-extension',
-        uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
+        uvOpenSeadragonExtension: './src/extensions/uv-openseadragon-extension',
         uvVirtexExtension: './src/extensions/uv-virtex-extension'
     };
     this.themes = {

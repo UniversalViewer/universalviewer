@@ -24,7 +24,7 @@ enum Extension {
     AV = "uv-av-extension",
     DEFAULT = "uv-default-extension",
     MEDIAELEMENT = "uv-mediaelement-extension",
-    OSD = "uv-seadragon-extension",
+    OSD = "uv-openseadragon-extension",
     PDF = "uv-pdf-extension",
     VIRTEX = "uv-virtex-extension"
 }
@@ -66,7 +66,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 return extension;
             },
             [Extension.OSD]: async () => {
-                const m = await import("./extensions/uv-seadragon-extension/Extension") as any;
+                const m = await import("./extensions/uv-openseadragon-extension/Extension") as any;
                 const extension = new m.default();
                 extension.name = Extension.OSD;
                 return extension;

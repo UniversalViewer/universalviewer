@@ -5,7 +5,7 @@ import { Size } from "@edsilv/utils";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Canvas } from "manifesto.js";
 
-export interface ISeadragonExtension extends IExtension{
+export interface IOpenSeadragonExtension extends IExtension{
     annotations: AnnotationGroup[] | null;
     currentAnnotationRect: AnnotationRect | null;
     getAnnotationRects(): AnnotationRect[];

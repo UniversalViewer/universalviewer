@@ -161,7 +161,7 @@
                 "twoUp": "Gweld dwy dudalen ar y tro"
             }
         },
-        "seadragonCenterPanel": {
+        "openSeadragonCenterPanel": {
             "content": {
                 "attribution": "Priodoliad",
                 "goHome": "Gweld y maint gwreiddiol",

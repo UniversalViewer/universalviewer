@@ -1,5 +1,5 @@
 const path = require("path");
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 function resolvePath(p) {
     return path.resolve(__dirname, p)
@@ -9,7 +9,13 @@ const config = {
     // These are the entry point of our library. We tell webpack to use the name we assign later, when creating the bundle.
     // We also use the name to filter the second entry point for applying code minification via UglifyJS
     entry: {
-        'UV': ['./src/index.ts']
+        'UV': ['./src/index.ts'],
+        'AVExtension': ['./src/extensions/uv-av-extension/Extension.ts'],
+        'DefaultExtension': ['./src/extensions/uv-default-extension/Extension.ts'],
+        'MediaElementExtension': ['./src/extensions/uv-mediaelement-extension/Extension.ts'],
+        'OpenSeadragonExtension': ['./src/extensions/uv-openseadragon-extension/Extension.ts'],
+        'PDFExtension': ['./src/extensions/uv-pdf-extension/Extension.ts'],
+        'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts']
     },
     // The output defines how and where we want the bundles. The special value `[name]` in `filename` tells Webpack to use the name we defined above.
     // We target a UMD and name it UV. When including the bundle in the browser it will be accessible at `window.UV`
@@ -19,6 +25,11 @@ const config = {
         libraryTarget: 'umd',
         library: 'UV',
         umdNamedDefine: true
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        }
     },
     node: {
         net: 'empty'
@@ -45,10 +56,10 @@ const config = {
                 ]
             }
         ]
-    }
-    // plugins: [
-    //     new BundleAnalyzerPlugin()
-    // ]
+    },
+    plugins: [
+        new BundleAnalyzerPlugin()
+    ]
 }
 
 if (process.env.NODE_WEBPACK_LIBRARY_PATH) {

@@ -6,7 +6,7 @@ const webpackConfig = require('./webpack.config.js');
 var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
 var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
 var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
-var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
+var openSeadragonExtensionConfig = require('./src/extensions/uv-openseadragon-extension/config');
 var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
 module.exports = function (grunt) {
@@ -153,7 +153,7 @@ module.exports = function (grunt) {
                     },
                     // extension dependencies (needed to copy stencil js files in sub directories https://github.com/ionic-team/stencil/issues/683)
                     {
-                        cwd: 'src/extensions/uv-seadragon-extension/lib/',
+                        cwd: 'src/extensions/uv-openseadragon-extension/lib/',
                         expand: true,
                         src: ['**'],
                         dest: config.directories.build + '/lib/'
@@ -215,7 +215,7 @@ module.exports = function (grunt) {
                     avExtensionConfig.sync.dependencies,
                     mediaelementExtensionConfig.sync.dependencies,
                     pdfExtensionConfig.sync.dependencies,
-                    seadragonExtensionConfig.sync.dependencies,
+                    openSeadragonExtensionConfig.sync.dependencies,
                     virtexExtensionConfig.sync.dependencies
                 ]
             }

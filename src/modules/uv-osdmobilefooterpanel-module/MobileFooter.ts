@@ -1,5 +1,5 @@
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
+import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 
 export class FooterPanel extends BaseFooterPanel {
 

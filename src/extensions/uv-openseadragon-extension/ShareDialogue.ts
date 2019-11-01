@@ -1,5 +1,5 @@
 import {Events} from "./Events";
-import {ISeadragonExtension} from "./ISeadragonExtension";
+import {IOpenSeadragonExtension} from "./IOpenSeadragonExtension";
 import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
 
 export class ShareDialogue extends BaseShareDialogue {
@@ -7,11 +7,11 @@ export class ShareDialogue extends BaseShareDialogue {
     constructor($element: JQuery) {
         super($element);
 
-        this.component.subscribe(Events.SEADRAGON_OPEN, () => {
+        this.component.subscribe(Events.OPENSEADRAGON_OPEN, () => {
             this.update();
         });
 
-        this.component.subscribe(Events.SEADRAGON_ANIMATION_FINISH, () => {
+        this.component.subscribe(Events.OPENSEADRAGON_ANIMATION_FINISH, () => {
             this.update();
         });
     }
@@ -25,10 +25,10 @@ export class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        const xywh: string = <string>(<ISeadragonExtension>this.extension).getViewportBounds();
-        const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
+        const xywh: string = <string>(<IOpenSeadragonExtension>this.extension).getViewportBounds();
+        const rotation: number = <number>(<IOpenSeadragonExtension>this.extension).getViewerRotation();
 
-        this.code = (<ISeadragonExtension>this.extension).getEmbedScript(
+        this.code = (<IOpenSeadragonExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight,

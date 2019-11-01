@@ -11,8 +11,8 @@ import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/Exter
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
 import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-import { ISeadragonExtension } from "./ISeadragonExtension";
-import { ISeadragonExtensionData } from "./ISeadragonExtensionData";
+import { IOpenSeadragonExtension } from "./IOpenSeadragonExtension";
+import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
 import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
@@ -20,7 +20,7 @@ import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
 import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
 import { Point } from "../../modules/uv-shared-module/Point";
-import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
+import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Maths, Strings } from "@edsilv/utils";
@@ -28,7 +28,7 @@ import { IIIFResourceType, ExternalResourceType, ServiceProfile } from "@iiif/vo
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Annotation, Canvas, Thumb, TreeNode, ManifestType, Resource, Range, LanguageMap, Service, Size, Utils } from "manifesto.js";
 
-export default class Extension extends BaseExtension implements ISeadragonExtension {
+export default class Extension extends BaseExtension implements IOpenSeadragonExtension {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;
@@ -38,7 +38,7 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
     $settingsDialogue: JQuery;
     $shareDialogue: JQuery;
     annotations: AnnotationGroup[] | null = [];
-    centerPanel: SeadragonCenterPanel;
+    centerPanel: OpenSeadragonCenterPanel;
     currentAnnotationRect: AnnotationRect | null;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
@@ -243,18 +243,18 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
             }
         });
 
-        this.component.subscribe(Events.SEADRAGON_ANIMATION, () => {
-            this.fire(Events.SEADRAGON_ANIMATION);
+        this.component.subscribe(Events.OPENSEADRAGON_ANIMATION, () => {
+            this.fire(Events.OPENSEADRAGON_ANIMATION);
         });
 
-        this.component.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (viewer: any) => {
+        this.component.subscribe(Events.OPENSEADRAGON_ANIMATION_FINISH, (viewer: any) => {
 
             const bounds: Bounds | null = this.centerPanel.getViewportBounds();
 
             if (this.centerPanel && bounds) {
                 this.component.publish(Events.XYWH_CHANGED, bounds.toString());
-                (<ISeadragonExtensionData>this.data).xywh = bounds.toString();
-                this.fire(Events.XYWH_CHANGED, (<ISeadragonExtensionData>this.data).xywh);
+                (<IOpenSeadragonExtensionData>this.data).xywh = bounds.toString();
+                this.fire(Events.XYWH_CHANGED, (<IOpenSeadragonExtensionData>this.data).xywh);
             }
 
             const canvas: Canvas = this.helper.getCurrentCanvas();
@@ -266,24 +266,24 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
                 });
         });
 
-        this.component.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
-            this.fire(Events.SEADRAGON_ANIMATION_START);
+        this.component.subscribe(Events.OPENSEADRAGON_ANIMATION_START, () => {
+            this.fire(Events.OPENSEADRAGON_ANIMATION_START);
         });
 
-        this.component.subscribe(Events.SEADRAGON_OPEN, () => {
+        this.component.subscribe(Events.OPENSEADRAGON_OPEN, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
-            this.fire(Events.SEADRAGON_OPEN);
+            this.fire(Events.OPENSEADRAGON_OPEN);
         });
 
-        this.component.subscribe(Events.SEADRAGON_RESIZE, () => {
-            this.fire(Events.SEADRAGON_RESIZE);
+        this.component.subscribe(Events.OPENSEADRAGON_RESIZE, () => {
+            this.fire(Events.OPENSEADRAGON_RESIZE);
         });
 
-        this.component.subscribe(Events.SEADRAGON_ROTATION, (rotation: number) => {
-            (<ISeadragonExtensionData>this.data).rotation = rotation;
-            this.fire(Events.SEADRAGON_ROTATION, (<ISeadragonExtensionData>this.data).rotation);
+        this.component.subscribe(Events.OPENSEADRAGON_ROTATION, (rotation: number) => {
+            (<IOpenSeadragonExtensionData>this.data).rotation = rotation;
+            this.fire(Events.OPENSEADRAGON_ROTATION, (<IOpenSeadragonExtensionData>this.data).rotation);
             this.currentRotation = rotation;
         });
 
@@ -354,7 +354,7 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
             this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new SeadragonCenterPanel(this.shell.$centerPanel);
+        this.centerPanel = new OpenSeadragonCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
@@ -456,7 +456,7 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
 
     checkForSearchParam(): void {
         // if a highlight param is set, use it to search.
-        const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
+        const highlight: string | null = (<IOpenSeadragonExtensionData>this.data).highlight;
 
         if (highlight) {
             highlight.replace(/\+/g, " ").replace(/"/g, "");
@@ -466,10 +466,10 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
 
     checkForRotationParam(): void {
         // if a rotation value is passed, set rotation
-        const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
+        const rotation: number | null = (<IOpenSeadragonExtensionData>this.data).rotation;
 
         if (rotation) {
-            this.component.publish(Events.SEADRAGON_ROTATION, rotation);
+            this.component.publish(Events.OPENSEADRAGON_ROTATION, rotation);
         }
     }
 
