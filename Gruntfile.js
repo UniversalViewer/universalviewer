@@ -3,11 +3,6 @@ var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
 const webpackConfig = require('./webpack.config.js');
-var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
-var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
-var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
-var openSeadragonExtensionConfig = require('./src/extensions/uv-openseadragon-extension/config');
-var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
 module.exports = function (grunt) {
 
@@ -151,13 +146,6 @@ module.exports = function (grunt) {
                         src: ['src/extensions/**/lib/*'],
                         dest: config.directories.build + '/lib/'
                     },
-                    // extension dependencies (needed to copy stencil js files in sub directories https://github.com/ionic-team/stencil/issues/683)
-                    {
-                        cwd: 'src/extensions/uv-openseadragon-extension/lib/',
-                        expand: true,
-                        src: ['**'],
-                        dest: config.directories.build + '/lib/'
-                    },
                     // images
                     {
                         expand: true,
@@ -208,15 +196,6 @@ module.exports = function (grunt) {
                         src: ['uv-*-theme/**'],
                         dest: config.directories.themes
                     }
-                ]
-            },
-            npmComponents: {
-                files: [
-                    avExtensionConfig.sync.dependencies,
-                    mediaelementExtensionConfig.sync.dependencies,
-                    pdfExtensionConfig.sync.dependencies,
-                    openSeadragonExtensionConfig.sync.dependencies,
-                    virtexExtensionConfig.sync.dependencies
                 ]
             }
         },

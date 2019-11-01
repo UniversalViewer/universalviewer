@@ -1,1 +1,0 @@
-export const deps = ['TreeComponent', 'GalleryComponent', 'MetadataComponent', 'openseadragon.min'];
