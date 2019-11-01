@@ -11,7 +11,6 @@ import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/Exter
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
 import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-//import { IOpenSeadragonExtension } from "./IOpenSeadragonExtension";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
 import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
@@ -417,15 +416,9 @@ export default class OpenSeadragonExtension extends BaseExtension  {
     render(): void {
         super.render();
 
-        //Utils.Async.waitFor(() => {
-        //    return this.centerPanel && this.centerPanel.isCreated;
-        //}, () => {
-
         this.checkForAnnotations();
         this.checkForSearchParam();
         this.checkForRotationParam();
-
-        //});
     }
 
     checkForAnnotations(): void {

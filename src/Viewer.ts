@@ -53,24 +53,24 @@ export class Viewer extends BaseComponent implements IUVComponent {
         super._init();
 
         this._extensions = {
-            [Extension.AV]: async () => {
-                const m = await import("./extensions/uv-av-extension/Extension") as any;
-                const extension = new m.default();
-                extension.name = Extension.AV;
-                return extension;
-            }
+            // [Extension.AV]: async () => {
+            //     const m = await import("./extensions/uv-av-extension/Extension") as any;
+            //     const extension = new m.default();
+            //     extension.name = Extension.AV;
+            //     return extension;
+            // }
             // [Extension.MEDIAELEMENT]: async () => {
             //     const m = await import("./extensions/uv-mediaelement-extension/Extension") as any;
             //     const extension = new m.default();
             //     extension.name = Extension.MEDIAELEMENT;
             //     return extension;
             // },
-            // [Extension.OSD]: async () => {
-            //     const m = await import("./extensions/uv-openseadragon-extension/Extension") as any;
-            //     const extension = new m.default();
-            //     extension.name = Extension.OSD;
-            //     return extension;
-            // },
+            [Extension.OSD]: async () => {
+                const m = await import("./extensions/uv-openseadragon-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.OSD;
+                return extension;
+            }
             // [Extension.PDF]: async () => {
             //     const m = await import("./extensions/uv-pdf-extension/Extension") as any;
             //     const extension = new m.default();

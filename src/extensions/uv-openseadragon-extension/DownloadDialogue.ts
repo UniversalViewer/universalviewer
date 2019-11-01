@@ -2,7 +2,6 @@ import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
-//import {IOpenSeadragonExtension} from "./IOpenSeadragonExtension";
 import OpenSeadragonExtension from "./Extension";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Async, Strings, Bools, Files } from "@edsilv/utils";
