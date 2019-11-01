@@ -44,11 +44,9 @@ export class GalleryView extends BaseView {
     }
 
     public databind(): void {
-        setTimeout(() => {
-            this.galleryComponent.options.data = this.galleryData;
-            this.galleryComponent.set(this.galleryData);
-            this.resize();
-        }, 1);
+        this.galleryComponent.options.data = this.galleryData;
+        this.galleryComponent.set(this.galleryData);
+        this.resize();
     }
 
     show(): void {

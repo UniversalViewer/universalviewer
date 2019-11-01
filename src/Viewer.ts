@@ -163,7 +163,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     }
     
     public data(): IUVData {
-        return <IUVData>{
+        return {
             annotations: undefined,
             root: "./uv",
             canvasIndex: 0,
@@ -185,7 +185,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
             rotation: 0,
             sequenceIndex: 0,
             xywh: ""
-        };
+        } as IUVData;
     }
 
     public set(data: IUVData): void {
