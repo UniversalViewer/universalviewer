@@ -24,7 +24,8 @@ const config = {
         filename: '[name].js',
         libraryTarget: 'umd',
         library: 'UV',
-        umdNamedDefine: true
+        umdNamedDefine: true,
+        chunkFilename: '[name].bundle.js'
     },
     optimization: {
         splitChunks: {
