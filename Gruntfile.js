@@ -2,8 +2,6 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
-const webpackConfig = require('./webpack.config.js');
-const webpackDllConfig = require('./webpack.vendor.config.js');
 
 module.exports = function (grunt) {
 
@@ -305,8 +303,8 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            myDllConfig: webpackDllConfig,
-            myConfig: webpackConfig
+            dll: require('./webpack.vendor.config.js'),
+            main: function() { return require('./webpack.config.js'); }
         },
     });
 
@@ -343,7 +341,8 @@ module.exports = function (grunt) {
             'configure:apply',
             'clean:build',
             'copy:schema',
-            'webpack',
+            'webpack:dll',
+            'webpack:main',
             'copy:build',
             'theme:create',
             'theme:dist',

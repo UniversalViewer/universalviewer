@@ -63,7 +63,7 @@ const config = {
         new BundleAnalyzerPlugin(),
         new webpack.DllReferencePlugin({
             context: './dist-umd/',
-			manifest: require("./dist-umd/OpenSeadragon-manifest.json")
+			manifest: require("./dist-umd/openseadragon-manifest.json")
         })
     ]
 }
