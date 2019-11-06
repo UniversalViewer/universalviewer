@@ -1,5 +1,6 @@
 const path = require("path");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require("webpack");
 
 function resolvePath(p) {
     return path.resolve(__dirname, p)
@@ -59,7 +60,11 @@ const config = {
         ]
     },
     plugins: [
-        new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin(),
+        new webpack.DllReferencePlugin({
+            context: './dist-umd/',
+			manifest: require("./dist-umd/OpenSeadragon-manifest.json")
+        })
     ]
 }
 

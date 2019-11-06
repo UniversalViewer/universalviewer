@@ -3,6 +3,7 @@ var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
 const webpackConfig = require('./webpack.config.js');
+const webpackDllConfig = require('./webpack.vendor.config.js');
 
 module.exports = function (grunt) {
 
@@ -304,7 +305,8 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            myConfig: webpackConfig,
+            myDllConfig: webpackDllConfig,
+            myConfig: webpackConfig
         },
     });
 
