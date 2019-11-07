@@ -16,7 +16,7 @@ const config = {
         'MediaElementExtension': ['./src/extensions/uv-mediaelement-extension/Extension.ts'],
         'OpenSeadragonExtension': ['./src/extensions/uv-openseadragon-extension/Extension.ts'],
         'PDFExtension': ['./src/extensions/uv-pdf-extension/Extension.ts'],
-        'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts'],
+        'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts']
     },
 
     externals: {
@@ -34,7 +34,6 @@ const config = {
         umdNamedDefine: true,
         chunkFilename: '[name].bundle.js'
     },
-    mode: 'production',
     node: {
         net: 'empty'
     },
@@ -59,17 +58,22 @@ const config = {
             name: true,
             cacheGroups: {
                 vendors: {
+                    enforce: true,
                     test: /[\\/]node_modules[\\/]/,
                     priority: -10
                 },
                 osd: {
-                    test: /[\\/]node_modules\/openseadragon[\\/]/,
+                    test: /[\\/]node_modules[\\/]openseadragon[\\/]/,
                     priority: -9
                 },
                 default: {
                     minChunks: 2,
                     priority: -20,
                     reuseExistingChunk: true
+                },
+                sharedmodule: {
+                    test: /[\\/]src[\\/]modules[\\/]uv\-shared\-module[\\/]/,
+                    priority: -8
                 }
             }
         }
@@ -84,11 +88,7 @@ const config = {
         }]
     },
     plugins: [
-        new BundleAnalyzerPlugin(),
-        new webpack.DllReferencePlugin({
-            context: './dist-umd/',
-            manifest: require("./dist-umd/openseadragon-manifest.json") 
-        })
+        new BundleAnalyzerPlugin()
     ]
 }
 

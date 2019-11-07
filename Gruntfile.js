@@ -303,8 +303,11 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            dll: require('./webpack.vendor.config.js'),
-            main: function() { return require('./webpack.config.js'); }
+            main: function() { 
+                var config = require('./webpack.config.js');
+                config.mode = grunt.option('dist')? 'production':'development';
+                return config;
+            }
         },
     });
 
@@ -341,8 +344,7 @@ module.exports = function (grunt) {
             'configure:apply',
             'clean:build',
             'copy:schema',
-            'webpack:dll',
-            'webpack:main',
+            'webpack',
             'copy:build',
             'theme:create',
             'theme:dist',
