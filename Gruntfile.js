@@ -2,7 +2,6 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
-const webpackConfig = require('./webpack.config.js');
 
 module.exports = function (grunt) {
 
@@ -304,7 +303,11 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            myConfig: webpackConfig,
+            main: function() { 
+                var config = require('./webpack.config.js');
+                config.mode = grunt.option('dist')? 'production':'development';
+                return config;
+            }
         },
     });
 
