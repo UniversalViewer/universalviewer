@@ -251,7 +251,12 @@ export class PDFCenterPanel extends CenterPanel {
             } else {
                 PDFJS.disableWorker = true;
 
-                PDFJS.getDocument(mediaUri).then((pdfDoc: any) => {
+                const parameter = {
+                    url: mediaUri,
+                    withCredentials: canvas.externalResource.isAccessControlled()
+                } 
+
+                PDFJS.getDocument(parameter).then((pdfDoc: any) => {
                     this._pdfDoc = pdfDoc;
                     this._render(this._pageIndex);
 

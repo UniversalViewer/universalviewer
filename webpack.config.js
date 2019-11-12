@@ -15,13 +15,13 @@ const config = {
         'MediaElementExtension': ['./src/extensions/uv-mediaelement-extension/Extension.ts'],
         'OpenSeadragonExtension': ['./src/extensions/uv-openseadragon-extension/Extension.ts'],
         'PDFExtension': ['./src/extensions/uv-pdf-extension/Extension.ts'],
-        'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts']
+        'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts'],
+        'openseadragon': ['./node_modules/openseadragon/build/openseadragon/openseadragon.js']
     },
     // The output defines how and where we want the bundles. The special value `[name]` in `filename` tells Webpack to use the name we defined above.
     // We target a UMD and name it UV. When including the bundle in the browser it will be accessible at `window.UV`
     output: {
         path: resolvePath('dist-umd'),
-        filename: '[name].js',
         libraryTarget: 'umd',
         library: 'UV',
         umdNamedDefine: true,
@@ -29,7 +29,7 @@ const config = {
     },
     optimization: {
         splitChunks: {
-            chunks: 'all',
+            chunks: 'all'
         }
     },
     node: {
@@ -44,8 +44,7 @@ const config = {
     // source when the user debugs the application
     //devtool: 'source-map',
     optimization: {
-        minimize: false,
-        concatenateModules: true
+        minimize: true
     },
     // Webpack doesn't understand TypeScript files and a loader is needed.
     module: {
