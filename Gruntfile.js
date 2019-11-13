@@ -23,12 +23,13 @@ module.exports = function (grunt) {
             themes: config.directories.themes,
             build: config.directories.build,
             dist: config.directories.dist,
+            distumd: config.directories.distumd,
             examples: config.directories.examples + '/uv/',
             extension: config.directories.src + '/extensions/*/.build/*',
             libs: [
                 config.directories.src + '/extensions/*/lib/**/*',
                 '!' + config.directories.src + '/extensions/*/lib/**/*.proxy.js'
-            ]           
+            ]
         },
 
         copy: {
@@ -303,7 +304,7 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            main: function() { 
+            main: function() {
                 var config = require('./webpack.config.js');
                 config.mode = grunt.option('dist')? 'production':'development';
                 return config;
