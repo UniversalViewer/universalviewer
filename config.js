@@ -39,6 +39,7 @@ module.exports = function () {
         uv: 'uv',
         uvAVExtension: './src/extensions/uv-av-extension',
         uvDefaultExtension: './src/extensions/uv-default-extension',
+        uvEbookExtension: './src/extensions/uv-ebook-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
         uvPdfExtension: './src/extensions/uv-pdf-extension',
         uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
