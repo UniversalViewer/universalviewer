@@ -65,8 +65,8 @@
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
         "panelOpen": false,
-        "consoleTabEnabled": false,
-        "graphTabEnabled": false,
+        "consoleTabEnabled": true,
+        "graphTabEnabled": true,
         "settingsTabEnabled": true,
         "srcTabEnabled": false
       }
