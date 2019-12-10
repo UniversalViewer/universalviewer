@@ -1,33 +1,37 @@
-import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
-import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import { EbookLeftPanel } from "../../modules/uv-ebookleftpanel-module/EbookLeftPanel";
+import { Events } from "./Events";
 import { DownloadDialogue } from "./DownloadDialogue";
+import { EbookCenterPanel } from "../../modules/uv-ebookcenterpanel-module/EbookCenterPanel";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
-import { FooterPanel as MobileFooterPanel } from "../../modules/uv-avmobilefooterpanel-module/MobileFooter";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-ebookmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IEbookExtension } from "./IEbookExtension";
+import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
+import { IEbookExtensionData } from "./IEbookExtensionData";
 
 export class Extension extends BaseExtension implements IEbookExtension {
 
     $downloadDialogue: JQuery;
+    $moreInfoDialogue: JQuery;
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     $shareDialogue: JQuery;
-    centerPanel: AVCenterPanel;
+    centerPanel: EbookCenterPanel;
     downloadDialogue: DownloadDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
-    leftPanel: ContentLeftPanel;
+    leftPanel: EbookLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
+    moreInfoDialogue: MoreInfoDialogue;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
+    cfiFragement: string;
 
     create(): void {
         super.create();
@@ -36,13 +40,9 @@ export class Extension extends BaseExtension implements IEbookExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: ITreeNode) => {
-            this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
-            this.treeNodeSelected(node);
-        });
-
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
-            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+        this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
+            this.cfiFragement = cfi;
+            this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
         });
     }
 
@@ -60,12 +60,12 @@ export class Extension extends BaseExtension implements IEbookExtension {
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
+            this.leftPanel = new EbookLeftPanel(this.shell.$leftPanel);
         } else {
             this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new AVCenterPanel(this.shell.$centerPanel);
+        this.centerPanel = new EbookCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
@@ -79,6 +79,10 @@ export class Extension extends BaseExtension implements IEbookExtension {
         } else {
             this.shell.$footerPanel.hide();
         }
+
+        this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
+        this.shell.$overlays.append(this.$moreInfoDialogue);
+        this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         this.shell.$overlays.append(this.$shareDialogue);
@@ -110,63 +114,26 @@ export class Extension extends BaseExtension implements IEbookExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        let isEnabled: boolean = super.isLeftPanelEnabled();
-        const tree: Manifesto.ITreeNode | null = this.helper.getTree();
-
-        if (tree && tree.nodes.length) {
-            isEnabled = true;
-        }
-
-        return isEnabled;
+        return true;
     }
 
     render(): void {
         super.render();
+        this.checkForCFIParam();
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&cfi=${this.cfiFragement}`;
         const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
-    treeNodeSelected(node: ITreeNode): void {
-        const data: any = node.data;
+    checkForCFIParam(): void {
+        const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
 
-        if (!data.type) return;
-
-        switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
-                // do nothing
-                break;
-            case manifesto.IIIFResourceType.collection().toString():
-                // do nothing
-                break;
-            default:
-                this.viewRange(data.path);
-                break;
+        if (cfi) {
+            this.component.publish(Events.CFI_FRAGMENT_CHANGED, cfi);
         }
     }
-
-    viewRange(path: string): void {
-        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
-        if (!range) return;
-        this.component.publish(BaseEvents.RANGE_CHANGED, range);
-
-        // don't update the canvas index, only when thumbs are clicked
-        // if (range.canvases && range.canvases.length) {
-        //     const canvasId: string = range.canvases[0];
-        //     const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
-
-        //     if (canvas) {
-        //         const canvasIndex: number = canvas.index;
-                
-        //         if (canvasIndex !== this.helper.canvasIndex) {
-        //             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
-        //         }
-        //     }
-        // }
-    }
-
 }

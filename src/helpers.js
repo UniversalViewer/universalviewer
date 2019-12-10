@@ -70,6 +70,10 @@ function createUV(selector, data, dataProvider) {
         //console.log('openseadragonExtension.currentViewUri', obj);
     }, false);
 
+    uv.on('ebookExtension.cfiFragmentChanged', function(cfi) {
+        dataProvider.set('cfi', cfi);
+    }, false);
+
     uv.on('reload', function(data) {
         data.isReload = true;
         uv.set(data);

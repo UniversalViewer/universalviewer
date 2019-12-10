@@ -5,6 +5,7 @@ import { Position } from "../uv-shared-module/Position";
 
 export class EbookCenterPanel extends CenterPanel {
 
+  private _cfi: string;
   private _ebookReader: any;
   private _ebookReaderReady: boolean = false;
   private _state: any = {};
@@ -25,22 +26,14 @@ export class EbookCenterPanel extends CenterPanel {
     this._ebookReader.setAttribute("width", "100%");
     this._ebookReader.setAttribute("height", "100%");
 
-    this._ebookReader.addEventListener(
-      "changed",
-      (e: any) => {
-        if (this._ebookReaderReady) {
-          this._nextState(Object.assign({}, e.detail, {
-            src: this._prevState.src
-          }));
-        }
-      },
-      false
-    );
+    this._ebookReader.addEventListener("loadedNavigation", (e: any) => {
+      this.component.publish(Events.LOADED_NAVIGATION, e.detail);
+    }, false);
 
-    this._ebookReader.addEventListener("loaded", (e: any) => {
-      this.component.publish(Events.LOADED, {        
-        url: e.detail
-      });
+    this._ebookReader.addEventListener("relocated", (e: any) => {
+      this.component.publish(Events.RELOCATED, e.detail);
+      this._cfi = e.detail.start.cfi;
+      this.component.publish(Events.CFI_FRAGMENT_CHANGED, this._cfi);
     }, false);
 
     Utils.Async.waitFor(() => {
@@ -48,7 +41,6 @@ export class EbookCenterPanel extends CenterPanel {
     }, () => {
       customElements.whenDefined("uv-ebook-reader").then(() => {
         this._ebookReaderReady = true;
-        this._ebookReader.load(this._state.src);
       });
     });
 
@@ -58,6 +50,30 @@ export class EbookCenterPanel extends CenterPanel {
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (e: any, resources: Manifesto.IExternalResource[]) => {
         that.openMedia(resources);
+      }
+    );
+
+    this.component.subscribe(
+      Events.ITEM_CLICKED,
+      (href: string) => {
+        this._nextState({
+          cfi: href
+        });
+      }
+    );
+
+    this.component.subscribe(
+      Events.CFI_FRAGMENT_CHANGED,
+      (cfi: string) => {
+        Utils.Async.waitFor(() => {
+          return this._ebookReaderReady;
+        }, () => {
+          if (cfi !== this._cfi) {
+            this._nextState({
+              cfi: cfi
+            });
+          }
+        });
       }
     );
   }
@@ -77,7 +93,7 @@ export class EbookCenterPanel extends CenterPanel {
           //const format: Manifesto.MediaType | null = media.getFormat();
 
           this._nextState({
-            src: media.id
+            bookPath: media.id
           });
         }
       }
@@ -90,25 +106,28 @@ export class EbookCenterPanel extends CenterPanel {
 
     this._state = Object.assign({}, this._state, s);
 
-    if (this._state.src && this._state.src !== this._prevState.src) {
-      Utils.Async.waitFor(() => {
-        return this._ebookReaderReady;
-      }, () => {
-        this._ebookReader.load(this._state.src);
-      });
-    }
-
-    this.component.publish(Events.READER_CHANGED, this._state);
-
-    this._prevState = Object.assign({}, this._state);
+    Utils.Async.waitFor(() => {
+      return this._ebookReaderReady;
+    }, () => {
+      if (this._state.bookPath && this._state.bookPath !== this._prevState.bookPath) {
+        this._ebookReader.load(this._state.bookPath);
+      }
+      if (this._state.cfi && this._state.cfi !== this._prevState.cfi) {
+        this._ebookReader.display(this._state.cfi);
+      }
+      this._prevState = Object.assign({}, this._state);
+    });
   }
 
   resize() {
 
     super.resize();
     
-    if (this._ebookReaderReady && this._state.srcLoaded) {
-      this._ebookReader.resize();
+    if (this._ebookReaderReady) {
+      setTimeout(() => {
+        this._ebookReader.resize();
+      }, 10);
+      
     }
   }
 }

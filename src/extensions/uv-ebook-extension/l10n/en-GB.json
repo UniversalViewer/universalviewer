@@ -23,21 +23,9 @@
         "viewTerms": "Read Full Terms and Conditions"
       }
     },
-    "contentLeftPanel": {
+    "ebookLeftPanel": {
       "content": {
-        "collapse": "Collapse Contents",
-        "collapseFull": "Collapse Gallery",
-        "date": "date",
-        "expand": "Expand Contents",
-        "expandFull": "Expand Gallery",
-        "index": "Index",
-        "manifestRanges": "Manifest Ranges",
-        "searchResult": "{0} search result",
-        "searchResults": "{0} search results",
-        "sortBy": "Sort By:",
-        "thumbnails": "Thumbnails",
-        "title": "Contents",
-        "volume": "volume"
+        "title": "Contents"
       }
     },
     "dialogue": {
@@ -133,15 +121,7 @@
     },
     "avCenterPanel": {
       "content": {
-        "attribution": "Attribution",
-        "currentTime": "Current Time",
-        "delimiter": " - ",
-        "duration": "Duration",
-        "mute": "Mute",
-        "next": "Next",
-        "pause": "Pause",
-        "play": "Play",
-        "previous": "Previous"
+        "attribution": "Attribution"
       }
     },
     "restrictedDialogue": {
