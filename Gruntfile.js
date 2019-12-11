@@ -2,7 +2,6 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
-const webpackConfig = require('./webpack.config.js');
 
 module.exports = function (grunt) {
 
@@ -225,18 +224,6 @@ module.exports = function (grunt) {
             }
         },
 
-        exec: {
-            // concatenate and compress with r.js
-            devbuild: {
-                // todo: https://github.com/Rich-Harris/sorcery
-                //cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none && sorcery -i src/build.js'
-                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none'
-            },
-            distbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
-            },
-        },
-
         replace: {
             // ../../../modules/<module>/assets/<asset>
             // becomes
@@ -304,7 +291,11 @@ module.exports = function (grunt) {
         },
 
         webpack: {
-            myConfig: webpackConfig,
+            main: function() { 
+                var config = require('./webpack.config.js');
+                config.mode = grunt.option('dist')? 'production':'development';
+                return config;
+            }
         },
     });
 

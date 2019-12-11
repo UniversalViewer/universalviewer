@@ -18,6 +18,11 @@ const config = {
         'VirtexExtension': ['./src/extensions/uv-virtex-extension/Extension.ts'],
         'openseadragon': ['./node_modules/openseadragon/build/openseadragon/openseadragon.js']
     },
+    externals: {
+        'node-fetch': 'fetch',
+        'fetch-cookie': 'fetch',
+        'tough-cookie': 'fetch'
+    },
     // The output defines how and where we want the bundles. The special value `[name]` in `filename` tells Webpack to use the name we defined above.
     // We target a UMD and name it UV. When including the bundle in the browser it will be accessible at `window.UV`
     output: {
@@ -26,11 +31,6 @@ const config = {
         library: 'UV',
         umdNamedDefine: true,
         chunkFilename: '[name].bundle.js'
-    },
-    optimization: {
-        splitChunks: {
-            chunks: 'all'
-        }
     },
     node: {
         net: 'empty'
@@ -44,7 +44,37 @@ const config = {
     // source when the user debugs the application
     //devtool: 'source-map',
     optimization: {
-        minimize: true
+        // splitChunks: {
+        //     chunks: 'all',
+        //     minSize: 30000,
+        //     maxSize: 0,
+        //     minChunks: 1,
+        //     maxAsyncRequests: 5,
+        //     maxInitialRequests: 3,
+        //     automaticNameDelimiter: '~',
+        //     automaticNameMaxLength: 30,
+        //     name: true,
+        //     cacheGroups: {
+        //         vendors: {
+        //             enforce: true,
+        //             test: /[\\/]node_modules[\\/]/,
+        //             priority: -10
+        //         },
+        //         osd: {
+        //             test: /[\\/]node_modules[\\/]openseadragon[\\/]/,
+        //             priority: -9
+        //         },
+        //         default: {
+        //             minChunks: 2,
+        //             priority: -20,
+        //             reuseExistingChunk: true
+        //         },
+        //         sharedmodule: {
+        //             test: /[\\/]src[\\/]modules[\\/]uv\-shared\-module[\\/]/,
+        //             priority: -8
+        //         }
+        //     }
+        // }
     },
     // Webpack doesn't understand TypeScript files and a loader is needed.
     module: {
