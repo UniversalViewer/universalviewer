@@ -233,7 +233,7 @@ export class PDFCenterPanel extends CenterPanel {
 
         this._$spinner.show();
         
-        this.extension.getExternalResources(resources).then(() => {
+        this.extension.getExternalResources(resources).then(async () => {
 
             let mediaUri: string | null = null;
             let canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -247,8 +247,12 @@ export class PDFCenterPanel extends CenterPanel {
             }
 
             if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+                window.PDFObject = await import(/* webpackChunkName: "pdfobject" *//* webpackMode: "lazy" */ "pdfobject");
                 window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
             } else {
+
+                PDFJS = await import(/* webpackChunkName: "pdfjs" *//* webpackMode: "lazy" */ "pdfjs-dist");
+
                 PDFJS.disableWorker = true;
 
                 const parameter = {
@@ -256,13 +260,12 @@ export class PDFCenterPanel extends CenterPanel {
                     withCredentials: canvas.externalResource.isAccessControlled()
                 } 
 
-                PDFJS.getDocument(parameter).then((pdfDoc: any) => {
-                    this._pdfDoc = pdfDoc;
-                    this._render(this._pageIndex);
+                const pdfDoc = await PDFJS.getDocument(parameter);
+                this._pdfDoc = pdfDoc;
+                this._render(this._pageIndex);
 
-                    this.component.publish(Events.PDF_LOADED, pdfDoc);
-                    this._$spinner.hide();
-                });
+                this.component.publish(Events.PDF_LOADED, pdfDoc);
+                this._$spinner.hide();
             }
         });
 

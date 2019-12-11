@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "module": "commonjs",
+    "module": "ESNext",
     "sourceMap": false,
     "noImplicitAny": false,
     "noImplicitReturns": true,

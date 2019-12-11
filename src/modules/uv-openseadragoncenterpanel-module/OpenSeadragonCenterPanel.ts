@@ -153,10 +153,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        // add to window object for testing automation purposes.
-        //window.openSeadragonViewer
-        // removed as causing issues for multiple UVs on page
-        import(/* webpackChunkName: "openseadragon" */ 'openseadragon').then(() => {
+        import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ 'openseadragon').then(() => {
             this.viewer = OpenSeadragon({
                 id: this.viewerId,
                 ajaxWithCredentials: false,

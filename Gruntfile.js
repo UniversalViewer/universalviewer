@@ -25,6 +25,7 @@ module.exports = function (grunt) {
             dist: config.directories.dist,
             distumd: config.directories.distumd,
             examples: config.directories.examples + '/uv/',
+            examplesdistumd: config.directories.examples + '/dist-umd/',
             extension: config.directories.src + '/extensions/*/.build/*',
             libs: [
                 config.directories.src + '/extensions/*/lib/**/*',
@@ -184,6 +185,16 @@ module.exports = function (grunt) {
                         dest: config.directories.examples + '/'
                     }
                 ]
+            },
+            distumd: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: config.directories.distumd,
+                        src: ['**'],
+                        dest: config.directories.examples + '/' + config.directories.distumd + '/'
+                    }
+                ]
             }
         },
 
@@ -285,16 +296,13 @@ module.exports = function (grunt) {
             }
         },
 
-        uglify: {
-            options: {
-                mangle: false
-            }
-        },
-
         webpack: {
             main: function() {
                 var config = require('./webpack.config.js');
                 config.mode = grunt.option('dist')? 'production':'development';
+                if (config.mode == 'development') {
+                    config.devtool = 'source-map';
+                }
                 return config;
             }
         },
@@ -325,6 +333,7 @@ module.exports = function (grunt) {
         grunt.task.run(
             'clean:libs',
             'clean:themes',
+            'clean:distumd',
             'sync',
             'copy:bundle',
             'concat:bundle',
@@ -341,7 +350,9 @@ module.exports = function (grunt) {
             'replace:themeassets',
             'clean:dist',
             'clean:examples',
+            'clean:examplesdistumd',
             'copy:dist',
+            'copy:distumd',
             'compress:zip'
         );
     });

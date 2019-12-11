@@ -66,17 +66,17 @@ export class Viewer extends BaseComponent implements IUVComponent {
             //     return extension;
             // },
             [Extension.OSD]: async () => {
-                const m = await import("./extensions/uv-openseadragon-extension/Extension") as any;
+                const m = await import(/* webpackChunkName: "uv-openseadragon-extension" *//* webpackMode: "lazy" */"./extensions/uv-openseadragon-extension/Extension") as any;
                 const extension = new m.default();
                 extension.name = Extension.OSD;
                 return extension;
+            },
+            [Extension.PDF]: async () => {
+                const m = await import(/* webpackChunkName: "uv-pdf-extension" *//* webpackMode: "lazy" */"./extensions/uv-pdf-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.PDF;
+                return extension;
             }
-            // [Extension.PDF]: async () => {
-            //     const m = await import("./extensions/uv-pdf-extension/Extension") as any;
-            //     const extension = new m.default();
-            //     extension.name = Extension.PDF;
-            //     return extension;
-            // },
             // [Extension.VIRTEX]: async () => {
             //     const m = await import("./extensions/uv-virtex-extension/Extension") as any;
             //     const extension = new m.default();
@@ -116,7 +116,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
         this._extensionRegistry[MediaType.JPG] = {
             load: this._extensions[Extension.OSD]
         };
-        
+
         this._extensionRegistry[MediaType.PDF] = {
             load: this._extensions[Extension.PDF]
         };
@@ -161,7 +161,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
         return true;
     }
-    
+
     public data(): IUVData {
         return {
             annotations: undefined,
@@ -216,7 +216,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 this.extension.data = Object.assign({}, this.extension.data, data);
                 this.extension.render();
             }
-        }       
+        }
     }
 
     public get(key: string): any {
@@ -234,7 +234,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     }
 
     private async _reload(data: IUVData): Promise<void> {
-        
+
         this._pubsub.dispose(); // remove any existing event listeners
 
         this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
@@ -260,7 +260,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
         } as IManifoldOptions);
-        
+
         let trackingLabel: string | null = helper.getTrackingLabel();
 
         if (trackingLabel) {
@@ -289,7 +289,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
             that._error(`Canvas ${data.canvasIndex} not found.`);
             return;
         }
-        
+
         let extension: IExtension | undefined = undefined;
 
         // if the canvas has a duration, use the uv-av-extension
@@ -302,7 +302,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
         // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
         // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
         const content: Annotation[] = canvas.getContent();
-        
+
         if (content.length) {
             const annotation: Annotation = content[0];
             const body: AnnotationBody[] = annotation.getBody();
@@ -316,7 +316,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
                     if (!extension) {
                         // try type
                         const type: ExternalResourceType | null = body[0].getType();
-                    
+
                         if (type) {
                             extension = await that._extensionRegistry[type].load();
                         }
