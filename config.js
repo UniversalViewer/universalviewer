@@ -15,6 +15,7 @@ module.exports = function () {
         bower: './lib',
         build: './.build',
         dist: './dist',
+        distumd: './dist-umd',
         examples: './examples',
         extensions: './src/extensions',
         lib: './src/lib',
@@ -32,6 +33,6 @@ module.exports = function () {
         uvVirtexExtension: './src/extensions/uv-virtex-extension'
     };
     this.themes = {
-        
+
     }
 }
