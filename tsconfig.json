@@ -15,6 +15,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
+    "tsBuildInfoFile": "./buildcache/front-end",
     "types": [
       "@edsilv/jquery-plugins",
       "@iiif/base-component",
