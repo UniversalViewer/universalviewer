@@ -62,20 +62,20 @@ export class EbookCenterPanel extends CenterPanel {
       }
     );
 
-    // this.component.subscribe(
-    //   Events.CFI_FRAGMENT_CHANGED,
-    //   (cfi: string) => {
-    //     Utils.Async.waitFor(() => {
-    //       return this._ebookReaderReady;
-    //     }, () => {
-    //       if (cfi !== this._cfi) {
-    //         this._nextState({
-    //           cfi: cfi
-    //         });
-    //       }
-    //     });
-    //   }
-    // );
+    this.component.subscribe(
+      Events.CFI_FRAGMENT_CHANGED,
+      (cfi: string) => {
+        Utils.Async.waitFor(() => {
+          return this._ebookReaderReady;
+        }, () => {
+          if (cfi !== this._cfi) {
+            this._nextState({
+              cfi: cfi
+            });
+          }
+        });
+      }
+    );
   }
 
   openMedia(resources: Manifesto.IExternalResource[]) {
