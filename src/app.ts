@@ -42,6 +42,7 @@ requirejs([
     './lib/manifold.js',
     './lib/Utils.js',
     './lib/xss.min.js',
+    './lib/fetch.umd.js',
     'URLDataProvider',
     'UVComponent'
 ], (
@@ -60,6 +61,7 @@ requirejs([
     manifesto: any,
     manifold: any,
     utils: any,
+    fetch: any,
     URLDataProvider: any,
     UVComponent: any
 ) => {

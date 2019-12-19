@@ -16,7 +16,8 @@ module.exports = function () {
             'node_modules/@iiif/manifold/dist/manifold.js',
             'node_modules/pdfjs-dist/build/pdf.combined.js',
             'node_modules/@edsilv/utils/dist/Utils.js',
-            'node_modules/xss/dist/xss.min.js'
+            'node_modules/xss/dist/xss.min.js',
+            'node_modules/whatwg-fetch/dist/fetch.umd.js'
         ],
         offline: [ // when offline, make these libs available as they can't be loaded from a cdn
             'node_modules/jquery/dist/jquery.min.js',

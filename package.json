@@ -100,6 +100,7 @@
     "three": "0.91.0",
     "virtex3d": "0.3.18",
     "waveform-data": "2.0.2",
+    "whatwg-fetch": "^3.0.0",
     "xss": "1.0.3"
   },
   "collective": {
