@@ -35,7 +35,7 @@ function createUV(selector, data) {
     }, false);
 
     uv.on('created', function(obj) {
-       resize();
+       //resize();
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {

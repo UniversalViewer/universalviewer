@@ -8,7 +8,7 @@ import {IOpenSeadragonExtensionData} from "../../extensions/uv-openseadragon-ext
 import { sanitize } from "../../Utils";
 import { Async, Bools, Dimensions } from "@edsilv/utils";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Canvas, IExternalResource, IExternalImageResourceData } from "manifesto.js";
+import { Canvas, IExternalResource, IExternalImageResourceData, IExternalResourceData } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
@@ -68,9 +68,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         });
 
         this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
-            this.whenResized(() => {
+            this.whenResized(async () => {
                 if (!this.isCreated) this.createUI();
-                this.openMedia(resources);
+                await this.openMedia(resources);
+                this.component.publish(BaseEvents.EXTENSION_READY, this.extension);
             });
         });
 
@@ -148,185 +149,183 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         }
     }
 
-    createUI(): void {
+    async createUI(): Promise<void> {
 
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ 'openseadragon').then(() => {
-            this.viewer = OpenSeadragon({
-                id: this.viewerId,
-                ajaxWithCredentials: false,
-                showNavigationControl: true,
-                showNavigator: true,
-                showRotationControl: true,
-                showHomeControl: Bools.getBool(this.config.options.showHomeControl, false),
-                showFullPageControl: false,
-                defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
-                maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
-                controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-                controlsFadeLength: this.config.options.controlsFadeLength || 250,
-                navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
-                animationTime: this.config.options.animationTime || 1.2,
-                visibilityRatio: this.config.options.visibilityRatio || 0.5,
-                constrainDuringPan: Bools.getBool(this.config.options.constrainDuringPan, false),
-                immediateRender: Bools.getBool(this.config.options.immediateRender, false),
-                blendTime: this.config.options.blendTime || 0,
-                autoHideControls: Bools.getBool(this.config.options.autoHideControls, true),
-                prefixUrl: this.extension.data.root + '/img/',
-                gestureSettingsMouse: {
-                    clickToZoom: Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
+        await import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ "openseadragon");
+        this.viewer = OpenSeadragon({
+            id: this.viewerId,
+            ajaxWithCredentials: false,
+            showNavigationControl: true,
+            showNavigator: true,
+            showRotationControl: true,
+            showHomeControl: Bools.getBool(this.config.options.showHomeControl, false),
+            showFullPageControl: false,
+            defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
+            maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
+            controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
+            controlsFadeLength: this.config.options.controlsFadeLength || 250,
+            navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+            animationTime: this.config.options.animationTime || 1.2,
+            visibilityRatio: this.config.options.visibilityRatio || 0.5,
+            constrainDuringPan: Bools.getBool(this.config.options.constrainDuringPan, false),
+            immediateRender: Bools.getBool(this.config.options.immediateRender, false),
+            blendTime: this.config.options.blendTime || 0,
+            autoHideControls: Bools.getBool(this.config.options.autoHideControls, true),
+            prefixUrl: this.extension.data.root + '/img/',
+            gestureSettingsMouse: {
+                clickToZoom: Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
+            },
+            navImages: {
+                zoomIn: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 },
-                navImages: {
-                    zoomIn: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    zoomOut: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    home: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    rotateright: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    rotateleft: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    next: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    },
-                    previous: {
-                        REST:   'pixel.gif',
-                        GROUP:  'pixel.gif',
-                        HOVER:  'pixel.gif',
-                        DOWN:   'pixel.gif'
-                    }
+                zoomOut: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                home: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                rotateright: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                rotateleft: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                next: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                previous: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 }
-            });
+            }
+        });
 
-            this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
-            this.$zoomInButton.attr('tabindex', 0);
-            this.$zoomInButton.prop('title', this.content.zoomIn);
-            this.$zoomInButton.addClass('zoomIn viewportNavButton');
+        this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
+        this.$zoomInButton.attr('tabindex', 0);
+        this.$zoomInButton.prop('title', this.content.zoomIn);
+        this.$zoomInButton.addClass('zoomIn viewportNavButton');
 
-            this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
-            this.$zoomOutButton.attr('tabindex', 0);
-            this.$zoomOutButton.prop('title', this.content.zoomOut);
-            this.$zoomOutButton.addClass('zoomOut viewportNavButton');
+        this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
+        this.$zoomOutButton.attr('tabindex', 0);
+        this.$zoomOutButton.prop('title', this.content.zoomOut);
+        this.$zoomOutButton.addClass('zoomOut viewportNavButton');
 
-            this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
-            this.$goHomeButton.attr('tabindex', 0);
-            this.$goHomeButton.prop('title', this.content.goHome);
-            this.$goHomeButton.addClass('goHome viewportNavButton');
+        this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
+        this.$goHomeButton.attr('tabindex', 0);
+        this.$goHomeButton.prop('title', this.content.goHome);
+        this.$goHomeButton.addClass('goHome viewportNavButton');
 
-            this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
-            this.$rotateButton.attr('tabindex', 0);
-            this.$rotateButton.prop('title', this.content.rotateRight);
-            this.$rotateButton.addClass('rotate viewportNavButton');
+        this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
+        this.$rotateButton.attr('tabindex', 0);
+        this.$rotateButton.prop('title', this.content.rotateRight);
+        this.$rotateButton.addClass('rotate viewportNavButton');
 
-            this.$viewportNavButtonsContainer = this.$viewer.find('.openseadragon-container > div:not(.openseadragon-canvas):first');
-            this.$viewportNavButtons = this.$viewportNavButtonsContainer.find('.viewportNavButton');
+        this.$viewportNavButtonsContainer = this.$viewer.find('.openseadragon-container > div:not(.openseadragon-canvas):first');
+        this.$viewportNavButtons = this.$viewportNavButtonsContainer.find('.viewportNavButton');
 
-            this.$canvas = $(this.viewer.canvas);
+        this.$canvas = $(this.viewer.canvas);
 
-            // disable right click on canvas
-            this.$canvas.on('contextmenu', () => { return false; });
+        // disable right click on canvas
+        this.$canvas.on('contextmenu', () => { return false; });
 
-            this.$navigator = this.$viewer.find(".navigator");
-            this.setNavigatorVisible();
+        this.$navigator = this.$viewer.find(".navigator");
+        this.setNavigatorVisible();
 
-            // events
+        // events
 
-            this.$element.on('mousemove', () => {
-                if (this.controlsVisible) return;
-                this.controlsVisible = true;
-                this.viewer.setControlsEnabled(true);
-            });
+        this.$element.on('mousemove', () => {
+            if (this.controlsVisible) return;
+            this.controlsVisible = true;
+            this.viewer.setControlsEnabled(true);
+        });
 
-            this.$element.on('mouseleave', () => {
+        this.$element.on('mouseleave', () => {
+            if (!this.controlsVisible) return;
+            this.controlsVisible = false;
+            this.viewer.setControlsEnabled(false);
+        });
+
+        // when mouse move stopped
+        this.$element.on('mousemove', () => {
+            // if over element, hide controls.
+            // When over prev/next buttons keep controls enabled
+            if (this.$prevButton.ismouseover()) {
+                return;
+            }
+            if (this.$nextButton.ismouseover()) {
+                return;
+            }
+            if (!this.$viewer.find('.navigator').ismouseover()) {
                 if (!this.controlsVisible) return;
                 this.controlsVisible = false;
                 this.viewer.setControlsEnabled(false);
-            });
+            }
+        }, this.config.options.controlsFadeAfterInactive);
 
-            // when mouse move stopped
-            this.$element.on('mousemove', () => {
-                // if over element, hide controls.
-                // When over prev/next buttons keep controls enabled
-                if (this.$prevButton.ismouseover()) {
-                    return;
-                }
-                if (this.$nextButton.ismouseover()) {
-                    return;
-                }
-                if (!this.$viewer.find('.navigator').ismouseover()) {
-                    if (!this.controlsVisible) return;
-                    this.controlsVisible = false;
-                    this.viewer.setControlsEnabled(false);
-                }
-            }, this.config.options.controlsFadeAfterInactive);
+        this.viewer.addHandler('tile-drawn', () => {
+            this.$spinner.hide();
+        });
 
-            this.viewer.addHandler('tile-drawn', () => {
-                this.$spinner.hide();
-            });
+        //this.viewer.addHandler("open-failed", () => {
+        //});
 
-            //this.viewer.addHandler("open-failed", () => {
-            //});
+        this.viewer.addHandler('resize', (viewer: any) => {
+            this.component.publish(Events.OPENSEADRAGON_RESIZE, viewer);
+            this.viewerResize(viewer);
+        });
 
-            this.viewer.addHandler('resize', (viewer: any) => {
-                this.component.publish(Events.OPENSEADRAGON_RESIZE, viewer);
-                this.viewerResize(viewer);
-            });
+        this.viewer.addHandler('animation-start', (viewer: any) => {
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION_START, viewer);
+        });
 
-            this.viewer.addHandler('animation-start', (viewer: any) => {
-                this.component.publish(Events.OPENSEADRAGON_ANIMATION_START, viewer);
-            });
+        this.viewer.addHandler('animation', (viewer: any) => {
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION, viewer);
+        });
 
-            this.viewer.addHandler('animation', (viewer: any) => {
-                this.component.publish(Events.OPENSEADRAGON_ANIMATION, viewer);
-            });
+        this.viewer.addHandler('animation-finish', (viewer: any) => {
+            this.currentBounds = this.getViewportBounds();
 
-            this.viewer.addHandler('animation-finish', (viewer: any) => {
-                this.currentBounds = this.getViewportBounds();
+            this.updateVisibleAnnotationRects();
 
-                this.updateVisibleAnnotationRects();
+            this.component.publish(Events.OPENSEADRAGON_ANIMATION_FINISH, viewer);
+        });
 
-                this.component.publish(Events.OPENSEADRAGON_ANIMATION_FINISH, viewer);
-            });
+        this.viewer.addHandler('rotate', (args: any) => {
+            this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
+        });
 
-            this.viewer.addHandler('rotate', (args: any) => {
-                this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
-            });
+        this.title = this.extension.helper.getLabel();
 
-            this.title = this.extension.helper.getLabel();
+        this.createNavigationButtons();
+        this.hidePrevButton();
+        this.hideNextButton();
 
-            this.createNavigationButtons();
-            this.hidePrevButton();
-            this.hideNextButton();
-
-            this.isCreated = true;
-
-            this.resize();
-        })
+        this.isCreated = true;
+        //this.resize();
     }
 
     createNavigationButtons() {
@@ -412,50 +411,49 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(resources?: IExternalResource[]): void {
+    async openMedia(resources?: IExternalResource[]): Promise<void> {
 
         this.$spinner.show();
         this.items = [];
 
-        this.extension.getExternalResources(resources).then((resources: IExternalImageResourceData[]) => {
+        let images: IExternalResourceData[] = await this.extension.getExternalResources(resources);
 
-            this.viewer.close();
+        this.viewer.close();
 
-            resources = this.getPagePositions(resources);
+        images = this.getPagePositions(images);
 
-            for (let i = 0; i < resources.length; i++) {
-                const data: any = resources[i];
+        for (let i = 0; i < images.length; i++) {
+            const data: any = images[i];
 
-                let tileSource: any;
+            let tileSource: any;
 
-                if (data.hasServiceDescriptor) {
-                    tileSource = data;
-                } else {
-                    tileSource = {
-                        type: 'image',
-                        url: data.id,
-                        buildPyramid: false
-                    };
-                }
-
-                this.viewer.addTiledImage({
-                    tileSource: tileSource,
-                    x: data.x,
-                    y: data.y,
-                    width: data.width,
-                    success: (item: any) => {
-                        this.items.push(item);
-                        if (this.items.length === resources.length) {
-                            this.openPagesHandler();
-                        }
-                        this.resize();
-                    }
-                });
+            if (data.hasServiceDescriptor) {
+                tileSource = data;
+            } else {
+                tileSource = {
+                    type: 'image',
+                    url: data.id,
+                    buildPyramid: false
+                };
             }
-        });
+
+            this.viewer.addTiledImage({
+                tileSource: tileSource,
+                x: data.x,
+                y: data.y,
+                width: data.width,
+                success: (item: any) => {
+                    this.items.push(item);
+                    if (this.items.length === images.length) {
+                        this.openPagesHandler();
+                    }
+                    this.resize();
+                }
+            });
+        }
     }
 
-    getPagePositions(resources: IExternalImageResourceData[]): IExternalImageResourceData[] {
+    getPagePositions(resources: IExternalResourceData[]): IExternalResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;

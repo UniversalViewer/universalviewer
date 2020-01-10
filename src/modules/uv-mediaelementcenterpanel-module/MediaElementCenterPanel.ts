@@ -172,7 +172,8 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        this.resize();
+        this.component.publish(BaseEvents.EXTENSION_READY, this.extension);
+        //this.resize();
     }
 
     isVideo(): boolean {

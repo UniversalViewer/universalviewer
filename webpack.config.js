@@ -45,10 +45,10 @@ const config = {
                 ]
             }
         ]
-    },
-    plugins: [
-        new BundleAnalyzerPlugin()
-    ]
+    }
+    // plugins: [
+    //     new BundleAnalyzerPlugin()
+    // ]
 }
 
 if (process.env.NODE_WEBPACK_LIBRARY_PATH) {

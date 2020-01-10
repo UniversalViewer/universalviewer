@@ -292,6 +292,13 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
+        this.component.subscribe(BaseEvents.EXTENSION_READY, (extension: IExtension) => {
+            setTimeout(() => {
+                this.component.publish(BaseEvents.RESIZE);
+                this.fire(BaseEvents.EXTENSION_READY, extension);
+            }, 1);
+        });
+
         this.component.subscribe(BaseEvents.FEEDBACK, () => {
             this.feedback();
         });
@@ -390,7 +397,10 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
             this.fire(BaseEvents.OPEN_LEFT_PANEL);
-            this.resize();
+            // todo: use global state
+            if (!this.$element.hasClass("loading")) {
+                this.resize();
+            }
         });
 
         this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
@@ -398,14 +408,17 @@ export class BaseExtension implements IExtension {
         });
 
         this.component.subscribe(BaseEvents.OPENED_EXTERNAL_RESOURCE, () => {
+            //console.log("opened external resource");
             this.$element.removeClass("loading");
-            this.component.publish(BaseEvents.RESIZE);
             this.fire(BaseEvents.OPENED_EXTERNAL_RESOURCE);
         });
 
         this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
             this.fire(BaseEvents.OPEN_RIGHT_PANEL);
-            this.resize();
+            // todo: use global state
+            if (!this.$element.hasClass("loading")) {
+                this.resize();
+            }
         });
 
         this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
@@ -765,6 +778,7 @@ export class BaseExtension implements IExtension {
 
     resize(): void {
         this._updateMetric();
+        //console.log("resize");
         this.component.publish(BaseEvents.RESIZE);
     }
 
