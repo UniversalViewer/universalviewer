@@ -53,18 +53,18 @@ export class Viewer extends BaseComponent implements IUVComponent {
         super._init();
 
         this._extensions = {
-            // [Extension.AV]: async () => {
-            //     const m = await import("./extensions/uv-av-extension/Extension") as any;
-            //     const extension = new m.default();
-            //     extension.name = Extension.AV;
-            //     return extension;
-            // }
-            // [Extension.MEDIAELEMENT]: async () => {
-            //     const m = await import("./extensions/uv-mediaelement-extension/Extension") as any;
-            //     const extension = new m.default();
-            //     extension.name = Extension.MEDIAELEMENT;
-            //     return extension;
-            // },
+            [Extension.AV]: async () => {
+                const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.AV;
+                return extension;
+            },
+            [Extension.MEDIAELEMENT]: async () => {
+                const m = await import(/* webpackChunkName: "uv-mediaelement-extension" *//* webpackMode: "lazy" */"./extensions/uv-mediaelement-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.MEDIAELEMENT;
+                return extension;
+            },
             [Extension.OSD]: async () => {
                 const m = await import(/* webpackChunkName: "uv-openseadragon-extension" *//* webpackMode: "lazy" */"./extensions/uv-openseadragon-extension/Extension") as any;
                 const extension = new m.default();
@@ -76,19 +76,23 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 const extension = new m.default();
                 extension.name = Extension.PDF;
                 return extension;
+            },
+            [Extension.VIRTEX]: async () => {
+                const m = await import(/* webpackChunkName: "uv-virtex-extension" *//* webpackMode: "lazy" */"./extensions/uv-virtex-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.VIRTEX;
+                return extension;
             }
-            // [Extension.VIRTEX]: async () => {
-            //     const m = await import("./extensions/uv-virtex-extension/Extension") as any;
-            //     const extension = new m.default();
-            //     extension.name = Extension.VIRTEX;
-            //     return extension;
-            // }
         };
 
         this._extensionRegistry = {};
 
         this._extensionRegistry[ExternalResourceType.CANVAS] = {
             load: this._extensions[Extension.OSD]
+        };
+
+        this._extensionRegistry[ExternalResourceType.DOCUMENT] = {
+            load: this._extensions[Extension.PDF]
         };
 
         this._extensionRegistry[ExternalResourceType.IMAGE] = {
@@ -219,6 +223,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
         }
     }
 
+    private _getExtension(key: string): IExtension {
+        if (!this._extensionRegistry[key]) {
+            key = "default";
+        }
+
+        return this._extensionRegistry[key].load();
+    }
+
     public get(key: string): any {
         if (this.extension) {
             return this.extension.data[key];
@@ -311,21 +323,21 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 const format: MediaType | null = body[0].getFormat();
 
                 if (format) {
-                    extension = await that._extensionRegistry[format].load();
+                    extension = await that._getExtension(format);
 
                     if (!extension) {
                         // try type
                         const type: ExternalResourceType | null = body[0].getType();
 
                         if (type) {
-                            extension = await that._extensionRegistry[type].load();
+                            extension = await that._getExtension(type);
                         }
                     }
                 } else {
                     const type: ExternalResourceType | null = body[0].getType();
 
                     if (type) {
-                        extension = await that._extensionRegistry[type].load();
+                        extension = await that._getExtension(type);
                     }
                 }
             }
@@ -335,19 +347,19 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
             if (canvasType) {
                 // try using canvasType
-                extension = await that._extensionRegistry[canvasType].load();
+                extension = await that._getExtension(canvasType);
             }
 
             // if there isn't an extension for the canvasType, try the format
             if (!extension) {
                 const format: any = canvas.getProperty('format');
-                extension = await that._extensionRegistry[format].load();
+                extension = await that._getExtension(format);
             }
         }
 
         // if there still isn't a matching extension, use the default extension.
         if (!extension) {
-            extension = await that._extensionRegistry['default'].load();
+            extension = await that._getExtension("default");
         }
 
         that._configure(data, extension, (config: any) => {

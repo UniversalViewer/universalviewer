@@ -52,126 +52,127 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     }
 
-    openMedia(resources: IExternalResource[]) {
+    async openMedia(resources: IExternalResource[]) {
 
         const that = this;
 
-        this.extension.getExternalResources(resources).then(() => {
+        await this.extension.getExternalResources(resources);
 
-            this.$container.empty();
+        await import(/* webpackChunkName: "mediaelement" *//* webpackMode: "lazy" */ "mediaelement/build/mediaelement-and-player");
 
-            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
+        this.$container.empty();
 
-            this.mediaHeight = this.config.defaultHeight;
-            this.mediaWidth = this.config.defaultWidth;
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-            this.$container.height(this.mediaHeight);
-            this.$container.width(this.mediaWidth);
+        this.mediaHeight = this.config.defaultHeight;
+        this.mediaWidth = this.config.defaultWidth;
 
-            const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
-            const sources: any[] = [];
+        this.$container.height(this.mediaHeight);
+        this.$container.width(this.mediaWidth);
 
-            const renderings: Rendering[] = canvas.getRenderings();
-            
-            if (renderings && renderings.length) {
-                canvas.getRenderings().forEach((rendering: Rendering) => {
-                    sources.push({
-                        type: rendering.getFormat().toString(),
-                        src: rendering.id
-                    });
+        const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
+        const sources: any[] = [];
+
+        const renderings: Rendering[] = canvas.getRenderings();
+        
+        if (renderings && renderings.length) {
+            canvas.getRenderings().forEach((rendering: Rendering) => {
+                sources.push({
+                    type: rendering.getFormat().toString(),
+                    src: rendering.id
                 });
-            } else {
-                const formats: AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
+            });
+        } else {
+            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
 
-                if (formats && formats.length) {
-                    formats.forEach((format: AnnotationBody) => {
-                        
-                        const type: MediaType | null = format.getFormat();
+            if (formats && formats.length) {
+                formats.forEach((format: AnnotationBody) => {
+                    
+                    const type: MediaType | null = format.getFormat();
 
-                        if (type) {
-                            sources.push({
-                                type: type.toString(),
-                                src: format.id
-                            });
+                    if (type) {
+                        sources.push({
+                            type: type.toString(),
+                            src: format.id
+                        });
+                    }
+                    
+                });
+            }
+        }
+
+        if (this.isVideo()) {
+
+            this.$media = $('<video controls="controls" preload="none"></video>');
+            this.$container.append(this.$media);
+
+            this.player = new MediaElementPlayer($('video')[0], {
+                //pluginPath: this.extension.data.root + 'lib/mediaelement/',
+                poster: poster,
+                features: ['playpause', 'current', 'progress', 'volume'],
+                success: function(mediaElement: any, originalNode: any) {
+                    
+                    mediaElement.addEventListener('canplay', () => {
+                        that.resize();
+                    });
+
+                    mediaElement.addEventListener('play', () => {
+                        that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
+                    });
+
+                    mediaElement.addEventListener('pause', () => {
+                        // mediaelement creates a pause event before the ended event. ignore this.
+                        if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
+                            that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
                         }
-                        
                     });
+
+                    mediaElement.addEventListener('ended', () => {
+                        that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
+                    });
+
+                    mediaElement.setSrc(sources);
                 }
-            }
+            });
 
-            if (this.isVideo()) {
+        } else { // audio
 
-                this.$media = $('<video controls="controls" preload="none"></video>');
-                this.$container.append(this.$media);
+            this.$media = $('<audio controls="controls" preload="none"></audio>');
+            this.$container.append(this.$media);
 
-                this.player = new MediaElementPlayer($('video')[0], {
-                    //pluginPath: this.extension.data.root + 'lib/mediaelement/',
-                    poster: poster,
-                    features: ['playpause', 'current', 'progress', 'volume'],
-                    success: function(mediaElement: any, originalNode: any) {
-                        
-                        mediaElement.addEventListener('canplay', () => {
-                            that.resize();
-                        });
+            this.player = new MediaElementPlayer($('audio')[0], {
+                poster: poster,
+                defaultAudioWidth: 'auto',
+                defaultAudioHeight: 'auto',
+                showPosterWhenPaused: true,
+                showPosterWhenEnded: true,
+                success: function(mediaElement: any, originalNode: any) {
+                    
+                    mediaElement.addEventListener('canplay', () => {
+                        that.resize();
+                    });
 
-                        mediaElement.addEventListener('play', () => {
-                            that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
-                        });
+                    mediaElement.addEventListener('play', () => {
+                        that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
+                    });
 
-                        mediaElement.addEventListener('pause', () => {
-                            // mediaelement creates a pause event before the ended event. ignore this.
-                            if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
-                                that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
-                            }
-                        });
+                    mediaElement.addEventListener('pause', () => {
+                        // mediaelement creates a pause event before the ended event. ignore this.
+                        if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
+                            that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
+                        }
+                    });
 
-                        mediaElement.addEventListener('ended', () => {
-                            that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
-                        });
+                    mediaElement.addEventListener('ended', () => {
+                        that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
+                    });
 
-                        mediaElement.setSrc(sources);
-                    }
-                });
+                    mediaElement.setSrc(sources);
+                }
+            });
+        }
 
-            } else { // audio
-
-                this.$media = $('<audio controls="controls" preload="none"></audio>');
-                this.$container.append(this.$media);
-
-                this.player = new MediaElementPlayer($('audio')[0], {
-                    poster: poster,
-                    defaultAudioWidth: 'auto',
-                    defaultAudioHeight: 'auto',
-                    showPosterWhenPaused: true,
-                    showPosterWhenEnded: true,
-                    success: function(mediaElement: any, originalNode: any) {
-                        
-                        mediaElement.addEventListener('canplay', () => {
-                            that.resize();
-                        });
-
-                        mediaElement.addEventListener('play', () => {
-                            that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
-                        });
-
-                        mediaElement.addEventListener('pause', () => {
-                            // mediaelement creates a pause event before the ended event. ignore this.
-                            if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
-                                that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
-                            }
-                        });
-
-                        mediaElement.addEventListener('ended', () => {
-                            that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
-                        });
-
-                        mediaElement.setSrc(sources);
-                    }
-                });
-            }
-
-            this.resize();
-        });
+        this.resize();
     }
 
     isVideo(): boolean {

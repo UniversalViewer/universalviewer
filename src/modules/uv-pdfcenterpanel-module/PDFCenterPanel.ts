@@ -235,45 +235,43 @@ export class PDFCenterPanel extends CenterPanel {
         this._$nextButton.show();
     }
 
-    openMedia(resources: IExternalResource[]) {
+    async openMedia(resources: IExternalResource[]) {
 
         this._$spinner.show();
         
-        this.extension.getExternalResources(resources).then(async () => {
+        await this.extension.getExternalResources(resources);
 
-            let mediaUri: string | null = null;
-            let canvas: Canvas = this.extension.helper.getCurrentCanvas();
-            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
-            const pdfUri: string = canvas.id;
+        let mediaUri: string | null = null;
+        let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+        const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+        const pdfUri: string = canvas.id;
 
-            if (formats && formats.length) {
-                mediaUri = formats[0].id;
-            } else {
-                mediaUri = canvas.id;
-            }
+        if (formats && formats.length) {
+            mediaUri = formats[0].id;
+        } else {
+            mediaUri = canvas.id;
+        }
 
-            if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
-                window.PDFObject = await import(/* webpackChunkName: "pdfobject" *//* webpackMode: "lazy" */ "pdfobject");
-                window.PDFObject.embed(pdfUri, '.pdfContainer', {id: "PDF"});
-            } else {
+        if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            window.PDFObject = await import(/* webpackChunkName: "pdfobject" *//* webpackMode: "lazy" */ "pdfobject");
+            window.PDFObject.embed(pdfUri, '.pdfContainer', {id: "PDF"});
+        } else {
 
-                PDFJS = await import(/* webpackChunkName: "pdfjs" *//* webpackMode: "lazy" */ "pdfjs-dist");
+            PDFJS = await import(/* webpackChunkName: "pdfjs" *//* webpackMode: "lazy" */ "pdfjs-dist");
 
-                PDFJS.disableWorker = true;
+            PDFJS.disableWorker = true;
 
-                const parameter = {
-                    url: mediaUri,
-                    withCredentials: canvas.externalResource.isAccessControlled()
-                } 
+            const parameter = {
+                url: mediaUri,
+                withCredentials: canvas.externalResource.isAccessControlled()
+            } 
 
-                const pdfDoc = await PDFJS.getDocument(parameter);
-                this._pdfDoc = pdfDoc;
-                this._render(this._pageIndex);
-                this.component.publish(Events.PDF_LOADED, pdfDoc);
-                this._$spinner.hide();
-            }
-        });
-
+            const pdfDoc = await PDFJS.getDocument(parameter);
+            this._pdfDoc = pdfDoc;
+            this._render(this._pageIndex);
+            this.component.publish(Events.PDF_LOADED, pdfDoc);
+            this._$spinner.hide();
+        }
     }
 
     private _render(num: number): void {

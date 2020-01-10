@@ -12,3 +12,11 @@
 .uv.loading * {
     visibility: hidden !important;
 } 
+
+.uv.loading button {
+    display: none !important;
+} 
+
+.uv.loading input {
+    display: none !important;
+} 
