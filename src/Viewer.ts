@@ -59,6 +59,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 extension.name = Extension.AV;
                 return extension;
             },
+            [Extension.DEFAULT]: async () => {
+                const m = await import(/* webpackChunkName: "uv-default-extension" *//* webpackMode: "lazy" */"./extensions/uv-default-extension/Extension") as any;
+                const extension = new m.default();
+                extension.name = Extension.DEFAULT;
+                return extension;
+            },
             [Extension.MEDIAELEMENT]: async () => {
                 const m = await import(/* webpackChunkName: "uv-mediaelement-extension" *//* webpackMode: "lazy" */"./extensions/uv-mediaelement-extension/Extension") as any;
                 const extension = new m.default();
