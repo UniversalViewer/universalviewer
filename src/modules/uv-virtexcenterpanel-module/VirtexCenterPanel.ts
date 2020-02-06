@@ -1,10 +1,20 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import { sanitize } from "../../Utils";
-import { MediaType } from "@iiif/vocabulary";
-import * as virtex from "virtex3d";
+import "three";
+import "three/examples/js/controls/VRControls";
+import "three/examples/js/Detector";
+import "three/examples/js/effects/VREffect";
+import "three/examples/js/libs/stats.min";
+import "three/examples/js/loaders/GLTFLoader";
+import "three/examples/js/loaders/MTLLoader";
+import "three/examples/js/loaders/OBJLoader";
+import "three/examples/js/loaders/PLYLoader";
+import "three/examples/js/vr/WebVR";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { Bools } from "@edsilv/utils";
+import { MediaType } from "@iiif/vocabulary";
+import { sanitize } from "../../Utils";
+import { Viewport } from "virtex3d";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
 
 export class VirtexCenterPanel extends CenterPanel {
 
@@ -13,7 +23,7 @@ export class VirtexCenterPanel extends CenterPanel {
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
     $vrButton: JQuery;
-    viewport: virtex.Viewport | null;
+    viewport: Viewport | null;
 
     constructor($element: JQuery) {
         super($element);
@@ -85,57 +95,57 @@ export class VirtexCenterPanel extends CenterPanel {
             this.$vrButton.hide();
         }
 
+        this.component.publish(BaseEvents.OPENED_MEDIA);
     }
 
-    openMedia(resources: IExternalResource[]) {
+    async openMedia(resources: IExternalResource[]) {
 
-        this.extension.getExternalResources(resources).then(() => {
+        await this.extension.getExternalResources(resources);
 
-            this.$viewport.empty();
+        this.$viewport.empty();
 
-            let mediaUri: string | null = null;
-            let canvas: Canvas = this.extension.helper.getCurrentCanvas();
-            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
-            let resourceType: MediaType | null = null;
-            // default to threejs format.
-            let fileType: any = MediaType.THREEJS;
+        let mediaUri: string | null = null;
+        let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+        const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+        let resourceType: MediaType | null = null;
+        // default to threejs format.
+        let fileType: any = MediaType.THREEJS;
 
-            if (formats && formats.length) {
-                mediaUri = formats[0].id;
-                resourceType = formats[0].getFormat();
-            } else {
-                mediaUri = canvas.id;
+        if (formats && formats.length) {
+            mediaUri = formats[0].id;
+            resourceType = formats[0].getFormat();
+        } else {
+            mediaUri = canvas.id;
+        }
+
+        if (resourceType) {
+            fileType = resourceType;
+        }
+
+        const isAndroid: boolean = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
+        this.viewport = new Viewport({
+            target:  <HTMLElement>this.$viewport[0],
+            data: {
+                antialias: !isAndroid,
+                file: mediaUri as string,
+                fullscreenEnabled: false,
+                type: fileType,
+                showStats: this.options.showStats
             }
-
-            if (resourceType) {
-                fileType = resourceType;
-            }
-
-            const isAndroid: boolean = navigator.userAgent.toLowerCase().indexOf("android") > -1;
-
-            this.viewport = new virtex.Viewport({
-                target:  <HTMLElement>this.$viewport[0],
-                data: {
-                    antialias: !isAndroid,
-                    file: mediaUri as string,
-                    fullscreenEnabled: false,
-                    type: fileType,
-                    showStats: this.options.showStats
-                }
-            });
-
-            if (this.viewport) {
-                this.viewport.on('vravailable', () => {
-                    this.$vrButton.show();
-                }, false);
-    
-                this.viewport.on('vrunavailable', () => {
-                    this.$vrButton.hide();
-                }, false);
-            }
-
-            this.resize();
         });
+
+        if (this.viewport) {
+            this.viewport.on('vravailable', () => {
+                this.$vrButton.show();
+            }, false);
+
+            this.viewport.on('vrunavailable', () => {
+                this.$vrButton.hide();
+            }, false);
+        }
+
+        this.component.publish(BaseEvents.OPENED_MEDIA);
     }
 
     private _isVREnabled(): boolean {

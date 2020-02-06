@@ -31,8 +31,6 @@ export default class Extension extends BaseExtension implements IPDFExtension {
 
     create(): void {
 
-        requirejs.config({paths: {'pdfjs-dist/build/pdf.combined': this.data.root + '/lib/' + 'pdf.combined'}});
-
         super.create();
 
         this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {

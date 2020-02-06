@@ -24,7 +24,6 @@ export class BaseEvents {
     static ESCAPE: string                           = 'escape';
     static EXIT_FULLSCREEN: string                  = 'exitFullScreen';
     static EXTERNAL_LINK_CLICKED: string            = 'externalLinkClicked';
-    static EXTENSION_READY: string                  = 'extensionReady';
     static FEEDBACK: string                         = 'feedback';
     static FIRST: string                            = 'first';
     static FORBIDDEN: string                        = 'forbidden';
@@ -70,7 +69,7 @@ export class BaseEvents {
     static OPEN_THUMBS_VIEW: string                 = 'openThumbsView';
     static OPEN_TREE_VIEW: string                   = 'openTreeView';
     static OPEN: string                             = 'open';
-    static OPENED_EXTERNAL_RESOURCE: string         = 'openedExternalResource';
+    static OPENED_MEDIA: string                     = 'openedMedia';
     static PAGE_DOWN: string                        = 'pageDown';
     static PAGE_UP: string                          = 'pageUp';
     static PLUS: string                             = 'plus';

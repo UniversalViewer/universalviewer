@@ -117,16 +117,56 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
         // presentation 3
 
+        this._extensionRegistry["av"] = {
+            load: this._extensions[Extension.AV]
+        };
+
+        this._extensionRegistry[MediaType.AUDIO_MP4] = {
+            load: this._extensions[Extension.AV]
+        };
+
+        this._extensionRegistry["default"] = {
+            load: this._extensions[Extension.DEFAULT]
+        };
+
+        this._extensionRegistry[MediaType.DRACO] = {
+            load: this._extensions[Extension.VIRTEX]
+        };
+
+        this._extensionRegistry[MediaType.GLTF] = {
+            load: this._extensions[Extension.VIRTEX]
+        };
+
         this._extensionRegistry[MediaType.JPG] = {
             load: this._extensions[Extension.OSD]
+        };
+
+        this._extensionRegistry[MediaType.M3U8] = {
+            load: this._extensions[Extension.AV]
+        };
+
+        this._extensionRegistry[MediaType.MP3] = {
+            load: this._extensions[Extension.AV]
+        };
+
+        this._extensionRegistry[MediaType.MPEG_DASH] = {
+            load: this._extensions[Extension.AV]
+        };
+
+        this._extensionRegistry[MediaType.OBJ] = {
+            load: this._extensions[Extension.VIRTEX]
         };
 
         this._extensionRegistry[MediaType.PDF] = {
             load: this._extensions[Extension.PDF]
         };
 
-        this._extensionRegistry[MediaType.AUDIO_MP4] = {
-            load: this._extensions[Extension.AV]
+        this._extensionRegistry[MediaType.PLY] = {
+            load: this._extensions[Extension.VIRTEX]
+        };
+        
+        this._extensionRegistry[MediaType.THREEJS] = {
+            load: this._extensions[Extension.VIRTEX]
         };
 
         this._extensionRegistry[MediaType.VIDEO_MP4] = {
@@ -135,30 +175,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
         this._extensionRegistry[MediaType.WEBM] = {
             load: this._extensions[Extension.AV]
-        };
-
-        this._extensionRegistry[MediaType.THREEJS] = {
-            load: this._extensions[Extension.VIRTEX]
-        };
-
-        this._extensionRegistry[MediaType.MP3] = {
-            load: this._extensions[Extension.AV]
-        };
-
-        this._extensionRegistry[MediaType.M3U8] = {
-            load: this._extensions[Extension.AV]
-        };
-
-        this._extensionRegistry[MediaType.MPEG_DASH] = {
-            load: this._extensions[Extension.AV]
-        };
-
-        this._extensionRegistry["av"] = {
-            load: this._extensions[Extension.AV]
-        };
-
-        this._extensionRegistry["default"] = {
-            load: this._extensions[Extension.DEFAULT]
         };
 
         this.set(this.options.data);

@@ -273,7 +273,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._$spinner.hide();
         }
 
-        this.component.publish(BaseEvents.EXTENSION_READY, this.extension);
+        this.component.publish(BaseEvents.OPENED_MEDIA);
     }
 
     private _render(num: number): void {

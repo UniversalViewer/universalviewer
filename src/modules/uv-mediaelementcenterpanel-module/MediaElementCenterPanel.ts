@@ -172,7 +172,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        this.component.publish(BaseEvents.EXTENSION_READY, this.extension);
+        this.component.publish(BaseEvents.OPENED_MEDIA);
         //this.resize();
     }
 

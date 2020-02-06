@@ -71,7 +71,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
             this.whenResized(async () => {
                 if (!this.isCreated) this.createUI();
                 await this.openMedia(resources);
-                this.component.publish(BaseEvents.EXTENSION_READY, this.extension);
+                this.component.publish(BaseEvents.OPENED_MEDIA);
             });
         });
 

@@ -292,10 +292,11 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
-        this.component.subscribe(BaseEvents.EXTENSION_READY, (extension: IExtension) => {
+
+        this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
             setTimeout(() => {
                 this.component.publish(BaseEvents.RESIZE);
-                this.fire(BaseEvents.EXTENSION_READY, extension);
+                this.fire(BaseEvents.OPENED_MEDIA);
             }, 1);
         });
 
@@ -407,10 +408,10 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        this.component.subscribe(BaseEvents.OPENED_EXTERNAL_RESOURCE, () => {
+        this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
             //console.log("opened external resource");
             this.$element.removeClass("loading");
-            this.fire(BaseEvents.OPENED_EXTERNAL_RESOURCE);
+            this.fire(BaseEvents.OPENED_MEDIA);
         });
 
         this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
@@ -1019,8 +1020,6 @@ export class BaseExtension implements IExtension {
                         return this._prepareResourceData(resource);
                     });
 
-                    this.component.publish(BaseEvents.OPENED_EXTERNAL_RESOURCE);
-
                     resolve(this.resources);
                 });
             });
@@ -1032,8 +1031,6 @@ export class BaseExtension implements IExtension {
                     this.resources = r.map((resource: IExternalResource) => {
                         return this._prepareResourceData(resource);
                     });
-
-                    this.component.publish(BaseEvents.OPENED_EXTERNAL_RESOURCE);
 
                     resolve(this.resources);
                 });
