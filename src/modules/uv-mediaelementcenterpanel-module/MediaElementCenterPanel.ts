@@ -148,18 +148,18 @@ export class MediaElementCenterPanel extends CenterPanel {
                         });
 
                         mediaElement.addEventListener('play', () => {
-                            this.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
+                            that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
                         });
 
                         mediaElement.addEventListener('pause', () => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
-                                this.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
+                                that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
                             }
                         });
 
                         mediaElement.addEventListener('ended', () => {
-                            this.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
+                            that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
                         });
 
                         mediaElement.setSrc(sources);
