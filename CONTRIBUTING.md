@@ -60,6 +60,8 @@ To view the examples run:
 
 UV source code lives inside the `/src/` folder.
 
+Here is a [diagram](https://docs.google.com/drawings/d/1i484Jd32FoLwtE5uvkBA6l5LV-DioSOZDIWD0WfhWl8/edit?usp=sharing) showing the overall architecture of the project.
+
 #### 3. Run test suite
 
 Before commiting your changes make sure tests are passing:
