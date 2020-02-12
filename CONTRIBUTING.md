@@ -14,8 +14,6 @@ In order to contribute to the UV, you must have a github account so you can push
 
 Once you are all setup, following the Github's guide of how to fork a repository: https://guides.github.com/activities/forking/
 
-Note: If switching between branches, ensure that you check out the correct branch in the `examples` sub-repository too. By default this should be `gh-pages`, but you can create your own test branches. Avoid getting into a "detached HEAD state".
-
 All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
@@ -29,6 +27,8 @@ All command-line operations for building the UV are scripted using [Grunt](http:
     `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
 
 1. On the command line, go in to the `universalviewer` folder
+
+  `cd universalviewer`
 
 1. Run
 
@@ -68,7 +68,10 @@ Before commiting your changes make sure tests are passing:
 npm test
 ```
 
-Note: the development server must be running (`grunt examples`)
+ > Note: the development server must be running (`grunt examples`)
+
+ > Tests are written using [Jest](https://jestjs.io/)
+
 
 #### 4. Create a branch and commit
 
