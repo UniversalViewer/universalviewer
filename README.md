@@ -65,10 +65,6 @@ For a "hello world" getting started example see [uv-hello-world](https://github.
 
 ## Contributing
 
-![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
-
-## Contributing
-
 Read below to learn how to take part in improving the UV:
 
 - Fork the repository and [run the examples from source](#getting-started)
@@ -79,6 +75,12 @@ Read below to learn how to take part in improving the UV:
   - First time contributing to the UV? Pick a [beginner friendly issue](https://github.com/universalviewer/universalviewer/labels/beginners) to get you familiar with codebase and our contributing process.
   - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
 - Could not find an issue? Look for bugs, typos, and missing features.
+
+### Contributors
+
+![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
+
+<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
 ## Feedback
 
@@ -154,9 +156,6 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/universalviewer/sponsor/27/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/27/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/28/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/28/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/29/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/29/avatar.svg"></a>
-
-
-<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
 ## License
 
