@@ -62,6 +62,8 @@ UV source code lives inside the `/src/` folder.
 
 Here is a [diagram](https://docs.google.com/drawings/d/1i484Jd32FoLwtE5uvkBA6l5LV-DioSOZDIWD0WfhWl8/edit?usp=sharing) showing the overall architecture of the project.
 
+The UV aims to be "framework agnostic", as it needs to be used in a variety of contexts. Therefore it is written in "plain" TypeScript and doesn't use a framework such as React or AngularJS. However, [StencilJS](https://stenciljs.com) is now being used to develop parts of the UV as generic Web Components, e.g. https://github.com/UniversalViewer/uv-ebook-components
+
 #### 3. Run test suite
 
 Before commiting your changes make sure tests are passing:
