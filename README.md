@@ -91,7 +91,7 @@ Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 
 ## Sponsors
 
-[[Become a backer](https://opencollective.com/universalviewer#backer)] and support us with a monthly donation and help us continue our activities. 
+[Become a backer](https://opencollective.com/universalviewer#backer) and support us with a monthly donation and help us continue our activities. 
 
 <a href="https://opencollective.com/universalviewer/backer/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/1/avatar.svg"></a>
@@ -124,7 +124,7 @@ Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 <a href="https://opencollective.com/universalviewer/backer/28/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/29/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/29/avatar.svg"></a>
 
-[[Become a sponsor](https://opencollective.com/universalviewer#sponsor)] and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
+[Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
 
 <a href="https://opencollective.com/universalviewer/sponsor/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/1/avatar.svg"></a>
