@@ -84,14 +84,14 @@ Read below to learn how to take part in improving the UV:
 
 ## Feedback
 
-Read below how to engage with UV [community](COMMUNITY_TEAM.md):
+Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 - Join the discussion on [Slack](http://universalviewer.io/#contact).
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new).
 - Star the repository to show your support ⭐
 
 ## Sponsors
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/universalviewer#backer)]
+[[Become a backer](https://opencollective.com/universalviewer#backer)] and support us with a monthly donation and help us continue our activities. 
 
 <a href="https://opencollective.com/universalviewer/backer/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/1/avatar.svg"></a>
@@ -124,7 +124,7 @@ Support us with a monthly donation and help us continue our activities. [[Become
 <a href="https://opencollective.com/universalviewer/backer/28/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/29/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/29/avatar.svg"></a>
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/universalviewer#sponsor)]
+[[Become a sponsor](https://opencollective.com/universalviewer#sponsor)] and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
 
 <a href="https://opencollective.com/universalviewer/sponsor/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/1/avatar.svg"></a>
