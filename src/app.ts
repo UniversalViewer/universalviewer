@@ -22,7 +22,7 @@ if (typeof jQuery === "function") {
     return;
 })();
 
-// uv.js
+// bundled into dist/uv.js
 // - things in src/lib that are generic to all extensions
 // - bundled data providers
 // - UVComponent
@@ -33,14 +33,14 @@ requirejs([
     './lib/jquery.xdomainrequest.js',
     './lib/modernizr.js',
     './lib/ex.es3.min.js',
-    './lib/base-component.js',
-    './lib/key-codes.js',
-    './lib/http-status-codes.js',
+    './lib/BaseComponent.js',
+    './lib/KeyCodes.js',
+    './lib/HTTPStatusCode.js',
     './lib/jquery-plugins.js',
     './lib/ba-tiny-pubsub.js',
     './lib/manifesto.js',
     './lib/manifold.js',
-    './lib/utils.js',
+    './lib/Utils.js',
     './lib/xss.min.js',
     'URLDataProvider',
     'UVComponent'
@@ -65,5 +65,5 @@ requirejs([
 ) => {
     window.UV = UVComponent.default;
     window.UV.URLDataProvider = URLDataProvider.default;
-    window.dispatchEvent(new CustomEvent('uvLoaded'));
+    window.dispatchEvent(new CustomEvent('uvLoaded', {}));
 });

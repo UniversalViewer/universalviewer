@@ -10,7 +10,6 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import {Shell} from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IPDFExtension {
@@ -34,46 +33,46 @@ export class Extension extends BaseExtension implements IPDFExtension {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.shell.$centerPanel.hide();
+            this.shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();
-            Shell.$rightPanel.show();
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.shell.$centerPanel.show();
+            this.shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
         });
 
-        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
             setTimeout(() => {
                 this.resize();
             }, 10); // allow time to exit full screen, then resize
         });
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     IsOldIE(): boolean {
@@ -84,41 +83,45 @@ export class Extension extends BaseExtension implements IPDFExtension {
         return false;
     }
 
+    isHeaderPanelEnabled(): boolean {
+        return super.isHeaderPanelEnabled() && Utils.Bools.getBool(this.data.config.options.usePdfJs, true);
+    }
+
     createModules(): void{
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new PDFHeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new PDFHeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ResourcesLeftPanel(this.shell.$leftPanel);
         }
 
-        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new PDFCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()) {
@@ -144,6 +147,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
         bookmark.type = manifesto.ResourceType.document().toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
+    }
+
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.PDFObject = dep;
+        }
     }
 
     getEmbedScript(template: string, width: number, height: number): string{

@@ -90,6 +90,23 @@
                 "refresh": "Uppdatera"
             }
         },
+        "headerPanel": {
+            "content": {
+              "close": "Stäng",
+              "help": "Hjälp"
+            }
+          },
+          "pdfHeaderPanel": {
+            "content": {
+              "emptyValue": "Geben Sie eine Nummer ein",
+              "first": "Första",
+              "go": "Gå",
+              "last": "Sista",
+              "next": "Hjälp",
+              "of": "av {0}",
+              "previous": "Föregående"
+            }
+          },
         "helpDialogue": {
             "content": {
                 "text": "platshållartext",

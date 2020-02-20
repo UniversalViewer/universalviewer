@@ -5,9 +5,66 @@
             font-size: @headings-size-xlarge;
             color: @text-color;
             padding: 0 20px 0 20px;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 30px;
+        }
 
-            span {
-                line-height: 30px;
+        .subtitle {
+            font-size: @headings-size-small;
+            color: @text-color;               
+            line-height: 30px;
+            height: 30px;
+            scrollbar-width: none;
+
+            &.hide {
+                display: none;
+            }
+
+            .wrapper {
+
+                z-index: 3;
+                background: rgba(0, 0, 0, 0.7);
+                scrollbar-width: none;
+
+                .expand-btn {
+                    width: 20px;
+                    height: 30px;
+                    float: left;
+                    background: #000;
+                    border: none;
+                    color: #fff;
+                    padding: 0;
+                }
+    
+                .text {
+                    display: block;
+                    float: left;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    margin: 0 10px 0 20px;
+                    scrollbar-width: none;
+
+                    &.elided {
+                        margin: 0 10px 0 0;
+                    }
+                }
+
+                &.expanded {
+                    position: absolute;
+                    overflow-y: scroll;
+                    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+                    .text {                        
+                        white-space: normal;
+                        text-overflow: inherit;
+                        overflow: scroll;
+                        margin: -30px 10px 0 20px;
+                    }
+                }
+
             }
         }
 

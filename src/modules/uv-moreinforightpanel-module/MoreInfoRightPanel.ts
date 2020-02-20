@@ -1,12 +1,12 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 
 export class MoreInfoRightPanel extends RightPanel {
 
-    metadataComponent: IIIFComponents.IMetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
-    limitType: IIIFComponents.MetadataComponentOptions.LimitType;
+    limitType: any;
     limit: number;
 
     constructor($element: JQuery) {
@@ -19,11 +19,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
         super.create();
         
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             this.databind();
         });
 
@@ -33,7 +33,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$main.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0],
+            target:  <HTMLElement>this.$metadata[0],
             data: this._getData()
         });
 
@@ -45,7 +45,7 @@ export class MoreInfoRightPanel extends RightPanel {
                 const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
-                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 }
             }
 
@@ -66,8 +66,8 @@ export class MoreInfoRightPanel extends RightPanel {
         return range;
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -78,13 +78,13 @@ export class MoreInfoRightPanel extends RightPanel {
             helper: this.extension.helper,
             licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            limitType: IIIFComponents.LimitType.LINES,
             limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
+            sanitizer: (html: string) => {
                 return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages

@@ -10,22 +10,11 @@ var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config
 
 module.exports = function (grunt) {
 
-    var packageJson;
-
-    function readPackageJson() {
-        packageJson = grunt.file.readJSON('package.json');
-    }
-
-    readPackageJson();
-
     grunt.initConfig({
 
         ts: {
             dev: {
-                tsconfig: './tsconfig.json',
-                options: {
-                    additionalFlags: '--sourceMap'
-                }
+                tsconfig: './tsconfig.json'
             },
             dist: {
                 tsconfig: './tsconfig.json',
@@ -38,9 +27,13 @@ module.exports = function (grunt) {
         clean: {
             themes: config.directories.themes,
             build: config.directories.build,
-            dist: config.directories.examples + '/uv/',
+            dist: config.directories.dist,
+            examples: config.directories.examples + '/uv/',
             extension: config.directories.src + '/extensions/*/.build/*',
-            libs: config.directories.src + '/extensions/*/lib/*'
+            libs: [
+                config.directories.src + '/extensions/*/lib/**/*',
+                '!' + config.directories.src + '/extensions/*/lib/**/*.proxy.js'
+            ]           
         },
 
         copy: {
@@ -80,7 +73,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: [ config.directories.src + '/build.js'],
+                        src: [config.directories.src + '/build.js'],
                         dest: config.directories.build,
                         rename: function(dest, src) {
                             return dest + '/uv.js';
@@ -157,6 +150,13 @@ module.exports = function (grunt) {
                         src: ['src/extensions/**/lib/*'],
                         dest: config.directories.build + '/lib/'
                     },
+                    // extension dependencies (needed to copy stencil js files in sub directories https://github.com/ionic-team/stencil/issues/683)
+                    {
+                        cwd: 'src/extensions/uv-seadragon-extension/lib/',
+                        expand: true,
+                        src: ['**'],
+                        dest: config.directories.build + '/lib/'
+                    },
                     // images
                     {
                         expand: true,
@@ -173,8 +173,14 @@ module.exports = function (grunt) {
                 ]
             },
             dist: {
-                // copy contents of /.build to /examples/uv.
+                // copy contents of /.build to /dist and /examples/uv.
                 files: [
+                    {
+                        cwd: config.directories.build,
+                        expand: true,
+                        src: ['**'],
+                        dest: config.directories.dist
+                    },
                     {
                         cwd: config.directories.build,
                         expand: true,
@@ -196,7 +202,7 @@ module.exports = function (grunt) {
             themes: {
                 files: [
                     {
-                        cwd: config.directories.npm,
+                        cwd: config.directories.npmthemes,
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: config.directories.themes
@@ -218,7 +224,7 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: config.directories.examples + '/' + config.directories.uv + '.zip',
+                    archive: config.directories.dist + '/uv.zip',
                     level: 9
                 },
                 files: [
@@ -336,8 +342,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', '', function() {
 
-        readPackageJson();
-
         var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
         var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
@@ -359,6 +363,7 @@ module.exports = function (grunt) {
             'replace:moduleassets',
             'replace:themeassets',
             'clean:dist',
+            'clean:examples',
             'copy:dist',
             'compress:zip'
         );

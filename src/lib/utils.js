@@ -1,7 +1,3 @@
-// utils v0.2.2 https://github.com/edsilv/utils
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.utils = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (global){
-
 var Utils;
 (function (Utils) {
     var Async = /** @class */ (function () {
@@ -31,10 +27,6 @@ var Utils;
         return Async;
     }());
     Utils.Async = Async;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Bools = /** @class */ (function () {
         function Bools() {
         }
@@ -47,10 +39,6 @@ var Utils;
         return Bools;
     }());
     Utils.Bools = Bools;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Clipboard = /** @class */ (function () {
         function Clipboard() {
         }
@@ -94,10 +82,6 @@ var Utils;
         return Clipboard;
     }());
     Utils.Clipboard = Clipboard;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Colors = /** @class */ (function () {
         function Colors() {
         }
@@ -129,10 +113,6 @@ var Utils;
         return Colors;
     }());
     Utils.Colors = Colors;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Dates = /** @class */ (function () {
         function Dates() {
         }
@@ -142,10 +122,6 @@ var Utils;
         return Dates;
     }());
     Utils.Dates = Dates;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Device = /** @class */ (function () {
         function Device() {
         }
@@ -164,10 +140,6 @@ var Utils;
         return Device;
     }());
     Utils.Device = Device;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Documents = /** @class */ (function () {
         function Documents() {
         }
@@ -210,10 +182,6 @@ var Utils;
         return Documents;
     }());
     Utils.Documents = Documents;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Events = /** @class */ (function () {
         function Events() {
         }
@@ -243,10 +211,6 @@ var Utils;
         return Events;
     }());
     Utils.Events = Events;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Files = /** @class */ (function () {
         function Files() {
         }
@@ -268,10 +232,6 @@ var Utils;
         return Files;
     }());
     Utils.Files = Files;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Keyboard = /** @class */ (function () {
         function Keyboard() {
         }
@@ -282,10 +242,6 @@ var Utils;
         return Keyboard;
     }());
     Utils.Keyboard = Keyboard;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Maths = /** @class */ (function () {
         function Maths() {
         }
@@ -310,55 +266,44 @@ var Utils;
         return Maths;
     }());
     Utils.Maths = Maths;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
-    var Measurements;
-    (function (Measurements) {
-        var Size = /** @class */ (function () {
-            function Size(width, height) {
-                this.width = width;
-                this.height = height;
+    var Size = /** @class */ (function () {
+        function Size(width, height) {
+            this.width = width;
+            this.height = height;
+        }
+        return Size;
+    }());
+    Utils.Size = Size;
+    var Dimensions = /** @class */ (function () {
+        function Dimensions() {
+        }
+        Dimensions.fitRect = function (width1, height1, width2, height2) {
+            var ratio1 = height1 / width1;
+            var ratio2 = height2 / width2;
+            var width = 0;
+            var height = 0;
+            var scale;
+            if (ratio1 < ratio2) {
+                scale = width2 / width1;
+                width = width1 * scale;
+                height = height1 * scale;
             }
-            return Size;
-        }());
-        Measurements.Size = Size;
-        var Dimensions = /** @class */ (function () {
-            function Dimensions() {
+            else {
+                scale = height2 / height1;
+                width = width1 * scale;
+                height = height1 * scale;
             }
-            Dimensions.fitRect = function (width1, height1, width2, height2) {
-                var ratio1 = height1 / width1;
-                var ratio2 = height2 / width2;
-                var width = 0;
-                var height = 0;
-                var scale;
-                if (ratio1 < ratio2) {
-                    scale = width2 / width1;
-                    width = width1 * scale;
-                    height = height1 * scale;
-                }
-                else {
-                    scale = height2 / height1;
-                    width = width1 * scale;
-                    height = height1 * scale;
-                }
-                return new Size(Math.floor(width), Math.floor(height));
-            };
-            Dimensions.hitRect = function (x, y, w, h, mx, my) {
-                if (mx > x && mx < (x + w) && my > y && my < (y + h)) {
-                    return true;
-                }
-                return false;
-            };
-            return Dimensions;
-        }());
-        Measurements.Dimensions = Dimensions;
-    })(Measurements = Utils.Measurements || (Utils.Measurements = {}));
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
+            return new Size(Math.floor(width), Math.floor(height));
+        };
+        Dimensions.hitRect = function (x, y, w, h, mx, my) {
+            if (mx > x && mx < (x + w) && my > y && my < (y + h)) {
+                return true;
+            }
+            return false;
+        };
+        return Dimensions;
+    }());
+    Utils.Dimensions = Dimensions;
     var Numbers = /** @class */ (function () {
         function Numbers() {
         }
@@ -384,10 +329,6 @@ var Utils;
         return Numbers;
     }());
     Utils.Numbers = Numbers;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Objects = /** @class */ (function () {
         function Objects() {
         }
@@ -402,29 +343,25 @@ var Utils;
         return Objects;
     }());
     Utils.Objects = Objects;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Storage = /** @class */ (function () {
         function Storage() {
         }
         Storage.clear = function (storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             switch (storageType.value) {
-                case Utils.StorageType.memory.value:
+                case StorageType.memory.value:
                     this._memoryStorage = {};
                     break;
-                case Utils.StorageType.session.value:
+                case StorageType.session.value:
                     sessionStorage.clear();
                     break;
-                case Utils.StorageType.local.value:
+                case StorageType.local.value:
                     localStorage.clear();
                     break;
             }
         };
         Storage.clearExpired = function (storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             var items = this.getItems(storageType);
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
@@ -434,16 +371,16 @@ var Utils;
             }
         };
         Storage.get = function (key, storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             var data = null;
             switch (storageType.value) {
-                case Utils.StorageType.memory.value:
+                case StorageType.memory.value:
                     data = this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session.value:
+                case StorageType.session.value:
                     data = sessionStorage.getItem(key);
                     break;
-                case Utils.StorageType.local.value:
+                case StorageType.local.value:
                     data = localStorage.getItem(key);
                     break;
             }
@@ -471,34 +408,34 @@ var Utils;
             return true;
         };
         Storage.getItems = function (storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             var items = [];
             switch (storageType.value) {
-                case Utils.StorageType.memory.value:
+                case StorageType.memory.value:
                     var keys = Object.keys(this._memoryStorage);
                     for (var i = 0; i < keys.length; i++) {
-                        var item = this.get(keys[i], Utils.StorageType.memory);
+                        var item = this.get(keys[i], StorageType.memory);
                         if (item) {
                             items.push(item);
                         }
                     }
                     break;
-                case Utils.StorageType.session.value:
+                case StorageType.session.value:
                     for (var i = 0; i < sessionStorage.length; i++) {
                         var key = sessionStorage.key(i);
                         if (key) {
-                            var item = this.get(key, Utils.StorageType.session);
+                            var item = this.get(key, StorageType.session);
                             if (item) {
                                 items.push(item);
                             }
                         }
                     }
                     break;
-                case Utils.StorageType.local.value:
+                case StorageType.local.value:
                     for (var i = 0; i < localStorage.length; i++) {
                         var key = localStorage.key(i);
                         if (key) {
-                            var item = this.get(key, Utils.StorageType.local);
+                            var item = this.get(key, StorageType.local);
                             if (item) {
                                 items.push(item);
                             }
@@ -509,33 +446,33 @@ var Utils;
             return items;
         };
         Storage.remove = function (key, storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             switch (storageType.value) {
-                case Utils.StorageType.memory.value:
+                case StorageType.memory.value:
                     delete this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session.value:
+                case StorageType.session.value:
                     sessionStorage.removeItem(key);
                     break;
-                case Utils.StorageType.local.value:
+                case StorageType.local.value:
                     localStorage.removeItem(key);
                     break;
             }
         };
         Storage.set = function (key, value, expirationSecs, storageType) {
-            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            if (storageType === void 0) { storageType = StorageType.memory; }
             var expirationMS = expirationSecs * 1000;
-            var record = new Utils.StorageItem();
+            var record = new StorageItem();
             record.value = value;
             record.expiresAt = new Date().getTime() + expirationMS;
             switch (storageType.value) {
-                case Utils.StorageType.memory.value:
+                case StorageType.memory.value:
                     this._memoryStorage[key] = JSON.stringify(record);
                     break;
-                case Utils.StorageType.session.value:
+                case StorageType.session.value:
                     sessionStorage.setItem(key, JSON.stringify(record));
                     break;
-                case Utils.StorageType.local.value:
+                case StorageType.local.value:
                     localStorage.setItem(key, JSON.stringify(record));
                     break;
             }
@@ -545,20 +482,12 @@ var Utils;
         return Storage;
     }());
     Utils.Storage = Storage;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var StorageItem = /** @class */ (function () {
         function StorageItem() {
         }
         return StorageItem;
     }());
     Utils.StorageItem = StorageItem;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var StorageType = /** @class */ (function () {
         function StorageType(value) {
             this.value = value;
@@ -572,10 +501,6 @@ var Utils;
         return StorageType;
     }());
     Utils.StorageType = StorageType;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Strings = /** @class */ (function () {
         function Strings() {
         }
@@ -627,35 +552,36 @@ var Utils;
         return Strings;
     }());
     Utils.Strings = Strings;
-})(Utils || (Utils = {}));
-
-var Utils;
-(function (Utils) {
     var Urls = /** @class */ (function () {
         function Urls() {
         }
         Urls.getHashParameter = function (key, doc) {
             if (!doc)
                 doc = window.document;
-            return this.getHashParameterFromString(key, doc.location.hash);
+            if (doc && doc.location) {
+                return this.getHashParameterFromString(key, doc.location.hash);
+            }
+            return null;
         };
-        Urls.getHashParameterFromString = function (key, fragment) {
+        Urls.getHashParameterFromString = function (key, url) {
             var regex = new RegExp("#.*[?&]" + key + "=([^&]+)(&|$)");
-            var match = regex.exec(fragment);
+            var match = regex.exec(url);
             return (match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
         };
         Urls.setHashParameter = function (key, value, doc) {
             if (!doc)
                 doc = window.document;
-            var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
-            var newHash = "#?" + kvp;
-            var url = doc.URL;
-            // remove hash value (if present).
-            var index = url.indexOf('#');
-            if (index != -1) {
-                url = url.substr(0, url.indexOf('#'));
+            if (doc && doc.location) {
+                var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
+                var newHash = "#?" + kvp;
+                var url = doc.URL;
+                // remove hash value (if present).
+                var index = url.indexOf('#');
+                if (index != -1) {
+                    url = url.substr(0, url.indexOf('#'));
+                }
+                doc.location.replace(url + newHash);
             }
-            doc.location.replace(url + newHash);
         };
         Urls.getQuerystringParameter = function (key, w) {
             if (!w)
@@ -671,9 +597,11 @@ var Utils;
         Urls.setQuerystringParameter = function (key, value, doc) {
             if (!doc)
                 doc = window.document;
-            var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
-            // redirects.
-            window.location.search = kvp;
+            if (doc && doc.location) {
+                var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
+                // redirects.
+                window.location.search = kvp;
+            }
         };
         Urls.updateURIKeyValuePair = function (uriSegment, key, value) {
             key = encodeURIComponent(key);
@@ -717,9 +645,4 @@ var Utils;
     }());
     Utils.Urls = Urls;
 })(Utils || (Utils = {}));
-
-global.Utils = module.exports = Utils;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1])(1)
-});
+window.Utils = Utils;

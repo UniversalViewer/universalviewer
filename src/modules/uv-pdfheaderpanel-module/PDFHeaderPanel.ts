@@ -33,12 +33,12 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(Events.PAGE_INDEX_CHANGED, (e: any, pageIndex: number) => {
+        this.component.subscribe(Events.PAGE_INDEX_CHANGED, (pageIndex: number) => {
             this._pageIndex = pageIndex;
             this.render();
         });
 
-        $.subscribe(Events.PDF_LOADED, (e: any, pdfDoc: any) => {
+        this.component.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
             this._pdfDoc = pdfDoc;
         });
 
@@ -95,19 +95,19 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
-            $.publish(BaseEvents.FIRST);
+            this.component.publish(BaseEvents.FIRST);
         });
 
         this.$prevButton.onPressed(() => {
-            $.publish(BaseEvents.PREV);
+            this.component.publish(BaseEvents.PREV);
         });
 
         this.$nextButton.onPressed(() => {
-            $.publish(BaseEvents.NEXT);
+            this.component.publish(BaseEvents.NEXT);
         });
 
         this.$lastButton.onPressed(() => {
-            $.publish(BaseEvents.LAST);
+            this.component.publish(BaseEvents.LAST);
         });
 
         this.$searchText.onEnter(() => {
@@ -125,10 +125,11 @@ export class PDFHeaderPanel extends HeaderPanel {
     }
 
     render(): void {
-
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this._pdfDoc.numPages === 1) {
             this.$centerOptions.hide();
+        } else {
+            this.$centerOptions.show();
         }
 
         this.$searchText.val(this._pageIndex);
@@ -169,7 +170,7 @@ export class PDFHeaderPanel extends HeaderPanel {
             return;
         }
 
-        $.publish(Events.SEARCH, [index]);
+        this.component.publish(Events.SEARCH, index);
     }
 
     resize(): void {

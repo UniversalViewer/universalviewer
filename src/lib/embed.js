@@ -93,13 +93,13 @@ docReady(function() {
 
     Array.prototype.forEach.call(uvDiv, function(ud) {
         var z = ud.getAttribute('data-uri');
-        var ci = ud.getAttribute('data-collectionindex');
-        var mi = ud.getAttribute('data-manifestindex');
-        var si = ud.getAttribute('data-sequenceindex');
-        var cvi = ud.getAttribute('data-canvasindex');
+        var ci = ud.getAttribute('data-collectionindex') || 0;
+        var mi = ud.getAttribute('data-manifestindex') || 0;
+        var si = ud.getAttribute('data-sequenceindex') || 0;
+        var cvi = ud.getAttribute('data-canvasindex') || 0;
         var xywh = ud.getAttribute('data-xywh');
         var r = ud.getAttribute('data-rotation');
-        var cfg = ud.getAttribute('data-config');
+        var cfg = ud.getAttribute('data-config') || '';
         var dl = ud.getAttribute('data-locale');
         var manifestUrl = z;
 
@@ -107,8 +107,9 @@ docReady(function() {
 
         var iframe = document.createElement('iframe');
         iframe.src = fullUrl;
-        iframe.width = ud.clientWidth;
-        iframe.height = ud.clientHeight;
+        iframe.width = ud.style.width;
+        iframe.height = ud.style.height;
+        iframe.setAttribute("allowfullscreen", true);
         ud.appendChild(iframe);
     });
 });

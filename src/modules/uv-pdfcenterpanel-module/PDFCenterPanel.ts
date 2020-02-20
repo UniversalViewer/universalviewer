@@ -42,25 +42,31 @@ export class PDFCenterPanel extends CenterPanel {
         this._$spinner = $('<div class="spinner"></div>');
         this._canvas = (<HTMLCanvasElement>this._$canvas[0]);
         this._ctx = this._canvas.getContext('2d');
-        this.$content.append(this._$spinner);
         this._$prevButton = $('<div class="btn prev" tabindex="0"></div>');
-        this.$content.append(this._$prevButton);
         this._$nextButton = $('<div class="btn next" tabindex="0"></div>');
-        this.$content.append(this._$nextButton);
         this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
-        this.$content.append(this._$zoomInButton);
         this._$zoomOutButton = $('<div class="btn zoomOut" tabindex="0"></div>');
-        this.$content.append(this._$zoomOutButton);
+
+        // Only attach PDF controls if we're using PDF.js; they have no meaning in
+        // PDFObject. However, we still create the objects above so that references
+        // to them do not cause errors (simpler than putting usePdfJs checks all over):
+        if (Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            this.$content.append(this._$spinner);
+            this.$content.append(this._$prevButton);
+            this.$content.append(this._$nextButton);
+            this.$content.append(this._$zoomInButton);
+            this.$content.append(this._$zoomOutButton);
+        }
 
         this._$pdfContainer.append(this._$canvas);
 
         this.$content.prepend(this._$pdfContainer);
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
 
-        $.subscribe(BaseEvents.FIRST, () => {
+        this.component.subscribe(BaseEvents.FIRST, () => {
 
             if (!this._pdfDoc) {
                 return;
@@ -71,7 +77,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(BaseEvents.PREV, () => {
+        this.component.subscribe(BaseEvents.PREV, () => {
 
             if (!this._pdfDoc) {
                 return;
@@ -86,7 +92,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(BaseEvents.NEXT, () => {
+        this.component.subscribe(BaseEvents.NEXT, () => {
 
             if (!this._pdfDoc) {
                 return;
@@ -101,7 +107,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(BaseEvents.LAST, () => {
+        this.component.subscribe(BaseEvents.LAST, () => {
 
             if (!this._pdfDoc) {
                 return;
@@ -112,7 +118,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
 
             if (!this._pdfDoc) {
                 return;
@@ -123,7 +129,7 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(Events.SEARCH, (e: any, pageIndex: number) => {
+        this.component.subscribe(Events.SEARCH, (pageIndex: number) => {
 
             if (!this._pdfDoc) {
                 return;
@@ -143,7 +149,7 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (!this._prevButtonEnabled) return;
 
-            $.publish(BaseEvents.PREV);
+            this.component.publish(BaseEvents.PREV);
         });
 
         this.disablePrevButton();
@@ -153,7 +159,7 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (!this._nextButtonEnabled) return;
 
-            $.publish(BaseEvents.NEXT);
+            this.component.publish(BaseEvents.NEXT);
         });
 
         this.disableNextButton();
@@ -165,6 +171,8 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (newScale < this._maxScale) {
                 this._scale = newScale;
+            } else {
+                this._scale = this._maxScale;
             }
 
             this._render(this._pageIndex);
@@ -177,6 +185,8 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (newScale > this._minScale) {
                 this._scale = newScale;
+            } else {
+                this._scale = this._minScale;
             }
 
             this._render(this._pageIndex);
@@ -232,6 +242,7 @@ export class PDFCenterPanel extends CenterPanel {
             let mediaUri: string | null = null;
             let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            const pdfUri: string = canvas.id;
 
             if (formats && formats.length) {
                 mediaUri = formats[0].id;
@@ -239,22 +250,46 @@ export class PDFCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
-            PDFJS.disableWorker = true;
+            if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+                window.PDFObject.embed(pdfUri, '.pdfContainer', {id: "PDF"});
+            } else {
+                PDFJS.disableWorker = true;
 
-            PDFJS.getDocument(mediaUri).then((pdfDoc: any) => {
-                this._pdfDoc = pdfDoc;
-                this._render(this._pageIndex);
+                var parameter = {
+                    url: mediaUri,
+                    withCredentials: canvas.externalResource.isAccessControlled()
+                  } 
 
-                $.publish(Events.PDF_LOADED, [pdfDoc]);
-                this._$spinner.hide();
-            });
-            
+                PDFJS.getDocument(parameter).then((pdfDoc: any) => {
+                    this._pdfDoc = pdfDoc;
+                    this._render(this._pageIndex);
+
+                    this.component.publish(Events.PDF_LOADED, pdfDoc);
+                    this._$spinner.hide();
+                });
+            }
         });
 
     }
 
     private _render(num: number): void {
+        if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            return;
+        }
+        
         this._pageRendering = true;
+        this._$zoomOutButton.enable();
+        this._$zoomInButton.enable();
+
+        //disable zoom if not possible
+        const lowScale: number = this._scale - 0.5;
+        const highScale: number = this._scale + 0.5;
+        if (lowScale < this._minScale) {
+            this._$zoomOutButton.disable();
+        }
+        if (highScale > this._maxScale) {
+            this._$zoomInButton.disable();
+        }
 
         //this._pdfDoc.getPage(num).then((page: any) => {
         this._pdfDoc.getPage(num).then((page: any) => {
@@ -290,7 +325,7 @@ export class PDFCenterPanel extends CenterPanel {
             // Wait for rendering to finish
             this._renderTask.promise.then(() => {
 
-                $.publish(Events.PAGE_INDEX_CHANGED, [this._pageIndex]);
+                this.component.publish(Events.PAGE_INDEX_CHANGED, this._pageIndex);
 
                 this._pageRendering = false;
 

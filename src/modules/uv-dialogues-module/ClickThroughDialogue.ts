@@ -22,13 +22,13 @@ export class ClickThroughDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_CLICKTHROUGH_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, params: any) => {
+        this.component.subscribe(this.openCommand, (params: any) => {
             this.acceptCallback = params.acceptCallback;
             this.resource = params.resource;
             this.open();
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -55,7 +55,7 @@ export class ClickThroughDialogue extends Dialogue {
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
             this.close();
-            $.publish(BaseEvents.ACCEPT_TERMS);
+            this.component.publish(BaseEvents.ACCEPT_TERMS);
             if (this.acceptCallback) this.acceptCallback();
         });
     }
@@ -71,7 +71,7 @@ export class ClickThroughDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
+            this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
         this.resize();

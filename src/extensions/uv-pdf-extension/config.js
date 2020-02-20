@@ -9,8 +9,9 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'iiif-metadata-component/dist/iiif-metadata-component.js',
-                'pdfjs-dist/build/pdf.combined.js'
+                '@iiif/iiif-metadata-component/dist/MetadataComponent.js',
+                'pdfjs-dist/build/pdf.combined.js',
+                'pdfobject/pdfobject.js'
             ],
             dest: config.directories.uvPdfExtension + '/lib'
         }

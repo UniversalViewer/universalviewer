@@ -7,8 +7,8 @@ export class MultiSelectDialogue extends Dialogue {
 
     $title: JQuery;
     $gallery: JQuery;
-    galleryComponent: IIIFComponents.IGalleryComponent;
-    data: IIIFComponents.IGalleryComponentData;
+    galleryComponent: any;
+    data: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -25,14 +25,14 @@ export class MultiSelectDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_MULTISELECT_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_MULTISELECT_DIALOGUE;
 
-        $.subscribe(this.openCommand, () => {
+        this.component.subscribe(this.openCommand, () => {
             this.open();
             const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
-            this.galleryComponent.set(new Object()); // todo: should be passing data
+            this.galleryComponent.set(this.data);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
             const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(false);
@@ -45,7 +45,7 @@ export class MultiSelectDialogue extends Dialogue {
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
         this.$content.append(this.$gallery);
 
-        this.data = <IIIFComponents.IGalleryComponentData>{
+        this.data = {
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -64,15 +64,14 @@ export class MultiSelectDialogue extends Dialogue {
         };
 
         this.galleryComponent = new IIIFComponents.GalleryComponent({
-            target: this.$gallery[0],
-            data: this.data
+            target:  <HTMLElement>this.$gallery[0]
         });
 
         const $selectButton: JQuery = this.$gallery.find('a.select');
         $selectButton.addClass('btn btn-primary');
 
         this.galleryComponent.on('multiSelectionMade', (ids: string[]) => {
-            $.publish(BaseEvents.MULTISELECTION_MADE, [ids]);
+            this.component.publish(BaseEvents.MULTISELECTION_MADE, ids);
             that.close();
         }, false);
 

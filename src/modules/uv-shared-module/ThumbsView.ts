@@ -21,15 +21,15 @@ export class ThumbsView extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, index: any) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (index: any) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseEvents.LOGIN, () => {
+        this.component.subscribe(BaseEvents.LOGIN, () => {
             this.loadThumbs();
         });
 
-        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
+        this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.loadThumbs();
         });
 
@@ -127,7 +127,7 @@ export class ThumbsView extends BaseView {
         if (!this.thumbs) return;
 
         // get median height
-        let heights = [];
+        let heights: number[] = [];
 
         for (let i = 0; i < this.thumbs.length; i++) {
             const thumb: IThumb = this.thumbs[i];
@@ -149,7 +149,7 @@ export class ThumbsView extends BaseView {
             e.preventDefault();
             const data = $.view(this).data;
             that.lastThumbClickedIndex = data.index;
-            $.publish(BaseEvents.THUMB_SELECTED, [data]);
+            that.component.publish(BaseEvents.THUMB_SELECTED, data);
         });
 
         this.setLabel();
@@ -220,13 +220,18 @@ export class ThumbsView extends BaseView {
                     }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
-                    $img.hide().load(function () {
+                    $img.hide();
+                    
+                    $img.on('load', function () {
                         $(this).fadeIn(fadeDuration, function () {
-                            $(this).parent().swapClass('loading', 'loaded');
+                            $(this).parent().switchClass('loading', 'loaded');
                         });
-                    }).error(function() {
-                        $(this).parent().swapClass('loading', 'loadingFailed');
                     });
+
+                    $img.on('error', function () {
+                        $(this).parent().switchClass('loading', 'loadingFailed');
+                    });
+
                     $wrap.append($img);
                 } else {
                     $wrap.addClass('hidden');

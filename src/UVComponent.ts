@@ -9,16 +9,22 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
+import {UVUtils} from "./Utils";
+import {PubSub} from "./PubSub";
+import "./Polyfills";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
     private _extensions: IExtension[];
+    private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
     public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
         super(options);
+
+        this._pubsub = new PubSub();
 
         this._init();
         this._resize();
@@ -133,12 +139,12 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     
     public data(): IUVData {
         return <IUVData>{
-            annotations: null,
+            annotations: undefined,
             root: "./uv",
             canvasIndex: 0,
-            collectionIndex: 0,
-            config: null,
-            configUri: null,
+            collectionIndex: undefined,
+            config: undefined,
+            configUri: undefined,
             embedded: false,
             iiifResourceUri: '',
             isLightbox: false,
@@ -150,7 +156,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 }
             ],
             manifestIndex: 0,
-            rangeId: null,
+            rangeId: undefined,
             rotation: 0,
             sequenceIndex: 0,
             xywh: ''
@@ -177,36 +183,15 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         } else {
 
             // changing any of these data properties forces the UV to reload.
-            if (this._propertiesChanged(data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'iiifResourceUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
-                $.extend(this.extension.data, data);
+            if (UVUtils.propertiesChanged(data, this.extension.data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'iiifResourceUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
+                this.extension.data = Object.assign({}, this.extension.data, data);
                 this._reload(this.extension.data);
             } else {
                 // no need to reload, just update.
-                $.extend(this.extension.data, data);
-                this.extension.update();
+                this.extension.data = Object.assign({}, this.extension.data, data);
+                this.extension.render();
             }
         }       
-    }
-
-    private _propertiesChanged(data: IUVData, properties: string[]): boolean {
-        let propChanged: boolean = false;
-        
-        for (var i = 0; i < properties.length; i++) {
-            propChanged = this._propertyChanged(data, properties[i]);
-            if (propChanged) {
-                break;
-            }
-        }
-
-        return propChanged;
-    }
-
-    private _propertyChanged(data: IUVData, propertyName: string): boolean {
-        if (this.extension) {
-            return !!data[propertyName] && this.extension.data[propertyName] !== data[propertyName];
-        }
-
-        return false;
     }
 
     public get(key: string): any {
@@ -215,11 +200,19 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
+    public publish(event: string, args?: any): void {
+        this._pubsub.publish(event, args);
+    }
+
+    public subscribe(event: string, cb: any): void {
+        this._pubsub.subscribe(event, cb);
+    }
+
     private _reload(data: IUVData): void {
         
-        $.disposePubSub(); // remove any existing event listeners
+        this._pubsub.dispose(); // remove any existing event listeners
 
-        $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
+        this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
 
@@ -237,33 +230,41 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: data.iiifResourceUri,
-            collectionIndex: data.collectionIndex,
-            manifestIndex: data.manifestIndex,
-            sequenceIndex: data.sequenceIndex,
-            canvasIndex: data.canvasIndex,
+            collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
+            manifestIndex: data.manifestIndex || 0,
+            sequenceIndex: data.sequenceIndex || 0,
+            canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
-            locale: data.locales[0].name
+            locale: (data.locales) ? data.locales[0].name : undefined
         }).then((helper: Manifold.IHelper) => {
             
             let trackingLabel: string = helper.getTrackingLabel();
             trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
             window.trackingLabel = trackingLabel;
 
-            const sequence: Manifesto.ISequence = helper.getSequenceByIndex(data.sequenceIndex);
+            let sequence: Manifesto.ISequence | undefined;
 
-            if (!sequence) {
-                that._error(`Sequence ${data.sequenceIndex} not found.`);
-                return;
+            if (data.sequenceIndex !== undefined) {
+                sequence = helper.getSequenceByIndex(data.sequenceIndex);
+
+                if (!sequence) {
+                    that._error(`Sequence ${data.sequenceIndex} not found.`);
+                    return;
+                }
             }
 
-            const canvas: Manifesto.ICanvas = helper.getCanvasByIndex(data.canvasIndex);
+            let canvas: Manifesto.ICanvas | undefined;
+
+            if (data.canvasIndex !== undefined) {
+                canvas = helper.getCanvasByIndex(data.canvasIndex);
+            }
 
             if (!canvas) {
                 that._error(`Canvas ${data.canvasIndex} not found.`);
                 return;
             }
-
-            let extension: IExtension | null = null;
+            
+            let extension: IExtension | undefined = undefined;
 
             // if the canvas has a duration, use the uv-av-extension
             // const duration: number | null = canvas.getDuration();
@@ -348,11 +349,13 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         this._getConfigExtension(data, extension, (configExtension: any) => {
 
-            const configPath: string = data.root + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
+            if (data.locales) {
+                const configPath: string = data.root + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
 
-            $.getJSON(configPath, (config) => {
-                this._extendConfig(data, extension, config, configExtension, cb);
-            });
+                $.getJSON(configPath, (config) => {
+                    this._extendConfig(data, extension, config, configExtension, cb);
+                });
+            }
         });
     }
 
@@ -372,8 +375,12 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
     private _getConfigExtension(data: IUVData, extension: any, cb: (configExtension: any) => void): void {
 
+        if (!data.locales) {
+            return;
+        }
+
         const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + data.locales[0].name);
-        const configUri: string | null = data.configUri;
+        const configUri: string | undefined = data.configUri;
 
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
@@ -405,6 +412,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     private _injectCss(data: IUVData, extension: any, cb: () => void): void {
+
+        if (!data.locales) {
+            return;
+        }
+
         const cssPath: string = data.root + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
         const locale: string = data.locales[0].name;
         const themeName: string = extension.name.toLowerCase() + '-theme-' + locale.toLowerCase();

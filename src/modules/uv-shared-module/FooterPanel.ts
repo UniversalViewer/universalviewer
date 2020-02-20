@@ -22,16 +22,16 @@ export class FooterPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.updateMinimisedButtons();
             this.updateMoreInfoButton();
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.updateDownloadButton();
         });
 
@@ -95,36 +95,36 @@ export class FooterPanel extends BaseView {
         this.$options.append(this.$fullScreenBtn);
 
         this.$openButton.onPressed(() => {
-            $.publish(BaseEvents.OPEN);
+            this.component.publish(BaseEvents.OPEN);
         });
 
         this.$feedbackButton.onPressed(() => {
-            $.publish(BaseEvents.FEEDBACK);
+            this.component.publish(BaseEvents.FEEDBACK);
         });
 
         this.$bookmarkButton.onPressed(() => {
-            $.publish(BaseEvents.BOOKMARK);
+            this.component.publish(BaseEvents.BOOKMARK);
         });
 
         this.$shareButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_SHARE_DIALOGUE, [this.$shareButton]);
+            this.component.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
         });
 
         this.$embedButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_EMBED_DIALOGUE, [this.$embedButton]);
+            this.component.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
         });
 
         this.$downloadButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
+            this.component.publish(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, this.$downloadButton);
         });
 
         this.$moreInfoButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_MOREINFO_DIALOGUE, [this.$moreInfoButton]);
+            this.component.publish(BaseEvents.SHOW_MOREINFO_DIALOGUE, this.$moreInfoButton);
         });
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         if (!Utils.Bools.getBool(this.options.embedEnabled, true)) {
@@ -189,13 +189,13 @@ export class FooterPanel extends BaseView {
         }
 
         if (this.extension.isFullScreen()) {
-            this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
-            this.$fullScreenBtn.find('i').swapClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
+            this.$fullScreenBtn.switchClass('fullScreen', 'exitFullscreen');
+            this.$fullScreenBtn.find('i').switchClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
             $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.exitFullScreen);
         } else {
-            this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
-            this.$fullScreenBtn.find('i').swapClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
+            this.$fullScreenBtn.switchClass('exitFullscreen', 'fullScreen');
+            this.$fullScreenBtn.find('i').switchClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
             $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.fullScreen);
         }

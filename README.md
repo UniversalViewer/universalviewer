@@ -30,17 +30,21 @@
 
 <br>
 
-
     npm install universalviewer@beta --save
 
+- [**Website**](#website)
+- [**Scope**](#scope)
+- [**Getting Started**](#getting-started)
+- [**Contributing**](#contributing)
+- [**Feedback**](#feedback)
+- [**Sponsors**](#sponsors)
+- [**License**](#license)
 
-## Contributors
+## Website
 
-![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
+[Visit the UV demo page](https://universalviewer.io/examples) to try it out.
 
-<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
-
-## Features:
+## Scope:
 
 - **Zoomable**
   <p><a href="https://openseadragon.github.io/">OpenSeadragon</a> image zooming using the <a href="http://iiif.io/api/image/2.0/">IIIF image API</a></p>
@@ -55,66 +59,39 @@
 
 [More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
-## Stable Builds
-
-See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
-
 ## Getting Started
 
 For a "hello world" getting started example see [uv-hello-world](https://github.com/UniversalViewer/uv-hello-world).
 
-For an example of how to use the Universal Viewer in a website starter project that uses [biiif](https://github.com/edsilv/biiif) to generate your IIIF data, see [uv-app-starter](https://github.com/UniversalViewer/uv-app-starter).
+## Contributing
 
-## Building the Universal Viewer
+Read below to learn how to take part in improving the UV:
 
-All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
+- Fork the repository and [run the examples from source](#getting-started)
+- Get familiar with [Code of Conduct](CODE_OF_CONDUCT.md)
+- Read our [guide to contributing](CONTRIBUTING.md)
+- Find an issue to work on and submit a pull request
+  - First time contributing to open source? Pick a [good first issue](https://github.com/universalviewer/universalviewer/labels/good%20first%20issue) to get you familiar with GitHub contributing process.
+  - First time contributing to the UV? Pick a [beginner friendly issue](https://github.com/universalviewer/universalviewer/labels/beginners) to get you familiar with codebase and our contributing process.
+  - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
+- Could not find an issue? Look for bugs, typos, and missing features.
 
-1. Install [Node.js](http://nodejs.org), if you haven't already
+### Contributors
 
-1. Install the grunt command line interface:
+![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
-    `npm install -g grunt-cli`
+<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
-<!--
-1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
+## Feedback
 
-    npm install -g sorcery
--->
-1. Clone the `universalviewer` repository and `examples` sub module:
+Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
+- Join the discussion on [Slack](http://universalviewer.io/#contact).
+- Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new).
+- Star the repository to show your support ⭐
 
-    `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
+## Sponsors
 
-1. On the command line, go in to the `universalviewer` folder
-
-1. Run
-
-    `npm install`
-
-> If switching between branches, ensure that you check out the correct branch in the `examples` sub-repository too. By default this should be `gh-pages`.
-
-## Debug Builds
-
-To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
-
-    grunt build
-
-This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js.
-
-## Distribution Builds
-
-To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
-
-    grunt build --dist
-
-## Examples
-
-To view the examples run:
-
-    grunt examples
-
-## Backers
-
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/universalviewer#backer)]
+[Become a backer](https://opencollective.com/universalviewer#backer) and support us with a monthly donation and help us continue our activities. 
 
 <a href="https://opencollective.com/universalviewer/backer/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/1/avatar.svg"></a>
@@ -147,10 +124,7 @@ Support us with a monthly donation and help us continue our activities. [[Become
 <a href="https://opencollective.com/universalviewer/backer/28/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/29/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/29/avatar.svg"></a>
 
-
-## Sponsors
-
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/universalviewer#sponsor)]
+[Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
 
 <a href="https://opencollective.com/universalviewer/sponsor/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/1/avatar.svg"></a>

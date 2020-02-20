@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.36 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.37 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifmanifold = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -145,26 +145,34 @@ var Manifold;
             if (!bootstrapper._options.iiifResource) {
                 bootstrapper._options.iiifResource = iiifResource;
             }
+            var collectionIndex = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
+            var manifestIndex = bootstrapper._options.manifestIndex; // this is either 0 or a positive number (defaults to 0)
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
                 iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') {
-                // if it's a collection and has child collections, get the collection by index
+                // it's a collection
+                var manifests = iiifResource.getManifests();
                 var collections = iiifResource.getCollections();
-                if (collections && collections.length) {
-                    iiifResource.getCollectionByIndex(bootstrapper._options.collectionIndex).then(function (collection) {
+                // if there are only collections available, set the collectionIndex to 0 if undefined.
+                if (!manifests.length && collectionIndex === undefined) {
+                    collectionIndex = 0;
+                }
+                if (collectionIndex !== undefined && collections && collections.length) {
+                    // a collectionIndex has been passed and we have sub collections
+                    iiifResource.getCollectionByIndex(collectionIndex).then(function (collection) {
                         if (!collection) {
                             reject('Collection index not found');
                         }
                         // Special case: we're trying to load the first manifest of the
-                        // collection, but the collection has no manifests but does have
+                        // specified collection, but the collection has no manifests but does have
                         // subcollections. Thus, we should dive in until we find something
                         // we can display!
-                        if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
+                        if (collection.getTotalManifests() === 0 && manifestIndex === 0 && collection.getTotalCollections() > 0) {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.iiifResourceUri = collection.id;
                             bootstrapper.bootstrap(resolve, reject);
                         }
                         else {
-                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
+                            collection.getManifestByIndex(manifestIndex).then(function (manifest) {
                                 bootstrapper._options.manifest = manifest;
                                 var helper = new Manifold.Helper(bootstrapper._options);
                                 resolve(helper);
@@ -501,7 +509,7 @@ var Manifold;
             this.iiifResource = this.options.iiifResource;
             this.iiifResourceUri = this.options.iiifResourceUri;
             this.manifest = this.options.manifest;
-            this.collectionIndex = this.options.collectionIndex || 0;
+            this.collectionIndex = this.options.collectionIndex;
             this.manifestIndex = this.options.manifestIndex || 0;
             this.sequenceIndex = this.options.sequenceIndex || 0;
             this.canvasIndex = this.options.canvasIndex || 0;
@@ -574,12 +582,15 @@ var Manifold;
             return canvas.ranges;
         };
         Helper.prototype.getCollectionIndex = function (iiifResource) {
-            // todo: support nested collections. walk up parents adding to array and return csv string.
-            var index = null;
-            if (iiifResource.parentCollection) {
-                index = iiifResource.parentCollection.index;
+            // todo: this only works for collections nested one level deep
+            if (iiifResource.parentCollection && !iiifResource.parentCollection.parentCollection) {
+                // manifest must be in the root
+                return undefined;
             }
-            return index;
+            else if (iiifResource.parentCollection) {
+                return iiifResource.parentCollection.index;
+            }
+            return undefined;
         };
         Helper.prototype.getCurrentCanvas = function () {
             return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
@@ -1329,7 +1340,7 @@ var Manifold;
             return this.ranges.en().where(function (r) { return r.multiSelected; }).toArray();
         };
         MultiSelectState.prototype.getCanvasById = function (id) {
-            return this.canvases.en().where(function (c) { return c.id === id; }).first();
+            return this.canvases.en().where(function (c) { return manifesto.Utils.normaliseUrl(c.id) === manifesto.Utils.normaliseUrl(id); }).first();
         };
         MultiSelectState.prototype.getCanvasesByIds = function (ids) {
             var canvases = [];

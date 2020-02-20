@@ -1,11 +1,11 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 
 export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    metadataComponent: IIIFComponents.IMetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -21,11 +21,11 @@ export class MoreInfoDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -40,21 +40,20 @@ export class MoreInfoDialogue extends Dialogue {
         this.$content.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0],
-            data: this._getData()
+            target:  <HTMLElement>this.$metadata[0]
         });
 
         // hide
         this.$element.hide();
     }
 
-    open($triggerButton?: JQuery): void {
-        super.open($triggerButton);
-        this.metadataComponent.set(new Object()); // todo: should be passing data
+    open(triggerButton?: HTMLElement): void {
+        super.open(triggerButton);
+        this.metadataComponent.set(this._getData());
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -65,12 +64,12 @@ export class MoreInfoDialogue extends Dialogue {
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            limitType: IIIFComponents.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
+            sanitizer: (html: string) => {
                 return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
