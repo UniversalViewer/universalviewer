@@ -2,7 +2,8 @@ import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {DownloadDialogue} from "./DownloadDialogue";
-import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+//import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel } from "../../modules/uv-pdffooterpanel-module/FooterPanel";
 import {IPDFExtension} from "./IPDFExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
@@ -11,6 +12,12 @@ import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/Res
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import IThumb = Manifold.IThumb;
+import { Events } from "../uv-pdf-extension/Events";
+//import * as d from '../../../node_modules/print-js/src/index';
+//import printJS = require("../../../node_modules/print-js/src/index");
+
+//var printJS = require("../../../node_modules/print-js/src/index");
+//declare var printJS: any;
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -26,6 +33,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
     leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
+
+    private _pdfUri:string = '';
 
     create(): void {
 
@@ -58,6 +67,14 @@ export class Extension extends BaseExtension implements IPDFExtension {
             }
         });
 
+        this.component.subscribe(Events.PDF_LOADED, (pdfDetails: any) => {
+            this._pdfUri = pdfDetails.pdfUri;
+        });
+
+        this.component.subscribe(Events.PRINT, () => {
+            this.print();
+        });
+
         this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
@@ -70,6 +87,110 @@ export class Extension extends BaseExtension implements IPDFExtension {
             }, 10); // allow time to exit full screen, then resize
         });
     }
+
+    print(){
+
+        //var pdfWindow:Window = window.open(window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/examples/uv/pdfjsbuild/generic/web/viewer.html?file='+this._pdfUri) as Window;
+        //pdfWindow.print();
+
+        this.printPdf(window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/examples/uv/pdfjsbuild/generic/web/viewer.html?file='+this._pdfUri);
+
+        //this.printPdf(this._pdfUri);
+    }
+
+    printPdf = function (url) {
+
+        //printJS = new printJS();
+        //console.log(printJS);
+
+        // require(['lib/print'], function(printJS){
+        //     printJS(url);
+        // })
+
+        //var iframe = this._printIframe;
+        //if (!this._printIframe) {
+          //iframe = this._printIframe = document.createElement('iframe');
+          //iframe.setAttribute("id","pdf-frame");
+          var $printFrame = $('<iframe></iframe>');
+          //document.body.appendChild(iframe);
+
+          $('body').append($printFrame);
+
+          $printFrame.attr("id", "pdf-frame" );
+
+          $.ajax({
+            url:'https://dlcs.io/file/wellcome/5/b17502792_Science%20and%20the%20Public.pdf',
+            //dataType: 'binary',
+            xhrFields: {
+                responseType: 'blob'
+              },
+            success:function(data){
+              //console.log(data); //ArrayBuffer
+              //console.log(new Blob([data])) // Blob
+
+              var objectURL = URL.createObjectURL(data);
+              alert('iffrrf');
+
+              $printFrame.attr("src", '' );
+              $printFrame.attr("src", objectURL );
+              //iframe.src = '';
+              //iframe.src = objectURL;
+                URL.revokeObjectURL(objectURL);                
+                window.setTimeout(() => {
+                    var printIFrame:any = $printFrame.get(0);
+                    printIFrame.contentWindow.print();
+                    //$printFrame.remove();
+                }, 10)
+            },error: function (xhr, ajaxOptions, thrownError) {
+                $printFrame.remove();
+              }
+          })
+
+//           fetch('https://dlcs.io/file/wellcome/5/b17502792_Science%20and%20the%20Public.pdf').then(function(response) {
+//     return response.blob();
+// }).then((myBlob) => {
+//     var objectURL = URL.createObjectURL(myBlob);
+//     alert('iffrrf');
+//     iframe.src = '';
+//     iframe.src = objectURL;
+// 	URL.revokeObjectURL(objectURL);
+// }).then(
+//     function() {
+//         window.setTimeout(() => {
+//             iframe.contentWindow.print();
+//         }, 1000)
+//     });
+        //}
+
+        
+        // var iframe = this._printIframe;
+        // if (!this._printIframe) {
+        //   iframe = this._printIframe = document.createElement('iframe');
+        //   document.body.appendChild(iframe);
+
+        //   alert('frame ready');
+      
+        //   //iframe.style.visibility = 'hidden';
+        // //   iframe.onload = function() {
+        // //       alert('fijioe');
+        // //     setTimeout(function() {
+        // //       iframe.focus();
+        // //       iframe.print();
+        // //     }, 1);
+        // //   };
+        // }
+      
+        //iframe.src = url;
+
+
+        // var objFra:any = document.createElement('iframe');   // Create an IFrame.
+        // //objFra.style.visibility = "hidden";    // Hide the frame.
+        // objFra.src = url;                      // Set source.
+        // document.body.appendChild(objFra);  // Add the frame to the web page.
+        // objFra.contentWindow.focus();
+        // alert('hi')  ;                      // Set focus.;
+        // objFra.contentWindow.print();      // Print it.
+      }
 
     render(): void {
         super.render();

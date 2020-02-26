@@ -80,6 +80,11 @@
                 "share": "Partager"
             }
         },
+        "pdfFooterPanel": {
+            "content": {
+              "print": "print fr-FR"
+            }
+          },
         "genericDialogue": {
             "content": {
                 "emptyValue": "veuillez saisir une valeur.",

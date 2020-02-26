@@ -31,7 +31,8 @@
         "feedbackEnabled": false,
         "minimiseButtons": true,
         "openEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": true,
+        "printEnabled": true
       }
     },
     "genericDialogue":

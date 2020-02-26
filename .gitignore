@@ -5,7 +5,7 @@
 lib
 src/lib/bundle.js
 src/lib/bundle.min.js
-!src/lib
+src/lib/*
 !src/extensions/**/lib
 
 #################

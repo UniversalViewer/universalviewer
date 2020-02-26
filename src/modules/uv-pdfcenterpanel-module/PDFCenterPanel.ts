@@ -264,7 +264,7 @@ export class PDFCenterPanel extends CenterPanel {
                     this._pdfDoc = pdfDoc;
                     this._render(this._pageIndex);
 
-                    this.component.publish(Events.PDF_LOADED, pdfDoc);
+                    this.component.publish(Events.PDF_LOADED, {pdfDoc:pdfDoc,pdfUri:parameter.url});
                     this._$spinner.hide();
                 });
             }

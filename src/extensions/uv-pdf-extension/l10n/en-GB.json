@@ -98,6 +98,16 @@
         "attribution": "Attribution"
       }
     },
+
+    "pdfFooterPanel": {
+      "content": {
+        "print": "print"
+      }
+    },
+
+    
+
+
     "settingsDialogue": {
       "content": {
         "locale": "Locale",
