@@ -33,6 +33,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
+    $printFrame:any;
 
     private _pdfUri:string = '';
 
@@ -89,108 +90,38 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     print(){
+        if(this.$printFrame)
+        {
+            this.$printFrame.remove();
+        }
 
-        //var pdfWindow:Window = window.open(window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/examples/uv/pdfjsbuild/generic/web/viewer.html?file='+this._pdfUri) as Window;
-        //pdfWindow.print();
+        this.$printFrame = $('<iframe></iframe>');
 
-        this.printPdf(window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/examples/uv/pdfjsbuild/generic/web/viewer.html?file='+this._pdfUri);
+        $('body').append(this.$printFrame);
 
-        //this.printPdf(this._pdfUri);
-    }
+        this.$printFrame.attr("id", "pdf_frame" );
+        this.$printFrame.attr("style", "visibility:hidden" );
 
-    printPdf = function (url) {
-
-        //printJS = new printJS();
-        //console.log(printJS);
-
-        // require(['lib/print'], function(printJS){
-        //     printJS(url);
-        // })
-
-        //var iframe = this._printIframe;
-        //if (!this._printIframe) {
-          //iframe = this._printIframe = document.createElement('iframe');
-          //iframe.setAttribute("id","pdf-frame");
-          var $printFrame = $('<iframe></iframe>');
-          //document.body.appendChild(iframe);
-
-          $('body').append($printFrame);
-
-          $printFrame.attr("id", "pdf-frame" );
+        var that = this;
 
           $.ajax({
-            url:'https://dlcs.io/file/wellcome/5/b17502792_Science%20and%20the%20Public.pdf',
-            //dataType: 'binary',
+            url:this._pdfUri,
             xhrFields: {
                 responseType: 'blob'
               },
             success:function(data){
-              //console.log(data); //ArrayBuffer
-              //console.log(new Blob([data])) // Blob
-
               var objectURL = URL.createObjectURL(data);
-              alert('iffrrf');
-
-              $printFrame.attr("src", '' );
-              $printFrame.attr("src", objectURL );
-              //iframe.src = '';
-              //iframe.src = objectURL;
+              that.$printFrame.attr("src", objectURL );
                 URL.revokeObjectURL(objectURL);                
                 window.setTimeout(() => {
-                    var printIFrame:any = $printFrame.get(0);
+                    var printIFrame:any = that.$printFrame.get(0);
                     printIFrame.contentWindow.print();
-                    //$printFrame.remove();
                 }, 10)
             },error: function (xhr, ajaxOptions, thrownError) {
-                $printFrame.remove();
+                that.$printFrame.remove();
               }
           })
-
-//           fetch('https://dlcs.io/file/wellcome/5/b17502792_Science%20and%20the%20Public.pdf').then(function(response) {
-//     return response.blob();
-// }).then((myBlob) => {
-//     var objectURL = URL.createObjectURL(myBlob);
-//     alert('iffrrf');
-//     iframe.src = '';
-//     iframe.src = objectURL;
-// 	URL.revokeObjectURL(objectURL);
-// }).then(
-//     function() {
-//         window.setTimeout(() => {
-//             iframe.contentWindow.print();
-//         }, 1000)
-//     });
-        //}
-
-        
-        // var iframe = this._printIframe;
-        // if (!this._printIframe) {
-        //   iframe = this._printIframe = document.createElement('iframe');
-        //   document.body.appendChild(iframe);
-
-        //   alert('frame ready');
-      
-        //   //iframe.style.visibility = 'hidden';
-        // //   iframe.onload = function() {
-        // //       alert('fijioe');
-        // //     setTimeout(function() {
-        // //       iframe.focus();
-        // //       iframe.print();
-        // //     }, 1);
-        // //   };
-        // }
-      
-        //iframe.src = url;
-
-
-        // var objFra:any = document.createElement('iframe');   // Create an IFrame.
-        // //objFra.style.visibility = "hidden";    // Hide the frame.
-        // objFra.src = url;                      // Set source.
-        // document.body.appendChild(objFra);  // Add the frame to the web page.
-        // objFra.contentWindow.focus();
-        // alert('hi')  ;                      // Set focus.;
-        // objFra.contentWindow.print();      // Print it.
-      }
+        }
 
     render(): void {
         super.render();

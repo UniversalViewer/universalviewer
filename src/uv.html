@@ -42,8 +42,7 @@
 
             uv = createUV('#uv', {
                 root: '.',
-                iiifResourceUri: 'http://wellcomelibrary.org/iiif/b17502792/manifest', 
-                //iiifResourceUri: 'http://wellcomelibrary.org/iiif/b18035723/manifest',
+                iiifResourceUri: urlDataProvider.get('manifest'), 
                 configUri: urlDataProvider.get('config'),
                 collectionIndex: Number(urlDataProvider.get('c', 0)),
                 manifestIndex: Number(urlDataProvider.get('m', 0)),
