@@ -42,7 +42,7 @@ export class CenterPanel extends BaseView {
         this.$subtitleExpand = this.$subtitle.find('.expand-btn');
         this.$subtitleText = this.$subtitle.find('.text');
 
-        this.$content = $('<div id="content" class="content"></div>');
+        this.$content = $('<div id="uv-content" class="content"></div>');
         this.$element.append(this.$content);
 
         this.$attribution = $(`
