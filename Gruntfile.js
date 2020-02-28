@@ -3,6 +3,7 @@ var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
 var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
+var ebookExtensionConfig = require('./src/extensions/uv-ebook-extension/config');
 var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
 var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
 var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
@@ -212,6 +213,7 @@ module.exports = function (grunt) {
             npmComponents: {
                 files: [
                     avExtensionConfig.sync.dependencies,
+                    ebookExtensionConfig.sync.dependencies,
                     mediaelementExtensionConfig.sync.dependencies,
                     pdfExtensionConfig.sync.dependencies,
                     seadragonExtensionConfig.sync.dependencies,
