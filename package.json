@@ -57,7 +57,7 @@
     "jest": "^23.6.0",
     "jest-puppeteer": "^3.5.0",
     "less": "2.4.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "ncp": "2.0.0",
     "puppeteer": "^1.9.0",
     "serve": "^10.0.2",
