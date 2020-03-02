@@ -1,0 +1,36 @@
+.uv{
+    .mainPanel {
+        .leftPanel {
+            @img-path: '../../../modules/uv-contentleftpanel-module/img/';
+            @shared-img-path: '../../../modules/uv-shared-module/img/';
+
+            .top{
+                .title{
+                    text-transform: uppercase;
+                }
+            }
+            
+            .main{
+                //padding: @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical @padding-medium-horizontal;
+                &.disabled {
+                    pointer-events: none;
+                    opacity: 0.4;
+                }
+
+                .container {
+                    overflow: auto;
+                    padding: @padding-medium;
+
+                    uv-ebook-toc {
+                        --toc-link-selected-color: @brand-primary;
+                        --toc-link-padding: 0.2rem;
+                        --toc-margin: 0;
+                        --toc-padding: 0;
+                        --toc-list-style-type: none;
+                    }
+                }
+            }
+            
+        }
+    }
+}
