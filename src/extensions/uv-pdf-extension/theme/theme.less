@@ -10,3 +10,41 @@
 @theme-assets-path: '@{theme-path}assets/';
 
 @import '@{theme-path}theme.less';
+
+#printContainer
+{
+    display: none;
+}
+
+@page{
+    margin:0;
+}
+
+@media print {
+    body > * {
+        display: none;
+    }
+
+    body{
+        padding:1px;
+    }
+
+    #printContainer
+    {
+        display: block;
+    }
+
+    /* wrapper around (scaled) print canvas elements */
+    #printContainer > div {
+        overflow: visible;
+        page-break-after: always;
+        page-break-inside: avoid;
+        page-break-before: avoid;
+    }
+
+    // #printContainer canvas,
+    #printContainer img {
+        display: block;
+        width: 100%;
+    }
+}

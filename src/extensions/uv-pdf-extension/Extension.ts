@@ -2,7 +2,6 @@ import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {DownloadDialogue} from "./DownloadDialogue";
-//import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel } from "../../modules/uv-pdffooterpanel-module/FooterPanel";
 import {IPDFExtension} from "./IPDFExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
@@ -11,13 +10,10 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
+//import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
+
 import IThumb = Manifold.IThumb;
 import { Events } from "../uv-pdf-extension/Events";
-//import * as d from '../../../node_modules/print-js/src/index';
-//import printJS = require("../../../node_modules/print-js/src/index");
-
-//var printJS = require("../../../node_modules/print-js/src/index");
-//declare var printJS: any;
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -35,7 +31,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
     settingsDialogue: SettingsDialogue;
     $printFrame:any;
 
-    private _pdfUri:string = '';
+    private _pdfDoc:any;
+    private _currentPage:number = -1;
+    private _printContainer: any;
+    private _scratchCanvas:any;
+    private _spinner:JQuery;
+    private _activePrint:boolean;
 
     create(): void {
 
@@ -69,7 +70,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         });
 
         this.component.subscribe(Events.PDF_LOADED, (pdfDetails: any) => {
-            this._pdfUri = pdfDetails.pdfUri;
+            this._pdfDoc = pdfDetails.pdfDoc;
         });
 
         this.component.subscribe(Events.PRINT, () => {
@@ -87,41 +88,115 @@ export class Extension extends BaseExtension implements IPDFExtension {
                 this.resize();
             }, 10); // allow time to exit full screen, then resize
         });
+
+        
     }
 
+    getCanvasContext(viewport, printUnits){
+        let width = Math.floor(viewport.width * printUnits);
+        let height = Math.floor(viewport.height * printUnits);
+        
+        this._scratchCanvas.width = width;
+        this._scratchCanvas.height = height;
+
+        const ctx = this._scratchCanvas.getContext("2d");
+        if (ctx == null)
+            return null;
+
+        ctx.fillStyle = "rgb(255, 255, 255)";
+        ctx.fillRect(0, 0, width, height);
+
+        return ctx;
+    }
+
+    renderPage(pageNumber) {
+        const PRINT_UNITS = 0.72 * 2;
+
+        return this._pdfDoc
+        .getPage(pageNumber)
+        .then((pdfPage) => {
+            //get pdf viewport
+            let viewport = pdfPage.getViewport(1);
+            
+            let ctx = this.getCanvasContext(viewport,  PRINT_UNITS);
+
+            const renderContext = {
+              canvasContext: ctx,
+              transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
+              viewport: viewport
+            };
+
+            return pdfPage.render(renderContext);
+        });
+    }
+
+    useRenderedPage() {
+        const img = document.createElement("img");
+    
+        const scratchCanvas = this._scratchCanvas;
+        if ("toBlob" in scratchCanvas) {
+          scratchCanvas.toBlob(function(blob) {
+            img.src = URL.createObjectURL(blob);
+          });
+        } else {
+          img.src = scratchCanvas.toDataURL();
+        }
+    
+        const wrapper = document.createElement("div");
+        wrapper.appendChild(img);
+        this._printContainer.appendChild(wrapper);
+    
+        return new Promise(function(resolve, reject) {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      }
+
+    renderPages() {
+        if(!this._pdfDoc){
+            return new Promise(() => {
+                throw new Error();
+            });
+        }
+
+        const pageCount = this._pdfDoc.numPages;
+        const renderNextPage = (resolve, reject) => {
+          
+          if (++this._currentPage >= pageCount) {
+            resolve();
+            return;
+          }
+
+          const index = this._currentPage;
+          this.renderPage(index + 1)
+            .then(this.useRenderedPage.bind(this))
+            .then(function() {
+              renderNextPage(resolve, reject);
+            }, reject);
+        };
+
+        return new Promise(renderNextPage);
+     }
+
     print(){
-        if(this.$printFrame)
-        {
-            this.$printFrame.remove();
-        }
+        if(this._activePrint)
+            return;
+        
+        this._activePrint = true;
+        this._spinner.show();
 
-        this.$printFrame = $('<iframe></iframe>');
+        let rederedPages = this.renderPages();
+        rederedPages.then(() => {
+            this._spinner.hide();
+            window.print();
+            this._activePrint = false;
+        });
 
-        $('body').append(this.$printFrame);
-
-        this.$printFrame.attr("id", "pdf_frame" );
-        this.$printFrame.attr("style", "visibility:hidden" );
-
-        var that = this;
-
-          $.ajax({
-            url:this._pdfUri,
-            xhrFields: {
-                responseType: 'blob'
-              },
-            success:function(data){
-              var objectURL = URL.createObjectURL(data);
-              that.$printFrame.attr("src", objectURL );
-                URL.revokeObjectURL(objectURL);                
-                window.setTimeout(() => {
-                    var printIFrame:any = that.$printFrame.get(0);
-                    printIFrame.contentWindow.print();
-                }, 10)
-            },error: function (xhr, ajaxOptions, thrownError) {
-                that.$printFrame.remove();
-              }
-          })
-        }
+        rederedPages.catch((r)=> {
+            this._spinner.hide();
+            this._activePrint = false;
+        });
+    }
 
     render(): void {
         super.render();
@@ -175,6 +250,18 @@ export class Extension extends BaseExtension implements IPDFExtension {
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
+
+        this._spinner = $("div.spinner"); // get spinner reference
+
+        //init print container and scratch canvas to hold the rendered page
+        //if we're using PDF.js
+        if (Utils.Bools.getBool(this.centerPanel.extension.data.config.options.usePdfJs, false)) {
+            this._printContainer = document.createElement("div");
+            this._printContainer.setAttribute("id","printContainer");
+            document.body.appendChild(this._printContainer);
+
+            this._scratchCanvas = document.createElement("canvas");
+        }
 
         if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
