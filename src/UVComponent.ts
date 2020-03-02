@@ -1,6 +1,7 @@
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
 import {Extension as AVExtension} from "./extensions/uv-av-extension/Extension";
 import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
+import {Extension as EbookExtension} from "./extensions/uv-ebook-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
 import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
 import {Extension as PDFExtension} from "./extensions/uv-pdf-extension/Extension";
@@ -125,6 +126,16 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this._extensions['application/dash+xml'] = {
             type: AVExtension,
             name: 'uv-av-extension'
+        };
+
+        this._extensions['application/epub+zip'] = {
+            type: EbookExtension,
+            name: 'uv-ebook-extension'
+        };
+
+        this._extensions['application/oebps-package+xml'] = {
+            type: EbookExtension,
+            name: 'uv-ebook-extension'
         };
 
         this._extensions['default'] = {

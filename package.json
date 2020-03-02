@@ -80,6 +80,7 @@
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
+    "@universalviewer/uv-ebook-components": "^1.0.0",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "core-js": "2.4.1",
     "dashjs": "2.6.7",
@@ -99,6 +100,7 @@
     "three": "0.91.0",
     "virtex3d": "0.3.18",
     "waveform-data": "2.0.2",
+    "whatwg-fetch": "^3.0.0",
     "xss": "1.0.3"
   },
   "collective": {
