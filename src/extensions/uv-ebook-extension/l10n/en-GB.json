@@ -69,6 +69,12 @@
         "share": "Share"
       }
     },
+    "ebookFooterPanel": {
+        "content": {
+          "print": "print"
+        }
+      },
+    
     "genericDialogue": {
       "content": {
         "emptyValue": "please enter a value.",

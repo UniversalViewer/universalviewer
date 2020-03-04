@@ -4,7 +4,7 @@ import { EbookLeftPanel } from "../../modules/uv-ebookleftpanel-module/EbookLeft
 import { Events } from "./Events";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { EbookCenterPanel } from "../../modules/uv-ebookcenterpanel-module/EbookCenterPanel";
-import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel } from "../../modules/uv-ebookfooterpanel-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-ebookmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IEbookExtension } from "./IEbookExtension";
@@ -33,6 +33,12 @@ export class Extension extends BaseExtension implements IEbookExtension {
     shareDialogue: ShareDialogue;
     cfiFragement: string;
 
+    private _toc:any;
+    //private _activePrint:boolean;
+    private _spinner:JQuery;
+    //private _currentTocItemIndex:number = -1;
+    private _ebookPath:string;
+
     create(): void {
         super.create();
 
@@ -43,6 +49,24 @@ export class Extension extends BaseExtension implements IEbookExtension {
         this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
             this.cfiFragement = cfi;
             this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
+        });
+
+        this.component.subscribe(Events.EBOOK_PATH_READY, (ebookPath) => {
+            alert(ebookPath);
+            this._ebookPath = ebookPath;
+        });
+
+        this.component.subscribe(Events.PRINT, () => {
+
+            if(this._ebookPath){
+            this.print();
+            }
+        });
+
+        this.component.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
+            alert('toc loaded');
+            this._toc = navigation.toc;
+            alert(this._toc);
         });
     }
 
@@ -111,6 +135,101 @@ export class Extension extends BaseExtension implements IEbookExtension {
         if (this.isFooterPanelEnabled()) {
             this.footerPanel.init();
         }
+
+        this._spinner = $("div.spinner");
+        this._spinner.hide();
+    }
+
+    print(){
+        // TODO Printing Implementation
+        alert('Printing Done');
+
+        // if(this._activePrint)
+        //     return;
+        
+        // this._activePrint = true;
+        // this._spinner.show();
+
+        // let rederedPages = this.renderBookContents();
+        // rederedPages.then(() => {
+        //     this._spinner.hide();
+        //     window.print();
+        //     this._activePrint = false;
+        // });
+
+        // rederedPages.catch((r)=> {
+        //     this._spinner.hide();
+        //     this._activePrint = false;
+        // });
+    }
+
+    renderBookContents() {
+        // if(!this._toc){
+        //     return new Promise(() => {
+        //         throw new Error();
+        //     });
+        // }
+
+        // const tocLength = this._toc.legth;
+        // const renderNextItem = (resolve, reject) => {
+          
+        //   if (++this._currentTocItemIndex >= tocLength) {
+        //     resolve();
+        //     return;
+        //   }
+
+        //   const index = this._currentTocItemIndex;
+        //   this.renderContent(index + 1)
+        //     .then(this.useRenderedContent.bind(this))
+        //     .then(function() {
+        //         renderNextItem(resolve, reject);
+        //     }, reject);
+        // };
+
+        // return new Promise(renderNextItem);
+     }
+
+     useRenderedContent() {
+        // const img = document.createElement("img");
+    
+        // const scratchCanvas = this._scratchCanvas;
+        // if ("toBlob" in scratchCanvas) {
+        //   scratchCanvas.toBlob(function(blob) {
+        //     img.src = URL.createObjectURL(blob);
+        //   });
+        // } else {
+        //   img.src = scratchCanvas.toDataURL();
+        // }
+    
+        // const wrapper = document.createElement("div");
+        // wrapper.appendChild(img);
+        // this._printContainer.appendChild(wrapper);
+    
+        // return new Promise(function(resolve, reject) {
+        //   img.onload = resolve;
+        //   img.onerror = reject;
+        // });
+      }
+
+     renderContent(tocItemIndex) {
+        // const PRINT_UNITS = 0.72 * 2;
+
+        // return this._pdfDoc
+        // .getPage(pageNumber)
+        // .then((pdfPage) => {
+        //     //get pdf viewport
+        //     let viewport = pdfPage.getViewport(1);
+            
+        //     let ctx = this.getCanvasContext(viewport,  PRINT_UNITS);
+
+        //     const renderContext = {
+        //       canvasContext: ctx,
+        //       transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
+        //       viewport: viewport
+        //     };
+
+        //     return pdfPage.render(renderContext);
+        // });
     }
 
     isLeftPanelEnabled(): boolean {

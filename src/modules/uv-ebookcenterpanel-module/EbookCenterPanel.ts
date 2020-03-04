@@ -10,6 +10,7 @@ export class EbookCenterPanel extends CenterPanel {
   private _ebookReaderReady: boolean = false;
   private _state: any = {};
   private _prevState: any = {};
+  private _$spinner: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -76,6 +77,9 @@ export class EbookCenterPanel extends CenterPanel {
         });
       }
     );
+
+    this._$spinner = $('<div class="spinner"></div>');
+    this.$content.append(this._$spinner);
   }
 
   openMedia(resources: Manifesto.IExternalResource[]) {
@@ -91,6 +95,8 @@ export class EbookCenterPanel extends CenterPanel {
         if (body.length) {
           const media: Manifesto.IAnnotationBody = body[0];
           //const format: Manifesto.MediaType | null = media.getFormat();
+
+          this.component.publish(Events.EBOOK_PATH_READY,media.id);
 
           this._nextState({
             bookPath: media.id

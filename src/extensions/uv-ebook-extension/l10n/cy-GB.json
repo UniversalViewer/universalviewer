@@ -72,6 +72,11 @@
                 "share": "Rhannu"
             }
         },
+        "ebookFooterPanel": {
+            "content": {
+              "print": "print cy-GB"
+            }
+          },
         "genericDialogue": {
             "content": {
                 "emptyValue": "rhowch rif",
