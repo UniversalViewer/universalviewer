@@ -6,22 +6,22 @@ import {DownloadDialogue} from "./DownloadDialogue";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
-import {IVirtexExtension} from "./IVirtexExtension";
+import {IModelViewerExtension} from "./IModelViewerExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
+import {ModelViewerCenterPanel} from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
 import { ExternalResourceType } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 
-export default class Extension extends BaseExtension implements IVirtexExtension {
+export default class Extension extends BaseExtension implements IModelViewerExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
-    centerPanel: VirtexCenterPanel;
+    centerPanel: ModelViewerCenterPanel;
     downloadDialogue: DownloadDialogue;
     shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
@@ -56,7 +56,7 @@ export default class Extension extends BaseExtension implements IVirtexExtension
             this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
         }
 
-        this.centerPanel = new VirtexCenterPanel(this.shell.$centerPanel);
+        this.centerPanel = new ModelViewerCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);

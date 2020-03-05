@@ -24,9 +24,9 @@ enum Extension {
     AV = "uv-av-extension",
     DEFAULT = "uv-default-extension",
     MEDIAELEMENT = "uv-mediaelement-extension",
+    MODELVIEWER = "uv-model-viewer-extension",
     OSD = "uv-openseadragon-extension",
-    PDF = "uv-pdf-extension",
-    VIRTEX = "uv-virtex-extension"
+    PDF = "uv-pdf-extension"
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {
@@ -83,10 +83,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 extension.name = Extension.PDF;
                 return extension;
             },
-            [Extension.VIRTEX]: async () => {
-                const m = await import(/* webpackChunkName: "uv-virtex-extension" *//* webpackMode: "lazy" */"./extensions/uv-virtex-extension/Extension") as any;
+            [Extension.MODELVIEWER]: async () => {
+                const m = await import(/* webpackChunkName: "uv-model-viewer-extension" *//* webpackMode: "lazy" */"./extensions/uv-model-viewer-extension/Extension") as any;
                 const extension = new m.default();
-                extension.name = Extension.VIRTEX;
+                extension.name = Extension.MODELVIEWER;
                 return extension;
             }
         };
@@ -110,7 +110,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
         };
 
         this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[ExternalResourceType.SOUND] = {
@@ -136,11 +136,11 @@ export class Viewer extends BaseComponent implements IUVComponent {
         };
 
         this._extensionRegistry[MediaType.DRACO] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[MediaType.GLTF] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[MediaType.JPG] = {
@@ -160,7 +160,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
         };
 
         this._extensionRegistry[MediaType.OBJ] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[MediaType.PDF] = {
@@ -168,11 +168,11 @@ export class Viewer extends BaseComponent implements IUVComponent {
         };
 
         this._extensionRegistry[MediaType.PLY] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
         
         this._extensionRegistry[MediaType.THREEJS] = {
-            load: this._extensions[Extension.VIRTEX]
+            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[MediaType.VIDEO_MP4] = {

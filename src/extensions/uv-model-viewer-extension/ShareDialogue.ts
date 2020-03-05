@@ -1,5 +1,5 @@
 import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
-import {IVirtexExtension} from "./IVirtexExtension";
+import {IModelViewerExtension} from "./IModelViewerExtension";
 
 export class ShareDialogue extends BaseShareDialogue {
 
@@ -18,7 +18,7 @@ export class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        this.code = (<IVirtexExtension>this.extension).getEmbedScript(
+        this.code = (<IModelViewerExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);

@@ -85,11 +85,9 @@
         "twoColThumbWidth": 90
       }
     },
-    "virtexCenterPanel": {
+    "modelViewerCenterPanel": {
       "options": {
-        "showStats": false,
-        "trimAttributionCount": 150,
-        "vrEnabled": false
+
       }
     }
   }

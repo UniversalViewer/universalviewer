@@ -99,7 +99,7 @@
     "contentLeftPanel": {
 
     },
-    "virtexCenterPanel": {
+    "modelViewerCenterPanel": {
       "content": {
         "attribution": "Attribution",
         "zoomIn": "Zoom In",
