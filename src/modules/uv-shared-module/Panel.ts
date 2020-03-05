@@ -20,7 +20,6 @@ export class Panel {
 
     create(): void {
         this.component.subscribe(BaseEvents.RESIZE, () => {
-            console.log("resize");
             this.resize();
         });
     }

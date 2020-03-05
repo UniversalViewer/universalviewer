@@ -26,6 +26,8 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
         this.title = this.extension.helper.getLabel();
 
+        this.$modelViewer = $('<model-viewer auto-rotate camera-controls></model-viewer>');
+
         this.component.publish(BaseEvents.OPENED_MEDIA);
     }
 
@@ -45,7 +47,8 @@ export class ModelViewerCenterPanel extends CenterPanel {
             mediaUri = canvas.id;
         }
 
-        this.$modelViewer = $('<model-viewer src="' + mediaUri + '" auto-rotate camera-controls></model-viewer>');
+        this.$modelViewer.attr("src", mediaUri);
+        
         this.$content.append(this.$modelViewer);
 
         this.component.publish(BaseEvents.OPENED_MEDIA);
