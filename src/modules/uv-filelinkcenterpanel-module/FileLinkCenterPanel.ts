@@ -92,9 +92,7 @@ export class FileLinkCenterPanel extends CenterPanel {
             this.$downloadItems.append($item);
         }
 
-        setTimeout(() => {
-            this.component.publish(BaseEvents.OPENED_MEDIA);
-        }, 1);
+        this.component.publish(BaseEvents.OPENED_MEDIA);
         
     }
 

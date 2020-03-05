@@ -295,9 +295,10 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
             setTimeout(() => {
+                this.$element.removeClass("loading");
                 this.component.publish(BaseEvents.RESIZE);
                 this.fire(BaseEvents.OPENED_MEDIA);
-            }, 1);
+            }, 100); // firefox needs this :-(
         });
 
         this.component.subscribe(BaseEvents.FEEDBACK, () => {
@@ -406,12 +407,6 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
             this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
-        });
-
-        this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
-            //console.log("opened external resource");
-            this.$element.removeClass("loading");
-            this.fire(BaseEvents.OPENED_MEDIA);
         });
 
         this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
