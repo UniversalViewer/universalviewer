@@ -40,8 +40,9 @@ export class AlephLeftPanel extends LeftPanel {
             this._alControlPanel.selected = state.selected;
             this._alControlPanel.units = state.units;
             this._alControlPanel.slicesIndex = state.slicesIndex;
-            this._alControlPanel.slicesBrightness = state.slicesWindowCenter;
-            this._alControlPanel.slicesContrast = state.slicesWindowWidth;
+            this._alControlPanel.slicesBrightness = state.volumeWindowCenter;
+            this._alControlPanel.slicesContrast = state.volumeWindowWidth;
+            this._alControlPanel.volumeSteps = state.volumeSteps;
             this._alControlPanel.volumeBrightness = state.volumeWindowCenter;
             this._alControlPanel.volumeContrast = state.volumeWindowWidth;
         });
@@ -103,15 +104,19 @@ export class AlephLeftPanel extends LeftPanel {
         }, false);
 
         this._alControlPanel.addEventListener("slicesBrightnessChanged", (e: any) => {
-            this.component.publish(Events.SLICES_BRIGHTNESS_CHANGED, e.detail);
+            this.component.publish(Events.VOLUME_BRIGHTNESS_CHANGED, e.detail);
         }, false);
 
         this._alControlPanel.addEventListener("slicesContrastChanged", (e: any) => {
-            this.component.publish(Events.SLICES_CONTRAST_CHANGED, e.detail);
+            this.component.publish(Events.VOLUME_CONTRAST_CHANGED, e.detail);
         }, false);
 
         this._alControlPanel.addEventListener("unitsChanged", (e: any) => {
             this.component.publish(Events.UNITS_CHANGED, e.detail);
+        }, false);
+
+        this._alControlPanel.addEventListener("volumeStepsChanged", (e: any) => {
+            this.component.publish(Events.VOLUME_STEPS_CHANGED, e.detail);
         }, false);
 
         this._alControlPanel.addEventListener("volumeBrightnessChanged", (e: any) => {
