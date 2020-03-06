@@ -69,14 +69,6 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
-                    // ionic
-                    {
-                        cwd: config.directories.ionic,
-                        expand: true,
-                        src: ['**'],
-                        expand: true,
-                        dest: config.directories.build + '/lib/ionic/'
-                    },
                     // js
                     {
                         expand: true,

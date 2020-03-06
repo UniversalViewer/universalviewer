@@ -106,11 +106,11 @@ export class AlephCenterPanel extends CenterPanel {
     });
 
     this.component.subscribe(Events.SLICES_BRIGHTNESS_CHANGED, (brightness: number) => {
-      this._alViewer.setSlicesBrightness(brightness);         
+      this._alViewer.setVolumeBrightness(brightness);         
     });
 
     this.component.subscribe(Events.SLICES_CONTRAST_CHANGED, (contrast: number) => {
-      this._alViewer.setSlicesContrast(contrast);         
+      this._alViewer.setVolumeContrast(contrast);         
     });
 
     this.component.subscribe(Events.UNITS_CHANGED, (units: Units) => {

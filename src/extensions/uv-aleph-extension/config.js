@@ -12,7 +12,7 @@ module.exports = {
                 src: [
                     'three/examples/js/controls/OrbitControls.js',
                     '@universalviewer/aleph/dist/collection/assets/ami.min.js',
-                    '@universalviewer/aleph/dist/collection/assets/aframe-master.min.js',
+                    '@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min.js',
                     '@universalviewer/aleph/dist/collection/assets/draco_decoder.wasm',
                     '@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js'
                 ],
