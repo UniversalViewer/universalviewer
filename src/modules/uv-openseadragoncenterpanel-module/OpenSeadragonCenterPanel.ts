@@ -1,15 +1,16 @@
+import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
+import { Async, Bools, Dimensions } from "@edsilv/utils";
+import { Canvas, IExternalResource, IExternalImageResourceData, IExternalResourceData } from "manifesto.js";
+import { sanitize } from "../../Utils";
+import { ViewingDirection } from "@iiif/vocabulary";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Bounds} from "../../extensions/uv-openseadragon-extension/Bounds";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
-import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
+import {Events} from "../../extensions/uv-openseadragon-extension/Events";
 import {IOpenSeadragonExtensionData} from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
-import { sanitize } from "../../Utils";
-import { Async, Bools, Dimensions } from "@edsilv/utils";
-import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Canvas, IExternalResource, IExternalImageResourceData, IExternalResourceData } from "manifesto.js";
-import { ViewingDirection } from "@iiif/vocabulary";
+import OpenSeadragon from "openseadragon";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
 
@@ -154,10 +155,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        await import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ "openseadragon");
+        //await import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ "openseadragon");
         this.viewer = OpenSeadragon({
             id: this.viewerId,
-            ajaxWithCredentials: false,
+            crossOriginPolicy: "Anonymous",
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,

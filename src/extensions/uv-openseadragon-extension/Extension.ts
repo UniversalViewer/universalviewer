@@ -25,7 +25,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Maths, Strings } from "@edsilv/utils";
 import { IIIFResourceType, ExternalResourceType, ServiceProfile } from "@iiif/vocabulary";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Annotation, Canvas, Thumb, TreeNode, ManifestType, Resource, Range, LanguageMap, Service, Size, Utils } from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas, Thumb, TreeNode, ManifestType, Resource, Range, LanguageMap, Service, Size, Utils } from "manifesto.js";
 
 export default class OpenSeadragonExtension extends BaseExtension  {
 
@@ -641,7 +641,22 @@ export default class OpenSeadragonExtension extends BaseExtension  {
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
-        if (!canvas.getHeight() || !canvas.getWidth()) {
+        let resourceWidth: number;
+        let resourceHeight: number;
+
+        if (canvas.getWidth()) {
+            resourceWidth = canvas.getWidth();
+        } else {
+            resourceWidth = canvas.externalResource.width;
+        }
+
+        if (canvas.getHeight()) {
+            resourceHeight = canvas.getHeight();
+        } else {
+            resourceHeight = canvas.externalResource.height;
+        }
+
+        if (!resourceWidth || !resourceHeight) {
             return null;
         }
 
@@ -655,8 +670,8 @@ export default class OpenSeadragonExtension extends BaseExtension  {
         let y: number = Math.floor(bounds.y);
 
         // constrain to image bounds
-        if (x + width > canvas.getWidth()) {
-            width = canvas.getWidth() - x;
+        if (x + width > resourceWidth) {
+            width = resourceWidth - x;
         } else if (x < 0) {
             width = width + x;
         }
@@ -665,8 +680,8 @@ export default class OpenSeadragonExtension extends BaseExtension  {
             x = 0;
         }
 
-        if (y + height > canvas.getHeight()) {
-            height = canvas.getHeight() - y;
+        if (y + height > resourceHeight) {
+            height = resourceHeight - y;
         } else if (y < 0) {
             height = height + y;
         }
@@ -675,8 +690,8 @@ export default class OpenSeadragonExtension extends BaseExtension  {
             y = 0;
         }
 
-        width = Math.min(width, canvas.getWidth());
-        height = Math.min(height, canvas.getHeight());
+        width = Math.min(width, resourceWidth);
+        height = Math.min(height, resourceHeight);
         let regionWidth: number = width;
         let regionHeight: number = height;
 
@@ -801,10 +816,23 @@ export default class OpenSeadragonExtension extends BaseExtension  {
     }
 
     getConfinedImageDimensions(canvas: Canvas, width: number): Size {
+
+        let resourceWidth: number = canvas.getWidth();
+
+        if (!resourceWidth) {
+            resourceWidth = canvas.externalResource.width;
+        }
+
+        let resourceHeight: number = canvas.getHeight();
+
+        if (!resourceHeight) {
+            resourceHeight = canvas.externalResource.height;
+        }
+
         const dimensions: Size = new Size(0, 0);
         dimensions.width = width;
-        const normWidth = Maths.normalise(width, 0, canvas.getWidth());
-        dimensions.height = Math.floor(canvas.getHeight() * normWidth);
+        const normWidth = Maths.normalise(width, 0, resourceWidth);
+        dimensions.height = Math.floor(resourceHeight * normWidth);
         return dimensions;
     }
 
@@ -849,15 +877,16 @@ export default class OpenSeadragonExtension extends BaseExtension  {
     getInfoUri(canvas: Canvas): string {
         let infoUri: string | null = null;
 
-        const images: Annotation[] = canvas.getImages();
-
+        let images: Annotation[] = canvas.getImages();
+        
+        // presentation 2
         if (images && images.length) {
-            let firstImage: Annotation = images[0];
-            let resource: Resource = firstImage.getResource();
-            let services: Service[] = resource.getServices();
+            const firstImage: Annotation = images[0];
+            const resource: Resource = firstImage.getResource();
+            const services: Service[] = resource.getServices();
 
             for (let i = 0; i < services.length; i++) {
-                let service: Service = services[i];
+                const service: Service = services[i];
                 let id = service.id;
 
                 if (!id.endsWith('/')) {
@@ -866,6 +895,29 @@ export default class OpenSeadragonExtension extends BaseExtension  {
 
                 if (Utils.isImageProfile(service.getProfile())) {
                     infoUri = id + 'info.json';
+                }
+            }
+        } else {
+            // presentation 3
+            images = canvas.getContent();
+
+            const firstImage: Annotation = images[0];
+            const body: AnnotationBody[] = firstImage.getBody();
+
+            if (body.length) {
+                const services: Service[] = body[0].getServices();
+
+                for (let i = 0; i < services.length; i++) {
+                    const service: Service = services[i];
+                    let id = service.id;
+    
+                    if (!id.endsWith('/')) {
+                        id += '/';
+                    }
+    
+                    if (Utils.isImageProfile(service.getProfile())) {
+                        infoUri = id + 'info.json';
+                    }
                 }
             }
         }
