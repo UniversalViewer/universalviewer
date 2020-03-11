@@ -7,14 +7,14 @@
     "noImplicitReturns": true,
     "noImplicitThis": false,
     "noLib": false,
-    "lib": ["es2015", "dom"],
+    "lib": ["ES2015", "DOM"],
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5",
+    "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",
     "types": [
       "@edsilv/jquery-plugins",
@@ -29,6 +29,6 @@
     "src/**/*.spec.ts"
   ],
   "include": [
-    "src/**/*"
+    "src"
   ]
 }
