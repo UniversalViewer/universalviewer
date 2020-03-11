@@ -44,6 +44,9 @@ export default class Extension extends BaseExtension implements IModelViewerExte
     }
 
     createModules(): void{
+
+        console.log("create modules");
+        
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
@@ -96,12 +99,6 @@ export default class Extension extends BaseExtension implements IModelViewerExte
     render(): void {
         super.render();
     }
-
-    // dependencyLoaded(index: number, dep: any): void {
-    //     if (index === 0) {
-    //         window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
-    //     }
-    // }
 
     isLeftPanelEnabled(): boolean{
         return Bools.getBool(this.data.config.options.leftPanelEnabled, true)

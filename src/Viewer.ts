@@ -84,6 +84,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 return extension;
             },
             [Extension.MODELVIEWER]: async () => {
+                console.log("modelviewer");
                 const m = await import(/* webpackChunkName: "uv-model-viewer-extension" *//* webpackMode: "lazy" */"./extensions/uv-model-viewer-extension/Extension") as any;
                 const extension = new m.default();
                 extension.name = Extension.MODELVIEWER;
