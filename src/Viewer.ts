@@ -53,12 +53,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
         super._init();
 
         this._extensions = {
-            [Extension.AV]: async () => {
-                const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
-                const extension = new m.default();
-                extension.name = Extension.AV;
-                return extension;
-            },
+            // [Extension.AV]: async () => {
+            //     const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
+            //     const extension = new m.default();
+            //     extension.name = Extension.AV;
+            //     return extension;
+            // },
             [Extension.DEFAULT]: async () => {
                 const m = await import(/* webpackChunkName: "uv-default-extension" *//* webpackMode: "lazy" */"./extensions/uv-default-extension/Extension") as any;
                 const extension = new m.default();
@@ -160,20 +160,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
             load: this._extensions[Extension.AV]
         };
 
-        this._extensionRegistry[MediaType.OBJ] = {
-            load: this._extensions[Extension.MODELVIEWER]
-        };
-
         this._extensionRegistry[MediaType.PDF] = {
             load: this._extensions[Extension.PDF]
-        };
-
-        this._extensionRegistry[MediaType.PLY] = {
-            load: this._extensions[Extension.MODELVIEWER]
-        };
-        
-        this._extensionRegistry[MediaType.THREEJS] = {
-            load: this._extensions[Extension.MODELVIEWER]
         };
 
         this._extensionRegistry[MediaType.VIDEO_MP4] = {
