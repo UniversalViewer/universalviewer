@@ -24,8 +24,7 @@ module.exports = function (grunt) {
             build: config.directories.build,
             dist: config.directories.dist,
             distumd: config.directories.distumd,
-            examples: config.directories.examples + '/uv/',
-            examplesdistumd: config.directories.examples + '/uv-dist-umd/',
+            www: config.directories.www,
             extension: config.directories.src + '/extensions/*/.build/*',
             libs: [
                 config.directories.src + '/extensions/*/lib/**/*',
@@ -46,51 +45,42 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            schema: {
-                files: [
-                    // extension schema files
-                    {
-                        expand: true,
-                        src: ['src/extensions/*/.build/*.schema.json'],
-                        dest: config.directories.build + '/schema/',
-                        rename: function(dest, src) {
-                            // get the extension name from the src string.
-                            // src/extensions/[extension]/.build/[locale].schema.json
-                            var reg = /extensions\/(.*)\/.build\/(.*.schema.json)/;
-                            var extensionName = src.match(reg)[1];
-                            var fileName = src.match(reg)[2];
-                            return dest + extensionName + '.' + fileName;
-                        }
-                    }
-                ]
-            },
+            // schema: {
+            //     files: [
+            //         // extension schema files
+            //         {
+            //             expand: true,
+            //             src: ['src/extensions/*/.build/*.schema.json'],
+            //             dest: config.directories.build + '/schema/',
+            //             rename: function(dest, src) {
+            //                 // get the extension name from the src string.
+            //                 // src/extensions/[extension]/.build/[locale].schema.json
+            //                 var reg = /extensions\/(.*)\/.build\/(.*.schema.json)/;
+            //                 var extensionName = src.match(reg)[1];
+            //                 var fileName = src.match(reg)[2];
+            //                 return dest + extensionName + '.' + fileName;
+            //             }
+            //         }
+            //     ]
+            // },
+            // everything first goes in an intermediary .build folder
+            // the contents of which are then copied into the (cleaned) www folder
+            // on dist, a dist build goes into .build, and is then copied into the dist folder
             build: {
                 files: [
-                    // // js
-                    // {
-                    //     expand: true,
-                    //     flatten: true,
-                    //     src: [config.directories.src + '/build.js'],
-                    //     dest: config.directories.build,
-                    //     rename: function(dest, src) {
-                    //         return dest + '/uv.js';
-                    //     }
-                    // },
-                    // // js
-                    // {
-                    //     expand: true,
-                    //     flatten: true,
-                    //     src: [config.directories.src + '/build.js.map'],
-                    //     dest: config.directories.build
-                    // },
                     // js
+                    {
+                        expand: true,
+                        cwd: config.directories.distumd,
+                        src: ['**'],
+                        dest: config.directories.build + '/' + config.directories.distumd + '/'
+                    },
                     {
                         expand: true,
                         flatten: true,
                         src: [config.directories.lib + '/bundle.js'],
                         dest: config.directories.build + '/lib'
                     },
-                    // js
                     {
                         expand: true,
                         flatten: true,
@@ -114,6 +104,35 @@ module.exports = function (grunt) {
                         src: [config.directories.src + '/uv.css'],
                         dest: config.directories.build
                     },
+                    {
+                        cwd: config.directories.build,
+                        expand: true,
+                        src: ['**'],
+                        dest: config.directories.build + '/' + config.directories.uv + '/'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            config.directories.src + '/index.html',
+                            config.directories.src + '/manifests.json',
+                            'favicon.ico'
+                        ],
+                        dest: config.directories.build + '/'
+                    },
+                    // images
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: 'src/img/*',
+                        dest: config.directories.build + '/img/'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: 'src/favicon.ico',
+                        dest: config.directories.build
+                    },
                     // extension configuration files
                     {
                         expand: true,
@@ -127,43 +146,11 @@ module.exports = function (grunt) {
                             var fileName = src.match(reg)[2];
                             return dest + extensionName + '.' + fileName;
                         }
-                    },
-                    // // extension dependencies
-                    // {
-                    //     expand: true,
-                    //     src: ['src/extensions/**/dependencies.js'],
-                    //     dest: config.directories.build + '/lib/',
-                    //     rename: function(dest, src) {
-                    //         // get the extension name from the src string.
-                    //         var reg = /extensions\/(.*)\/dependencies.js/;
-                    //         var extensionName = src.match(reg)[1];
-                    //         return dest + extensionName + '-dependencies.js';
-                    //     }
-                    // },
-                    // // extension dependencies
-                    // {
-                    //     expand: true,
-                    //     flatten: true,
-                    //     src: ['src/extensions/**/lib/*'],
-                    //     dest: config.directories.build + '/lib/'
-                    // },
-                    // images
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: 'src/img/*',
-                        dest: config.directories.build + '/img/'
-                    },
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: 'src/favicon.ico',
-                        dest: config.directories.build
                     }
                 ]
             },
-            dist: {
-                // copy contents of /.build to /dist and /examples/uv.
+            www: {
+                // copy contents of /.build to /www
                 files: [
                     {
                         cwd: config.directories.build,
@@ -171,31 +158,30 @@ module.exports = function (grunt) {
                         src: ['**'],
                         dest: config.directories.dist
                     },
+                    
+                ]
+            },
+            dist: {
+                // copy contents of /.build to /dist
+                files: [
                     {
                         cwd: config.directories.build,
                         expand: true,
                         src: ['**'],
-                        dest: config.directories.examples + '/' + config.directories.uv + '/'
-                    },
-                    // misc
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: ['favicon.ico'],
-                        dest: config.directories.examples + '/'
-                    }
-                ]
-            },
-            distumd: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: config.directories.distumd,
-                        src: ['**'],
-                        dest: config.directories.examples + '/' + config.directories.distumd + '/'
+                        dest: config.directories.dist
                     }
                 ]
             }
+            // distumd: {
+            //     files: [
+            //         {
+            //             expand: true,
+            //             cwd: config.directories.distumd,
+            //             src: ['**'],
+            //             dest: config.directories.www + '/' + config.directories.distumd + '/'
+            //         }
+            //     ]
+            // }
         },
 
         sync: {
@@ -206,23 +192,6 @@ module.exports = function (grunt) {
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: config.directories.themes
-                    }
-                ]
-            }
-        },
-
-        compress: {
-            zip: {
-                options: {
-                    mode: 'zip',
-                    archive: config.directories.dist + '/uv.zip',
-                    level: 9
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: config.directories.build + '/',
-                        src: ['**']
                     }
                 ]
             }
@@ -264,12 +233,12 @@ module.exports = function (grunt) {
         connect: {
             dev: {
                 options: {
-                    port: config.examplesPort,
+                    port: config.wwwPort,
                     base: '.',
                     directory: '.',
                     keepalive: true,
                     open: {
-                        target: 'http://localhost:' + config.examplesPort + '/' + config.directories.examples + '/'
+                        target: 'http://localhost:' + config.wwwPort + '/' + config.directories.www + '/'
                     }
                 }
             }
@@ -309,7 +278,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -341,7 +309,7 @@ module.exports = function (grunt) {
             'clean:extension',
             'configure:apply',
             'clean:build',
-            'copy:schema',
+            //'copy:schema',
             'webpack',
             'copy:build',
             'theme:create',
@@ -349,15 +317,13 @@ module.exports = function (grunt) {
             'replace:moduleassets',
             'replace:themeassets',
             'clean:dist',
-            'clean:examples',
-            'clean:examplesdistumd',
+            'clean:www',
             'copy:dist',
-            'copy:distumd',
-            'compress:zip'
+            'copy:distumd'
         );
     });
 
-    grunt.registerTask('examples', '', function() {
+    grunt.registerTask('www', '', function() {
 
         grunt.task.run(
             'connect'

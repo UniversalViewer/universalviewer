@@ -1,6 +1,8 @@
 .buildcache
 dist
 uv-dist-umd
+www
+examples
 
 #################
 ## lib folders

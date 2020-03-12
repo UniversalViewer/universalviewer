@@ -3,7 +3,7 @@ var metadata = require('./package');
 module.exports = function () {
     this.name = metadata.name;
     this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
-    this.examplesPort = 8002;
+    this.wwwPort = 8002;
     this.dependencies = {
         bundle: [
             'node_modules/jquery/dist/jquery.min.js',
@@ -16,7 +16,7 @@ module.exports = function () {
         build: './.build',
         dist: './dist',
         distumd: './uv-dist-umd',
-        examples: './examples',
+        www: './www',
         extensions: './src/extensions',
         lib: './src/lib',
         modules: './src/modules',
