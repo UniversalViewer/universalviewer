@@ -1,5 +1,6 @@
 .buildcache
-dist-umd
+dist
+uv-dist-umd
 
 #################
 ## lib folders

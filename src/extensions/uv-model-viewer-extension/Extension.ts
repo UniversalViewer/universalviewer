@@ -45,8 +45,6 @@ export default class Extension extends BaseExtension implements IModelViewerExte
 
     createModules(): void{
 
-        console.log("create modules");
-        
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {

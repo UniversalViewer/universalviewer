@@ -19,8 +19,8 @@ const config = {
     // The output defines how and where we want the bundles. The special value `[name]` in `filename` tells Webpack to use the name we defined above.
     // We target a UMD and name it UV. When including the bundle in the browser it will be accessible at `window.UV`
     output: {
-        path: resolvePath("dist-umd"),
-        publicPath: "dist-umd/",
+        path: resolvePath("uv-dist-umd"),
+        publicPath: "uv-dist-umd/",
         libraryTarget: "umd",
         library: "UV",
         umdNamedDefine: true,

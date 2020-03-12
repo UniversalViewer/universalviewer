@@ -15,8 +15,6 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     create(): void {
 
-        console.log("create center panel");
-
         this.setConfig('modelViewerCenterPanel');
 
         super.create();
@@ -35,8 +33,6 @@ export class ModelViewerCenterPanel extends CenterPanel {
     }
 
     async openMedia(resources: IExternalResource[]) {
-
-        console.log("open media");
 
         await this.extension.getExternalResources(resources);
 
@@ -60,7 +56,6 @@ export class ModelViewerCenterPanel extends CenterPanel {
     }
 
     resize() {
-        console.log("resize");
 
         super.resize();
 

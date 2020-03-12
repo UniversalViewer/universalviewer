@@ -15,7 +15,7 @@ module.exports = function () {
         bower: './lib',
         build: './.build',
         dist: './dist',
-        distumd: './dist-umd',
+        distumd: './uv-dist-umd',
         examples: './examples',
         extensions: './src/extensions',
         lib: './src/lib',
@@ -24,13 +24,7 @@ module.exports = function () {
         npmthemes: './node_modules/@universalviewer',
         src: './src',
         themes: './src/themes',
-        uv: 'uv',
-        uvAVExtension: './src/extensions/uv-av-extension',
-        uvDefaultExtension: './src/extensions/uv-default-extension',
-        uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
-        uvPdfExtension: './src/extensions/uv-pdf-extension',
-        uvOpenSeadragonExtension: './src/extensions/uv-openseadragon-extension',
-        uvVirtexExtension: './src/extensions/uv-virtex-extension'
+        uv: 'uv'
     };
     this.themes = {
 

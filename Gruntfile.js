@@ -25,7 +25,7 @@ module.exports = function (grunt) {
             dist: config.directories.dist,
             distumd: config.directories.distumd,
             examples: config.directories.examples + '/uv/',
-            examplesdistumd: config.directories.examples + '/dist-umd/',
+            examplesdistumd: config.directories.examples + '/uv-dist-umd/',
             extension: config.directories.src + '/extensions/*/.build/*',
             libs: [
                 config.directories.src + '/extensions/*/lib/**/*',
@@ -66,23 +66,23 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
-                    // js
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [config.directories.src + '/build.js'],
-                        dest: config.directories.build,
-                        rename: function(dest, src) {
-                            return dest + '/uv.js';
-                        }
-                    },
-                    // js
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [config.directories.src + '/build.js.map'],
-                        dest: config.directories.build
-                    },
+                    // // js
+                    // {
+                    //     expand: true,
+                    //     flatten: true,
+                    //     src: [config.directories.src + '/build.js'],
+                    //     dest: config.directories.build,
+                    //     rename: function(dest, src) {
+                    //         return dest + '/uv.js';
+                    //     }
+                    // },
+                    // // js
+                    // {
+                    //     expand: true,
+                    //     flatten: true,
+                    //     src: [config.directories.src + '/build.js.map'],
+                    //     dest: config.directories.build
+                    // },
                     // js
                     {
                         expand: true,
@@ -128,25 +128,25 @@ module.exports = function (grunt) {
                             return dest + extensionName + '.' + fileName;
                         }
                     },
-                    // extension dependencies
-                    {
-                        expand: true,
-                        src: ['src/extensions/**/dependencies.js'],
-                        dest: config.directories.build + '/lib/',
-                        rename: function(dest, src) {
-                            // get the extension name from the src string.
-                            var reg = /extensions\/(.*)\/dependencies.js/;
-                            var extensionName = src.match(reg)[1];
-                            return dest + extensionName + '-dependencies.js';
-                        }
-                    },
-                    // extension dependencies
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: ['src/extensions/**/lib/*'],
-                        dest: config.directories.build + '/lib/'
-                    },
+                    // // extension dependencies
+                    // {
+                    //     expand: true,
+                    //     src: ['src/extensions/**/dependencies.js'],
+                    //     dest: config.directories.build + '/lib/',
+                    //     rename: function(dest, src) {
+                    //         // get the extension name from the src string.
+                    //         var reg = /extensions\/(.*)\/dependencies.js/;
+                    //         var extensionName = src.match(reg)[1];
+                    //         return dest + extensionName + '-dependencies.js';
+                    //     }
+                    // },
+                    // // extension dependencies
+                    // {
+                    //     expand: true,
+                    //     flatten: true,
+                    //     src: ['src/extensions/**/lib/*'],
+                    //     dest: config.directories.build + '/lib/'
+                    // },
                     // images
                     {
                         expand: true,
