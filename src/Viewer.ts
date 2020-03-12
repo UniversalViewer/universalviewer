@@ -21,7 +21,7 @@ interface IExtensionRegistry {
 }
 
 enum Extension {
-    AV = "uv-av-extension",
+    //AV = "uv-av-extension",
     DEFAULT = "uv-default-extension",
     MEDIAELEMENT = "uv-mediaelement-extension",
     MODELVIEWER = "uv-model-viewer-extension",
@@ -124,12 +124,13 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
         // presentation 3
 
-        this._extensionRegistry["av"] = {
-            load: this._extensions[Extension.AV]
-        };
+        // this._extensionRegistry["av"] = {
+        //     load: this._extensions[Extension.AV]
+        // };
 
         this._extensionRegistry[MediaType.AUDIO_MP4] = {
-            load: this._extensions[Extension.AV]
+            //load: this._extensions[Extension.AV]
+            load: this._extensions[Extension.MEDIAELEMENT]
         };
 
         this._extensionRegistry["default"] = {
@@ -148,29 +149,31 @@ export class Viewer extends BaseComponent implements IUVComponent {
             load: this._extensions[Extension.OSD]
         };
 
-        this._extensionRegistry[MediaType.M3U8] = {
-            load: this._extensions[Extension.AV]
-        };
+        // this._extensionRegistry[MediaType.M3U8] = {
+        //     load: this._extensions[Extension.AV]
+        // };
 
         this._extensionRegistry[MediaType.MP3] = {
-            load: this._extensions[Extension.AV]
+            //load: this._extensions[Extension.AV]
+            load: this._extensions[Extension.MEDIAELEMENT]
         };
 
-        this._extensionRegistry[MediaType.MPEG_DASH] = {
-            load: this._extensions[Extension.AV]
-        };
+        // this._extensionRegistry[MediaType.MPEG_DASH] = {
+        //     load: this._extensions[Extension.AV]
+        // };
 
         this._extensionRegistry[MediaType.PDF] = {
             load: this._extensions[Extension.PDF]
         };
 
         this._extensionRegistry[MediaType.VIDEO_MP4] = {
-            load: this._extensions[Extension.AV]
+            //load: this._extensions[Extension.AV]
+            load: this._extensions[Extension.MEDIAELEMENT]
         };
 
-        this._extensionRegistry[MediaType.WEBM] = {
-            load: this._extensions[Extension.AV]
-        };
+        // this._extensionRegistry[MediaType.WEBM] = {
+        //     load: this._extensions[Extension.AV]
+        // };
 
         this.set(this.options.data);
 
