@@ -31,7 +31,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if (this.isVideo()){
+        if (this.isVideo()) {
             this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
                 if (that.component.isFullScreen) {
                     that.player.enterFullScreen(false);
