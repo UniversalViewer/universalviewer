@@ -36,10 +36,16 @@ function createUV(selector, data) {
 
     uv.on('created', function(obj) {
         console.log("created");
-        setTimeout(() => {
-            console.log("resize");
-            resize();
-        }, 2000);
+        resize();
+        // setTimeout(() => {
+        //     console.log("resize");
+        //     resize();
+        // }, 2000);
+    }, false);
+
+    uv.on('openedMedia', function() {
+        console.log('opened media');
+        resize();
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {
