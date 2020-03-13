@@ -2,7 +2,7 @@ test.skip('Configuration options', () => {});
 
 describe('Universal Viewer', () => {
   beforeAll(async () => {
-    await page.goto('http://localhost:4444/examples');
+    await page.goto('http://localhost:4444/');
   });
   it('has the correct page title', async () => {
     const title = await page.title();

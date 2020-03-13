@@ -19,7 +19,7 @@ module.exports = function (grunt) {
         copy: {
             bundle: {
                 files: [
-                    // node modules
+                    // node modules to go in bundle.js
                     {
                         expand: true,
                         flatten: true,
@@ -29,27 +29,8 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            // schema: {
-            //     files: [
-            //         // extension schema files
-            //         {
-            //             expand: true,
-            //             src: ['src/extensions/*/.build/*.schema.json'],
-            //             dest: config.directories.build + '/schema/',
-            //             rename: function(dest, src) {
-            //                 // get the extension name from the src string.
-            //                 // src/extensions/[extension]/.build/[locale].schema.json
-            //                 var reg = /extensions\/(.*)\/.build\/(.*.schema.json)/;
-            //                 var extensionName = src.match(reg)[1];
-            //                 var fileName = src.match(reg)[2];
-            //                 return dest + extensionName + '.' + fileName;
-            //             }
-            //         }
-            //     ]
-            // },
-            // everything first goes in an intermediary .build folder
-            // the contents of which are then copied into the (cleaned) www folder
-            // on dist, a dist build goes into .build, and is then copied into the dist folder
+            // everything first gets built into an intermediary .build folder
+            // the contents of .build are then copied into the (cleaned) dist and www folders
             build: {
                 files: [
                     // uv-dist-umd
@@ -72,23 +53,18 @@ module.exports = function (grunt) {
                         src: 'src/img/*',
                         dest: config.directories.build + '/uv-assets/img/'
                     },
-                    // {
-                    //     cwd: config.directories.build,
-                    //     expand: true,
-                    //     src: ['**'],
-                    //     dest: config.directories.build + '/' + config.directories.uv + '/'
-                    // },
                     {
                         expand: true,
                         flatten: true,
                         src: [
-                            config.directories.src + '/favicon.ico',
-                            config.directories.src + '/uv.html',
-                            config.directories.src + '/uv.css',
-                            config.directories.src + '/index.html',
-                            config.directories.src + '/uv-helpers.js',
+                            config.directories.src + '/_headers',
                             config.directories.src + '/collection.json',
-                            config.directories.src + '/uv-config.json'
+                            config.directories.src + '/favicon.ico',
+                            config.directories.src + '/index.html',
+                            config.directories.src + '/uv-config.json',
+                            config.directories.src + '/uv-helpers.js',
+                            config.directories.src + '/uv.css',
+                            config.directories.src + '/uv.html'
                         ],
                         dest: config.directories.build + '/'
                     },
@@ -130,16 +106,6 @@ module.exports = function (grunt) {
                     }
                 ]
             }
-            // distumd: {
-            //     files: [
-            //         {
-            //             expand: true,
-            //             cwd: config.directories.distumd,
-            //             src: ['**'],
-            //             dest: config.directories.www + '/' + config.directories.distumd + '/'
-            //         }
-            //     ]
-            // }
         },
 
         sync: {
@@ -220,7 +186,7 @@ module.exports = function (grunt) {
                 }
                 return config;
             }
-        },
+        }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");

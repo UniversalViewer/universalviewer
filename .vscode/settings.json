@@ -4,7 +4,7 @@
     "**/.svn": true,
     "**/.DS_Store": true,
     "node_modules": false,
-    "dist": true,
+    "dist": false,
     "**/*.js": { "when": "$(basename).ts"},
     "**/*.js.map": true
   }

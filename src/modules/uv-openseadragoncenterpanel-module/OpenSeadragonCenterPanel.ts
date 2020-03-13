@@ -65,6 +65,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         });
 
         this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
+            console.log("viewer");
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 

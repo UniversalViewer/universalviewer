@@ -1007,8 +1007,23 @@
       "@context": "https://iiif.io/api/presentation/2/context.json",
       "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
-      "label": "IPFS",
+      "label": "RPM",
       "visible": true,
+      "manifests": [
+        {
+          "@id": "https://www.rpm-api.io/records/5e60db9640fe2700178d152e?_format=iiif",
+          "@type": "sc:Manifest",
+          "label": "Interior of The New Market-Place at Brighton",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "https://iiif.io/api/presentation/2/context.json",
+      "@id": "https://universalviewer.io/collection.json",
+      "@type": "sc:Collection",
+      "label": "IPFS",
+      "visible": false,
       "manifests": [
         {
           "@id": "https://ipfs.io/ipfs/QmYomyCpT1vKNovYvTjAStYq31JoaH8xdivjmWcDj5mpM1",
@@ -1023,7 +1038,7 @@
       "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "DAT",
-      "visible": true,
+      "visible": false,
       "manifests": [
         {
           "@id": "https://174.138.105.19:3000/5fe9b8d2ce257bccf05211597350d2459d7cf76701264cca70f3ffbec7bf605f/index.json",
@@ -1036,51 +1051,6 @@
           "@type": "sc:Manifest",
           "label": "Fisherman",
           "visible": true
-        }
-      ]
-    },
-    {
-      "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/collection.json",
-      "@type": "sc:Collection",
-      "label": "Tests (require jsonp)",
-      "visible": false,
-      "manifests": [
-        {
-          "@id": "/examples/manifest/missingimages.js",
-          "@type": "sc:Manifest",
-          "label": "Missing Images",
-          "visible": false
-        },
-        {
-          "@id": "/examples/manifest/collection.js",
-          "@type": "sc:Manifest",
-          "label": "Collection",
-          "visible": false
-        },
-        {
-          "@id": "/examples/manifest/deephierarchylongtitle.js",
-          "@type": "sc:Manifest",
-          "label": "Deep hierarchy long title",
-          "visible": false
-        },
-        {
-          "@id": "/examples/manifest/attribution.js",
-          "@type": "sc:Manifest",
-          "label": "Attribution",
-          "visible": false
-        },
-        {
-          "@id": "/examples/manifest/toptobottom.js",
-          "@type": "sc:Manifest",
-          "label": "Top to Bottom",
-          "visible": false
-        },
-        {
-          "@id": "/examples/manifest/logo.js",
-          "@type": "sc:Manifest",
-          "label": "Logo as IIIF",
-          "visible": false
         }
       ]
     }
