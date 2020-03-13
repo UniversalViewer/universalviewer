@@ -44,8 +44,10 @@ function createUV(selector, data) {
     }, false);
 
     uv.on('openedMedia', function() {
-        console.log('opened media');
-        resize();
+        setTimeout(() => {
+            console.log('opened media');
+            resize();
+        }, 100);
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {
