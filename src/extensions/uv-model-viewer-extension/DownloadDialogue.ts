@@ -1,29 +1,27 @@
-import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
-import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
+import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
+import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 
 export class DownloadDialogue extends BaseDownloadDialogue {
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("downloadDialogue");
 
-    create(): void {
+    super.create();
+  }
 
-        this.setConfig('downloadDialogue');
+  open(triggerButton: HTMLElement) {
+    super.open(triggerButton);
 
-        super.create();
-    }
+    this.addEntireFileDownloadOptions();
+    this.updateNoneAvailable();
 
-    open(triggerButton: HTMLElement) {
-        super.open(triggerButton);
+    this.resize();
+  }
 
-        this.addEntireFileDownloadOptions();
-        this.updateNoneAvailable();
-
-        this.resize();
-    }
-
-    isDownloadOptionAvailable(option: DownloadOption): boolean {
-        return super.isDownloadOptionAvailable(option);
-    }
+  isDownloadOptionAvailable(option: DownloadOption): boolean {
+    return super.isDownloadOptionAvailable(option);
+  }
 }

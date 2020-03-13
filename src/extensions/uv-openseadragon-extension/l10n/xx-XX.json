@@ -2,8 +2,7 @@
   "localisation": {
     "label": "English (GB) (xx-XX)"
   },
-  "options": {
-  },
+  "options": {},
   "content": {
     "canvasIndexOutOfRange": "Canvas index out of range. (xx-XX)",
     "degradedResourceMessage": "Please log in to view at full quality. (xx-XX)",
@@ -106,10 +105,8 @@
         "zoomOut": "Zoom Out (xx-XX)"
       }
     },
-    "searchFooterPanel":
-    {
-      "content":
-      {
+    "searchFooterPanel": {
+      "content": {
         "clearSearch": "Clear Search (xx-XX)",
         "defaultLabel": "- (xx-XX)",
         "displaying": "Displaying {0} {1} of {2} (xx-XX)",

@@ -1045,7 +1045,7 @@
           "@type": "sc:Manifest",
           "label": "Code of Ethics Zine",
           "visible": true
-        },        
+        },
         {
           "@id": "dat://f370c50889fe51511e8dcec10537c94c02360a4c4351c5af1e353c696a255204/collection/woody/index.json",
           "@type": "sc:Manifest",

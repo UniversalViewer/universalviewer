@@ -1,259 +1,258 @@
-import {BaseView} from "./BaseView";
+import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
 
 export class BaseExpandPanel extends BaseView {
+  isExpanded: boolean = false;
+  isFullyExpanded: boolean = false;
+  isUnopened: boolean = true;
+  autoToggled: boolean = false;
+  expandFullEnabled: boolean = true;
 
-    isExpanded: boolean = false;
-    isFullyExpanded: boolean = false;
-    isUnopened: boolean = true;
-    autoToggled: boolean = false;
-    expandFullEnabled: boolean = true;
+  $closed: JQuery;
+  $closedTitle: JQuery;
+  $collapseButton: JQuery;
+  $expandButton: JQuery;
+  $expandFullButton: JQuery;
+  $main: JQuery;
+  $title: JQuery;
+  $top: JQuery;
 
-    $closed: JQuery;
-    $closedTitle: JQuery;
-    $collapseButton: JQuery;
-    $expandButton: JQuery;
-    $expandFullButton: JQuery;
-    $main: JQuery;
-    $title: JQuery;
-    $top: JQuery;
+  constructor($element: JQuery) {
+    super($element, false, true);
+  }
 
-    constructor($element: JQuery) {
-        super($element, false, true);
+  create(): void {
+    super.create();
+
+    this.$top = $('<div class="top"></div>');
+    this.$element.append(this.$top);
+
+    this.$title = $('<div class="title"></div>');
+    this.$title.prop("title", this.content.title);
+    this.$top.append(this.$title);
+
+    this.$expandFullButton = $('<a class="expandFullButton" tabindex="0"></a>');
+    this.$expandFullButton.prop("title", this.content.expandFull);
+    this.$top.append(this.$expandFullButton);
+
+    if (!Bools.getBool(this.config.options.expandFullEnabled, true)) {
+      this.$expandFullButton.hide();
     }
 
-    create(): void {
+    this.$collapseButton = $('<div class="collapseButton" tabindex="0"></div>');
+    this.$collapseButton.prop("title", this.content.collapse);
+    this.$top.append(this.$collapseButton);
 
-        super.create();
+    this.$closed = $('<div class="closed"></div>');
+    this.$element.append(this.$closed);
 
-        this.$top = $('<div class="top"></div>');
-        this.$element.append(this.$top);
+    this.$expandButton = $('<a class="expandButton" tabindex="0"></a>');
+    this.$expandButton.prop("title", this.content.expand);
+    this.$closed.append(this.$expandButton);
 
-        this.$title = $('<div class="title"></div>');
-        this.$title.prop('title', this.content.title);
-        this.$top.append(this.$title);
+    this.$closedTitle = $('<a class="title"></a>');
+    this.$closedTitle.prop("title", this.content.title);
+    this.$closed.append(this.$closedTitle);
 
-        this.$expandFullButton = $('<a class="expandFullButton" tabindex="0"></a>');
-        this.$expandFullButton.prop('title', this.content.expandFull);
-        this.$top.append(this.$expandFullButton);
-        
-        if (!Bools.getBool(this.config.options.expandFullEnabled, true)) {
-            this.$expandFullButton.hide();
-        } 
+    this.$main = $('<div class="main"></div>');
+    this.$element.append(this.$main);
 
-        this.$collapseButton = $('<div class="collapseButton" tabindex="0"></div>');
-        this.$collapseButton.prop('title', this.content.collapse);
-        this.$top.append(this.$collapseButton);
+    this.$expandButton.onPressed(() => {
+      this.toggle();
+    });
 
-        this.$closed = $('<div class="closed"></div>');
-        this.$element.append(this.$closed);
+    this.$expandFullButton.onPressed(() => {
+      this.expandFull();
+    });
 
-        this.$expandButton = $('<a class="expandButton" tabindex="0"></a>');
-        this.$expandButton.prop('title', this.content.expand);
-        this.$closed.append(this.$expandButton);
+    this.$closedTitle.onPressed(() => {
+      this.toggle();
+    });
 
-        this.$closedTitle = $('<a class="title"></a>');
-        this.$closedTitle.prop('title', this.content.title);
-        this.$closed.append(this.$closedTitle);
+    this.$title.onPressed(() => {
+      if (this.isFullyExpanded) {
+        this.collapseFull();
+      } else {
+        this.toggle();
+      }
+    });
 
-        this.$main = $('<div class="main"></div>');
-        this.$element.append(this.$main);
+    this.$collapseButton.onPressed(() => {
+      if (this.isFullyExpanded) {
+        this.collapseFull();
+      } else {
+        this.toggle();
+      }
+    });
 
-        this.$expandButton.onPressed(() => {
-            this.toggle();
-        });
+    this.$top.hide();
+    this.$main.hide();
+  }
 
-        this.$expandFullButton.onPressed(() => {
-            this.expandFull();
-        });
+  init(): void {
+    super.init();
+  }
 
-        this.$closedTitle.onPressed(() => {
-            this.toggle();
-        });
+  setTitle(title: string): void {
+    this.$title.text(title);
+    this.$closedTitle.text(title);
+  }
 
-        this.$title.onPressed(() => {
-            if (this.isFullyExpanded){
-                this.collapseFull();
-            } else {
-                this.toggle();
-            }
-        });
+  toggle(autoToggled?: boolean): void {
+    autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
-        this.$collapseButton.onPressed(() => {
-            if (this.isFullyExpanded){
-                this.collapseFull();
-            } else {
-                this.toggle();
-            }
-        });
-
-        this.$top.hide();
-        this.$main.hide();
+    // if collapsing, hide contents immediately.
+    if (this.isExpanded) {
+      this.$top.attr("aria-hidden", "true");
+      this.$main.attr("aria-hidden", "true");
+      this.$closed.attr("aria-hidden", "false");
+      this.$top.hide();
+      this.$main.hide();
+      this.$closed.show();
     }
 
-    init(): void {
-        super.init();
+    this.$element.stop().animate(
+      {
+        width: this.getTargetWidth(),
+        left: this.getTargetLeft()
+      },
+      this.options.panelAnimationDuration,
+      () => {
+        this.toggled();
+      }
+    );
+  }
+
+  toggled(): void {
+    this.toggleStart();
+
+    this.isExpanded = !this.isExpanded;
+
+    // if expanded show content when animation finished.
+    if (this.isExpanded) {
+      this.$top.attr("aria-hidden", "false");
+      this.$main.attr("aria-hidden", "false");
+      this.$closed.attr("aria-hidden", "true");
+      this.$closed.hide();
+      this.$top.show();
+      this.$main.show();
     }
 
-    setTitle(title: string): void {
-        this.$title.text(title);
-        this.$closedTitle.text(title);
+    this.toggleFinish();
+
+    this.isUnopened = false;
+  }
+
+  expandFull(): void {
+    if (!this.isExpanded) {
+      this.toggled();
     }
 
-    toggle(autoToggled?: boolean): void {
+    var targetWidth: number = this.getFullTargetWidth();
+    var targetLeft: number = this.getFullTargetLeft();
 
-        (autoToggled) ? this.autoToggled = true : this.autoToggled = false;
+    this.expandFullStart();
 
-        // if collapsing, hide contents immediately.
-        if (this.isExpanded) {
-            this.$top.attr('aria-hidden', 'true');
-            this.$main.attr('aria-hidden', 'true');
-            this.$closed.attr('aria-hidden', 'false');
-            this.$top.hide();
-            this.$main.hide();
-            this.$closed.show();
-        }
+    this.$element.stop().animate(
+      {
+        width: targetWidth,
+        left: targetLeft
+      },
+      this.options.panelAnimationDuration,
+      () => {
+        this.expandFullFinish();
+      }
+    );
+  }
 
-        this.$element.stop().animate(
-            {
-                width: this.getTargetWidth(),
-                left: this.getTargetLeft()
-            },
-            this.options.panelAnimationDuration, () => {
-                this.toggled();
-            });
+  collapseFull(): void {
+    var targetWidth: number = this.getTargetWidth();
+    var targetLeft: number = this.getTargetLeft();
+
+    this.collapseFullStart();
+
+    this.$element.stop().animate(
+      {
+        width: targetWidth,
+        left: targetLeft
+      },
+      this.options.panelAnimationDuration,
+      () => {
+        this.collapseFullFinish();
+      }
+    );
+  }
+
+  getTargetWidth(): number {
+    return 0;
+  }
+
+  getTargetLeft(): number {
+    return 0;
+  }
+
+  getFullTargetWidth(): number {
+    return 0;
+  }
+
+  getFullTargetLeft(): number {
+    return 0;
+  }
+
+  toggleStart(): void {}
+
+  toggleFinish(): void {
+    if (this.isExpanded && !this.autoToggled) {
+      this.focusCollapseButton();
+    } else {
+      this.focusExpandButton();
+    }
+  }
+
+  expandFullStart(): void {}
+
+  expandFullFinish(): void {
+    this.isFullyExpanded = true;
+    this.$expandFullButton.hide();
+
+    this.focusCollapseButton();
+  }
+
+  collapseFullStart(): void {}
+
+  collapseFullFinish(): void {
+    this.isFullyExpanded = false;
+
+    if (this.expandFullEnabled) {
+      this.$expandFullButton.show();
     }
 
-    toggled(): void {
-        this.toggleStart();
+    this.focusExpandFullButton();
+  }
 
-        this.isExpanded = !this.isExpanded;
+  focusExpandButton(): void {
+    setTimeout(() => {
+      this.$expandButton.focus();
+    }, 1);
+  }
 
-        // if expanded show content when animation finished.
-        if (this.isExpanded) {
-            this.$top.attr('aria-hidden', 'false');
-            this.$main.attr('aria-hidden', 'false');
-            this.$closed.attr('aria-hidden', 'true');
-            this.$closed.hide();
-            this.$top.show();
-            this.$main.show();
-        }
-        
-        this.toggleFinish();
+  focusExpandFullButton(): void {
+    setTimeout(() => {
+      this.$expandFullButton.focus();
+    }, 1);
+  }
 
-        this.isUnopened = false;
-    }
+  focusCollapseButton(): void {
+    setTimeout(() => {
+      this.$collapseButton.focus();
+    }, 1);
+  }
 
-    expandFull(): void {
-        if (!this.isExpanded) {
-            this.toggled();
-        }        
-        
-        var targetWidth: number = this.getFullTargetWidth();
-        var targetLeft: number = this.getFullTargetLeft();
+  resize(): void {
+    super.resize();
 
-        this.expandFullStart();
-
-        this.$element.stop().animate(
-            {
-                width: targetWidth,
-                left: targetLeft
-            },
-            this.options.panelAnimationDuration, () => {
-                this.expandFullFinish();
-            });
-    }
-
-    collapseFull(): void {
-        var targetWidth: number = this.getTargetWidth();
-        var targetLeft: number = this.getTargetLeft();
-
-        this.collapseFullStart();
-
-        this.$element.stop().animate(
-            {
-                width: targetWidth,
-                left: targetLeft
-            },
-            this.options.panelAnimationDuration, () => {
-                this.collapseFullFinish();
-            });
-    }
-
-    getTargetWidth(): number{
-        return 0;
-    }
-
-    getTargetLeft(): number {
-        return 0;
-    }
-
-    getFullTargetWidth(): number{
-        return 0;
-    }
-
-    getFullTargetLeft(): number{
-        return 0;
-    }
-
-    toggleStart(): void {
-
-    }
-
-    toggleFinish(): void {
-        if (this.isExpanded && !this.autoToggled){
-            this.focusCollapseButton();
-        } else {
-            this.focusExpandButton();
-        }
-    }
-
-    expandFullStart(): void {
-
-    }
-
-    expandFullFinish(): void {
-        this.isFullyExpanded = true;
-        this.$expandFullButton.hide();
-
-        this.focusCollapseButton();
-    }
-
-    collapseFullStart(): void {
-
-    }
-
-    collapseFullFinish(): void {
-        this.isFullyExpanded = false;
-
-        if (this.expandFullEnabled) {
-            this.$expandFullButton.show();
-        }
-
-        this.focusExpandFullButton();
-    }
-
-    focusExpandButton(): void {
-        setTimeout(() => {
-            this.$expandButton.focus();
-        }, 1);
-    }
-
-    focusExpandFullButton(): void {
-        setTimeout(() => {
-            this.$expandFullButton.focus();
-        }, 1);
-    }
-
-    focusCollapseButton(): void {
-        setTimeout(() => {
-            this.$collapseButton.focus();
-        }, 1);
-    }
-
-    resize(): void {
-        super.resize();
-
-        this.$main.height(this.$element.parent().height() - this.$top.outerHeight(true));
-    }
+    this.$main.height(
+      this.$element.parent().height() - this.$top.outerHeight(true)
+    );
+  }
 }

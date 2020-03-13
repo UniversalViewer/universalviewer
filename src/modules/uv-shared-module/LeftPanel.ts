@@ -1,66 +1,67 @@
-import {BaseEvents} from "./BaseEvents";
-import {BaseExpandPanel} from "./BaseExpandPanel";
+import { BaseEvents } from "./BaseEvents";
+import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 
 export class LeftPanel extends BaseExpandPanel {
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
+  create(): void {
+    super.create();
+
+    this.$element.width(this.options.panelCollapsedWidth);
+
+    this.component.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+      if (this.isFullyExpanded) {
+        this.collapseFull();
+      } else {
+        this.expandFull();
+      }
+    });
+  }
+
+  init(): void {
+    super.init();
+
+    const shouldOpenPanel: boolean = Bools.getBool(
+      this.extension.getSettings().leftPanelOpen,
+      this.options.panelOpen
+    );
+
+    if (shouldOpenPanel) {
+      this.toggle(true);
     }
+  }
 
-    create(): void {
-
-        super.create();
-
-        this.$element.width(this.options.panelCollapsedWidth);
-
-        this.component.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
-            if (this.isFullyExpanded){
-                this.collapseFull();
-            } else {
-                this.expandFull();
-            }
-        });
+  getTargetWidth(): number {
+    if (this.isFullyExpanded || !this.isExpanded) {
+      return this.options.panelExpandedWidth;
+    } else {
+      return this.options.panelCollapsedWidth;
     }
+  }
 
-    init(): void {
-        super.init();
+  getFullTargetWidth(): number {
+    return this.$element.parent().width();
+  }
 
-        const shouldOpenPanel: boolean = Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
-        
-        if (shouldOpenPanel) {
-            this.toggle(true);
-        }
+  toggleFinish(): void {
+    super.toggleFinish();
+
+    if (this.isExpanded) {
+      this.component.publish(BaseEvents.OPEN_LEFT_PANEL);
+    } else {
+      this.component.publish(BaseEvents.CLOSE_LEFT_PANEL);
     }
+    this.extension.updateSettings({ leftPanelOpen: this.isExpanded });
+  }
 
-    getTargetWidth(): number {
-        if (this.isFullyExpanded || !this.isExpanded) {
-            return this.options.panelExpandedWidth;
-        } else {
-            return this.options.panelCollapsedWidth;
-        }
+  resize(): void {
+    super.resize();
+
+    if (this.isFullyExpanded) {
+      this.$element.width(this.$element.parent().width());
     }
-
-    getFullTargetWidth(): number {
-        return this.$element.parent().width();
-    }
-
-    toggleFinish(): void {
-        super.toggleFinish();
-
-        if (this.isExpanded) {
-            this.component.publish(BaseEvents.OPEN_LEFT_PANEL);
-        } else {           
-            this.component.publish(BaseEvents.CLOSE_LEFT_PANEL);
-        }
-        this.extension.updateSettings({leftPanelOpen: this.isExpanded});
-    }
-
-    resize(): void {
-        super.resize();
-
-        if (this.isFullyExpanded) {
-            this.$element.width(this.$element.parent().width());
-        }
-    }
+  }
 }

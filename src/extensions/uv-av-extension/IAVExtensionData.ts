@@ -1,5 +1,3 @@
-import {IUVData} from "../../IUVData";
+import { IUVData } from "../../IUVData";
 
-export interface IAVExtensionData extends IUVData {
-
-}
+export interface IAVExtensionData extends IUVData {}

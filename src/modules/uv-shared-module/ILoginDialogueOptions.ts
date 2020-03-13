@@ -1,4 +1,4 @@
 export interface ILoginDialogueOptions {
-    showCancelButton: boolean;
-    warningMessage: string;
+  showCancelButton: boolean;
+  warningMessage: string;
 }

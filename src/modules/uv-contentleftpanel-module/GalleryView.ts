@@ -1,73 +1,83 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {BaseView} from "../uv-shared-module/BaseView";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
 
 export class GalleryView extends BaseView {
+  isOpen: boolean = false;
+  galleryComponent: any;
+  galleryData: any;
+  $gallery: JQuery;
 
-    isOpen: boolean = false;
-    galleryComponent: any;
-    galleryData: any;
-    $gallery: JQuery;
+  constructor($element: JQuery) {
+    super($element, true, true);
+  }
 
-    constructor($element: JQuery) {
-        super($element, true, true);
-    }
+  create(): void {
+    this.setConfig("contentLeftPanel");
+    super.create();
 
-    create(): void {
-        this.setConfig('contentLeftPanel');
-        super.create();
+    this.$gallery = $('<div class="iiif-gallery-component"></div>');
+    this.$element.append(this.$gallery);
+  }
 
-        this.$gallery = $('<div class="iiif-gallery-component"></div>');
-        this.$element.append(this.$gallery);
-    }
+  public setup(): void {
+    const that = this;
 
-    public setup(): void {
+    this.galleryComponent = new GalleryComponent({
+      target: <HTMLElement>this.$gallery[0]
+    });
 
-        const that = this;
+    this.galleryComponent.on(
+      "thumbSelected",
+      function(thumb: any) {
+        that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
+        that.component.publish(BaseEvents.THUMB_SELECTED, thumb);
+      },
+      false
+    );
 
-        this.galleryComponent = new GalleryComponent({
-            target:  <HTMLElement>this.$gallery[0]
-        });
+    this.galleryComponent.on(
+      "decreaseSize",
+      function() {
+        that.component.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+      },
+      false
+    );
 
-        this.galleryComponent.on('thumbSelected', function(thumb: any) {
-            that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
-            that.component.publish(BaseEvents.THUMB_SELECTED, thumb);
-        }, false);
+    this.galleryComponent.on(
+      "increaseSize",
+      function() {
+        that.component.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+      },
+      false
+    );
+  }
 
-        this.galleryComponent.on('decreaseSize', function() {
-            that.component.publish(BaseEvents.GALLERY_DECREASE_SIZE);
-        }, false);
+  public databind(): void {
+    this.galleryComponent.options.data = this.galleryData;
+    this.galleryComponent.set(this.galleryData);
+    this.resize();
+  }
 
-        this.galleryComponent.on('increaseSize', function() {
-            that.component.publish(BaseEvents.GALLERY_INCREASE_SIZE);
-        }, false);
-    }
+  show(): void {
+    this.isOpen = true;
+    this.$element.show();
 
-    public databind(): void {
-        this.galleryComponent.options.data = this.galleryData;
-        this.galleryComponent.set(this.galleryData);
-        this.resize();
-    }
+    // todo: would be better to have no imperative methods on components and use a reactive pattern
+    setTimeout(() => {
+      this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
+    }, 10);
+  }
 
-    show(): void {
-        this.isOpen = true;
-        this.$element.show();
+  hide(): void {
+    this.isOpen = false;
+    this.$element.hide();
+  }
 
-        // todo: would be better to have no imperative methods on components and use a reactive pattern
-        setTimeout(() => {
-            this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
-        }, 10);
-    }
-
-    hide(): void {
-        this.isOpen = false;
-        this.$element.hide();
-    }
-
-    resize(): void {
-        super.resize();
-        const $main: JQuery = this.$gallery.find('.main');
-        const $header: JQuery = this.$gallery.find('.header');
-        $main.height(this.$element.height() - $header.height());
-    }
+  resize(): void {
+    super.resize();
+    const $main: JQuery = this.$gallery.find(".main");
+    const $header: JQuery = this.$gallery.find(".header");
+    $main.height(this.$element.height() - $header.height());
+  }
 }

@@ -10,12 +10,13 @@
     "dist/"
   ],
   "scripts": {
-    "postinstall": "opencollective postinstall",
-    "test": "jest",
+    "build:dist": "npm run lint:all && grunt build --dist",
+    "build": "npm run lint:all && grunt build",
     "e2eserve": "npx serve www -p 4444",
+    "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\" \"!./src/lib/* \"",
+    "postinstall": "opencollective postinstall",
     "start": "npx serve www",
-    "build": "grunt build",
-    "build:dist": "grunt build --dist"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -57,11 +58,15 @@
     "less": "2.4.0",
     "lodash": "4.17.11",
     "ncp": "2.0.0",
+    "prettier": "^1.19.1",
+    "prettier-check": "^2.0.0",
     "puppeteer": "1.9.0",
     "serve": "10.0.2",
     "ts-jest": "22.4.2",
     "ts-loader": "6.2.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "3.6.3",
+    "typescript-tslint-plugin": "^0.5.5",
     "webpack": "4.41.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpack-cli": "3.3.9"

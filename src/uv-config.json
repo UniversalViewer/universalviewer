@@ -21,7 +21,7 @@
       }
     },
     "footerPanel": {
-      "options":{
+      "options": {
         "downloadEnabled": true
       }
     }

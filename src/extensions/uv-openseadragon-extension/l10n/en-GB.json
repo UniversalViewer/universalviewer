@@ -2,8 +2,7 @@
   "localisation": {
     "label": "English (GB)"
   },
-  "options": {
-  },
+  "options": {},
   "content": {
     "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
     "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
@@ -188,10 +187,8 @@
         "cancel": "Cancel"
       }
     },
-    "searchFooterPanel":
-    {
-      "content":
-      {
+    "searchFooterPanel": {
+      "content": {
         "clearSearch": "Clear",
         "defaultLabel": "-",
         "displaying": "{0} {1} of {2}",

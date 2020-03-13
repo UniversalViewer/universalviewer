@@ -1,257 +1,297 @@
-import {BaseEvents} from "./BaseEvents";
-import {BaseView} from "./BaseView";
+import { BaseEvents } from "./BaseEvents";
+import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";
 
 export class FooterPanel extends BaseView {
+  $feedbackButton: JQuery;
+  $bookmarkButton: JQuery;
+  $downloadButton: JQuery;
+  $moreInfoButton: JQuery;
+  $shareButton: JQuery;
+  $embedButton: JQuery;
+  $openButton: JQuery;
+  $fullScreenBtn: JQuery;
+  $options: JQuery;
 
-    $feedbackButton: JQuery;
-    $bookmarkButton: JQuery;
-    $downloadButton: JQuery;
-    $moreInfoButton: JQuery;
-    $shareButton: JQuery;
-    $embedButton: JQuery;
-    $openButton: JQuery;
-    $fullScreenBtn: JQuery;
-    $options: JQuery;
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("footerPanel");
 
-    create(): void {
-        this.setConfig('footerPanel');
+    super.create();
 
-        super.create();
+    this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+      this.updateFullScreenButton();
+    });
 
-        this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-            this.updateFullScreenButton();
-        });
+    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+      this.updateMinimisedButtons();
+      this.updateMoreInfoButton();
+    });
 
-        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            this.updateMinimisedButtons();
-            this.updateMoreInfoButton();
-        });
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+      this.updateDownloadButton();
+    });
 
-        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
-            this.updateDownloadButton();
-        });
+    this.$options = $('<div class="options"></div>');
+    this.$element.append(this.$options);
 
-        this.$options = $('<div class="options"></div>');
-        this.$element.append(this.$options);
-
-        this.$feedbackButton = $(`
+    this.$feedbackButton = $(`
           <button class="feedback btn imageBtn" title="${this.content.feedback}" tabindex="0">
             <i class="uv-icon uv-icon-feedback" aria-hidden="true"></i>${this.content.feedback}
           </button>
         `);
-        this.$options.prepend(this.$feedbackButton);
+    this.$options.prepend(this.$feedbackButton);
 
-        this.$openButton = $(`
+    this.$openButton = $(`
           <button class="open btn imageBtn" title="${this.content.open}" tabindex="0">
             <i class="uv-icon-open" aria-hidden="true"></i>${this.content.open}
           </button>
         `);
-        this.$options.prepend(this.$openButton);
+    this.$options.prepend(this.$openButton);
 
-        this.$bookmarkButton = $(`
+    this.$bookmarkButton = $(`
           <button class="bookmark btn imageBtn" title="${this.content.bookmark}" tabindex="0">
             <i class="uv-icon uv-icon-bookmark" aria-hidden="true"></i>${this.content.bookmark}
           </button>
         `);
-        this.$options.prepend(this.$bookmarkButton);
+    this.$options.prepend(this.$bookmarkButton);
 
-        this.$shareButton = $(`
+    this.$shareButton = $(`
           <button class="share btn imageBtn" title="${this.content.share}" tabindex="0">
             <i class="uv-icon uv-icon-share" aria-hidden="true"></i>${this.content.share}
           </button>
         `);
-        this.$options.append(this.$shareButton);
+    this.$options.append(this.$shareButton);
 
-        this.$embedButton = $(`
+    this.$embedButton = $(`
           <button class="embed btn imageBtn" title="${this.content.embed}" tabindex="0">
             <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>${this.content.embed}
           </button>
         `);
-        this.$options.append(this.$embedButton);
+    this.$options.append(this.$embedButton);
 
-        this.$downloadButton = $(`
+    this.$downloadButton = $(`
           <button class="download btn imageBtn" title="${this.content.download}" tabindex="0">
             <i class="uv-icon uv-icon-download" aria-hidden="true"></i>${this.content.download}
           </button>
         `);
-        this.$options.prepend(this.$downloadButton);
+    this.$options.prepend(this.$downloadButton);
 
-        this.$moreInfoButton = $(`
+    this.$moreInfoButton = $(`
           <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}" tabindex="0">
             <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>${this.content.moreInfo}
           </button>
         `);
-        this.$options.prepend(this.$moreInfoButton);
+    this.$options.prepend(this.$moreInfoButton);
 
-        this.$fullScreenBtn = $(`
+    this.$fullScreenBtn = $(`
           <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}" tabindex="0">
             <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>${this.content.fullScreen}
           </button>
         `);
-        this.$options.append(this.$fullScreenBtn);
+    this.$options.append(this.$fullScreenBtn);
 
-        this.$openButton.onPressed(() => {
-            this.component.publish(BaseEvents.OPEN);
-        });
+    this.$openButton.onPressed(() => {
+      this.component.publish(BaseEvents.OPEN);
+    });
 
-        this.$feedbackButton.onPressed(() => {
-            this.component.publish(BaseEvents.FEEDBACK);
-        });
+    this.$feedbackButton.onPressed(() => {
+      this.component.publish(BaseEvents.FEEDBACK);
+    });
 
-        this.$bookmarkButton.onPressed(() => {
-            this.component.publish(BaseEvents.BOOKMARK);
-        });
+    this.$bookmarkButton.onPressed(() => {
+      this.component.publish(BaseEvents.BOOKMARK);
+    });
 
-        this.$shareButton.onPressed(() => {
-            this.component.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
-        });
+    this.$shareButton.onPressed(() => {
+      this.component.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
+    });
 
-        this.$embedButton.onPressed(() => {
-            this.component.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
-        });
+    this.$embedButton.onPressed(() => {
+      this.component.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
+    });
 
-        this.$downloadButton.onPressed(() => {
-            this.component.publish(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, this.$downloadButton);
-        });
+    this.$downloadButton.onPressed(() => {
+      this.component.publish(
+        BaseEvents.SHOW_DOWNLOAD_DIALOGUE,
+        this.$downloadButton
+      );
+    });
 
-        this.$moreInfoButton.onPressed(() => {
-            this.component.publish(BaseEvents.SHOW_MOREINFO_DIALOGUE, this.$moreInfoButton);
-        });
+    this.$moreInfoButton.onPressed(() => {
+      this.component.publish(
+        BaseEvents.SHOW_MOREINFO_DIALOGUE,
+        this.$moreInfoButton
+      );
+    });
 
-        this.$fullScreenBtn.on('click', (e) => {
-            e.preventDefault();
-            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
-        });
+    this.$fullScreenBtn.on("click", e => {
+      e.preventDefault();
+      this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
+    });
 
-        if (!Bools.getBool(this.options.embedEnabled, true)) {
-            this.$embedButton.hide();
-        }
-
-        this.updateMoreInfoButton();
-        this.updateOpenButton();
-        this.updateFeedbackButton();
-        this.updateBookmarkButton();
-        this.updateEmbedButton();
-        this.updateDownloadButton();
-        this.updateFullScreenButton();
-        this.updateShareButton();
-        this.updateMinimisedButtons();
+    if (!Bools.getBool(this.options.embedEnabled, true)) {
+      this.$embedButton.hide();
     }
 
-    updateMinimisedButtons(): void {
-        
-        // if configured to always minimise buttons
-        if (Bools.getBool(this.options.minimiseButtons, false)) {
-            this.$options.addClass('minimiseButtons');
-            return;
-        }
+    this.updateMoreInfoButton();
+    this.updateOpenButton();
+    this.updateFeedbackButton();
+    this.updateBookmarkButton();
+    this.updateEmbedButton();
+    this.updateDownloadButton();
+    this.updateFullScreenButton();
+    this.updateShareButton();
+    this.updateMinimisedButtons();
+  }
 
-        // otherwise, check metric
-        if (!this.extension.isDesktopMetric()) {
-            this.$options.addClass('minimiseButtons');
-        } else {
-            this.$options.removeClass('minimiseButtons');
-        }
+  updateMinimisedButtons(): void {
+    // if configured to always minimise buttons
+    if (Bools.getBool(this.options.minimiseButtons, false)) {
+      this.$options.addClass("minimiseButtons");
+      return;
     }
 
-    updateMoreInfoButton(): void {
-        const configEnabled: boolean = Bools.getBool(this.options.moreInfoEnabled, false);
+    // otherwise, check metric
+    if (!this.extension.isDesktopMetric()) {
+      this.$options.addClass("minimiseButtons");
+    } else {
+      this.$options.removeClass("minimiseButtons");
+    }
+  }
 
-        if (configEnabled && !this.extension.isDesktopMetric() && !this.extension.isCatchAllMetric()) {
-            this.$moreInfoButton.show();
-        } else {
-            this.$moreInfoButton.hide();
-        }
+  updateMoreInfoButton(): void {
+    const configEnabled: boolean = Bools.getBool(
+      this.options.moreInfoEnabled,
+      false
+    );
+
+    if (
+      configEnabled &&
+      !this.extension.isDesktopMetric() &&
+      !this.extension.isCatchAllMetric()
+    ) {
+      this.$moreInfoButton.show();
+    } else {
+      this.$moreInfoButton.hide();
+    }
+  }
+
+  updateOpenButton(): void {
+    const configEnabled: boolean = Bools.getBool(
+      this.options.openEnabled,
+      false
+    );
+
+    if (configEnabled && Documents.isInIFrame()) {
+      this.$openButton.show();
+    } else {
+      this.$openButton.hide();
+    }
+  }
+
+  updateFullScreenButton(): void {
+    if (
+      !Bools.getBool(this.options.fullscreenEnabled, true) ||
+      !Documents.supportsFullscreen()
+    ) {
+      this.$fullScreenBtn.hide();
+      return;
     }
 
-    updateOpenButton(): void {
-        const configEnabled: boolean = Bools.getBool(this.options.openEnabled, false);
-
-        if (configEnabled && Documents.isInIFrame()) {
-            this.$openButton.show();
-        } else {
-            this.$openButton.hide();
-        }
+    if (this.extension.data.isLightbox) {
+      this.$fullScreenBtn.addClass("lightbox");
     }
 
-    updateFullScreenButton(): void {
-        if (!Bools.getBool(this.options.fullscreenEnabled, true) || !Documents.supportsFullscreen()) {
-            this.$fullScreenBtn.hide();
-            return;
-        }
-
-        if (this.extension.data.isLightbox) {
-            this.$fullScreenBtn.addClass('lightbox');
-        }
-
-        if (this.extension.isFullScreen()) {
-            this.$fullScreenBtn.switchClass('fullScreen', 'exitFullscreen');
-            this.$fullScreenBtn.find('i').switchClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
-            this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
-            $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.exitFullScreen);
-        } else {
-            this.$fullScreenBtn.switchClass('exitFullscreen', 'fullScreen');
-            this.$fullScreenBtn.find('i').switchClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
-            this.$fullScreenBtn.attr('title', this.content.fullScreen);
-            $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.fullScreen);
-        }
+    if (this.extension.isFullScreen()) {
+      this.$fullScreenBtn.switchClass("fullScreen", "exitFullscreen");
+      this.$fullScreenBtn
+        .find("i")
+        .switchClass("uv-icon-fullscreen", "uv-icon-exit-fullscreen");
+      this.$fullScreenBtn.attr("title", this.content.exitFullScreen);
+      $(
+        (<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling
+      ).replaceWith(this.content.exitFullScreen);
+    } else {
+      this.$fullScreenBtn.switchClass("exitFullscreen", "fullScreen");
+      this.$fullScreenBtn
+        .find("i")
+        .switchClass("uv-icon-exit-fullscreen", "uv-icon-fullscreen");
+      this.$fullScreenBtn.attr("title", this.content.fullScreen);
+      $(
+        (<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling
+      ).replaceWith(this.content.fullScreen);
     }
+  }
 
-    updateEmbedButton(): void {
-        if (this.extension.helper.isUIEnabled('embed') && Bools.getBool(this.options.embedEnabled, false)) {
-            // current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
-            if (!this.extension.isMobile()) {
-                this.$embedButton.show();
-            }
-        } else {
-            this.$embedButton.hide();
-        }
+  updateEmbedButton(): void {
+    if (
+      this.extension.helper.isUIEnabled("embed") &&
+      Bools.getBool(this.options.embedEnabled, false)
+    ) {
+      // current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
+      if (!this.extension.isMobile()) {
+        this.$embedButton.show();
+      }
+    } else {
+      this.$embedButton.hide();
     }
+  }
 
-    updateShareButton(): void {
-        if (this.extension.helper.isUIEnabled('share') && Bools.getBool(this.options.shareEnabled, true)) {
-            this.$shareButton.show();
-        } else {
-            this.$shareButton.hide();
-        }
+  updateShareButton(): void {
+    if (
+      this.extension.helper.isUIEnabled("share") &&
+      Bools.getBool(this.options.shareEnabled, true)
+    ) {
+      this.$shareButton.show();
+    } else {
+      this.$shareButton.hide();
     }
+  }
 
-    updateDownloadButton(): void {
-        const configEnabled: boolean = Bools.getBool(this.options.downloadEnabled, true);
+  updateDownloadButton(): void {
+    const configEnabled: boolean = Bools.getBool(
+      this.options.downloadEnabled,
+      true
+    );
 
-        if (configEnabled){
-            this.$downloadButton.show();
-        } else {
-            this.$downloadButton.hide();
-        }
+    if (configEnabled) {
+      this.$downloadButton.show();
+    } else {
+      this.$downloadButton.hide();
     }
+  }
 
-    updateFeedbackButton(): void {
-        const configEnabled: boolean = Bools.getBool(this.options.feedbackEnabled, false);
+  updateFeedbackButton(): void {
+    const configEnabled: boolean = Bools.getBool(
+      this.options.feedbackEnabled,
+      false
+    );
 
-        if (configEnabled){
-            this.$feedbackButton.show();
-        } else {
-            this.$feedbackButton.hide();
-        }
+    if (configEnabled) {
+      this.$feedbackButton.show();
+    } else {
+      this.$feedbackButton.hide();
     }
+  }
 
-    updateBookmarkButton(): void {
-        const configEnabled: boolean = Bools.getBool(this.options.bookmarkEnabled, false);
+  updateBookmarkButton(): void {
+    const configEnabled: boolean = Bools.getBool(
+      this.options.bookmarkEnabled,
+      false
+    );
 
-        if (configEnabled) {
-            this.$bookmarkButton.show();
-        } else {
-            this.$bookmarkButton.hide();
-        }
+    if (configEnabled) {
+      this.$bookmarkButton.show();
+    } else {
+      this.$bookmarkButton.hide();
     }
+  }
 
-    resize(): void {
-        super.resize();
-    }
+  resize(): void {
+    super.resize();
+  }
 }

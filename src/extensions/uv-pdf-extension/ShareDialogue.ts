@@ -1,32 +1,30 @@
-import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
-import {IPDFExtension} from "./IPDFExtension";
+import { ShareDialogue as BaseShareDialogue } from "../../modules/uv-dialogues-module/ShareDialogue";
+import { IPDFExtension } from "./IPDFExtension";
 
 export class ShareDialogue extends BaseShareDialogue {
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("shareDialogue");
 
-    create(): void {
+    super.create();
+  }
 
-        this.setConfig('shareDialogue');
+  update(): void {
+    super.update();
 
-        super.create();
-    }
+    this.code = (<IPDFExtension>this.extension).getEmbedScript(
+      this.options.embedTemplate,
+      this.currentWidth,
+      this.currentHeight
+    );
 
-    update(): void {
+    this.$code.val(this.code);
+  }
 
-        super.update();
-
-        this.code = (<IPDFExtension>this.extension).getEmbedScript(
-            this.options.embedTemplate,
-            this.currentWidth,
-            this.currentHeight);
-
-        this.$code.val(this.code);
-    }
-
-    resize(): void {
-        super.resize();
-    }
+  resize(): void {
+    super.resize();
+  }
 }

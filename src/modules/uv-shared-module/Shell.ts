@@ -1,86 +1,91 @@
-import {BaseEvents} from "./BaseEvents";
-import {BaseView} from "./BaseView";
-import {GenericDialogue} from "./GenericDialogue";
+import { BaseEvents } from "./BaseEvents";
+import { BaseView } from "./BaseView";
+import { GenericDialogue } from "./GenericDialogue";
 
 export class Shell extends BaseView {
-    
-    public $centerPanel: JQuery;
-    public $element: JQuery;
-    public $footerPanel: JQuery;
-    public $genericDialogue: JQuery;
-    public $headerPanel: JQuery;
-    public $leftPanel: JQuery;
-    public $mainPanel: JQuery;
-    public $mobileFooterPanel: JQuery;
-    public $overlays: JQuery;
-    public $rightPanel: JQuery;
+  public $centerPanel: JQuery;
+  public $element: JQuery;
+  public $footerPanel: JQuery;
+  public $genericDialogue: JQuery;
+  public $headerPanel: JQuery;
+  public $leftPanel: JQuery;
+  public $mainPanel: JQuery;
+  public $mobileFooterPanel: JQuery;
+  public $overlays: JQuery;
+  public $rightPanel: JQuery;
 
-    constructor($element: JQuery) {
-        super($element, true, true);
-    }
-    
-    create(): void {
-        super.create();
+  constructor($element: JQuery) {
+    super($element, true, true);
+  }
 
-        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
-            this.$overlays.show();
-        });
+  create(): void {
+    super.create();
 
-        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
-            this.$overlays.hide();
-        });
+    this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+      this.$overlays.show();
+    });
 
-        this.$headerPanel = $('<div class="headerPanel"></div>');
-        this.$element.append(this.$headerPanel);
+    this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+      this.$overlays.hide();
+    });
 
-        this.$mainPanel = $('<div class="mainPanel"></div>');
-        this.$element.append(this.$mainPanel);
+    this.$headerPanel = $('<div class="headerPanel"></div>');
+    this.$element.append(this.$headerPanel);
 
-        this.$centerPanel = $('<div class="centerPanel"></div>');
-        this.$mainPanel.append(this.$centerPanel);
+    this.$mainPanel = $('<div class="mainPanel"></div>');
+    this.$element.append(this.$mainPanel);
 
-        this.$leftPanel = $('<div class="leftPanel"></div>');
-        this.$mainPanel.append(this.$leftPanel);
+    this.$centerPanel = $('<div class="centerPanel"></div>');
+    this.$mainPanel.append(this.$centerPanel);
 
-        this.$rightPanel = $('<div class="rightPanel"></div>');
-        this.$mainPanel.append(this.$rightPanel);
+    this.$leftPanel = $('<div class="leftPanel"></div>');
+    this.$mainPanel.append(this.$leftPanel);
 
-        this.$footerPanel = $('<div class="footerPanel"></div>');
-        this.$element.append(this.$footerPanel);
+    this.$rightPanel = $('<div class="rightPanel"></div>');
+    this.$mainPanel.append(this.$rightPanel);
 
-        this.$mobileFooterPanel = $('<div class="mobileFooterPanel"></div>');
-        this.$element.append(this.$mobileFooterPanel);
+    this.$footerPanel = $('<div class="footerPanel"></div>');
+    this.$element.append(this.$footerPanel);
 
-        this.$overlays = $('<div class="overlays"></div>');
-        this.$element.append(this.$overlays);
+    this.$mobileFooterPanel = $('<div class="mobileFooterPanel"></div>');
+    this.$element.append(this.$mobileFooterPanel);
 
-        this.$genericDialogue = $('<div class="overlay genericDialogue" aria-hidden="true"></div>');
-        this.$overlays.append(this.$genericDialogue);
+    this.$overlays = $('<div class="overlays"></div>');
+    this.$element.append(this.$overlays);
 
-        this.$overlays.on('click', (e) => {
-            if ($(e.target).hasClass('overlays')) {
-                e.preventDefault();
-                this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
-            }
-        });
+    this.$genericDialogue = $(
+      '<div class="overlay genericDialogue" aria-hidden="true"></div>'
+    );
+    this.$overlays.append(this.$genericDialogue);
 
-        // create shared views.
-        new GenericDialogue(this.$genericDialogue);
-    }
-    
-    resize(): void {
-        super.resize();
+    this.$overlays.on("click", e => {
+      if ($(e.target).hasClass("overlays")) {
+        e.preventDefault();
+        this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+      }
+    });
 
-        setTimeout(() => {
-            this.$overlays.width(this.extension.width());
-            this.$overlays.height(this.extension.height());
-        }, 1);
-        
-        const mainHeight: number = this.$element.height() - parseInt(this.$mainPanel.css('paddingTop')) 
-            - (this.$headerPanel.is(':visible') ? this.$headerPanel.height() : 0)
-            - (this.$footerPanel.is(':visible') ? this.$footerPanel.height() : 0)
-            - (this.$mobileFooterPanel.is(':visible') ? this.$mobileFooterPanel.height() : 0);
-        
-        this.$mainPanel.height(mainHeight);
-    }
+    // create shared views.
+    new GenericDialogue(this.$genericDialogue);
+  }
+
+  resize(): void {
+    super.resize();
+
+    setTimeout(() => {
+      this.$overlays.width(this.extension.width());
+      this.$overlays.height(this.extension.height());
+    }, 1);
+
+    const mainHeight: number =
+      this.$element.height() -
+      parseInt(this.$mainPanel.css("paddingTop")) -
+      (this.$headerPanel.is(":visible") ? this.$headerPanel.height() : 0) -
+      (this.$footerPanel.is(":visible") ? this.$footerPanel.height() : 0) -
+      (this.$mobileFooterPanel.is(":visible")
+        ? this.$mobileFooterPanel.height()
+        : 0);
+
+    this.$mainPanel.height(mainHeight);
+  }
 }

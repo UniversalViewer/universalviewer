@@ -1,13 +1,13 @@
 export class StringValue {
-    public value: string = "";
+  public value: string = "";
 
-    constructor(value?: string) {
-        if (value) {
-            this.value = value.toLowerCase();
-        }
+  constructor(value?: string) {
+    if (value) {
+      this.value = value.toLowerCase();
     }
+  }
 
-    toString() {
-        return this.value;
-    }
+  toString() {
+    return this.value;
+  }
 }

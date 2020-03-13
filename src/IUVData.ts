@@ -1,18 +1,18 @@
-import {ILocale} from "./ILocale";
+import { ILocale } from "./ILocale";
 
 export interface IUVData {
-    annotations?: string;
-    assetsDir?: string;
-    canvasIndex?: number;
-    collectionIndex?: number;
-    config?: any; // do not pass this on initialisation, internal use only
-    configUri?: string;
-    embedded?: boolean;
-    isLightbox?: boolean;
-    isReload?: boolean;
-    locales?: ILocale[];
-    manifestIndex?: number;
-    manifestUri?: string;
-    rangeId?: string;
-    sequenceIndex?: number;
+  annotations?: string;
+  assetsDir?: string;
+  canvasIndex?: number;
+  collectionIndex?: number;
+  config?: any; // do not pass this on initialisation, internal use only
+  configUri?: string;
+  embedded?: boolean;
+  isLightbox?: boolean;
+  isReload?: boolean;
+  locales?: ILocale[];
+  manifestIndex?: number;
+  manifestUri?: string;
+  rangeId?: string;
+  sequenceIndex?: number;
 }

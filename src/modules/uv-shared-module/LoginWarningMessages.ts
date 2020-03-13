@@ -1,3 +1,3 @@
 export class LoginWarningMessages {
-    static FORBIDDEN: string = "forbiddenResourceMessage";
+  static FORBIDDEN: string = "forbiddenResourceMessage";
 }

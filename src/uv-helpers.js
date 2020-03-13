@@ -1,178 +1,236 @@
 function createUV(selector, data) {
-    var uv;
-    var isFullScreen = false;
-    var container = document.getElementById(selector);
-    container.innerHTML = '';
-    var parent = document.createElement('div');
-    container.appendChild(parent);
-    var uv = document.createElement('div');
-    parent.appendChild(uv);
+  var uv;
+  var isFullScreen = false;
+  var container = document.getElementById(selector);
+  container.innerHTML = "";
+  var parent = document.createElement("div");
+  container.appendChild(parent);
+  var uv = document.createElement("div");
+  parent.appendChild(uv);
 
-    function resize() {
-        if (uv) {
-            if (isFullScreen) {
-                parent.style.width = window.innerWidth + "px";
-                parent.style.height = window.innerHeight + "px";
-            } else {
-                parent.style.width = container.offsetWidth + "px";
-                parent.style.height = container.offsetHeight + "px";
-            }
-            uv.resize();
-        }
+  function resize() {
+    if (uv) {
+      if (isFullScreen) {
+        parent.style.width = window.innerWidth + "px";
+        parent.style.height = window.innerHeight + "px";
+      } else {
+        parent.style.width = container.offsetWidth + "px";
+        parent.style.height = container.offsetHeight + "px";
+      }
+      uv.resize();
     }
+  }
 
-    window.addEventListener('resize', function() {
+  window.addEventListener("resize", function() {
+    resize();
+  });
+
+  uv = new UV.Viewer({
+    target: uv,
+    data: data
+  });
+
+  uv.on("create", function(obj) {}, false);
+
+  uv.on(
+    "created",
+    function(obj) {
+      console.log("created");
+      resize();
+    },
+    false
+  );
+
+  uv.on(
+    "openedMedia",
+    function() {
+      setTimeout(() => {
         resize();
-    });
+      }, 100);
+    },
+    false
+  );
 
-    uv = new UV.Viewer({
-        target: uv,
-        data: data
-    });
+  uv.on(
+    "collectionIndexChanged",
+    function(collectionIndex) {
+      uv.dataProvider.set("c", collectionIndex);
+    },
+    false
+  );
 
-    uv.on('create', function(obj) {
+  uv.on(
+    "manifestIndexChanged",
+    function(manifestIndex) {
+      uv.dataProvider.set("m", manifestIndex);
+    },
+    false
+  );
 
-    }, false);
+  uv.on(
+    "sequenceIndexChanged",
+    function(sequenceIndex) {
+      uv.dataProvider.set("s", sequenceIndex);
+    },
+    false
+  );
 
-    uv.on('created', function(obj) {
-        console.log("created");
-        resize();
-    }, false);
+  uv.on(
+    "canvasIndexChanged",
+    function(canvasIndex) {
+      uv.dataProvider.set("cv", canvasIndex);
+    },
+    false
+  );
 
-    uv.on('openedMedia', function() {
-        setTimeout(() => {
-            resize();
-        }, 100);
-    }, false);
+  uv.on(
+    "rangeChanged",
+    function(rangeId) {
+      uv.dataProvider.set("rid", rangeId);
+    },
+    false
+  );
 
-    uv.on('collectionIndexChanged', function(collectionIndex) {
-        uv.dataProvider.set('c', collectionIndex);
-    }, false);
+  uv.on(
+    "openseadragonExtension.rotationChanged",
+    function(rotation) {
+      uv.dataProvider.set("r", rotation);
+    },
+    false
+  );
 
-    uv.on('manifestIndexChanged', function(manifestIndex) {
-        uv.dataProvider.set('m', manifestIndex);
-    }, false);
+  uv.on(
+    "openseadragonExtension.xywhChanged",
+    function(xywh) {
+      uv.dataProvider.set("xywh", xywh);
+    },
+    false
+  );
 
-    uv.on('sequenceIndexChanged', function(sequenceIndex) {
-        uv.dataProvider.set('s', sequenceIndex);
-    }, false);
+  uv.on(
+    "openseadragonExtension.currentViewUri",
+    function(data) {
+      //console.log('openseadragonExtension.currentViewUri', obj);
+    },
+    false
+  );
 
-    uv.on('canvasIndexChanged', function(canvasIndex) {
-        uv.dataProvider.set('cv', canvasIndex);
-    }, false);
+  uv.on(
+    "reload",
+    function(data) {
+      data.isReload = true;
+      uv.set(data);
+    },
+    false
+  );
 
-    uv.on('rangeChanged', function(rangeId) {
-        uv.dataProvider.set('rid', rangeId);
-    }, false);
+  uv.on(
+    "toggleFullScreen",
+    function(data) {
+      isFullScreen = data.isFullScreen;
 
-    uv.on('openseadragonExtension.rotationChanged', function(rotation) {
-        uv.dataProvider.set('r', rotation);
-    }, false);
+      if (data.overrideFullScreen) {
+        return;
+      }
 
-    uv.on('openseadragonExtension.xywhChanged', function(xywh) {
-        uv.dataProvider.set('xywh', xywh);
-    }, false);
-
-    uv.on('openseadragonExtension.currentViewUri', function(data) {
-        //console.log('openseadragonExtension.currentViewUri', obj);
-    }, false);
-
-    uv.on('reload', function(data) {
-        data.isReload = true;
-        uv.set(data);
-    }, false);
-
-    uv.on('toggleFullScreen', function(data) {
-        isFullScreen = data.isFullScreen;
-
-        if (data.overrideFullScreen) {
-            return;
+      if (isFullScreen) {
+        var requestFullScreen = getRequestFullScreen(parent);
+        if (requestFullScreen) {
+          requestFullScreen.call(parent);
+          resize();
         }
-
-        if (isFullScreen) {
-            var requestFullScreen = getRequestFullScreen(parent);
-            if (requestFullScreen) {
-                requestFullScreen.call(parent);
-                resize();
-            }
-        } else {
-            var exitFullScreen = getExitFullScreen();
-            if (exitFullScreen) {
-                exitFullScreen.call(document);
-                resize();
-            }
+      } else {
+        var exitFullScreen = getExitFullScreen();
+        if (exitFullScreen) {
+          exitFullScreen.call(document);
+          resize();
         }
-    }, false);
+      }
+    },
+    false
+  );
 
-    uv.on('error', function(message) {
-        console.error(message);
-    }, false);
+  uv.on(
+    "error",
+    function(message) {
+      console.error(message);
+    },
+    false
+  );
 
-    uv.on('bookmark', function(data) {
+  uv.on(
+    "bookmark",
+    function(data) {
+      var absUri = parent.document.URL;
+      var parts = Utils.Urls.getUrlParts(absUri);
+      var relUri =
+        parts.pathname + parts.search + parent.document.location.hash;
 
-        var absUri = parent.document.URL;
-        var parts = Utils.Urls.getUrlParts(absUri);
-        var relUri = parts.pathname + parts.search + parent.document.location.hash;
+      if (!relUri.startsWith("/")) {
+        relUri = "/" + relUri;
+      }
 
-        if (!relUri.startsWith("/")) {
-            relUri = "/" + relUri;
-        }
+      data.path = relUri;
 
-        data.path = relUri;
+      console.log("bookmark", data);
+    },
+    false
+  );
 
-        console.log('bookmark', data);
-    },false);
+  $(document).on(
+    "fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange",
+    function(e) {
+      if (
+        (e.type === "webkitfullscreenchange" && !document.webkitIsFullScreen) ||
+        (e.type === "fullscreenchange" && !document.fullscreenElement) ||
+        (e.type === "mozfullscreenchange" && !document.mozFullScreen) ||
+        (e.type === "MSFullscreenChange" &&
+          document.msFullscreenElement === null)
+      ) {
+        uv.exitFullScreen();
+      }
+    }
+  );
 
-    $(document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function(e) {
-        if (e.type === 'webkitfullscreenchange' && !document.webkitIsFullScreen ||
-        e.type === 'fullscreenchange' && !document.fullscreenElement ||
-        e.type === 'mozfullscreenchange' && !document.mozFullScreen ||
-        e.type === 'MSFullscreenChange' && document.msFullscreenElement === null) {
-            uv.exitFullScreen();
-        }
-    });
-
-    return uv;
+  return uv;
 }
 
 function getRequestFullScreen(elem) {
+  if (elem.webkitRequestFullscreen) {
+    return elem.webkitRequestFullscreen;
+  }
 
-    if (elem.webkitRequestFullscreen) {
-        return elem.webkitRequestFullscreen;
-    }
+  if (elem.mozRequestFullScreen) {
+    return elem.mozRequestFullScreen;
+  }
 
-    if (elem.mozRequestFullScreen) {
-        return elem.mozRequestFullScreen;
-    }
+  if (elem.msRequestFullscreen) {
+    return elem.msRequestFullscreen;
+  }
 
-    if (elem.msRequestFullscreen) {
-        return elem.msRequestFullscreen;
-    } 
+  if (elem.requestFullscreen) {
+    return elem.requestFullscreen;
+  }
 
-    if (elem.requestFullscreen) {
-        return elem.requestFullscreen;
-    }
-
-    return false;
+  return false;
 }
 
 function getExitFullScreen() {
+  if (document.webkitExitFullscreen) {
+    return document.webkitExitFullscreen;
+  }
 
-    if (document.webkitExitFullscreen) {
-        return document.webkitExitFullscreen;
-    }
-    
-    if (document.msExitFullscreen) {
-        return document.msExitFullscreen;
-    }
-    
-    if (document.mozCancelFullScreen) {
-        return document.mozCancelFullScreen;
-    }
+  if (document.msExitFullscreen) {
+    return document.msExitFullscreen;
+  }
 
-    if (document.exitFullscreen) {
-        return document.exitFullscreen;
-    }
+  if (document.mozCancelFullScreen) {
+    return document.mozCancelFullScreen;
+  }
 
-    return false;
+  if (document.exitFullscreen) {
+    return document.exitFullscreen;
+  }
+
+  return false;
 }

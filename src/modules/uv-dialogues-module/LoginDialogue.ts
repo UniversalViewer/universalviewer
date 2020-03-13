@@ -1,49 +1,48 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Dialogue} from "../uv-shared-module/Dialogue";
-import {ILoginDialogueOptions} from "../uv-shared-module/ILoginDialogueOptions";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { Dialogue } from "../uv-shared-module/Dialogue";
+import { ILoginDialogueOptions } from "../uv-shared-module/ILoginDialogueOptions";
 import { IExternalResource } from "manifesto.js";
 
 export class LoginDialogue extends Dialogue {
+  loginCallback: any;
+  logoutCallback: any;
+  $cancelButton: JQuery;
+  $loginButton: JQuery;
+  $logoutButton: JQuery;
+  $message: JQuery;
+  $title: JQuery;
+  options: ILoginDialogueOptions;
+  resource: IExternalResource;
 
-    loginCallback: any;
-    logoutCallback: any;
-    $cancelButton: JQuery;
-    $loginButton: JQuery;
-    $logoutButton: JQuery;
-    $message: JQuery;
-    $title: JQuery;
-    options: ILoginDialogueOptions;
-    resource: IExternalResource;
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("loginDialogue");
 
-    create(): void {
+    super.create();
 
-        this.setConfig('loginDialogue');
+    this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
+    this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
 
-        super.create();
+    this.component.subscribe(this.openCommand, (e: any) => {
+      this.loginCallback = e.loginCallback;
+      this.logoutCallback = e.logoutCallback;
+      this.options = e.options;
+      this.resource = e.resource;
+      this.open();
+    });
 
-        this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
-        this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
+    this.component.subscribe(this.closeCommand, () => {
+      this.close();
+    });
 
-        this.component.subscribe(this.openCommand, (e: any) => {
-            this.loginCallback = e.loginCallback;
-            this.logoutCallback = e.logoutCallback;
-            this.options = e.options;
-            this.resource = e.resource;
-            this.open();
-        });
+    this.$title = $("<h1></h1>");
+    this.$content.append(this.$title);
 
-        this.component.subscribe(this.closeCommand, () => {
-            this.close();
-        });
-
-        this.$title = $('<h1></h1>');
-        this.$content.append(this.$title);
-
-        this.$content.append('\
+    this.$content.append(
+      '\
             <div>\
                 <p class="message scroll"></p>\
                 <div class="buttons">\
@@ -52,83 +51,88 @@ export class LoginDialogue extends Dialogue {
                     <a class="cancel btn btn-primary" href="#"></a>\
                 </div>\
             </div>'
-        );
+    );
 
-        this.$message = this.$content.find('.message');
+    this.$message = this.$content.find(".message");
 
-        this.$loginButton = this.$content.find('.login');
-        this.$loginButton.text(this.content.login);
+    this.$loginButton = this.$content.find(".login");
+    this.$loginButton.text(this.content.login);
 
-        this.$logoutButton = this.$content.find('.logout');
-        this.$logoutButton.text(this.content.logout);
+    this.$logoutButton = this.$content.find(".logout");
+    this.$logoutButton.text(this.content.logout);
 
-        this.$cancelButton = this.$content.find('.cancel');
-        this.$cancelButton.text(this.content.cancel);
+    this.$cancelButton = this.$content.find(".cancel");
+    this.$cancelButton.text(this.content.cancel);
 
-        this.$element.hide();
+    this.$element.hide();
 
-        this.$loginButton.on('click', (e) => {
-            e.preventDefault();
-            this.close();
-            if (this.loginCallback) this.loginCallback();
-        });
+    this.$loginButton.on("click", e => {
+      e.preventDefault();
+      this.close();
+      if (this.loginCallback) this.loginCallback();
+    });
 
-        this.$logoutButton.on('click', (e) => {
-            e.preventDefault();
-            this.close();
-            if (this.logoutCallback) this.logoutCallback();
-        });
+    this.$logoutButton.on("click", e => {
+      e.preventDefault();
+      this.close();
+      if (this.logoutCallback) this.logoutCallback();
+    });
 
-        this.$cancelButton.on('click', (e) => {
-            e.preventDefault();
-            this.close();
-        });
+    this.$cancelButton.on("click", e => {
+      e.preventDefault();
+      this.close();
+    });
 
-        this.updateLogoutButton();
+    this.updateLogoutButton();
+  }
+
+  open(): void {
+    super.open();
+
+    let message: string = "";
+
+    if (this.resource.loginService) {
+      this.$title.text(this.resource.loginService.getProperty("label"));
+      message = this.resource.loginService.getProperty("description");
     }
 
-    open(): void {
-        super.open();
-
-        let message: string = "";
-
-        if (this.resource.loginService) {
-            this.$title.text(this.resource.loginService.getProperty('label'));
-            message = this.resource.loginService.getProperty('description');
-        }
-    
-        if (this.options.warningMessage){
-            message = '<span class="warning">' + this.extension.data.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
-        }
-
-        this.updateLogoutButton();
-
-        this.$message.html(message);
-        this.$message.targetBlank();
-
-        this.$message.find('a').on('click', function() {
-            var url: string = $(this).attr('href');
-            this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
-        });
-
-        if (this.options.showCancelButton){
-            this.$cancelButton.show();
-        } else {
-            this.$cancelButton.hide();
-        }
-
-        this.resize();
+    if (this.options.warningMessage) {
+      message =
+        '<span class="warning">' +
+        this.extension.data.config.content[this.options.warningMessage] +
+        '</span><span class="description">' +
+        message +
+        "</span>";
     }
 
-    updateLogoutButton(): void {
-        if (this.extension.isLoggedIn){
-            this.$logoutButton.show();
-        } else {
-            this.$logoutButton.hide();
-        }
+    this.updateLogoutButton();
+
+    this.$message.html(message);
+    this.$message.targetBlank();
+
+    this.$message.find("a").on("click", function() {
+      var url: string = $(this).attr("href");
+      this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+    });
+
+    if (this.options.showCancelButton) {
+      this.$cancelButton.show();
+    } else {
+      this.$cancelButton.hide();
     }
 
-    resize(): void {
-        super.resize();
+    this.resize();
+  }
+
+  updateLogoutButton(): void {
+    if (this.extension.isLoggedIn) {
+      this.$logoutButton.show();
+    } else {
+      this.$logoutButton.hide();
     }
+  }
+
+  resize(): void {
+    super.resize();
+  }
 }

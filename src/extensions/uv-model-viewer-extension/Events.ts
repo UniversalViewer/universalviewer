@@ -1,3 +1,3 @@
 export class Events {
-    static namespace: string = 'modelViewerExtension.';
+  static namespace: string = "modelViewerExtension.";
 }

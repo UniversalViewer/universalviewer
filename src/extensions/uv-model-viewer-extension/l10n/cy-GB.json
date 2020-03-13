@@ -61,9 +61,7 @@
       }
     },
     "mediaelementCenterPanel": {
-      "content": {
-
-      }
+      "content": {}
     },
     "moreInfoRightPanel": {
       "content": {
@@ -96,9 +94,7 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
       }
     },
-    "contentLeftPanel": {
-
-    },
+    "contentLeftPanel": {},
     "modelViewerCenterPanel": {
       "content": {
         "attribution": "Priodoliad",

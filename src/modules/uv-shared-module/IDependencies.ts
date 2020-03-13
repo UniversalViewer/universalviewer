@@ -1,4 +1,4 @@
 export interface IDependencies {
-    async: string[];
-    sync: string[];
+  async: string[];
+  sync: string[];
 }

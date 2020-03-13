@@ -1,6 +1,5 @@
 {
-  "options":
-  {
+  "options": {
     "authAPIVersion": 1,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
@@ -13,17 +12,13 @@
     "rightPanelEnabled": true,
     "theme": "uv-en-GB-theme"
   },
-  "modules":
-  {
-    "shareDialogue":
-    {
-      "options":
-      {
+  "modules": {
+    "shareDialogue": {
+      "options": {
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
       }
     },
-    "footerPanel":
-    {
+    "footerPanel": {
       "options": {
         "downloadEnabled": true,
         "embedEnabled": false,
@@ -33,22 +28,11 @@
         "shareEnabled": true
       }
     },
-    "genericDialogue":
-    {
-
-    },
-    "headerPanel":
-    {
-
-    },
-    "helpDialogue":
-    {
-
-    },
-    "moreInfoRightPanel":
-    {
-      "options":
-      {
+    "genericDialogue": {},
+    "headerPanel": {},
+    "helpDialogue": {},
+    "moreInfoRightPanel": {
+      "options": {
         "canvasDisplayOrder": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
@@ -86,9 +70,7 @@
       }
     },
     "modelViewerCenterPanel": {
-      "options": {
-
-      }
+      "options": {}
     }
   }
 }

@@ -1,6 +1,6 @@
 import { DownloadOption } from "./DownloadOption";
 
 export interface IRenderingOption {
-    type: DownloadOption;
-    button: JQuery;
+  type: DownloadOption;
+  button: JQuery;
 }
