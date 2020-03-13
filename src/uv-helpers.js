@@ -1,21 +1,21 @@
 function createUV(selector, data) {
     var uv;
     var isFullScreen = false;
-    var $container = $(selector);
-    $container.empty();
-    var $parent = $('<div></div>');
-    $container.append($parent);
-    var $uv = $('<div></div>');
-    $parent.append($uv);
+    var container = document.getElementById(selector);
+    container.innerHTML = '';
+    var parent = document.createElement('div');
+    container.appendChild(parent);
+    var uv = document.createElement('div');
+    parent.appendChild(uv);
 
     function resize() {
         if (uv) {
             if (isFullScreen) {
-                $parent.width(window.innerWidth);
-                $parent.height(window.innerHeight);
+                parent.style.width = window.innerWidth + "px";
+                parent.style.height = window.innerHeight + "px";
             } else {
-                $parent.width($container.width());
-                $parent.height($container.height());
+                parent.style.width = container.offsetWidth + "px";
+                parent.style.height = container.offsetHeight + "px";
             }
             uv.resize();
         }
@@ -26,26 +26,21 @@ function createUV(selector, data) {
     });
 
     uv = new UV.Viewer({
-        target: $uv[0],
+        target: uv,
         data: data
     });
 
     uv.on('create', function(obj) {
-        //resize();
+
     }, false);
 
     uv.on('created', function(obj) {
         console.log("created");
         resize();
-        // setTimeout(() => {
-        //     console.log("resize");
-        //     resize();
-        // }, 2000);
     }, false);
 
     uv.on('openedMedia', function() {
         setTimeout(() => {
-            console.log('opened media');
             resize();
         }, 100);
     }, false);
@@ -94,12 +89,10 @@ function createUV(selector, data) {
             return;
         }
 
-        var elem = $parent[0];
-
         if (isFullScreen) {
-            var requestFullScreen = getRequestFullScreen(elem);
+            var requestFullScreen = getRequestFullScreen(parent);
             if (requestFullScreen) {
-                requestFullScreen.call(elem);
+                requestFullScreen.call(parent);
                 resize();
             }
         } else {

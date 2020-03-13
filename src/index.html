@@ -75,7 +75,7 @@
                 xywh: urlDataProvider.get('xywh', '')
             };
 
-            uv = createUV('#uv', data, urlDataProvider);
+            uv = createUV('uv', data, urlDataProvider);
 
             uv.on('created', function() {
                 utils.Urls.setHashParameter('manifest', manifest);
