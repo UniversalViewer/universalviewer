@@ -11,9 +11,7 @@
   ],
   "scripts": {
     "postinstall": "opencollective postinstall",
-    "server": "node_modules/.bin/http-server -p 4444",
     "test": "jest",
-    "version": "echo { \"version\": \"%npm_package_version%\" } > ./dist/info.json && cp ./dist/info.json ./examples/uv",
     "start": "npx serve www"
   },
   "repository": {
