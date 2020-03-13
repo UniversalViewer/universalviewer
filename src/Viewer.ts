@@ -182,16 +182,16 @@ export class Viewer extends BaseComponent implements IUVComponent {
     public data(): IUVData {
         return {
             annotations: undefined,
-            root: "./uv",
+            assetsDir: "./uv-assets/",
             canvasIndex: 0,
             collectionIndex: undefined,
             config: undefined,
             configUri: undefined,
             embedded: false,
-            manifestUri: "",
             isLightbox: false,
             isReload: false,
             limitLocales: false,
+            manifestUri: "",
             locales: [
                 {
                     name: "en-GB"
@@ -215,9 +215,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
                 return;
             }
 
-            // remove '/' from root
-            if (data.root && data.root.endsWith('/')) {
-                data.root = data.root.substring(0, data.root.length - 1);
+            // remove '/' from assetsDir
+            if (data.assetsDir && data.assetsDir.endsWith('/')) {
+                data.assetsDir = data.assetsDir.substring(0, data.assetsDir.length - 1);
             }
 
             this._reload(data);
@@ -392,7 +392,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
         this._getConfigExtension(data, extension, (configExtension: any) => {
 
             if (data.locales) {
-                const configPath: string = data.root + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
+                const configPath: string = data.assetsDir + '/config/' + extension.name + '.' + data.locales[0].name + '.config.json';
 
                 $.getJSON(configPath, (config) => {
                     this._extendConfig(data, extension, config, configExtension, cb);
@@ -441,7 +441,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
             return;
         }
 
-        const cssPath: string = data.root + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = data.assetsDir + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
         const locale: string = data.locales[0].name;
         const themeName: string = extension.name.toLowerCase() + '-theme-' + locale.toLowerCase();
         const $existingCSS: JQuery = $('#' + themeName.toLowerCase());

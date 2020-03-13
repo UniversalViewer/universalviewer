@@ -7,29 +7,13 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
 
-        ts: {
-            dev: {
-                tsconfig: './tsconfig.json'
-            },
-            dist: {
-                tsconfig: './tsconfig.json',
-                options: {
-                    additionalFlags: '--removeComments'
-                }
-            }
-        },
-
         clean: {
             themes: config.directories.themes,
             build: config.directories.build,
             dist: config.directories.dist,
             distumd: config.directories.distumd,
             www: config.directories.www,
-            extension: config.directories.src + '/extensions/*/.build/*',
-            libs: [
-                config.directories.src + '/extensions/*/lib/**/*',
-                '!' + config.directories.src + '/extensions/*/lib/**/*.proxy.js'
-            ]
+            extension: config.directories.src + '/extensions/*/.build/*'
         },
 
         copy: {
@@ -68,76 +52,51 @@ module.exports = function (grunt) {
             // on dist, a dist build goes into .build, and is then copied into the dist folder
             build: {
                 files: [
-                    // js
+                    // uv-dist-umd
                     {
                         expand: true,
                         cwd: config.directories.distumd,
                         src: ['**'],
                         dest: config.directories.build + '/' + config.directories.distumd + '/'
                     },
+                    // assets
                     {
                         expand: true,
                         flatten: true,
                         src: [config.directories.lib + '/bundle.js'],
-                        dest: config.directories.build + '/lib'
+                        dest: config.directories.build + '/uv-assets/js/'
                     },
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [config.directories.src + '/helpers.js'],
-                        dest: config.directories.build,
-                        rename: function(dest, src) {
-                            return dest + '/helpers.js';
-                        }
-                    },
-                    // html
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [config.directories.src + '/uv.html'],
-                        dest: config.directories.build
-                    },
-                    // css
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [config.directories.src + '/uv.css'],
-                        dest: config.directories.build
-                    },
-                    {
-                        cwd: config.directories.build,
-                        expand: true,
-                        src: ['**'],
-                        dest: config.directories.build + '/' + config.directories.uv + '/'
-                    },
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            config.directories.src + '/index.html',
-                            config.directories.src + '/manifests.json',
-                            'favicon.ico'
-                        ],
-                        dest: config.directories.build + '/'
-                    },
-                    // images
                     {
                         expand: true,
                         flatten: true,
                         src: 'src/img/*',
-                        dest: config.directories.build + '/img/'
+                        dest: config.directories.build + '/uv-assets/img/'
                     },
+                    // {
+                    //     cwd: config.directories.build,
+                    //     expand: true,
+                    //     src: ['**'],
+                    //     dest: config.directories.build + '/' + config.directories.uv + '/'
+                    // },
                     {
                         expand: true,
                         flatten: true,
-                        src: 'src/favicon.ico',
-                        dest: config.directories.build
+                        src: [
+                            config.directories.src + '/favicon.ico',
+                            config.directories.src + '/uv.html',
+                            config.directories.src + '/uv.css',
+                            config.directories.src + '/index.html',
+                            config.directories.src + '/uv-helpers.js',
+                            config.directories.src + '/collection.json',
+                            config.directories.src + '/uv-config.json'
+                        ],
+                        dest: config.directories.build + '/'
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/.build/*.config.json'],
-                        dest: config.directories.build + '/lib/',
+                        dest: config.directories.build + '/uv-assets/config/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/[locale].config.json
@@ -156,9 +115,8 @@ module.exports = function (grunt) {
                         cwd: config.directories.build,
                         expand: true,
                         src: ['**'],
-                        dest: config.directories.dist
-                    },
-                    
+                        dest: config.directories.www
+                    }
                 ]
             },
             dist: {
@@ -205,42 +163,30 @@ module.exports = function (grunt) {
             }
         },
 
+        // replace all assets paths in built theme css files
+        // I think this is now only needed for the mediaelement icons svg!
         replace: {
             // ../../../modules/<module>/assets/<asset>
             // becomes
             // ../../../<module>/<asset>
             moduleassets: {
-                src: [config.directories.build + '/themes/*/css/*/theme.css'],
+                src: [config.directories.build + '/uv-assets/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
                     to: '\(\'../../assets/$1/$2\'\)'
                 }]
             },
-            // ../../../themes/uv-default-theme/assets/<asset>
+            // ../../../themes/uv-<extension>-theme/assets/<asset>
             // becomes
             // ../../assets/<asset>
             themeassets: {
-                src: [config.directories.build + '/themes/*/css/*/theme.css'],
+                src: [config.directories.build + '/uv-assets/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
                     to: '\(\'../../assets/$2\'\)'
                 }]
-            }
-        },
-
-        connect: {
-            dev: {
-                options: {
-                    port: config.wwwPort,
-                    base: '.',
-                    directory: '.',
-                    keepalive: true,
-                    open: {
-                        target: 'http://localhost:' + config.wwwPort + '/' + config.directories.www + '/'
-                    }
-                }
             }
         },
 
@@ -257,7 +203,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: "./src/extensions/*/theme/theme.less"
+                        src: './src/extensions/*/theme/theme.less'
                     }
                 ]
             },
@@ -268,8 +214,8 @@ module.exports = function (grunt) {
         webpack: {
             main: function() {
                 var config = require('./webpack.config.js');
-                config.mode = grunt.option('dist')? 'production':'development';
-                if (config.mode == 'development') {
+                config.mode = grunt.option('dist')? 'production' : 'development';
+                if (config.mode === 'development') {
                     config.devtool = 'source-map';
                 }
                 return config;
@@ -280,10 +226,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-webpack');
@@ -295,17 +237,12 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', '', function() {
 
-        var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
-        //var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
-
         grunt.task.run(
-            'clean:libs',
             'clean:themes',
             'clean:distumd',
             'sync',
             'copy:bundle',
             'concat:bundle',
-            tsType,
             'clean:extension',
             'configure:apply',
             'clean:build',
@@ -319,14 +256,7 @@ module.exports = function (grunt) {
             'clean:dist',
             'clean:www',
             'copy:dist',
-            'copy:distumd'
-        );
-    });
-
-    grunt.registerTask('www', '', function() {
-
-        grunt.task.run(
-            'connect'
+            'copy:www'
         );
     });
 };

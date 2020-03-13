@@ -1,4 +1,4 @@
-import { isValidUrl } from "../../Utils";
+//import { isValidUrl } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
@@ -846,27 +846,27 @@ export class BaseExtension implements IExtension {
         pathname = pathname.substr(0, pathname.lastIndexOf('/') + 1); // remove the file name
         
         let appUri: string = origin + pathname;
-        let root: string = '';
+        // let assetsDir: string = '';
 
-        if (!Documents.isInIFrame()) {
+        // if (!Documents.isInIFrame()) {
 
-            root = this.data.root || '';
+        //     assetsDir = this.data.assetsDir || '';
             
-            if (root.startsWith('./')) {
-                root = root.substr(2);
-            }
+        //     if (assetsDir.startsWith('./')) {
+        //         assetsDir = assetsDir.substr(2);
+        //     }
 
-            if (root && !root.endsWith('/')) {
-                root += '/';
-            }
-        }
+        //     if (assetsDir && !assetsDir.endsWith('/')) {
+        //         assetsDir += '/';
+        //     }
+        // }
 
-        // if root is a URL, use that instead of appUri.
-        if (isValidUrl(root)) {
-            return root + 'uv.html';
-        }
+        // // if assetsDir is a URL, use that instead of appUri.
+        // if (isValidUrl(assetsDir)) {
+        //     return assetsDir + 'uv.html';
+        // }
 
-        return appUri + root + 'uv.html';
+        return appUri + 'uv.html';
 
     }
 

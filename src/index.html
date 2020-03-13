@@ -3,11 +3,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Universal Viewer Examples</title>
-    <link rel="icon" href="uv/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="uv.css">
     <script type="text/javascript" src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
-    <script type="text/javascript" src="uv/lib/bundle.js"></script>
-    <script type="text/javascript" src="uv/helpers.js"></script>
+    <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
+    <script type="text/javascript" src="uv-helpers.js"></script>
     <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
         body {
@@ -65,7 +65,7 @@
 
             var data = {
                 manifestUri: manifest,
-                configUri: 'examples-config.json',
+                configUri: 'uv-config.json',
                 collectionIndex: (collectionIndex !== undefined) ? Number(collectionIndex) : undefined,
                 manifestIndex: Number(urlDataProvider.get('m', 0)),
                 sequenceIndex: Number(urlDataProvider.get('s', 0)),
@@ -78,7 +78,7 @@
             uv = createUV('#uv', data, urlDataProvider);
 
             uv.on('created', function() {
-                Utils.Urls.setHashParameter('manifest', manifest);
+                utils.Urls.setHashParameter('manifest', manifest);
             });
 
             // uv.on('openseadragonExtension.open', function() {
@@ -89,7 +89,7 @@
         function loadManifests(cb) {
 
             // load manifests
-            $.getJSON('manifests.json', function(manifests) {
+            $.getJSON('collection.json', function(manifests) {
 
                 var $manifestSelect = $('#manifestSelect');
 
@@ -119,7 +119,7 @@
 
         function setSelectedManifest() {
 
-            manifest = Utils.Urls.getHashParameter('manifest');
+            manifest = utils.Urls.getHashParameter('manifest');
 
             if (manifest) {
                 $('#manifestSelect').val(manifest);

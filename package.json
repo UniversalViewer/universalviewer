@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "3.0.36",
+  "version": "4.0.0-pre.1",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
     "node": ">=8.9.1",
@@ -13,7 +13,8 @@
     "postinstall": "opencollective postinstall",
     "server": "node_modules/.bin/http-server -p 4444",
     "test": "jest",
-    "version": "echo { \"version\": \"%npm_package_version%\" } > ./dist/info.json && cp ./dist/info.json ./examples/uv"
+    "version": "echo { \"version\": \"%npm_package_version%\" } > ./dist/info.json && cp ./dist/info.json ./examples/uv",
+    "start": "npx serve www"
   },
   "repository": {
     "type": "git",

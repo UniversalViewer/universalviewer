@@ -1,11 +1,11 @@
 {
   "@context": "https://iiif.io/api/presentation/2/context.json",
-  "@id": "https://universalviewer.io/manifests.json",
+  "@id": "https://universalviewer.io/collection.json",
   "@type": "sc:Collection",
   "collections": [
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Wellcome Library",
       "manifests": [
@@ -151,7 +151,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "V&A",
       "visible": true,
@@ -166,7 +166,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Internet Archive",
       "visible": true,
@@ -181,7 +181,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Princeton",
       "visible": false,
@@ -202,7 +202,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "British Library",
       "manifests": [
@@ -330,7 +330,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "National Library of Wales",
       "manifests": [
@@ -368,7 +368,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Bodleian",
       "manifests": [
@@ -386,7 +386,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Stanford University",
       "manifests": [
@@ -414,7 +414,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Sentences Commentary Text Archive",
       "visible": false,
@@ -428,7 +428,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "LUNA Imaging",
       "visible": true,
@@ -447,7 +447,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Villanova University",
       "manifests": [
@@ -528,7 +528,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "National Gallery of Art (US)",
       "visible": true,
@@ -542,7 +542,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "World Digital Library",
       "visible": false,
@@ -561,7 +561,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Riks Arkivet",
       "manifests": [
@@ -584,7 +584,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Qatar Digital Library",
       "manifests": [
@@ -602,7 +602,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Ghent University Library",
       "visible": false,
@@ -621,7 +621,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Yale",
       "manifests": [
@@ -634,7 +634,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "3D",
       "manifests": [
@@ -654,7 +654,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Level 0",
       "visible": false,
@@ -669,7 +669,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Tests",
       "visible": true,
@@ -846,7 +846,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "AV",
       "visible": true,
@@ -1005,7 +1005,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "IPFS",
       "visible": true,
@@ -1020,7 +1020,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "DAT",
       "visible": true,
@@ -1041,7 +1041,7 @@
     },
     {
       "@context": "https://iiif.io/api/presentation/2/context.json",
-      "@id": "https://universalviewer.io/manifests.json",
+      "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",
       "label": "Tests (require jsonp)",
       "visible": false,

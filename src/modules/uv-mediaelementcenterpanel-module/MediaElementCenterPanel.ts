@@ -107,7 +107,6 @@ export class MediaElementCenterPanel extends CenterPanel {
             this.$container.append(this.$media);
 
             this.player = new MediaElementPlayer($('video')[0], {
-                //pluginPath: this.extension.data.root + 'lib/mediaelement/',
                 poster: poster,
                 features: ['playpause', 'current', 'progress', 'volume'],
                 success: function(mediaElement: any, originalNode: any) {
