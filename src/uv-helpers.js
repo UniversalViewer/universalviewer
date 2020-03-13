@@ -31,11 +31,12 @@ function createUV(selector, data) {
     });
 
     uv.on('create', function(obj) {
-        resize();
+        //resize();
     }, false);
 
     uv.on('created', function(obj) {
-       //resize();
+        console.log("created");
+       resize();
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {
