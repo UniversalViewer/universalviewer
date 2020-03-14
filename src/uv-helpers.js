@@ -35,7 +35,6 @@ function createUV(selector, data) {
   uv.on(
     "created",
     function(obj) {
-      console.log("created");
       resize();
     },
     false

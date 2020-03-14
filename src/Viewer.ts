@@ -152,6 +152,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
       load: this._extensions[Extension.MODELVIEWER]
     };
 
+    this._extensionRegistry[MediaType.GLB] = {
+      load: this._extensions[Extension.MODELVIEWER]
+    };
+
     this._extensionRegistry[MediaType.GLTF] = {
       load: this._extensions[Extension.MODELVIEWER]
     };
