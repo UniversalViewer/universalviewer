@@ -645,6 +645,12 @@
           "visible": true
         },
         {
+          "@id": "https://bl-3d.netlify.com/collection/jane-austen-writing-desk/index.json",
+          "@type": "sc:Manifest",
+          "label": "Jane Austen Desk",
+          "visible": true
+        },
+        {
           "@id": "https://iiif-3d-manifests.netlify.com/collection/gltf/woody/index.json",
           "@type": "sc:Manifest",
           "label": "Fisherman (gltf)",

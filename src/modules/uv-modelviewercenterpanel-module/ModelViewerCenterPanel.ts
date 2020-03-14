@@ -29,7 +29,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     this.title = this.extension.helper.getLabel();
 
     this.$modelViewer = $(
-      "<model-viewer auto-rotate camera-controls></model-viewer>"
+      "<model-viewer auto-rotate camera-controls ar></model-viewer>"
     );
 
     this.component.publish(BaseEvents.OPENED_MEDIA);
