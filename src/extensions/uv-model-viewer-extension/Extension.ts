@@ -4,6 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-modelviewermobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IModelViewerExtension } from "./IModelViewerExtension";
@@ -23,13 +24,14 @@ export default class Extension extends BaseExtension
   $settingsDialogue: JQuery;
   centerPanel: ModelViewerCenterPanel;
   downloadDialogue: DownloadDialogue;
-  shareDialogue: ShareDialogue;
   footerPanel: FooterPanel;
   headerPanel: HeaderPanel;
   helpDialogue: HelpDialogue;
   leftPanel: ContentLeftPanel;
+  mobileFooterPanel: FooterPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
+  shareDialogue: ShareDialogue;
 
   create(): void {
     super.create();
@@ -70,6 +72,9 @@ export default class Extension extends BaseExtension
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+      );
     } else {
       this.shell.$footerPanel.hide();
     }
