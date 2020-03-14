@@ -11,8 +11,11 @@ import {
   IExternalResource,
   Rendering
 } from "manifesto.js";
+import "mediaelement/build/mediaelement-and-player";
 
 export class MediaElementCenterPanel extends CenterPanel {
+  _$mejsContainer: JQuery;
+  _$mejsLayers: JQuery;
   $container: JQuery;
   $media: JQuery;
   mediaHeight: number;
@@ -62,9 +65,9 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     await this.extension.getExternalResources(resources);
 
-    await import(
-      /* webpackChunkName: "mediaelement" */ /* webpackMode: "lazy" */ "mediaelement/build/mediaelement-and-player"
-    );
+    // await import(
+    //   /* webpackChunkName: "mediaelement" */ /* webpackMode: "lazy" */ "mediaelement/build/mediaelement-and-player"
+    // );
 
     this.$container.empty();
 
@@ -200,6 +203,9 @@ export class MediaElementCenterPanel extends CenterPanel {
       });
     }
 
+    this._$mejsContainer = this.$container.find(".mejs__container");
+    this._$mejsLayers = this.$container.find(".mejs__layer");
+
     this.component.publish(BaseEvents.OPENED_MEDIA);
     //this.resize();
   }
@@ -210,6 +216,8 @@ export class MediaElementCenterPanel extends CenterPanel {
 
   resize() {
     super.resize();
+
+    const that = this;
 
     // if in Firefox < v13 don't resize the media container.
     if (
@@ -257,11 +265,18 @@ export class MediaElementCenterPanel extends CenterPanel {
         this.player.setPlayerSize();
         this.player.setControlsSize();
 
-        const $mejs: JQuery = $(".mejs__container");
+        this._$mejsContainer.height(this.$container.height());
+        this._$mejsContainer.width(this.$container.width());
 
-        $mejs.css({
-          "margin-top": (this.$container.height() - $mejs.height()) / 2
+        this._$mejsLayers.each(function() {
+          $(this).height(that.$container.height());
+          $(this).width(that.$container.width());
         });
+        // const $mejs: JQuery = $(".mejs__container");
+
+        // $mejs.css({
+        //   "margin-top": (this.$container.height() - $mejs.height()) / 2
+        // });
       }
     }
   }
