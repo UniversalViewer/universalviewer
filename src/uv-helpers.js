@@ -28,7 +28,7 @@ function createUV(selector, data) {
   window.addEventListener("orientationchange", function() {
     setTimeout(() => {
       resize();
-    }, 1000);
+    }, 100);
   });
 
   uv = new UV.Viewer({

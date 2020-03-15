@@ -1,4 +1,3 @@
-//import "@google/model-viewer-legacy";
 import "../../../node_modules/@google/model-viewer/dist/model-viewer-legacy";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { sanitize } from "../../Utils";
