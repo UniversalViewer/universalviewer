@@ -1,89 +1,104 @@
-<!--
-    This is what the embed iframe src links to. It doesn't need to communicate with the parent page, only fill the available space and look for #? parameters
--->
-
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="uv.css">
-    <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
-    <script type="text/javascript" src="uv-helpers.js"></script>
-    <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Universal Viewer Examples</title>
+    <link rel="icon" href="uv/favicon.ico" />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/jquery@1.11.2/dist/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"
+    ></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+      body {
+        margin: 0px;
+        padding: 20px;
+      }
+
+      #options {
+        padding: 20px 0 0 0;
+      }
+
+      #manifestSelect {
+				width: 100%;
+				margin-bottom: 10px;
+      }
     </style>
-</head>    
-<body>
+  </head>
+  <body>
+    <div id="options">
+      <select id="manifestSelect"></select>
+      <input id="manifest" type="text" value="" />
+      <a id="setManifestButton" class="button" href="#">Set</a>
+    </div>
 
-<div id="uv" class="uv"></div>
+    <script type="text/javascript">
+      var manifest;
 
-<script type="text/javascript">
+      // load manifests
+      $.getJSON("collection.json", function(manifests) {
+        var $manifestSelect = $("#manifestSelect");
 
-    console.log("test");
+        for (var i = 0; i < manifests.collections.length; i++) {
+          var collection = manifests.collections[i];
 
-    urlDataProvider = new UV.URLDataProvider(true);
-    var formattedLocales;
-    var locales = urlDataProvider.get('locales', '');
+          if (collection.visible === false) {
+            continue;
+          }
 
-    if (locales) {
-        var names = locales.split(',');
-        formattedLocales = [];
+          $manifestSelect.append('<optgroup label="' + collection.label + '">');
 
-        for (var i in names) {
-            var nameparts = String(names[i]).split(':');
-            formattedLocales[i] = {name: nameparts[0], label: nameparts[1]};
-        }
-        
-    } else {
-        formattedLocales = [
-            {
-                name: 'en-GB'
+          for (var j = 0; j < collection.manifests.length; j++) {
+            var manifest = collection.manifests[j];
+
+            if (manifest.visible !== false) {
+              $manifestSelect.append(
+                '<option value="' +
+                  manifest["@id"] +
+                  '">' +
+                  manifest.label +
+                  "</option>"
+              );
             }
-        ]
-    }
+          }
 
-    uv = createUV('uv', {
-        manifestUri: "https://bl-3d.netlify.com/collection/jane-austen-writing-desk/index.json",
-        configUri: urlDataProvider.get('config'),
-        collectionIndex: Number(urlDataProvider.get('c', 0)),
-        manifestIndex: Number(urlDataProvider.get('m', 0)),
-        sequenceIndex: Number(urlDataProvider.get('s', 0)),
-        canvasIndex: Number(urlDataProvider.get('cv', 0)),
-        rangeId: urlDataProvider.get('rid', 0),
-        rotation: Number(urlDataProvider.get('r', 0)),
-        xywh: urlDataProvider.get('xywh', ''),
-        embedded: true,
-        locales: formattedLocales
-    }, urlDataProvider);
-</script>
-
-<script>
-
-    $(function() {
-
-        var $UV = $('#uv');
-
-        function resize() {
-            var windowWidth = window.innerWidth;
-            var windowHeight = window.innerHeight;
-            $UV.width(windowWidth);
-            $UV.height(windowHeight);
+          $manifestSelect.append("</optgroup>");
         }
 
-        $(window).on('resize', function() {
-            resize();
-        });
-        
-        resize();
-    });
-    
-</script>
+        setSelectedManifest();
+      });
 
-</body>
+      function setSelectedManifest() {
+        manifest = utils.Urls.getHashParameter("manifest");
+
+        if (manifest) {
+          $("#manifestSelect").val(manifest);
+        } else {
+          var options = $("#manifestSelect option");
+
+          if (options.length) {
+            manifest = options[0].value;
+          }
+        }
+
+        $("#manifest").val(manifest);
+      }
+
+      $("#manifestSelect").on("change", function() {
+        $("#manifest").val($("#manifestSelect option:selected").val());
+      });
+
+      $("#setManifestButton").on("click", function() {
+        manifest = $("#manifest").val();
+        document.location.href =
+          "uv.html#?manifest=" + manifest + "&locales=en-GB";
+      });
+    </script>
+  </body>
 </html>

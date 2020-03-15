@@ -8,6 +8,7 @@ import { FooterPanel as MobileFooterPanel } from "../../modules/uv-modelviewermo
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IModelViewerExtension } from "./IModelViewerExtension";
+import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
@@ -21,6 +22,7 @@ export default class Extension extends BaseExtension
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
+  $moreInfoDialogue: JQuery;
   $settingsDialogue: JQuery;
   centerPanel: ModelViewerCenterPanel;
   downloadDialogue: DownloadDialogue;
@@ -29,6 +31,7 @@ export default class Extension extends BaseExtension
   helpDialogue: HelpDialogue;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: FooterPanel;
+  moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
@@ -78,6 +81,12 @@ export default class Extension extends BaseExtension
     } else {
       this.shell.$footerPanel.hide();
     }
+
+    this.$moreInfoDialogue = $(
+      '<div class="overlay moreInfo" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$moreInfoDialogue);
+    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
     this.$downloadDialogue = $(
       '<div class="overlay download" aria-hidden="true"></div>'

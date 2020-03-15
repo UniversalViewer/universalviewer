@@ -8,6 +8,36 @@
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
+    "metrics": [
+      {
+        "type": "watch",
+        "minWidth": 0,
+        "maxWidth": 312,
+        "minHeight": 0,
+        "maxHeight": 390
+      },
+      {
+        "type": "mobileportrait",
+        "minWidth": 312,
+        "maxWidth": 415,
+        "minHeight": 640,
+        "maxHeight": 813
+      },
+      {
+        "type": "mobilelandscape",
+        "minWidth": 640,
+        "maxWidth": 813,
+        "minHeight": 360,
+        "maxHeight": 415
+      },
+      {
+        "type": "desktop",
+        "minWidth": 800,
+        "maxWidth": 100000,
+        "minHeight": 415,
+        "maxHeight": 100000
+      }
+    ],
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "rightPanelEnabled": true,
     "theme": "uv-en-GB-theme"
@@ -24,6 +54,7 @@
         "embedEnabled": false,
         "feedbackEnabled": false,
         "minimiseButtons": true,
+        "moreInfoEnabled": true,
         "openEnabled": false,
         "shareEnabled": true
       }

@@ -647,7 +647,7 @@
         {
           "@id": "https://bl-3d.netlify.com/collection/jane-austen-writing-desk/index.json",
           "@type": "sc:Manifest",
-          "label": "Jane Austen Desk (glb)",
+          "label": "Jane Austen Desk",
           "visible": true
         },
         {

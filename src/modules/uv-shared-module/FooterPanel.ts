@@ -164,6 +164,7 @@ export class FooterPanel extends BaseView {
   }
 
   updateMoreInfoButton(): void {
+
     const configEnabled: boolean = Bools.getBool(
       this.options.moreInfoEnabled,
       false

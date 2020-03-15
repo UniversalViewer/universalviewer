@@ -4,86 +4,85 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="uv.css">
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="uv.css" />
     <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
     <script type="text/javascript" src="uv-helpers.js"></script>
     <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
     </style>
-</head>    
-<body>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
 
-<div id="uv" class="uv"></div>
+    <script type="text/javascript">
 
-<script type="text/javascript">
+      urlDataProvider = new UV.URLDataProvider(true);
+      var formattedLocales;
+      var locales = urlDataProvider.get("locales", "");
 
-    console.log("test");
-
-    urlDataProvider = new UV.URLDataProvider(true);
-    var formattedLocales;
-    var locales = urlDataProvider.get('locales', '');
-
-    if (locales) {
-        var names = locales.split(',');
+      if (locales) {
+        var names = locales.split(",");
         formattedLocales = [];
 
         for (var i in names) {
-            var nameparts = String(names[i]).split(':');
-            formattedLocales[i] = {name: nameparts[0], label: nameparts[1]};
+          var nameparts = String(names[i]).split(":");
+          formattedLocales[i] = { name: nameparts[0], label: nameparts[1] };
         }
-        
-    } else {
+      } else {
         formattedLocales = [
-            {
-                name: 'en-GB'
-            }
-        ]
-    }
+          {
+            name: "en-GB"
+          }
+        ];
+      }
 
-    uv = createUV('uv', {
-        manifestUri: urlDataProvider.get('manifest'),
-        configUri: urlDataProvider.get('config'),
-        collectionIndex: Number(urlDataProvider.get('c', 0)),
-        manifestIndex: Number(urlDataProvider.get('m', 0)),
-        sequenceIndex: Number(urlDataProvider.get('s', 0)),
-        canvasIndex: Number(urlDataProvider.get('cv', 0)),
-        rangeId: urlDataProvider.get('rid', 0),
-        rotation: Number(urlDataProvider.get('r', 0)),
-        xywh: urlDataProvider.get('xywh', ''),
-        embedded: true,
-        locales: formattedLocales
-    }, urlDataProvider);
-</script>
+      uv = createUV(
+        "uv",
+        {
+          manifestUri: urlDataProvider.get("manifest"),
+          configUri: urlDataProvider.get("config"),
+          collectionIndex: Number(urlDataProvider.get("c", 0)),
+          manifestIndex: Number(urlDataProvider.get("m", 0)),
+          sequenceIndex: Number(urlDataProvider.get("s", 0)),
+          canvasIndex: Number(urlDataProvider.get("cv", 0)),
+          rangeId: urlDataProvider.get("rid", 0),
+          rotation: Number(urlDataProvider.get("r", 0)),
+          xywh: urlDataProvider.get("xywh", ""),
+          embedded: true,
+          locales: formattedLocales
+        },
+        urlDataProvider
+      );
+    </script>
 
-<script>
-
-    $(function() {
-
-        var $UV = $('#uv');
+    <script>
+      $(function() {
+        var $UV = $("#uv");
 
         function resize() {
-            var windowWidth = window.innerWidth;
-            var windowHeight = window.innerHeight;
-            $UV.width(windowWidth);
-            $UV.height(windowHeight);
+          var windowWidth = window.innerWidth;
+          var windowHeight = window.innerHeight;
+          $UV.width(windowWidth);
+          $UV.height(windowHeight);
         }
 
-        $(window).on('resize', function() {
-            resize();
+        $(window).on("resize", function() {
+          resize();
         });
-        
-        resize();
-    });
-    
-</script>
 
-</body>
+        resize();
+      });
+    </script>
+  </body>
 </html>

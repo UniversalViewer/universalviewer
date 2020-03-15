@@ -54,6 +54,10 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.$modelViewer.attr("src", mediaUri);
 
+    // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
+    mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
+    this.$modelViewer.attr("ios-src", mediaUri);
+
     this.$content.append(this.$modelViewer);
 
     this.component.publish(BaseEvents.OPENED_MEDIA);

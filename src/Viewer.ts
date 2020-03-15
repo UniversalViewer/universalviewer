@@ -181,6 +181,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
       load: this._extensions[Extension.PDF]
     };
 
+    this._extensionRegistry[MediaType.USDZ] = {
+      load: this._extensions[Extension.MODELVIEWER]
+    };
+
     this._extensionRegistry[MediaType.VIDEO_MP4] = {
       //load: this._extensions[Extension.AV]
       load: this._extensions[Extension.MEDIAELEMENT]
