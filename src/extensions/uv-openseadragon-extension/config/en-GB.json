@@ -21,7 +21,7 @@
         "type": "mobileportrait",
         "minWidth": 312,
         "maxWidth": 415,
-        "minHeight": 640,
+        "minHeight": 600,
         "maxHeight": 813
       },
       {
