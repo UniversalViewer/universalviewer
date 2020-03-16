@@ -45,7 +45,9 @@ export class Extension extends BaseExtension implements IAVExtension {
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+            if (this.data.canvasIndex !== thumb.index) {
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+            }
         });
     }
 
@@ -176,7 +178,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         //     if (canvas) {
         //         const canvasIndex: number = canvas.index;
-                
+
         //         if (canvasIndex !== this.helper.canvasIndex) {
         //             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         //         }
