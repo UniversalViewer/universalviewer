@@ -31,6 +31,12 @@ export class EbookCenterPanel extends CenterPanel {
       this.component.publish(Events.LOADED_NAVIGATION, e.detail);
     }, false);
 
+    this._ebookReader.addEventListener("bookReady", (e: any) => {
+      this._ebookReader.getBook().then(ebook => {
+        this.component.publish(Events.EBOOK_READY, ebook);
+      });
+    }, false);
+
     this._ebookReader.addEventListener("relocated", (e: any) => {
       this.component.publish(Events.RELOCATED, e.detail);
       this._cfi = e.detail.start.cfi;
@@ -78,7 +84,7 @@ export class EbookCenterPanel extends CenterPanel {
       }
     );
 
-    this._$spinner = $('<div class="spinner"></div>');
+    this._$spinner = $('<div id="spinner"><div class="square" /></div>');
     this.$content.append(this._$spinner);
   }
 
@@ -95,8 +101,6 @@ export class EbookCenterPanel extends CenterPanel {
         if (body.length) {
           const media: Manifesto.IAnnotationBody = body[0];
           //const format: Manifesto.MediaType | null = media.getFormat();
-
-          this.component.publish(Events.EBOOK_PATH_READY,media.id);
 
           this._nextState({
             bookPath: media.id

@@ -14,6 +14,8 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
 
+const PRINT_IFRAME = "ifrmPrintEbookContent";
+
 export class Extension extends BaseExtension implements IEbookExtension {
 
     $downloadDialogue: JQuery;
@@ -33,11 +35,10 @@ export class Extension extends BaseExtension implements IEbookExtension {
     shareDialogue: ShareDialogue;
     cfiFragement: string;
 
-    private _toc:any;
-    //private _activePrint:boolean;
     private _spinner:JQuery;
-    //private _currentTocItemIndex:number = -1;
-    private _ebookPath:string;
+    private _ebook:any;
+    private _printDocument:any;
+    private _activePrint:boolean = false;
 
     create(): void {
         super.create();
@@ -51,23 +52,18 @@ export class Extension extends BaseExtension implements IEbookExtension {
             this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
         });
 
-        this.component.subscribe(Events.EBOOK_PATH_READY, (ebookPath) => {
-            alert(ebookPath);
-            this._ebookPath = ebookPath;
+        this.component.subscribe(Events.EBOOK_READY, (ebook) => {
+            this._ebook = ebook;
         });
 
         this.component.subscribe(Events.PRINT, () => {
-
-            if(this._ebookPath){
-            this.print();
-            }
+            this.printEbook();
         });
 
-        this.component.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
-            alert('toc loaded');
-            this._toc = navigation.toc;
-            alert(this._toc);
-        });
+        //Remove the print doc iframe if already exists
+        let printDocIframe = document.getElementById(PRINT_IFRAME);
+        if(printDocIframe)
+            printDocIframe.remove();
     }
 
     dependencyLoaded(_index: number, _dep: any): void {
@@ -136,100 +132,140 @@ export class Extension extends BaseExtension implements IEbookExtension {
             this.footerPanel.init();
         }
 
-        this._spinner = $("div.spinner");
+        this._spinner = $("div#spinner");
         this._spinner.hide();
     }
 
-    print(){
-        // TODO Printing Implementation
-        alert('Printing Done');
-
-        // if(this._activePrint)
-        //     return;
-        
-        // this._activePrint = true;
-        // this._spinner.show();
-
-        // let rederedPages = this.renderBookContents();
-        // rederedPages.then(() => {
-        //     this._spinner.hide();
-        //     window.print();
-        //     this._activePrint = false;
-        // });
-
-        // rederedPages.catch((r)=> {
-        //     this._spinner.hide();
-        //     this._activePrint = false;
-        // });
+    getPrintContentwindow(iframe){
+        return iframe.contentWindow;
     }
 
-    renderBookContents() {
-        // if(!this._toc){
-        //     return new Promise(() => {
-        //         throw new Error();
-        //     });
-        // }
+    finalizePrint(contentWindow){
+        contentWindow.print();
+        this._activePrint = false;
+        this._spinner.hide();
+    }
 
-        // const tocLength = this._toc.legth;
-        // const renderNextItem = (resolve, reject) => {
-          
-        //   if (++this._currentTocItemIndex >= tocLength) {
-        //     resolve();
-        //     return;
-        //   }
+    printEbook(){
+        if(!this._ebook){
+            alert('Ebook is not loaded yet');
+            return;
+        }
 
-        //   const index = this._currentTocItemIndex;
-        //   this.renderContent(index + 1)
-        //     .then(this.useRenderedContent.bind(this))
-        //     .then(function() {
-        //         renderNextItem(resolve, reject);
-        //     }, reject);
-        // };
+        //return if printing is already in progress
+        if(this._activePrint)
+            return;
+    
+        this._activePrint = true;
+        this._spinner.show();
+        
+        let printDocIframe = document.getElementById(PRINT_IFRAME) as HTMLIFrameElement;
+        if(printDocIframe){
+            this.finalizePrint(this.getPrintContentwindow(printDocIframe));
+            return;
+        }
+        
+        this.renderContents()
+            .then(()=>{
+                //remove document content meta tags
+                this._printDocument.querySelectorAll("[name^='dc.']")
+                    .forEach(meta => {
+                        meta.remove();
+                    });
 
-        // return new Promise(renderNextItem);
+                let docHead = this._printDocument.head || this._printDocument.getElementsByTagName('head')[0];    
+                //add viewport meta tag to print document
+                let meta = document.createElement('meta');
+                meta.setAttribute('name', 'viewport');
+                meta.content = "width=device-width, initial-scale=1";
+                docHead.appendChild(meta);
+                
+                //Add style to doc for page break after each chapter
+                let style = document.createElement('style');
+                style.type = 'text/css';
+                style.appendChild(document.createTextNode("body{margin: 0; padding: 0;} body > *{display: block; page-break-after: always; page-break-before: avoid;}"));
+                docHead.appendChild(style);
+
+                //set document title
+                docHead.getElementsByTagName("title")[0].innerText = this._ebook.packaging.metadata.title;
+
+                //create an iframe to load the doc contents 
+                let ifrm = document.createElement('iframe');
+                ifrm.setAttribute("id", "ifrmPrintEbookContent");
+                ifrm.setAttribute("style", "display:none;");
+
+                //add iframe to body
+                document.body.appendChild(ifrm);
+
+                // check if srcdoc supported for iframe for the browser
+                if(!!("srcdoc" in ifrm)){
+                    //add onload event to iframe
+                    ifrm.onload = () => {
+                        this.finalizePrint(this.getPrintContentwindow(ifrm));
+                    };
+
+                    //add doc html to iframe srcdoc
+                    ifrm.setAttribute("srcdoc", this._printDocument.documentElement.innerHTML);
+                    return;
+                }
+                
+                //if scrdoc not supported for the browser
+                let contentWindow = this.getPrintContentwindow(ifrm);
+                contentWindow.document.write(this._printDocument.documentElement.innerHTML);
+
+                setTimeout(() => {
+                    this.finalizePrint(contentWindow);
+                }, 1000);
+            });
+    }
+
+    renderContents() {
+        let tocCount = 144;
+        let currentTocIndex = -1;
+
+        const renderNextSectionContent = (resolve, reject) => {
+          if (++currentTocIndex >= tocCount) {
+            resolve();
+            return;
+          }
+
+          this.renderSectionContent(currentTocIndex)
+            .then(() => {
+                renderNextSectionContent(resolve, reject);
+            }, reject);
+        };
+
+        return new Promise(renderNextSectionContent);
      }
 
-     useRenderedContent() {
-        // const img = document.createElement("img");
-    
-        // const scratchCanvas = this._scratchCanvas;
-        // if ("toBlob" in scratchCanvas) {
-        //   scratchCanvas.toBlob(function(blob) {
-        //     img.src = URL.createObjectURL(blob);
-        //   });
-        // } else {
-        //   img.src = scratchCanvas.toDataURL();
-        // }
-    
-        // const wrapper = document.createElement("div");
-        // wrapper.appendChild(img);
-        // this._printContainer.appendChild(wrapper);
-    
-        // return new Promise(function(resolve, reject) {
-        //   img.onload = resolve;
-        //   img.onerror = reject;
-        // });
-      }
+     renderSectionContent(index) {
+        var section = this._ebook.spine.get(index);
+        if(!section) 
+            return Promise.resolve();
 
-     renderContent(tocItemIndex) {
-        // const PRINT_UNITS = 0.72 * 2;
-
-        // return this._pdfDoc
-        // .getPage(pageNumber)
-        // .then((pdfPage) => {
-        //     //get pdf viewport
-        //     let viewport = pdfPage.getViewport(1);
+        return section.render(this._ebook.load.bind(this._ebook))
+        .then(htmlDoc => {
+            let domparser = new DOMParser()
+            let doc = domparser.parseFromString(htmlDoc, "text/html");
+            if(doc) {
+                if(index == 0) {
+                    this._printDocument = doc;
+                    return;
+                }
             
-        //     let ctx = this.getCanvasContext(viewport,  PRINT_UNITS);
+                //get cssclass and style if any for the section content 
+                let docClass = doc.body.getAttribute("class") || "";
+                let docStyle = doc.body.getAttribute("style") || "";
 
-        //     const renderContext = {
-        //       canvasContext: ctx,
-        //       transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
-        //       viewport: viewport
-        //     };
+                //attach the cssClass and style to section wrapper
+                var sectionWrapper= document.createElement('div');
+                sectionWrapper.setAttribute("class", (docClass ? docClass + " " : "") + "section-" + index );
+                sectionWrapper.setAttribute("style", docStyle);
 
-        //     return pdfPage.render(renderContext);
-        // });
+                sectionWrapper.innerHTML= doc.body.innerHTML;
+                this._printDocument.body.appendChild(sectionWrapper);
+            }
+        });
     }
 
     isLeftPanelEnabled(): boolean {

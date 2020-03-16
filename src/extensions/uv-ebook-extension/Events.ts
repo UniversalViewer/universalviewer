@@ -8,5 +8,5 @@ export class Events {
     static RENDITION_ATTACHED: string                 = Events.namespace + "renditionAttached";
     static TOC_READY: string                          = Events.namespace + "tocReady";
     static PRINT: string                              = Events.namespace + 'print';
-    static EBOOK_PATH_READY: string                   = Events.namespace + "ebookPathReady";
+    static EBOOK_READY: string                        = Events.namespace + "ebookReady";
 }
