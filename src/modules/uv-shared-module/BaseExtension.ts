@@ -97,6 +97,10 @@ export class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
+        if (this.isFullScreen()) {
+            this.$element.addClass('fullscreen');
+        }
+
         // events
         if (!this.data.isReload) {
 
