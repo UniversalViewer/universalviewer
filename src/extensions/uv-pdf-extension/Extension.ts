@@ -69,8 +69,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
             }
         });
 
-        this.component.subscribe(Events.PDF_LOADED, (pdfDetails: any) => {
-            this._pdfDoc = pdfDetails.pdfDoc;
+        this.component.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
+            this._pdfDoc = pdfDoc;
         });
 
         this.component.subscribe(Events.PRINT, () => {
