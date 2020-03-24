@@ -29,7 +29,9 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this._viewCanvas(canvasIndex);           
+            if (this._lastCanvasIndex !== canvasIndex) {
+                this._viewCanvas(canvasIndex);
+            }
         });
 
         $.subscribe(BaseEvents.CURRENT_TIME_CHANGED, (e: any, currentTime: number) => {
