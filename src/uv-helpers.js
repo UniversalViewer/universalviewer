@@ -26,7 +26,7 @@ function createUV(selector, data) {
   });
 
   window.addEventListener("orientationchange", function() {
-    setTimeout(() => {
+    setTimeout(function() {
       resize();
     }, 100);
   });
@@ -49,7 +49,7 @@ function createUV(selector, data) {
   uv.on(
     "openedMedia",
     function() {
-      setTimeout(() => {
+      setTimeout(function() {
         resize();
       }, 100);
     },
@@ -148,7 +148,9 @@ function createUV(selector, data) {
         var exitFullScreen = getExitFullScreen();
         if (exitFullScreen) {
           exitFullScreen.call(document);
-          resize();
+          setTimeout(function() {
+            resize();
+          }, 100);
         }
       }
     },
