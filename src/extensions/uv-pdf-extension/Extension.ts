@@ -10,7 +10,7 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-//import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
+import {ProgressDialogue} from "../../modules/uv-dialogues-module/ProgressDialogue";
 
 import IThumb = Manifold.IThumb;
 import { Events } from "../uv-pdf-extension/Events";
@@ -21,6 +21,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     $shareDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
+    $progressDialogue: JQuery;
     centerPanel: PDFCenterPanel;
     downloadDialogue: DownloadDialogue;
     shareDialogue: ShareDialogue;
@@ -29,6 +30,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
+    progressDialogue: ProgressDialogue;
     $printFrame:any;
 
     private _pdfDoc:any;
@@ -251,6 +253,11 @@ export class Extension extends BaseExtension implements IPDFExtension {
         this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
+        this.$progressDialogue = $('<div class="overlay progress" aria-hidden="true"></div>');
+        this.shell.$overlays.append(this.$progressDialogue);
+        this.progressDialogue = new ProgressDialogue(this.$progressDialogue);
+        setTimeout(this.showDocLoadProgress.bind(this), 3000);
+
         this._spinner = $("div.spinner"); // get spinner reference
 
         //init print container and scratch canvas to hold the rendered page
@@ -270,6 +277,34 @@ export class Extension extends BaseExtension implements IPDFExtension {
         if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
+    }
+
+    showDocLoadProgress():void {
+        if(this._pdfDoc)
+            return;
+
+        if(this.progressDialogue.content.docLoadingText)
+            this.progressDialogue.setOptions({label:this.progressDialogue.content.docLoadingText});
+
+        this.progressDialogue.open();
+
+        let num = 1;
+        let interval = setInterval(() => {
+            if(this._pdfDoc)
+            {
+                this.progressDialogue.setValue(100);
+                setTimeout(()=>{
+                    this.progressDialogue.close();
+                }, 200); 
+                clearInterval(interval);
+                return;
+            }
+
+            if(num + 2 == 100)
+                return; //hack - stop the progress bar till doc ready
+            
+            this.progressDialogue.setValue(++num);
+        }, 200)
     }
 
     bookmark() : void {
