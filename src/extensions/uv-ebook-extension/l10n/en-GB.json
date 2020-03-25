@@ -158,6 +158,12 @@
         "size": "Size:",
         "width": "Width"
       }
+    },
+    "progressDialogue":{
+      "content": {
+        "docLoadingText": "Loading content...",
+        "docPrintProgressText" : "Preparing document for printing..."
+      }
     }
   }
 }

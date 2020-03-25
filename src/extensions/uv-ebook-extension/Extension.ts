@@ -13,6 +13,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
+import {ProgressDialogue} from "../../modules/uv-dialogues-module/ProgressDialogue";
 
 const PRINT_IFRAME = "ifrmPrintEbookContent";
 
@@ -22,6 +23,7 @@ export class Extension extends BaseExtension implements IEbookExtension {
     $moreInfoDialogue: JQuery;
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
+    $progressDialogue: JQuery;
     $shareDialogue: JQuery;
     centerPanel: EbookCenterPanel;
     downloadDialogue: DownloadDialogue;
@@ -32,6 +34,7 @@ export class Extension extends BaseExtension implements IEbookExtension {
     moreInfoDialogue: MoreInfoDialogue;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
+    progressDialogue: ProgressDialogue;
     shareDialogue: ShareDialogue;
     cfiFragement: string;
 
@@ -116,6 +119,11 @@ export class Extension extends BaseExtension implements IEbookExtension {
         this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
+        this.$progressDialogue = $('<div class="overlay progress" aria-hidden="true"></div>');
+        this.shell.$overlays.append(this.$progressDialogue);
+        this.progressDialogue = new ProgressDialogue(this.$progressDialogue);
+        setTimeout(this.showDocLoadProgress.bind(this), 3000);
+        
         if (this.isHeaderPanelEnabled()) {
             this.headerPanel.init();
         }
@@ -134,6 +142,34 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
         this._spinner = $("div#spinner");
         this._spinner.hide();
+    }
+
+    showDocLoadProgress():void {
+        if(this._ebook)
+            return;
+
+        if(this.progressDialogue.content.docLoadingText)
+            this.progressDialogue.setOptions({label:this.progressDialogue.content.docLoadingText});
+
+        this.progressDialogue.open();
+
+        let num = 1;
+        let interval = setInterval(() => {
+            if(this._ebook)
+            {
+                this.progressDialogue.setValue(100);
+                setTimeout(()=>{
+                    this.progressDialogue.close();
+                }, 200); 
+                clearInterval(interval);
+                return;
+            }
+            
+            if(num + 2 == 100)
+                return; //hack - stop the progress bar till doc ready
+            
+            this.progressDialogue.setValue(++num);
+        }, 200)
     }
 
     getPrintContentwindow(iframe){
