@@ -62,6 +62,7 @@ module.exports = function (grunt) {
                             config.directories.src + '/favicon.ico',
                             config.directories.src + '/index.html',
                             config.directories.src + '/mobile.html',
+                            config.directories.src + '/production.html',
                             config.directories.src + '/uv-config.json',
                             config.directories.src + '/uv-helpers.js',
                             config.directories.src + '/uv.css',
