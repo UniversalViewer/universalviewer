@@ -164,7 +164,6 @@ export class FooterPanel extends BaseView {
   }
 
   updateMoreInfoButton(): void {
-
     const configEnabled: boolean = Bools.getBool(
       this.options.moreInfoEnabled,
       false
@@ -172,8 +171,7 @@ export class FooterPanel extends BaseView {
 
     if (
       configEnabled &&
-      !this.extension.isDesktopMetric() &&
-      !this.extension.isCatchAllMetric()
+      !this.extension.isDesktopMetric()
     ) {
       this.$moreInfoButton.show();
     } else {

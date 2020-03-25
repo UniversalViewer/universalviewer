@@ -68,7 +68,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     });
 
     this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
-      console.log("viewer");
       this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
     });
 
@@ -179,6 +178,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       controlsFadeLength: this.config.options.controlsFadeLength || 250,
       navigatorPosition:
         this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+      navigatorHeight: "100px",
+      navigatorWidth: "100px",
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
