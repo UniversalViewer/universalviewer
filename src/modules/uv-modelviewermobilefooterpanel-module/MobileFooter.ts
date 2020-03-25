@@ -1,7 +1,6 @@
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 
 export class FooterPanel extends BaseFooterPanel {
-
   constructor($element: JQuery) {
     super($element);
   }

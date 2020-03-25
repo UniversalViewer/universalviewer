@@ -118,7 +118,7 @@ export class BaseExtension implements IExtension {
     }
 
     if (this.isFullScreen()) {
-      this.$element.addClass('fullscreen');
+      this.$element.addClass("fullscreen");
     }
 
     this.$element.on("mousemove", e => {

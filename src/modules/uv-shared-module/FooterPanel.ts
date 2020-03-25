@@ -169,10 +169,7 @@ export class FooterPanel extends BaseView {
       false
     );
 
-    if (
-      configEnabled &&
-      !this.extension.isDesktopMetric()
-    ) {
+    if (configEnabled && !this.extension.isDesktopMetric()) {
       this.$moreInfoButton.show();
     } else {
       this.$moreInfoButton.hide();
