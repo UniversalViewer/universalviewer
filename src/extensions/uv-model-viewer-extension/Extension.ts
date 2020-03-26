@@ -14,7 +14,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
 import { ExternalResourceType } from "@iiif/vocabulary";
-import { Bools, Strings } from "@edsilv/utils";
+import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 
 export default class Extension extends BaseExtension
@@ -124,10 +124,11 @@ export default class Extension extends BaseExtension
   }
 
   isLeftPanelEnabled(): boolean {
-    return (
-      Bools.getBool(this.data.config.options.leftPanelEnabled, true) &&
-      (this.helper.isMultiCanvas() || this.helper.isMultiSequence())
-    );
+    return false;
+    // return (
+    //   Bools.getBool(this.data.config.options.leftPanelEnabled, true) &&
+    //   (this.helper.isMultiCanvas() || this.helper.isMultiSequence())
+    // );
   }
 
   bookmark(): void {

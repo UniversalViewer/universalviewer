@@ -6,6 +6,7 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelViewer: JQuery;
+  $spinner: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -27,17 +28,26 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.title = this.extension.helper.getLabel();
 
+    this.$spinner = $('<div class="spinner"></div>');
+    this.$content.prepend(this.$spinner);
+
     this.$modelViewer = $(
-      "<model-viewer auto-rotate camera-controls ar></model-viewer>"
+      '<model-viewer auto-rotate camera-controls style="background-color: unset;"></model-viewer>'
     );
+
+    this.$content.prepend(this.$modelViewer);
+
+    this.$modelViewer[0].addEventListener("load", () => {
+      this.$content.removeClass("loading");
+      this.$spinner.hide();
+    });
 
     this.component.publish(BaseEvents.OPENED_MEDIA);
   }
 
   async openMedia(resources: IExternalResource[]) {
+    this.$spinner.show();
     await this.extension.getExternalResources(resources);
-
-    this.$content.empty();
 
     let mediaUri: string | null = null;
     let canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -53,17 +63,25 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.$modelViewer.attr("src", mediaUri);
 
+    // todo: look for choice of usdz, if found, add ar attribute or hide ar button using --ar-button-display
     // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
-    mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
-    this.$modelViewer.attr("ios-src", mediaUri);
-
-    this.$content.append(this.$modelViewer);
+    // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
+    // this.$modelViewer.attr("ios-src", mediaUri);
 
     this.component.publish(BaseEvents.OPENED_MEDIA);
   }
 
   resize() {
     super.resize();
+
+    this.$spinner.css(
+      "top",
+      this.$content.height() / 2 - this.$spinner.height() / 2
+    );
+    this.$spinner.css(
+      "left",
+      this.$content.width() / 2 - this.$spinner.width() / 2
+    );
 
     if (this.title) {
       this.$title.text(sanitize(this.title));

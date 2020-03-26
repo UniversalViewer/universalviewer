@@ -6,7 +6,7 @@
     "dropEnabled": true,
     "footerPanelEnabled": true,
     "headerPanelEnabled": true,
-    "leftPanelEnabled": true,
+    "leftPanelEnabled": false,
     "limitLocales": false,
     "metrics": [
       {

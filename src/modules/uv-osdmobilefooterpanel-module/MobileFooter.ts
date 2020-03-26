@@ -3,7 +3,7 @@ import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 
 export class FooterPanel extends BaseFooterPanel {
   $rotateButton: JQuery;
-  $spacer: JQuery;
+  //$spacer: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
 
@@ -16,8 +16,8 @@ export class FooterPanel extends BaseFooterPanel {
 
     super.create();
 
-    this.$spacer = $('<div class="spacer"></div>');
-    this.$options.prepend(this.$spacer);
+    // this.$spacer = $('<div class="spacer"></div>');
+    // this.$options.prepend(this.$spacer);
 
     this.$rotateButton = $(`
             <button class="btn imageBtn rotate" title="${this.content.rotateRight}">
