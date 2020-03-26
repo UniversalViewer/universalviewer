@@ -37,7 +37,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
     private _currentPage:number = -1;
     private _printContainer: any;
     private _scratchCanvas:any;
-    private _spinner:JQuery;
     private _activePrint:boolean;
 
     create(): void {
@@ -156,18 +155,18 @@ export class Extension extends BaseExtension implements IPDFExtension {
 
     renderPages() {
         if(!this._pdfDoc){
-            return new Promise(() => {
-                throw new Error();
-            });
+            return Promise.reject("PDF document not ready");
         }
 
         const pageCount = this._pdfDoc.numPages;
         const renderNextPage = (resolve, reject) => {
-          
           if (++this._currentPage >= pageCount) {
+            this.progressDialogue.setValue(this._currentPage);
             resolve();
             return;
           }
+
+          this.progressDialogue.setValue(this._currentPage);
 
           const index = this._currentPage;
           this.renderPage(index + 1)
@@ -185,17 +184,19 @@ export class Extension extends BaseExtension implements IPDFExtension {
             return;
         
         this._activePrint = true;
-        this._spinner.show();
+        this.initPrintProgress();
 
         let rederedPages = this.renderPages();
         rederedPages.then(() => {
-            this._spinner.hide();
-            window.print();
             this._activePrint = false;
+            setTimeout(()=>{
+                this.progressDialogue.close();
+                window.print();
+            }, 200);
         });
 
         rederedPages.catch((r)=> {
-            this._spinner.hide();
+            this.progressDialogue.close();
             this._activePrint = false;
         });
     }
@@ -258,8 +259,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
         this.progressDialogue = new ProgressDialogue(this.$progressDialogue);
         setTimeout(this.showDocLoadProgress.bind(this), 3000);
 
-        this._spinner = $("div.spinner"); // get spinner reference
-
         //init print container and scratch canvas to hold the rendered page
         //if we're using PDF.js
         if (Utils.Bools.getBool(this.centerPanel.extension.data.config.options.usePdfJs, false)) {
@@ -305,6 +304,18 @@ export class Extension extends BaseExtension implements IPDFExtension {
             
             this.progressDialogue.setValue(++num);
         }, 200)
+    }
+
+    initPrintProgress():void{
+        var options={
+            maxValue: this._pdfDoc.numPages,
+            showPercentage: true
+        };
+        if(this.progressDialogue.content.docPrintProgressText)
+            options["label"] = this.progressDialogue.content.docPrintProgressText;
+
+        this.progressDialogue.setOptions(options);
+        this.progressDialogue.open();
     }
 
     bookmark() : void {
