@@ -38,7 +38,6 @@ export class Extension extends BaseExtension implements IEbookExtension {
     shareDialogue: ShareDialogue;
     cfiFragement: string;
 
-    private _spinner:JQuery;
     private _ebook:any;
     private _printDocument:any;
     private _activePrint:boolean = false;
@@ -139,9 +138,6 @@ export class Extension extends BaseExtension implements IEbookExtension {
         if (this.isFooterPanelEnabled()) {
             this.footerPanel.init();
         }
-
-        this._spinner = $("div#spinner");
-        this._spinner.hide();
     }
 
     showDocLoadProgress():void {
@@ -177,9 +173,9 @@ export class Extension extends BaseExtension implements IEbookExtension {
     }
 
     finalizePrint(contentWindow){
-        contentWindow.print();
         this._activePrint = false;
-        this._spinner.hide();
+        this.progressDialogue.close();
+        contentWindow.print();
     }
 
     printEbook(){
@@ -193,7 +189,7 @@ export class Extension extends BaseExtension implements IEbookExtension {
             return;
     
         this._activePrint = true;
-        this._spinner.show();
+        this.initPrintProgress();
         
         let printDocIframe = document.getElementById(PRINT_IFRAME) as HTMLIFrameElement;
         if(printDocIframe){
@@ -201,62 +197,67 @@ export class Extension extends BaseExtension implements IEbookExtension {
             return;
         }
         
-        this.renderContents()
-            .then(()=>{
-                //remove document content meta tags
-                this._printDocument.querySelectorAll("[name^='dc.']")
-                    .forEach(meta => {
-                        meta.remove();
-                    });
+        this.renderContents().then(()=>{
+            let docHead = this._printDocument.head || this._printDocument.getElementsByTagName('head')[0];    
+            
+            //add viewport meta tag to print document
+            let meta = document.createElement('meta');
+            meta.setAttribute('name', 'viewport');
+            meta.content = "width=device-width, initial-scale=1";
+            docHead.appendChild(meta);
+            
+            //Add style to doc for page break after each chapter
+            let style = document.createElement('style');
+            style.type = 'text/css';
+            style.appendChild(document.createTextNode("body{margin: 0; padding: 0;} body > .section{display: block; position:relative; min-height:1px; page-break-after: avoid; page-break-before: always;}"));
+            docHead.appendChild(style);
 
-                let docHead = this._printDocument.head || this._printDocument.getElementsByTagName('head')[0];    
-                //add viewport meta tag to print document
-                let meta = document.createElement('meta');
-                meta.setAttribute('name', 'viewport');
-                meta.content = "width=device-width, initial-scale=1";
-                docHead.appendChild(meta);
-                
-                //Add style to doc for page break after each chapter
-                let style = document.createElement('style');
-                style.type = 'text/css';
-                style.appendChild(document.createTextNode("body{margin: 0; padding: 0;} body > *{display: block; page-break-after: always; page-break-before: avoid;}"));
-                docHead.appendChild(style);
+            //set document title
+            let docHeadTitle = docHead.getElementsByTagName("title")[0];
+            if(docHeadTitle)
+                docHeadTitle.innerText = this._ebook.packaging.metadata.title;
+            else{
+                docHeadTitle = document.createElement("title");
+                docHeadTitle.innerText = this._ebook.packaging.metadata.title;
+                docHead.appendChild(docHeadTitle);
+            }
 
-                //set document title
-                docHead.getElementsByTagName("title")[0].innerText = this._ebook.packaging.metadata.title;
+            this.createIframeAndExecPrint();
+        });
+    }
+   
+    createIframeAndExecPrint():void {
+        //create an iframe to load the doc contents 
+        let ifrm = document.createElement('iframe');
+        ifrm.setAttribute("id", "ifrmPrintEbookContent");
+        ifrm.setAttribute("style", "display:none;");
 
-                //create an iframe to load the doc contents 
-                let ifrm = document.createElement('iframe');
-                ifrm.setAttribute("id", "ifrmPrintEbookContent");
-                ifrm.setAttribute("style", "display:none;");
+        //add iframe to body
+        document.body.appendChild(ifrm);
 
-                //add iframe to body
-                document.body.appendChild(ifrm);
+        // check if srcdoc supported for iframe for the browser
+        if(!!("srcdoc" in ifrm)){
+            //add onload event to iframe
+            ifrm.onload = () => {
+                this.finalizePrint(this.getPrintContentwindow(ifrm));
+            };
 
-                // check if srcdoc supported for iframe for the browser
-                if(!!("srcdoc" in ifrm)){
-                    //add onload event to iframe
-                    ifrm.onload = () => {
-                        this.finalizePrint(this.getPrintContentwindow(ifrm));
-                    };
+            //add doc html to iframe srcdoc
+            ifrm.setAttribute("srcdoc", this._printDocument.documentElement.innerHTML);
+            return;
+        }
 
-                    //add doc html to iframe srcdoc
-                    ifrm.setAttribute("srcdoc", this._printDocument.documentElement.innerHTML);
-                    return;
-                }
-                
-                //if scrdoc not supported for the browser
-                let contentWindow = this.getPrintContentwindow(ifrm);
-                contentWindow.document.write(this._printDocument.documentElement.innerHTML);
+        //if scrdoc not supported for the browser
+        let contentWindow = this.getPrintContentwindow(ifrm);
+        contentWindow.document.write(this._printDocument.documentElement.innerHTML);
 
-                setTimeout(() => {
-                    this.finalizePrint(contentWindow);
-                }, 1000);
-            });
+        setTimeout(() => {
+            this.finalizePrint(contentWindow);
+        }, 1000);
     }
 
     renderContents() {
-        let tocCount = 144;
+        let tocCount = this._ebook.spine.length;
         let currentTocIndex = -1;
 
         const renderNextSectionContent = (resolve, reject) => {
@@ -279,6 +280,7 @@ export class Extension extends BaseExtension implements IEbookExtension {
         if(!section) 
             return Promise.resolve();
 
+        this.progressDialogue.setValue(index + 1);
         return section.render(this._ebook.load.bind(this._ebook))
         .then(htmlDoc => {
             let domparser = new DOMParser()
@@ -295,7 +297,7 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
                 //attach the cssClass and style to section wrapper
                 var sectionWrapper= document.createElement('div');
-                sectionWrapper.setAttribute("class", (docClass ? docClass + " " : "") + "section-" + index );
+                sectionWrapper.setAttribute("class", (docClass ? docClass + " " : "") + "section section-" + index );
                 sectionWrapper.setAttribute("style", docStyle);
 
                 sectionWrapper.innerHTML= doc.body.innerHTML;
@@ -326,5 +328,18 @@ export class Extension extends BaseExtension implements IEbookExtension {
         if (cfi) {
             this.component.publish(Events.CFI_FRAGMENT_CHANGED, cfi);
         }
+    }
+
+    initPrintProgress():void{
+        var options={
+            maxValue: this._ebook.spine.length,
+            showPercentage: true
+        };
+
+        if(this.progressDialogue.content.docPrintProgressText)
+            options["label"] = this.progressDialogue.content.docPrintProgressText;
+
+        this.progressDialogue.setOptions(options);
+        this.progressDialogue.open();
     }
 }

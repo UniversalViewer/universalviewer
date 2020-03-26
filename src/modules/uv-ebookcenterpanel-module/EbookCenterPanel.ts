@@ -10,7 +10,6 @@ export class EbookCenterPanel extends CenterPanel {
   private _ebookReaderReady: boolean = false;
   private _state: any = {};
   private _prevState: any = {};
-  private _$spinner: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -83,9 +82,6 @@ export class EbookCenterPanel extends CenterPanel {
         });
       }
     );
-
-    this._$spinner = $('<div id="spinner"><div class="square" /></div>');
-    this.$content.append(this._$spinner);
   }
 
   openMedia(resources: Manifesto.IExternalResource[]) {
