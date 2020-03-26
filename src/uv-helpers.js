@@ -28,7 +28,7 @@ function createUV(selector, data) {
   window.addEventListener("orientationchange", function() {
     setTimeout(function() {
       resize();
-    }, 100);
+    }, 10);
   });
 
   uv = new UV.Viewer({
@@ -51,7 +51,7 @@ function createUV(selector, data) {
     function() {
       setTimeout(function() {
         resize();
-      }, 100);
+      }, 10);
     },
     false
   );
@@ -150,7 +150,7 @@ function createUV(selector, data) {
           exitFullScreen.call(document);
           setTimeout(function() {
             resize();
-          }, 100);
+          }, 10);
         }
       }
     },
