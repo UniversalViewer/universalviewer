@@ -858,11 +858,14 @@ export class BaseExtension implements IExtension {
         const metric: Metric = this.metrics[i];
 
         // if the current width and height is within this metric's defined range
+        const width: number = window.innerWidth;
+        const height: number = window.innerHeight;
+
         if (
-          this.width() >= metric.minWidth &&
-          this.width() <= metric.maxWidth &&
-          this.height() >= metric.minHeight &&
-          this.height() <= metric.maxHeight
+          width >= metric.minWidth &&
+          width <= metric.maxWidth &&
+          height >= metric.minHeight &&
+          height <= metric.maxHeight
         ) {
           metricFound = true;
 
