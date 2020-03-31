@@ -31,7 +31,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
     progressDialogue: ProgressDialogue;
-    $printFrame:any;
 
     private _pdfDoc:any;
     private _currentPage:number = -1;
@@ -111,7 +110,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     renderPage(pageNumber) {
-        const PRINT_UNITS = 0.72 * 2;
+        const PRINT_UNITS = 1;
 
         return this._pdfDoc
         .getPage(pageNumber)
