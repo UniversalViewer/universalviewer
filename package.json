@@ -16,7 +16,9 @@
     "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\" \"!./src/lib/* \"",
     "postinstall": "opencollective postinstall",
     "start": "npx serve www",
-    "test": "jest"
+    "storybook": "start-storybook -p 6006 -s ./dist",
+    "test": "jest",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -36,9 +38,12 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@storybook/html": "^5.3.18",
     "@types/jest": "22.2.2",
     "@types/puppeteer": "1.9.0",
     "async": "0.9.0",
+    "babel-loader": "^8.1.0",
     "chai": "4.1.2",
     "chalk": "0.5.1",
     "glob": "7.1.3",
@@ -84,6 +89,8 @@
     "@iiif/iiif-tree-component": "^2.0.3",
     "@iiif/manifold": "2.0.2",
     "@iiif/vocabulary": "1.0.16",
+    "@storybook/addon-info": "^5.3.18",
+    "@storybook/addon-knobs": "^5.3.18",
     "@types/modernizr": "3.2.29",
     "@types/node": "8.10.52",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
@@ -97,12 +104,14 @@
     "jquery-ui-dist": "1.12.1",
     "jquery-ui-touch-punch": "0.2.3",
     "jsviews": "0.9.83",
+    "jsx-dom": "^6.4.14-beta.3",
     "manifesto.js": "4.0.1",
     "mediaelement": "4.2.15",
     "opencollective": "1.0.3",
     "openseadragon": "2.4.2",
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
+    "react-docgen-typescript-loader": "^3.7.2",
     "waveform-data": "2.0.2",
     "xss": "1.0.3"
   },

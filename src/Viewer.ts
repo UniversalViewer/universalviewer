@@ -14,7 +14,8 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas, Sequence } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
-import "./lib/";
+// Has to be require.
+require("./lib/");
 
 interface IExtensionLoaderCollection {
   [key: string]: () => any;
