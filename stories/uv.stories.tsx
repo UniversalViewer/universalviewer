@@ -2,6 +2,7 @@
 import { h } from 'jsx-dom';
 import { withKnobs, text, number } from '@storybook/addon-knobs';
 import { Viewer } from '../src/index';
+import { ILocale } from '../src/ILocale';
 
 export default { title: 'Universal Viewer',   decorators: [withKnobs] };
 
@@ -16,7 +17,7 @@ type Data = {
   rotation?: number,
   xywh?: string,
   embedded?: boolean,
-  locales?: any, //??
+  locales?: ILocale[]
 };
 
 const UVDemo = (data: Data) => {
