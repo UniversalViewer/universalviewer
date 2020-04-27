@@ -353,10 +353,11 @@ export class BaseExtension implements IExtension {
     );
 
     this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
+
       setTimeout(() => {
-        this.$element.removeClass("loading");
         this.component.publish(BaseEvents.RESIZE);
         this.fire(BaseEvents.OPENED_MEDIA);
+        this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
 
@@ -661,10 +662,10 @@ export class BaseExtension implements IExtension {
     this.shell = new Shell(this.$element);
 
     this.createModules();
-    this.modulesCreated();
     this.component.publish(BaseEvents.RESIZE); // initial sizing
 
     setTimeout(() => {
+      //this.component.el.classList.add("created");
       this.render();
       this.component.publish(BaseEvents.CREATED);
       this._setDefaultFocus();
@@ -698,8 +699,6 @@ export class BaseExtension implements IExtension {
     this.shell.$overlays.append(this.$loginDialogue);
     this.loginDialogue = new LoginDialogue(this.$loginDialogue);
   }
-
-  modulesCreated(): void {}
 
   private _setDefaultFocus(): void {
     setTimeout(() => {
