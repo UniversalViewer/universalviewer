@@ -19,3 +19,9 @@
 .uv.loading input {
   display: none !important;
 }
+
+/* Avoid FOUC */
+html {
+  visibility: visible;
+  opacity: 1;
+}
