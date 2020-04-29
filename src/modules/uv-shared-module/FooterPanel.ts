@@ -24,6 +24,13 @@ export class FooterPanel extends BaseView {
 
     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
       this.updateFullScreenButton();
+
+      // hack for firefox when exiting full screen
+      if (!this.component.isFullScreen) {
+        setTimeout(() => {
+          this.resize();
+        }, 1001); // wait one ms longer than the resize timeout in uv-helpers.js 
+      }
     });
 
     this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {

@@ -150,6 +150,10 @@ function createUV(selector, data) {
           exitFullScreen.call(document);
           setTimeout(function() {
             resize();
+          }, 100);
+          // firefox needs extra time when exiting a full screen embed
+          setTimeout(function() {
+            resize();
           }, 1000);
         }
       }

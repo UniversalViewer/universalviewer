@@ -57,8 +57,6 @@ export class FooterPanel extends BaseFooterPanel {
   resize(): void {
     super.resize();
 
-    console.log("resize");
-
     setTimeout(() => {
       this.$options.css(
         "left",

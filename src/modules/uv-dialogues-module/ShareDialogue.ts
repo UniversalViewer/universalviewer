@@ -34,7 +34,7 @@ export class ShareDialogue extends Dialogue {
   maxHeight: number = this.maxWidth * this.aspectRatio;
   minWidth: number = 200;
   minHeight: number = this.minWidth * this.aspectRatio;
-  shareManifests: boolean = false;
+  shareManifestsEnabled: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
@@ -47,7 +47,7 @@ export class ShareDialogue extends Dialogue {
 
     this.openCommand = BaseEvents.SHOW_SHARE_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
-    this.shareManifests = this.options.shareManifests || false;
+    this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
 
     this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
       this.open(triggerButton);
@@ -166,16 +166,18 @@ export class ShareDialogue extends Dialogue {
     );
     this.$customSize.append(this.$heightInput);
 
-    const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifests);
+    const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifestsEnabled);
 
-    this.$iiifButton = $(
-      '<a class="imageBtn iiif" href="' +
-        iiifUrl +
-        '" title="' +
-        this.content.iiif +
-        '" target="_blank"></a>'
-    );
-    this.$footer.append(this.$iiifButton);
+    if (this.shareManifestsEnabled) {
+      this.$iiifButton = $(
+        '<a class="imageBtn iiif" href="' +
+          iiifUrl +
+          '" title="' +
+          this.content.iiif +
+          '" target="_blank"></a>'
+      );
+      this.$footer.append(this.$iiifButton);
+    }
 
     this.$termsOfUseButton = $(
       '<a href="#">' + this.extension.data.config.content.termsOfUse + "</a>"
