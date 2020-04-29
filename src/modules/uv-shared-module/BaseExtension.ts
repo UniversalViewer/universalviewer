@@ -353,7 +353,6 @@ export class BaseExtension implements IExtension {
     );
 
     this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
-
       setTimeout(() => {
         this.component.publish(BaseEvents.RESIZE);
         this.fire(BaseEvents.OPENED_MEDIA);
