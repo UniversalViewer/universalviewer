@@ -639,19 +639,19 @@
       "label": "3D",
       "manifests": [
         {
-          "@id": "https://iiif-3d-manifests.netlify.com/collection/gltf/flight-helmet/index.json",
+          "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/flight-helmet/index.json",
           "@type": "sc:Manifest",
           "label": "Flight Helmet (gltf)",
           "visible": true
         },
         {
-          "@id": "https://bl-3d.netlify.com/collection/jane-austen-writing-desk/index.json",
+          "@id": "https://bl-3d.netlify.app/collection/jane-austen-writing-desk/index.json",
           "@type": "sc:Manifest",
           "label": "Jane Austen Desk",
           "visible": true
         },
         {
-          "@id": "https://iiif-3d-manifests.netlify.com/collection/gltf/woody/index.json",
+          "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/woody/index.json",
           "@type": "sc:Manifest",
           "label": "Fisherman (gltf)",
           "visible": true
@@ -864,7 +864,7 @@
           "visible": true
         },
         {
-          "@id": "https://iiif-video-nav-demo.netlify.com/iiif-manifest.json",
+          "@id": "https://iiif-video-nav-demo.netlify.app/iiif-manifest.json",
           "@type": "sc:Manifest",
           "label": "Story Session 1 - Dad & Mom - Learning to Ski & A Night in Kentucky",
           "visible": true

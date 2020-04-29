@@ -12,6 +12,7 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   create(): void {
+
     this.setConfig("mobileFooterPanel");
 
     super.create();
@@ -56,9 +57,13 @@ export class FooterPanel extends BaseFooterPanel {
   resize(): void {
     super.resize();
 
-    this.$options.css(
-      "left",
-      Math.floor(this.$element.width() / 2 - this.$options.width() / 2)
-    );
+    console.log("resize");
+
+    setTimeout(() => {
+      this.$options.css(
+        "left",
+        Math.floor(this.$element.width() / 2 - this.$options.width() / 2)
+      );
+    }, 1);
   }
 }

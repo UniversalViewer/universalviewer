@@ -150,7 +150,7 @@ function createUV(selector, data) {
           exitFullScreen.call(document);
           setTimeout(function() {
             resize();
-          }, 100);
+          }, 1000);
         }
       }
     },
