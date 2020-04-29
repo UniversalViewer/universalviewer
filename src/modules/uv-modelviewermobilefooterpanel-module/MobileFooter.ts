@@ -19,6 +19,6 @@ export class FooterPanel extends BaseFooterPanel {
         "left",
         Math.floor(this.$element.width() / 2 - this.$options.width() / 2)
       );
-    }, 1);
+    }, 100);
   }
 }
