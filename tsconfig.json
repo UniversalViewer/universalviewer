@@ -13,9 +13,15 @@
     "noUnusedParameters": false,
     "removeComments": false,
     "strictNullChecks": true,
+    "jsx": "react",
+    "jsxFactory": "h",
     "suppressImplicitAnyIndexErrors": true,
     "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",
+    "rootDirs": [
+      "stories",
+      "src"
+    ],
     "types": [
       "@edsilv/jquery-plugins",
       "@iiif/base-component",
