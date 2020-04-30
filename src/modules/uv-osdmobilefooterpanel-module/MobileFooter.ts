@@ -12,7 +12,6 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   create(): void {
-
     this.setConfig("mobileFooterPanel");
 
     super.create();

@@ -29,7 +29,7 @@ export class FooterPanel extends BaseView {
       if (!this.component.isFullScreen) {
         setTimeout(() => {
           this.resize();
-        }, 1001); // wait one ms longer than the resize timeout in uv-helpers.js 
+        }, 1001); // wait one ms longer than the resize timeout in uv-helpers.js
       }
     });
 

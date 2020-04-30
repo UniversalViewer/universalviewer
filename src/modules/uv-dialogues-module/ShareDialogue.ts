@@ -166,7 +166,9 @@ export class ShareDialogue extends Dialogue {
     );
     this.$customSize.append(this.$heightInput);
 
-    const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifestsEnabled);
+    const iiifUrl: string = this.extension.getIIIFShareUrl(
+      this.shareManifestsEnabled
+    );
 
     if (this.shareManifestsEnabled) {
       this.$iiifButton = $(
