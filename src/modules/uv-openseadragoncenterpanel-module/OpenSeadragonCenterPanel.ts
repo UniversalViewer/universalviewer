@@ -736,8 +736,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     rect.y = Number(bounds.y);
     rect.width = Number(bounds.w);
     rect.height = Number(bounds.h);
-
-    this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
+    setTimeout(() => {
+      this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
+    }, 100);
   }
 
   getCroppedImageBounds(): string | null {
