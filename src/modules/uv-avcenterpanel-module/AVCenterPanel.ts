@@ -42,13 +42,20 @@ export class AVCenterPanel extends CenterPanel {
            });
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        let x = 0;
 
+        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+            // If we are in thumbnail view, skip changing the range.
             if (!this._observeRangeChanges()) {
                 return;
             }
 
+            x++;
+
+            console.log(`Exteral range change ${x}`, range ? range.id : undefined);
+
             this._whenMediaReady(() => {
+                console.log(`Breaking? ${x}`, range ? range.id : undefined);
                 that._viewRange(range);
                 that._setTitle();
             });
@@ -92,6 +99,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+            console.log('OPEN TREE VIEW?');
 
             this._isThumbsViewOpen = false;
 
@@ -109,6 +117,15 @@ export class AVCenterPanel extends CenterPanel {
         this._createAVComponent();
     }
 
+
+    _mediaReadyQueue: Function[] = [];
+    private _flushMediaReadyQueue() {
+        for (const cb of this._mediaReadyQueue) {
+            cb();
+        }
+        this._mediaReadyQueue = [];
+    }
+
     private _createAVComponent(): void {
 
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
@@ -120,6 +137,7 @@ export class AVCenterPanel extends CenterPanel {
 
         // Trying to set this early, see what happens.
         this.avcomponent.set({
+            range: this.extension.helper.getCurrentRange(),
             helper: this.extension.helper,
             autoPlay: this.config.options.autoPlay,
             enableFastForward: this.config.options.enableFastForward,
@@ -135,13 +153,16 @@ export class AVCenterPanel extends CenterPanel {
 
         this.avcomponent.on('mediaready', () => {
             this._mediaReady = true;
+            this._flushMediaReadyQueue();
         }, false);
 
-        this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
-            
-            if (rangeId) {
+        this.avcomponent.on('rangechanged', (rangeId: string | null) => {
+            console.groupCollapsed('this.avcomponent.on("rangechanged", ...)');
+            console.log('av component range changed', rangeId);
+            console.trace();
+            console.groupEnd();
 
-                this._setTitle();
+            if (rangeId) {
 
                 const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
 
@@ -158,8 +179,10 @@ export class AVCenterPanel extends CenterPanel {
 
             } else {
                 $.publish(BaseEvents.RANGE_CHANGED, [null]);
-            } 
-            
+            }
+
+            this._setTitle();
+
         }, false);
     }
 
@@ -179,6 +202,8 @@ export class AVCenterPanel extends CenterPanel {
 
         // get the current range or canvas title
         const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+
+        console.log('title => current range', currentRange ? currentRange.id : null);
 
         if (currentRange) {
             label = currentRange.getLabel();
@@ -287,18 +312,20 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     private _whenMediaReady(cb: () => void): void {
-        Utils.Async.waitFor(() => {
-            return this._mediaReady;
-        }, cb);
+        if (this._mediaReady) {
+            cb();
+        } else {
+            this._mediaReadyQueue.push(cb);
+        }
     }
 
-    private _viewRange(range: Manifesto.IRange | null): void {
 
+    private _viewRange(range: Manifesto.IRange | null): void {
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
-                this.avcomponent.playRange(range.id, true);
+                this.avcomponent.viewRange(range.id);
+                // this.avcomponent.playRange(range.id, true);
             }
-            
             // don't resize the av component to avoid expensively redrawing waveforms
             this.resize(false);
         });

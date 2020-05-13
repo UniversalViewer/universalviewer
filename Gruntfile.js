@@ -289,6 +289,7 @@ module.exports = function (grunt) {
                     base: '.',
                     directory: '.',
                     keepalive: true,
+                    cors: true,
                     open: {
                         target: 'http://localhost:' + config.examplesPort + '/' + config.directories.examples + '/'
                     }
