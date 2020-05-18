@@ -78,7 +78,7 @@
     "@iiif/manifold": "1.2.38",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
-    "@universalviewer/aleph": "0.0.5",
+    "@universalviewer/aleph": "0.0.11",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "dashjs": "2.6.7",
