@@ -9,6 +9,7 @@ const config = {
     entry: {
         "UV": ["./src/index.ts"]
     },
+    // todo: can these be removed?
     externals: {
         "node-fetch": "fetch",
         "fetch-cookie": "fetch",
