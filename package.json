@@ -1,6 +1,10 @@
 {
   "name": "universalviewer",
+<<<<<<< HEAD
   "version": "4.0.0-pre.12",
+=======
+  "version": "3.1.0",
+>>>>>>> master
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
     "node": ">=8.9.1",
@@ -88,8 +92,13 @@
     "@types/modernizr": "3.2.29",
     "@types/node": "8.10.52",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
+<<<<<<< HEAD
     "@universalviewer/uv-en-gb-theme": "1.1.3",
     "@webcomponents/webcomponentsjs": "^2.4.3",
+=======
+    "@universalviewer/uv-ebook-components": "^1.0.0",
+    "@universalviewer/uv-en-gb-theme": "1.1.2",
+>>>>>>> master
     "core-js": "2.4.1",
     "dashjs": "2.6.7",
     "hls.js": "0.9.1",
@@ -105,6 +114,7 @@
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
     "waveform-data": "2.0.2",
+    "whatwg-fetch": "^3.0.0",
     "xss": "1.0.3"
   },
   "collective": {

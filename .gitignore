@@ -56,6 +56,7 @@ node_modules
 *.min.map
 !tasks/*.js
 /config.js
+!src/extensions/*/config.js
 !Gruntfile.js
 !webpack.config.js
 !src/lib/*.js
