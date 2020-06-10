@@ -1025,6 +1025,45 @@
       ]
     },
     {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Ebooks",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/alice-in-wonderland/index.json",
+          "@type": "sc:Manifest",
+          "label": "Alice in Wonderland (opf)",
+          "visible": true
+        },
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/cc-shared-culture/index.json",
+          "@type": "sc:Manifest",
+          "label": "CC Shared Culture (epub)",
+          "visible": true
+        },
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/moby-dick/index.json",
+          "@type": "sc:Manifest",
+          "label": "Moby Dick (epub)",
+          "visible": true
+        },
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/cole-voyage-of-life/index.json",
+          "@type": "sc:Manifest",
+          "label": "Voyage of Life (epub)",
+          "visible": true
+        },
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/mahabharata/index.json",
+          "@type": "sc:Manifest",
+          "label": "Mahabharata (epub)",
+          "visible": true
+        }
+      ]
+    },
+    {
       "@context": "https://iiif.io/api/presentation/2/context.json",
       "@id": "https://universalviewer.io/collection.json",
       "@type": "sc:Collection",

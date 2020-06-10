@@ -13,6 +13,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
+import { Strings } from "@edsilv/utils";
 
 export class Extension extends BaseExtension implements IEbookExtension {
 
@@ -124,8 +125,8 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&cfi=${this.cfiFragement}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 

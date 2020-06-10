@@ -1,6 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
+import { Async } from "@edsilv/utils";
 
 export class EbookLeftPanel extends LeftPanel {
 
@@ -39,7 +40,7 @@ export class EbookLeftPanel extends LeftPanel {
             this.component.publish(Events.ITEM_CLICKED, e.detail);
         }, false);
 
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return (window.customElements !== undefined);
         }, () => {
             customElements.whenDefined("uv-ebook-toc").then(() => {
