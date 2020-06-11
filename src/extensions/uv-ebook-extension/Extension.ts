@@ -15,7 +15,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
 import { Strings } from "@edsilv/utils";
 
-export class Extension extends BaseExtension implements IEbookExtension {
+export default class Extension extends BaseExtension implements IEbookExtension {
 
     $downloadDialogue: JQuery;
     $moreInfoDialogue: JQuery;
@@ -45,10 +45,6 @@ export class Extension extends BaseExtension implements IEbookExtension {
             this.cfiFragement = cfi;
             this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
         });
-    }
-
-    dependencyLoaded(_index: number, _dep: any): void {
-
     }
 
     createModules(): void {

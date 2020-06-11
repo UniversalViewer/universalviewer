@@ -27,6 +27,7 @@ interface IExtensionRegistry {
 enum Extension {
   //AV = "uv-av-extension",
   DEFAULT = "uv-default-extension",
+  EBOOK = "uv-ebook-extension",
   MEDIAELEMENT = "uv-mediaelement-extension",
   MODELVIEWER = "uv-model-viewer-extension",
   OSD = "uv-openseadragon-extension",
@@ -69,12 +70,28 @@ export class Viewer extends BaseComponent implements IUVComponent {
         extension.name = Extension.DEFAULT;
         return extension;
       },
+      [Extension.EBOOK]: async () => {
+        const m = (await import(
+          /* webpackChunkName: "uv-ebook-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-ebook-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.EBOOK;
+        return extension;
+      },
       [Extension.MEDIAELEMENT]: async () => {
         const m = (await import(
           /* webpackChunkName: "uv-mediaelement-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-mediaelement-extension/Extension"
         )) as any;
         const extension = new m.default();
         extension.name = Extension.MEDIAELEMENT;
+        return extension;
+      },
+      [Extension.MODELVIEWER]: async () => {
+        const m = (await import(
+          /* webpackChunkName: "uv-model-viewer-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-model-viewer-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.MODELVIEWER;
         return extension;
       },
       [Extension.OSD]: async () => {
@@ -91,14 +108,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
         )) as any;
         const extension = new m.default();
         extension.name = Extension.PDF;
-        return extension;
-      },
-      [Extension.MODELVIEWER]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-model-viewer-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-model-viewer-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.MODELVIEWER;
         return extension;
       }
     };
@@ -193,6 +202,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
     // this._extensionRegistry[MediaType.WEBM] = {
     //     load: this._extensions[Extension.AV]
     // };
+
+    this._extensionRegistry[MediaType.EPUB] = {
+      load: this._extensions[Extension.EBOOK]
+    };
+
+    this._extensionRegistry[MediaType.OPF] = {
+      load: this._extensions[Extension.EBOOK]
+    };
 
     this.set(this.options.data);
 

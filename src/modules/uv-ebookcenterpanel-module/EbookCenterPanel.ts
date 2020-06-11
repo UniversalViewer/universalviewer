@@ -5,6 +5,8 @@ import { Events } from "../../extensions/uv-ebook-extension/Events";
 import { Position } from "../uv-shared-module/Position";
 import { IExternalResource, Canvas, Annotation, AnnotationBody } from "manifesto.js";
 
+import { applyPolyfills, defineCustomElements } from "@universalviewer/uv-ebook-components/loader";
+
 export class EbookCenterPanel extends CenterPanel {
 
   private _cfi: string;
@@ -18,10 +20,13 @@ export class EbookCenterPanel extends CenterPanel {
     this.attributionPosition = Position.BOTTOM_RIGHT;
   }
 
-  create(): void {
+  async create(): Promise<void> {
     this.setConfig("ebookCenterPanel");
 
     super.create();
+
+    await applyPolyfills();
+    defineCustomElements(window);
 
     this._ebookReader = document.createElement("uv-ebook-reader");
     this.$content.prepend(this._ebookReader);

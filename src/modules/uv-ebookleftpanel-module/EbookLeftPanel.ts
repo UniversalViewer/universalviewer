@@ -2,6 +2,7 @@ import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
 import { Async } from "@edsilv/utils";
+import "@universalviewer/uv-ebook-components";
 
 export class EbookLeftPanel extends LeftPanel {
 
