@@ -8,8 +8,7 @@ module.exports = function () {
         // goes in assets/js/
         bundle: [
             'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/jsviews/jsviews.min.js',
-            'node_modules/core-js/client/shim.min.js'
+            'node_modules/jsviews/jsviews.min.js'
         ]
     };
     this.directories = {
@@ -19,6 +18,7 @@ module.exports = function () {
         distumd: './uv-dist-umd',
         www: './www',
         extensions: './src/extensions',
+        ionic: './node_modules/@ionic/core/dist',
         lib: './src/lib',
         modules: './src/modules',
         npm: './node_modules',

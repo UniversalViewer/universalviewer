@@ -68,6 +68,7 @@ node_modules
 !jest.setup.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
+!src/extensions/*/config.js
 
 #################
 ## Build
