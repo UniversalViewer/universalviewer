@@ -10,8 +10,9 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
+import { Strings, Bools } from "@edsilv/utils";
 
-export class Extension extends BaseExtension implements IAlephExtension {
+export default class Extension extends BaseExtension implements IAlephExtension {
 
     $downloadDialogue: JQuery;
     $multiSelectDialogue: JQuery;
@@ -111,13 +112,13 @@ export class Extension extends BaseExtension implements IAlephExtension {
         if (this.IsOldIE()) {
             return false;
         }
-        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+        return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

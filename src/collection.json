@@ -225,106 +225,6 @@
           "@id": "https://sanddragon.bl.uk/IIIFMetadataService/egerton_ms_3512.json",
           "@type": "sc:Manifest",
           "label": "Egerton MS 3512"
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/Add_11831.json",
-          "@type": "sc:Manifest",
-          "label": "Add_11831 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/Add_4709.json",
-          "@type": "sc:Manifest",
-          "label": "Add_4709 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/Or_1087.json",
-          "@type": "sc:Manifest",
-          "label": "Or_1087 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/Or_13027.json",
-          "@type": "sc:Manifest",
-          "label": "Or_13027 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/or_7694_1580.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1580 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/or_7694_1595.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1595 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/or_7694_1655_1672.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1655_1672 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/or_7694_1988_part1.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1988_part1 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://files.universalviewer.io/manifests/adiks/or_7694_1988_part2.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1988_part2 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Add_11831.json",
-          "@type": "sc:Manifest",
-          "label": "Add_11831 (3D)",
-          "visible": false
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Add_4709.json",
-          "@type": "sc:Manifest",
-          "label": "Add_4709 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_1087.json",
-          "@type": "sc:Manifest",
-          "label": "Or_1087 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_13027.json",
-          "@type": "sc:Manifest",
-          "label": "Or_13027 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1580.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1580 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1595.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1595 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1655_1672.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1655_1672 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part1.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1988_part1 (3D)"
-        },
-        {
-          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part2.json",
-          "@type": "sc:Manifest",
-          "label": "or_7694_1988_part2 (3D)"
         }
       ]
     },
@@ -651,9 +551,15 @@
           "visible": true
         },
         {
-          "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/woody/index.json",
+          "@id": "https://aleph-fixtures.netlify.app/collection/gltf/frog-draco/index.json",
           "@type": "sc:Manifest",
-          "label": "Fisherman (gltf)",
+          "label": "Frog (draco)",
+          "visible": true
+        },
+        {
+          "@id": "https://aleph-fixtures.netlify.app/collection/dicom/platypus/platypus/index.json",
+          "@type": "sc:Manifest",
+          "label": "Platypus (dicom)",
           "visible": true
         }
       ]

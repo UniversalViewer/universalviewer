@@ -26,6 +26,7 @@ interface IExtensionRegistry {
 
 enum Extension {
   //AV = "uv-av-extension",
+  ALEPH = "uv-aleph-extension",
   DEFAULT = "uv-default-extension",
   EBOOK = "uv-ebook-extension",
   MEDIAELEMENT = "uv-mediaelement-extension",
@@ -62,6 +63,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
       //     extension.name = Extension.AV;
       //     return extension;
       // },
+      [Extension.ALEPH]: async () => {
+        const m = (await import(
+          /* webpackChunkName: "uv-aleph-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-aleph-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.ALEPH;
+        return extension;
+      },
       [Extension.DEFAULT]: async () => {
         const m = (await import(
           /* webpackChunkName: "uv-default-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-default-extension/Extension"
@@ -158,15 +167,18 @@ export class Viewer extends BaseComponent implements IUVComponent {
     };
 
     this._extensionRegistry[MediaType.DRACO] = {
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLB] = {
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLTF] = {
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.JPG] = {

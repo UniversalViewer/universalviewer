@@ -6,6 +6,13 @@ import { Orientation } from "./Orientation";
 import { Position } from "../uv-shared-module/Position";
 import { Units } from "./Units";
 import { ControlsType } from "./ControlsType";
+import { Async } from "@edsilv/utils";
+import { IExternalResource, Canvas, Annotation, AnnotationBody } from "manifesto.js";
+import { MediaType } from "@iiif/vocabulary";
+import { applyPolyfills, defineCustomElements } from "@universalviewer/aleph/loader";
+import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
+import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
+import "@universalviewer/aleph/dist/collection/assets/ami.min";
 
 export class AlephCenterPanel extends CenterPanel {
 
@@ -19,10 +26,13 @@ export class AlephCenterPanel extends CenterPanel {
     this.attributionPosition = Position.BOTTOM_RIGHT;
   }
 
-  create(): void {
+  async create(): Promise<void> {
     this.setConfig("alephCenterPanel");
 
     super.create();
+
+    await applyPolyfills();
+    defineCustomElements(window);
 
     this._alViewer = document.createElement("al-viewer");
     this.$content.prepend(this._alViewer);
@@ -129,7 +139,7 @@ export class AlephCenterPanel extends CenterPanel {
       this._alViewer.setVolumeContrast(contrast);         
     });
 
-    Utils.Async.waitFor(() => {
+    Async.waitFor(() => {
       return (window.customElements !== undefined);
     }, () => {
       customElements.whenDefined("al-viewer").then(() => {
@@ -142,34 +152,41 @@ export class AlephCenterPanel extends CenterPanel {
 
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
-      (e: any, resources: Manifesto.IExternalResource[]) => {
+      (e: any, resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
   }
 
-  openMedia(resources: Manifesto.IExternalResource[]) {
+  openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
-      let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-      const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+      const annotations: Annotation[] = canvas.getContent();
 
       if (annotations.length) {
-        const annotation: Manifesto.IAnnotation = annotations[0];
-        const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+        const annotation: Annotation = annotations[0];
+        const body: AnnotationBody[] = annotation.getBody();
 
         if (body.length) {
-          const media: Manifesto.IAnnotationBody = body[0];
-          const format: Manifesto.MediaType | null = media.getFormat();
+          const media: AnnotationBody = body[0];
+          const format: MediaType | null = media.getFormat();
+
+          const displayMode: DisplayMode = (format && format.toString() === "model/gltf+json") ? DisplayMode.MESH : DisplayMode.SLICES;
+
+          // todo: only load AMI if not DisplayMode.MESH
+          // PDFJS = await import(
+          //   /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
+          // );
 
           this._nextState({
             src: media.id,
-            displayMode: (format && format.toString() === "model/gltf+json") ? DisplayMode.MESH : DisplayMode.SLICES
+            displayMode: displayMode
           });
         }
       }
 
-      this.component.publish(BaseEvents.RESIZE);
+      this.component.publish(BaseEvents.OPENED_MEDIA);
     });
   }
 
@@ -178,7 +195,7 @@ export class AlephCenterPanel extends CenterPanel {
     this._state = Object.assign({}, this._state, s);
 
     if (this._state.src && this._state.src !== this._prevState.src) {
-      Utils.Async.waitFor(() => {
+      Async.waitFor(() => {
         return this._alViewerReady;
       }, () => {
         this._alViewer.load(this._state.src);
@@ -193,6 +210,8 @@ export class AlephCenterPanel extends CenterPanel {
   resize() {
 
     super.resize();
+
+    console.log("resize");
     
     if (this._alViewerReady && this._state.srcLoaded) {
       this._alViewer.resize();

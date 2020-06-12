@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-aleph-extension/Events";
+import { applyPolyfills, defineCustomElements } from "@universalviewer/aleph/loader";
 
 export class AlephLeftPanel extends LeftPanel {
 
@@ -10,9 +11,12 @@ export class AlephLeftPanel extends LeftPanel {
         super($element);
     }
 
-    create(): void {
+    async create(): Promise<void> {
         this.setConfig("alephLeftPanel");
         super.create();
+
+        await applyPolyfills();
+        defineCustomElements(window);
 
         this._alControlPanel = document.createElement("al-control-panel");
         this._alControlPanel.setAttribute("src-tab-enabled", this.config.options.srcTabEnabled);
@@ -150,6 +154,9 @@ export class AlephLeftPanel extends LeftPanel {
 
     resize(): void {
         super.resize();
-        this._alControlPanel.tabContentHeight = this.$main.height() - 68 + "px";
+
+        if (this._alControlPanel) {
+            this._alControlPanel.tabContentHeight = this.$main.height() - 68 + "px";
+        }
     }
 }
