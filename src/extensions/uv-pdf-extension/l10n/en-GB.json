@@ -1,4 +1,4 @@
-  {
+{
   "localisation": {
     "label": "English (GB)"
   },
@@ -107,9 +107,7 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
-    "contentLeftPanel": {
-
-    },
+    "contentLeftPanel": {},
     "shareDialogue": {
       "content": {
         "customSize": "custom",

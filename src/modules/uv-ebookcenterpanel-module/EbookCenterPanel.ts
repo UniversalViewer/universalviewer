@@ -1,7 +1,11 @@
+import { Async } from "@edsilv/utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
 import { Position } from "../uv-shared-module/Position";
+import { IExternalResource, Canvas, Annotation, AnnotationBody } from "manifesto.js";
+
+import { applyPolyfills, defineCustomElements } from "@universalviewer/uv-ebook-components/loader";
 
 export class EbookCenterPanel extends CenterPanel {
 
@@ -16,10 +20,13 @@ export class EbookCenterPanel extends CenterPanel {
     this.attributionPosition = Position.BOTTOM_RIGHT;
   }
 
-  create(): void {
+  async create(): Promise<void> {
     this.setConfig("ebookCenterPanel");
 
     super.create();
+
+    await applyPolyfills();
+    defineCustomElements(window);
 
     this._ebookReader = document.createElement("uv-ebook-reader");
     this.$content.prepend(this._ebookReader);
@@ -36,7 +43,7 @@ export class EbookCenterPanel extends CenterPanel {
       this.component.publish(Events.CFI_FRAGMENT_CHANGED, this._cfi);
     }, false);
 
-    Utils.Async.waitFor(() => {
+    Async.waitFor(() => {
       return (window.customElements !== undefined);
     }, () => {
       customElements.whenDefined("uv-ebook-reader").then(() => {
@@ -48,7 +55,7 @@ export class EbookCenterPanel extends CenterPanel {
 
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
-      (e: any, resources: Manifesto.IExternalResource[]) => {
+      (e: any, resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
@@ -65,7 +72,7 @@ export class EbookCenterPanel extends CenterPanel {
     this.component.subscribe(
       Events.CFI_FRAGMENT_CHANGED,
       (cfi: string) => {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
           return this._ebookReaderReady;
         }, () => {
           if (cfi !== this._cfi) {
@@ -78,19 +85,19 @@ export class EbookCenterPanel extends CenterPanel {
     );
   }
 
-  openMedia(resources: Manifesto.IExternalResource[]) {
+  openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
-      let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-      const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+      const annotations: Annotation[] = canvas.getContent();
 
       if (annotations.length) {
-        const annotation: Manifesto.IAnnotation = annotations[0];
-        const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+        const annotation: Annotation = annotations[0];
+        const body: AnnotationBody[] = annotation.getBody();
 
         if (body.length) {
-          const media: Manifesto.IAnnotationBody = body[0];
-          //const format: Manifesto.MediaType | null = media.getFormat();
+          const media: AnnotationBody = body[0];
+          //const format: MediaType | null = media.getFormat();
 
           this._nextState({
             bookPath: media.id
@@ -98,7 +105,7 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.RESIZE);
+      this.component.publish(BaseEvents.OPENED_MEDIA);
     });
   }
 
@@ -106,7 +113,7 @@ export class EbookCenterPanel extends CenterPanel {
 
     this._state = Object.assign({}, this._state, s);
 
-    Utils.Async.waitFor(() => {
+    Async.waitFor(() => {
       return this._ebookReaderReady;
     }, () => {
       if (this._state.bookPath && this._state.bookPath !== this._prevState.bookPath) {

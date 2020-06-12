@@ -13,8 +13,9 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
+import { Strings } from "@edsilv/utils";
 
-export class Extension extends BaseExtension implements IEbookExtension {
+export default class Extension extends BaseExtension implements IEbookExtension {
 
     $downloadDialogue: JQuery;
     $moreInfoDialogue: JQuery;
@@ -44,10 +45,6 @@ export class Extension extends BaseExtension implements IEbookExtension {
             this.cfiFragement = cfi;
             this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
         });
-    }
-
-    dependencyLoaded(_index: number, _dep: any): void {
-
     }
 
     createModules(): void {
@@ -124,8 +121,8 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&cfi=${this.cfiFragement}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 

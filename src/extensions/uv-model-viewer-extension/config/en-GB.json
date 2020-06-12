@@ -1,0 +1,108 @@
+{
+  "options": {
+    "authAPIVersion": 1,
+    "bookmarkThumbHeight": 150,
+    "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
+    "footerPanelEnabled": true,
+    "headerPanelEnabled": true,
+    "leftPanelEnabled": false,
+    "limitLocales": false,
+    "metrics": [
+      {
+        "type": "watch",
+        "minWidth": 0,
+        "maxWidth": 312,
+        "minHeight": 0,
+        "maxHeight": 390
+      },
+      {
+        "type": "mobileportrait",
+        "minWidth": 312,
+        "maxWidth": 415,
+        "minHeight": 600,
+        "maxHeight": 813
+      },
+      {
+        "type": "mobilelandscape",
+        "minWidth": 640,
+        "maxWidth": 813,
+        "minHeight": 360,
+        "maxHeight": 415
+      },
+      {
+        "type": "desktop",
+        "minWidth": 800,
+        "maxWidth": 100000,
+        "minHeight": 415,
+        "maxHeight": 100000
+      }
+    ],
+    "openTemplate": "http://universalviewer.io?manifest={0}",
+    "rightPanelEnabled": true,
+    "theme": "uv-en-GB-theme"
+  },
+  "modules": {
+    "shareDialogue": {
+      "options": {
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "shareManifestsEnabled": true
+      }
+    },
+    "footerPanel": {
+      "options": {
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "shareEnabled": true
+      }
+    },
+    "genericDialogue": {},
+    "headerPanel": {},
+    "helpDialogue": {},
+    "moreInfoRightPanel": {
+      "options": {
+        "canvasDisplayOrder": "",
+        "canvasExclude": "",
+        "copyToClipboardEnabled": false,
+        "manifestDisplayOrder": "",
+        "manifestExclude": "",
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false,
+        "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+        "showAllLanguages": false,
+        "textLimit": 4,
+        "textLimitType": "lines"
+      }
+    },
+    "contentLeftPanel": {
+      "options": {
+        "elideCount": 40,
+        "galleryThumbHeight": 320,
+        "galleryThumbWidth": 200,
+        "oneColThumbHeight": 320,
+        "oneColThumbWidth": 200,
+        "pageModeEnabled": true,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": true,
+        "thumbsEnabled": true,
+        "thumbsExtraHeight": 8,
+        "thumbsImageFadeInDuration": 300,
+        "thumbsLoadRange": 15,
+        "treeEnabled": true,
+        "twoColThumbHeight": 150,
+        "twoColThumbWidth": 90
+      }
+    },
+    "modelViewerCenterPanel": {
+      "options": {}
+    }
+  }
+}

@@ -4,10 +4,9 @@
     "**/.svn": true,
     "**/.DS_Store": true,
     "node_modules": false,
-    "dist": true,
-    "**/*.js": { "when": "$(basename).ts"},
+    "dist": false,
+    "**/*.js": { "when": "$(basename).ts" },
     "**/*.js.map": true
-  }
-,
-"typescript.check.workspaceVersion": false
+  },
+  "typescript.check.workspaceVersion": false
 }

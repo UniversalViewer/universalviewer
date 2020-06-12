@@ -1,0 +1,25 @@
+.uv {
+
+    .centerPanel {
+
+        background-color: #000;
+
+        .content {
+
+            position: relative;
+            
+            model-viewer {
+                --progress-bar-color: #000;
+                --progress-bar-height: 1px;
+            }
+
+            .spinner {
+                position: absolute;
+                width: 27px;
+                height: 27px;
+                border-radius: 27px;
+                .loading(@loader-black-bg);
+            }
+        }
+    }
+}

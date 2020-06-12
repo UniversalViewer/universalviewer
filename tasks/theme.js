@@ -162,7 +162,7 @@ module.exports = function (grunt) {
 
     function getThemeDest(theme) {
         var buildDir = config.directories.build;
-        return path.join(buildDir, 'themes', theme);
+        return path.join(buildDir, 'uv-assets/themes', theme);
     }
 
     //// todo: async, only copy if changed

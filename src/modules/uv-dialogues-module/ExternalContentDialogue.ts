@@ -1,42 +1,40 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Dialogue} from "../uv-shared-module/Dialogue";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ExternalContentDialogue extends Dialogue {
+  $iframe: JQuery;
 
-    $iframe: JQuery;
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("externalContentDialogue");
 
-    create(): void {
+    super.create();
 
-        this.setConfig('externalContentDialogue');
+    this.openCommand = BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE;
+    this.closeCommand = BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE;
 
-        super.create();
+    this.component.subscribe(this.openCommand, (params: any) => {
+      this.open();
+      this.$iframe.prop("src", params.uri);
+    });
 
-        this.openCommand = BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE;
-        this.closeCommand = BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE;
+    this.component.subscribe(this.closeCommand, () => {
+      this.close();
+    });
 
-        this.component.subscribe(this.openCommand, (params: any) => {
-            this.open();
-            this.$iframe.prop('src', params.uri);
-        });
+    this.$iframe = $("<iframe></iframe>");
+    this.$content.append(this.$iframe);
 
-        this.component.subscribe(this.closeCommand, () => {
-            this.close();
-        });
+    this.$element.hide();
+  }
 
-        this.$iframe = $('<iframe></iframe>');
-        this.$content.append(this.$iframe);
+  resize(): void {
+    super.resize();
 
-        this.$element.hide();
-    }
-
-    resize(): void {
-        super.resize();
-
-        this.$iframe.width(this.$content.width());
-        this.$iframe.height(this.$content.height());
-    }
+    this.$iframe.width(this.$content.width());
+    this.$iframe.height(this.$content.height());
+  }
 }

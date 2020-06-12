@@ -1,22 +1,22 @@
-import {UVDataProvider} from "./UVDataProvider";
+import { UVDataProvider } from "./UVDataProvider";
+import { Urls } from "@edsilv/utils";
 
-export default class URLDataProvider extends UVDataProvider {
+export class URLDataProvider extends UVDataProvider {
+  constructor(readonly: boolean = false) {
+    super(readonly);
+  }
 
-    constructor(readonly: boolean) {
-        super(readonly);
+  public get(key: string, defaultValue: string | null): string | null {
+    return Urls.getHashParameter(key, document) || defaultValue;
+  }
+
+  public set(key: string, value: string): void {
+    if (!this.readonly) {
+      if (value) {
+        Urls.setHashParameter(key, value.toString(), document);
+      } else {
+        Urls.setHashParameter(key, "", document);
+      }
     }
-
-    public get(key: string, defaultValue: string | null): string | null {
-        return Utils.Urls.getHashParameter(key, document) || defaultValue;
-    }
-
-    public set(key: string, value: string): void {
-        if (!this.readonly) {
-            if (value) {
-                Utils.Urls.setHashParameter(key, value.toString(), document);
-            } else {
-                Utils.Urls.setHashParameter(key, '', document);
-            }
-        }
-    }
+  }
 }

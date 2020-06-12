@@ -1,6 +1,8 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
+import { Async } from "@edsilv/utils";
+import { applyPolyfills, defineCustomElements } from "@universalviewer/uv-ebook-components/loader";
 
 export class EbookLeftPanel extends LeftPanel {
 
@@ -12,11 +14,15 @@ export class EbookLeftPanel extends LeftPanel {
         super($element);
     }
 
-    create(): void {
+    async create(): Promise<void> {
         this.setConfig("ebookLeftPanel");
         super.create();
 
         this._$container = $('<div class="container"></div>');
+
+        await applyPolyfills();
+        defineCustomElements(window);
+
         this._ebookTOC = document.createElement("uv-ebook-toc");
         this._$ebookTOC = $(this._ebookTOC);
         //this._ebookTOC.setAttribute("src-tab-enabled", this.config.options.srcTabEnabled);
@@ -39,7 +45,7 @@ export class EbookLeftPanel extends LeftPanel {
             this.component.publish(Events.ITEM_CLICKED, e.detail);
         }, false);
 
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return (window.customElements !== undefined);
         }, () => {
             customElements.whenDefined("uv-ebook-toc").then(() => {

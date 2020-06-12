@@ -1,3 +1,9 @@
+.buildcache
+dist
+uv-dist-umd
+www
+examples
+
 #################
 ## lib folders
 #################
@@ -52,15 +58,17 @@ node_modules
 /config.js
 !src/extensions/*/config.js
 !Gruntfile.js
+!webpack.config.js
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js
-!src/helpers.js
+!src/uv-helpers.js
 !dev.build.js
 !dist.build.js
 !jest.setup.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
+!src/extensions/*/config.js
 
 #################
 ## Build

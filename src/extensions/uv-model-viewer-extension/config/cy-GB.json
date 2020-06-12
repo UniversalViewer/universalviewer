@@ -1,0 +1,7 @@
+{
+  "extends": "en-GB",
+  "options": {
+    "theme": "uv-cy-GB-theme"
+  },
+  "modules": {}
+}

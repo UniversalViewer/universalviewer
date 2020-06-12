@@ -1,4 +1,6 @@
-@import '../../uv-shared-module/css/thumbs-view.less';
+@import "../../../../node_modules/@iiif/iiif-gallery-component/dist-css/styles.less";
+@import "../../../../node_modules/@iiif/iiif-tree-component/dist-css/styles.less";
+@import "../../uv-shared-module/css/thumbs-view.less";
 
 .uv{
 
@@ -120,11 +122,15 @@
             .treeView{
                 font-weight: normal;
                 overflow: auto;
+
+                .iiif-tree-component ul li a.selected {
+                    color: @brand-primary !important;
+                }
             }
 
-            .galleryView{
+            //.galleryView{
                 // iiif-gallery-component (shared-module)
-            }
+            //}
         }
 
     }

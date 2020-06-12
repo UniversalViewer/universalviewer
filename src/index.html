@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Universal Viewer Examples</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="uv.css" />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"
+    ></script>
+    <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script>
+    <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
+    <script type="text/javascript" src="uv-helpers.js"></script>
+    <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
+    <style>
+      body {
+        margin: 0px;
+        padding: 20px;
+      }
+
+      #uv {
+        width: 924px;
+        height: 668px;
+        /* width: 1024px;
+            height: 576px; */
+      }
+
+      #options {
+        padding: 20px 0 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
+
+    <div id="options">
+      <select id="manifestSelect"></select>
+      <input id="manifest" type="text" value="" />
+      <a id="setManifestButton" class="button" href="#">Set</a>
+    </div>
+
+    <!-- <div>
+        <button id="prev">&lt;</button>
+        <button id="next">&gt;</button>
+    </div> -->
+
+    <div>
+      <!--<textarea id="annotations" rows="10" cols="50" placeholder="annotations"></textarea>
+        <button id="updateAnnotations">Update</button>-->
+      <!--<button id="addAnnotation" disabled>Add Annotation</button>-->
+    </div>
+
+    <script type="text/javascript">
+      var uv, manifest;
+
+      var urlDataProvider = new UV.URLDataProvider();
+
+      loadManifests(function() {
+        setSelectedManifest();
+        setupUV();
+      });
+
+      function setupUV() {
+        var collectionIndex = urlDataProvider.get("c");
+
+        var data = {
+          manifestUri: manifest,
+          configUri: "uv-config.json",
+          collectionIndex:
+            collectionIndex !== undefined ? Number(collectionIndex) : undefined,
+          manifestIndex: Number(urlDataProvider.get("m", 0)),
+          sequenceIndex: Number(urlDataProvider.get("s", 0)),
+          canvasIndex: Number(urlDataProvider.get("cv", 0)),
+          rotation: Number(urlDataProvider.get("r", 0)),
+          rangeId: urlDataProvider.get("rid", ""),
+          xywh: urlDataProvider.get("xywh", "")
+        };
+
+        uv = createUV("uv", data, urlDataProvider);
+
+        uv.on("created", function() {
+          utils.Urls.setHashParameter("manifest", manifest);
+        });
+
+        // uv.on('openseadragonExtension.open', function() {
+        //     console.log('osd opened');
+        // });
+      }
+
+      function loadManifests(cb) {
+        // load manifests
+        $.getJSON("collection.json", function(manifests) {
+          var $manifestSelect = $("#manifestSelect");
+
+          for (var i = 0; i < manifests.collections.length; i++) {
+            var collection = manifests.collections[i];
+
+            if (collection.visible === false) {
+              continue;
+            }
+
+            $manifestSelect.append(
+              '<optgroup label="' + collection.label + '">'
+            );
+
+            for (var j = 0; j < collection.manifests.length; j++) {
+              var manifest = collection.manifests[j];
+
+              if (manifest.visible !== false) {
+                $manifestSelect.append(
+                  '<option value="' +
+                    manifest["@id"] +
+                    '">' +
+                    manifest.label +
+                    "</option>"
+                );
+              }
+            }
+
+            $manifestSelect.append("</optgroup>");
+          }
+
+          cb();
+        });
+      }
+
+      function setSelectedManifest() {
+        manifest = utils.Urls.getHashParameter("manifest");
+
+        if (manifest) {
+          $("#manifestSelect").val(manifest);
+        } else {
+          var options = $("#manifestSelect option");
+
+          if (options.length) {
+            manifest = options[0].value;
+          }
+        }
+
+        $("#manifest").val(manifest);
+      }
+
+      $("#manifestSelect").on("change", function() {
+        $("#manifest").val($("#manifestSelect option:selected").val());
+      });
+
+      $("#setManifestButton").on("click", function() {
+        manifest = $("#manifest").val();
+
+        uv.set({
+          manifestUri: manifest,
+          collectionIndex: undefined,
+          manifestIndex: 0,
+          sequenceIndex: 0,
+          canvasIndex: 0
+        });
+      });
+
+      // $('#prev').on('click', function() {
+      //     uv.set({
+      //         canvasIndex: uv.get('canvasIndex') - 1
+      //     });
+      // });
+
+      // $('#next').on('click', function() {
+      //     uv.set({
+      //         canvasIndex: uv.get('canvasIndex') + 1
+      //     });
+      // });
+
+      // annotationList = {
+      //     "@context": "http://iiif.io/api/search/0/context.json",
+      //     "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest",
+      //     "@type": "sc:AnnotationList",
+      //     "within": {
+      //         "@type": "sc:Layer"
+      //     },
+      //     "startIndex": 0,
+      //     "resources": []
+      // };
+
+      // $('#updateAnnotations').on('click', function() {
+
+      //     var annotations = JSON.parse($('#annotations').val());
+
+      //     uv.set({
+      //         annotations: annotations
+      //     });
+      // });
+
+      // var $addAnnotation = $('#addAnnotation');
+
+      // // load test annotations
+      // $.getJSON('test-annotations.json', function(testAnnotations) {
+
+      //     $addAnnotation.prop('disabled', false);
+
+      //     $addAnnotation.on('click', function() {
+
+      //         var annotation = testAnnotations[Math.floor(Math.random() * testAnnotations.length)];
+      //         annotation.on = "https://wellcomelibrary.org/iiif/b18035723/canvas/c0#xywh=909,3067,339,50";
+      //         annotationList.resources.push(annotation);
+
+      //         uv.set({
+      //             annotations: annotationList
+      //         });
+      //     });
+      // });
+    </script>
+  </body>
+</html>
