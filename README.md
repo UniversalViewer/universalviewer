@@ -30,7 +30,7 @@
 
 <br>
 
-    npm install universalviewer@beta --save
+    npm install universalviewer --save
 
 - [**Website**](#website)
 - [**Scope**](#scope)
