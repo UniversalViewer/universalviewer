@@ -78,9 +78,9 @@ export class SettingsDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        $.getJSON(this.extension.data.root + "/info.json", (pjson: any) => {
-            this.$version.text("v" + pjson.version);
-        });
+        //$.getJSON(this.extension.data.root + "/info.json", (pjson: any) => {
+            this.$version.text("v3.1.1"); // update this on version
+        //});
     }
 
     private _createLocalesMenu(): void {

@@ -9,5 +9,9 @@
     "**/*.js.map": true
   }
 ,
-"typescript.check.workspaceVersion": false
+"typescript.check.workspaceVersion": false,
+"workbench.editorAssociations": [
+
+],
+"editor.codeActionsOnSave": null
 }
