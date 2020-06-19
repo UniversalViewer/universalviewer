@@ -167,18 +167,18 @@ export class Viewer extends BaseComponent implements IUVComponent {
     };
 
     this._extensionRegistry[MediaType.DRACO] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLB] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLTF] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.JPG] = {
@@ -534,20 +534,19 @@ export class Viewer extends BaseComponent implements IUVComponent {
     const locale: string = data.locales[0].name;
     const themeName: string =
       extension.name.toLowerCase() + "-theme-" + locale.toLowerCase();
-    const $existingCSS: JQuery = $("#" + themeName.toLowerCase());
+    const $existingCSS: JQuery = $("link.uv");
 
-    if (!$existingCSS.length) {
-      $("head").append(
-        '<link rel="stylesheet" id="' +
-          themeName +
-          '" href="' +
-          cssPath.toLowerCase() +
-          '" />'
-      );
-      cb();
-    } else {
-      cb();
-    }
+    $existingCSS.remove();
+
+    $("head").append(
+      '<link class="uv" rel="stylesheet" id="' +
+        themeName +
+        '" href="' +
+        cssPath.toLowerCase() +
+        '" />'
+    );
+
+    cb();
   }
 
   private _createExtension(

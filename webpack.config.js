@@ -26,12 +26,22 @@ const config = {
     resolve: {
         extensions: [".ts", ".tsx", ".js"]
     },
+    node: {
+        fs: "empty"
+    },
     module: {
         rules: [
             {
                 test: /\.ts$/,
                 use: [
                     { loader: "ts-loader" }
+                ]
+            },
+            {
+                // any file with a specified extension imported from an assets folder
+                test: /\.*\/assets.*.(png|jpe?g|gif|js)$/i,
+                use: [
+                    { loader: "file-loader" }
                 ]
             }
         ]

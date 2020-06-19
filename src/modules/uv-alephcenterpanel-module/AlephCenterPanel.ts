@@ -12,7 +12,9 @@ import { MediaType } from "@iiif/vocabulary";
 import { applyPolyfills, defineCustomElements } from "@universalviewer/aleph/loader";
 import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
-import "@universalviewer/aleph/dist/collection/assets/ami.min";
+import "@universalviewer/aleph/dist/collection/assets/draco_decoder.js";
+import "@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js";
+//import "@universalviewer/aleph/dist/collection/assets/ami.min";
 
 export class AlephCenterPanel extends CenterPanel {
 
@@ -38,7 +40,7 @@ export class AlephCenterPanel extends CenterPanel {
     this.$content.prepend(this._alViewer);
     this._alViewer.setAttribute("width", "100%");
     this._alViewer.setAttribute("height", "100%");
-    const dracoDecoderPath: string = (window.self !== window.top)? "lib/" : "uv/lib/";
+    const dracoDecoderPath: string = "https://unpkg.com/@universalviewer/aleph/dist/collection/assets/"; // (window.self !== window.top)? "js/" : "uv-assets/js/";
     this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
 
     this._alViewer.addEventListener(
@@ -211,8 +213,6 @@ export class AlephCenterPanel extends CenterPanel {
 
     super.resize();
 
-    console.log("resize");
-    
     if (this._alViewerReady && this._state.srcLoaded) {
       this._alViewer.resize();
     }

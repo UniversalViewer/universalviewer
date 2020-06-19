@@ -17,18 +17,18 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            bundle: {
-                files: [
-                    // node modules to go in bundle.js
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '.',
-                        src: config.dependencies.bundle,
-                        dest: config.directories.lib
-                    }
-                ]
-            },
+            // bundle: {
+            //     files: [
+            //         // node modules to go in bundle.js
+            //         {
+            //             expand: true,
+            //             flatten: true,
+            //             cwd: '.',
+            //             src: config.dependencies.bundle,
+            //             dest: config.directories.lib
+            //         }
+            //     ]
+            // },
             // everything first gets built into an intermediary .build folder
             // the contents of .build are then copied into the (cleaned) dist and www folders
             build: {
@@ -123,13 +123,13 @@ module.exports = function (grunt) {
             }
         },
 
-        concat: {
-            bundle: {
-                cwd: '.',
-                src: config.dependencies.bundle,
-                dest: config.directories.lib + '/bundle.js'
-            }
-        },
+        // concat: {
+        //     bundle: {
+        //         cwd: '.',
+        //         src: config.dependencies.bundle,
+        //         dest: config.directories.lib + '/bundle.js'
+        //     }
+        // },
 
         // replace all assets paths in built theme css files
         // I think this is now only needed for the mediaelement icons svg!
@@ -209,8 +209,8 @@ module.exports = function (grunt) {
             'clean:themes',
             'clean:distumd',
             'sync',
-            'copy:bundle',
-            'concat:bundle',
+            //'copy:bundle',
+            //'concat:bundle',
             'clean:extension',
             'configure:apply',
             'clean:build',
