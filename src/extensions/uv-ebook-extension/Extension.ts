@@ -15,122 +15,140 @@ import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
 import { Strings } from "@edsilv/utils";
 
-export default class Extension extends BaseExtension implements IEbookExtension {
+export default class Extension extends BaseExtension
+  implements IEbookExtension {
+  $downloadDialogue: JQuery;
+  $moreInfoDialogue: JQuery;
+  $multiSelectDialogue: JQuery;
+  $settingsDialogue: JQuery;
+  $shareDialogue: JQuery;
+  centerPanel: EbookCenterPanel;
+  downloadDialogue: DownloadDialogue;
+  footerPanel: FooterPanel;
+  headerPanel: HeaderPanel;
+  leftPanel: EbookLeftPanel;
+  mobileFooterPanel: MobileFooterPanel;
+  moreInfoDialogue: MoreInfoDialogue;
+  rightPanel: MoreInfoRightPanel;
+  settingsDialogue: SettingsDialogue;
+  shareDialogue: ShareDialogue;
+  cfiFragement: string;
 
-    $downloadDialogue: JQuery;
-    $moreInfoDialogue: JQuery;
-    $multiSelectDialogue: JQuery;
-    $settingsDialogue: JQuery;
-    $shareDialogue: JQuery;
-    centerPanel: EbookCenterPanel;
-    downloadDialogue: DownloadDialogue;
-    footerPanel: FooterPanel;
-    headerPanel: HeaderPanel;
-    leftPanel: EbookLeftPanel;
-    mobileFooterPanel: MobileFooterPanel;
-    moreInfoDialogue: MoreInfoDialogue;
-    rightPanel: MoreInfoRightPanel;
-    settingsDialogue: SettingsDialogue;
-    shareDialogue: ShareDialogue;
-    cfiFragement: string;
+  create(): void {
+    super.create();
 
-    create(): void {
-        super.create();
+    this.component.subscribe(
+      BaseEvents.CANVAS_INDEX_CHANGED,
+      (canvasIndex: number) => {
+        this.viewCanvas(canvasIndex);
+      }
+    );
 
-        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
-            this.viewCanvas(canvasIndex);
-        });
+    this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
+      this.cfiFragement = cfi;
+      this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
+    });
+  }
 
-        this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
-            this.cfiFragement = cfi;
-            this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
-        });
+  createModules(): void {
+    super.createModules();
+
+    if (this.isHeaderPanelEnabled()) {
+      this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
+    } else {
+      this.shell.$headerPanel.hide();
     }
 
-    createModules(): void {
-        super.createModules();
-
-        if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
-        } else {
-            this.shell.$headerPanel.hide();
-        }
-
-        if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new EbookLeftPanel(this.shell.$leftPanel);
-        } else {
-            this.shell.$leftPanel.hide();
-        }
-
-        this.centerPanel = new EbookCenterPanel(this.shell.$centerPanel);
-
-        if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
-        } else {
-            this.shell.$rightPanel.hide();
-        }
-
-        if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
-            this.mobileFooterPanel = new MobileFooterPanel(this.shell.$mobileFooterPanel);
-        } else {
-            this.shell.$footerPanel.hide();
-        }
-
-        this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
-        this.shell.$overlays.append(this.$moreInfoDialogue);
-        this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
-
-        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        this.shell.$overlays.append(this.$shareDialogue);
-        this.shareDialogue = new ShareDialogue(this.$shareDialogue);
-
-        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        this.shell.$overlays.append(this.$downloadDialogue);
-        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
-
-        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        this.shell.$overlays.append(this.$settingsDialogue);
-        this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
-
-        if (this.isHeaderPanelEnabled()) {
-            this.headerPanel.init();
-        }
-
-        if (this.isLeftPanelEnabled()) {
-            this.leftPanel.init();
-        }
-
-        if (this.isRightPanelEnabled()) {
-            this.rightPanel.init();
-        }
-
-        if (this.isFooterPanelEnabled()) {
-            this.footerPanel.init();
-        }
+    if (this.isLeftPanelEnabled()) {
+      this.leftPanel = new EbookLeftPanel(this.shell.$leftPanel);
+    } else {
+      this.shell.$leftPanel.hide();
     }
 
-    isLeftPanelEnabled(): boolean {
-        return true;
+    this.centerPanel = new EbookCenterPanel(this.shell.$centerPanel);
+
+    if (this.isRightPanelEnabled()) {
+      this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
+    } else {
+      this.shell.$rightPanel.hide();
     }
 
-    render(): void {
-        super.render();
-        this.checkForCFIParam();
+    if (this.isFooterPanelEnabled()) {
+      this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+      );
+    } else {
+      this.shell.$footerPanel.hide();
     }
 
-    getEmbedScript(template: string, width: number, height: number): string {
-        const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
-        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+    this.$moreInfoDialogue = $(
+      '<div class="overlay moreInfo" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$moreInfoDialogue);
+    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
+
+    this.$shareDialogue = $(
+      '<div class="overlay share" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$shareDialogue);
+    this.shareDialogue = new ShareDialogue(this.$shareDialogue);
+
+    this.$downloadDialogue = $(
+      '<div class="overlay download" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$downloadDialogue);
+    this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
+
+    this.$settingsDialogue = $(
+      '<div class="overlay settings" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$settingsDialogue);
+    this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
+
+    if (this.isHeaderPanelEnabled()) {
+      this.headerPanel.init();
     }
 
-    checkForCFIParam(): void {
-        const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
-
-        if (cfi) {
-            this.component.publish(Events.CFI_FRAGMENT_CHANGED, cfi);
-        }
+    if (this.isLeftPanelEnabled()) {
+      this.leftPanel.init();
     }
+
+    if (this.isRightPanelEnabled()) {
+      this.rightPanel.init();
+    }
+
+    if (this.isFooterPanelEnabled()) {
+      this.footerPanel.init();
+    }
+  }
+
+  isLeftPanelEnabled(): boolean {
+    return true;
+  }
+
+  render(): void {
+    super.render();
+    this.checkForCFIParam();
+  }
+
+  getEmbedScript(template: string, width: number, height: number): string {
+    const appUri: string = this.getAppUri();
+    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
+    const script: string = Strings.format(
+      template,
+      iframeSrc,
+      width.toString(),
+      height.toString()
+    );
+    return script;
+  }
+
+  checkForCFIParam(): void {
+    const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
+
+    if (cfi) {
+      this.component.publish(Events.CFI_FRAGMENT_CHANGED, cfi);
+    }
+  }
 }

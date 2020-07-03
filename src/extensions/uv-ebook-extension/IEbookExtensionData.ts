@@ -1,5 +1,5 @@
-import {IUVData} from "../../IUVData";
+import { IUVData } from "../../IUVData";
 
 export interface IEbookExtensionData extends IUVData {
-    cfi: string;
+  cfi: string;
 }
