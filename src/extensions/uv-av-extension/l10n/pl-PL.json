@@ -1,0 +1,177 @@
+{
+  "localisation": {
+    "label": "Polski"
+  },
+  "content": {
+    "authCORSError": "Twoja przeglądarka nie obsługuje CORS. Zaktualizuj ją, aby wyświetlić tę zawartość.",
+    "authorisationFailedMessage": "Twoja próba logowania nie powidła się. Proszę spróbuj ponownie.",
+    "canvasIndexOutOfRange": "Numer kanwy poza zakresem.",
+    "fallbackDegradedLabel": "Zaloguj się",
+    "fallbackDegradedMessage": "Zaloguj się, aby zobaczyć tę treść w pełnej rozdzielczości.",
+    "forbiddenResourceMessage": "Twoje obecne prawa dostępu są niewystarczające, aby wyświetlić ten obraz",
+    "termsOfUse": "Warunki korzystania"
+  },
+  "modules": {
+    "authDialogue": {
+      "content": {
+        "cancel": "Anuluj",
+        "confirm": "Potwierdź"
+      }
+    },
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "Przeczytaj pełny Regulamin"
+      }
+    },
+    "contentLeftPanel": {
+      "content": {
+        "collapse": "Zwiń zawartość",
+        "collapseFull": "Zwiń galerię",
+        "date": "data",
+        "expand": "Rozwiń zawartość",
+        "expandFull": "Rozwiń galerię",
+        "index": "Indeks",
+        "manifestRanges": "Zakresy manifestu",
+        "searchResult": "Liczba wyników: {0}",
+        "searchResults": "Liczba wyników: {0}",
+        "sortBy": "Sortuj wg:",
+        "thumbnails": "Miniatury",
+        "title": "Zawartość",
+        "volume": "tom"
+      }
+    },
+    "dialogue": {
+      "content": {
+        "close": "Zamknij"
+      }
+    },
+    "downloadDialogue": {
+      "content": {
+        "currentViewAsJpg": "Aktualny widok {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Otwiera się w nowym oknie",
+        "download": "Pobierz",
+        "downloadSelection": "Pobierz wybrane strony",
+        "downloadSelectionExplanation": "Otwiera okno wyboru stron do pobrania.",
+        "editSettings": "Edytuj ustawienia",
+        "entireDocument": "Cały dokument ({0})",
+        "entireFileAsOriginal": "Cały plik",
+        "entireFileAsOriginalWithFormat": "Cały plik ({0})",
+        "noneAvailable": "Brak dostępnych opcji pobierania.",
+        "pagingNote": "Wyłącz widok dwóch stron, aby uzyskać dodatkowe opcje.",
+        "preview": "Podgląd",
+        "title": "Pobieranie",
+        "wholeImageHighRes": "Pełny obraz {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Otwiera się w nowym oknie.",
+        "wholeImagesHighRes": "Pełne obrazy ({0})",
+        "wholeImagesHighResExplanation": "Otwiera się w dwóch nowych oknach.",
+        "wholeImageLowResAsJpg": "Pełny obraz {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Otwiera się w nowym oknie."
+      }
+    },
+    "footerPanel": {
+      "content": {
+        "bookmark": "Dodaj do zakładek",
+        "download": "Pobierz",
+        "embed": "Osadź",
+        "exitFullScreen": "Zamknij pełny ekran",
+        "feedback": "Feedback",
+        "fullScreen": "Pełny ekran",
+        "moreInfo": "Więcej informacji",
+        "open": "Otwórz",
+        "share": "Udostępnij"
+      }
+    },
+    "genericDialogue": {
+      "content": {
+        "emptyValue": "proszę wprowadzić wartość.",
+        "invalidNumber": "Proszę wprowadzić poprawny numer.",
+        "noMatches": "Nie znaleziono dopasowań.",
+        "ok": "OK",
+        "pageNotFound": "Ten obiekt nie zawiera strony z wprowadzonym numerem. Spróbuj przełączyć tryb numeracji na 'obraz'.",
+        "refresh": "Odśwież"
+      }
+    },
+    "headerPanel": {
+      "content": {
+        "settings": "Ustawienia"
+      }
+    },
+    "helpDialogue": {
+      "content": {
+        "text": "tekst zastępczy",
+        "title": "Pomoc"
+      }
+    },
+    "loginDialogue": {
+      "content": {
+        "login": "Zaloguj się",
+        "logout": "Wyloguj",
+        "cancel": "Anuluj"
+      }
+    },
+    "moreInfoRightPanel": {
+      "content": {
+        "attribution": "Źródło",
+        "collapse": "Zwiń informacje",
+        "collapseFull": "Zwiń galerię",
+        "description": "Opis",
+        "expand": "Rozwiń informacje",
+        "expandFull": "Rozwiń galerię",
+        "holdingText": "Miejsce na twój moduł!",
+        "less": "mniej",
+        "license": "Licencja",
+        "logo": "Logo",
+        "more": "więcej",
+        "noData": "Brak danych do wyświetlenia",
+        "page": "Strona",
+        "title": "Więcej informacji",
+        "manifestHeader": "O obiekcie",
+        "canvasHeader": "O obrazie",
+        "copyToClipboard": "Skopiuj do schowka",
+        "copiedToClipboard": "Skopiowano do schowka"
+      }
+    },
+    "avCenterPanel": {
+      "content": {
+        "attribution": "Źródło",
+        "currentTime": "Obecny czas",
+        "delimiter": " - ",
+        "duration": "Czas trwania",
+        "mute": "Wycisz",
+        "next": "Następny",
+        "pause": "Pauza",
+        "play": "Odtwarzaj",
+        "previous": "Poprzedni"
+      }
+    },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "Anuluj"
+      }
+    },
+    "settingsDialogue": {
+      "content": {
+        "locale": "Język",
+        "navigatorEnabled": "Włączona nawigacja",
+        "clickToZoomEnabled": "Przybliżenie przez kliknięcie myszą",
+        "pagingEnabled": "Widok dwóch stron",
+        "preserveViewport": "Zachowanie przybliżenia",
+        "title": "Ustawienia",
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>więcej informacji</a>"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "niestandardowy",
+        "embed": "Osadź",
+        "embedInstructions": "Aby osadzić ten obiekt na własnej witrynie, skopiuj i wklej poniższy kod.",
+        "height": "Wysokość",
+        "iiif": "Manifest IIIF",
+        "share": "Udostępnij",
+        "shareInstructions": "Aby udostępnić ten obiekt, skopiuj poniższy adres URL.",
+        "size": "Rozmiar:",
+        "width": "Szerokość"
+      }
+    }
+  }
+}
