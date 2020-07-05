@@ -657,13 +657,13 @@
           "@id": "https://aleph-fixtures.netlify.app/collection/gltf/frog-draco/index.json",
           "@type": "sc:Manifest",
           "label": "Frog (draco)",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://aleph-fixtures.netlify.app/collection/dicom/platypus/platypus/index.json",
           "@type": "sc:Manifest",
           "label": "Platypus (dicom)",
-          "visible": false
+          "visible": true
         }
       ]
     },
