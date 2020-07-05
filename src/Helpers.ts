@@ -1,14 +1,22 @@
-function createUV(selector, data) {
-  var uv;
-  var isFullScreen = false;
-  var container = document.getElementById(selector);
+import { Viewer } from "./Viewer";
+import { Urls } from "@edsilv/utils";
+
+export const init = (selector, data) => {
+  let uv;
+  let isFullScreen = false;
+  const container = document.getElementById(selector);
+
+  if (!container) {
+    throw new Error("UV target element not found");
+  }
+
   container.innerHTML = "";
-  var parent = document.createElement("div");
+  const parent = document.createElement("div");
   container.appendChild(parent);
-  var uv = document.createElement("div");
+  uv = document.createElement("div");
   parent.appendChild(uv);
 
-  function resize() {
+  const resize = () => {
     if (uv) {
       if (isFullScreen) {
         parent.style.width = window.innerWidth + "px";
@@ -31,16 +39,14 @@ function createUV(selector, data) {
     }, 100);
   });
 
-  uv = new UV.Viewer({
+  uv = new Viewer({
     target: uv,
     data: data
   });
 
-  uv.on("create", function(obj) {}, false);
-
   uv.on(
     "created",
-    function(obj) {
+    function(_obj) {
       resize();
     },
     false
@@ -73,14 +79,6 @@ function createUV(selector, data) {
   );
 
   uv.on(
-    "sequenceIndexChanged",
-    function(sequenceIndex) {
-      uv.dataProvider.set("s", sequenceIndex);
-    },
-    false
-  );
-
-  uv.on(
     "canvasIndexChanged",
     function(canvasIndex) {
       uv.dataProvider.set("cv", canvasIndex);
@@ -96,29 +94,29 @@ function createUV(selector, data) {
     false
   );
 
-  uv.on(
-    "openseadragonExtension.rotationChanged",
-    function(rotation) {
-      uv.dataProvider.set("r", rotation);
-    },
-    false
-  );
+  // uv.on(
+  //   "openseadragonExtension.rotationChanged",
+  //   function(rotation) {
+  //     uv.dataProvider.set("r", rotation);
+  //   },
+  //   false
+  // );
 
-  uv.on(
-    "openseadragonExtension.xywhChanged",
-    function(xywh) {
-      uv.dataProvider.set("xywh", xywh);
-    },
-    false
-  );
+  // uv.on(
+  //   "openseadragonExtension.xywhChanged",
+  //   function(xywh) {
+  //     uv.dataProvider.set("xywh", xywh);
+  //   },
+  //   false
+  // );
 
-  uv.on(
-    "openseadragonExtension.currentViewUri",
-    function(data) {
-      //console.log('openseadragonExtension.currentViewUri', obj);
-    },
-    false
-  );
+  // uv.on(
+  //   "openseadragonExtension.currentViewUri",
+  //   function(_data) {
+  //     //console.log('openseadragonExtension.currentViewUri', obj);
+  //   },
+  //   false
+  // );
 
   uv.on(
     "reload",
@@ -139,13 +137,13 @@ function createUV(selector, data) {
       }
 
       if (isFullScreen) {
-        var requestFullScreen = getRequestFullScreen(parent);
+        const requestFullScreen = getRequestFullScreen(parent);
         if (requestFullScreen) {
           requestFullScreen.call(parent);
           resize();
         }
       } else {
-        var exitFullScreen = getExitFullScreen();
+        const exitFullScreen = getExitFullScreen();
         if (exitFullScreen) {
           exitFullScreen.call(document);
           setTimeout(function() {
@@ -172,10 +170,10 @@ function createUV(selector, data) {
   uv.on(
     "bookmark",
     function(data) {
-      var absUri = parent.document.URL;
-      var parts = Utils.Urls.getUrlParts(absUri);
-      var relUri =
-        parts.pathname + parts.search + parent.document.location.hash;
+      const absUri = parent!.ownerDocument!.URL;
+      const parts = Urls.getUrlParts(absUri);
+      let relUri =
+        parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
 
       if (!relUri.startsWith("/")) {
         relUri = "/" + relUri;

@@ -74,6 +74,10 @@ interface Window {
 interface Document {
   mozFullScreen: boolean;
   msFullscreenElement: any;
+  webkitExitFullscreen: any;
+  msExitFullscreen: any;
+  mozCancelFullScreen: any;
+  webkitIsFullScreen: any;
 }
 
 // had to copy this from lib.es2016.array.include.d.ts as no combination of compiler options would work :-(

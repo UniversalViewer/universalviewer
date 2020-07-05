@@ -14,7 +14,6 @@
     ></script>
     <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script>
     <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
-    <script type="text/javascript" src="uv-helpers.js"></script>
     <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
       body {
@@ -80,7 +79,7 @@
           xywh: urlDataProvider.get("xywh", "")
         };
 
-        uv = createUV("uv", data, urlDataProvider);
+        uv = UV.init("uv", data, urlDataProvider);
 
         uv.on("created", function() {
           utils.Urls.setHashParameter("manifest", manifest);
