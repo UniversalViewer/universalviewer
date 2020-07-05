@@ -4,7 +4,7 @@ import { Urls } from "@edsilv/utils";
 export const init = (el: string | HTMLDivElement, data) => {
   let uv;
   let isFullScreen = false;
-  const container = typeof(el) === 'string' ? document.getElementById(el) : el;
+  const container = typeof el === "string" ? document.getElementById(el) : el;
 
   if (!container) {
     throw new Error("UV target element not found");
