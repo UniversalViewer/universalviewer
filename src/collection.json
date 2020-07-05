@@ -10,122 +10,122 @@
       "label": "Wellcome Library",
       "manifests": [
         {
-          "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b18035723/manifest",
           "@type": "sc:Manifest",
           "label": "Wunder der Vererbung"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b23984958/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b23984958/manifest",
           "@type": "sc:Manifest",
           "label": "Greenfly Eye"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b18035978/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b18035978/manifest",
           "@type": "sc:Manifest",
           "label": "The Biocrats"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b19684915/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b19684915/manifest",
           "@type": "sc:Manifest",
           "label": "Wellcome Apocalypse"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b1948799x/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b1948799x/manifest",
           "@type": "sc:Manifest",
           "label": "Crick's letter"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b16659090/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b16659090/manifest",
           "@type": "sc:Manifest",
           "label": "The story of the Wellcome Foundation Ltd (video)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b20605055/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b20605055/manifest",
           "@type": "sc:Manifest",
           "label": "English folding almanac in Latin (video)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b16748967/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b16748967/manifest",
           "@type": "sc:Manifest",
           "label": "Entebbe encounter (video with transcript)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b17307922/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b17307922/manifest",
           "@type": "sc:Manifest",
           "label": "Florence Nightingale (audio)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b17502792/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b17502792/manifest",
           "@type": "sc:Manifest",
           "label": "A Review of Science Communication and Public Attitudes to Science in Britain (PDF)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b17564980/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b17564980/manifest",
           "@type": "sc:Manifest",
           "label": "First Thursday Club (click through)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b19813508/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b19813508/manifest",
           "@type": "sc:Manifest",
           "label": "Kourilsky, Philippe (restricted content)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b1818893x/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b1818893x/manifest",
           "@type": "sc:Manifest",
           "label": "Correspondence Concerning Publication (click through)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b17307703/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b17307703/manifest",
           "@type": "sc:Manifest",
           "label": "I Remember Sir Henry Dale (audio, click through)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b11599820/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b11599820/manifest",
           "@type": "sc:Manifest",
           "label": "Sixteen feet in profile (degraded image)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b21072061/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b21072061/manifest",
           "@type": "sc:Manifest",
           "label": "An Atlas of Clinical Microscopy (clinical login)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b19684538/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b19684538/manifest",
           "@type": "sc:Manifest",
           "label": "Pseudo-Albert the Great (folio)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/collection/b19974760",
+          "@id": "https://wellcomelibrary.org/iiif/collection/b19974760",
           "@type": "sc:Collection",
           "label": "Chemist & Druggist (collection)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/collection/b18031511",
+          "@id": "https://wellcomelibrary.org/iiif/collection/b18031511",
           "@type": "sc:Collection",
           "label": "Biological Basis of Medicine (collection)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b21274344/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b21274344/manifest",
           "@type": "sc:Manifest",
           "label": "Abnormalities and curiosities of medicine"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b13266330/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b13266330/manifest",
           "@type": "sc:Manifest",
           "label": "Spiegl de Artzny (manuscript)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b19646045/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b19646045/manifest",
           "@type": "sc:Manifest",
           "label": "Herbal (overlapping ranges)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b16625948/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b16625948/manifest",
           "@type": "sc:Manifest",
           "label": "Public perspectives (Embed disabled using UI Extension)"
         },
         {
-          "@id": "http://wellcomelibrary.org/iiif/b20641151/manifest",
+          "@id": "https://wellcomelibrary.org/iiif/b20641151/manifest",
           "@type": "sc:Manifest",
           "label": "Completed Schedules from the International Health Exhibition (large)"
         },
