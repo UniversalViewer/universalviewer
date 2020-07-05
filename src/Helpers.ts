@@ -1,10 +1,10 @@
 import { Viewer } from "./Viewer";
 import { Urls } from "@edsilv/utils";
 
-export const init = (selector, data) => {
+export const init = (el: string | HTMLDivElement, data) => {
   let uv;
   let isFullScreen = false;
-  const container = document.getElementById(selector);
+  const container = typeof(el) === 'string' ? document.getElementById(el) : el;
 
   if (!container) {
     throw new Error("UV target element not found");
@@ -13,8 +13,8 @@ export const init = (selector, data) => {
   container.innerHTML = "";
   const parent = document.createElement("div");
   container.appendChild(parent);
-  uv = document.createElement("div");
-  parent.appendChild(uv);
+  const uvDiv = document.createElement("div");
+  parent.appendChild(uvDiv);
 
   const resize = () => {
     if (uv) {
@@ -27,7 +27,7 @@ export const init = (selector, data) => {
       }
       uv.resize();
     }
-  }
+  };
 
   window.addEventListener("resize", function() {
     resize();
@@ -40,7 +40,7 @@ export const init = (selector, data) => {
   });
 
   uv = new Viewer({
-    target: uv,
+    target: uvDiv,
     data: data
   });
 
@@ -202,7 +202,7 @@ export const init = (selector, data) => {
   );
 
   return uv;
-}
+};
 
 function getRequestFullScreen(elem) {
   if (elem.webkitRequestFullscreen) {
