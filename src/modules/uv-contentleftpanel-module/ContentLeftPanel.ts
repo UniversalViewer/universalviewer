@@ -117,7 +117,6 @@ export class ContentLeftPanel extends LeftPanel {
     this.$thumbsButton = $(
       '<a class="thumbs tab" tabindex="0">' + this.content.thumbnails + "</a>"
     );
-    this.$thumbsButton.prop("title", this.content.thumbnails);
     this.$tabs.append(this.$thumbsButton);
 
     this.$tabsContent = $('<div class="tabsContent"></div>');
@@ -374,7 +373,6 @@ export class ContentLeftPanel extends LeftPanel {
 
   setTreeTabTitle(title: string): void {
     this.$treeButton.text(title);
-    this.$treeButton.prop("title", title);
   }
 
   updateTreeTabBySelection(): void {

@@ -205,7 +205,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      `<a class="go btn btn-primary" title="${this.content.go}" tabindex="0">${this.content.go}</a>`
+      `<a class="go btn btn-primary" tabindex="0">${this.content.go}</a>`
     );
     this.$search.append(this.$searchButton);
 

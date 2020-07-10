@@ -132,11 +132,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerContainer.prepend(this.$searchPagerControls);
 
     this.$previousResultButton = $(
-      '<a class="previousResult" title="' +
-        this.content.previousResult +
-        '">' +
-        this.content.previousResult +
-        "</a>"
+      '<a class="previousResult">' + this.content.previousResult + "</a>"
     );
     this.$searchPagerControls.append(this.$previousResultButton);
 
@@ -146,20 +142,12 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerControls.append(this.$searchResultsInfo);
 
     this.$clearSearchResultsButton = $(
-      '<a class="clearSearch" title="' +
-        this.content.clearSearch +
-        '">' +
-        this.content.clearSearch +
-        "</a>"
+      '<a class="clearSearch">' + this.content.clearSearch + "</a>"
     );
     this.$searchResultsInfo.append(this.$clearSearchResultsButton);
 
     this.$nextResultButton = $(
-      '<a class="nextResult" title="' +
-        this.content.nextResult +
-        '">' +
-        this.content.nextResult +
-        "</a>"
+      '<a class="nextResult">' + this.content.nextResult + "</a>"
     );
     this.$searchPagerControls.append(this.$nextResultButton);
 
