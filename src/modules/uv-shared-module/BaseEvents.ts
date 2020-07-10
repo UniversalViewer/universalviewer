@@ -88,6 +88,7 @@ export class BaseEvents {
   static RIGHTPANEL_EXPAND_FULL_FINISH: string = "rightPanelExpandFullFinish";
   static RIGHTPANEL_EXPAND_FULL_START: string = "rightPanelExpandFullStart";
   static SEQUENCE_INDEX_CHANGE: string = "sequenceIndexChange";
+  static SET_TARGET: string = "setTarget";
   static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";
   static SHOW_CLICKTHROUGH_DIALOGUE: string = "showClickThroughDialogue";

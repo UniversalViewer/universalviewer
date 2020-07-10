@@ -20,9 +20,9 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
-  currentBounds: any;
+  currentBounds: Bounds | null;
   handler: any;
-  initialBounds: any;
+  initialBounds: Bounds | null;
   initialRotation: any;
   isCreated: boolean = false;
   isFirstLoad: boolean = true;
@@ -84,7 +84,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
       this.whenCreated(() => {
-        (<OpenSeadragonExtension>this.extension).currentAnnotationRect = null;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
         this.clearAnnotations();
       });
     });
@@ -122,6 +122,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.whenCreated(() => {
         this.updateResponsiveView();
+      });
+    });
+
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: Bounds) => {
+      this.whenCreated(() => {
+        this.fitToBounds(target, false);
       });
     });
   }
@@ -624,8 +630,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   zoomToInitialAnnotation(): void {
     let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
 
-    (<OpenSeadragonExtension>this.extension).previousAnnotationRect = null;
-    (<OpenSeadragonExtension>this.extension).currentAnnotationRect = null;
+    (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
+    (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
 
     if (annotationRect && this.isZoomToSearchResultEnabled()) {
       this.zoomToAnnotation(annotationRect);
@@ -669,16 +675,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.viewer.viewport.setRotation(parseInt(this.initialRotation));
       }
 
-      this.initialBounds = (<IOpenSeadragonExtensionData>(
+      const xywh: string | null = ((
         this.extension.data
-      )).xywh;
+      ) as IOpenSeadragonExtensionData).xywh;
 
-      if (this.initialBounds) {
-        this.initialBounds = Bounds.fromString(this.initialBounds);
+      if (xywh) {
+        this.initialBounds = Bounds.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
       }
-    } else if (settings.preserveViewport) {
+    } else if (settings.preserveViewport && this.currentBounds) {
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
       this.fitToBounds(this.currentBounds);
     } else {
@@ -745,9 +751,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const dimensions: CroppedImageDimensions | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).getCroppedImageDimensions(canvas, this.viewer);
+    const dimensions: CroppedImageDimensions | null = (this.extension as OpenSeadragonExtension).getCroppedImageDimensions(canvas, this.viewer);
 
     if (dimensions) {
       const bounds: Bounds = new Bounds(
@@ -794,9 +798,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   getAnnotationsForCurrentImages(): AnnotationGroup[] {
     let annotationsForCurrentImages: AnnotationGroup[] = [];
-    const annotations: AnnotationGroup[] | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).annotations;
+    const annotations: AnnotationGroup[] | null = (this.extension as OpenSeadragonExtension).annotations;
 
     if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -863,9 +865,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   prevAnnotation(): void {
     const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).currentAnnotationRect;
+    const currentAnnotationRect: AnnotationRect | null = (this.extension as OpenSeadragonExtension).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -891,9 +891,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is less than the current canvasIndex
       if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
-        (<OpenSeadragonExtension>(
-          this.extension
-        )).currentAnnotationRect = foundRect;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
         this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
@@ -909,9 +907,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   nextAnnotation(): void {
     const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).currentAnnotationRect;
+    const currentAnnotationRect: AnnotationRect | null = (this.extension as OpenSeadragonExtension).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -940,15 +936,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is greater than the current canvasIndex
       if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-        (<OpenSeadragonExtension>(
-          this.extension
-        )).currentAnnotationRect = foundRect;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
         this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
-        this.zoomToAnnotation(<AnnotationRect>foundRect);
+        this.zoomToAnnotation(foundRect);
       }
     } else {
       this.navigatedFromSearch = true;
@@ -972,9 +966,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     // if less than, select the first annotation on the current page
     // otherwise default to the first annotation
 
-    const previousAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).previousAnnotationRect;
+    const previousAnnotationRect: AnnotationRect | null = (this.extension as OpenSeadragonExtension).previousAnnotationRect;
 
     if (!previousAnnotationRect) {
       if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
@@ -991,12 +983,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   zoomToAnnotation(annotationRect: AnnotationRect): void {
-    (<OpenSeadragonExtension>this.extension).previousAnnotationRect =
-      (<OpenSeadragonExtension>this.extension).currentAnnotationRect ||
+    (this.extension as OpenSeadragonExtension).previousAnnotationRect =
+      (this.extension as OpenSeadragonExtension).currentAnnotationRect ||
       annotationRect;
-    (<OpenSeadragonExtension>(
-      this.extension
-    )).currentAnnotationRect = annotationRect;
+    (this.extension as OpenSeadragonExtension).currentAnnotationRect = annotationRect;
 
     // if zoomToBoundsEnabled, zoom to the annotation's bounds.
     // otherwise, pan into view preserving the current zoom level.
@@ -1015,7 +1005,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         ),
         false
       );
-    } else {
+    } else if (this.currentBounds) {
       const x: number =
         annotationRect.viewportX -
         (this.currentBounds.w * 0.5 - annotationRect.width * 0.5);

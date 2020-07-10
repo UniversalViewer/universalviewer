@@ -92,7 +92,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       (canvasIndex: number) => {
         this.previousAnnotationRect = null;
         this.currentAnnotationRect = null;
-        this.viewPage(canvasIndex);
+        this.changeCanvas(canvasIndex);
       }
     );
 
@@ -523,7 +523,22 @@ export default class OpenSeadragonExtension extends BaseExtension {
   }
 
   checkForTarget(): void {
-    console.log("target changed internal", this.data.target);
+    if (this.data.target) {
+      // Split target into canvas id and selector
+      const components: string[] = this.data.target.split('#');
+      const canvasId: string = components[0];
+
+      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE
+      const index: number | null = this.helper.getCanvasIndexById(canvasId);
+
+      if (this.helper.canvasIndex !== index) {
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+      }
+
+      // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
+      const selector: string = components[1];
+      this.component.publish(BaseEvents.SET_TARGET, Bounds.fromString(selector));
+    }
   }
 
   checkForAnnotations(): void {
@@ -577,7 +592,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     }
   }
 
-  viewPage(canvasIndex: number): void {
+  changeCanvas(canvasIndex: number): void {
     // if it's an invalid canvas index.
     if (canvasIndex === -1) return;
 

@@ -16,7 +16,8 @@ export class Bounds {
   }
 
   static fromString(bounds: string): Bounds {
-    var boundsArr: string[] = bounds.split(",");
+    bounds = bounds.replace("xywh=", "");
+    const boundsArr: string[] = bounds.split(",");
     return new Bounds(
       Number(boundsArr[0]),
       Number(boundsArr[1]),
