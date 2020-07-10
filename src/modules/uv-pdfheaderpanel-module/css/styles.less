@@ -23,13 +23,11 @@
                 }
             }
 
-            &.disabled {
-                opacity: 0.4;
-                filter: alpha(opacity=40);
+            &.disabled,
+            &.disabled:hover,
+            &.disabled i,
+            &.disabled i:hover {
                 background-color: transparent;
-                &:hover {
-                    background-color: transparent;
-                }
             }
         }
 
