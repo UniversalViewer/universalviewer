@@ -246,7 +246,7 @@ export class BaseExtension implements IExtension {
       this.component.publish(BaseEvents.RESIZE);
     });
 
-    this.$element.append('<a href="/" id="top"></a>');
+    // this.$element.append('<a href="/" id="top"></a>');
     this.$element.append(
       '<iframe id="commsFrame" style="display:none"></iframe>'
     );
