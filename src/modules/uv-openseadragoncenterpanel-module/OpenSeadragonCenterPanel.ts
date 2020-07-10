@@ -67,7 +67,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       this.zoomToInitialAnnotation();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
       this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
     });
 
@@ -77,7 +77,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.whenResized(async () => {
           if (!this.isCreated) this.createUI();
           await this.openMedia(resources);
-          this.component.publish(BaseEvents.OPENED_MEDIA);
+          this.component.publish(BaseEvents.MEDIA_CHANGE);
         });
       }
     );
@@ -119,7 +119,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.whenCreated(() => {
         this.updateResponsiveView();
       });
@@ -895,7 +895,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           this.extension
         )).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [
+        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
@@ -944,7 +944,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           this.extension
         )).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [
+        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
@@ -1031,7 +1031,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     this.highlightAnnotationRect(annotationRect);
 
-    this.component.publish(BaseEvents.ANNOTATION_CHANGED);
+    this.component.publish(BaseEvents.ANNOTATION_CHANGE);
   }
 
   highlightAnnotationRect(annotationRect: AnnotationRect): void {

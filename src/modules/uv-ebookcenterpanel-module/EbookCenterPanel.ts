@@ -53,7 +53,7 @@ export class EbookCenterPanel extends CenterPanel {
       (e: any) => {
         this.component.publish(Events.RELOCATED, e.detail);
         this._cfi = e.detail.start.cfi;
-        this.component.publish(Events.CFI_FRAGMENT_CHANGED, this._cfi);
+        this.component.publish(Events.CFI_FRAGMENT_CHANGE, this._cfi);
       },
       false
     );
@@ -84,7 +84,7 @@ export class EbookCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
+    this.component.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
       Async.waitFor(
         () => {
           return this._ebookReaderReady;
@@ -120,7 +120,7 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.OPENED_MEDIA);
+      this.component.publish(BaseEvents.MEDIA_CHANGE);
     });
   }
 

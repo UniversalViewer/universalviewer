@@ -46,7 +46,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       this.canvasIndexChanged();
       this.setCurrentSearchResultPlacemarker();
       this.updatePrevButton();
@@ -58,7 +58,7 @@ export class FooterPanel extends BaseFooterPanel {
     });
 
     // todo: this should be a setting
-    this.component.subscribe(Events.MODE_CHANGED, () => {
+    this.component.subscribe(Events.MODE_CHANGE, () => {
       this.settingsChanged();
     });
 
@@ -83,7 +83,7 @@ export class FooterPanel extends BaseFooterPanel {
       this.hideSearchSpinner();
     });
 
-    this.component.subscribe(BaseEvents.ANNOTATION_CHANGED, () => {
+    this.component.subscribe(BaseEvents.ANNOTATION_CHANGE, () => {
       this.updatePrevButton();
       this.updateNextButton();
     });
@@ -222,7 +222,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     this.$placemarkerDetails.on("click", () => {
       that.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.currentPlacemarkerIndex
       );
     });

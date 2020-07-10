@@ -16,6 +16,7 @@ import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-
 import { ExternalResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
+import { Events } from "./Events";
 
 export default class Extension extends BaseExtension
   implements IModelViewerExtension {
@@ -40,7 +41,7 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
@@ -49,7 +50,16 @@ export default class Extension extends BaseExtension
     this.component.subscribe(
       BaseEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
+      }
+    );
+
+    this.component.subscribe(
+      Events.CAMERA_CHANGE,
+      (obj: any) => {
+        const selector: { theta: number, phi: number, radius: number } = obj.srcElement.getCameraOrbit();
+        this.data.target = this.helper.getCurrentCanvas().id + "#" + `tpr=${selector.theta}, ${selector.phi}, ${selector.radius}`;
+        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
       }
     );
   }

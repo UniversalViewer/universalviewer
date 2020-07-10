@@ -4,7 +4,6 @@ import { IUVComponent } from "./IUVComponent";
 import { IUVData } from "./IUVData";
 import { IUVDataProvider } from "./IUVDataProvider";
 import { PubSub } from "./PubSub";
-import { propertiesChanged } from "./Utils";
 import {
   RenderingFormat,
   MediaType,
@@ -231,13 +230,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
   public data(): IUVData {
     return {
       annotations: undefined,
-      assetsDir: "./uv-assets/",
-      canvasIndex: 0,
-      collectionIndex: undefined,
+      assetsDir: "/uv-assets",
+      //canvasIndex: 0,
+      //collectionIndex: undefined,
       config: undefined,
       configUri: undefined,
       embedded: false,
-      isLightbox: false,
       isReload: false,
       limitLocales: false,
       manifestUri: "",
@@ -246,11 +244,11 @@ export class Viewer extends BaseComponent implements IUVComponent {
           name: "en-GB"
         }
       ],
-      manifestIndex: 0,
-      rangeId: undefined,
-      rotation: 0,
-      sequenceIndex: 0,
-      xywh: ""
+      // manifestIndex: 0,
+      // rangeId: undefined,
+      // rotation: 0,
+      // sequenceIndex: 0,
+      target: ""
     } as IUVData;
   }
 
@@ -270,29 +268,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
       this._reload(data);
     } else {
       // changing any of these data properties forces the UV to reload.
-      if (
-        propertiesChanged(data, this.extension.data, [
-          "collectionIndex",
-          "manifestIndex",
-          "config",
-          "configUri",
-          "domain",
-          "embedDomain",
-          "embedScriptUri",
-          "manifestUri",
-          "isHomeDomain",
-          "isLightbox",
-          "isOnlyInstance",
-          "isReload",
-          "locales",
-          "root"
-        ])
-      ) {
-        this.extension.data = Object.assign({}, this.extension.data, data);
+      const newData: IUVData = Object.assign({}, this.extension.data, data);
+      if (newData.isReload !== this.extension.data.isReload ||
+          newData.manifestUri !== this.extension.data.manifestUri) {
+        this.extension.data = newData;
         this._reload(this.extension.data);
       } else {
         // no need to reload, just update.
-        this.extension.data = Object.assign({}, this.extension.data, data);
+        this.extension.data = newData;
         this.extension.render();
       }
     }

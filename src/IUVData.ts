@@ -8,11 +8,11 @@ export interface IUVData {
   config?: any; // do not pass this on initialisation, internal use only
   configUri?: string;
   embedded?: boolean;
-  isLightbox?: boolean;
   isReload?: boolean;
   locales?: ILocale[];
   manifestIndex?: number;
   manifestUri?: string;
   rangeId?: string;
   sequenceIndex?: number;
+  target?: string;
 }

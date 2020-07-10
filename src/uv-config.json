@@ -15,6 +15,11 @@
         "localeToggleEnabled": false
       }
     },
+    "pagingHeaderPanel": {
+      "options": {
+        "pagingToggleEnabled": true
+      }
+    },
     "openSeadragonCenterPanel": {
       "options": {
         "autoHideControls": false
@@ -22,7 +27,7 @@
     },
     "footerPanel": {
       "options": {
-        "downloadEnabled": true
+        "downloadEnabled": false
       }
     }
   }

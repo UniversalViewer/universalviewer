@@ -10,7 +10,7 @@ export class ThumbsView extends BaseThumbsView {
     super.create();
 
     // todo: this should be a setting
-    this.component.subscribe(Events.MODE_CHANGED, () => {
+    this.component.subscribe(Events.MODE_CHANGE, () => {
       this.setLabel();
     });
 

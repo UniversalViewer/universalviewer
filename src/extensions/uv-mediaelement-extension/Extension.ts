@@ -51,14 +51,14 @@ export default class Extension extends BaseExtension
     });
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
     this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
 
     this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {

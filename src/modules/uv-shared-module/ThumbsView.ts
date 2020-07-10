@@ -21,7 +21,7 @@ export class ThumbsView extends BaseView {
   create(): void {
     super.create();
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (index: any) => {
+    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, (index: any) => {
       this.selectIndex(parseInt(index));
     });
 

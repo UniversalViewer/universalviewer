@@ -32,7 +32,7 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     super.create();
 
-    this.component.subscribe(Events.PAGE_INDEX_CHANGED, (pageIndex: number) => {
+    this.component.subscribe(Events.PAGE_INDEX_CHANGE, (pageIndex: number) => {
       this._pageIndex = pageIndex;
       this.render();
     });

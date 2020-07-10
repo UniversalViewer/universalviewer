@@ -102,7 +102,10 @@
       }
     },
     "modelViewerCenterPanel": {
-      "options": {}
+      "options": {
+        "autoRotateEnabled": true,
+        "interactionPromptEnabled": true
+      }
     }
   }
 }

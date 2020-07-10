@@ -108,11 +108,6 @@ export class BaseExtension implements IExtension {
       this.$element.addClass("mobile");
     }
 
-    // todo: deprecate?
-    if (this.data.isLightbox) {
-      this.$element.addClass("lightbox");
-    }
-
     if (Documents.supportsFullscreen()) {
       this.$element.addClass("fullscreen-supported");
     }
@@ -282,12 +277,12 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.data.canvasIndex = canvasIndex;
         this.lastCanvasIndex = this.helper.canvasIndex;
         this.helper.canvasIndex = canvasIndex;
-        this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
+        this.fire(BaseEvents.CANVAS_INDEX_CHANGE, this.data.canvasIndex);
       }
     );
 
@@ -310,11 +305,11 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.COLLECTION_INDEX_CHANGED,
+      BaseEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
         this.data.collectionIndex = collectionIndex;
         this.fire(
-          BaseEvents.COLLECTION_INDEX_CHANGED,
+          BaseEvents.COLLECTION_INDEX_CHANGE,
           this.data.collectionIndex
         );
       }
@@ -352,10 +347,10 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
+    this.component.subscribe(BaseEvents.MEDIA_CHANGE, () => {
       setTimeout(() => {
         this.component.publish(BaseEvents.RESIZE);
-        this.fire(BaseEvents.OPENED_MEDIA);
+        this.fire(BaseEvents.MEDIA_CHANGE, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
@@ -441,17 +436,17 @@ export class BaseExtension implements IExtension {
         that.lastCanvasIndex !== that.helper.canvasIndex
       ) {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           that.lastCanvasIndex
         );
       }
     });
 
     this.component.subscribe(
-      BaseEvents.MANIFEST_INDEX_CHANGED,
+      BaseEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex: number) => {
         this.data.manifestIndex = manifestIndex;
-        this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
+        this.fire(BaseEvents.MANIFEST_INDEX_CHANGE, this.data.manifestIndex);
       }
     );
 
@@ -497,16 +492,16 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.RANGE_CHANGED,
+      BaseEvents.RANGE_CHANGE,
       (range: Range | null) => {
         if (range) {
           this.data.rangeId = range.id;
           this.helper.rangeId = range.id;
-          this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
+          this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
         } else {
           this.data.rangeId = undefined;
           this.helper.rangeId = undefined;
-          this.fire(BaseEvents.RANGE_CHANGED, null);
+          this.fire(BaseEvents.RANGE_CHANGE, null);
         }
       }
     );
@@ -544,15 +539,15 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.SEQUENCE_INDEX_CHANGED,
+      BaseEvents.SEQUENCE_INDEX_CHANGE,
       (sequenceIndex: number) => {
         this.data.sequenceIndex = sequenceIndex;
-        this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
+        this.fire(BaseEvents.SEQUENCE_INDEX_CHANGE, this.data.sequenceIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: any) => {
-      this.fire(BaseEvents.SETTINGS_CHANGED, args);
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: any) => {
+      this.fire(BaseEvents.SETTINGS_CHANGE, args);
     });
 
     this.component.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
@@ -737,7 +732,7 @@ export class BaseExtension implements IExtension {
       this.data.collectionIndex !== this.helper.collectionIndex
     ) {
       this.component.publish(
-        BaseEvents.COLLECTION_INDEX_CHANGED,
+        BaseEvents.COLLECTION_INDEX_CHANGE,
         this.data.collectionIndex
       );
     }
@@ -747,7 +742,7 @@ export class BaseExtension implements IExtension {
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
       this.component.publish(
-        BaseEvents.MANIFEST_INDEX_CHANGED,
+        BaseEvents.MANIFEST_INDEX_CHANGE,
         this.data.manifestIndex
       );
     }
@@ -757,14 +752,14 @@ export class BaseExtension implements IExtension {
       this.data.sequenceIndex !== this.helper.sequenceIndex
     ) {
       this.component.publish(
-        BaseEvents.SEQUENCE_INDEX_CHANGED,
+        BaseEvents.SEQUENCE_INDEX_CHANGE,
         this.data.sequenceIndex
       );
     }
 
     if (!this.isCreated || this.data.canvasIndex !== this.helper.canvasIndex) {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.data.canvasIndex
       );
     }
@@ -774,7 +769,7 @@ export class BaseExtension implements IExtension {
         const range: Range | null = this.helper.getRangeById(this.data.rangeId);
 
         if (range) {
-          this.component.publish(BaseEvents.RANGE_CHANGED, range);
+          this.component.publish(BaseEvents.RANGE_CHANGE, range);
         } else {
           console.warn("range id not found:", this.data.rangeId);
         }
@@ -847,8 +842,8 @@ export class BaseExtension implements IExtension {
     setTimeout(() => {
       // loop through all metrics
       // find one that matches the current dimensions
-      // if a metric is found, and it's not the current metric, set it to be the current metric and publish a METRIC_CHANGED event
-      // if no metric is found, set MetricType.NONE to be the current metric and publish a METRIC_CHANGED event
+      // if a metric is found, and it's not the current metric, set it to be the current metric and publish a METRIC_CHANGE event
+      // if no metric is found, set MetricType.NONE to be the current metric and publish a METRIC_CHANGE event
 
       let metricFound: boolean = false;
 
@@ -869,7 +864,7 @@ export class BaseExtension implements IExtension {
 
           if (this.metric !== metric.type) {
             this.metric = metric.type;
-            this.component.publish(BaseEvents.METRIC_CHANGED);
+            this.component.publish(BaseEvents.METRIC_CHANGE);
           }
         }
       }
@@ -877,7 +872,7 @@ export class BaseExtension implements IExtension {
       if (!metricFound) {
         if (this.metric !== MetricType.NONE) {
           this.metric = MetricType.NONE;
-          this.component.publish(BaseEvents.METRIC_CHANGED);
+          this.component.publish(BaseEvents.METRIC_CHANGE);
         }
       }
     }, 1);
@@ -885,7 +880,6 @@ export class BaseExtension implements IExtension {
 
   resize(): void {
     this._updateMetric();
-    //console.log("resize");
     this.component.publish(BaseEvents.RESIZE);
   }
 

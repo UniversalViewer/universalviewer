@@ -1,19 +1,19 @@
 export class BaseEvents {
   static ACCEPT_TERMS: string = "acceptTerms";
-  static ANNOTATION_CANVAS_CHANGED: string = "annotationCanvasChanged";
-  static ANNOTATION_CHANGED: string = "annotationChanged";
+  static ANNOTATION_CANVAS_CHANGE: string = "annotationCanvasChange";
+  static ANNOTATION_CHANGE: string = "annotationChange";
   static ANNOTATIONS_CLEARED: string = "annotationsCleared";
   static ANNOTATIONS_EMPTY: string = "annotationsEmpty";
   static ANNOTATIONS: string = "annotations";
   static BOOKMARK: string = "bookmark";
   static CANVAS_INDEX_CHANGE_FAILED: string = "canvasIndexChangeFailed";
-  static CANVAS_INDEX_CHANGED: string = "canvasIndexChanged";
+  static CANVAS_INDEX_CHANGE: string = "canvasIndexChange";
   static CLEAR_ANNOTATIONS: string = "clearAnnotations";
   static CLICKTHROUGH: string = "clickthrough";
   static CLOSE_ACTIVE_DIALOGUE: string = "closeActiveDialogue";
   static CLOSE_LEFT_PANEL: string = "closeLeftPanel";
   static CLOSE_RIGHT_PANEL: string = "closeRightPanel";
-  static COLLECTION_INDEX_CHANGED: string = "collectionIndexChanged";
+  static COLLECTION_INDEX_CHANGE: string = "collectionIndexChange";
   static CREATE: string = "create";
   static CREATED: string = "created";
   static DOWN_ARROW: string = "downArrow";
@@ -56,8 +56,9 @@ export class BaseEvents {
   static LOGIN_FAILED: string = "loginFailed";
   static LOGIN: string = "login";
   static LOGOUT: string = "logout";
-  static MANIFEST_INDEX_CHANGED: string = "manifestIndexChanged";
-  static METRIC_CHANGED: string = "metricChanged";
+  static MANIFEST_INDEX_CHANGE: string = "manifestIndexChange";
+  static MEDIA_CHANGE: string = "mediaChange";
+  static METRIC_CHANGE: string = "metricChange";
   static MINUS: string = "minus";
   static MULTISELECT_CHANGE: string = "multiSelectChange";
   static MULTISELECTION_MADE: string = "multiSelectionMade";
@@ -69,12 +70,11 @@ export class BaseEvents {
   static OPEN_THUMBS_VIEW: string = "openThumbsView";
   static OPEN_TREE_VIEW: string = "openTreeView";
   static OPEN: string = "open";
-  static OPENED_MEDIA: string = "openedMedia";
   static PAGE_DOWN: string = "pageDown";
   static PAGE_UP: string = "pageUp";
   static PLUS: string = "plus";
   static PREV: string = "prev";
-  static RANGE_CHANGED: string = "rangeChanged";
+  static RANGE_CHANGE: string = "rangeChange";
   static REDIRECT: string = "redirect";
   static REFRESH: string = "refresh";
   static RELOAD: string = "reload";
@@ -83,13 +83,12 @@ export class BaseEvents {
   static RETRY: string = "retry";
   static RETURN: string = "return";
   static RIGHT_ARROW: string = "rightArrow";
-  static RIGHTPANEL_COLLAPSE_FULL_FINISH: string =
-    "rightPanelCollapseFullFinish";
+  static RIGHTPANEL_COLLAPSE_FULL_FINISH: string = "rightPanelCollapseFullFinish";
   static RIGHTPANEL_COLLAPSE_FULL_START: string = "rightPanelCollapseFullStart";
   static RIGHTPANEL_EXPAND_FULL_FINISH: string = "rightPanelExpandFullFinish";
   static RIGHTPANEL_EXPAND_FULL_START: string = "rightPanelExpandFullStart";
-  static SEQUENCE_INDEX_CHANGED: string = "sequenceIndexChanged";
-  static SETTINGS_CHANGED: string = "settingsChanged";
+  static SEQUENCE_INDEX_CHANGE: string = "sequenceIndexChange";
+  static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";
   static SHOW_CLICKTHROUGH_DIALOGUE: string = "showClickThroughDialogue";
   static SHOW_DOWNLOAD_DIALOGUE: string = "showDownloadDialogue";
@@ -107,6 +106,7 @@ export class BaseEvents {
   static SHOW_SETTINGS_DIALOGUE: string = "showSettingsDialogue";
   static SHOW_SHARE_DIALOGUE: string = "showShareDialogue";
   static SHOW_TERMS_OF_USE: string = "showTermsOfUse";
+  static TARGET_CHANGE: string = "targetChange";
   static THUMB_MULTISELECTED: string = "thumbMultiSelected";
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";

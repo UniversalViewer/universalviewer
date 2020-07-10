@@ -33,12 +33,12 @@ export class FooterPanel extends BaseView {
       }
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.updateMinimisedButtons();
       this.updateMoreInfoButton();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.updateDownloadButton();
     });
 
@@ -203,10 +203,6 @@ export class FooterPanel extends BaseView {
     ) {
       this.$fullScreenBtn.hide();
       return;
-    }
-
-    if (this.extension.data.isLightbox) {
-      this.$fullScreenBtn.addClass("lightbox");
     }
 
     if (this.extension.isFullScreen()) {

@@ -38,15 +38,15 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
+    this.component.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
       this.cfiFragement = cfi;
-      this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
+      this.fire(Events.CFI_FRAGMENT_CHANGE, this.cfiFragement);
     });
   }
 
@@ -148,7 +148,7 @@ export default class Extension extends BaseExtension
     const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
 
     if (cfi) {
-      this.component.publish(Events.CFI_FRAGMENT_CHANGED, cfi);
+      this.component.publish(Events.CFI_FRAGMENT_CHANGE, cfi);
     }
   }
 }

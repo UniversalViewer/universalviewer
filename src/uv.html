@@ -52,7 +52,7 @@
         ];
       }
 
-      uv = UV.init(
+      uv = createUV(
         "uv",
         {
           manifestUri: urlDataProvider.get("manifest"),
@@ -65,7 +65,8 @@
           rotation: Number(urlDataProvider.get("r", 0)),
           xywh: urlDataProvider.get("xywh", ""),
           embedded: true,
-          locales: formattedLocales
+          locales: formattedLocales,
+          target: urlDataProvider.get("target")
         },
         urlDataProvider
       );

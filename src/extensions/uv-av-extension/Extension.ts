@@ -35,7 +35,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
@@ -50,7 +50,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     );
 
     this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
   }
 
@@ -177,7 +177,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   viewRange(path: string): void {
     const range: Range | null = this.helper.getRangeByPath(path);
     if (!range) return;
-    this.component.publish(BaseEvents.RANGE_CHANGED, range);
+    this.component.publish(BaseEvents.RANGE_CHANGE, range);
 
     // don't update the canvas index, only when thumbs are clicked
     // if (range.canvases && range.canvases.length) {
@@ -188,7 +188,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     //         const canvasIndex: number = canvas.index;
 
     //         if (canvasIndex !== this.helper.canvasIndex) {
-    //             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+    //             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [canvasIndex]);
     //         }
     //     }
     // }

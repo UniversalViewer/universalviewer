@@ -19,6 +19,7 @@
       body {
         margin: 0px;
         padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       #uv {
@@ -28,18 +29,39 @@
             height: 576px; */
       }
 
-      #options {
+      #uv-controls .group {
         padding: 20px 0 0 0;
+      }
+
+      #uv-controls select {
+        width: 700px;
+        margin: 0 0 10px 0;
+      }
+
+      #uv-controls input {
+        width: 700px;
+      }
+
+      #uv-controls button {
+        width: 100px;
       }
     </style>
   </head>
   <body>
     <div id="uv" class="uv"></div>
 
-    <div id="options">
-      <select id="manifestSelect"></select>
-      <input id="manifest" type="text" value="" />
-      <a id="setManifestButton" class="button" href="#">Set</a>
+    <div id="uv-controls">
+      <div class="group">
+        <select id="manifestSelect"></select>
+        <input id="manifest" type="text" value="" />
+        <button id="setManifestButton" class="button" href="#">Set Manifest</button>
+      </div>
+
+      <div class="group">
+        <input id="target" type="text" value="" />
+        <button id="setTargetButton" class="button" href="#">Set Target</button>
+      </div>
+
     </div>
 
     <!-- <div>
@@ -76,7 +98,8 @@
           canvasIndex: Number(urlDataProvider.get("cv", 0)),
           rotation: Number(urlDataProvider.get("r", 0)),
           rangeId: urlDataProvider.get("rid", ""),
-          xywh: urlDataProvider.get("xywh", "")
+          xywh: urlDataProvider.get("xywh", ""),
+          target: urlDataProvider.get("target", "")
         };
 
         uv = UV.init("uv", data, urlDataProvider);
@@ -85,9 +108,9 @@
           utils.Urls.setHashParameter("manifest", manifest);
         });
 
-        // uv.on('openseadragonExtension.open', function() {
-        //     console.log('osd opened');
-        // });
+        uv.on('targetChange', function(target) {
+          $('#target').val(target);
+        });
       }
 
       function loadManifests(cb) {
@@ -156,6 +179,14 @@
           manifestIndex: 0,
           sequenceIndex: 0,
           canvasIndex: 0
+        });
+      });
+
+      $("#setTargetButton").on("click", function() {
+        var target = $("#target").val();
+
+        uv.set({
+          target: target
         });
       });
 

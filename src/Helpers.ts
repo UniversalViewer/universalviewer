@@ -53,7 +53,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "openedMedia",
+    "mediaChange",
     function() {
       setTimeout(function() {
         resize();
@@ -63,7 +63,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "collectionIndexChanged",
+    "collectionIndexChange",
     function(collectionIndex) {
       uv.dataProvider.set("c", collectionIndex);
     },
@@ -71,7 +71,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "manifestIndexChanged",
+    "manifestIndexChange",
     function(manifestIndex) {
       uv.dataProvider.set("m", manifestIndex);
     },
@@ -79,7 +79,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "canvasIndexChanged",
+    "canvasIndexChange",
     function(canvasIndex) {
       uv.dataProvider.set("cv", canvasIndex);
     },
@@ -87,7 +87,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "rangeChanged",
+    "rangeChange",
     function(rangeId) {
       uv.dataProvider.set("rid", rangeId);
     },
@@ -95,7 +95,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   // uv.on(
-  //   "openseadragonExtension.rotationChanged",
+  //   "openseadragonExtension.rotationChange",
   //   function(rotation) {
   //     uv.dataProvider.set("r", rotation);
   //   },
@@ -103,7 +103,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   // );
 
   // uv.on(
-  //   "openseadragonExtension.xywhChanged",
+  //   "openseadragonExtension.xywhChange",
   //   function(xywh) {
   //     uv.dataProvider.set("xywh", xywh);
   //   },

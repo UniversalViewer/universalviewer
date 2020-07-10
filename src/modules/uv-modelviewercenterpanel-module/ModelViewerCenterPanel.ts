@@ -4,6 +4,7 @@ import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { sanitize } from "../../Utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { Events } from "../../extensions/uv-model-viewer-extension/Events";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelViewer: JQuery;
@@ -33,7 +34,11 @@ export class ModelViewerCenterPanel extends CenterPanel {
     this.$content.prepend(this.$spinner);
 
     this.$modelViewer = $(
-      '<model-viewer auto-rotate camera-controls style="background-color: unset;"></model-viewer>'
+      `<model-viewer 
+        ${this.config.options.autoRotateEnabled ? 'auto-rotate' : ''} 
+        ${this.config.options.interactionPromptEnabled ? 'interaction-prompt' : 'interaction-prompt="none"'}
+        camera-controls 
+        style="background-color: unset;"></model-viewer>`
     );
 
     this.$content.prepend(this.$modelViewer);
@@ -43,7 +48,11 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.$spinner.hide();
     });
 
-    this.component.publish(BaseEvents.OPENED_MEDIA);
+    this.$modelViewer[0].addEventListener("camera-change", (obj) => {
+      this.component.publish(Events.CAMERA_CHANGE, obj);
+    });
+
+    this.component.publish(BaseEvents.MEDIA_CHANGE);
   }
 
   async openMedia(resources: IExternalResource[]) {
@@ -69,7 +78,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelViewer.attr("ios-src", mediaUri);
 
-    this.component.publish(BaseEvents.OPENED_MEDIA);
+    this.component.publish(BaseEvents.MEDIA_CHANGE);
   }
 
   resize() {

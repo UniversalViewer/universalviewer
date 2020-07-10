@@ -75,7 +75,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   create(): void {
     super.create();
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       if (!this.isDesktopMetric()) {
         const settings: ISettings = {};
         settings.pagingEnabled = false;
@@ -88,7 +88,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.previousAnnotationRect = null;
         this.currentAnnotationRect = null;
@@ -110,7 +110,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.component.subscribe(BaseEvents.END, () => {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.helper.getLastPageIndex()
       );
     });
@@ -118,7 +118,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(BaseEvents.FIRST, () => {
       this.fire(BaseEvents.FIRST);
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.helper.getFirstPageIndex()
       );
     });
@@ -137,20 +137,20 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.component.subscribe(BaseEvents.HOME, () => {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.helper.getFirstPageIndex()
       );
     });
 
     this.component.subscribe(Events.IMAGE_SEARCH, (index: number) => {
       this.fire(Events.IMAGE_SEARCH, index);
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
+      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
     });
 
     this.component.subscribe(BaseEvents.LAST, () => {
       this.fire(BaseEvents.LAST);
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.helper.getLastPageIndex()
       );
     });
@@ -158,7 +158,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(BaseEvents.LEFT_ARROW, () => {
       if (this.useArrowKeysToNavigate()) {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           this.getPrevPageIndex()
         );
       } else {
@@ -186,11 +186,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.centerPanel.setFocus();
     });
 
-    this.component.subscribe(Events.MODE_CHANGED, (mode: string) => {
-      this.fire(Events.MODE_CHANGED, mode);
+    this.component.subscribe(Events.MODE_CHANGE, (mode: string) => {
+      this.fire(Events.MODE_CHANGE, mode);
       this.mode = new Mode(mode);
       const settings: ISettings = this.getSettings();
-      this.component.publish(BaseEvents.SETTINGS_CHANGED, settings);
+      this.component.publish(BaseEvents.SETTINGS_CHANGE, settings);
     });
 
     this.component.subscribe(
@@ -209,7 +209,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(BaseEvents.NEXT, () => {
       this.fire(BaseEvents.NEXT);
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.getNextPageIndex()
       );
     });
@@ -244,7 +244,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.getNextPageIndex()
       );
     });
@@ -256,7 +256,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.component.subscribe(BaseEvents.PAGE_UP, () => {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.getPrevPageIndex()
       );
     });
@@ -272,7 +272,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(BaseEvents.PREV, () => {
       this.fire(BaseEvents.PREV);
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.getPrevPageIndex()
       );
     });
@@ -292,7 +292,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(BaseEvents.RIGHT_ARROW, () => {
       if (this.useArrowKeysToNavigate()) {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           this.getNextPageIndex()
         );
       } else {
@@ -310,11 +310,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
         const bounds: Bounds | null = this.centerPanel.getViewportBounds();
 
         if (this.centerPanel && bounds) {
-          this.component.publish(Events.XYWH_CHANGED, bounds.toString());
-          (<IOpenSeadragonExtensionData>this.data).xywh = bounds.toString();
+          this.component.publish(Events.XYWH_CHANGE, bounds.toString());
+          this.data.target = this.helper.getCurrentCanvas().id + "#xywh=" + bounds.toString();
           this.fire(
-            Events.XYWH_CHANGED,
-            (<IOpenSeadragonExtensionData>this.data).xywh
+            BaseEvents.TARGET_CHANGE,
+            this.data.target
           );
         }
 
@@ -372,10 +372,10 @@ export default class OpenSeadragonExtension extends BaseExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.ANNOTATION_CANVAS_CHANGED,
+      BaseEvents.ANNOTATION_CANVAS_CHANGE,
       (rects: AnnotationRect[]) => {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           rects[0].canvasIndex
         );
       }
@@ -386,7 +386,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     });
 
     this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
 
     this.component.subscribe(
@@ -405,16 +405,16 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.component.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
       this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
+        BaseEvents.CANVAS_INDEX_CHANGE,
         this.helper.canvasIndex
       );
       const settings: ISettings = this.getSettings();
-      this.component.publish(BaseEvents.SETTINGS_CHANGED, settings);
+      this.component.publish(BaseEvents.SETTINGS_CHANGE, settings);
     });
 
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
     //     this.fire(Events.VIEW_PAGE, index);
-    //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+    //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [index]);
     // });
   }
 
@@ -516,9 +516,14 @@ export default class OpenSeadragonExtension extends BaseExtension {
   render(): void {
     super.render();
 
+    this.checkForTarget();
     this.checkForAnnotations();
     this.checkForSearchParam();
     this.checkForRotationParam();
+  }
+
+  checkForTarget(): void {
+    console.log("target changed internal", this.data.target);
   }
 
   checkForAnnotations(): void {
@@ -548,7 +553,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.publish(BaseEvents.ANNOTATIONS, annotationResults);
 
     // reload current index as it may contain annotations.
-    //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+    //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [this.helper.canvasIndex]);
   }
 
   checkForSearchParam(): void {
@@ -637,7 +642,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     if (!range) return;
     const canvasId: string = range.getCanvasIds()[0];
     const index: number | null = this.helper.getCanvasIndexById(canvasId);
-    this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
+    this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
   }
 
   viewLabel(label: string): void {
@@ -652,7 +657,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     const index: number = this.helper.getCanvasIndexByLabel(label);
 
     if (index != -1) {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
+      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
     } else {
       this.showMessage(
         this.data.config.modules.genericDialogue.content.pageNotFound
@@ -686,7 +691,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     // reload current index as it may contain results.
     this.component.publish(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       this.helper.canvasIndex
     );
   }
@@ -702,7 +707,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       if (result.canvasIndex <= this.getPrevPageIndex()) {
         foundResult = result;
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           foundResult.canvasIndex
         );
         break;
@@ -719,7 +724,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
       if (result && result.canvasIndex >= this.getNextPageIndex()) {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           result.canvasIndex
         );
         break;
