@@ -27,7 +27,7 @@
     },
     "footerPanel": {
       "options": {
-        "downloadEnabled": false
+        "downloadEnabled": true
       }
     }
   }

@@ -10,7 +10,7 @@ import {
   ExternalResourceType
 } from "@iiif/vocabulary";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
-import { Annotation, AnnotationBody, Canvas, Sequence } from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
 import "./lib/";
@@ -271,7 +271,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
       const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
         newData.isReload !== this.extension.data.isReload ||
-        newData.manifestUri !== this.extension.data.manifestUri
+        newData.manifestUri !== this.extension.data.manifestUri ||
+        newData.manifestIndex !== this.extension.data.manifestIndex ||
+        newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
         this.extension.data = newData;
         console.log("reload");
@@ -329,7 +331,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
       manifestUri: data.manifestUri,
       collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
       manifestIndex: data.manifestIndex || 0,
-      sequenceIndex: data.sequenceIndex || 0,
       canvasIndex: data.canvasIndex || 0,
       rangeId: data.rangeId,
       locale: data.locales ? data.locales[0].name : undefined
@@ -345,29 +346,16 @@ export class Viewer extends BaseComponent implements IUVComponent {
       window.trackingLabel = trackingLabel;
     }
 
-    let sequence: Sequence | undefined;
-
-    if (data.sequenceIndex !== undefined) {
-      sequence = helper.getSequenceByIndex(data.sequenceIndex);
-
-      if (!sequence) {
-        that._error(`Sequence ${data.sequenceIndex} not found.`);
-        return;
-      }
-    }
-
     let canvas: Canvas | undefined;
 
-    if (data.canvasIndex !== undefined) {
-      canvas = helper.getCanvasByIndex(data.canvasIndex);
-    }
+    canvas = helper.getCurrentCanvas();
 
-    if (!canvas) {
-      that._error(`Canvas ${data.canvasIndex} not found.`);
-      return;
-    }
+    // if (!canvas) {
+    //   that._error(`Canvas ${data.canvasIndex} not found.`);
+    //   return;
+    // }
 
-    let extension: IExtension | undefined = undefined;
+    let extension: IExtension | undefined;
 
     // if the canvas has a duration, use the uv-av-extension
     // const duration: number | null = canvas.getDuration();

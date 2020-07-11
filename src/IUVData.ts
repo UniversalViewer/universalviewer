@@ -13,6 +13,5 @@ export interface IUVData {
   manifestIndex?: number;
   manifestUri?: string;
   rangeId?: string;
-  sequenceIndex?: number;
   target?: string;
 }

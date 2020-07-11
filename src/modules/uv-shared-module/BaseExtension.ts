@@ -534,14 +534,6 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
     });
 
-    this.component.subscribe(
-      BaseEvents.SEQUENCE_INDEX_CHANGE,
-      (sequenceIndex: number) => {
-        this.data.sequenceIndex = sequenceIndex;
-        this.fire(BaseEvents.SEQUENCE_INDEX_CHANGE, this.data.sequenceIndex);
-      }
-    );
-
     this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: any) => {
       this.fire(BaseEvents.SETTINGS_CHANGE, args);
     });
@@ -740,16 +732,6 @@ export class BaseExtension implements IExtension {
       this.component.publish(
         BaseEvents.MANIFEST_INDEX_CHANGE,
         this.data.manifestIndex
-      );
-    }
-
-    if (
-      !this.isCreated ||
-      this.data.sequenceIndex !== this.helper.sequenceIndex
-    ) {
-      this.component.publish(
-        BaseEvents.SEQUENCE_INDEX_CHANGE,
-        this.data.sequenceIndex
       );
     }
 
@@ -1231,7 +1213,6 @@ export class BaseExtension implements IExtension {
     data.manifestUri = this.helper.manifestUri;
     data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
     data.manifestIndex = <number>manifest.index;
-    data.sequenceIndex = 0;
     data.canvasIndex = 0;
 
     this.reload(data);
@@ -1246,7 +1227,6 @@ export class BaseExtension implements IExtension {
       : this.helper.manifestUri;
     data.collectionIndex = collection.index;
     data.manifestIndex = 0;
-    data.sequenceIndex = 0;
     data.canvasIndex = 0;
 
     this.reload(data);

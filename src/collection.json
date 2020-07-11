@@ -289,42 +289,50 @@
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Add_4709.json",
           "@type": "sc:Manifest",
-          "label": "Add_4709 (3D)"
+          "label": "Add_4709 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_1087.json",
           "@type": "sc:Manifest",
-          "label": "Or_1087 (3D)"
+          "label": "Or_1087 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_13027.json",
           "@type": "sc:Manifest",
-          "label": "Or_13027 (3D)"
+          "label": "Or_13027 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1580.json",
           "@type": "sc:Manifest",
-          "label": "or_7694_1580 (3D)"
+          "label": "or_7694_1580 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1595.json",
           "@type": "sc:Manifest",
-          "label": "or_7694_1595 (3D)"
+          "label": "or_7694_1595 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1655_1672.json",
           "@type": "sc:Manifest",
-          "label": "or_7694_1655_1672 (3D)"
+          "label": "or_7694_1655_1672 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part1.json",
           "@type": "sc:Manifest",
-          "label": "or_7694_1988_part1 (3D)"
+          "label": "or_7694_1988_part1 (3D)",
+          "visible": false
         },
         {
           "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part2.json",
           "@type": "sc:Manifest",
-          "label": "or_7694_1988_part2 (3D)"
+          "label": "or_7694_1988_part2 (3D)",
+          "visible": false
         }
       ]
     },
