@@ -17,6 +17,7 @@ import { ExternalResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Events } from "./Events";
+import { TPR } from "./TPR";
 
 export default class Extension extends BaseExtension
   implements IModelViewerExtension {
@@ -57,9 +58,14 @@ export default class Extension extends BaseExtension
     this.component.subscribe(
       Events.CAMERA_CHANGE,
       (obj: any) => {
-        const selector: { theta: number, phi: number, radius: number } = obj.srcElement.getCameraOrbit();
-        this.data.target = this.helper.getCurrentCanvas().id + "#" + `tpr=${selector.theta}, ${selector.phi}, ${selector.radius}`;
-        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+        const orbit = obj.srcElement.getCameraOrbit();
+        const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+
+        if (canvas) {
+          this.data.target = canvas.id + "#" + `tpr=${tpr.toString()}`;
+          this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+        }
       }
     );
   }
@@ -131,6 +137,27 @@ export default class Extension extends BaseExtension
 
   render(): void {
     super.render();
+
+    this.checkForTarget();
+  }
+
+  checkForTarget(): void {
+    if (this.data.target) {
+      // Split target into canvas id and selector
+      const components: string[] = this.data.target.split('#');
+      const canvasId: string = components[0];
+
+      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)
+      const index: number | null = this.helper.getCanvasIndexById(canvasId);
+
+      if (index !== null && this.helper.canvasIndex !== index) {
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+      }
+
+      // trigger SET_TARGET which sets the camera-orbit attribute in ModelViewerCenterPanel
+      const selector: string = components[1];
+      this.component.publish(BaseEvents.SET_TARGET, TPR.fromString(selector));
+    }
   }
 
   isLeftPanelEnabled(): boolean {

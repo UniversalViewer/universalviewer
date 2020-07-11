@@ -5,10 +5,14 @@ import { sanitize } from "../../Utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-model-viewer-extension/Events";
+import { TPR } from "../../extensions/uv-model-viewer-extension/TPR";
+import { Async } from "@edsilv/utils";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelViewer: JQuery;
   $spinner: JQuery;
+
+  isLoaded: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
@@ -28,6 +32,12 @@ export class ModelViewerCenterPanel extends CenterPanel {
       }
     );
 
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: TPR) => {
+      this.whenLoaded(() => {
+        (that.$modelViewer[0] as any).cameraOrbit = target.toAttributeString();
+      });
+    });
+
     this.title = this.extension.helper.getLabel();
 
     this.$spinner = $('<div class="spinner"></div>');
@@ -36,23 +46,32 @@ export class ModelViewerCenterPanel extends CenterPanel {
     this.$modelViewer = $(
       `<model-viewer 
         ${this.config.options.autoRotateEnabled ? 'auto-rotate' : ''} 
-        ${this.config.options.interactionPromptEnabled ? 'interaction-prompt' : 'interaction-prompt="none"'}
+        ${this.config.options.interactionPromptEnabled ? 'interaction-prompt="auto"' : 'interaction-prompt="none"'}
         camera-controls 
         style="background-color: unset;"></model-viewer>`
     );
 
     this.$content.prepend(this.$modelViewer);
 
-    this.$modelViewer[0].addEventListener("load", () => {
+    this.$modelViewer[0].addEventListener("model-visibility", () => {
+      this.isLoaded = true;
       this.$content.removeClass("loading");
       this.$spinner.hide();
     });
 
     this.$modelViewer[0].addEventListener("camera-change", (obj) => {
-      this.component.publish(Events.CAMERA_CHANGE, obj);
+      if (this.isLoaded) {
+        this.component.publish(Events.CAMERA_CHANGE, obj);
+      }
     });
 
     this.component.publish(BaseEvents.MEDIA_CHANGE);
+  }
+
+  whenLoaded(cb: () => void): void {
+    Async.waitFor(() => {
+      return this.isLoaded;
+    }, cb);
   }
 
   async openMedia(resources: IExternalResource[]) {

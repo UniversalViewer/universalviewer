@@ -2,7 +2,7 @@ import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResu
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
-import { Bounds } from "./Bounds";
+import { XYWH } from "./XYWH";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import { DownloadDialogue } from "./DownloadDialogue";
@@ -307,18 +307,17 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(
       Events.OPENSEADRAGON_ANIMATION_FINISH,
       (viewer: any) => {
-        const bounds: Bounds | null = this.centerPanel.getViewportBounds();
+        const xywh: XYWH | null = this.centerPanel.getViewportBounds();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
 
-        if (this.centerPanel && bounds) {
-          this.component.publish(Events.XYWH_CHANGE, bounds.toString());
-          this.data.target = this.helper.getCurrentCanvas().id + "#xywh=" + bounds.toString();
+        if (this.centerPanel && xywh && canvas) {
+          this.component.publish(Events.XYWH_CHANGE, xywh.toString());
+          this.data.target = canvas.id + "#xywh=" + xywh.toString();
           this.fire(
             BaseEvents.TARGET_CHANGE,
             this.data.target
           );
         }
-
-        const canvas: Canvas = this.helper.getCurrentCanvas();
 
         this.fire(Events.CURRENT_VIEW_URI, {
           cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
@@ -528,16 +527,16 @@ export default class OpenSeadragonExtension extends BaseExtension {
       const components: string[] = this.data.target.split('#');
       const canvasId: string = components[0];
 
-      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE
+      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)
       const index: number | null = this.helper.getCanvasIndexById(canvasId);
 
-      if (this.helper.canvasIndex !== index) {
+      if (index !== null && this.helper.canvasIndex !== index) {
         this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
       }
 
       // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
       const selector: string = components[1];
-      this.component.publish(BaseEvents.SET_TARGET, Bounds.fromString(selector));
+      this.component.publish(BaseEvents.SET_TARGET, XYWH.fromString(selector));
     }
   }
 

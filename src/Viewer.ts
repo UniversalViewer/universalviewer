@@ -272,6 +272,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
       if (newData.isReload !== this.extension.data.isReload ||
           newData.manifestUri !== this.extension.data.manifestUri) {
         this.extension.data = newData;
+        console.log("reload");
         this._reload(this.extension.data);
       } else {
         // no need to reload, just update.
@@ -305,6 +306,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
   private async _reload(data: IUVData): Promise<void> {
     this._pubsub.dispose(); // remove any existing event listeners
+
+    data.target = ""; // clear target
 
     this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
       this.fire(BaseEvents.RELOAD, data);

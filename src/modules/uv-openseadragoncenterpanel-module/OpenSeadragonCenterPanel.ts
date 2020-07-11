@@ -9,7 +9,7 @@ import {
 import { sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
-import { Bounds } from "../../extensions/uv-openseadragon-extension/Bounds";
+import { XYWH } from "../../extensions/uv-openseadragon-extension/XYWH";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
@@ -20,9 +20,9 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
-  currentBounds: Bounds | null;
+  currentBounds: XYWH | null;
   handler: any;
-  initialBounds: Bounds | null;
+  initialBounds: XYWH | null;
   initialRotation: any;
   isCreated: boolean = false;
   isFirstLoad: boolean = true;
@@ -125,7 +125,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: Bounds) => {
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWH) => {
       this.whenCreated(() => {
         this.fitToBounds(target, false);
       });
@@ -680,7 +680,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       ) as IOpenSeadragonExtensionData).xywh;
 
       if (xywh) {
-        this.initialBounds = Bounds.fromString(xywh);
+        this.initialBounds = XYWH.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
       }
@@ -736,7 +736,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$nextButton.show();
   }
 
-  fitToBounds(bounds: Bounds, immediate: boolean = true): void {
+  fitToBounds(bounds: XYWH, immediate: boolean = true): void {
     const rect = new OpenSeadragon.Rect();
     rect.x = Number(bounds.x);
     rect.y = Number(bounds.y);
@@ -754,7 +754,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const dimensions: CroppedImageDimensions | null = (this.extension as OpenSeadragonExtension).getCroppedImageDimensions(canvas, this.viewer);
 
     if (dimensions) {
-      const bounds: Bounds = new Bounds(
+      const bounds: XYWH = new XYWH(
         dimensions.regionPos.x,
         dimensions.regionPos.y,
         dimensions.region.width,
@@ -766,11 +766,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     return null;
   }
 
-  getViewportBounds(): Bounds | null {
+  getViewportBounds(): XYWH | null {
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const b: any = this.viewer.viewport.getBounds(true);
-    const bounds: Bounds = new Bounds(
+    const bounds: XYWH = new XYWH(
       Math.floor(b.x),
       Math.floor(b.y),
       Math.floor(b.width),
@@ -997,7 +997,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       )
     ) {
       this.fitToBounds(
-        new Bounds(
+        new XYWH(
           annotationRect.viewportX,
           annotationRect.viewportY,
           annotationRect.width,
@@ -1015,7 +1015,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       const w: number = this.currentBounds.w;
       const h: number = this.currentBounds.h;
 
-      const bounds: Bounds = new Bounds(x, y, w, h);
+      const bounds: XYWH = new XYWH(x, y, w, h);
       this.fitToBounds(bounds);
     }
 

@@ -94,30 +94,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     false
   );
 
-  // uv.on(
-  //   "openseadragonExtension.rotationChange",
-  //   function(rotation) {
-  //     uv.dataProvider.set("r", rotation);
-  //   },
-  //   false
-  // );
-
-  // uv.on(
-  //   "openseadragonExtension.xywhChange",
-  //   function(xywh) {
-  //     uv.dataProvider.set("xywh", xywh);
-  //   },
-  //   false
-  // );
-
-  // uv.on(
-  //   "openseadragonExtension.currentViewUri",
-  //   function(_data) {
-  //     //console.log('openseadragonExtension.currentViewUri', obj);
-  //   },
-  //   false
-  // );
-
   uv.on(
     "reload",
     function(data) {
