@@ -55,19 +55,16 @@ export default class Extension extends BaseExtension
       }
     );
 
-    this.component.subscribe(
-      Events.CAMERA_CHANGE,
-      (obj: any) => {
-        const orbit = obj.srcElement.getCameraOrbit();
-        const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
-        const canvas: Canvas = this.helper.getCurrentCanvas();
+    this.component.subscribe(Events.CAMERA_CHANGE, (obj: any) => {
+      const orbit = obj.srcElement.getCameraOrbit();
+      const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
+      const canvas: Canvas = this.helper.getCurrentCanvas();
 
-        if (canvas) {
-          this.data.target = canvas.id + "#" + `tpr=${tpr.toString()}`;
-          this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
-        }
+      if (canvas) {
+        this.data.target = canvas.id + "#" + `tpr=${tpr.toString()}`;
+        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
       }
-    );
+    });
   }
 
   createModules(): void {
@@ -144,7 +141,7 @@ export default class Extension extends BaseExtension
   checkForTarget(): void {
     if (this.data.target) {
       // Split target into canvas id and selector
-      const components: string[] = this.data.target.split('#');
+      const components: string[] = this.data.target.split("#");
       const canvasId: string = components[0];
 
       // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)

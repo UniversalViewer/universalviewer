@@ -313,10 +313,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
         if (this.centerPanel && xywh && canvas) {
           this.component.publish(Events.XYWH_CHANGE, xywh.toString());
           this.data.target = canvas.id + "#xywh=" + xywh.toString();
-          this.fire(
-            BaseEvents.TARGET_CHANGE,
-            this.data.target
-          );
+          this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
         }
 
         this.fire(Events.CURRENT_VIEW_URI, {
@@ -524,7 +521,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   checkForTarget(): void {
     if (this.data.target) {
       // Split target into canvas id and selector
-      const components: string[] = this.data.target.split('#');
+      const components: string[] = this.data.target.split("#");
       const canvasId: string = components[0];
 
       // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)

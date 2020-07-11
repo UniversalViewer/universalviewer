@@ -490,20 +490,17 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.PAGE_UP);
     });
 
-    this.component.subscribe(
-      BaseEvents.RANGE_CHANGE,
-      (range: Range | null) => {
-        if (range) {
-          this.data.rangeId = range.id;
-          this.helper.rangeId = range.id;
-          this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
-        } else {
-          this.data.rangeId = undefined;
-          this.helper.rangeId = undefined;
-          this.fire(BaseEvents.RANGE_CHANGE, null);
-        }
+    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+      if (range) {
+        this.data.rangeId = range.id;
+        this.helper.rangeId = range.id;
+        this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
+      } else {
+        this.data.rangeId = undefined;
+        this.helper.rangeId = undefined;
+        this.fire(BaseEvents.RANGE_CHANGE, null);
       }
-    );
+    });
 
     this.component.subscribe(
       BaseEvents.RESOURCE_DEGRADED,

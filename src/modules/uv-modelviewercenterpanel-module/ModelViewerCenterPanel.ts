@@ -45,8 +45,12 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.$modelViewer = $(
       `<model-viewer 
-        ${this.config.options.autoRotateEnabled ? 'auto-rotate' : ''} 
-        ${this.config.options.interactionPromptEnabled ? 'interaction-prompt="auto"' : 'interaction-prompt="none"'}
+        ${this.config.options.autoRotateEnabled ? "auto-rotate" : ""} 
+        ${
+          this.config.options.interactionPromptEnabled
+            ? 'interaction-prompt="auto"'
+            : 'interaction-prompt="none"'
+        }
         camera-controls 
         style="background-color: unset;"></model-viewer>`
     );
@@ -59,7 +63,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.$spinner.hide();
     });
 
-    this.$modelViewer[0].addEventListener("camera-change", (obj) => {
+    this.$modelViewer[0].addEventListener("camera-change", obj => {
       if (this.isLoaded) {
         this.component.publish(Events.CAMERA_CHANGE, obj);
       }

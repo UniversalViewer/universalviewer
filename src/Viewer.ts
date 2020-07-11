@@ -269,8 +269,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
     } else {
       // changing any of these data properties forces the UV to reload.
       const newData: IUVData = Object.assign({}, this.extension.data, data);
-      if (newData.isReload !== this.extension.data.isReload ||
-          newData.manifestUri !== this.extension.data.manifestUri) {
+      if (
+        newData.isReload !== this.extension.data.isReload ||
+        newData.manifestUri !== this.extension.data.manifestUri
+      ) {
         this.extension.data = newData;
         console.log("reload");
         this._reload(this.extension.data);

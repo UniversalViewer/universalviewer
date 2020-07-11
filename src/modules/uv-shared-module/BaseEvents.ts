@@ -83,7 +83,8 @@ export class BaseEvents {
   static RETRY: string = "retry";
   static RETURN: string = "return";
   static RIGHT_ARROW: string = "rightArrow";
-  static RIGHTPANEL_COLLAPSE_FULL_FINISH: string = "rightPanelCollapseFullFinish";
+  static RIGHTPANEL_COLLAPSE_FULL_FINISH: string =
+    "rightPanelCollapseFullFinish";
   static RIGHTPANEL_COLLAPSE_FULL_START: string = "rightPanelCollapseFullStart";
   static RIGHTPANEL_EXPAND_FULL_FINISH: string = "rightPanelExpandFullFinish";
   static RIGHTPANEL_EXPAND_FULL_START: string = "rightPanelExpandFullStart";

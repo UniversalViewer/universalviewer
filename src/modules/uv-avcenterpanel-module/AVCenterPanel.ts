@@ -45,19 +45,16 @@ export class AVCenterPanel extends CenterPanel {
       }
     );
 
-    this.component.subscribe(
-      BaseEvents.RANGE_CHANGE,
-      (range: Range | null) => {
-        if (!this._observeRangeChanges()) {
-          return;
-        }
-
-        this._whenMediaReady(() => {
-          that._viewRange(range);
-          that._setTitle();
-        });
+    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+      if (!this._observeRangeChanges()) {
+        return;
       }
-    );
+
+      this._whenMediaReady(() => {
+        that._viewRange(range);
+        that._setTitle();
+      });
+    });
 
     this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this._whenMediaReady(() => {

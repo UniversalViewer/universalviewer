@@ -21,10 +21,6 @@ export class TPR {
   static fromString(tpr: string): TPR {
     tpr = tpr.replace("tpr=", "");
     const tprArr: string[] = tpr.split(",");
-    return new TPR(
-      tprArr[0],
-      tprArr[1],
-      tprArr[2]
-    );
+    return new TPR(tprArr[0], tprArr[1], tprArr[2]);
   }
 }

@@ -4,8 +4,7 @@ export class Events {
   static BOUNDING_BOX_ENABLED_CHANGE: string =
     Events.namespace + "boundingBoxEnabledChange";
   static CLEAR_GRAPH: string = Events.namespace + "clearGraph";
-  static CONTROLS_TYPE_CHANGE: string =
-    Events.namespace + "controlsTypeChange";
+  static CONTROLS_TYPE_CHANGE: string = Events.namespace + "controlsTypeChange";
   static DELETE_ANGLE: string = Events.namespace + "deleteAngle";
   static DELETE_EDGE: string = Events.namespace + "deleteEdge";
   static DELETE_NODE: string = Events.namespace + "deleteNode";
