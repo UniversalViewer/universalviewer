@@ -729,17 +729,23 @@ export class BaseExtension implements IExtension {
       !this.isCreated ||
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
-      this.component.publish(
-        BaseEvents.MANIFEST_INDEX_CHANGE,
-        this.data.manifestIndex
-      );
+      if (this.data.manifestUri !== undefined) {
+        this.component.publish(
+          BaseEvents.MANIFEST_INDEX_CHANGE,
+          this.data.manifestIndex
+        );
+      }
     }
 
     if (!this.isCreated || this.data.canvasIndex !== this.helper.canvasIndex) {
-      this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGE,
-        this.data.canvasIndex
-      );
+      if (this.data.canvasIndex !== undefined) {
+        this.component.publish(
+          BaseEvents.CANVAS_INDEX_CHANGE,
+          this.data.canvasIndex
+        );
+      } else {
+        console.error("canvasIndex is undefined");
+      }
     }
 
     if (!this.isCreated || this.data.rangeId !== this.helper.rangeId) {

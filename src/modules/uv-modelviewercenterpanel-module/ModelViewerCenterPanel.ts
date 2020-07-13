@@ -13,6 +13,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
   $spinner: JQuery;
 
   isLoaded: boolean = false;
+  cameraPos: any;
 
   constructor($element: JQuery) {
     super($element);
@@ -63,9 +64,19 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.$spinner.hide();
     });
 
-    this.$modelViewer[0].addEventListener("camera-change", obj => {
+    this.$modelViewer[0].addEventListener("mouseup", () => {
       if (this.isLoaded) {
-        this.component.publish(Events.CAMERA_CHANGE, obj);
+        if (this.cameraPos) {
+          this.component.publish(Events.CAMERA_CHANGE, this.cameraPos);
+        }
+      }
+    });
+
+    this.$modelViewer[0].addEventListener("camera-change", (obj: any) => {
+      if (this.isLoaded) {
+        if (obj.detail.source === "user-interaction") {
+          this.cameraPos = obj;
+        }
       }
     });
 

@@ -182,10 +182,8 @@ export default class Extension extends BaseExtension
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    //const configUri: string = this.data.config.uri || '';
-    //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
     const appUri: string = this.getAppUri();
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
     const script: string = Strings.format(
       template,
       iframeSrc,

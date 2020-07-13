@@ -229,12 +229,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
   public data(): IUVData {
     return {
-      annotations: undefined,
       assetsDir: "/uv-assets",
-      //canvasIndex: 0,
-      //collectionIndex: undefined,
-      config: undefined,
-      configUri: undefined,
+      canvasIndex: 0,
       embedded: false,
       isReload: false,
       limitLocales: false,
@@ -244,10 +240,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
           name: "en-GB"
         }
       ],
-      // manifestIndex: 0,
-      // rangeId: undefined,
-      // rotation: 0,
-      // sequenceIndex: 0,
       target: ""
     } as IUVData;
   }
@@ -276,7 +268,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
         newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
         this.extension.data = newData;
-        console.log("reload");
         this._reload(this.extension.data);
       } else {
         // no need to reload, just update.
@@ -350,10 +341,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     canvas = helper.getCurrentCanvas();
 
-    // if (!canvas) {
-    //   that._error(`Canvas ${data.canvasIndex} not found.`);
-    //   return;
-    // }
+    if (!canvas) {
+      that._error(`Canvas ${data.canvasIndex} not found.`);
+      return;
+    }
 
     let extension: IExtension | undefined;
 

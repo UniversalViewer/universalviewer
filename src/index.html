@@ -93,7 +93,6 @@
           collectionIndex:
             collectionIndex !== undefined ? Number(collectionIndex) : undefined,
           manifestIndex: Number(urlDataProvider.get("m", 0)),
-          sequenceIndex: Number(urlDataProvider.get("s", 0)),
           canvasIndex: Number(urlDataProvider.get("cv", 0)),
           rotation: Number(urlDataProvider.get("r", 0)),
           rangeId: urlDataProvider.get("rid", ""),
@@ -173,7 +172,8 @@
         manifest = $("#manifest").val();
 
         uv.set({
-          manifestUri: manifest
+          manifestUri: manifest,
+          canvasIndex: 0
         });
       });
 
