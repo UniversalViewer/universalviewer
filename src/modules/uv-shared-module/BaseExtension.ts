@@ -346,10 +346,10 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.component.subscribe(BaseEvents.MEDIA_CHANGE, () => {
+    this.component.subscribe(BaseEvents.LOAD, () => {
       setTimeout(() => {
         this.component.publish(BaseEvents.RESIZE);
-        this.fire(BaseEvents.MEDIA_CHANGE, this.helper.getCurrentCanvas().id);
+        this.fire(BaseEvents.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });

@@ -52,12 +52,12 @@ export class BaseEvents {
   static LEFTPANEL_COLLAPSE_FULL_START: string = "leftPanelCollapseFullStart";
   static LEFTPANEL_EXPAND_FULL_FINISH: string = "leftPanelExpandFullFinish";
   static LEFTPANEL_EXPAND_FULL_START: string = "leftPanelExpandFullStart";
+  static LOAD: string = "load";
   static LOAD_FAILED: string = "loadFailed";
   static LOGIN_FAILED: string = "loginFailed";
   static LOGIN: string = "login";
   static LOGOUT: string = "logout";
   static MANIFEST_INDEX_CHANGE: string = "manifestIndexChange";
-  static MEDIA_CHANGE: string = "mediaChange";
   static METRIC_CHANGE: string = "metricChange";
   static MINUS: string = "minus";
   static MULTISELECT_CHANGE: string = "multiSelectChange";

@@ -103,8 +103,9 @@
     },
     "modelViewerCenterPanel": {
       "options": {
-        "autoRotateEnabled": true,
-        "interactionPromptEnabled": true
+        "autoRotateEnabled": false,
+        "cameraChangeDelay": 500,
+        "interactionPromptEnabled": false
       }
     }
   }

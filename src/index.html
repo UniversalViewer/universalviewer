@@ -106,7 +106,14 @@
           utils.Urls.setHashParameter("manifest", manifest);
         });
 
-        uv.on('targetChange', function(target) {
+        uv.on("load", function() {
+          console.log("load");
+          // uv.set({
+          //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+          // });
+        });
+
+        uv.on("targetChange", function(target) {
           $('#target').val(target);
         });
       }

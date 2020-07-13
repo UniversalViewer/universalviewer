@@ -206,7 +206,7 @@ export class MediaElementCenterPanel extends CenterPanel {
     this._$mejsContainer = this.$container.find(".mejs__container");
     this._$mejsLayers = this.$container.find(".mejs__layer");
 
-    this.component.publish(BaseEvents.MEDIA_CHANGE);
+    this.component.publish(BaseEvents.LOAD);
     //this.resize();
   }
 

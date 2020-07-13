@@ -1,7 +1,7 @@
 import "@webcomponents/webcomponentsjs/webcomponents-bundle.js";
 import "../../../node_modules/@google/model-viewer/dist/model-viewer-legacy";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
-import { sanitize } from "../../Utils";
+import { sanitize, debounce } from "../../Utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-model-viewer-extension/Events";
@@ -13,7 +13,6 @@ export class ModelViewerCenterPanel extends CenterPanel {
   $spinner: JQuery;
 
   isLoaded: boolean = false;
-  cameraPos: any;
 
   constructor($element: JQuery) {
     super($element);
@@ -64,23 +63,16 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.$spinner.hide();
     });
 
-    this.$modelViewer[0].addEventListener("mouseup", () => {
-      if (this.isLoaded) {
-        if (this.cameraPos) {
-          this.component.publish(Events.CAMERA_CHANGE, this.cameraPos);
+    this.$modelViewer[0].addEventListener(
+      "camera-change",
+      debounce((obj: any) => {
+        if (this.isLoaded) {
+          if (obj.detail.source === "user-interaction") {
+            this.component.publish(Events.CAMERA_CHANGE, obj);
+          }
         }
-      }
-    });
-
-    this.$modelViewer[0].addEventListener("camera-change", (obj: any) => {
-      if (this.isLoaded) {
-        if (obj.detail.source === "user-interaction") {
-          this.cameraPos = obj;
-        }
-      }
-    });
-
-    this.component.publish(BaseEvents.MEDIA_CHANGE);
+      }, this.config.options.cameraChangeDelay)
+    );
   }
 
   whenLoaded(cb: () => void): void {
@@ -112,7 +104,20 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelViewer.attr("ios-src", mediaUri);
 
-    this.component.publish(BaseEvents.MEDIA_CHANGE);
+    this.component.publish(BaseEvents.LOAD);
+
+    // const modelViewer: any = this.$modelViewer[0];
+    // const orbitCycle = [
+    //   '45deg 55deg 4m',
+    //   '-60deg 110deg 2m',
+    //   modelViewer.cameraOrbit
+    // ];
+
+    // setInterval(() => {
+    //   const currentOrbitIndex = orbitCycle.indexOf(modelViewer.cameraOrbit);
+    //   modelViewer.cameraOrbit =
+    //       orbitCycle[(currentOrbitIndex + 1) % orbitCycle.length];
+    // }, 3000);
   }
 
   resize() {

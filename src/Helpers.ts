@@ -53,43 +53,11 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "mediaChange",
+    "load",
     function() {
       setTimeout(function() {
         resize();
       }, 100);
-    },
-    false
-  );
-
-  uv.on(
-    "collectionIndexChange",
-    function(collectionIndex) {
-      uv.dataProvider.set("c", collectionIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "manifestIndexChange",
-    function(manifestIndex) {
-      uv.dataProvider.set("m", manifestIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "canvasIndexChange",
-    function(canvasIndex) {
-      uv.dataProvider.set("cv", canvasIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "rangeChange",
-    function(rangeId) {
-      uv.dataProvider.set("rid", rangeId);
     },
     false
   );
@@ -175,6 +143,42 @@ export const init = (el: string | HTMLDivElement, data) => {
         uv.exitFullScreen();
       }
     }
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "collectionIndexChange",
+    function(collectionIndex) {
+      uv.dataProvider.set("c", collectionIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "manifestIndexChange",
+    function(manifestIndex) {
+      uv.dataProvider.set("m", manifestIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "canvasIndexChange",
+    function(canvasIndex) {
+      uv.dataProvider.set("cv", canvasIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "rangeChange",
+    function(rangeId) {
+      uv.dataProvider.set("rid", rangeId);
+    },
+    false
   );
 
   return uv;

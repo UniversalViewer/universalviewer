@@ -75,9 +75,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.whenResized(async () => {
-          if (!this.isCreated) this.createUI();
-          await this.openMedia(resources);
-          this.component.publish(BaseEvents.MEDIA_CHANGE);
+          if (!this.isCreated) {
+            // uv may have reloaded
+            try {
+              this.createUI();
+              await this.openMedia(resources);
+              this.component.publish(BaseEvents.LOAD);
+            } catch (error) {
+              console.warn(error);
+            }
+          }
         });
       }
     );
@@ -457,6 +464,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   async openMedia(resources?: IExternalResource[]): Promise<void> {
+    // uv may have been unloaded
+    if (!this.viewer) {
+      return;
+    }
+
     this.$spinner.show();
     this.items = [];
 

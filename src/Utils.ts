@@ -25,6 +25,15 @@ export const isValidUrl = (value: string): boolean => {
   return !!a.host && a.host !== window.location.host;
 };
 
+export const debounce = (callback: (args: any) => void, wait: number) => {
+  let timeout: NodeJS.Timer;
+  return (...args) => {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback.apply(context, args), wait);
+  };
+};
+
 export const propertiesChanged = (
   newData: IUVData,
   currentData: IUVData,

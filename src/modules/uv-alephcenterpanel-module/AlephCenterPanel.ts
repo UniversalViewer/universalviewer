@@ -234,7 +234,7 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.MEDIA_CHANGE);
+      this.component.publish(BaseEvents.LOAD);
     });
   }
 
