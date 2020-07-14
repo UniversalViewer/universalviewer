@@ -14,7 +14,8 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
-import OpenSeadragon from "openseadragon";
+// todo: replace when #1853 is merged
+import OpenSeadragon from "./openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
@@ -1204,12 +1205,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
       this.extension.isDesktopMetric();
 
-    this.viewer.navigator.setVisible(navigatorEnabled);
+    if (this.viewer && this.viewer.navigator) {
+      this.viewer.navigator.setVisible(navigatorEnabled);
 
-    if (navigatorEnabled) {
-      this.$navigator.show();
-    } else {
-      this.$navigator.hide();
+      if (navigatorEnabled) {
+        this.$navigator.show();
+      } else {
+        this.$navigator.hide();
+      }
     }
   }
 }

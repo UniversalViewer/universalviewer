@@ -61,6 +61,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.isLoaded = true;
       this.$content.removeClass("loading");
       this.$spinner.hide();
+      this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
     });
 
     this.$modelViewer[0].addEventListener(
@@ -68,7 +69,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       debounce((obj: any) => {
         if (this.isLoaded) {
           if (obj.detail.source === "user-interaction") {
-            this.component.publish(Events.CAMERA_CHANGE, obj);
+            this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
           }
         }
       }, this.config.options.cameraChangeDelay)
@@ -79,6 +80,15 @@ export class ModelViewerCenterPanel extends CenterPanel {
     Async.waitFor(() => {
       return this.isLoaded;
     }, cb);
+  }
+
+  private getCameraOrbit(): TPR | null {
+    if (this.$modelViewer) {
+      const orbit: any = (this.$modelViewer[0] as any).getCameraOrbit();
+      const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
+      return tpr;
+    }
+    return null;
   }
 
   async openMedia(resources: IExternalResource[]) {
@@ -105,19 +115,6 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // this.$modelViewer.attr("ios-src", mediaUri);
 
     this.component.publish(BaseEvents.LOAD);
-
-    // const modelViewer: any = this.$modelViewer[0];
-    // const orbitCycle = [
-    //   '45deg 55deg 4m',
-    //   '-60deg 110deg 2m',
-    //   modelViewer.cameraOrbit
-    // ];
-
-    // setInterval(() => {
-    //   const currentOrbitIndex = orbitCycle.indexOf(modelViewer.cameraOrbit);
-    //   modelViewer.cameraOrbit =
-    //       orbitCycle[(currentOrbitIndex + 1) % orbitCycle.length];
-    // }, 3000);
   }
 
   resize() {

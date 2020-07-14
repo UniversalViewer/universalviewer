@@ -55,11 +55,8 @@ export default class Extension extends BaseExtension
       }
     );
 
-    this.component.subscribe(Events.CAMERA_CHANGE, (obj: any) => {
-      const orbit = obj.srcElement.getCameraOrbit();
-      const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
+    this.component.subscribe(Events.CAMERA_CHANGE, (tpr: TPR) => {
       const canvas: Canvas = this.helper.getCurrentCanvas();
-
       if (canvas) {
         this.data.target = canvas.id + "#" + `tpr=${tpr.toString()}`;
         this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
