@@ -17,7 +17,7 @@ import { ExternalResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Events } from "./Events";
-import { TPR } from "./TPR";
+import { Orbit } from "./Orbit";
 
 export default class Extension extends BaseExtension
   implements IModelViewerExtension {
@@ -55,10 +55,10 @@ export default class Extension extends BaseExtension
       }
     );
 
-    this.component.subscribe(Events.CAMERA_CHANGE, (tpr: TPR) => {
+    this.component.subscribe(Events.CAMERA_CHANGE, (orbit: Orbit) => {
       const canvas: Canvas = this.helper.getCurrentCanvas();
       if (canvas) {
-        this.data.target = canvas.id + "#" + `tpr=${tpr.toString()}`;
+        this.data.target = canvas.id + "#" + `orbit=${orbit.toString()}`;
         this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
       }
     });
@@ -150,7 +150,7 @@ export default class Extension extends BaseExtension
 
       // trigger SET_TARGET which sets the camera-orbit attribute in ModelViewerCenterPanel
       const selector: string = components[1];
-      this.component.publish(BaseEvents.SET_TARGET, TPR.fromString(selector));
+      this.component.publish(BaseEvents.SET_TARGET, Orbit.fromString(selector));
     }
   }
 

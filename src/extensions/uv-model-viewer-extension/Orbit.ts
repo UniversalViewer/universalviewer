@@ -1,5 +1,5 @@
 // theta, phi, radius
-export class TPR {
+export class Orbit {
   public t: string;
   public p: string;
   public r: string;
@@ -18,9 +18,9 @@ export class TPR {
     return `${this.t}rad ${this.p}rad ${this.r}m`;
   }
 
-  static fromString(tpr: string): TPR {
-    tpr = tpr.replace("tpr=", "");
-    const tprArr: string[] = tpr.split(",");
-    return new TPR(tprArr[0], tprArr[1], tprArr[2]);
+  static fromString(orbit: string): Orbit {
+    orbit = orbit.replace("orbit=", "");
+    const orbitArr: string[] = orbit.split(",");
+    return new Orbit(orbitArr[0], orbitArr[1], orbitArr[2]);
   }
 }

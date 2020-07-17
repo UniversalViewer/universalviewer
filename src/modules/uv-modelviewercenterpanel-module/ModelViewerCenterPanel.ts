@@ -5,7 +5,7 @@ import { sanitize, debounce } from "../../Utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-model-viewer-extension/Events";
-import { TPR } from "../../extensions/uv-model-viewer-extension/TPR";
+import { Orbit } from "../../extensions/uv-model-viewer-extension/Orbit";
 import { Async } from "@edsilv/utils";
 
 export class ModelViewerCenterPanel extends CenterPanel {
@@ -32,7 +32,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       }
     );
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: TPR) => {
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: Orbit) => {
       this.whenLoaded(() => {
         (that.$modelViewer[0] as any).cameraOrbit = target.toAttributeString();
       });
@@ -82,10 +82,10 @@ export class ModelViewerCenterPanel extends CenterPanel {
     }, cb);
   }
 
-  private getCameraOrbit(): TPR | null {
+  private getCameraOrbit(): Orbit | null {
     if (this.$modelViewer) {
       const orbit: any = (this.$modelViewer[0] as any).getCameraOrbit();
-      const tpr: TPR = new TPR(orbit.theta, orbit.phi, orbit.radius);
+      const tpr: Orbit = new Orbit(orbit.theta, orbit.phi, orbit.radius);
       return tpr;
     }
     return null;

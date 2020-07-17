@@ -15,7 +15,7 @@ import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extens
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 // todo: replace when #1853 is merged
-import OpenSeadragon from "./openseadragon";
+import OpenSeadragon from "../../lib/openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
@@ -75,17 +75,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
+        console.log("open");
         this.whenResized(async () => {
           if (!this.isCreated) {
             // uv may have reloaded
-            try {
-              this.createUI();
-              await this.openMedia(resources);
-              this.component.publish(BaseEvents.LOAD);
-            } catch (error) {
-              console.warn(error);
-            }
+            this.createUI();
           }
+          await this.openMedia(resources);
+          this.component.publish(BaseEvents.LOAD);
         });
       }
     );
