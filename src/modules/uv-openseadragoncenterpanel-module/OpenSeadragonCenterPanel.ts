@@ -75,7 +75,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
-        console.log("open");
         this.whenResized(async () => {
           if (!this.isCreated) {
             // uv may have reloaded
@@ -474,38 +473,42 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       resources
     );
 
-    this.viewer.close();
+    try {
+      this.viewer.close();
 
-    images = this.getPagePositions(images);
+      images = this.getPagePositions(images);
 
-    for (let i = 0; i < images.length; i++) {
-      const data: any = images[i];
+      for (let i = 0; i < images.length; i++) {
+        const data: any = images[i];
 
-      let tileSource: any;
+        let tileSource: any;
 
-      if (data.hasServiceDescriptor) {
-        tileSource = data;
-      } else {
-        tileSource = {
-          type: "image",
-          url: data.id,
-          buildPyramid: false
-        };
-      }
-
-      this.viewer.addTiledImage({
-        tileSource: tileSource,
-        x: data.x,
-        y: data.y,
-        width: data.width,
-        success: (item: any) => {
-          this.items.push(item);
-          if (this.items.length === images.length) {
-            this.openPagesHandler();
-          }
-          this.resize();
+        if (data.hasServiceDescriptor) {
+          tileSource = data;
+        } else {
+          tileSource = {
+            type: "image",
+            url: data.id,
+            buildPyramid: false
+          };
         }
-      });
+
+        this.viewer.addTiledImage({
+          tileSource: tileSource,
+          x: data.x,
+          y: data.y,
+          width: data.width,
+          success: (item: any) => {
+            this.items.push(item);
+            if (this.items.length === images.length) {
+              this.openPagesHandler();
+            }
+            this.resize();
+          }
+        });
+      }
+    } catch {
+      // do nothing
     }
   }
 
