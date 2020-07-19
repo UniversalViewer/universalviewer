@@ -248,7 +248,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     // if this is the first set
     if (!this.extension) {
       if (!data.manifestUri) {
-        this._error(`manifestUri is required.`);
+        console.warn(`manifestUri is required.`);
         return;
       }
 

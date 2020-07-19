@@ -16,6 +16,7 @@ import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 // todo: replace when #1853 is merged
 import OpenSeadragon from "../../lib/openseadragon";
+//import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
@@ -26,6 +27,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   initialBounds: XYWH | null;
   initialRotation: any;
   isCreated: boolean = false;
+  isLoaded: boolean = false;
   isFirstLoad: boolean = true;
   items: any[];
   navigatedFromSearch: boolean = false;
@@ -80,7 +82,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
             // uv may have reloaded
             this.createUI();
           }
+          this.isLoaded = false;
           await this.openMedia(resources);
+          this.isLoaded = true;
           this.component.publish(BaseEvents.LOAD);
         });
       }
@@ -130,7 +134,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     });
 
     this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWH) => {
-      this.whenCreated(() => {
+      this.whenLoaded(() => {
         this.fitToBounds(target, false);
       });
     });
@@ -139,6 +143,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   whenCreated(cb: () => void): void {
     Async.waitFor(() => {
       return this.isCreated;
+    }, cb);
+  }
+
+  whenLoaded(cb: () => void): void {
+    Async.waitFor(() => {
+      return this.isLoaded;
     }, cb);
   }
 
