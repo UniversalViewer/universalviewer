@@ -68,9 +68,9 @@ export class ModelViewerCenterPanel extends CenterPanel {
       "camera-change",
       debounce((obj: any) => {
         if (this.isLoaded) {
-          if (obj.detail.source === "user-interaction") {
-            this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
-          }
+          //if (obj.detail.source === "user-interaction") {
+          this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
+          //}
         }
       }, this.config.options.cameraChangeDelay)
     );
