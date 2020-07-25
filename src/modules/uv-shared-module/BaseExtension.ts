@@ -830,9 +830,7 @@ export class BaseExtension implements IExtension {
 
         const width: number = window.innerWidth;
 
-        if (
-          width >= metric.minWidth
-        ) {
+        if (width >= metric.minWidth) {
           if (this.metric !== metric.type) {
             this.metric = metric.type;
             this.component.publish(BaseEvents.METRIC_CHANGE);

@@ -169,10 +169,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     if (!this.extension.isDesktopMetric()) {
       this.viewer.autoHideControls = false;
-      this.$viewportNavButtons.hide();
     } else {
       this.viewer.autoHideControls = true;
-      this.$viewportNavButtons.show();
     }
   }
 
@@ -180,7 +178,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
 
-    //await import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ "openseadragon");
     this.viewer = OpenSeadragon({
       id: this.viewerId,
       crossOriginPolicy: "Anonymous",
@@ -291,6 +288,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
     );
+
+    //this.$viewportNavButtonsContainer.addClass("viewportControls");
+
     this.$viewportNavButtons = this.$viewportNavButtonsContainer.find(
       ".viewportNavButton"
     );

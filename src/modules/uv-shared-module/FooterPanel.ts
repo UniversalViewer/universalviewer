@@ -175,7 +175,6 @@ export class FooterPanel extends BaseView {
     //   this.options.moreInfoEnabled,
     //   false
     // );
-
     // if (configEnabled && !this.extension.isDesktopMetric()) {
     //   this.$moreInfoButton.show();
     // } else {
