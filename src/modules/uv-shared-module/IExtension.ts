@@ -1,7 +1,6 @@
 import { ILocale } from "../../ILocale";
 import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
-import { MetricType } from "./MetricType";
 import { Shell } from "./Shell";
 import {} from "@iiif/manifold";
 import {
@@ -13,6 +12,7 @@ import {
   Manifest,
   Range
 } from "manifesto.js";
+import { MetricType } from "./Metric";
 
 export interface IExtension {
   $element: JQuery;
@@ -42,7 +42,6 @@ export interface IExtension {
   getShareUrl(): string | null;
   height(): number;
   helper: manifold.Helper;
-  isCatchAllMetric(): boolean;
   isCreated: boolean;
   isDesktopMetric(): boolean;
   isFooterPanelEnabled(): boolean;
@@ -54,7 +53,7 @@ export interface IExtension {
   isOverlayActive(): boolean;
   isRightPanelEnabled(): boolean;
   isSeeAlsoEnabled(): boolean;
-  isWatchMetric(): boolean;
+  isMobileMetric(): boolean;
   lastCanvasIndex: number;
   metric: MetricType;
   mouseX: number;

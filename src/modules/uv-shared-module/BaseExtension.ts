@@ -10,7 +10,7 @@ import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
 import { Metric } from "../../modules/uv-shared-module/Metric";
-import { MetricType } from "../../modules/uv-shared-module/MetricType";
+import { MetricType } from "../../modules/uv-shared-module/Metric";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
@@ -57,7 +57,7 @@ export class BaseExtension implements IExtension {
   isLoggedIn: boolean = false;
   lastCanvasIndex: number;
   loginDialogue: LoginDialogue;
-  metric: MetricType = MetricType.NONE;
+  metric: MetricType;
   metrics: Metric[] = [];
   mouseX: number;
   mouseY: number;
@@ -245,7 +245,7 @@ export class BaseExtension implements IExtension {
       '<iframe id="commsFrame" style="display:none"></iframe>'
     );
 
-    //this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
+    //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
 
     this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
       this.fire(BaseEvents.ACCEPT_TERMS);
@@ -809,14 +809,11 @@ export class BaseExtension implements IExtension {
   }
 
   private _parseMetrics(): void {
-    const metrics: any[] = this.data.config.options.metrics;
+    const metrics: Metric[] = this.data.config.options.metrics;
 
     if (metrics) {
       for (let i = 0; i < metrics.length; i++) {
-        const m: any = metrics[i];
-        if (typeof m.type === "string") {
-          m.type = new MetricType(m.type);
-        }
+        const m: Metric = metrics[i];
         this.metrics.push(m);
       }
     }
@@ -826,37 +823,21 @@ export class BaseExtension implements IExtension {
     setTimeout(() => {
       // loop through all metrics
       // find one that matches the current dimensions
-      // if a metric is found, and it's not the current metric, set it to be the current metric and publish a METRIC_CHANGE event
-      // if no metric is found, set MetricType.NONE to be the current metric and publish a METRIC_CHANGE event
+      // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
 
-      let metricFound: boolean = false;
-
-      for (let i = 0; i < this.metrics.length; i++) {
+      for (let i = this.metrics.length - 1; i >= 0; i--) {
         const metric: Metric = this.metrics[i];
 
-        // if the current width and height is within this metric's defined range
         const width: number = window.innerWidth;
-        const height: number = window.innerHeight;
 
         if (
-          width >= metric.minWidth &&
-          width <= metric.maxWidth &&
-          height >= metric.minHeight &&
-          height <= metric.maxHeight
+          width >= metric.minWidth
         ) {
-          metricFound = true;
-
           if (this.metric !== metric.type) {
             this.metric = metric.type;
             this.component.publish(BaseEvents.METRIC_CHANGE);
           }
-        }
-      }
-
-      if (!metricFound) {
-        if (this.metric !== MetricType.NONE) {
-          this.metric = MetricType.NONE;
-          this.component.publish(BaseEvents.METRIC_CHANGE);
+          break;
         }
       }
     }, 1);
@@ -1202,15 +1183,11 @@ export class BaseExtension implements IExtension {
   }
 
   isDesktopMetric(): boolean {
-    return this.metric.toString() === MetricType.DESKTOP.toString();
+    return this.metric === "lg" || this.metric === "xl";
   }
 
-  isWatchMetric(): boolean {
-    return this.metric.toString() === MetricType.WATCH.toString();
-  }
-
-  isCatchAllMetric(): boolean {
-    return this.metric.toString() === MetricType.NONE.toString();
+  isMobileMetric(): boolean {
+    return this.metric === "sm" || this.metric === "md";
   }
 
   // todo: use redux in manifold to get reset state

@@ -171,16 +171,16 @@ export class FooterPanel extends BaseView {
   }
 
   updateMoreInfoButton(): void {
-    const configEnabled: boolean = Bools.getBool(
-      this.options.moreInfoEnabled,
-      false
-    );
+    // const configEnabled: boolean = Bools.getBool(
+    //   this.options.moreInfoEnabled,
+    //   false
+    // );
 
-    if (configEnabled && !this.extension.isDesktopMetric()) {
-      this.$moreInfoButton.show();
-    } else {
-      this.$moreInfoButton.hide();
-    }
+    // if (configEnabled && !this.extension.isDesktopMetric()) {
+    //   this.$moreInfoButton.show();
+    // } else {
+    //   this.$moreInfoButton.hide();
+    // }
   }
 
   updateOpenButton(): void {

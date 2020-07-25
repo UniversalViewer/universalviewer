@@ -206,13 +206,15 @@ export class CenterPanel extends BaseView {
     let titleHeight: number;
     let subtitleHeight: number;
 
+    console.log("title height");
+
     if (
       (this.options && this.options.titleEnabled === false) ||
       !this.$title.is(":visible")
     ) {
       titleHeight = 0;
     } else {
-      titleHeight = this.$title.height();
+      titleHeight = this.$title.outerHeight(true);
     }
 
     if (
@@ -221,7 +223,7 @@ export class CenterPanel extends BaseView {
     ) {
       subtitleHeight = 0;
     } else {
-      subtitleHeight = this.$subtitle.height();
+      subtitleHeight = this.$subtitle.outerHeight(true);
     }
 
     this.$content.height(this.$element.height() - titleHeight - subtitleHeight);

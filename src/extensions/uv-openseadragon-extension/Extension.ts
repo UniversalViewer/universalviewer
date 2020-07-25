@@ -81,9 +81,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
         settings.pagingEnabled = false;
         this.updateSettings(settings);
         this.component.publish(BaseEvents.UPDATE_SETTINGS);
-        this.shell.$rightPanel.hide();
+        //this.shell.$rightPanel.hide();
       } else {
-        this.shell.$rightPanel.show();
+        //this.shell.$rightPanel.show();
       }
     });
 
