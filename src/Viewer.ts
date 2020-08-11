@@ -45,7 +45,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
   constructor(options: IBaseComponentOptions) {
     super(options);
 
-    this.dataProvider = new URLDataProvider(!!options.data.readOnlyDataProvider);
+    this.dataProvider = new URLDataProvider(
+      !!options.data.readOnlyDataProvider
+    );
     this._pubsub = new PubSub();
 
     this._init();
