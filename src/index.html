@@ -97,10 +97,11 @@
           rotation: Number(urlDataProvider.get("r", 0)),
           rangeId: urlDataProvider.get("rid", ""),
           xywh: urlDataProvider.get("xywh", ""),
-          target: urlDataProvider.get("target", "")
+          target: urlDataProvider.get("target", ""),
+          readOnlyDataProvider: false
         };
 
-        uv = UV.init("uv", data, urlDataProvider);
+        uv = UV.init("uv", data);
 
         uv.on("created", function() {
           utils.Urls.setHashParameter("manifest", manifest);

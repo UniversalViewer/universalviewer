@@ -12,6 +12,7 @@ export interface IUVData {
   locales?: ILocale[];
   manifestIndex?: number;
   manifestUri?: string;
+  readOnlyDataProvider?: boolean;
   rangeId?: string;
   target?: string;
 }
