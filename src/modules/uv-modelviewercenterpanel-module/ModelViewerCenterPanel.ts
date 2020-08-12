@@ -114,6 +114,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelViewer.attr("ios-src", mediaUri);
+    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
   }
 
   resize() {

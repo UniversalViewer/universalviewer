@@ -24,6 +24,7 @@ export class BaseEvents {
   static ESCAPE: string = "escape";
   static EXIT_FULLSCREEN: string = "exitFullScreen";
   static EXTERNAL_LINK_CLICKED: string = "externalLinkClicked";
+  static EXTERNAL_RESOURCE_OPENED: string = "externalResourceOpened";
   static FEEDBACK: string = "feedback";
   static FIRST: string = "first";
   static FORBIDDEN: string = "forbidden";

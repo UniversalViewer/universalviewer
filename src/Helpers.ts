@@ -53,14 +53,24 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "load",
-    function() {
+    "externalResourceOpened",
+    function(_obj) {
       setTimeout(function() {
         resize();
       }, 100);
     },
     false
   );
+
+  // uv.on(
+  //   "load",
+  //   function() {
+  //     setTimeout(function() {
+  //       resize();
+  //     }, 100);
+  //   },
+  //   false
+  // );
 
   uv.on(
     "reload",

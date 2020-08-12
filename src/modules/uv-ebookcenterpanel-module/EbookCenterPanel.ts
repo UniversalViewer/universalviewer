@@ -120,6 +120,7 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
+      this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
       this.component.publish(BaseEvents.LOAD);
     });
   }

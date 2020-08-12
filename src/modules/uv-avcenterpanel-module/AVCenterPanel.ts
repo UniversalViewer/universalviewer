@@ -261,7 +261,8 @@ export class AVCenterPanel extends CenterPanel {
           posterImageRatio: this.config.options.posterImageRatio
         });
 
-        this.resize();
+        this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+        this.component.publish(BaseEvents.LOAD);
       }
     });
   }

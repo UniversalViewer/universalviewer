@@ -474,6 +474,10 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
+    this.component.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
+      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    });
+
     this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
       this.fire(BaseEvents.OPEN_RIGHT_PANEL);
       // todo: use global state

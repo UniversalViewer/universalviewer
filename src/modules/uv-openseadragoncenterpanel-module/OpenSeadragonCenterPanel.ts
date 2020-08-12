@@ -85,6 +85,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           this.isLoaded = false;
           await this.openMedia(resources);
           this.isLoaded = true;
+          this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
           this.component.publish(BaseEvents.LOAD);
         });
       }
