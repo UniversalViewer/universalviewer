@@ -46,57 +46,65 @@ export class FooterPanel extends BaseView {
     this.$element.append(this.$options);
 
     this.$feedbackButton = $(`
-          <button class="feedback btn imageBtn" title="${this.content.feedback}" tabindex="0">
-            <i class="uv-icon uv-icon-feedback" aria-hidden="true"></i>${this.content.feedback}
+          <button class="feedback btn imageBtn" title="${this.content.feedback}">
+            <i class="uv-icon uv-icon-feedback" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.feedback}</span>
           </button>
         `);
     this.$options.prepend(this.$feedbackButton);
 
     this.$openButton = $(`
-          <button class="open btn imageBtn" title="${this.content.open}" tabindex="0">
-            <i class="uv-icon-open" aria-hidden="true"></i>${this.content.open}
+          <button class="open btn imageBtn" title="${this.content.open}">
+            <i class="uv-icon-open" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.open}</span>
           </button>
         `);
     this.$options.prepend(this.$openButton);
 
     this.$bookmarkButton = $(`
-          <button class="bookmark btn imageBtn" title="${this.content.bookmark}" tabindex="0">
-            <i class="uv-icon uv-icon-bookmark" aria-hidden="true"></i>${this.content.bookmark}
+          <button class="bookmark btn imageBtn" title="${this.content.bookmark}">
+            <i class="uv-icon uv-icon-bookmark" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.bookmark}</span>
           </button>
         `);
     this.$options.prepend(this.$bookmarkButton);
 
     this.$shareButton = $(`
-          <button class="share btn imageBtn" title="${this.content.share}" tabindex="0">
-            <i class="uv-icon uv-icon-share" aria-hidden="true"></i>${this.content.share}
+          <button class="share btn imageBtn" title="${this.content.share}">
+            <i class="uv-icon uv-icon-share" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.share}</span>
           </button>
         `);
     this.$options.append(this.$shareButton);
 
     this.$embedButton = $(`
-          <button class="embed btn imageBtn" title="${this.content.embed}" tabindex="0">
-            <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>${this.content.embed}
+          <button class="embed btn imageBtn" title="${this.content.embed}">
+            <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.embed}</span>
           </button>
         `);
     this.$options.append(this.$embedButton);
 
     this.$downloadButton = $(`
-          <button class="download btn imageBtn" title="${this.content.download}" tabindex="0">
-            <i class="uv-icon uv-icon-download" aria-hidden="true"></i>${this.content.download}
+          <button class="download btn imageBtn" title="${this.content.download}">
+            <i class="uv-icon uv-icon-download" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.download}</span>
           </button>
         `);
     this.$options.prepend(this.$downloadButton);
 
     this.$moreInfoButton = $(`
-          <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}" tabindex="0">
-            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>${this.content.moreInfo}
+          <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}">
+            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.moreInfo}</span>
           </button>
         `);
     this.$options.prepend(this.$moreInfoButton);
 
     this.$fullScreenBtn = $(`
-          <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}" tabindex="0">
-            <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>${this.content.fullScreen}
+          <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}">
+            <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.fullScreen}</span>
           </button>
         `);
     this.$options.append(this.$fullScreenBtn);

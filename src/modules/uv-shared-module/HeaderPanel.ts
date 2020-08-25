@@ -54,7 +54,7 @@ export class HeaderPanel extends BaseView {
 
     this.$settingsButton = $(`
           <button class="btn imageBtn settings" tabindex="0" title="${this.content.settings}">
-            <i class="uv-icon-settings" aria-hidden="true"></i>${this.content.settings}
+            <i class="uv-icon-settings" aria-hidden="true"></i>
           </button>
         `);
     this.$settingsButton.attr("title", this.content.settings);
