@@ -907,42 +907,13 @@ export class BaseExtension implements IExtension {
   }
 
   getAppUri(): string {
-    const parts: any = Urls.getUrlParts((<any>document).location.href);
-    const origin: string =
+    const appUri: string =
       window.location.protocol +
       "//" +
       window.location.hostname +
       (window.location.port ? ":" + window.location.port : "");
-    let pathname: string = parts.pathname;
 
-    if (!pathname.startsWith("/")) {
-      pathname = "/" + pathname;
-    }
-
-    pathname = pathname.substr(0, pathname.lastIndexOf("/") + 1); // remove the file name
-
-    let appUri: string = origin + pathname;
-    // let assetsDir: string = '';
-
-    // if (!Documents.isInIFrame()) {
-
-    //     assetsDir = this.data.assetsDir || '';
-
-    //     if (assetsDir.startsWith('./')) {
-    //         assetsDir = assetsDir.substr(2);
-    //     }
-
-    //     if (assetsDir && !assetsDir.endsWith('/')) {
-    //         assetsDir += '/';
-    //     }
-    // }
-
-    // // if assetsDir is a URL, use that instead of appUri.
-    // if (isValidUrl(assetsDir)) {
-    //     return assetsDir + 'uv.html';
-    // }
-
-    return appUri + "uv.html";
+    return appUri + "/uv.html";
   }
 
   getSettings(): ISettings {
