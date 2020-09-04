@@ -77,10 +77,10 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
-    "@edsilv/jquery-plugins": "1.0.7",
+    "@edsilv/jquery-plugins": "1.0.8",
     "@edsilv/key-codes": "1.0.0",
     "@edsilv/utils": "1.0.2",
-    "@google/model-viewer": "1.1.0",
+    "@google/model-viewer": "1.2.1",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.0.1",
     "@iiif/iiif-gallery-component": "1.1.19",
