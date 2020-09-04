@@ -49,7 +49,7 @@ export class AlephCenterPanel extends CenterPanel {
     this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
 
     this._alViewer.addEventListener(
-      "changed",
+      "change",
       (e: any) => {
         if (this._alViewerReady) {
           this._nextState(
