@@ -212,7 +212,7 @@ export class CenterPanel extends BaseView {
     ) {
       titleHeight = 0;
     } else {
-      titleHeight = this.$title.height();
+      titleHeight = this.$title.outerHeight(true);
     }
 
     if (
@@ -221,7 +221,7 @@ export class CenterPanel extends BaseView {
     ) {
       subtitleHeight = 0;
     } else {
-      subtitleHeight = this.$subtitle.height();
+      subtitleHeight = this.$subtitle.outerHeight(true);
     }
 
     this.$content.height(this.$element.height() - titleHeight - subtitleHeight);

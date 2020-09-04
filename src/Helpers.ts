@@ -53,8 +53,8 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "openedMedia",
-    function() {
+    "externalResourceOpened",
+    function(_obj) {
       setTimeout(function() {
         resize();
       }, 100);
@@ -62,58 +62,12 @@ export const init = (el: string | HTMLDivElement, data) => {
     false
   );
 
-  uv.on(
-    "collectionIndexChanged",
-    function(collectionIndex) {
-      uv.dataProvider.set("c", collectionIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "manifestIndexChanged",
-    function(manifestIndex) {
-      uv.dataProvider.set("m", manifestIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "canvasIndexChanged",
-    function(canvasIndex) {
-      uv.dataProvider.set("cv", canvasIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "rangeChanged",
-    function(rangeId) {
-      uv.dataProvider.set("rid", rangeId);
-    },
-    false
-  );
-
   // uv.on(
-  //   "openseadragonExtension.rotationChanged",
-  //   function(rotation) {
-  //     uv.dataProvider.set("r", rotation);
-  //   },
-  //   false
-  // );
-
-  // uv.on(
-  //   "openseadragonExtension.xywhChanged",
-  //   function(xywh) {
-  //     uv.dataProvider.set("xywh", xywh);
-  //   },
-  //   false
-  // );
-
-  // uv.on(
-  //   "openseadragonExtension.currentViewUri",
-  //   function(_data) {
-  //     //console.log('openseadragonExtension.currentViewUri', obj);
+  //   "load",
+  //   function() {
+  //     setTimeout(function() {
+  //       resize();
+  //     }, 100);
   //   },
   //   false
   // );
@@ -199,6 +153,42 @@ export const init = (el: string | HTMLDivElement, data) => {
         uv.exitFullScreen();
       }
     }
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "collectionIndexChange",
+    function(collectionIndex) {
+      uv.dataProvider.set("c", collectionIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "manifestIndexChange",
+    function(manifestIndex) {
+      uv.dataProvider.set("m", manifestIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "canvasIndexChange",
+    function(canvasIndex) {
+      uv.dataProvider.set("cv", canvasIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "rangeChange",
+    function(rangeId) {
+      uv.dataProvider.set("rid", rangeId);
+    },
+    false
   );
 
   return uv;

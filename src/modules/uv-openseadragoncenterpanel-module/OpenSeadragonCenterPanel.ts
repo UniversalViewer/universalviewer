@@ -9,22 +9,25 @@ import {
 import { sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
-import { Bounds } from "../../extensions/uv-openseadragon-extension/Bounds";
+import { XYWH } from "../../extensions/uv-openseadragon-extension/XYWH";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
+// todo: replace when #1853 is merged
+//import OpenSeadragon from "../../lib/openseadragon";
 import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
-  currentBounds: any;
+  currentBounds: XYWH | null;
   handler: any;
-  initialBounds: any;
+  initialBounds: XYWH | null;
   initialRotation: any;
   isCreated: boolean = false;
+  isLoaded: boolean = false;
   isFirstLoad: boolean = true;
   items: any[];
   navigatedFromSearch: boolean = false;
@@ -67,7 +70,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       this.zoomToInitialAnnotation();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
       this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
     });
 
@@ -75,16 +78,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.whenResized(async () => {
-          if (!this.isCreated) this.createUI();
+          if (!this.isCreated) {
+            // uv may have reloaded
+            this.createUI();
+          }
+          this.isLoaded = false;
           await this.openMedia(resources);
-          this.component.publish(BaseEvents.OPENED_MEDIA);
+          this.isLoaded = true;
+          this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+          this.component.publish(BaseEvents.LOAD);
         });
       }
     );
 
     this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
       this.whenCreated(() => {
-        (<OpenSeadragonExtension>this.extension).currentAnnotationRect = null;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
         this.clearAnnotations();
       });
     });
@@ -119,9 +128,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.whenCreated(() => {
         this.updateResponsiveView();
+      });
+    });
+
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWH) => {
+      this.whenLoaded(() => {
+        this.fitToBounds(target, false);
       });
     });
   }
@@ -129,6 +144,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   whenCreated(cb: () => void): void {
     Async.waitFor(() => {
       return this.isCreated;
+    }, cb);
+  }
+
+  whenLoaded(cb: () => void): void {
+    Async.waitFor(() => {
+      return this.isLoaded;
     }, cb);
   }
 
@@ -149,10 +170,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     if (!this.extension.isDesktopMetric()) {
       this.viewer.autoHideControls = false;
-      this.$viewportNavButtons.hide();
     } else {
       this.viewer.autoHideControls = true;
-      this.$viewportNavButtons.show();
     }
   }
 
@@ -160,7 +179,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
 
-    //await import(/* webpackChunkName: "openseadragon" *//* webpackMode: "eager" */ "openseadragon");
     this.viewer = OpenSeadragon({
       id: this.viewerId,
       crossOriginPolicy: "Anonymous",
@@ -271,6 +289,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
     );
+
+    //this.$viewportNavButtonsContainer.addClass("viewportControls");
+
     this.$viewportNavButtons = this.$viewportNavButtonsContainer.find(
       ".viewportNavButton"
     );
@@ -451,6 +472,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   async openMedia(resources?: IExternalResource[]): Promise<void> {
+    // uv may have been unloaded
+    if (!this.viewer) {
+      return;
+    }
+
     this.$spinner.show();
     this.items = [];
 
@@ -458,38 +484,42 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       resources
     );
 
-    this.viewer.close();
+    try {
+      this.viewer.close();
 
-    images = this.getPagePositions(images);
+      images = this.getPagePositions(images);
 
-    for (let i = 0; i < images.length; i++) {
-      const data: any = images[i];
+      for (let i = 0; i < images.length; i++) {
+        const data: any = images[i];
 
-      let tileSource: any;
+        let tileSource: any;
 
-      if (data.hasServiceDescriptor) {
-        tileSource = data;
-      } else {
-        tileSource = {
-          type: "image",
-          url: data.id,
-          buildPyramid: false
-        };
-      }
-
-      this.viewer.addTiledImage({
-        tileSource: tileSource,
-        x: data.x,
-        y: data.y,
-        width: data.width,
-        success: (item: any) => {
-          this.items.push(item);
-          if (this.items.length === images.length) {
-            this.openPagesHandler();
-          }
-          this.resize();
+        if (data.hasServiceDescriptor) {
+          tileSource = data;
+        } else {
+          tileSource = {
+            type: "image",
+            url: data.id,
+            buildPyramid: false
+          };
         }
-      });
+
+        this.viewer.addTiledImage({
+          tileSource: tileSource,
+          x: data.x,
+          y: data.y,
+          width: data.width,
+          success: (item: any) => {
+            this.items.push(item);
+            if (this.items.length === images.length) {
+              this.openPagesHandler();
+            }
+            this.resize();
+          }
+        });
+      }
+    } catch {
+      // do nothing
     }
   }
 
@@ -624,8 +654,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   zoomToInitialAnnotation(): void {
     let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
 
-    (<OpenSeadragonExtension>this.extension).previousAnnotationRect = null;
-    (<OpenSeadragonExtension>this.extension).currentAnnotationRect = null;
+    (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
+    (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
 
     if (annotationRect && this.isZoomToSearchResultEnabled()) {
       this.zoomToAnnotation(annotationRect);
@@ -669,16 +699,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.viewer.viewport.setRotation(parseInt(this.initialRotation));
       }
 
-      this.initialBounds = (<IOpenSeadragonExtensionData>(
-        this.extension.data
-      )).xywh;
+      const xywh: string | null = (this.extension
+        .data as IOpenSeadragonExtensionData).xywh;
 
-      if (this.initialBounds) {
-        this.initialBounds = Bounds.fromString(this.initialBounds);
+      if (xywh) {
+        this.initialBounds = XYWH.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
       }
-    } else if (settings.preserveViewport) {
+    } else if (settings.preserveViewport && this.currentBounds) {
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
       this.fitToBounds(this.currentBounds);
     } else {
@@ -730,7 +759,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$nextButton.show();
   }
 
-  fitToBounds(bounds: Bounds, immediate: boolean = true): void {
+  fitToBounds(bounds: XYWH, immediate: boolean = true): void {
     const rect = new OpenSeadragon.Rect();
     rect.x = Number(bounds.x);
     rect.y = Number(bounds.y);
@@ -745,12 +774,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const dimensions: CroppedImageDimensions | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).getCroppedImageDimensions(canvas, this.viewer);
+    const dimensions: CroppedImageDimensions | null = (this
+      .extension as OpenSeadragonExtension).getCroppedImageDimensions(
+      canvas,
+      this.viewer
+    );
 
     if (dimensions) {
-      const bounds: Bounds = new Bounds(
+      const bounds: XYWH = new XYWH(
         dimensions.regionPos.x,
         dimensions.regionPos.y,
         dimensions.region.width,
@@ -762,11 +793,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     return null;
   }
 
-  getViewportBounds(): Bounds | null {
+  getViewportBounds(): XYWH | null {
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const b: any = this.viewer.viewport.getBounds(true);
-    const bounds: Bounds = new Bounds(
+    const bounds: XYWH = new XYWH(
       Math.floor(b.x),
       Math.floor(b.y),
       Math.floor(b.width),
@@ -794,9 +825,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   getAnnotationsForCurrentImages(): AnnotationGroup[] {
     let annotationsForCurrentImages: AnnotationGroup[] = [];
-    const annotations: AnnotationGroup[] | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).annotations;
+    const annotations: AnnotationGroup[] | null = (this
+      .extension as OpenSeadragonExtension).annotations;
 
     if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -863,9 +893,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   prevAnnotation(): void {
     const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).currentAnnotationRect;
+    const currentAnnotationRect: AnnotationRect | null = (this
+      .extension as OpenSeadragonExtension).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -891,11 +920,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is less than the current canvasIndex
       if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
-        (<OpenSeadragonExtension>(
-          this.extension
-        )).currentAnnotationRect = foundRect;
+        (this
+          .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [
+        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
@@ -909,9 +937,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   nextAnnotation(): void {
     const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).currentAnnotationRect;
+    const currentAnnotationRect: AnnotationRect | null = (this
+      .extension as OpenSeadragonExtension).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -940,15 +967,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is greater than the current canvasIndex
       if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-        (<OpenSeadragonExtension>(
-          this.extension
-        )).currentAnnotationRect = foundRect;
+        (this
+          .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [
+        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
-        this.zoomToAnnotation(<AnnotationRect>foundRect);
+        this.zoomToAnnotation(foundRect);
       }
     } else {
       this.navigatedFromSearch = true;
@@ -972,9 +998,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     // if less than, select the first annotation on the current page
     // otherwise default to the first annotation
 
-    const previousAnnotationRect: AnnotationRect | null = (<
-      OpenSeadragonExtension
-    >this.extension).previousAnnotationRect;
+    const previousAnnotationRect: AnnotationRect | null = (this
+      .extension as OpenSeadragonExtension).previousAnnotationRect;
 
     if (!previousAnnotationRect) {
       if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
@@ -991,12 +1016,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   zoomToAnnotation(annotationRect: AnnotationRect): void {
-    (<OpenSeadragonExtension>this.extension).previousAnnotationRect =
-      (<OpenSeadragonExtension>this.extension).currentAnnotationRect ||
+    (this.extension as OpenSeadragonExtension).previousAnnotationRect =
+      (this.extension as OpenSeadragonExtension).currentAnnotationRect ||
       annotationRect;
-    (<OpenSeadragonExtension>(
-      this.extension
-    )).currentAnnotationRect = annotationRect;
+    (this
+      .extension as OpenSeadragonExtension).currentAnnotationRect = annotationRect;
 
     // if zoomToBoundsEnabled, zoom to the annotation's bounds.
     // otherwise, pan into view preserving the current zoom level.
@@ -1007,7 +1031,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       )
     ) {
       this.fitToBounds(
-        new Bounds(
+        new XYWH(
           annotationRect.viewportX,
           annotationRect.viewportY,
           annotationRect.width,
@@ -1015,7 +1039,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         ),
         false
       );
-    } else {
+    } else if (this.currentBounds) {
       const x: number =
         annotationRect.viewportX -
         (this.currentBounds.w * 0.5 - annotationRect.width * 0.5);
@@ -1025,13 +1049,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       const w: number = this.currentBounds.w;
       const h: number = this.currentBounds.h;
 
-      const bounds: Bounds = new Bounds(x, y, w, h);
+      const bounds: XYWH = new XYWH(x, y, w, h);
       this.fitToBounds(bounds);
     }
 
     this.highlightAnnotationRect(annotationRect);
 
-    this.component.publish(BaseEvents.ANNOTATION_CHANGED);
+    this.component.publish(BaseEvents.ANNOTATION_CHANGE);
   }
 
   highlightAnnotationRect(annotationRect: AnnotationRect): void {
@@ -1192,12 +1216,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
       this.extension.isDesktopMetric();
 
-    this.viewer.navigator.setVisible(navigatorEnabled);
+    if (this.viewer && this.viewer.navigator) {
+      this.viewer.navigator.setVisible(navigatorEnabled);
 
-    if (navigatorEnabled) {
-      this.$navigator.show();
-    } else {
-      this.$navigator.hide();
+      if (navigatorEnabled) {
+        this.$navigator.show();
+      } else {
+        this.$navigator.hide();
+      }
     }
   }
 }

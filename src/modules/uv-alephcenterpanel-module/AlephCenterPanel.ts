@@ -74,7 +74,7 @@ export class AlephCenterPanel extends CenterPanel {
     );
 
     this.component.subscribe(
-      Events.CONTROLS_TYPE_CHANGED,
+      Events.CONTROLS_TYPE_CHANGE,
       (controlsType: ControlsType) => {
         this._alViewer.setControlsType(controlsType);
       }
@@ -97,28 +97,28 @@ export class AlephCenterPanel extends CenterPanel {
     });
 
     this.component.subscribe(
-      Events.DISPLAY_MODE_CHANGED,
+      Events.DISPLAY_MODE_CHANGE,
       (displayMode: DisplayMode) => {
         this._alViewer.setDisplayMode(displayMode);
       }
     );
 
     this.component.subscribe(
-      Events.GRAPH_ENABLED_CHANGED,
+      Events.GRAPH_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setGraphEnabled(enabled);
       }
     );
 
     this.component.subscribe(
-      Events.BOUNDING_BOX_ENABLED_CHANGED,
+      Events.BOUNDING_BOX_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setBoundingBoxEnabled(enabled);
       }
     );
 
     this.component.subscribe(
-      Events.ORIENTATION_CHANGED,
+      Events.ORIENTATION_CHANGE,
       (orientation: Orientation) => {
         this._alViewer.setOrientation(orientation);
       }
@@ -140,41 +140,41 @@ export class AlephCenterPanel extends CenterPanel {
       this._alViewer.selectNode(id);
     });
 
-    this.component.subscribe(Events.SLICES_INDEX_CHANGED, (index: number) => {
+    this.component.subscribe(Events.SLICES_INDEX_CHANGE, (index: number) => {
       this._alViewer.setSlicesIndex(index);
     });
 
     this.component.subscribe(
-      Events.SLICES_BRIGHTNESS_CHANGED,
+      Events.SLICES_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
     this.component.subscribe(
-      Events.SLICES_CONTRAST_CHANGED,
+      Events.SLICES_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
       }
     );
 
-    this.component.subscribe(Events.UNITS_CHANGED, (units: Units) => {
+    this.component.subscribe(Events.UNITS_CHANGE, (units: Units) => {
       this._alViewer.setUnits(units);
     });
 
-    this.component.subscribe(Events.VOLUME_STEPS_CHANGED, (steps: number) => {
+    this.component.subscribe(Events.VOLUME_STEPS_CHANGE, (steps: number) => {
       this._alViewer.setVolumeSteps(steps);
     });
 
     this.component.subscribe(
-      Events.VOLUME_BRIGHTNESS_CHANGED,
+      Events.VOLUME_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
     this.component.subscribe(
-      Events.VOLUME_CONTRAST_CHANGED,
+      Events.VOLUME_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
       }
@@ -233,7 +233,8 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.OPENED_MEDIA);
+      this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+      this.component.publish(BaseEvents.LOAD);
     });
   }
 
@@ -251,15 +252,13 @@ export class AlephCenterPanel extends CenterPanel {
       );
     }
 
-    this.component.publish(Events.VIEWER_CHANGED, this._state);
+    this.component.publish(Events.VIEWER_CHANGE, this._state);
 
     this._prevState = Object.assign({}, this._state);
   }
 
   resize() {
     super.resize();
-
-    console.log("resize");
 
     if (this._alViewerReady && this._state.srcLoaded) {
       this._alViewer.resize();

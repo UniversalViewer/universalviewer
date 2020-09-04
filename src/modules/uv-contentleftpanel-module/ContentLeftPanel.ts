@@ -57,7 +57,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.databind();
     });
 
@@ -65,7 +65,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.collapseFull();
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       if (!this.extension.isDesktopMetric()) {
         if (this.isFullyExpanded) {
           this.collapseFull();
@@ -88,7 +88,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.databindGalleryView();
     });
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }
@@ -97,7 +97,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.updateTreeTabBySelection();
     });
 
-    this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
+    this.component.subscribe(BaseEvents.RANGE_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }

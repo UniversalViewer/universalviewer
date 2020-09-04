@@ -117,7 +117,7 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -272,7 +272,8 @@ export class PDFCenterPanel extends CenterPanel {
       this._$spinner.hide();
     }
 
-    this.component.publish(BaseEvents.OPENED_MEDIA);
+    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.component.publish(BaseEvents.LOAD);
   }
 
   private _render(num: number): void {
@@ -327,7 +328,7 @@ export class PDFCenterPanel extends CenterPanel {
       // Wait for rendering to finish
       this._renderTask.promise
         .then(() => {
-          this.component.publish(Events.PAGE_INDEX_CHANGED, this._pageIndex);
+          this.component.publish(Events.PAGE_INDEX_CHANGE, this._pageIndex);
 
           this._pageRendering = false;
 

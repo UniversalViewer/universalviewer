@@ -4,14 +4,13 @@ import { IUVComponent } from "./IUVComponent";
 import { IUVData } from "./IUVData";
 import { IUVDataProvider } from "./IUVDataProvider";
 import { PubSub } from "./PubSub";
-import { propertiesChanged } from "./Utils";
 import {
   RenderingFormat,
   MediaType,
   ExternalResourceType
 } from "@iiif/vocabulary";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
-import { Annotation, AnnotationBody, Canvas, Sequence } from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
 import "./lib/";
@@ -46,7 +45,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
   constructor(options: IBaseComponentOptions) {
     super(options);
 
-    this.dataProvider = new URLDataProvider();
+    this.dataProvider = new URLDataProvider(
+      !!options.data.readOnlyDataProvider
+    );
     this._pubsub = new PubSub();
 
     this._init();
@@ -230,14 +231,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
   public data(): IUVData {
     return {
-      annotations: undefined,
-      assetsDir: "./uv-assets/",
+      assetsDir: "/uv-assets",
       canvasIndex: 0,
-      collectionIndex: undefined,
-      config: undefined,
-      configUri: undefined,
       embedded: false,
-      isLightbox: false,
       isReload: false,
       limitLocales: false,
       manifestUri: "",
@@ -246,11 +242,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
           name: "en-GB"
         }
       ],
-      manifestIndex: 0,
-      rangeId: undefined,
-      rotation: 0,
-      sequenceIndex: 0,
-      xywh: ""
+      target: ""
     } as IUVData;
   }
 
@@ -258,7 +250,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     // if this is the first set
     if (!this.extension) {
       if (!data.manifestUri) {
-        this._error(`manifestUri is required.`);
+        console.warn(`manifestUri is required.`);
         return;
       }
 
@@ -270,29 +262,18 @@ export class Viewer extends BaseComponent implements IUVComponent {
       this._reload(data);
     } else {
       // changing any of these data properties forces the UV to reload.
+      const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
-        propertiesChanged(data, this.extension.data, [
-          "collectionIndex",
-          "manifestIndex",
-          "config",
-          "configUri",
-          "domain",
-          "embedDomain",
-          "embedScriptUri",
-          "manifestUri",
-          "isHomeDomain",
-          "isLightbox",
-          "isOnlyInstance",
-          "isReload",
-          "locales",
-          "root"
-        ])
+        newData.isReload !== this.extension.data.isReload ||
+        newData.manifestUri !== this.extension.data.manifestUri ||
+        newData.manifestIndex !== this.extension.data.manifestIndex ||
+        newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
-        this.extension.data = Object.assign({}, this.extension.data, data);
+        this.extension.data = newData;
         this._reload(this.extension.data);
       } else {
         // no need to reload, just update.
-        this.extension.data = Object.assign({}, this.extension.data, data);
+        this.extension.data = newData;
         this.extension.render();
       }
     }
@@ -323,6 +304,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
   private async _reload(data: IUVData): Promise<void> {
     this._pubsub.dispose(); // remove any existing event listeners
 
+    data.target = ""; // clear target
+
     this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
       this.fire(BaseEvents.RELOAD, data);
     });
@@ -341,7 +324,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
       manifestUri: data.manifestUri,
       collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
       manifestIndex: data.manifestIndex || 0,
-      sequenceIndex: data.sequenceIndex || 0,
       canvasIndex: data.canvasIndex || 0,
       rangeId: data.rangeId,
       locale: data.locales ? data.locales[0].name : undefined
@@ -357,29 +339,16 @@ export class Viewer extends BaseComponent implements IUVComponent {
       window.trackingLabel = trackingLabel;
     }
 
-    let sequence: Sequence | undefined;
-
-    if (data.sequenceIndex !== undefined) {
-      sequence = helper.getSequenceByIndex(data.sequenceIndex);
-
-      if (!sequence) {
-        that._error(`Sequence ${data.sequenceIndex} not found.`);
-        return;
-      }
-    }
-
     let canvas: Canvas | undefined;
 
-    if (data.canvasIndex !== undefined) {
-      canvas = helper.getCanvasByIndex(data.canvasIndex);
-    }
+    canvas = helper.getCurrentCanvas();
 
     if (!canvas) {
       that._error(`Canvas ${data.canvasIndex} not found.`);
       return;
     }
 
-    let extension: IExtension | undefined = undefined;
+    let extension: IExtension | undefined;
 
     // if the canvas has a duration, use the uv-av-extension
     // const duration: number | null = canvas.getDuration();

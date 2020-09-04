@@ -22,6 +22,14 @@
                     margin: 0 30px 0 0 !important;
                 }
 
+                .openseadragon-container > div:not(.openseadragon-canvas):first {
+                    display: none;
+
+                    .xl-mediaquery({
+                        display: block;
+                    });
+                }
+
                 .paging.btn {
                     position: absolute !important;
                     width: 30px;
@@ -92,7 +100,7 @@
                 .zoomIn{
                     display: none !important;
 
-                    .desktop-mediaquery({
+                    .xl-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         background-image: data-uri('@{img-path}zoom_in.png') !important;
@@ -111,7 +119,7 @@
                 .zoomOut{
                     display: none !important;
 
-                    .desktop-mediaquery({
+                    .xl-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         background-image: data-uri('@{img-path}zoom_out.png') !important;
@@ -138,7 +146,7 @@
                 .rotate{
                     display: none !important;
 
-                    .desktop-mediaquery({
+                    .xl-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         background-image: data-uri('@{img-path}rotate_right.png') !important;

@@ -3,7 +3,7 @@ export class Events {
 
   static CURRENT_VIEW_URI: string = Events.namespace + "currentViewUri";
   static IMAGE_SEARCH: string = Events.namespace + "imageSearch";
-  static MODE_CHANGED: string = Events.namespace + "modeChanged";
+  static MODE_CHANGE: string = Events.namespace + "modeChange";
   static NEXT_SEARCH_RESULT: string = Events.namespace + "nextSearchResult";
   static NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE: string =
     Events.namespace + "nextImagesSearchResultUnavailable";
@@ -21,12 +21,12 @@ export class Events {
   static OPENSEADRAGON_ANIMATION: string = Events.namespace + "animation";
   static OPENSEADRAGON_OPEN: string = Events.namespace + "open";
   static OPENSEADRAGON_RESIZE: string = Events.namespace + "resize";
-  static OPENSEADRAGON_ROTATION: string = Events.namespace + "rotationChanged";
+  static OPENSEADRAGON_ROTATION: string = Events.namespace + "rotationChange";
   static SEARCH_PREVIEW_FINISH: string =
     Events.namespace + "searchPreviewFinish";
   static SEARCH_PREVIEW_START: string = Events.namespace + "searchPreviewStart";
   static SEARCH: string = Events.namespace + "search";
-  static XYWH_CHANGED: string = Events.namespace + "xywhChanged";
+  static XYWH_CHANGE: string = Events.namespace + "xywhChange";
   static ZOOM_IN: string = Events.namespace + "zoomIn";
   static ZOOM_OUT: string = Events.namespace + "zoomOut";
 }

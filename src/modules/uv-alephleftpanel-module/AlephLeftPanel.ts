@@ -47,7 +47,7 @@ export class AlephLeftPanel extends LeftPanel {
       this.$main.removeClass("disabled");
     });
 
-    this.component.subscribe(Events.VIEWER_CHANGED, (state: any) => {
+    this.component.subscribe(Events.VIEWER_CHANGE, (state: any) => {
       this._alControlPanel.angles = state.angles;
       this._alControlPanel.boundingBoxEnabled = state.boundingBoxEnabled;
       this._alControlPanel.controlsType = state.controlsType;
@@ -66,17 +66,17 @@ export class AlephLeftPanel extends LeftPanel {
     });
 
     this._alControlPanel.addEventListener(
-      "boundingBoxEnabledChanged",
+      "boundingBoxEnabledChange",
       (e: any) => {
-        this.component.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, e.detail);
+        this.component.publish(Events.BOUNDING_BOX_ENABLED_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "controlsTypeChanged",
+      "controlsTypeChange",
       (e: any) => {
-        this.component.publish(Events.CONTROLS_TYPE_CHANGED, e.detail);
+        this.component.publish(Events.CONTROLS_TYPE_CHANGE, e.detail);
       },
       false
     );
@@ -106,17 +106,17 @@ export class AlephLeftPanel extends LeftPanel {
     );
 
     this._alControlPanel.addEventListener(
-      "displayModeChanged",
+      "displayModeChange",
       (e: any) => {
-        this.component.publish(Events.DISPLAY_MODE_CHANGED, e.detail);
+        this.component.publish(Events.DISPLAY_MODE_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "graphEnabledChanged",
+      "graphEnabledChange",
       (e: any) => {
-        this.component.publish(Events.GRAPH_ENABLED_CHANGED, e.detail);
+        this.component.publish(Events.GRAPH_ENABLED_CHANGE, e.detail);
       },
       false
     );
@@ -134,9 +134,9 @@ export class AlephLeftPanel extends LeftPanel {
     );
 
     this._alControlPanel.addEventListener(
-      "orientationChanged",
+      "orientationChange",
       (e: any) => {
-        this.component.publish(Events.ORIENTATION_CHANGED, e.detail);
+        this.component.publish(Events.ORIENTATION_CHANGE, e.detail);
       },
       false
     );
@@ -158,7 +158,7 @@ export class AlephLeftPanel extends LeftPanel {
     );
 
     this._alControlPanel.addEventListener(
-      "selectedChanged",
+      "selectedChange",
       (e: any) => {
         this.component.publish(Events.SELECT_NODE, e.detail);
       },
@@ -166,57 +166,57 @@ export class AlephLeftPanel extends LeftPanel {
     );
 
     this._alControlPanel.addEventListener(
-      "slicesIndexChanged",
+      "slicesIndexChange",
       (e: any) => {
-        this.component.publish(Events.SLICES_INDEX_CHANGED, e.detail);
+        this.component.publish(Events.SLICES_INDEX_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "slicesBrightnessChanged",
+      "slicesBrightnessChange",
       (e: any) => {
-        this.component.publish(Events.VOLUME_BRIGHTNESS_CHANGED, e.detail);
+        this.component.publish(Events.VOLUME_BRIGHTNESS_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "slicesContrastChanged",
+      "slicesContrastChange",
       (e: any) => {
-        this.component.publish(Events.VOLUME_CONTRAST_CHANGED, e.detail);
+        this.component.publish(Events.VOLUME_CONTRAST_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "unitsChanged",
+      "unitsChange",
       (e: any) => {
-        this.component.publish(Events.UNITS_CHANGED, e.detail);
+        this.component.publish(Events.UNITS_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "volumeStepsChanged",
+      "volumeStepsChange",
       (e: any) => {
-        this.component.publish(Events.VOLUME_STEPS_CHANGED, e.detail);
+        this.component.publish(Events.VOLUME_STEPS_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "volumeBrightnessChanged",
+      "volumeBrightnessChange",
       (e: any) => {
-        this.component.publish(Events.VOLUME_BRIGHTNESS_CHANGED, e.detail);
+        this.component.publish(Events.VOLUME_BRIGHTNESS_CHANGE, e.detail);
       },
       false
     );
 
     this._alControlPanel.addEventListener(
-      "volumeContrastChanged",
+      "volumeContrastChange",
       (e: any) => {
-        this.component.publish(Events.VOLUME_CONTRAST_CHANGED, e.detail);
+        this.component.publish(Events.VOLUME_CONTRAST_CHANGE, e.detail);
       },
       false
     );

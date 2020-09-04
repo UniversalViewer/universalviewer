@@ -33,12 +33,12 @@ export class FooterPanel extends BaseView {
       }
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.updateMinimisedButtons();
       this.updateMoreInfoButton();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.updateDownloadButton();
     });
 
@@ -171,16 +171,15 @@ export class FooterPanel extends BaseView {
   }
 
   updateMoreInfoButton(): void {
-    const configEnabled: boolean = Bools.getBool(
-      this.options.moreInfoEnabled,
-      false
-    );
-
-    if (configEnabled && !this.extension.isDesktopMetric()) {
-      this.$moreInfoButton.show();
-    } else {
-      this.$moreInfoButton.hide();
-    }
+    // const configEnabled: boolean = Bools.getBool(
+    //   this.options.moreInfoEnabled,
+    //   false
+    // );
+    // if (configEnabled && !this.extension.isDesktopMetric()) {
+    //   this.$moreInfoButton.show();
+    // } else {
+    //   this.$moreInfoButton.hide();
+    // }
   }
 
   updateOpenButton(): void {
@@ -203,10 +202,6 @@ export class FooterPanel extends BaseView {
     ) {
       this.$fullScreenBtn.hide();
       return;
-    }
-
-    if (this.extension.data.isLightbox) {
-      this.$fullScreenBtn.addClass("lightbox");
     }
 
     if (this.extension.isFullScreen()) {
