@@ -61,6 +61,7 @@ interface Window {
   webViewerLoad: any; // pdfjs
   openSeadragonViewer: any; // for testing convenience (make this generic)
   PDFObject: any;
+  AMI: any;
   UVURLDataProvider: any;
   THREE: any;
   Event: any;

@@ -202,8 +202,8 @@ export class AlephCenterPanel extends CenterPanel {
     );
   }
 
-  openMedia(resources: IExternalResource[]) {
-    this.extension.getExternalResources(resources).then(() => {
+  async openMedia(resources: IExternalResource[]) {
+    this.extension.getExternalResources(resources).then(async () => {
       let canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
       const annotations: Annotation[] = canvas.getContent();
@@ -221,10 +221,12 @@ export class AlephCenterPanel extends CenterPanel {
               ? DisplayMode.MESH
               : DisplayMode.SLICES;
 
-          // todo: only load AMI if not DisplayMode.MESH
-          // PDFJS = await import(
-          //   /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
-          // );
+          // only load AMI if not DisplayMode.MESH
+          if (displayMode !== DisplayMode.MESH) {
+            window.AMI = await import(
+              /* webpackChunkName: "ami" */ /* webpackMode: "lazy" */ "@universalviewer/aleph/dist/collection/assets/ami.min"
+            );
+          }
 
           this._nextState({
             src: media.id,

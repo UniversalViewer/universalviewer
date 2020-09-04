@@ -182,6 +182,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
       //load: this._extensions[Extension.MODELVIEWER]
     };
 
+    this._extensionRegistry[MediaType.DICOM] = {
+      load: this._extensions[Extension.ALEPH]
+    };
+
     this._extensionRegistry[MediaType.JPG] = {
       load: this._extensions[Extension.OSD]
     };
@@ -280,6 +284,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private _getExtension(key: string): IExtension {
+    console.log("key", key);
     if (!this._extensionRegistry[key]) {
       key = "default";
     }
