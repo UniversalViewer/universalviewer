@@ -18,9 +18,9 @@ import {
   applyPolyfills,
   defineCustomElements
 } from "@universalviewer/aleph/loader";
-import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
+//import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
-import "@universalviewer/aleph/dist/collection/assets/ami.min";
+//import "@universalviewer/aleph/dist/collection/assets/ami.min";
 
 export class AlephCenterPanel extends CenterPanel {
   private _alViewer: any;
@@ -222,11 +222,11 @@ export class AlephCenterPanel extends CenterPanel {
               : DisplayMode.SLICES;
 
           // only load AMI if not DisplayMode.MESH
-          if (displayMode !== DisplayMode.MESH) {
-            window.AMI = await import(
-              /* webpackChunkName: "ami" */ /* webpackMode: "lazy" */ "@universalviewer/aleph/dist/collection/assets/ami.min"
-            );
-          }
+          // if (displayMode !== DisplayMode.MESH) {
+          //   window.AMI = await import(
+          //     /* webpackChunkName: "ami" */ /* webpackMode: "lazy" */ "@universalviewer/aleph/dist/collection/assets/ami.min"
+          //   );
+          // }
 
           this._nextState({
             src: media.id,

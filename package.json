@@ -90,7 +90,7 @@
     "@iiif/vocabulary": "1.0.19",
     "@types/modernizr": "3.2.29",
     "@types/node": "8.10.52",
-    "@universalviewer/aleph": "0.0.13",
+    "@universalviewer/aleph": "0.0.15",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@universalviewer/uv-en-gb-theme": "1.1.3",
