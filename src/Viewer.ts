@@ -284,7 +284,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private _getExtension(key: string): IExtension {
-    console.log("key", key);
     if (!this._extensionRegistry[key]) {
       key = "default";
     }
