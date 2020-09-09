@@ -132,6 +132,12 @@ export class AutoComplete {
       }
     });
 
+    // hide results if focus moves on.
+    this._$element.on("focusout", e => {
+      this._clearResults();
+      this._hideResults();
+    });
+
     this._hideResults();
   }
 
