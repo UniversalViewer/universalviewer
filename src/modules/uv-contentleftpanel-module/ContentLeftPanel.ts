@@ -169,7 +169,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.$treeView = $('<div class="treeView"></div>');
     this.$views.append(this.$treeView);
 
-    this.$thumbsView = $('<div class="thumbsView" tabindex="0"></div>');
+    this.$thumbsView = $('<div class="thumbsView" tabindex="-1"></div>');
     this.$views.append(this.$thumbsView);
 
     this.$galleryView = $('<div class="galleryView"></div>');
