@@ -2,7 +2,8 @@ import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";
 import { ExternalResourceType, ViewingDirection } from "@iiif/vocabulary";
 import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
-import { Dates, Maths, Strings } from "@edsilv/utils";
+import * as KeyCodes from "@edsilv/key-codes";
+import { Dates, Keyboard, Maths, Strings } from "@edsilv/utils";
 
 export class ThumbsView extends BaseView {
   private _$thumbsCache: JQuery | null;
@@ -46,14 +47,14 @@ export class ThumbsView extends BaseView {
 
     $.templates({
       thumbsTemplate:
-        '<div id="thumb{{>index}}" class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}">\
+        '<a id="thumb{{>index}}" class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}" tabindex="0">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <div class="info">\
                                     <span class="index">{{:#index + 1}}</span>\
                                     <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
                                     <span class="searchResults" title="{{:~searchResultsTitle()}}">{{>data.searchResults}}</span>\
                                 </div>\
-                             </div>\
+                             </a>\
                              {{if ~separator()}} \
                                  <div class="separator"></div> \
                              {{/if}}'
@@ -166,6 +167,22 @@ export class ThumbsView extends BaseView {
       const data = $.view(this).data;
       that.lastThumbClickedIndex = data.index;
       that.component.publish(BaseEvents.THUMB_SELECTED, data);
+      return false;
+    });
+
+    // Support keyboard navigation (spacebar / enter)
+    this.$thumbs.delegate(".thumb", "keydown", function(e: JQueryEventObject) {
+      const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
+      const charCode: number = Keyboard.getCharCode(originalEvent);
+      if (
+        charCode === KeyCodes.KeyDown.Spacebar ||
+        charCode === KeyCodes.KeyDown.Enter
+      ) {
+        e.preventDefault();
+        const data = $.view(this).data;
+        that.lastThumbClickedIndex = data.index;
+        that.component.publish(BaseEvents.THUMB_SELECTED, data);
+      }
     });
 
     this.setLabel();
