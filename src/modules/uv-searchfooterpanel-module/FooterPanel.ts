@@ -103,7 +103,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchContainer.append(this.$searchOptions);
 
     this.$searchLabel = $(
-      '<span class="label">' + this.content.searchWithin + "</span>"
+      '<label class="label" for="searchWithinInput">' + this.content.searchWithin + "</label>"
     );
     this.$searchOptions.append(this.$searchLabel);
 
@@ -111,7 +111,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchOptions.append(this.$searchTextContainer);
 
     this.$searchText = $(
-      '<input class="searchText" type="text" maxlength="100" value="' +
+      '<input class="searchText" id="searchWithinInput" type="text" maxlength="100" value="' +
         this.content.enterKeyword +
         '" aria-label="' +
         this.content.searchWithin +
