@@ -27,7 +27,7 @@ export class BaseExpandPanel extends BaseView {
     this.$top = $('<div class="top"></div>');
     this.$element.append(this.$top);
 
-    this.$title = $('<div class="title"></div>');
+    this.$title = $('<h2 class="title"></h2>');
     this.$top.append(this.$title);
 
     this.$expandFullButton = $('<a class="expandFullButton" tabindex="0"></a>');

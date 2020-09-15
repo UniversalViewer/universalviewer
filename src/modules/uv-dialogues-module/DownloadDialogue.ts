@@ -44,7 +44,7 @@ export class DownloadDialogue extends Dialogue {
     });
 
     // create ui.
-    this.$title = $("<h1>" + this.content.title + "</h1>");
+    this.$title = $("<h2>" + this.content.title + "</h2>");
     this.$content.append(this.$title);
 
     this.$noneAvailable = $(

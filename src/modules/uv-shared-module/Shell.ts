@@ -36,6 +36,7 @@ export class Shell extends BaseView {
     this.$element.append(this.$mainPanel);
 
     this.$centerPanel = $('<div class="centerPanel"></div>');
+    this.$centerPanel.append('<h2 class="sr-only">Media Viewer</h2>');
     this.$mainPanel.append(this.$centerPanel);
 
     this.$leftPanel = $('<div class="leftPanel"></div>');
