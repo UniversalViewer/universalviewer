@@ -29,6 +29,10 @@ export class Shell extends BaseView {
       this.$overlays.hide();
     });
 
+    // Jump link
+    // TODO: Needs internationalization
+    this.$element.append('<a class="sr-only" href="#download-btn">Skip to downloads and alternative formats</a>');
+
     this.$headerPanel = $('<div class="headerPanel"></div>');
     this.$element.append(this.$headerPanel);
 
@@ -36,6 +40,7 @@ export class Shell extends BaseView {
     this.$element.append(this.$mainPanel);
 
     this.$centerPanel = $('<div class="centerPanel"></div>');
+    // TODO: Needs internationalization
     this.$centerPanel.append('<h2 class="sr-only">Media Viewer</h2>');
     this.$mainPanel.append(this.$centerPanel);
 
