@@ -1,13 +1,14 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Bounds} from "../../extensions/uv-seadragon-extension/Bounds";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
-import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
-import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
-import {UVUtils} from "../../Utils";
-import AnnotationGroup = Manifold.AnnotationGroup;
-import AnnotationRect = Manifold.AnnotationRect;
+import { Canvas, IExternalImageResourceData, IExternalResource } from 'manifesto.js';
+import { ViewingDirection } from '@iiif/vocabulary';
+import { AnnotationGroup, AnnotationRect } from '@iiif/manifold';
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { Bounds } from "../../extensions/uv-seadragon-extension/Bounds";
+import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { Events } from "../../extensions/uv-seadragon-extension/Events";
+import { CroppedImageDimensions } from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
+import { ISeadragonExtension } from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import { ISeadragonExtensionData } from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
+import { UVUtils } from "../../Utils";
 
 export class SeadragonCenterPanel extends CenterPanel {
 
@@ -22,7 +23,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     items: any[];
     navigatedFromSearch: boolean = false;
     nextButtonEnabled: boolean = false;
-    pages: Manifesto.IExternalResource[];
+    pages: IExternalResource[];
     prevButtonEnabled: boolean = false;
     previousAnnotationRect: AnnotationRect;
     userData: any;
@@ -65,7 +66,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
@@ -330,7 +331,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     createNavigationButtons() {
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
 
@@ -352,8 +353,8 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
 
         switch (viewingDirection.toString()) {
-            case manifesto.ViewingDirection.bottomToTop().toString() :
-            case manifesto.ViewingDirection.topToBottom().toString() :
+            case ViewingDirection.BOTTOM_TO_TOP.toString() :
+            case ViewingDirection.TOP_TO_BOTTOM.toString() :
                 this.$prevButton.addClass('vertical');
                 this.$nextButton.addClass('vertical');;
                 break;
@@ -368,12 +369,12 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (!that.prevButtonEnabled) return;
 
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
                     this.component.publish(BaseEvents.PREV);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.NEXT);
                     break;
             }
@@ -386,12 +387,12 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (!that.nextButtonEnabled) return;
 
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
                     this.component.publish(BaseEvents.NEXT);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.PREV);
                     break;
             }
@@ -411,12 +412,12 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(resources?: Manifesto.IExternalResource[]): void {
+    openMedia(resources?: IExternalResource[]): void {
 
         this.$spinner.show();
         this.items = [];
 
-        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalImageResourceData[]) => {
+        this.extension.getExternalResources(resources).then((resources: IExternalImageResourceData[]) => {
 
             this.viewer.close();
 
@@ -454,7 +455,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    getPagePositions(resources: Manifesto.IExternalImageResourceData[]): Manifesto.IExternalImageResourceData[] {
+    getPagePositions(resources: IExternalImageResourceData[]): IExternalImageResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;
@@ -534,9 +535,9 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             $('.navigator').addClass('extraMargin');
 
-            const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+            const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-            if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+            if (viewingDirection.toString() === ViewingDirection.RIGHT_TO_LEFT.toString()) {
                 if (this.extension.helper.isFirstCanvas()) {
                     this.disableNextButton();
                 } else {
@@ -695,7 +696,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         const dimensions: CroppedImageDimensions | null = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
         if (dimensions) {
@@ -711,9 +712,8 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.viewer || !this.viewer.viewport) return null;
 
         const b: any = this.viewer.viewport.getBounds(true);
-        const bounds: Bounds = new Bounds(Math.floor(b.x), Math.floor(b.y), Math.floor(b.width), Math.floor(b.height));
 
-        return bounds;
+        return new Bounds(Math.floor(b.x), Math.floor(b.y), Math.floor(b.width), Math.floor(b.height));
     }
 
     viewerResize(viewer: any): void {
@@ -924,7 +924,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         let offsetX: number = 0;
 
         if (index > 0) {
-            offsetX = (<Manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
+            offsetX = (<IExternalImageResourceData>this.extension.resources[index - 1]).width;
         }
 
         for (let i = 0; i < annotationGroup.rects.length; i++) {
@@ -964,21 +964,21 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();;
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         if (this.extension.helper.isMultiCanvas() && this.$prevButton && this.$nextButton) {
 
             const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
                     this.$prevButton.addClass('down');
                     this.$nextButton.addClass('up');
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     break;
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()));

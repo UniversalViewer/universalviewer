@@ -1,18 +1,20 @@
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {DownloadDialogue} from "./DownloadDialogue";
-import {Events} from "./Events";
-import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
-import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
-import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
-import {IMediaElementExtension} from "./IMediaElementExtension";
-import {MediaElementCenterPanel} from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
-import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
-import {SettingsDialogue} from "./SettingsDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import IThumb = Manifold.IThumb;
+import * as Manifesto from 'manifesto.js';
+import { Annotation, AnnotationBody, Canvas } from 'manifesto.js';
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { DownloadDialogue } from "./DownloadDialogue";
+import { Events } from "./Events";
+import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
+import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
+import { IMediaElementExtension } from "./IMediaElementExtension";
+import { MediaElementCenterPanel } from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
+import { ExternalResourceType, MediaType } from '@iiif/vocabulary';
 
 export class Extension extends BaseExtension implements IMediaElementExtension {
 
@@ -46,7 +48,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Manifesto.Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
@@ -136,7 +138,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     bookmark(): void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.extensions.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extensions.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
@@ -146,9 +148,9 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         bookmark.trackingLabel = window.trackingLabel;
 
         if (this.isVideo()){
-            bookmark.type = manifesto.ResourceType.movingimage().toString();
+            bookmark.type = ExternalResourceType.MOVING_IMAGE.toString();
         } else {
-            bookmark.type = manifesto.ResourceType.sound().toString();
+            bookmark.type = ExternalResourceType.SOUND.toString();
         }
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
@@ -158,16 +160,15 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         //const configUri: string = this.data.config.uri || '';
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
     }
 
     // todo: use canvas.getThumbnail()
     getPosterImageUri(): string {
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        const annotations: Annotation[] = canvas.getContent();
         
         if (annotations && annotations.length) {
             return annotations[0].getProperty('thumbnail');
@@ -177,23 +178,23 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     isVideoFormat(type: string): boolean {
-        const videoFormats: string[] = [manifesto.MediaType.mp4().toString(), manifesto.MediaType.webm().toString()];
+        const videoFormats: string[] = [MediaType.AUDIO_MP4.toString(), MediaType.WEBM.toString()];
         return videoFormats.indexOf(type) != -1;
     }
 
     isVideo(): boolean {
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
-        
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        const annotations: Annotation[] = canvas.getContent();
+
         if (annotations && annotations.length) {
 
-            const formats: Manifesto.IAnnotationBody[] | null = this.getMediaFormats(canvas);
+            const formats: AnnotationBody[] | null = this.getMediaFormats(canvas);
 
             for (let i = 0; i < formats.length; i++) {
 
-                const format: Manifesto.IAnnotationBody = formats[i];
-                const type: Manifesto.MediaType | null = format.getFormat();
+                const format: AnnotationBody = formats[i];
+                const type: MediaType | null = format.getFormat();
 
                 if (type) {
                     if (this.isVideoFormat(type.toString())) {
@@ -203,12 +204,12 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             }
 
         } else {
-            const type: Manifesto.ResourceType | null = canvas.getType();
+            const type: ExternalResourceType | null = canvas.getType();
 
             if (type) {
-                return type.toString() === manifesto.ResourceType.movingimage().toString();
+                return type.toString() === ExternalResourceType.MOVING_IMAGE.toString();
             }
-            
+
         }
 
         throw(new Error("Unable to determine media type"));

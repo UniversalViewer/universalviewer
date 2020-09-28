@@ -1,7 +1,9 @@
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
+import { MultiSelectState } from '@iiif/manifold';
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import { GalleryComponent } from '@iiif/iiif-gallery-component';
 
 export class MultiSelectDialogue extends Dialogue {
 
@@ -27,14 +29,14 @@ export class MultiSelectDialogue extends Dialogue {
 
         this.component.subscribe(this.openCommand, () => {
             this.open();
-            const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+            const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
             this.galleryComponent.set(this.data);
         });
 
         this.component.subscribe(this.closeCommand, () => {
             this.close();
-            const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+            const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(false);
         });
 
@@ -63,7 +65,7 @@ export class MultiSelectDialogue extends Dialogue {
             viewingDirection: this.extension.helper.getViewingDirection()
         };
 
-        this.galleryComponent = new IIIFComponents.GalleryComponent({
+        this.galleryComponent = new GalleryComponent({
             target:  <HTMLElement>this.$gallery[0]
         });
 

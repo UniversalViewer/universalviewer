@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 import {ILoginDialogueOptions} from "../uv-shared-module/ILoginDialogueOptions";
+import { IExternalResource } from 'manifesto.js';
 
 export class LoginDialogue extends Dialogue {
 
@@ -12,7 +13,7 @@ export class LoginDialogue extends Dialogue {
     $message: JQuery;
     $title: JQuery;
     options: ILoginDialogueOptions;
-    resource: Manifesto.IExternalResource;
+    resource: IExternalResource;
 
     constructor($element: JQuery) {
         super($element);

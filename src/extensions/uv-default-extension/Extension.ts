@@ -1,14 +1,14 @@
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {FileLinkCenterPanel} from "../../modules/uv-filelinkcenterpanel-module/FileLinkCenterPanel";
-import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
-import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
-import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
-import {IDefaultExtension} from "./IDefaultExtension";
-import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
-import {SettingsDialogue} from "./SettingsDialogue";
-import {ShareDialogue} from "./ShareDialogue";
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { FileLinkCenterPanel } from "../../modules/uv-filelinkcenterpanel-module/FileLinkCenterPanel";
+import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
+import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
+import { IDefaultExtension } from "./IDefaultExtension";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
 
 export class Extension extends BaseExtension implements IDefaultExtension {
 
@@ -105,9 +105,8 @@ export class Extension extends BaseExtension implements IDefaultExtension {
         //const configUri: string = this.data.config.uri || '';
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
     }
 
 }

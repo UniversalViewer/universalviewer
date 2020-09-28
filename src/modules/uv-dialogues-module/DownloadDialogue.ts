@@ -1,7 +1,10 @@
+import { ILabelValuePair } from '@iiif/manifold';
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
+import { Annotation, AnnotationBody, Canvas, LanguageMap, ManifestResource, Rendering } from 'manifesto.js';
+import { MediaType, RenderingFormat } from '@iiif/vocabulary';
 
 export class DownloadDialogue extends Dialogue {
 
@@ -67,20 +70,20 @@ export class DownloadDialogue extends Dialogue {
             // 
 
             // add each file src
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             let renderingFound: boolean = false;
 
-            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+            const renderings: Rendering[] = canvas.getRenderings();
 
             for (let i = 0; i < renderings.length; i++) {
-                const rendering: Manifesto.IRendering = renderings[i];
-                const renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
+                const rendering: Rendering = renderings[i];
+                const renderingFormat: RenderingFormat = rendering.getFormat();
                 let format: string = '';
                 if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.LanguageMap.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>LanguageMap.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             }
 
@@ -88,14 +91,14 @@ export class DownloadDialogue extends Dialogue {
 
                 let annotationFound: boolean = false;
 
-                const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+                const annotations: Annotation[] = canvas.getContent();
 
                 for (let i = 0; i < annotations.length; i++) {
-                    const annotation: Manifesto.IAnnotation = annotations[i];
-                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+                    const annotation: Annotation = annotations[i];
+                    const body: AnnotationBody[] = annotation.getBody();
 
                     if (body.length) {
-                        const format: Manifesto.MediaType | null = body[0].getFormat();
+                        const format: MediaType | null = body[0].getFormat();
 
                         if (format) {
                             this.addEntireFileDownloadOption(body[0].id, '', format.toString());
@@ -140,15 +143,19 @@ export class DownloadDialogue extends Dialogue {
         this.$downloadOptions.find('li.dynamic').remove();
     }
 
-    getDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): IRenderingOption[] {
-        const renderings: Manifesto.IRendering[] = resource.getRenderings();
-
+    getDownloadOptionsForRenderings(resource: ManifestResource | undefined, defaultLabel: string, type: DownloadOption): IRenderingOption[] {
         const downloadOptions: any[] = [];
 
+        if (!resource) {
+            return downloadOptions;
+        }
+
+        const renderings: Rendering[] = resource.getRenderings();
+
         for (let i = 0; i < renderings.length; i++) {
-            const rendering: Manifesto.IRendering = renderings[i];
+            const rendering: Rendering = renderings[i];
             if (rendering) {
-                let label: string | null = Manifesto.LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
+                let label: string | null = LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
                 const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";
@@ -175,7 +182,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     getCurrentResourceId(): string {
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         return canvas.externalResource.data.id;
     }
 
@@ -195,7 +202,7 @@ export class DownloadDialogue extends Dialogue {
 
     updateTermsOfUseButton(): void {
 
-        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+        const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
         if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();

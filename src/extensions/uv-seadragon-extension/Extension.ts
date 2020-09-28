@@ -1,3 +1,17 @@
+import {
+    Annotation,
+    Canvas,
+    LanguageMap,
+    ManifestType,
+    Range,
+    Resource,
+    Service,
+    Size,
+    Thumb,
+    TreeNode,
+    Utils as ManifestoUtils
+} from 'manifesto.js';
+import { AnnotationGroup, AnnotationRect } from '@iiif/manifold';
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
@@ -23,11 +37,7 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
-import AnnotationGroup = Manifold.AnnotationGroup;
-import AnnotationRect = Manifold.AnnotationRect;
-import Size = Manifesto.Size;
+import { ExternalResourceType, IIIFResourceType, ServiceProfile } from '@iiif/vocabulary';
 
 export class Extension extends BaseExtension implements ISeadragonExtension {
 
@@ -163,7 +173,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.component.subscribe(BaseEvents.MULTISELECTION_MADE, (ids: string[]) => {
             const args: MultiSelectionArgs = new MultiSelectionArgs();
-            args.manifestUri = this.helper.iiifResourceUri;
+            args.manifestUri = this.helper.manifestUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
             args.canvases = ids;
             args.format = this.data.config.options.multiSelectionMimeType;
@@ -258,7 +268,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 this.fire(Events.XYWH_CHANGED, (<ISeadragonExtensionData>this.data).xywh);
             }
 
-            const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+            const canvas: Canvas = this.helper.getCurrentCanvas();
 
             this.fire(Events.CURRENT_VIEW_URI,
                 {
@@ -313,11 +323,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.fire(BaseEvents.ANNOTATIONS_EMPTY);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: ITreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: TreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
@@ -510,10 +520,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     getMode(): Mode {
         if (this.mode) return this.mode;
 
-        switch (this.helper.getManifestType().toString()) {
-            case manifesto.ManifestType.monograph().toString():
+        const manifestType = this.helper.getManifestType();
+
+        if (!manifestType) {
+            return Mode.image;
+        }
+
+        switch (manifestType.toString()) {
+            case ManifestType.MONOGRAPH.toString():
                 return Mode.page;
-            case manifesto.ManifestType.manuscript().toString():
+            case ManifestType.MANUSCRIPT.toString():
                 return Mode.page;
             default:
                 return Mode.image;
@@ -536,7 +552,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     viewRange(path: string): void {
         //this.currentRangePath = path;
-        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
+        const range: Range | null = this.helper.getRangeByPath(path);
         if (!range) return;
         const canvasId: string = range.getCanvasIds()[0];
         const index: number | null = this.helper.getCanvasIndexById(canvasId);
@@ -561,16 +577,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    treeNodeSelected(node: ITreeNode): void {
+    treeNodeSelected(node: TreeNode): void {
         const data: any = node.data;
 
         if (!data.type) return;
 
         switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
+            case IIIFResourceType.MANIFEST.toString():
                 this.viewManifest(data);
                 break;
-            case manifesto.IIIFResourceType.collection().toString():
+            case IIIFResourceType.COLLECTION.toString():
                 // note: this won't get called as the tree component now has branchNodesSelectable = false
                 // useful to keep around for reference
                 this.viewCollection(data);
@@ -621,16 +637,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     bookmark(): void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>LanguageMap.getValue(canvas.getLabel());
         bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.image().toString();
+        bookmark.type = ExternalResourceType.IMAGE.toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
@@ -645,7 +661,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         this.fire(Events.PRINT);
     }
 
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null {
+    getCroppedImageDimensions(canvas: Canvas, viewer: any): CroppedImageDimensions | null {
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
@@ -705,16 +721,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         }
 
-        dimensions.region = new manifesto.Size(regionWidth, regionHeight);
+        dimensions.region = new Size(regionWidth, regionHeight);
         dimensions.regionPos = new Point(x, y);
-        dimensions.size = new manifesto.Size(width, height);
+        dimensions.size = new Size(width, height);
 
         return dimensions;
     }
 
     // keep this around for reference
 
-    // getOnScreenCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {
+    // getOnScreenCroppedImageDimensions(canvas: Canvas, viewer: any): CroppedImageDimensions {
 
     //     if (!viewer) return null;
     //     if (!viewer.viewport) return null;
@@ -773,14 +789,14 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     //     var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-    //     dimensions.region = new manifesto.Size(regionWidth, regionHeight);
+    //     dimensions.region = new Size(regionWidth, regionHeight);
     //     dimensions.regionPos = new Point(regionLeft, regionTop);
-    //     dimensions.size = new manifesto.Size(sizeWidth, sizeHeight);
+    //     dimensions.size = new Size(sizeWidth, sizeHeight);
 
     //     return dimensions;
     // }
 
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null {
+    getCroppedImageUri(canvas: Canvas, viewer: any): string | null {
 
         if (!viewer) return null;
         if (!viewer.viewport) return null;
@@ -808,15 +824,15 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
-    getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
-        const dimensions: Size = new manifesto.Size(0, 0);
+    getConfinedImageDimensions(canvas: Canvas, width: number): Size {
+        const dimensions: Size = new Size(0, 0);
         dimensions.width = width;
         const normWidth = Utils.Maths.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
 
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string | null {
+    getConfinedImageUri(canvas: Canvas, width: number): string | null {
         const baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
@@ -834,7 +850,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
-    getImageId(canvas: Manifesto.ICanvas): string | null {
+    getImageId(canvas: Canvas): string | null {
 
         if (canvas.externalResource) {
             const id: string | undefined = canvas.externalResource.data['@id'];
@@ -847,32 +863,32 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return null;
     }
 
-    getImageBaseUri(canvas: Manifesto.ICanvas): string {
+    getImageBaseUri(canvas: Canvas): string {
         let uri = this.getInfoUri(canvas);
         // First trim off info.json, then trim off ID....
         uri = uri.substr(0, uri.lastIndexOf("/"));
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
-    getInfoUri(canvas: Manifesto.ICanvas): string {
+    getInfoUri(canvas: Canvas): string {
         let infoUri: string | null = null;
 
-        const images: Manifesto.IAnnotation[] = canvas.getImages();
+        const images: Annotation[] = canvas.getImages();
 
         if (images && images.length) {
-            let firstImage: Manifesto.IAnnotation = images[0];
-            let resource: Manifesto.IResource = firstImage.getResource();
-            let services: Manifesto.IService[] = resource.getServices();
+            let firstImage: Annotation = images[0];
+            let resource: Resource = firstImage.getResource();
+            let services: Service[] = resource.getServices();
 
             for (let i = 0; i < services.length; i++) {
-                let service: Manifesto.IService = services[i];
+                let service: Service = services[i];
                 let id = service.id;
 
                 if (!id.endsWith('/')) {
                     id += '/';
                 }
 
-                if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                if (ManifestoUtils.isImageProfile(service.getProfile())) {
                     infoUri = id + 'info.json';
                 }
             }
@@ -890,7 +906,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const config: string = this.data.config.uri || '';
         const locales: string | null = this.getSerializedLocales();
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
         const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
@@ -958,20 +974,20 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return index;
     }
 
-    getAutoCompleteService(): Manifesto.IService | null {
-        const service: Manifesto.IService | null = this.helper.getSearchService();
+    getAutoCompleteService(): Service | null {
+        const service: Service | null = this.helper.getSearchService();
         if (!service) return null;
-        return service.getService(manifesto.ServiceProfile.autoComplete());
+        return service.getService(ServiceProfile.SEARCH_1_AUTO_COMPLETE) || service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE);
     }
 
     getAutoCompleteUri(): string | null {
-        const service: Manifesto.IService | null = this.getAutoCompleteService();
+        const service: Service | null = this.getAutoCompleteService();
         if (!service) return null;
         return service.id + '?q={0}';
     }
 
     getSearchServiceUri(): string | null {
-        const service: Manifesto.IService | null = this.helper.getSearchService();
+        const service: Service | null = this.helper.getSearchService();
         if (!service) return null;
 
         let uri: string = service.id;
@@ -1089,11 +1105,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
 
-        let indices: number[] | undefined = [];
+        let indices: number[] = [];
 
         // if it's a continuous manifest, get all resources.
         if (this.helper.isContinuous()) {
-            indices = $.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
+            indices = $.map(this.helper.getCanvases(), (c: Canvas, index: number) => {
                 return index;
             });
         } else {

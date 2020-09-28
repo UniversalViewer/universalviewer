@@ -1,8 +1,8 @@
+import { Canvas } from 'manifesto.js';
+import { AnnotationGroup, AnnotationRect } from '@iiif/manifold';
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {IExtension} from "../../modules/uv-shared-module/IExtension";
 import {Mode} from "./Mode";
-import AnnotationGroup = Manifold.AnnotationGroup;
-import AnnotationRect = Manifold.AnnotationRect;
 import Size = Utils.Size;
 
 export interface ISeadragonExtension extends IExtension{
@@ -10,14 +10,14 @@ export interface ISeadragonExtension extends IExtension{
     currentAnnotationRect: AnnotationRect | null;
     getAnnotationRects(): AnnotationRect[];
     getAutoCompleteUri(): string | null;
-    getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string | null;
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null;
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null;
+    getConfinedImageDimensions(canvas: Canvas, width: number): Size;
+    getConfinedImageUri(canvas: Canvas, width: number, height?: number): string | null;
+    getCroppedImageDimensions(canvas: Canvas, viewer: any): CroppedImageDimensions | null;
+    getCroppedImageUri(canvas: Canvas, viewer: any): string | null;
     getCurrentAnnotationRectIndex(): number;
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
-    getImageBaseUri(canvas: Manifesto.ICanvas): string;
-    getImageId(canvas: Manifesto.ICanvas): string | null;
+    getImageBaseUri(canvas: Canvas): string;
+    getImageId(canvas: Canvas): string | null;
     getLastAnnotationRectIndex(): number;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;

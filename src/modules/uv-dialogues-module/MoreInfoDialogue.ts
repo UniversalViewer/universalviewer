@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 import {UVUtils} from "../../Utils";
+import { LimitType, MetadataComponent } from '@iiif/iiif-metadata-component';
 
 export class MoreInfoDialogue extends Dialogue {
 
@@ -39,7 +40,7 @@ export class MoreInfoDialogue extends Dialogue {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$content.append(this.$metadata);
 
-        this.metadataComponent = new IIIFComponents.MetadataComponent({
+        this.metadataComponent = new MetadataComponent({
             target:  <HTMLElement>this.$metadata[0]
         });
 
@@ -64,7 +65,7 @@ export class MoreInfoDialogue extends Dialogue {
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.LimitType.LINES,
+            limitType: LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this.extension.getCurrentCanvasRange(),

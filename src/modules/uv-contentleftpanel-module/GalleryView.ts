@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
+import { GalleryComponent } from '@iiif/iiif-gallery-component';
 
 export class GalleryView extends BaseView {
 
@@ -39,7 +40,7 @@ export class GalleryView extends BaseView {
 
         const that = this;
 
-        this.galleryComponent = new IIIFComponents.GalleryComponent({
+        this.galleryComponent = new GalleryComponent({
             target:  <HTMLElement>this.$gallery[0]
         });
 
