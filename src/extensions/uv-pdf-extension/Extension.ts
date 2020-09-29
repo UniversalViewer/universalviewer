@@ -1,19 +1,18 @@
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {DownloadDialogue} from "./DownloadDialogue";
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-pdffooterpanel-module/FooterPanel";
-import {IPDFExtension} from "./IPDFExtension";
-import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
-import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
-import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
-import {SettingsDialogue} from "./SettingsDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import {ProgressDialogue} from "../../modules/uv-dialogues-module/ProgressDialogue";
-
-import IThumb = Manifold.IThumb;
+import { IPDFExtension } from "./IPDFExtension";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { PDFCenterPanel } from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
+import { PDFHeaderPanel } from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
+import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
+import { ProgressDialogue } from "../../modules/uv-dialogues-module/ProgressDialogue";
 import { Events } from "../uv-pdf-extension/Events";
+import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -100,8 +99,9 @@ export class Extension extends BaseExtension implements IPDFExtension {
         this._scratchCanvas.height = height;
 
         const ctx = this._scratchCanvas.getContext("2d");
-        if (ctx == null)
+        if (ctx == null) {
             return null;
+        }
 
         ctx.fillStyle = "rgb(255, 255, 255)";
         ctx.fillRect(0, 0, width, height);
@@ -153,7 +153,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
       }
 
     renderPages() {
-        if(!this._pdfDoc){
+        if (!this._pdfDoc){
             return Promise.reject("PDF document not ready");
         }
 
@@ -179,8 +179,9 @@ export class Extension extends BaseExtension implements IPDFExtension {
      }
 
     print(){
-        if(this._activePrint)
+        if (this._activePrint) {
             return;
+        }
         
         this._activePrint = true;
         this.initPrintProgress();
@@ -208,8 +209,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         const browser: string = window.browserDetect.browser;
         const version: number = window.browserDetect.version;
 
-        if (browser === 'Explorer' && version <= 9) return true;
-        return false;
+        return browser === 'Explorer' && version <= 9;
     }
 
     isHeaderPanelEnabled(): boolean {
@@ -278,18 +278,19 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     showDocLoadProgress():void {
-        if(this._pdfDoc)
+        if (this._pdfDoc) {
             return;
+        }
 
-        if(this.progressDialogue.content.docLoadingText)
-            this.progressDialogue.setOptions({label:this.progressDialogue.content.docLoadingText});
+        if (this.progressDialogue.content.docLoadingText) {
+            this.progressDialogue.setOptions({ label: this.progressDialogue.content.docLoadingText });
+        }
 
         this.progressDialogue.open();
 
         let num = 1;
         let interval = setInterval(() => {
-            if(this._pdfDoc)
-            {
+            if (this._pdfDoc) {
                 this.progressDialogue.setValue(100);
                 setTimeout(()=>{
                     this.progressDialogue.close();
@@ -298,20 +299,22 @@ export class Extension extends BaseExtension implements IPDFExtension {
                 return;
             }
 
-            if(num + 2 == 100)
+            if(num + 2 == 100) {
                 return; //hack - stop the progress bar till doc ready
+            }
             
             this.progressDialogue.setValue(++num);
         }, 200)
     }
 
     initPrintProgress():void{
-        var options={
+        const options = {
             maxValue: this._pdfDoc.numPages,
             showPercentage: true
         };
-        if(this.progressDialogue.content.docPrintProgressText)
+        if (this.progressDialogue.content.docPrintProgressText) {
             options["label"] = this.progressDialogue.content.docPrintProgressText;
+        }
 
         this.progressDialogue.setOptions(options);
         this.progressDialogue.open();
@@ -344,7 +347,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
     }
 }
