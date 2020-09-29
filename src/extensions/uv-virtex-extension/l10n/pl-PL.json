@@ -1,0 +1,124 @@
+{
+  "localisation": {
+    "label": "Polski"
+  },
+  "content": {
+    "authCORSError": "Twoja przeglądarka nie obsługuje CORS. Zaktualizuj ją, aby wyświetlić tę zawartość.",
+    "authorisationFailedMessage": "Twoja próba logowania nie powidła się. Proszę spróbuj ponownie.",
+    "degradedResourceMessage": "Zaloguj się, aby wyświetlić w pełnej jakości.",
+    "degradedResourceLogin": "Zaloguj się",
+    "forbiddenResourceMessage": "Twoje obecne prawa dostępu są niewystarczające, aby wyświetlić ten obraz"
+  },
+  "modules": {
+    "dialogue": {
+      "content": {
+        "close": "Zamknij"
+      }
+    },
+    "downloadDialogue": {
+      "content": {
+        "download": "Pobierz",
+        "entireFileAsOriginal": "Cały plik",
+        "noneAvailable": "Brak dostępnych opcji pobierania.",
+        "preview": "Podgląd",
+        "title": "Pobieranie"
+      }
+    },
+    "footerPanel": {
+      "content": {
+        "bookmark": "Dodaj do zakładek",
+        "download": "Pobierz",
+        "embed": "Osadź",
+        "exitFullScreen": "Zamknij pełny ekran",
+        "fullScreen": "Pełny ekran",
+        "moreInfo": "Więcej informacji",
+        "open": "Otwórz",
+        "share": "Udostępnij"
+      }
+    },
+    "genericDialogue": {
+      "content": {
+        "ok": "OK"
+      }
+    },
+    "headerPanel": {
+      "content": {
+        "close": "Zamknij",
+        "help": "Pomoc",
+        "settings": "Ustawienia"
+      }
+    },
+    "helpDialogue": {
+      "content": {
+        "text": "tekst zastępczy",
+        "title": "Pomoc"
+      }
+    },
+    "loginDialogue": {
+      "content": {
+        "login": "Zaloguj się",
+        "cancel": "Anuluj"
+      }
+    },
+    "mediaelementCenterPanel": {
+      "content": {
+
+      }
+    },
+    "moreInfoRightPanel": {
+      "content": {
+        "attribution": "Źródło",
+        "collapse": "Zwiń informacje",
+        "collapseFull": "Zwiń galerię",
+        "description": "Opis",
+        "expand": "Rozwiń informacje",
+        "expandFull": "Rozwiń galerię",
+        "holdingText": "Miejsce na twój moduł!",
+        "less": "mniej",
+        "license": "Licencja",
+        "logo": "Logo",
+        "more": "więcej",
+        "noData": "Brak danych do wyświetlenia",
+        "page": "Strona",
+        "title": "Więcej informacji",
+        "manifestHeader": "O obiekcie",
+        "canvasHeader": "O obrazie",
+        "copyToClipboard": "Skopiuj do schowka",
+        "copiedToClipboard": "Skopiowano do schowka"
+      }
+    },
+    "settingsDialogue": {
+      "content": {
+        "locale": "Język",
+        "pagingEnabled": "Widok dwóch stron",
+        "preserveViewport": "Zachowanie przybliżenia",
+        "title": "Ustawienia",
+        "website": "<a href='https://github.com/universalviewer/universalviewer'>więcej informacji</a>"
+      }
+    },
+    "contentLeftPanel": {
+
+    },
+    "virtexCenterPanel": {
+      "content": {
+        "attribution": "Źródło",
+        "zoomIn": "Przybliż",
+        "zoomOut": "Oddal",
+        "vr": "VR"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "niestandardowy",
+        "embed": "Osadź",
+        "embedInstructions": "Aby osadzić ten obiekt na własnej witrynie, skopiuj i wklej poniższy kod.",
+        "height": "Wysokość",
+        "iiif": "Manifest IIIF",
+        "share": "Udostępnij",
+        "shareInstructions": "Aby udostępnić ten obiekt, skopiuj poniższy adres URL.",
+        "size": "Rozmiar:",
+        "width": "Szerokość"
+      }
+    }
+  }
+}

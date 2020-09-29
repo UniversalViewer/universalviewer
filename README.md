@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.png">
+    <img src="https://avatars0.githubusercontent.com/u/9430521">
     <h1 align="center">Universal Viewer</h1>
 </p>
 
@@ -30,7 +30,7 @@
 
 <br>
 
-    npm install universalviewer@beta --save
+    npm install universalviewer --save
 
 - [**Website**](#website)
 - [**Scope**](#scope)
@@ -160,4 +160,8 @@ Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 ## License
 
 The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
+
+## Accessibility Statement
+
+https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement
 

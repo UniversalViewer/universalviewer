@@ -61,6 +61,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-virtex-extension'
         };
 
+        this._extensions["Model"] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
         this._extensions[manifesto.ResourceType.sound().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
@@ -94,6 +99,21 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         };
 
         this._extensions[manifesto.MediaType.threejs().toString()] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
+        this._extensions['model/gltf+json'] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
+        this._extensions['model/gltf+json'] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
+        this._extensions['model/gltf-binary'] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
         };
