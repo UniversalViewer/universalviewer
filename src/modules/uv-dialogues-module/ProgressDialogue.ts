@@ -1,4 +1,4 @@
-import {Dialogue} from "../uv-shared-module/Dialogue";
+import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ProgressDialogue extends Dialogue {
 
@@ -50,16 +50,18 @@ export class ProgressDialogue extends Dialogue {
         this.$progressBar.attr('max', this.options.maxValue);
         this.$progressBar.attr('value', this.value);
 
-        if(this.options.showPercentage)
+        if (this.options.showPercentage) {
             this.$percentLabel.show();
+        }
     }
 
-    setValue(value:number):void{
+    setValue(value:number): void {
         this.value = value;
         this.$progressBar.val(this.value);
 
-        if(this.options.showPercentage)
+        if (this.options.showPercentage) {
             this.$percentLabel.text(Math.floor(this.value / this.options.maxValue * 100) + '%');
+        }
     }
 
     open(): void {

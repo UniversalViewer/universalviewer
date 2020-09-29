@@ -79,6 +79,11 @@
         "refresh": "Odśwież"
       }
     },
+    "ebookFooterPanel": {
+      "content": {
+        "print": "Drukuj"
+      }
+    },
     "headerPanel": {
       "content": {
         "settings": "Ustawienia"

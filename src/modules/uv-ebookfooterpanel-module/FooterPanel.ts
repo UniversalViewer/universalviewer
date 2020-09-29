@@ -22,11 +22,8 @@ export class FooterPanel extends BaseFooterPanel {
         `);
         this.$options.prepend(this.$printButton);
 
-        
-        var that = this;
-
         this.$printButton.onPressed(() => {
-            that.component.publish(Events.PRINT);
+            this.component.publish(Events.PRINT);
         });
 
         this.updatePrintButton();

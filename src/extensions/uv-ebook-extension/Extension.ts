@@ -13,7 +13,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
-import {ProgressDialogue} from "../../modules/uv-dialogues-module/ProgressDialogue";
+import { ProgressDialogue } from "../../modules/uv-dialogues-module/ProgressDialogue";
 
 const PRINT_IFRAME = "ifrmPrintEbookContent";
 
@@ -21,7 +21,6 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
     $downloadDialogue: JQuery;
     $moreInfoDialogue: JQuery;
-    $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     $progressDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -36,11 +35,11 @@ export class Extension extends BaseExtension implements IEbookExtension {
     settingsDialogue: SettingsDialogue;
     progressDialogue: ProgressDialogue;
     shareDialogue: ShareDialogue;
-    cfiFragement: string;
+    cfiFragment: string;
 
-    private _ebook:any;
-    private _printDocument:any;
-    private _activePrint:boolean = false;
+    private _ebook: any;
+    private _printDocument: any;
+    private _activePrint = false;
 
     create(): void {
         super.create();
@@ -50,8 +49,8 @@ export class Extension extends BaseExtension implements IEbookExtension {
         });
 
         this.component.subscribe(Events.CFI_FRAGMENT_CHANGED, (cfi: string) => {
-            this.cfiFragement = cfi;
-            this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragement);
+            this.cfiFragment = cfi;
+            this.fire(Events.CFI_FRAGMENT_CHANGED, this.cfiFragment);
         });
 
         this.component.subscribe(Events.EBOOK_READY, (ebook) => {
@@ -64,8 +63,9 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
         //Remove the print doc iframe if already exists
         let printDocIframe = document.getElementById(PRINT_IFRAME);
-        if(printDocIframe)
+        if (printDocIframe) {
             printDocIframe.remove();
+        }
     }
 
     dependencyLoaded(_index: number, _dep: any): void {
@@ -140,19 +140,20 @@ export class Extension extends BaseExtension implements IEbookExtension {
         }
     }
 
-    showDocLoadProgress():void {
-        if(this._ebook)
+    showDocLoadProgress() {
+        if (this._ebook) {
             return;
+        }
 
-        if(this.progressDialogue.content.docLoadingText)
-            this.progressDialogue.setOptions({label:this.progressDialogue.content.docLoadingText});
+        if (this.progressDialogue.content.docLoadingText) {
+            this.progressDialogue.setOptions({ label: this.progressDialogue.content.docLoadingText });
+        }
 
         this.progressDialogue.open();
 
         let num = 1;
         let interval = setInterval(() => {
-            if(this._ebook)
-            {
+            if (this._ebook) {
                 this.progressDialogue.setValue(100);
                 setTimeout(()=>{
                     this.progressDialogue.close();
@@ -161,14 +162,15 @@ export class Extension extends BaseExtension implements IEbookExtension {
                 return;
             }
             
-            if(num + 2 == 100)
+            if (num + 2 == 100) {
                 return; //hack - stop the progress bar till doc ready
+            }
             
             this.progressDialogue.setValue(++num);
         }, 200)
     }
 
-    getPrintContentwindow(iframe){
+    getPrintContentWindow(iframe){
         return iframe.contentWindow;
     }
 
@@ -179,21 +181,22 @@ export class Extension extends BaseExtension implements IEbookExtension {
     }
 
     printEbook(){
-        if(!this._ebook){
+        if (!this._ebook){
             alert('Ebook is not loaded yet');
             return;
         }
 
         //return if printing is already in progress
-        if(this._activePrint)
+        if (this._activePrint) {
             return;
-    
+        }
+
         this._activePrint = true;
         this.initPrintProgress();
         
         let printDocIframe = document.getElementById(PRINT_IFRAME) as HTMLIFrameElement;
-        if(printDocIframe){
-            this.finalizePrint(this.getPrintContentwindow(printDocIframe));
+        if (printDocIframe){
+            this.finalizePrint(this.getPrintContentWindow(printDocIframe));
             return;
         }
         
@@ -214,9 +217,9 @@ export class Extension extends BaseExtension implements IEbookExtension {
 
             //set document title
             let docHeadTitle = docHead.getElementsByTagName("title")[0];
-            if(docHeadTitle)
+            if (docHeadTitle) {
                 docHeadTitle.innerText = this._ebook.packaging.metadata.title;
-            else{
+            } else {
                 docHeadTitle = document.createElement("title");
                 docHeadTitle.innerText = this._ebook.packaging.metadata.title;
                 docHead.appendChild(docHeadTitle);
@@ -228,27 +231,27 @@ export class Extension extends BaseExtension implements IEbookExtension {
    
     createIframeAndExecPrint():void {
         //create an iframe to load the doc contents 
-        let ifrm = document.createElement('iframe');
-        ifrm.setAttribute("id", "ifrmPrintEbookContent");
-        ifrm.setAttribute("style", "display:none;");
+        let iframe = document.createElement('iframe');
+        iframe.setAttribute("id", "ifrmPrintEbookContent");
+        iframe.setAttribute("style", "display:none;");
 
         //add iframe to body
-        document.body.appendChild(ifrm);
+        document.body.appendChild(iframe);
 
         // check if srcdoc supported for iframe for the browser
-        if(!!("srcdoc" in ifrm)){
+        if(("srcdoc" in iframe)){
             //add onload event to iframe
-            ifrm.onload = () => {
-                this.finalizePrint(this.getPrintContentwindow(ifrm));
+            iframe.onload = () => {
+                this.finalizePrint(this.getPrintContentWindow(iframe));
             };
 
             //add doc html to iframe srcdoc
-            ifrm.setAttribute("srcdoc", this._printDocument.documentElement.innerHTML);
+            iframe.setAttribute("srcdoc", this._printDocument.documentElement.innerHTML);
             return;
         }
 
         //if scrdoc not supported for the browser
-        let contentWindow = this.getPrintContentwindow(ifrm);
+        let contentWindow = this.getPrintContentWindow(iframe);
         contentWindow.document.write(this._printDocument.documentElement.innerHTML);
 
         setTimeout(() => {
@@ -276,9 +279,10 @@ export class Extension extends BaseExtension implements IEbookExtension {
      }
 
      renderSectionContent(index) {
-        var section = this._ebook.spine.get(index);
-        if(!section) 
+        const section = this._ebook.spine.get(index);
+        if (!section) {
             return Promise.resolve();
+        }
 
         this.progressDialogue.setValue(index + 1);
         return section.render(this._ebook.load.bind(this._ebook))
@@ -291,12 +295,12 @@ export class Extension extends BaseExtension implements IEbookExtension {
                     return;
                 }
             
-                //get cssclass and style if any for the section content 
+                //get css class and style if any for the section content
                 let docClass = doc.body.getAttribute("class") || "";
                 let docStyle = doc.body.getAttribute("style") || "";
 
                 //attach the cssClass and style to section wrapper
-                var sectionWrapper= document.createElement('div');
+                const sectionWrapper = document.createElement('div');
                 sectionWrapper.setAttribute("class", (docClass ? docClass + " " : "") + "section section-" + index );
                 sectionWrapper.setAttribute("style", docStyle);
 
@@ -306,23 +310,22 @@ export class Extension extends BaseExtension implements IEbookExtension {
         });
     }
 
-    isLeftPanelEnabled(): boolean {
+    isLeftPanelEnabled() {
         return true;
     }
 
-    render(): void {
+    render() {
         super.render();
         this.checkForCFIParam();
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&cfi=${this.cfiFragement}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&cfi=${this.cfiFragment}`;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
     }
 
-    checkForCFIParam(): void {
+    checkForCFIParam() {
         const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
 
         if (cfi) {
@@ -330,14 +333,15 @@ export class Extension extends BaseExtension implements IEbookExtension {
         }
     }
 
-    initPrintProgress():void{
-        var options={
+    initPrintProgress() {
+        const options = {
             maxValue: this._ebook.spine.length,
             showPercentage: true
         };
 
-        if(this.progressDialogue.content.docPrintProgressText)
+        if(this.progressDialogue.content.docPrintProgressText) {
             options["label"] = this.progressDialogue.content.docPrintProgressText;
+        }
 
         this.progressDialogue.setOptions(options);
         this.progressDialogue.open();

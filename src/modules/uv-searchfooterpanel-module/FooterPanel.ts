@@ -371,7 +371,6 @@ export class FooterPanel extends BaseFooterPanel {
         } else {
             this.$printButton.hide();
         }
-       
     }
 
     search(terms: string): void {
