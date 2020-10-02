@@ -32,7 +32,7 @@
         "minimiseButtons": true,
         "openEnabled": false,
         "shareEnabled": true,
-        "printEnabled": true
+        "printEnabled": false
       }
     },
     "genericDialogue":
