@@ -7,4 +7,6 @@ export class Events {
     static RELOCATED: string                          = Events.namespace + "relocated";
     static RENDITION_ATTACHED: string                 = Events.namespace + "renditionAttached";
     static TOC_READY: string                          = Events.namespace + "tocReady";
+    static PRINT: string                              = Events.namespace + "print";
+    static EBOOK_READY: string                        = Events.namespace + "ebookReady";
 }

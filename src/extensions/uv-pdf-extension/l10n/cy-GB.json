@@ -37,6 +37,12 @@
         "share": "Rhannu"
       }
     },
+    "pdfFooterPanel": {
+      "content": {
+        "print": "print cy-GB"
+      }
+    },
+
     "genericDialogue": {
       "content": {
         "ok": "GWELD"

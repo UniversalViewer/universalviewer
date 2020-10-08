@@ -30,6 +30,12 @@ export class EbookCenterPanel extends CenterPanel {
       this.component.publish(Events.LOADED_NAVIGATION, e.detail);
     }, false);
 
+    this._ebookReader.addEventListener("bookReady", (e: any) => {
+      this._ebookReader.getBook().then(ebook => {
+        this.component.publish(Events.EBOOK_READY, ebook);
+      });
+    }, false);
+
     this._ebookReader.addEventListener("relocated", (e: any) => {
       this.component.publish(Events.RELOCATED, e.detail);
       this._cfi = e.detail.start.cfi;

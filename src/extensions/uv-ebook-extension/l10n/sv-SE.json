@@ -81,6 +81,11 @@
                 "share": "Dela"
             }
         },
+        "ebookFooterPanel": {
+            "content": {
+              "print": "Skriva ut"
+            }
+          },
         "genericDialogue": {
             "content": {
                 "emptyValue": "ange ett värde.",

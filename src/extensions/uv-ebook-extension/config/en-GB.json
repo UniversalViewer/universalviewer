@@ -79,7 +79,7 @@
         "minimiseButtons": true,
         "moreInfoEnabled": true,
         "openEnabled": false,
-        "printEnabled": false,
+        "printEnabled": true,
         "shareEnabled": true
       }
     },

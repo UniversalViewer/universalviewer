@@ -80,6 +80,11 @@
                 "share": "Dela"
             }
         },
+        "pdfFooterPanel": {
+            "content": {
+              "print": "print sv-SV"
+            }
+          },
         "genericDialogue": {
             "content": {
                 "emptyValue": "ange ett värde.",

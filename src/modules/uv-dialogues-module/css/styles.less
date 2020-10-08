@@ -361,8 +361,26 @@
                 background: none;
             }
         }
-    }
+        &.progress{
+            width: 250px;
+            .middle{
+                .content{
+                    padding: 10px;
+                }
+            }
 
+            .progress-bar{
+                width: 100%;
+                height: 15px;
+            }
+
+            .progress-percent{
+                position: absolute;
+                right: 10px;
+                font-weight: 600;
+            }
+        }
+    }
 }
 
 @import 'mobile';

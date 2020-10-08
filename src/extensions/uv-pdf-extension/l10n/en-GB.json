@@ -98,6 +98,16 @@
         "attribution": "Attribution"
       }
     },
+
+    "pdfFooterPanel": {
+      "content": {
+        "print": "print"
+      }
+    },
+
+    
+
+
     "settingsDialogue": {
       "content": {
         "locale": "Locale",
@@ -121,6 +131,12 @@
         "shareInstructions": "To share this item, copy the URL below.",
         "size": "Size:",
         "width": "Width"
+      }
+    },
+    "progressDialogue":{
+      "content": {
+        "docLoadingText": "Loading content...",
+        "docPrintProgressText" : "Preparing document for printing..."
       }
     }
   }
