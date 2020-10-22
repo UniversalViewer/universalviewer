@@ -1,3 +1,8 @@
+declare global {
+    let define: (load: () => any) => void;
+    let requirejs: any;
+}
+
 export class SynchronousRequire {
 
     static load(deps: string[], cb: (index: number, dep: any) => void): Promise<void> {
@@ -44,6 +49,7 @@ export class DependencyLoader {
         var that = this;
 
         return new Promise<void>((resolve) => {
+            // @ts-ignore
             requirejs([that._dep], (dep: any) => {
                 that._cb(that._index, dep);
                 resolve();

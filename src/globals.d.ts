@@ -40,7 +40,7 @@ declare var yepnope: any;
 declare var PDFJS: any;
 declare var filterXSS: (html: string, config: any) => string;
 declare var WEBVR: any;
-declare var IIIFComponents: any; // have excluded component definitions from tsconfig to avoid needing to update all components when using a newer manifesto/manifold type definition
+// declare var IIIFComponents: any; // have excluded component definitions from tsconfig to avoid needing to update all components when using a newer manifesto/manifold type definition
 
 // app
 interface Window {

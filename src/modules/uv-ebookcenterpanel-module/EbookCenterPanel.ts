@@ -1,3 +1,4 @@
+import { Annotation, AnnotationBody, Canvas, IExternalResource } from 'manifesto.js';
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
@@ -48,7 +49,7 @@ export class EbookCenterPanel extends CenterPanel {
 
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
-      (e: any, resources: Manifesto.IExternalResource[]) => {
+      (e: any, resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
@@ -78,19 +79,19 @@ export class EbookCenterPanel extends CenterPanel {
     );
   }
 
-  openMedia(resources: Manifesto.IExternalResource[]) {
+  openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
-      let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-      const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+      const annotations: Annotation[] = canvas.getContent();
 
       if (annotations.length) {
-        const annotation: Manifesto.IAnnotation = annotations[0];
-        const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+        const annotation: Annotation = annotations[0];
+        const body: AnnotationBody[] = annotation.getBody();
 
         if (body.length) {
-          const media: Manifesto.IAnnotationBody = body[0];
-          //const format: Manifesto.MediaType | null = media.getFormat();
+          const media: AnnotationBody = body[0];
+          //const format: MediaType | null = media.getFormat();
 
           this._nextState({
             bookPath: media.id

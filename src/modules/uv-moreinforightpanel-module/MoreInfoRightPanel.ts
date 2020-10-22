@@ -1,6 +1,9 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {RightPanel} from "../uv-shared-module/RightPanel";
-import {UVUtils} from "../../Utils";
+import { Range } from 'manifesto.js';
+import { MetadataComponent } from '@iiif/iiif-metadata-component';
+import { UriLabeller } from '@iiif/manifold';
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { RightPanel } from "../uv-shared-module/RightPanel";
+import { UVUtils } from "../../Utils";
 
 export class MoreInfoRightPanel extends RightPanel {
 
@@ -32,7 +35,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$main.append(this.$metadata);
 
-        this.metadataComponent = new IIIFComponents.MetadataComponent({
+        this.metadataComponent = new MetadataComponent({
             target:  <HTMLElement>this.$metadata[0],
             data: this._getData()
         });
@@ -42,7 +45,7 @@ export class MoreInfoRightPanel extends RightPanel {
             const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
 
             if (rangeId) {
-                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+                const range: Range | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
                     this.component.publish(BaseEvents.RANGE_CHANGED, range);
@@ -61,9 +64,8 @@ export class MoreInfoRightPanel extends RightPanel {
         this.metadataComponent.set(this._getData());
     }
 
-    private _getCurrentRange(): Manifesto.IRange | null {
-        const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
-        return range;
+    private _getCurrentRange(): Range | null {
+        return this.extension.helper.getCurrentRange();
     }
 
     private _getData() {
@@ -76,9 +78,9 @@ export class MoreInfoRightPanel extends RightPanel {
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
-            licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
+            licenseFormatter: new UriLabeller(this.config.license ? this.config.license : {}),
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.LimitType.LINES,
+            limitType: 'lines',
             limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,

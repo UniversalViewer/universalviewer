@@ -3,6 +3,8 @@ import {Events} from "../../extensions/uv-mediaelement-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { UVUtils } from "../../Utils";
+import { AnnotationBody, Canvas, IExternalResource, Rendering } from 'manifesto.js';
+import { MediaType } from '@iiif/vocabulary';
 
 export class MediaElementCenterPanel extends CenterPanel {
 
@@ -38,7 +40,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -49,7 +51,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     }
 
-    openMedia(resources: Manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         const that = this;
 
@@ -57,7 +59,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
             this.$container.empty();
 
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
@@ -68,22 +70,22 @@ export class MediaElementCenterPanel extends CenterPanel {
             const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
             const sources: any[] = [];
 
-            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+            const renderings: Rendering[] = canvas.getRenderings();
             
             if (renderings && renderings.length) {
-                canvas.getRenderings().forEach((rendering: Manifesto.IRendering) => {
+                canvas.getRenderings().forEach((rendering: Rendering) => {
                     sources.push({
                         type: rendering.getFormat().toString(),
                         src: rendering.id
                     });
                 });
             } else {
-                const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
+                const formats: AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
 
                 if (formats && formats.length) {
-                    formats.forEach((format: Manifesto.IAnnotationBody) => {
+                    formats.forEach((format: AnnotationBody) => {
                         
-                        const type: Manifesto.MediaType | null = format.getFormat();
+                        const type: MediaType | null = format.getFormat();
 
                         if (type) {
                             sources.push({

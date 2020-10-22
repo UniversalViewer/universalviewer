@@ -1,22 +1,35 @@
+import {
+    Annotation,
+    AnnotationBody,
+    Canvas,
+    Collection, IExternalImageResourceData,
+    IExternalResource,
+    IExternalResourceData, IExternalResourceOptions,
+    IManifestoOptions,
+    Manifest,
+    Range,
+    Thumb,
+} from 'manifesto.js';
+import { ExternalResource, Helper, ILabelValuePair } from '@iiif/manifold';
+import { ViewingHint } from '@iiif/vocabulary';
 import { IDependencies } from "./IDependencies";
 import { UVUtils } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
-import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
+import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
 import { BaseEvents } from "./BaseEvents";
-import { ClickThroughDialogue } from "../../modules/uv-dialogues-module/ClickThroughDialogue";
+import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
 import { IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";
 import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
-import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
-import { Metric } from "../../modules/uv-shared-module/Metric";
-import { MetricType } from "../../modules/uv-shared-module/MetricType";
-import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
+import { LoginDialogue } from "../uv-dialogues-module/LoginDialogue";
+import { Metric } from "./Metric";
+import { MetricType } from "./MetricType";
+import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { SynchronousRequire } from "../../SynchronousRequire";
-import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
@@ -30,7 +43,7 @@ export class BaseExtension implements IExtension {
     component: IUVComponent;
     data: IUVData;
     extensions: any;
-    helper: Manifold.IHelper;
+    helper: Helper;
     isCreated: boolean = false;
     isLoggedIn: boolean = false;
     lastCanvasIndex: number;
@@ -40,7 +53,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResourceData[] | null;
+    resources: IExternalResourceData[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -382,7 +395,7 @@ export class BaseExtension implements IExtension {
         this.component.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.manifestUri);
 
             window.open(openUri);
         });
@@ -409,7 +422,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Range | null) => {
             
             if (range) {
                 this.data.rangeId = range.id;
@@ -417,13 +430,13 @@ export class BaseExtension implements IExtension {
                 this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
             } else {
                 this.data.rangeId = undefined;
-                this.helper.rangeId = null;
+                this.helper.rangeId = undefined;
                 this.fire(BaseEvents.RANGE_CHANGED, null);
             }
             
         });
 
-        this.component.subscribe(BaseEvents.RESOURCE_DEGRADED, (resource: Manifesto.IExternalResource) => {
+        this.component.subscribe(BaseEvents.RESOURCE_DEGRADED, (resource: IExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
             Auth09.handleDegraded(resource)
         });
@@ -515,7 +528,7 @@ export class BaseExtension implements IExtension {
             let terms: string | null = this.helper.getLicense();
             
             if (!terms) {
-                const requiredStatement: Manifold.ILabelValuePair | null = this.helper.getRequiredStatement();
+                const requiredStatement: ILabelValuePair | null = this.helper.getRequiredStatement();
 
                 if (requiredStatement && requiredStatement.value) {
                     terms = requiredStatement.value;
@@ -528,7 +541,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.fire(BaseEvents.THUMB_SELECTED, thumb.index);
         });
 
@@ -610,6 +623,7 @@ export class BaseExtension implements IExtension {
 
         if (!scripts.length) {
 
+            // @ts-ignore
             requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
 
                 // getDeps is a function that accepts a file format.
@@ -617,8 +631,8 @@ export class BaseExtension implements IExtension {
                 // for example, 'application/vnd.apple.mpegurl' for the AV extension
                 // would return hls.min.js, and not dash.all.min.js.
                 
-                let canvas: Manifesto.ICanvas = that.helper.getCurrentCanvas();
-                const mediaFormats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
+                let canvas: Canvas = that.helper.getCurrentCanvas();
+                const mediaFormats: AnnotationBody[] | null = that.getMediaFormats(canvas);
                 let formats: string[] = [];
                 if (mediaFormats && mediaFormats.length) {
                     formats = mediaFormats.map((f: any) => {
@@ -667,6 +681,7 @@ export class BaseExtension implements IExtension {
             // then load the async scripts
             SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
                 if (deps.async) {
+                    // @ts-ignore
                     requirejs(deps.async, function() {
                         that.dependenciesLoaded(arguments);
                     });
@@ -675,6 +690,7 @@ export class BaseExtension implements IExtension {
                 }
             });
         } else if (deps.async) {
+            // @ts-ignore
             requirejs(deps.async, function() {
                 that.dependenciesLoaded(arguments);
             });
@@ -719,7 +735,7 @@ export class BaseExtension implements IExtension {
         if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
 
             if (this.data.rangeId) {
-                const range: Manifesto.IRange | null = this.helper.getRangeById(this.data.rangeId);
+                const range: Range | null = this.helper.getRangeById(this.data.rangeId);
 
                 if (range) {
                     this.component.publish(BaseEvents.RANGE_CHANGED, range);
@@ -893,7 +909,7 @@ export class BaseExtension implements IExtension {
     }   
 
     getIIIFShareUrl(shareManifests: boolean = false): string {
-        var manifestUri: string = shareManifests ? this.helper.manifest.id : this.helper.iiifResourceUri;
+        const manifestUri: string = shareManifests && this.helper.manifest ? this.helper.manifest.id : this.helper.manifestUri;
         return `${manifestUri}?manifest=${manifestUri}`;
     }
 
@@ -902,7 +918,7 @@ export class BaseExtension implements IExtension {
     }
 
     getDomain(): string {
-        const parts: any = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
+        const parts: any = Utils.Urls.getUrlParts(this.helper.manifestUri);
         return parts.host;
     }
 
@@ -972,7 +988,7 @@ export class BaseExtension implements IExtension {
     }
 
     getLocale(): string {
-        return this.helper.options.locale;
+        return this.helper.options.locale as string;
     }
 
     getSharePreview(): ISharePreview {
@@ -981,7 +997,7 @@ export class BaseExtension implements IExtension {
 
         // todo: use getThumb (when implemented)
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
         let thumbnail: string = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !(typeof(thumbnail) === 'string')) {
@@ -998,13 +1014,13 @@ export class BaseExtension implements IExtension {
         return [canvasIndex];
     }
 
-    public getCurrentCanvases(): Manifesto.ICanvas[] {
+    public getCurrentCanvases(): Canvas[] {
         const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
-        const canvases: Manifesto.ICanvas[] = [];
+        const canvases: Canvas[] = [];
         
         for (let i = 0; i < indices.length; i++) {
             const index: number = indices[i];
-            const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
+            const canvas: Canvas = this.helper.getCanvasByIndex(index);
             canvases.push(canvas);
         }
         
@@ -1027,25 +1043,25 @@ export class BaseExtension implements IExtension {
         return labels;
     }
 
-    public getCurrentCanvasRange(): Manifesto.IRange | null {
+    public getCurrentCanvasRange(): Range | null {
         //var rangePath: string = this.currentRangePath ? this.currentRangePath : '';
-        //var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
-        const range: Manifesto.IRange | null = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
+        //var range: Range = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
+        const range: Range | null = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
         return range;
     }
 
     // todo: move to manifold?
-    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]> {
+    public getExternalResources(resources?: IExternalResource[]): Promise<IExternalResourceData[]> {
 
         const indices: number[] = this.getPagedIndices();
-        const resourcesToLoad: Manifesto.IExternalResource[] = [];
+        const resourcesToLoad: IExternalResource[] = [];
 
         indices.forEach((index: number) => {
-            const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            let r: Manifesto.IExternalResource;
+            const canvas: Canvas = this.helper.getCanvasByIndex(index);
+            let r: IExternalResource;
 
             if (!canvas.externalResource) {
-                r = new Manifold.ExternalResource(canvas, <Manifesto.IExternalResourceOptions>{
+                r = new ExternalResource(canvas, <IExternalResourceOptions>{
                     authApiVersion: this.data.config.options.authAPIVersion
                 });
             } else {
@@ -1055,7 +1071,7 @@ export class BaseExtension implements IExtension {
             // reload resources if passed
             if (resources) {
 
-                const found: Manifesto.IExternalResource | undefined = resources.find((f: Manifesto.IExternalResource) => {
+                const found: IExternalResource | undefined = resources.find((f: IExternalResource) => {
                     return f.dataUri === r.dataUri;
                 });
 
@@ -1074,15 +1090,15 @@ export class BaseExtension implements IExtension {
 
         // if using auth api v1
         if (authAPIVersion === 1) {
-            return new Promise<Manifesto.IExternalResourceData[]>((resolve) => {
+            return new Promise<IExternalResourceData[]>((resolve) => {
 
-                const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
+                const options: IManifestoOptions = <IManifestoOptions>{
                     locale: this.helper.options.locale
                 }
 
-                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
+                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: IExternalResource[]) => {
                     
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {                        
+                    this.resources = r.map((resource: IExternalResource) => {
                         return this._prepareResourceData(resource);
                     });
 
@@ -1094,7 +1110,7 @@ export class BaseExtension implements IExtension {
             return new Promise<any[]>((resolve) => {
                 Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
                     
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
+                    this.resources = r.map((resource: IExternalResource) => {
                         return this._prepareResourceData(resource);
                     });
 
@@ -1106,15 +1122,15 @@ export class BaseExtension implements IExtension {
 
     // copy useful properties over to the data object to be opened in center panel's openMedia method
     // this is the info.json if there is one, which can be opened natively by openseadragon.
-    private _prepareResourceData(resource: Manifesto.IExternalResource): any {
+    private _prepareResourceData(resource: IExternalResource): any {
         
         resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
   
         // if the data isn't an info.json, give it the necessary viewing properties
         if (!resource.hasServiceDescriptor()) {
             resource.data.id = <string>resource.dataUri;
-            (<Manifesto.IExternalImageResourceData>resource.data).width = resource.width;
-            (<Manifesto.IExternalImageResourceData>resource.data).height = resource.height;
+            (<IExternalImageResourceData>resource.data).width = resource.width;
+            (<IExternalImageResourceData>resource.data).height = resource.height;
         }
 
         resource.data.index = resource.index;
@@ -1122,16 +1138,16 @@ export class BaseExtension implements IExtension {
         return Utils.Objects.toPlainObject(resource.data);
     }
 
-    getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[] {
+    getMediaFormats(canvas: Canvas): AnnotationBody[] {
 
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        const annotations: Annotation[] = canvas.getContent();
 
         if (annotations && annotations.length) {
-            const annotation: Manifesto.IAnnotation = annotations[0];
+            const annotation: Annotation = annotations[0];
             return annotation.getBody();
         } else {
             // legacy IxIF compatibility
-            const body: Manifesto.IAnnotationBody = <any>{
+            const body: AnnotationBody = <any>{
                 id: canvas.id,
                 type: canvas.getType(),
                 getFormat: function() {
@@ -1188,9 +1204,9 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: use redux in manifold to get reset state
-    viewManifest(manifest: Manifesto.IManifest): void {
+    viewManifest(manifest: Manifest): void {
         const data: IUVData = <IUVData>{};
-        data.iiifResourceUri = this.helper.iiifResourceUri;
+        data.iiifResourceUri = this.helper.manifestUri;
         data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
         data.manifestIndex = <number>manifest.index;
         data.sequenceIndex = 0;
@@ -1200,10 +1216,10 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: use redux in manifold to get reset state
-    viewCollection(collection: Manifesto.ICollection): void {
+    viewCollection(collection: Collection): void {
         const data: IUVData = <IUVData>{};
         //data.iiifResourceUri = this.helper.iiifResourceUri;
-        data.iiifResourceUri = collection.parentCollection ? collection.parentCollection.id : this.helper.iiifResourceUri;
+        data.iiifResourceUri = collection.parentCollection ? collection.parentCollection.id : this.helper.manifestUri;
         data.collectionIndex = collection.index;
         data.manifestIndex = 0;
         data.sequenceIndex = 0;
@@ -1226,9 +1242,9 @@ export class BaseExtension implements IExtension {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
 
-                const viewingHint: Manifesto.ViewingHint | null = this.helper.getViewingHint();
+                const viewingHint: ViewingHint | null = this.helper.getViewingHint();
 
-                if (!viewingHint || (viewingHint && viewingHint.toString() !== manifesto.ViewingHint.continuous().toString())) {
+                if (!viewingHint || (viewingHint && viewingHint.toString() !== ViewingHint.CONTINUOUS.toString())) {
                     return true;
                 }
             }

@@ -1,10 +1,11 @@
+import { Annotation, Canvas, IExternalImageResourceData, Range, Resource, Size, Utils as ManifestoUtils } from 'manifesto.js';
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {ISeadragonExtension} from "./ISeadragonExtension";
-import Size = Manifesto.Size;
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
+import { MediaType } from '@iiif/vocabulary';
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -93,7 +94,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const label: string = $selectedOption.attr('title');
             const mime: any = $selectedOption.data('mime');
             let type: string = DownloadOption.UNKNOWN;
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             if (this.renderingUrls[<any>id]) {
                 if (mime) {
@@ -105,7 +106,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 }
 
                 if (type = DownloadOption.ENTIRE_DOCUMENT_AS_PDF) {
-                    //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+                    //var printService: Service = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
                     // if (printService && this.extension.isOnHomeDomain()){
@@ -166,7 +167,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     open(triggerButton?: HTMLElement) {
         super.open(triggerButton);
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
         const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
         const hasNormalDimensions: boolean = rotation % 180 == 0;
@@ -338,7 +339,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
-                    const range: Manifesto.IRange = canvas.ranges[i];
+                    const range: Range = canvas.ranges[i];
                     const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
@@ -346,7 +347,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            const images: Annotation[] = canvas.getImages();
             for (let i = 0; i < images.length; i++) {
                 const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.IMAGE_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
@@ -361,7 +362,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) {
             let renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
             
-            if (!renderingOptions.length) {
+            if (!renderingOptions.length && this.extension.helper.manifest) {
                 renderingOptions = this.getDownloadOptionsForRenderings(this.extension.helper.manifest, this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
             }
             
@@ -473,15 +474,15 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     }
 
-    getCanvasImageResource(canvas: Manifesto.ICanvas): Manifesto.IResource | null {
-        const images: Manifesto.IAnnotation[] = canvas.getImages();
+    getCanvasImageResource(canvas: Canvas): Resource | null {
+        const images: Annotation[] = canvas.getImages();
         if (images[0]) {
             return images[0].getResource();
         }
         return null;
     }
 
-    getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
+    getCanvasHighResImageUri(canvas: Canvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
         
         if (size) {
@@ -503,11 +504,11 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return '';
     }
 
-    getCanvasMimeType(canvas: Manifesto.ICanvas): string | null {
-        const resource: Manifesto.IResource | null = this.getCanvasImageResource(canvas);
+    getCanvasMimeType(canvas: Canvas): string | null {
+        const resource: Resource | null = this.getCanvasImageResource(canvas);
 
         if (resource) {
-            const format: Manifesto.MediaType | null = resource.getFormat();
+            const format: MediaType | null = resource.getFormat();
 
             if (format) {
                 return format.toString();
@@ -517,12 +518,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasDimensions(canvas: Manifesto.ICanvas): Size | null {
+    getCanvasDimensions(canvas: Canvas): Size | null {
 
         // externalResource may not have loaded yet
         if (canvas.externalResource.data) {
-            const width: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).width;
-            const height: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).height;
+            const width: number | undefined = (<IExternalImageResourceData>canvas.externalResource.data).width;
+            const height: number | undefined = (<IExternalImageResourceData>canvas.externalResource.data).height;
             if (width && height) {
                 return new Size(width, height);
             }
@@ -531,7 +532,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size | null {
+    getCanvasComputedDimensions(canvas: Canvas): Size | null {
         const imageSize: Size | null = this.getCanvasDimensions(canvas);
         const requiredSize: Size | null =  canvas.getMaxDimensions();
 
@@ -557,7 +558,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     private _isLevel0(profile: any): boolean {
         if (!profile || !profile.length) return false;
 
-        return manifesto.Utils.isLevel0ImageProfile(profile[0]);
+        return ManifestoUtils.isLevel0ImageProfile(profile[0]);
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
@@ -566,7 +567,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             return false;
         }
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
         // if the external resource doesn't have a service descriptor or is level 0
         // only allow wholeImageHighRes
@@ -618,7 +619,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return this.options.selectionEnabled;
             case DownloadOption.RANGE_RENDERINGS:                
                 if (canvas.ranges && canvas.ranges.length) {
-                    const range: Manifesto.IRange = canvas.ranges[0];
+                    const range: Range = canvas.ranges[0];
                     return range.getRenderings().length > 0;
                 }
                 return false;

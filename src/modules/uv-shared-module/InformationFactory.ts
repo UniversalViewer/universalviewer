@@ -4,6 +4,7 @@ import {InformationAction} from "./InformationAction";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 import {IExtension} from "./IExtension";
+import { IExternalResource } from 'manifesto.js';
 
 export class InformationFactory {
 
@@ -29,7 +30,7 @@ export class InformationFactory {
 
                 loginAction.label = label;
 
-                const resource: Manifesto.IExternalResource = args.param;
+                const resource: IExternalResource = args.param;
 
                 loginAction.action = () => {
                     resource.authHoldingPage = window.open("", "_blank");

@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import { IExternalResource } from 'manifesto.js';
 
 export class ClickThroughDialogue extends Dialogue {
 
@@ -7,7 +8,7 @@ export class ClickThroughDialogue extends Dialogue {
     $acceptTermsButton: JQuery;
     $message: JQuery;
     $title: JQuery;
-    resource: Manifesto.IExternalResource;
+    resource: IExternalResource;
 
     constructor($element: JQuery) {
         super($element);
