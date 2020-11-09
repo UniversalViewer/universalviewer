@@ -6,7 +6,7 @@ path = require('path');
 
 module.exports = function (grunt) {
 
-    var options, src;
+    var options;
 
     grunt.registerMultiTask('configure', 'Creates localised config files, generates config editor schemas.', function () {
 
