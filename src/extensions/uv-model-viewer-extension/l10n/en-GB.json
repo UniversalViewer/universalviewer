@@ -89,6 +89,7 @@
       "content": {
         "locale": "Locale",
         "pagingEnabled": "Two Page View",
+        "reducedMotion": "Reduce motion (disables animations)",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"

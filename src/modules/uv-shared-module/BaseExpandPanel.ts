@@ -1,5 +1,6 @@
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
+import { BaseEvents } from './BaseEvents';
 
 export class BaseExpandPanel extends BaseView {
   isExpanded: boolean = false;
@@ -7,6 +8,7 @@ export class BaseExpandPanel extends BaseView {
   isUnopened: boolean = true;
   autoToggled: boolean = false;
   expandFullEnabled: boolean = true;
+  reducedAnimation = false;
 
   $closed: JQuery;
   $closedTitle: JQuery;
@@ -87,6 +89,11 @@ export class BaseExpandPanel extends BaseView {
 
     this.$top.hide();
     this.$main.hide();
+
+    // Subscribe to settings change.
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
+      this.reducedAnimation = args.reducedAnimation || false;
+    });
   }
 
   init(): void {
@@ -111,16 +118,24 @@ export class BaseExpandPanel extends BaseView {
       this.$closed.show();
     }
 
-    this.$element.stop().animate(
-      {
-        width: this.getTargetWidth(),
-        left: this.getTargetLeft()
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.toggled();
-      }
-    );
+    if (this.reducedAnimation) {
+      // This is reduced motion.
+      this.$element.css('width', this.getTargetWidth());
+      this.$element.css('left', this.getTargetLeft());
+      this.toggled();
+    } else {
+      // Otherwise animate.
+      this.$element.stop().animate(
+        {
+          width: this.getTargetWidth(),
+          left: this.getTargetLeft()
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.toggled();
+        }
+      );
+    }
   }
 
   toggled(): void {

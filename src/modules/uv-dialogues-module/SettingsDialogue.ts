@@ -12,6 +12,11 @@ export class SettingsDialogue extends Dialogue {
   $version: JQuery;
   $website: JQuery;
 
+  // Accessibility elements
+  $reducedAnimation: JQuery;
+  $reducedAnimationLabel: JQuery;
+  $reducedAnimationCheckbox: JQuery;
+
   constructor($element: JQuery) {
     super($element);
   }
@@ -63,6 +68,8 @@ export class SettingsDialogue extends Dialogue {
 
     this._createLocalesMenu();
 
+    this._createAccessibilityMenu();
+
     this.$element.hide();
   }
 
@@ -104,5 +111,37 @@ export class SettingsDialogue extends Dialogue {
 
   resize(): void {
     super.resize();
+  }
+
+  private _createAccessibilityMenu() {
+    // Accessibility
+    this.$reducedAnimation = $(
+      '<div class="setting reducedAnimation"></div>'
+    );
+    this.$scroll.append(this.$reducedAnimation);
+
+    this.$reducedAnimationCheckbox = $(
+      '<input id="reducedAnimation" type="checkbox" tabindex="0" />'
+    );
+    this.$reducedAnimation.append(this.$reducedAnimationCheckbox);
+
+    this.$reducedAnimationLabel = $(
+      '<label for="reducedAnimation">' +
+      this.content.reducedMotion +
+      "</label>"
+    );
+    this.$reducedAnimation.append(this.$reducedAnimationLabel);
+
+    this.$reducedAnimationCheckbox.change(() => {
+      const settings: ISettings = {};
+
+      if (this.$reducedAnimationCheckbox.is(":checked")) {
+        settings.reducedAnimation = true;
+      } else {
+        settings.reducedAnimation = false;
+      }
+
+      this.updateSettings(settings);
+    });
   }
 }
