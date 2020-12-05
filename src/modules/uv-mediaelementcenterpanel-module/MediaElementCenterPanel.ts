@@ -12,6 +12,8 @@ import {
   Rendering
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
+import 'mediaelement-plugins/dist/source-chooser/source-chooser'
+import 'mediaelement-plugins/dist/source-chooser/source-chooser.css'
 
 export class MediaElementCenterPanel extends CenterPanel {
   _$mejsContainer: JQuery;
@@ -83,6 +85,11 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.extension
     )).getPosterImageUri();
     const sources: any[] = [];
+    const subtitles: Array<{
+      language?: string;
+      label?: string;
+      id: string;
+    }> = [];
 
     const renderings: Rendering[] = canvas.getRenderings();
 
@@ -102,10 +109,14 @@ export class MediaElementCenterPanel extends CenterPanel {
         formats.forEach((format: AnnotationBody) => {
           const type: MediaType | null = format.getFormat();
 
-          if (type) {
+          // Add any additional subtitle types if required.
+          if (type && (type.toString() === 'text/vtt')) {
+            subtitles.push(format.__jsonld);
+          } else if (type) {
             sources.push({
+              label: format.__jsonld.label ? format.__jsonld.label : '',
               type: type.toString(),
-              src: format.id
+              src: format.id,
             });
           }
         });
@@ -113,12 +124,26 @@ export class MediaElementCenterPanel extends CenterPanel {
     }
 
     if (this.isVideo()) {
-      this.$media = $('<video controls="controls" preload="none"></video>');
+      this.$media = $('<video controls="controls" preload="none" crossorigin=""></video>');
+
+      // Add VTT subtitles/captions.
+      for (const subtitle of subtitles) {
+        this.$media.append(
+          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language}" crossorigin="" src="${subtitle.id}" ${subtitles.indexOf(subtitle) === 0 ? 'default' : ''}>
+`)
+        )
+      }
+
+      for (const source of sources) {
+        this.$media.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+      }
+
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("video")[0], {
         poster: poster,
-        features: ["playpause", "current", "progress", "volume"],
+        toggleCaptionsButtonWhenOnlyOne: true,
+        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("canplay", () => {
             that.resize();
@@ -150,8 +175,6 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.duration)
             );
           });
-
-          mediaElement.setSrc(sources);
         }
       });
     } else {
@@ -163,6 +186,7 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.player = new MediaElementPlayer($("audio")[0], {
         poster: poster,
         defaultAudioWidth: "auto",
+        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
@@ -198,7 +222,9 @@ export class MediaElementCenterPanel extends CenterPanel {
             );
           });
 
-          mediaElement.setSrc(sources);
+          for (const source of sources) {
+            mediaElement.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+          }
         }
       });
     }
