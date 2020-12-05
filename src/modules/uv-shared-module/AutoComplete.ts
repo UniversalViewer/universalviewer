@@ -81,6 +81,11 @@ export class AutoComplete {
       }
     });
 
+    this._$element.on('blur', () => {
+      that._clearResults();
+      that._hideResults();
+    })
+
     // auto complete
     this._$element.on("keyup", function(e) {
       // if pressing enter without a list item selected
@@ -90,6 +95,10 @@ export class AutoComplete {
       ) {
         // enter
         that._onSelect(that._getTerms());
+        return;
+      }
+
+      if (e.keyCode === KeyCodes.KeyDown.Tab) {
         return;
       }
 
