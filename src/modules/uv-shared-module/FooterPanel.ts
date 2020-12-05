@@ -135,10 +135,10 @@ export class FooterPanel extends BaseView {
       );
     });
 
-    this.$fullScreenBtn.on("click", e => {
+    this.onAccessibleClick(this.$fullScreenBtn, (e) => {
       e.preventDefault();
       this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
-    });
+    }, true)
 
     if (!Bools.getBool(this.options.embedEnabled, true)) {
       this.$embedButton.hide();

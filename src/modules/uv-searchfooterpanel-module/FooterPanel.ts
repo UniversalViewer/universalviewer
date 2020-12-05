@@ -179,7 +179,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$placemarkerDetails = $('<div class="placeMarkerDetails"></div>');
     this.$searchResultsContainer.append(this.$placemarkerDetails);
 
-    this.$placemarkerDetailsTop = $("<h1></h1>");
+    this.$placemarkerDetailsTop = $(`<div role="heading" class="heading"></div>`);
     this.$placemarkerDetails.append(this.$placemarkerDetailsTop);
 
     this.$placemarkerDetailsBottom = $("<p></p>");
@@ -220,7 +220,7 @@ export class FooterPanel extends BaseFooterPanel {
       placemarkers.removeClass("hover");
     });
 
-    this.$placemarkerDetails.on("click", () => {
+    this.onAccessibleClick(this.$placemarkerDetails, () => {
       that.component.publish(
         BaseEvents.CANVAS_INDEX_CHANGE,
         this.currentPlacemarkerIndex
@@ -489,6 +489,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     // clear all existing placemarkers
     const placemarkers: JQuery = this.getSearchResultPlacemarkers();
+    const shouldFocus = placemarkers.length === 0;
     placemarkers.remove();
 
     const pageWidth = this.getPageLineRatio();
@@ -502,7 +503,7 @@ export class FooterPanel extends BaseFooterPanel {
       const result: AnnotationGroup = searchResults[i];
       const distance: number = result.canvasIndex * pageWidth;
       const $placemarker: JQuery = $(
-        '<div class="searchResultPlacemarker" data-index="' +
+        '<div class="searchResultPlacemarker" tabindex="0" data-index="' +
           result.canvasIndex +
           '"></div>'
       );
@@ -516,7 +517,20 @@ export class FooterPanel extends BaseFooterPanel {
       $placemarker.mouseenter(function(e: any) {
         that.onPlacemarkerMouseEnter.call(this, that);
       });
+      $placemarker.focus(function(e: any) {
+        that.onPlacemarkerMouseEnter.call(this, that);
+      });
+      this.onAccessibleClick($placemarker, (e) => {
+        that.component.publish(
+          BaseEvents.CANVAS_INDEX_CHANGE,
+          this.currentPlacemarkerIndex
+        );
+        that.onPlacemarkerMouseLeave.call(this, e, that);
+      }, false)
       $placemarker.mouseleave(function(e: any) {
+        that.onPlacemarkerMouseLeave.call(this, e, that);
+      });
+      $placemarker.blur(function(e: any) {
         that.onPlacemarkerMouseLeave.call(this, e, that);
       });
 
@@ -529,6 +543,10 @@ export class FooterPanel extends BaseFooterPanel {
         top: top,
         left: left
       });
+
+      if (i === 0 && shouldFocus) {
+        $placemarker.focus();
+      }
     }
   }
 

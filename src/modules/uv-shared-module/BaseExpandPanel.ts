@@ -41,14 +41,14 @@ export class BaseExpandPanel extends BaseView {
       this.$expandFullButton.hide();
     }
 
-    this.$collapseButton = $('<div class="collapseButton" tabindex="0"></div>');
+    this.$collapseButton = $('<div role="button" class="collapseButton" tabindex="0"></div>');
     this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
-    this.$expandButton = $('<a class="expandButton" tabindex="0"></a>');
+    this.$expandButton = $('<a role="button" class="expandButton" tabindex="0"></a>');
     this.$expandButton.prop("title", this.content.expand);
     this.$closed.append(this.$expandButton);
 
@@ -59,19 +59,19 @@ export class BaseExpandPanel extends BaseView {
     this.$main = $('<div class="main"></div>');
     this.$element.append(this.$main);
 
-    this.$expandButton.onPressed(() => {
+    this.onAccessibleClick(this.$expandButton, () => {
       this.toggle();
-    });
+    })
 
-    this.$expandFullButton.onPressed(() => {
+    this.$expandFullButton.on('click', () => {
       this.expandFull();
     });
 
-    this.$closedTitle.onPressed(() => {
+    this.$closedTitle.on('click', () => {
       this.toggle();
     });
 
-    this.$title.onPressed(() => {
+    this.$title.on('click', () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -79,13 +79,15 @@ export class BaseExpandPanel extends BaseView {
       }
     });
 
-    this.$collapseButton.onPressed(() => {
+    this.onAccessibleClick(this.$collapseButton, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
         this.toggle();
       }
-    });
+    })
+
+
 
     this.$top.hide();
     this.$main.hide();

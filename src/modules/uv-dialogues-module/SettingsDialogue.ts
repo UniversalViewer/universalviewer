@@ -29,15 +29,20 @@ export class SettingsDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_SETTINGS_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_SETTINGS_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, () => {
+    let lastElement: HTMLElement;
+    this.component.subscribe(this.openCommand, (element: HTMLElement) => {
+      lastElement = element;
       this.open();
     });
 
     this.component.subscribe(this.closeCommand, () => {
+      if (lastElement) {
+        lastElement.focus();
+      }
       this.close();
     });
 
-    this.$title = $("<h1></h1>");
+    this.$title = $(`<div role="heading" class="heading"></div>`);
     this.$content.append(this.$title);
 
     this.$scroll = $('<div class="scroll"></div>');

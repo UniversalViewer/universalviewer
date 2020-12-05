@@ -194,13 +194,13 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$treeViewOptions.hide();
 
-    this.$treeButton.onPressed(() => {
+    this.onAccessibleClick(this.$treeButton, () => {
       this.openTreeView();
-    });
+    })
 
-    this.$thumbsButton.onPressed(() => {
+    this.onAccessibleClick(this.$thumbsButton, () => {
       this.openThumbsView();
-    });
+    })
 
     this.setTitle(this.content.title);
 

@@ -86,7 +86,7 @@ export class HeaderPanel extends BaseView {
     });
 
     this.$settingsButton.onPressed(() => {
-      this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+      this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE, this.$settingsButton);
     });
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {

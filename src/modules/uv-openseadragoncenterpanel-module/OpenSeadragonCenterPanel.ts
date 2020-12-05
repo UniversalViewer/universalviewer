@@ -421,7 +421,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.$prevButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$prevButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 
@@ -439,7 +439,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       }
     });
 
-    this.$nextButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$nextButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 

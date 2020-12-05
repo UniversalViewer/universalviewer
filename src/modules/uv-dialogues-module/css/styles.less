@@ -2,6 +2,14 @@
 
     .overlay{
 
+        .heading {
+            color: #000000;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0px 0px 0px;
+            padding: 0 0 10px 0;
+        }
+
         color: @text-secondary-color;
 
         &.share{
@@ -81,7 +89,7 @@
                                 margin-top: @margin-small-vertical;
                             }
                         }
-                        
+
                         .embedView{
                             .code {
                                 .single-line-code();
@@ -90,7 +98,7 @@
                             .customSize{
                                 overflow: hidden;
                                 padding-top: @padding-medium-vertical;
-                                
+
                                 .size{
                                     padding: 0 @padding-small-horizontal 0 0;
                                 }
@@ -135,7 +143,7 @@
                             }
                         }
                     }
-                }                
+                }
             }
         }
 
@@ -300,7 +308,7 @@
                     .loading(@loader-white-bg);
                 }
 
-                h1{
+                .heading{
                     border-bottom: none;
                     font-size: @font-size-base;
                 }
@@ -318,7 +326,7 @@
             .message{
                 height: 180px;
 
-                h1{
+                .heading{
                     border-bottom: none !important;
                     font-size: @font-size-base !important;
                 }
@@ -344,7 +352,7 @@
             .message {
                 height: 180px;
 
-                h1 {
+                .heading {
                     border-bottom: none !important;
                     font-size: @font-size-base !important;
                 }

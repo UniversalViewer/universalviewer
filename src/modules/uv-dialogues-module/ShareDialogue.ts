@@ -49,7 +49,9 @@ export class ShareDialogue extends Dialogue {
     this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
     this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
 
+    let lastElement: HTMLElement;
     this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+      lastElement = triggerButton;
       this.open(triggerButton);
 
       if (this.isShareAvailable()) {
@@ -60,6 +62,9 @@ export class ShareDialogue extends Dialogue {
     });
 
     this.component.subscribe(this.closeCommand, () => {
+      if (lastElement) {
+        lastElement.focus();
+      }
       this.close();
     });
 
@@ -202,11 +207,11 @@ export class ShareDialogue extends Dialogue {
       $(this).select();
     });
 
-    this.$shareButton.onPressed(() => {
+    this.onAccessibleClick(this.$shareButton, () => {
       this.openShareView();
     });
 
-    this.$embedButton.onPressed(() => {
+    this.onAccessibleClick(this.$embedButton, () => {
       this.openEmbedView();
     });
 
@@ -224,7 +229,7 @@ export class ShareDialogue extends Dialogue {
       this.update();
     });
 
-    this.$termsOfUseButton.onPressed(() => {
+    this.onAccessibleClick(this.$termsOfUseButton, () => {
       this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
     });
 
