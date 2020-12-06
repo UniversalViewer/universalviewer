@@ -29,12 +29,10 @@ export class BaseExpandPanel extends BaseView {
     this.$top = $('<div class="top"></div>');
     this.$element.append(this.$top);
 
-    this.$title = $('<div class="title"></div>');
-    this.$title.prop("title", this.content.title);
+    this.$title = $('<h2 class="title"></h2>');
     this.$top.append(this.$title);
 
     this.$expandFullButton = $('<a class="expandFullButton" tabindex="0"></a>');
-    this.$expandFullButton.prop("title", this.content.expandFull);
     this.$top.append(this.$expandFullButton);
 
     if (!Bools.getBool(this.config.options.expandFullEnabled, true)) {
@@ -50,10 +48,10 @@ export class BaseExpandPanel extends BaseView {
 
     this.$expandButton = $('<a role="button" class="expandButton" tabindex="0"></a>');
     this.$expandButton.prop("title", this.content.expand);
+
     this.$closed.append(this.$expandButton);
 
     this.$closedTitle = $('<a class="title"></a>');
-    this.$closedTitle.prop("title", this.content.title);
     this.$closed.append(this.$closedTitle);
 
     this.$main = $('<div class="main"></div>');

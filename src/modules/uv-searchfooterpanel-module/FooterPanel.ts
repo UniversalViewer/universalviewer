@@ -103,7 +103,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchContainer.append(this.$searchOptions);
 
     this.$searchLabel = $(
-      '<span class="label">' + this.content.searchWithin + "</span>"
+      '<label class="label" for="searchWithinInput">' + this.content.searchWithin + "</label>"
     );
     this.$searchOptions.append(this.$searchLabel);
 
@@ -111,7 +111,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchOptions.append(this.$searchTextContainer);
 
     this.$searchText = $(
-      '<input class="searchText" type="text" maxlength="100" value="' +
+      '<input class="searchText" id="searchWithinInput" type="text" maxlength="100" value="' +
         this.content.enterKeyword +
         '" aria-label="' +
         this.content.searchWithin +
@@ -120,7 +120,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchTextContainer.append(this.$searchText);
 
     this.$searchButton = $(
-      '<a class="imageButton searchButton" tabindex="0"></a>'
+      '<button class="imageButton searchButton"></button>'
     );
     this.$searchTextContainer.append(this.$searchButton);
 
@@ -132,11 +132,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerContainer.prepend(this.$searchPagerControls);
 
     this.$previousResultButton = $(
-      '<a class="previousResult" title="' +
-        this.content.previousResult +
-        '">' +
-        this.content.previousResult +
-        "</a>"
+      '<button class="previousResult">' + this.content.previousResult + "</button>"
     );
     this.$searchPagerControls.append(this.$previousResultButton);
 
@@ -146,20 +142,12 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerControls.append(this.$searchResultsInfo);
 
     this.$clearSearchResultsButton = $(
-      '<a class="clearSearch" title="' +
-        this.content.clearSearch +
-        '">' +
-        this.content.clearSearch +
-        "</a>"
+      '<button class="clearSearch">' + this.content.clearSearch + "</button>"
     );
     this.$searchResultsInfo.append(this.$clearSearchResultsButton);
 
     this.$nextResultButton = $(
-      '<a class="nextResult" title="' +
-        this.content.nextResult +
-        '">' +
-        this.content.nextResult +
-        "</a>"
+      '<button class="nextResult">' + this.content.nextResult + "</button>"
     );
     this.$searchPagerControls.append(this.$nextResultButton);
 

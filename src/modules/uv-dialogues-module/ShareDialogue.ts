@@ -82,13 +82,11 @@ export class ShareDialogue extends Dialogue {
     this.$shareButton = $(
       '<a class="share tab default" tabindex="0">' + this.content.share + "</a>"
     );
-    this.$shareButton.prop("title", this.content.share);
     this.$tabs.append(this.$shareButton);
 
     this.$embedButton = $(
       '<a class="embed tab" tabindex="0">' + this.content.embed + "</a>"
     );
-    this.$embedButton.prop("title", this.content.embed);
     this.$tabs.append(this.$embedButton);
 
     this.$tabsContent = $('<div class="tabsContent"></div>');

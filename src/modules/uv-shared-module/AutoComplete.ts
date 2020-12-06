@@ -141,6 +141,17 @@ export class AutoComplete {
       }
     });
 
+    // hide results if focus moves on.
+    $(document).on("focusin", e => {
+      if (
+        this._$searchResultsList.has($(e.target)[0]).length === 0 &&
+        !this._$element.is($(e.target)[0])
+      ) {
+        this._clearResults();
+        this._hideResults();
+      }
+    });
+
     this._hideResults();
   }
 

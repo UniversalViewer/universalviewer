@@ -129,19 +129,27 @@
     }
 
 
-    // Only display content to screen readers
-    //
-    // See: http://a11yproject.com/posts/how-to-hide-content/
-
+    // Screen reader only text hiding
+    // https://tailwindcss.com/docs/screen-readers/
     .sr-only {
         position: absolute;
         width: 1px;
         height: 1px;
-        margin: -1px;
         padding: 0;
+        margin: -1px;
         overflow: hidden;
-        clip: rect(0 0 0 0);
-        border: 0;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
     }
-
+    .not-sr-only {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+    }
 }
