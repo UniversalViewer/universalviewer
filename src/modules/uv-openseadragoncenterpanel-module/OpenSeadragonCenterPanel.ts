@@ -489,6 +489,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
       images = this.getPagePositions(images);
 
+      const canvases: Canvas[] = this.extension.helper.getCanvases();
+
+      const layers = [];
+
+      const viewingDirection: ViewingDirection =
+        this.extension.helper.getViewingDirection() ||
+        ViewingDirection.LEFT_TO_RIGHT;
+
       for (let i = 0; i < images.length; i++) {
         const data: any = images[i];
 
@@ -504,19 +512,39 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           };
         }
 
+        const canvasWorld = new CanvasWorld(canvases, [], viewingDirection);
+        const contentResource = canvasWorld.contentResource(infoResponse.id);
+
         this.viewer.addTiledImage({
-          tileSource: tileSource,
-          x: data.x,
-          y: data.y,
-          width: data.width,
+          error: event => reject(event),
+          fitBounds: new OpenSeadragon.Rect(
+            ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
+          ),
+          index: canvasWorld.layerIndexOfImageResource(contentResource),
+          opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
               this.openPagesHandler();
             }
             this.resize();
-          }
+          },
+          tileSource,
         });
+
+        // this.viewer.addTiledImage({
+        //   tileSource: tileSource,
+        //   x: data.x,
+        //   y: data.y,
+        //   width: data.width,
+        //   success: (item: any) => {
+        //     this.items.push(item);
+        //     if (this.items.length === images.length) {
+        //       this.openPagesHandler();
+        //     }
+        //     this.resize();
+        //   }
+        // });
       }
     } catch {
       // do nothing
