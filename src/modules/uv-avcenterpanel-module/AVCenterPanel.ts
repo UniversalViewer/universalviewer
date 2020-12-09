@@ -11,6 +11,7 @@ import {
   Range
 } from "manifesto.js";
 import { AVComponent } from "@iiif/iiif-av-component";
+import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 
 export class AVCenterPanel extends CenterPanel {
   $avcomponent: JQuery;
@@ -197,14 +198,14 @@ export class AVCenterPanel extends CenterPanel {
     this.title = title;
 
     // set subtitle
-    const groups: manifold.MetadataGroup[] = this.extension.helper.getMetadata(<
-      manifold.MetadataOptions
+    const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
+      MetadataOptions
     >{
       range: currentRange
     });
 
     for (let i = 0; i < groups.length; i++) {
-      const group: manifold.MetadataGroup = groups[i];
+      const group: MetadataGroup = groups[i];
 
       const item: LabelValuePair | undefined = group.items.find(
         (el: LabelValuePair) => {
@@ -223,7 +224,7 @@ export class AVCenterPanel extends CenterPanel {
       );
 
       if (item) {
-        this.subtitle = LanguageMap.getValue(item.value);
+        this.subtitle = LanguageMap.getValue(item.value as LanguageMap);
         break;
       }
     }

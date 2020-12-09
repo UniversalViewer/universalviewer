@@ -522,7 +522,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
   private _createExtension(
     extension: any,
     data: IUVData,
-    helper: manifold.Helper
+    helper: Helper
   ): void {
     this.extension = extension;
     if (this.extension) {

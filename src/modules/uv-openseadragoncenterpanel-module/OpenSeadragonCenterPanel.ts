@@ -2,8 +2,9 @@ import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Async, Bools, Dimensions } from "@edsilv/utils";
 import {
   Canvas,
+  CanvasWorld,
   IExternalResource,
-  IExternalImageResourceData,
+  //IExternalImageResourceData,
   IExternalResourceData
 } from "manifesto.js";
 import { sanitize } from "../../Utils";
@@ -20,6 +21,7 @@ import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
+  canvasWorld: CanvasWorld;
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
   currentBounds: XYWH | null;
@@ -512,16 +514,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           };
         }
 
-        const canvasWorld = new CanvasWorld(canvases, [], viewingDirection);
-        const contentResource = canvasWorld.contentResource(infoResponse.id);
+        this.canvasWorld = new CanvasWorld(canvases, layers, viewingDirection);
+        const contentResource = this.canvasWorld.contentResource(data.id || data["@id"]);
 
-        this.viewer.addTiledImage({
-          error: event => reject(event),
+        const tiledImage = {
+          //error: event => reject(event),
           fitBounds: new OpenSeadragon.Rect(
-            ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
+            ...this.canvasWorld.contentResourceToWorldCoordinates(contentResource),
           ),
-          index: canvasWorld.layerIndexOfImageResource(contentResource),
-          opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
+          index: this.canvasWorld.layerIndexOfImageResource(contentResource),
+          opacity: this.canvasWorld.layerOpacityOfImageResource(contentResource),
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
@@ -529,8 +531,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
             }
             this.resize();
           },
-          tileSource,
-        });
+          tileSource: tileSource
+        };
+
+        this.viewer.addTiledImage(tiledImage);
 
         // this.viewer.addTiledImage({
         //   tileSource: tileSource,
@@ -788,11 +792,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   fitToBounds(bounds: XYWH, immediate: boolean = true): void {
-    const rect = new OpenSeadragon.Rect();
-    rect.x = Number(bounds.x);
-    rect.y = Number(bounds.y);
-    rect.width = Number(bounds.w);
-    rect.height = Number(bounds.h);
+    const rect = new OpenSeadragon.Rect(bounds.x, bounds.y, bounds.w, bounds.h);
     setTimeout(() => {
       this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
     }, 100);
@@ -1050,6 +1050,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     (this
       .extension as OpenSeadragonExtension).currentAnnotationRect = annotationRect;
 
+    console.log("zoomtoanno");
+
     // if zoomToBoundsEnabled, zoom to the annotation's bounds.
     // otherwise, pan into view preserving the current zoom level.
     if (
@@ -1103,24 +1105,33 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       return newRects;
     }
 
-    let resource: any = this.extension.resources.filter(
-      x => x.index === annotationGroup.canvasIndex
-    )[0];
-    let index: number = this.extension.resources.indexOf(resource);
-    let offsetX: number = 0;
+    // todo: if canvasWorld isn't enabled use this
+    // let resource: any = this.extension.resources.filter(
+    //   x => x.index === annotationGroup.canvasIndex
+    // )[0];
+    //let index: number = this.extension.resources.indexOf(resource);
+    //let offsetX: number = 0;
 
-    if (index > 0) {
-      offsetX = (<IExternalImageResourceData>(
-        this.extension.resources[index - 1]
-      )).width;
-    }
+    // if (index > 0) {
+    //   offsetX = (<IExternalImageResourceData>(
+    //     this.extension.resources[index - 1]
+    //   )).width;
+    // }
 
     for (let i = 0; i < annotationGroup.rects.length; i++) {
       const searchRect: AnnotationRect = annotationGroup.rects[i];
 
-      const x: number =
-        searchRect.x + offsetX + (index > 0 ? this.config.options.pageGap : 0);
-      const y: number = searchRect.y;
+      const canvas: Canvas = this.extension.helper.getCanvasByIndex(annotationGroup.canvasIndex);
+
+      const offset = this.canvasWorld.offsetByCanvas(canvas.id);
+      console.log("offset", offset);
+
+      //const x: number =
+      //  searchRect.x + offsetX + (index > 0 ? this.config.options.pageGap : 0);
+      //const x: number = searchRect.x;
+      //const x: number = searchRect.x;
+      const x: number = searchRect.x + offset.x;
+      const y: number = searchRect.y + offset.y;
       const w: number = searchRect.width;
       const h: number = searchRect.height;
 
