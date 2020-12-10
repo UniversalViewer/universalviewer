@@ -183,6 +183,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     this.viewer = OpenSeadragon({
       id: this.viewerId,
+      preserveImageSizeOnResize: true,
+      preserveViewport: true,
       crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
@@ -695,6 +697,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   overlayAnnotations(): void {
+
+    // const viewportZoom = this.viewer.viewport.getZoom(true)    
+
+    // console.log("zoom", zoom);
     const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
 
     for (let i = 0; i < annotations.length; i++) {
@@ -703,6 +709,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
       for (let k = 0; k < overlayRects.length; k++) {
         const overlayRect = overlayRects[k];
+        // const tiledImage = this.viewer.world.getItemAt(0);
+        // const zoom = tiledImage.imageToViewportCoordinates(overlayRect.x, overlayRect.y);
+        // overlayRect.x = zoom.x;
+        // overlayRect.y = zoom.y;
+        // console.log("zoom", zoom);
 
         const div: HTMLElement = document.createElement("div");
         div.id =
