@@ -13,8 +13,6 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
-import 'jquery/dist/jquery.min';
-import 'jsviews/jsviews.min';
 import "./lib/";
 import './uv.css';
 
