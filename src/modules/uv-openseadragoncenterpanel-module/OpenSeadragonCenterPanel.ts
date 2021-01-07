@@ -179,6 +179,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
 
+    // Transparent pixel
+    const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
     this.viewer = OpenSeadragon({
       id: this.viewerId,
       crossOriginPolicy: "Anonymous",
@@ -213,7 +216,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: this.extension.data.assetsDir + "/img/",
+      prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config.options.clickToZoomEnabled,
@@ -222,46 +225,46 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       },
       navImages: {
         zoomIn: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         zoomOut: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         home: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         rotateright: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         rotateleft: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         next: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         previous: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         }
       }
     });
