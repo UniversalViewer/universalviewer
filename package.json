@@ -16,7 +16,7 @@
     "e2eserve": "npx serve www -p 4444",
     "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\" \"!./src/lib/* \"",
     "postinstall": "opencollective postinstall",
-    "start": "npx webpack -c webpack.dev-server.js serve",
+    "start": "npx webpack serve -c webpack.dev-server.js",
     "test": "jest",
     "prepublishOnly": "npm run build:dist"
   },
@@ -77,7 +77,7 @@
     "url-loader": "^4.1.1",
     "webpack": "4.44.2",
     "webpack-bundle-analyzer": "3.9.0",
-    "webpack-cli": "4.2.0"
+    "webpack-cli": "^4.3.1"
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
