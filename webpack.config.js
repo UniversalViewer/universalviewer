@@ -1,16 +1,11 @@
-const path = require("path");
-//const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const { resolvePath, createThemeConfig } = require('./webpack-helpers');
 
-function resolvePath(p) {
-  return path.resolve(__dirname, p);
-}
-
-const config = {
+const config = [{
   entry: {
     UV: ["./src/index.ts"],
   },
   output: {
-    path: resolvePath("uv-dist-umd"),
+    path: resolvePath(".build/uv-dist-umd"),
     publicPath: "/uv-dist-umd/",
     libraryTarget: "umd",
     library: "UV",
@@ -31,6 +26,29 @@ const config = {
         use: ["style-loader", "css-loader"],
       },
       {
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+            }
+          },
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                strictMath: true,
+              },
+              additionalData: '@theme: "uv-en-gb-theme";',
+            },
+          },
+        ],
+      },
+      {
         test: /\.(png|jpg|gif|svg)$/i,
         use: [
           {
@@ -43,10 +61,10 @@ const config = {
       },
     ],
   },
-  // plugins: [
-  //     new BundleAnalyzerPlugin()
-  // ]
-};
+}];
+
+config.push(createThemeConfig('uv-en-gb-theme', require.resolve('@universalviewer/uv-en-gb-theme/theme.less')));
+config.push(createThemeConfig('uv-cy-gb-theme', require.resolve('@universalviewer/uv-cy-gb-theme/theme.less')));
 
 if (process.env.NODE_WEBPACK_LIBRARY_PATH) {
   config.output.path = resolvePath(process.env.NODE_WEBPACK_LIBRARY_PATH);
