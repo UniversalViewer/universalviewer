@@ -183,7 +183,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 
     this.viewer = OpenSeadragon({
-      id: this.viewerId,
+      // id: this.viewerId,
+      element: this.$viewer[0],
       crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
@@ -522,6 +523,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
               this.openPagesHandler();
             }
             this.resize();
+            this.goHome();
           }
         });
       }
