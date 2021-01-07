@@ -59,6 +59,7 @@ node_modules
 !src/extensions/*/config.js
 !Gruntfile.js
 !webpack.config.js
+!webpack.dev-server.js
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js

@@ -5,4 +5,5 @@ interface ISettings {
   rightPanelOpen?: boolean;
   preserveViewport?: boolean;
   clickToZoomEnabled?: boolean;
+  reducedAnimation?: boolean;
 }

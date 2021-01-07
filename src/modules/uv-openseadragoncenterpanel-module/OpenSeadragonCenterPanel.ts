@@ -269,21 +269,25 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
     this.$zoomInButton.attr("tabindex", 0);
     this.$zoomInButton.prop("title", this.content.zoomIn);
+    this.$zoomInButton.prop("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.prop("title", this.content.zoomOut);
+    this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
 
     this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton.attr("tabindex", 0);
     this.$goHomeButton.prop("title", this.content.goHome);
+    this.$goHomeButton.prop("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
 
     this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.prop("title", this.content.rotateRight);
+    this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
@@ -421,7 +425,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.$prevButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$prevButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 
@@ -439,7 +443,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       }
     });
 
-    this.$nextButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$nextButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 

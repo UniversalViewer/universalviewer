@@ -49,7 +49,7 @@
                 background: #fff;
                 cursor: pointer;
 
-                h1{
+                .heading{
                     color: @text-secondary-color;
                     font-size: @font-size-small;
                     //border-bottom: 1px solid @gray-light;
@@ -159,12 +159,13 @@
                     }
                 }
 
-                a.imageButton.searchButton{
+                .imageButton.searchButton{
                     background: data-uri('@{img-path}search.png');
                     background-repeat: no-repeat;
                     height: 18px;
                     width: 18px;
                     margin: 2px 2px 0 0;
+                    border: 0;
                     float: right;
                     cursor: pointer;
                 }
@@ -197,36 +198,56 @@
                 // margin: @margin-small-vertical 0 0 0;
                 width: 585px;
 
-                a.previousResult{
+                // Reset accessible buttons.
+                button {
+                    border: none;
+                    background: transparent;
+                    color: inherit;
+                }
+
+                .previousResult{
                     .noselect();
                     .icon-left('@{img-path}prev.png', 30px, 25px);
                     line-height: 30px;
                     float: left;
                     margin: 0 @margin-medium-horizontal 0 0;
+                    border: 0;
+                    background-color: #000;
+
+                    &:hover {
+                        background-color: #000;
+                    }
 
                     &.disabled {
                         .opacity(.25);
                     }
                 }
 
-                a.nextResult{
+                .nextResult{
                     .noselect();
                     .icon-right('@{img-path}next.png', 30px, 25px);
                     line-height: 30px;
                     float: right;
                     margin: 0 0 0 @margin-medium-horizontal;
+                    border: 0;
+                    background-color: #000;
+
+                    &:hover {
+                        background-color: #000;
+                    }
 
                     &.disabled {
                         .opacity(.25);
                     }
                 }
 
-                a.clearSearch{
+                .clearSearch{
                     .noselect();
                     cursor: pointer;
                     color: @link-color;
                     text-decoration: none;
                     margin: 0 0 0 @margin-medium-horizontal;
+                    border: 0;
                     font-size: 12px;
                 }
 

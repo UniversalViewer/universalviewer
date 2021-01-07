@@ -81,6 +81,11 @@ export class AutoComplete {
       }
     });
 
+    this._$element.on('blur', () => {
+      that._clearResults();
+      that._hideResults();
+    })
+
     // auto complete
     this._$element.on("keyup", function(e) {
       // if pressing enter without a list item selected
@@ -90,6 +95,10 @@ export class AutoComplete {
       ) {
         // enter
         that._onSelect(that._getTerms());
+        return;
+      }
+
+      if (e.keyCode === KeyCodes.KeyDown.Tab) {
         return;
       }
 
@@ -127,6 +136,17 @@ export class AutoComplete {
     // hide results if clicked outside.
     $(document).on("mouseup", e => {
       if (this._$searchResultsList.parent().has($(e.target)[0]).length === 0) {
+        this._clearResults();
+        this._hideResults();
+      }
+    });
+
+    // hide results if focus moves on.
+    $(document).on("focusin", e => {
+      if (
+        this._$searchResultsList.has($(e.target)[0]).length === 0 &&
+        !this._$element.is($(e.target)[0])
+      ) {
         this._clearResults();
         this._hideResults();
       }

@@ -97,7 +97,7 @@ export class BaseExtension implements IExtension {
     this.$element.addClass(this.name);
     this.$element.addClass("browser-" + window.browserDetect.browser);
     this.$element.addClass("browser-version-" + window.browserDetect.version);
-    this.$element.prop("tabindex", 0);
+    this.$element.prop("tabindex", -1);
 
     if (this.data.embedded) {
       this.$element.addClass("embedded");
@@ -240,7 +240,7 @@ export class BaseExtension implements IExtension {
       this.component.publish(BaseEvents.RESIZE);
     });
 
-    this.$element.append('<a href="/" id="top"></a>');
+    // this.$element.append('<a href="/" id="top"></a>');
     this.$element.append(
       '<iframe id="commsFrame" style="display:none"></iframe>'
     );

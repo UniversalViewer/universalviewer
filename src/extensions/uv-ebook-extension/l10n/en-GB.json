@@ -9,7 +9,9 @@
     "fallbackDegradedLabel": "Login",
     "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
     "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
-    "termsOfUse": "Terms of Use"
+    "termsOfUse": "Terms of Use",
+    "mediaViewer": "Media Viewer",
+    "skipToDownload": "Skip to downloads and alternative formats"
   },
   "modules": {
     "authDialogue": {
@@ -135,6 +137,7 @@
         "navigatorEnabled": "Navigator Enabled",
         "clickToZoomEnabled": "Mouse Click To Zoom",
         "pagingEnabled": "Two Page View",
+        "reducedMotion": "Reduce motion (disables animations)",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"

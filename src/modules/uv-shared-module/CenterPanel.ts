@@ -26,7 +26,7 @@ export class CenterPanel extends BaseView {
   create(): void {
     super.create();
 
-    this.$title = $('<div class="title"></div>');
+    this.$title = $('<h1 class="title"></h1>');
     this.$element.append(this.$title);
 
     this.$subtitle = $(`<div class="subtitle">
