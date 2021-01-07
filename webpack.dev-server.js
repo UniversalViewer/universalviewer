@@ -19,11 +19,6 @@ const config = {
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
   },
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      VERSION: pkg.version,
-    })
-  ],
   module: {
     rules: [
       {
@@ -92,6 +87,9 @@ const config = {
     }
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      PACKAGE_VERSION: `${pkg.version} (development)`,
+    }),
     new HtmlWebpackPlugin({
       title: 'UV Examples',
       template: './src/html-templates/index.html',

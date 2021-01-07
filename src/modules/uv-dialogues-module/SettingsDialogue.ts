@@ -1,7 +1,6 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILocale } from "../../ILocale";
-var metadata = require("../../../package.json");
 
 export class SettingsDialogue extends Dialogue {
   $locale: JQuery;
@@ -90,7 +89,7 @@ export class SettingsDialogue extends Dialogue {
 
   open(): void {
     super.open();
-    this.$version.text("v" + metadata.version);
+    this.$version.text("v" + process.env.PACKAGE_VERSION);
   }
 
   private _createLocalesMenu(): void {

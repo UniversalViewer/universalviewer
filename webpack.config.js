@@ -1,4 +1,6 @@
+const webpack = require('webpack');
 const { resolvePath, createThemeConfig } = require('./webpack-helpers');
+const pkg = require('./package.json');
 
 const config = [{
   entry: {
@@ -61,6 +63,11 @@ const config = [{
       },
     ],
   },
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      PACKAGE_VERSION: pkg.version,
+    }),
+  ]
 }];
 
 config.push(createThemeConfig('uv-en-gb-theme', require.resolve('@universalviewer/uv-en-gb-theme/theme.less')));
