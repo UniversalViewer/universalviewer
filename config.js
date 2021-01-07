@@ -6,8 +6,8 @@ module.exports = function () {
     this.dependencies = {
         // goes in assets/js/
         bundle: [
-            'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/jsviews/jsviews.min.js'
+            // 'node_modules/jquery/dist/jquery.min.js',
+            // 'node_modules/jsviews/jsviews.min.js'
         ]
     };
     this.directories = {
