@@ -16,6 +16,7 @@ import { URLDataProvider } from "./URLDataProvider";
 import 'jquery/dist/jquery.min';
 import 'jsviews/jsviews.min';
 import "./lib/";
+import './uv.css';
 
 interface IExtensionLoaderCollection {
   [key: string]: () => any;
@@ -411,9 +412,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     that._configure(data, extension, (config: any) => {
       data.config = config;
-      that._injectCss(data, extension, () => {
-        that._createExtension(extension, data, helper);
-      });
+      that._createExtension(extension, data, helper);
     });
   }
 
@@ -487,37 +486,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
       });
     } else {
       cb(null);
-    }
-  }
-
-  private _injectCss(data: IUVData, extension: any, cb: () => void): void {
-    if (!data.locales) {
-      return;
-    }
-
-    const cssPath: string =
-      data.assetsDir +
-      "/themes/" +
-      data.config.options.theme +
-      "/css/" +
-      extension.name +
-      "/theme.css";
-    const locale: string = data.locales[0].name;
-    const themeName: string =
-      extension.name.toLowerCase() + "-theme-" + locale.toLowerCase();
-    const $existingCSS: JQuery = $("#" + themeName.toLowerCase());
-
-    if (!$existingCSS.length) {
-      $("head").append(
-        '<link rel="stylesheet" id="' +
-          themeName +
-          '" href="' +
-          cssPath.toLowerCase() +
-          '" />'
-      );
-      cb();
-    } else {
-      cb();
     }
   }
 

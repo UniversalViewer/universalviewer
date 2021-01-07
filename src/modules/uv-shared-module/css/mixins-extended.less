@@ -51,7 +51,7 @@
 }
 
 .icon-btn-2(@img) {
-    background-image: data-uri(@img);
+    background-image: @img;
     background-repeat: no-repeat;
     display: inline-block;
     height: 30px;
@@ -61,7 +61,7 @@
 }
 
 .icon-btn(@img, @height) {
-    background-image: data-uri(@img);
+    background-image: @img;
     background-repeat: no-repeat;
     height: @height;
     line-height: @height;
