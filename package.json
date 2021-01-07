@@ -18,6 +18,8 @@
     "postinstall": "opencollective postinstall",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build:webpack": "webpack -c webpack.config.js",
+    "theme:en": "THEME=uv-en-gb-theme NPM_THEME=@universalviewer/uv-en-gb-theme webpack -c webpack.theme.js",
+    "theme:cy": "THEME=uv-cy-gb-theme NPM_THEME=@universalviewer/uv-cy-gb-theme webpack -c webpack.theme.js",
     "test": "jest",
     "prepublishOnly": "npm run build:dist"
   },
