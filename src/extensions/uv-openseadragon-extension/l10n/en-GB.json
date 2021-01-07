@@ -10,6 +10,8 @@
     "fallbackDegradedLabel": "Login",
     "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
     "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
+    "mediaViewer": "Media Viewer",
+    "skipToDownload": "Skip to downloads and alternative formats",
     "termsOfUse": "Terms of Use"
   },
   "modules": {

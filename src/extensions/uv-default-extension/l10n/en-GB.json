@@ -7,7 +7,9 @@
     "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
     "degradedResourceMessage": "Please log in to view at full quality.",
     "degradedResourceLogin": "log in",
-    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image"
+    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
+    "mediaViewer": "Media Viewer",
+    "skipToDownload": "Skip to downloads and alternative formats"
   },
   "modules": {
     "dialogue": {
