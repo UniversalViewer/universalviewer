@@ -264,7 +264,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
       // changing any of these data properties forces the UV to reload.
       const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
-        newData.isReload !== this.extension.data.isReload ||
+        newData.isReload ||
         newData.manifestUri !== this.extension.data.manifestUri ||
         newData.manifestIndex !== this.extension.data.manifestIndex ||
         newData.collectionIndex !== this.extension.data.collectionIndex
@@ -302,6 +302,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private async _reload(data: IUVData): Promise<void> {
+
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target
@@ -466,6 +467,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     extension: any,
     cb: (configExtension: any) => void
   ): void {
+
     if (!data.locales) {
       return;
     }
