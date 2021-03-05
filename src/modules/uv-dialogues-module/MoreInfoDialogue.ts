@@ -29,6 +29,10 @@ export class MoreInfoDialogue extends Dialogue {
       this.close();
     });
 
+    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+      this.metadataComponent.set(this._getData());
+    });
+
     this.config.content = this.extension.data.config.modules.moreInfoRightPanel.content;
     this.config.options = this.extension.data.config.modules.moreInfoRightPanel.options;
 

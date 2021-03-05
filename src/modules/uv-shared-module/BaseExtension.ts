@@ -1274,7 +1274,6 @@ export class BaseExtension implements IExtension {
 
   changeLocale(locale: string): void {
     // re-order locales so the passed locale is first
-
     const data: IUVData = <IUVData>{};
 
     if (this.data.locales) {

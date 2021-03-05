@@ -654,6 +654,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     const canvasId: string = range.getCanvasIds()[0];
     const index: number | null = this.helper.getCanvasIndexById(canvasId);
     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+    this.component.publish(BaseEvents.RANGE_CHANGE, range);
   }
 
   viewLabel(label: string): void {
