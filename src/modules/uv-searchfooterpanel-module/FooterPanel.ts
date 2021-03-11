@@ -103,7 +103,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchContainer.append(this.$searchOptions);
 
     this.$searchLabel = $(
-      '<label class="label" for="searchWithinInput">' + this.content.searchWithin + "</label>"
+      '<label class="label" for="searchWithinInput">' +
+        this.content.searchWithin +
+        "</label>"
     );
     this.$searchOptions.append(this.$searchLabel);
 
@@ -132,7 +134,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerContainer.prepend(this.$searchPagerControls);
 
     this.$previousResultButton = $(
-      '<button class="previousResult">' + this.content.previousResult + "</button>"
+      '<button class="previousResult">' +
+        this.content.previousResult +
+        "</button>"
     );
     this.$searchPagerControls.append(this.$previousResultButton);
 
@@ -167,7 +171,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$placemarkerDetails = $('<div class="placeMarkerDetails"></div>');
     this.$searchResultsContainer.append(this.$placemarkerDetails);
 
-    this.$placemarkerDetailsTop = $(`<div role="heading" class="heading"></div>`);
+    this.$placemarkerDetailsTop = $(
+      `<div role="heading" class="heading"></div>`
+    );
     this.$placemarkerDetails.append(this.$placemarkerDetailsTop);
 
     this.$placemarkerDetailsBottom = $("<p></p>");
@@ -508,13 +514,17 @@ export class FooterPanel extends BaseFooterPanel {
       $placemarker.focus(function(e: any) {
         that.onPlacemarkerMouseEnter.call(this, that);
       });
-      this.onAccessibleClick($placemarker, (e) => {
-        that.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGE,
-          this.currentPlacemarkerIndex
-        );
-        that.onPlacemarkerMouseLeave.call(this, e, that);
-      }, false)
+      this.onAccessibleClick(
+        $placemarker,
+        e => {
+          that.component.publish(
+            BaseEvents.CANVAS_INDEX_CHANGE,
+            this.currentPlacemarkerIndex
+          );
+          that.onPlacemarkerMouseLeave.call(this, e, that);
+        },
+        false
+      );
       $placemarker.mouseleave(function(e: any) {
         that.onPlacemarkerMouseLeave.call(this, e, that);
       });

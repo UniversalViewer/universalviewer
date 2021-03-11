@@ -2,7 +2,7 @@ import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResu
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
-import { XYWH } from "./XYWH";
+import { XYWHFragment } from "./XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import { DownloadDialogue } from "./DownloadDialogue";
@@ -307,7 +307,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(
       Events.OPENSEADRAGON_ANIMATION_FINISH,
       (viewer: any) => {
-        const xywh: XYWH | null = this.centerPanel.getViewportBounds();
+        const xywh: XYWHFragment | null = this.centerPanel.getViewportBounds();
         const canvas: Canvas = this.helper.getCurrentCanvas();
 
         if (this.centerPanel && xywh && canvas) {
@@ -533,7 +533,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
       // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
       const selector: string = components[1];
-      this.component.publish(BaseEvents.SET_TARGET, XYWH.fromString(selector));
+      this.component.publish(BaseEvents.SET_TARGET, XYWHFragment.fromString(selector));
     }
   }
 

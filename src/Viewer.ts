@@ -302,7 +302,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private async _reload(data: IUVData): Promise<void> {
-
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target
@@ -467,7 +466,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
     extension: any,
     cb: (configExtension: any) => void
   ): void {
-
     if (!data.locales) {
       return;
     }

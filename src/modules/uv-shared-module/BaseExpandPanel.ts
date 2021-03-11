@@ -1,6 +1,6 @@
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
-import { BaseEvents } from './BaseEvents';
+import { BaseEvents } from "./BaseEvents";
 
 export class BaseExpandPanel extends BaseView {
   isExpanded: boolean = false;
@@ -39,14 +39,18 @@ export class BaseExpandPanel extends BaseView {
       this.$expandFullButton.hide();
     }
 
-    this.$collapseButton = $('<div role="button" class="collapseButton" tabindex="0"></div>');
+    this.$collapseButton = $(
+      '<div role="button" class="collapseButton" tabindex="0"></div>'
+    );
     this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
-    this.$expandButton = $('<a role="button" class="expandButton" tabindex="0"></a>');
+    this.$expandButton = $(
+      '<a role="button" class="expandButton" tabindex="0"></a>'
+    );
     this.$expandButton.prop("title", this.content.expand);
 
     this.$closed.append(this.$expandButton);
@@ -59,17 +63,17 @@ export class BaseExpandPanel extends BaseView {
 
     this.onAccessibleClick(this.$expandButton, () => {
       this.toggle();
-    })
+    });
 
-    this.$expandFullButton.on('click', () => {
+    this.$expandFullButton.on("click", () => {
       this.expandFull();
     });
 
-    this.$closedTitle.on('click', () => {
+    this.$closedTitle.on("click", () => {
       this.toggle();
     });
 
-    this.$title.on('click', () => {
+    this.$title.on("click", () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -83,9 +87,7 @@ export class BaseExpandPanel extends BaseView {
       } else {
         this.toggle();
       }
-    })
-
-
+    });
 
     this.$top.hide();
     this.$main.hide();
@@ -120,8 +122,8 @@ export class BaseExpandPanel extends BaseView {
 
     if (this.reducedAnimation) {
       // This is reduced motion.
-      this.$element.css('width', this.getTargetWidth());
-      this.$element.css('left', this.getTargetLeft());
+      this.$element.css("width", this.getTargetWidth());
+      this.$element.css("left", this.getTargetLeft());
       this.toggled();
     } else {
       // Otherwise animate.

@@ -12,8 +12,9 @@ import {
   Rendering
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
-import 'mediaelement-plugins/dist/source-chooser/source-chooser'
-import 'mediaelement-plugins/dist/source-chooser/source-chooser.css'
+import "mediaelement-plugins/dist/source-chooser/source-chooser";
+import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
+import { TFragment } from "../../extensions/uv-openseadragon-extension/TFragment";
 
 export class MediaElementCenterPanel extends CenterPanel {
   _$mejsContainer: JQuery;
@@ -37,6 +38,11 @@ export class MediaElementCenterPanel extends CenterPanel {
     const that = this;
 
     // events.
+
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
+      that.player.setCurrentTime(target.t);
+      that.player.play();
+    });
 
     // only full screen video
     if (this.isVideo()) {
@@ -110,13 +116,13 @@ export class MediaElementCenterPanel extends CenterPanel {
           const type: MediaType | null = format.getFormat();
 
           // Add any additional subtitle types if required.
-          if (type && (type.toString() === 'text/vtt')) {
+          if (type && type.toString() === "text/vtt") {
             subtitles.push(format.__jsonld);
           } else if (type) {
             sources.push({
-              label: format.__jsonld.label ? format.__jsonld.label : '',
+              label: format.__jsonld.label ? format.__jsonld.label : "",
               type: type.toString(),
-              src: format.id,
+              src: format.id
             });
           }
         });
@@ -124,18 +130,28 @@ export class MediaElementCenterPanel extends CenterPanel {
     }
 
     if (this.isVideo()) {
-      this.$media = $('<video controls="controls" preload="none" crossorigin=""></video>');
+      this.$media = $(
+        '<video controls="controls" preload="none" crossorigin=""></video>'
+      );
 
       // Add VTT subtitles/captions.
       for (const subtitle of subtitles) {
         this.$media.append(
-          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language}" crossorigin="" src="${subtitle.id}" ${subtitles.indexOf(subtitle) === 0 ? 'default' : ''}>
+          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
+            subtitle.language
+          }" crossorigin="" src="${subtitle.id}" ${
+            subtitles.indexOf(subtitle) === 0 ? "default" : ""
+          }>
 `)
-        )
+        );
       }
 
       for (const source of sources) {
-        this.$media.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+        this.$media.append(
+          $(
+            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+          )
+        );
       }
 
       this.$container.append(this.$media);
@@ -143,7 +159,14 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.player = new MediaElementPlayer($("video")[0], {
         poster: poster,
         toggleCaptionsButtonWhenOnlyOne: true,
-        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
+        features: [
+          "playpause",
+          "current",
+          "progress",
+          "tracks",
+          "volume",
+          "sourcechooser"
+        ],
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("canplay", () => {
             that.resize();
@@ -175,6 +198,13 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.duration)
             );
           });
+
+          mediaElement.addEventListener("timeupdate", () => {
+            that.component.publish(
+              Events.MEDIA_TIME_UPDATE,
+              Math.floor(mediaElement.currentTime)
+            );
+          });
         }
       });
     } else {
@@ -186,7 +216,14 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.player = new MediaElementPlayer($("audio")[0], {
         poster: poster,
         defaultAudioWidth: "auto",
-        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
+        features: [
+          "playpause",
+          "current",
+          "progress",
+          "tracks",
+          "volume",
+          "sourcechooser"
+        ],
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
@@ -223,7 +260,11 @@ export class MediaElementCenterPanel extends CenterPanel {
           });
 
           for (const source of sources) {
-            mediaElement.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+            mediaElement.append(
+              $(
+                `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+              )
+            );
           }
         }
       });

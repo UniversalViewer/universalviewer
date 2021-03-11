@@ -33,12 +33,11 @@ export class DownloadDialogue extends Dialogue {
     super.create();
 
     // Accessibility.
-    this.$element.attr('role', 'region');
-    this.$element.attr('aria-label', this.content.title);
+    this.$element.attr("role", "region");
+    this.$element.attr("aria-label", this.content.title);
 
     this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
-
 
     let lastButton: HTMLElement;
     this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
@@ -54,7 +53,9 @@ export class DownloadDialogue extends Dialogue {
     });
 
     // create ui.
-    this.$title = $(`<div role="heading" class="heading">${this.content.title}</div>`);
+    this.$title = $(
+      `<div role="heading" class="heading">${this.content.title}</div>`
+    );
     this.$content.append(this.$title);
 
     this.$noneAvailable = $(
