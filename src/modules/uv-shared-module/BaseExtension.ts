@@ -613,6 +613,11 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+
+      if (this.data.config.options.overrideFullScreen) {
+        return;
+      }
+
       $("#top").focus();
       this.component.isFullScreen = !this.component.isFullScreen;
 
