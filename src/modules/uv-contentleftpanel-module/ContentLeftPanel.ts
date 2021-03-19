@@ -195,11 +195,11 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.onAccessibleClick(this.$treeButton, () => {
       this.openTreeView();
-    })
+    });
 
     this.onAccessibleClick(this.$thumbsButton, () => {
       this.openThumbsView();
-    })
+    });
 
     this.setTitle(this.content.title);
 

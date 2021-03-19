@@ -81,10 +81,10 @@ export class AutoComplete {
       }
     });
 
-    this._$element.on('blur', () => {
+    this._$element.on("blur", () => {
       that._clearResults();
       that._hideResults();
-    })
+    });
 
     // auto complete
     this._$element.on("keyup", function(e) {

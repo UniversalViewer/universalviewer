@@ -37,7 +37,9 @@ export class MoreInfoDialogue extends Dialogue {
     this.config.options = this.extension.data.config.modules.moreInfoRightPanel.options;
 
     // create ui
-    this.$title = $(`<div role="heading" class="heading">${this.config.content.title}</div>`);
+    this.$title = $(
+      `<div role="heading" class="heading">${this.config.content.title}</div>`
+    );
     this.$content.append(this.$title);
 
     this.$metadata = $('<div class="iiif-metadata-component"></div>');
