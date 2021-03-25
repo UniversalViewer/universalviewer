@@ -613,18 +613,24 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-      $("#top").focus();
+      const overrideFullScreen: boolean = this.data.config.options
+        .overrideFullScreen;
+
       this.component.isFullScreen = !this.component.isFullScreen;
 
-      if (this.component.isFullScreen) {
-        this.$element.addClass("fullscreen");
-      } else {
-        this.$element.removeClass("fullscreen");
+      if (!overrideFullScreen) {
+        $("#top").focus();
+
+        if (this.component.isFullScreen) {
+          this.$element.addClass("fullscreen");
+        } else {
+          this.$element.removeClass("fullscreen");
+        }
       }
 
       this.fire(BaseEvents.TOGGLE_FULLSCREEN, {
         isFullScreen: this.component.isFullScreen,
-        overrideFullScreen: this.data.config.options.overrideFullScreen
+        overrideFullScreen: overrideFullScreen
       });
     });
 

@@ -110,6 +110,10 @@
           console.log("target change", target);
           $('#target').val(target);
         });
+
+        uv.on("toggleFullScreen", function(e) {
+          console.log("toggleFullScreen", e);
+        });
       }
 
       function loadManifests(cb) {
