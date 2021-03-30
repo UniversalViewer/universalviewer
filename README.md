@@ -22,10 +22,10 @@
 -->
 
 <p align="center">
-    <a href="http://universalviewer.io/examples/">examples</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://groups.google.com/forum/#!forum/universalviewer">google group</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow">#slack</a>
+  <a href="http://universalviewer.io/examples/">examples</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://groups.google.com/forum/#!forum/universalviewer">google group</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow">#slack</a>
 </p>
 
 <br>
