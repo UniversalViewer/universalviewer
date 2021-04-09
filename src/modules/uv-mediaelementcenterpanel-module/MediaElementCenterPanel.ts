@@ -73,16 +73,15 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     await this.extension.getExternalResources(resources);
 
-    // await import(
-    //   /* webpackChunkName: "mediaelement" */ /* webpackMode: "lazy" */ "mediaelement/build/mediaelement-and-player"
-    // );
-
     this.$container.empty();
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
     this.mediaHeight = this.config.defaultHeight;
     this.mediaWidth = this.config.defaultWidth;
+
+    console.log("mediaHeight", this.mediaHeight);
+    console.log("mediaWidth", this.mediaWidth);
 
     this.$container.height(this.mediaHeight);
     this.$container.width(this.mediaWidth);
@@ -168,7 +167,9 @@ export class MediaElementCenterPanel extends CenterPanel {
           "sourcechooser"
         ],
         success: function(mediaElement: any, originalNode: any) {
-          mediaElement.addEventListener("canplay", () => {
+          console.log("success");
+          mediaElement.addEventListener("loadstart", () => {
+            console.log("loadstart");
             that.resize();
           });
 
@@ -228,7 +229,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function(mediaElement: any, originalNode: any) {
-          mediaElement.addEventListener("canplay", () => {
+          mediaElement.addEventListener("loadedmetadata", () => {
             that.resize();
           });
 
@@ -282,33 +283,31 @@ export class MediaElementCenterPanel extends CenterPanel {
   }
 
   resize() {
+    console.log("resize");
     super.resize();
 
     const that = this;
 
-    // if in Firefox < v13 don't resize the media container.
-    if (
-      window.browserDetect.browser === "Firefox" &&
-      window.browserDetect.version < 13
-    ) {
-      this.$container.width(this.mediaWidth);
-      this.$container.height(this.mediaHeight);
-    } else {
-      // fit media to available space.
-      const size: Size = Dimensions.fitRect(
-        this.mediaWidth,
-        this.mediaHeight,
-        this.$content.width(),
-        this.$content.height()
-      );
+    if (!this.mediaWidth || !this.mediaHeight) {
+      return;
+    }
 
-      this.$container.height(size.height);
-      this.$container.width(size.width);
+    // fit media to available space.
+    const size: Size = Dimensions.fitRect(
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
-      if (this.player && !this.extension.isFullScreen()) {
-        this.$media.width(size.width);
-        this.$media.height(size.height);
-      }
+    console.log(size, this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+
+    this.$container.height(size.height);
+    this.$container.width(size.width);
+
+    if (this.player && !this.extension.isFullScreen()) {
+      this.$media.width(size.width);
+      this.$media.height(size.height);
     }
 
     const left: number = Math.floor(
@@ -339,11 +338,6 @@ export class MediaElementCenterPanel extends CenterPanel {
           $(this).height(that.$container.height());
           $(this).width(that.$container.width());
         });
-        // const $mejs: JQuery = $(".mejs__container");
-
-        // $mejs.css({
-        //   "margin-top": (this.$container.height() - $mejs.height()) / 2
-        // });
       }
     }
   }

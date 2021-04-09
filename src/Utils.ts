@@ -58,3 +58,7 @@ export const propertyChanged = (
 ): boolean => {
   return currentData[propertyName] !== newData[propertyName];
 };
+
+export const isVisible = (el: JQuery) => {
+  return el.css("visibility") !== "hidden"
+}

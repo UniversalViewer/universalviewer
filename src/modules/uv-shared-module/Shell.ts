@@ -48,6 +48,7 @@ export class Shell extends BaseView {
         this.extension.data.config.content.mediaViewer +
         "</h2>"
     );
+
     this.$mainPanel.append(this.$centerPanel);
 
     this.$leftPanel = $('<div class="leftPanel"></div>');
