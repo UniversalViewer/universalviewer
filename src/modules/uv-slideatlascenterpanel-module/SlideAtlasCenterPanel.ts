@@ -5,7 +5,8 @@ import {
   IExternalResource,
   Canvas,
   Annotation,
-  AnnotationBody
+  AnnotationBody,
+  Service
 } from "manifesto.js";
 
 export class SlideAtlasCenterPanel extends CenterPanel {
@@ -20,12 +21,21 @@ export class SlideAtlasCenterPanel extends CenterPanel {
     console.log("slide atlas center panel");
     super.create();
     this.$title.hide();
+
+    const that = this;
+
+    this.component.subscribe(
+      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      (e: any, resources: IExternalResource[]) => {
+        that.openMedia(resources);
+      }
+    );
   }
 
   openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
       let canvas: Canvas = this.extension.helper.getCurrentCanvas();
-
+      debugger;
       const annotations: Annotation[] = canvas.getContent();
 
       if (annotations.length) {
@@ -33,10 +43,14 @@ export class SlideAtlasCenterPanel extends CenterPanel {
         const body: AnnotationBody[] = annotation.getBody();
 
         if (body.length) {
-          const media: AnnotationBody = body[0];
-          //const format: MediaType | null = media.getFormat();
+          const services: Service[] = body[0].getServices();
 
-          console.log("loaded", media.id);
+          for (let i = 0; i < services.length; i++) {
+            const service: Service = services[i];
+            let id = service.id;
+
+            console.log(id);
+          }
         }
       }
 
