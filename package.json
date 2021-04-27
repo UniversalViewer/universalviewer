@@ -115,6 +115,7 @@
     "openseadragon": "2.4.2",
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
+    "slideatlas-viewer": "^4.4.1",
     "waveform-data": "2.0.2",
     "webpack-dev-server": "^3.11.0",
     "whatwg-fetch": "^3.0.0",

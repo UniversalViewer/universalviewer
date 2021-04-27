@@ -380,8 +380,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
       if (body && body.length) {
         const format: MediaType | null = body[0].getFormat();
 
-        console.log("get extension");
-
         if (format) {
           extension = await that._getExtension(format);
 

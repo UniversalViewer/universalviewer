@@ -1,7 +1,7 @@
 define(function() {
   return function(formats: string[]) {
     return {
-      async: []
+      async: ["uv-ebook-extension.proxy"]
     };
   };
 });
