@@ -1129,6 +1129,7 @@ export class BaseExtension implements IExtension {
   }
 
   viewCanvas(canvasIndex: number): void {
+    console.log("view canvas");
     if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
       this.showMessage(this.data.config.content.canvasIndexOutOfRange);
       return;
