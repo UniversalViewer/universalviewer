@@ -63,10 +63,7 @@ function appendScript(src: string) {
   return new Promise<void>(resolve => {
     const script = document.createElement("script");
     script.src = src;
-    var callback = function (){ 
-      resolve();
-    }
-    script.onload = callback;
+    script.onload = () => resolve();
     document.head.appendChild(script);
   });
 }
@@ -74,12 +71,9 @@ function appendScript(src: string) {
 function appendCSS(src: string) {
   return new Promise<void>(resolve => {
     const link = document.createElement("link");
-    link.rel="stylesheet";
+    link.rel = "stylesheet";
     link.href = src;
-    var callback = function (){ 
-      resolve();
-    }
-    link.onload = callback;
+    link.onload = () => resolve();
     document.head.appendChild(link);
   });
 }
