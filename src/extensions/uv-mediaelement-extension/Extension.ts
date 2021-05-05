@@ -173,7 +173,10 @@ export default class Extension extends BaseExtension
 
       // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
       const selector: string = components[1];
-      this.component.publish(BaseEvents.SET_TARGET, TFragment.fromString(selector));
+      this.component.publish(
+        BaseEvents.SET_TARGET,
+        TFragment.fromString(selector)
+      );
     }
   }
 

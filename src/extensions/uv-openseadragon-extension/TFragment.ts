@@ -11,8 +11,6 @@ export class TFragment {
 
   static fromString(time: string): TFragment {
     time = time.replace("t=", "");
-    return new TFragment(
-      Number(time)
-    );
+    return new TFragment(Number(time));
   }
 }

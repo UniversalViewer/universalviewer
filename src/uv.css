@@ -10,7 +10,6 @@
 
 /* avoid fouc */
 div.uv .uv * {
-  visibility: hidden;
   opacity: 0;
 }
 

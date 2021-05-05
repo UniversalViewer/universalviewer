@@ -13,7 +13,6 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
-import "./lib/";
 
 interface IExtensionLoaderCollection {
   [key: string]: () => any;
@@ -31,7 +30,8 @@ enum Extension {
   MEDIAELEMENT = "uv-mediaelement-extension",
   MODELVIEWER = "uv-model-viewer-extension",
   OSD = "uv-openseadragon-extension",
-  PDF = "uv-pdf-extension"
+  PDF = "uv-pdf-extension",
+  SLIDEATLAS = "uv-slideatlas-extension",
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {
@@ -118,6 +118,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
         )) as any;
         const extension = new m.default();
         extension.name = Extension.PDF;
+        return extension;
+      },
+      [Extension.SLIDEATLAS]: async () => {
+        const m = (await import(
+          /* webpackChunkName: "uv-pdf-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-slideatlas-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.SLIDEATLAS;
         return extension;
       }
     };
@@ -222,6 +230,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     this._extensionRegistry[MediaType.OPF] = {
       load: this._extensions[Extension.EBOOK]
+    };
+
+    this._extensionRegistry["image/vnd.kitware.girder"] = {
+      load: this._extensions[Extension.SLIDEATLAS]
     };
 
     this.set(this.options.data);

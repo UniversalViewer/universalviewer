@@ -69,6 +69,7 @@ interface Window {
   MediaSource: any;
   WebKitMediaSource: any;
   WaveformData: any;
+  opera: any;
 }
 
 interface Document {
