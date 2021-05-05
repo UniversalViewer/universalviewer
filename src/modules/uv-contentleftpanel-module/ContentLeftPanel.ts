@@ -18,6 +18,7 @@ import {
   Range
 } from "manifesto.js";
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
+import { isVisible } from "../../Utils";
 
 export class ContentLeftPanel extends LeftPanel {
   $bottomOptions: JQuery;
@@ -799,7 +800,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$tabsContent.height(
       this.$main.height() -
-        (this.$tabs.is(":visible") ? this.$tabs.height() : 0) -
+        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
         this.$tabsContent.verticalPadding()
     );
     this.$views.height(

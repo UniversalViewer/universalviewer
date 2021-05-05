@@ -93,3 +93,7 @@ export const loadCSS = async (sources: string[]) => {
     })
   );
 }
+
+export const isVisible = (el: JQuery) => {
+  return el.css("visibility") !== "hidden"
+}

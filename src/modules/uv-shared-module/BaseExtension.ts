@@ -40,6 +40,7 @@ import {
   Urls,
   Strings
 } from "@edsilv/utils";
+import { isVisible } from "../../Utils";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -1159,7 +1160,7 @@ export class BaseExtension implements IExtension {
   }
 
   isOverlayActive(): boolean {
-    return this.shell.$overlays.is(":visible");
+    return isVisible(this.shell.$overlays);
   }
 
   isDesktopMetric(): boolean {

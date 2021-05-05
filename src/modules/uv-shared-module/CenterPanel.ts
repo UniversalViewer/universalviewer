@@ -1,6 +1,6 @@
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
-import { sanitize } from "../../Utils";
+import { sanitize, isVisible } from "../../Utils";
 import {} from "@iiif/manifold";
 import { Bools } from "@edsilv/utils";
 
@@ -184,16 +184,14 @@ export class CenterPanel extends BaseView {
   resize(): void {
     super.resize();
 
-    const leftPanelWidth: number = this.extension.shell.$leftPanel.is(
-      ":visible"
-    )
+    const leftPanelWidth: number = isVisible(this.extension.shell.$leftPanel)
       ? Math.floor(this.extension.shell.$leftPanel.width())
       : 0;
-    const rightPanelWidth: number = this.extension.shell.$rightPanel.is(
-      ":visible"
-    )
+
+    const rightPanelWidth: number = isVisible(this.extension.shell.$rightPanel)
       ? Math.floor(this.extension.shell.$rightPanel.width())
       : 0;
+
     const width: number = Math.floor(
       this.$element.parent().width() - leftPanelWidth - rightPanelWidth
     );
@@ -208,7 +206,7 @@ export class CenterPanel extends BaseView {
 
     if (
       (this.options && this.options.titleEnabled === false) ||
-      !this.$title.is(":visible")
+      !isVisible(this.$title)
     ) {
       titleHeight = 0;
     } else {
@@ -217,7 +215,7 @@ export class CenterPanel extends BaseView {
 
     if (
       (this.options && this.options.subtitleEnabled === false) ||
-      !this.$subtitle.is(":visible")
+      !isVisible(this.$subtitle)
     ) {
       subtitleHeight = 0;
     } else {

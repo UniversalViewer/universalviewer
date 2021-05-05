@@ -1,5 +1,6 @@
 import * as KeyCodes from "@edsilv/key-codes";
 import { Keyboard } from "@edsilv/utils";
+import { isVisible } from "../../Utils";
 export class AutoComplete {
   private _results: any;
   private _selectedResultIndex: number;
@@ -103,7 +104,7 @@ export class AutoComplete {
       }
 
       // If there are search results
-      if (that._$searchResultsList.is(":visible") && that._results.length) {
+      if (isVisible(that._$searchResultsList) && that._results.length) {
         if (e.keyCode === KeyCodes.KeyDown.Enter) {
           that._searchForItem(that._getSelectedListItem());
         } else if (e.keyCode === KeyCodes.KeyDown.DownArrow) {
