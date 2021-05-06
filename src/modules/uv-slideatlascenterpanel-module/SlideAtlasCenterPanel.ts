@@ -72,7 +72,7 @@ export class SlideAtlasCenterPanel extends CenterPanel {
           // var prefix =
           //   "https://slide-atlas.org/tile?img=5141c4094834a312d0b82d87&db=5074589002e31023d4292d83&name=";
           var prefix =
-            "https://slide-atlas.org/tile?img=5a724a831fbb90062d175994&name=";
+            "https://slide-atlas.org/tile?img=5a724a831fbb90062d175994&db=5074589002e31023d4292d83&name=";
           var name = prefix + "t";
           while (level > 0) {
             --level;
