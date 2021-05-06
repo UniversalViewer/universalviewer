@@ -68,8 +68,11 @@ export class SlideAtlasCenterPanel extends CenterPanel {
         spacing: [info.mm_x, info.mm_y],
         getTileUrl: function(level, x, y, z) {
           // https://images.slide-atlas.org/api/v1/item/5ad161631fbb9005ff24cd2c/tiles/zxy/3/0/4
+          // 5a724a831fbb90062d175994
+          // var prefix =
+          //   "https://slide-atlas.org/tile?img=5141c4094834a312d0b82d87&db=5074589002e31023d4292d83&name=";
           var prefix =
-            "https://slide-atlas.org/tile?img=5141c4094834a312d0b82d87&db=5074589002e31023d4292d83&name=";
+            "https://slide-atlas.org/tile?img=5a724a831fbb90062d175994&name=";
           var name = prefix + "t";
           while (level > 0) {
             --level;
