@@ -72,7 +72,7 @@ export class TreeView extends BaseView {
       )[0];
 
       if (link) {
-        link.scrollIntoViewIfNeeded();
+        link.scrollIntoView();
       }
     }
 

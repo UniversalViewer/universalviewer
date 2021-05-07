@@ -13,7 +13,6 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
-import "./lib/";
 import './uv.css';
 
 interface IExtensionLoaderCollection {
@@ -32,7 +31,8 @@ enum Extension {
   MEDIAELEMENT = "uv-mediaelement-extension",
   MODELVIEWER = "uv-model-viewer-extension",
   OSD = "uv-openseadragon-extension",
-  PDF = "uv-pdf-extension"
+  PDF = "uv-pdf-extension",
+  SLIDEATLAS = "uv-slideatlas-extension",
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {
@@ -119,6 +119,14 @@ export class Viewer extends BaseComponent implements IUVComponent {
         )) as any;
         const extension = new m.default();
         extension.name = Extension.PDF;
+        return extension;
+      },
+      [Extension.SLIDEATLAS]: async () => {
+        const m = (await import(
+          /* webpackChunkName: "uv-pdf-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-slideatlas-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.SLIDEATLAS;
         return extension;
       }
     };
@@ -225,6 +233,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
       load: this._extensions[Extension.EBOOK]
     };
 
+    this._extensionRegistry["image/vnd.kitware.girder"] = {
+      load: this._extensions[Extension.SLIDEATLAS]
+    };
+
     this.set(this.options.data);
 
     return true;
@@ -265,7 +277,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
       // changing any of these data properties forces the UV to reload.
       const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
-        newData.isReload !== this.extension.data.isReload ||
+        newData.isReload ||
         newData.manifestUri !== this.extension.data.manifestUri ||
         newData.manifestIndex !== this.extension.data.manifestIndex ||
         newData.collectionIndex !== this.extension.data.collectionIndex

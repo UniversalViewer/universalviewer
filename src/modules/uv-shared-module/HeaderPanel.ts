@@ -6,6 +6,7 @@ import { InformationAction } from "../uv-shared-module/InformationAction";
 import { InformationArgs } from "../uv-shared-module/InformationArgs";
 import { InformationFactory } from "../uv-shared-module/InformationFactory";
 import { Bools } from "@edsilv/utils";
+import { isVisible } from "../../Utils";
 
 export class HeaderPanel extends BaseView {
   $centerOptions: JQuery;
@@ -86,7 +87,10 @@ export class HeaderPanel extends BaseView {
     });
 
     this.$settingsButton.onPressed(() => {
-      this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE, this.$settingsButton);
+      this.component.publish(
+        BaseEvents.SHOW_SETTINGS_DIALOGUE,
+        this.$settingsButton
+      );
     });
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
@@ -192,7 +196,7 @@ export class HeaderPanel extends BaseView {
       left: pos
     });
 
-    if (this.$informationBox.is(":visible")) {
+    if (isVisible(this.$informationBox)) {
       const $actions: JQuery = this.$informationBox.find(".actions");
       const $message: JQuery = this.$informationBox.find(".message");
       $message.width(
@@ -202,7 +206,9 @@ export class HeaderPanel extends BaseView {
           Math.ceil(this.$informationBox.find(".close").outerWidth(true)) -
           2
       );
-      $message.text(this.information.message);
+      if (this.information) {
+        $message.text(this.information.message);
+      }
     }
 
     // hide toggle buttons below minimum width

@@ -1,5 +1,3 @@
-import "@edsilv/jquery-plugins";
-
 // if (typeof jQuery === "function") {
 //   define('jquery', [], function() {
 //       return jQuery;

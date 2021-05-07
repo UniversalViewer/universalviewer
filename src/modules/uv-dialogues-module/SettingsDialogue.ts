@@ -119,9 +119,7 @@ export class SettingsDialogue extends Dialogue {
 
   private _createAccessibilityMenu() {
     // Accessibility
-    this.$reducedAnimation = $(
-      '<div class="setting reducedAnimation"></div>'
-    );
+    this.$reducedAnimation = $('<div class="setting reducedAnimation"></div>');
     this.$scroll.append(this.$reducedAnimation);
 
     this.$reducedAnimationCheckbox = $(
@@ -130,9 +128,7 @@ export class SettingsDialogue extends Dialogue {
     this.$reducedAnimation.append(this.$reducedAnimationCheckbox);
 
     this.$reducedAnimationLabel = $(
-      '<label for="reducedAnimation">' +
-      this.content.reducedMotion +
-      "</label>"
+      '<label for="reducedAnimation">' + this.content.reducedMotion + "</label>"
     );
     this.$reducedAnimation.append(this.$reducedAnimationLabel);
 

@@ -7,7 +7,9 @@ module.exports = function () {
         // goes in assets/js/
         bundle: [
             'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/jsviews/jsviews.min.js'
+            'node_modules/jsviews/jsviews.min.js',
+            'node_modules/@edsilv/jquery-plugins/dist/jquery-plugins.min.js',
+            'src/lib/window.js'
         ]
     };
     this.directories = {

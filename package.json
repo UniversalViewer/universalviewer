@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.0.0-pre.49",
+  "version": "4.0.0-pre.54",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
     "node": ">=8.9.1",
@@ -122,6 +122,7 @@
     "openseadragon": "2.4.2",
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
+    "slideatlas-viewer": "^4.4.1",
     "waveform-data": "2.0.2",
     "webpack-dev-server": "^3.11.0",
     "whatwg-fetch": "^3.0.0",

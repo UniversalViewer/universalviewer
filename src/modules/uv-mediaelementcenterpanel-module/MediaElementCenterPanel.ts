@@ -12,8 +12,9 @@ import {
   Rendering
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
-import 'mediaelement-plugins/dist/source-chooser/source-chooser'
-import 'mediaelement-plugins/dist/source-chooser/source-chooser.css'
+import "mediaelement-plugins/dist/source-chooser/source-chooser";
+import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
+import { TFragment } from "../../extensions/uv-openseadragon-extension/TFragment";
 
 export class MediaElementCenterPanel extends CenterPanel {
   _$mejsContainer: JQuery;
@@ -37,6 +38,11 @@ export class MediaElementCenterPanel extends CenterPanel {
     const that = this;
 
     // events.
+
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
+      that.player.setCurrentTime(target.t);
+      that.player.play();
+    });
 
     // only full screen video
     if (this.isVideo()) {
@@ -67,16 +73,15 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     await this.extension.getExternalResources(resources);
 
-    // await import(
-    //   /* webpackChunkName: "mediaelement" */ /* webpackMode: "lazy" */ "mediaelement/build/mediaelement-and-player"
-    // );
-
     this.$container.empty();
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
     this.mediaHeight = this.config.defaultHeight;
     this.mediaWidth = this.config.defaultWidth;
+
+    console.log("mediaHeight", this.mediaHeight);
+    console.log("mediaWidth", this.mediaWidth);
 
     this.$container.height(this.mediaHeight);
     this.$container.width(this.mediaWidth);
@@ -110,13 +115,13 @@ export class MediaElementCenterPanel extends CenterPanel {
           const type: MediaType | null = format.getFormat();
 
           // Add any additional subtitle types if required.
-          if (type && (type.toString() === 'text/vtt')) {
+          if (type && type.toString() === "text/vtt") {
             subtitles.push(format.__jsonld);
           } else if (type) {
             sources.push({
-              label: format.__jsonld.label ? format.__jsonld.label : '',
+              label: format.__jsonld.label ? format.__jsonld.label : "",
               type: type.toString(),
-              src: format.id,
+              src: format.id
             });
           }
         });
@@ -124,18 +129,28 @@ export class MediaElementCenterPanel extends CenterPanel {
     }
 
     if (this.isVideo()) {
-      this.$media = $('<video controls="controls" preload="none" crossorigin=""></video>');
+      this.$media = $(
+        '<video controls="controls" preload="none" crossorigin=""></video>'
+      );
 
       // Add VTT subtitles/captions.
       for (const subtitle of subtitles) {
         this.$media.append(
-          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language}" crossorigin="" src="${subtitle.id}" ${subtitles.indexOf(subtitle) === 0 ? 'default' : ''}>
+          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
+            subtitle.language
+          }" crossorigin="" src="${subtitle.id}" ${
+            subtitles.indexOf(subtitle) === 0 ? "default" : ""
+          }>
 `)
-        )
+        );
       }
 
       for (const source of sources) {
-        this.$media.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+        this.$media.append(
+          $(
+            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+          )
+        );
       }
 
       this.$container.append(this.$media);
@@ -143,9 +158,18 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.player = new MediaElementPlayer($("video")[0], {
         poster: poster,
         toggleCaptionsButtonWhenOnlyOne: true,
-        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
+        features: [
+          "playpause",
+          "current",
+          "progress",
+          "tracks",
+          "volume",
+          "sourcechooser"
+        ],
         success: function(mediaElement: any, originalNode: any) {
-          mediaElement.addEventListener("canplay", () => {
+          console.log("success");
+          mediaElement.addEventListener("loadstart", () => {
+            console.log("loadstart");
             that.resize();
           });
 
@@ -175,6 +199,13 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.duration)
             );
           });
+
+          mediaElement.addEventListener("timeupdate", () => {
+            that.component.publish(
+              Events.MEDIA_TIME_UPDATE,
+              Math.floor(mediaElement.currentTime)
+            );
+          });
         }
       });
     } else {
@@ -186,12 +217,19 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.player = new MediaElementPlayer($("audio")[0], {
         poster: poster,
         defaultAudioWidth: "auto",
-        features: ["playpause", "current", "progress", "tracks", "volume", 'sourcechooser'],
+        features: [
+          "playpause",
+          "current",
+          "progress",
+          "tracks",
+          "volume",
+          "sourcechooser"
+        ],
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function(mediaElement: any, originalNode: any) {
-          mediaElement.addEventListener("canplay", () => {
+          mediaElement.addEventListener("loadedmetadata", () => {
             that.resize();
           });
 
@@ -223,7 +261,11 @@ export class MediaElementCenterPanel extends CenterPanel {
           });
 
           for (const source of sources) {
-            mediaElement.append($(`<source src="${source.src}" type="${source.type}" title="${source.label}">`))
+            mediaElement.append(
+              $(
+                `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+              )
+            );
           }
         }
       });
@@ -241,33 +283,31 @@ export class MediaElementCenterPanel extends CenterPanel {
   }
 
   resize() {
+    console.log("resize");
     super.resize();
 
     const that = this;
 
-    // if in Firefox < v13 don't resize the media container.
-    if (
-      window.browserDetect.browser === "Firefox" &&
-      window.browserDetect.version < 13
-    ) {
-      this.$container.width(this.mediaWidth);
-      this.$container.height(this.mediaHeight);
-    } else {
-      // fit media to available space.
-      const size: Size = Dimensions.fitRect(
-        this.mediaWidth,
-        this.mediaHeight,
-        this.$content.width(),
-        this.$content.height()
-      );
+    if (!this.mediaWidth || !this.mediaHeight) {
+      return;
+    }
 
-      this.$container.height(size.height);
-      this.$container.width(size.width);
+    // fit media to available space.
+    const size: Size = Dimensions.fitRect(
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
-      if (this.player && !this.extension.isFullScreen()) {
-        this.$media.width(size.width);
-        this.$media.height(size.height);
-      }
+    console.log(size, this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+
+    this.$container.height(size.height);
+    this.$container.width(size.width);
+
+    if (this.player && !this.extension.isFullScreen()) {
+      this.$media.width(size.width);
+      this.$media.height(size.height);
     }
 
     const left: number = Math.floor(
@@ -298,11 +338,6 @@ export class MediaElementCenterPanel extends CenterPanel {
           $(this).height(that.$container.height());
           $(this).width(that.$container.width());
         });
-        // const $mejs: JQuery = $(".mejs__container");
-
-        // $mejs.css({
-        //   "margin-top": (this.$container.height() - $mejs.height()) / 2
-        // });
       }
     }
   }
