@@ -1,4 +1,4 @@
-import { XYWH } from "./XYWHFragment";
+import { XYWHFragment } from "./XYWHFragment";
 
 describe("XYWH", () => {
   const xywh = new XYWH(0, 5, 100, 95);
