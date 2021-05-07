@@ -60,12 +60,14 @@ node_modules
 !Gruntfile.js
 !webpack.config.js
 !webpack.dev-server.js
+!webpack.theme.js
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js
 !dev.build.js
 !dist.build.js
 !jest.setup.js
+!webpack-helpers.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
 !src/extensions/*/config.js
