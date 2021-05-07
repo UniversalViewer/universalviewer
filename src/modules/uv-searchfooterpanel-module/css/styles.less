@@ -3,8 +3,6 @@
 
     .footerPanel{
 
-        @img-path: '../../../modules/uv-searchfooterpanel-module/img/';
-
         .searchResults{
             position: relative;
             height: 60px;
@@ -17,24 +15,24 @@
 
             .searchResultPlacemarker{
                 position: absolute;
-                background: data-uri('@{img-path}placemarker_down.png');
+                background: data-uri('../img/placemarker_down.png');
                 height: 24px;
                 width: 18px;
                 cursor: pointer;
                 margin: -24 0 0 -9;
 
                 &.hover{
-                    background: data-uri('@{img-path}placemarker_down_hover.png');
+                    background: data-uri('../img/placemarker_down_hover.png');
                 }
 
                 &.current{
-                    background: data-uri('@{img-path}placemarker_down_hover.png');
+                    background: data-uri('../img/placemarker_down_hover.png');
                 }
             }
 
             .positionPlacemarker{
                 position: absolute;
-                background: data-uri('@{img-path}placemarker_up.png');
+                background: data-uri('../img/placemarker_up.png');
                 height: 24px;
                 width: 18px;
                 margin: 2px 0 0 -9px;
@@ -54,7 +52,7 @@
                     font-size: @font-size-small;
                     //border-bottom: 1px solid @gray-light;
                     font-weight: bold;
-                    //background-image: url('@{img-path}arrow.png');
+                    //background-image: url('../img/arrow.png');
                     background-position: 0 1px;
                     background-repeat: no-repeat;
                     margin: 5px;
@@ -153,14 +151,14 @@
                     border: none;
 
                     &.searching {
-                        background: data-uri('@{img-path}spinner.gif');
+                        background: data-uri('../img/spinner.gif');
                         background-repeat: no-repeat;
                         background-position: right 3px;
                     }
                 }
 
                 .imageButton.searchButton{
-                    background: data-uri('@{img-path}search.png');
+                    background: data-uri('../img/search.png');
                     background-repeat: no-repeat;
                     height: 18px;
                     width: 18px;
@@ -207,7 +205,7 @@
 
                 .previousResult{
                     .noselect();
-                    .icon-left('@{img-path}prev.png', 30px, 25px);
+                    .icon-left(data-uri('../img/prev.png'), 30px, 25px);
                     line-height: 30px;
                     float: left;
                     margin: 0 @margin-medium-horizontal 0 0;
@@ -225,7 +223,7 @@
 
                 .nextResult{
                     .noselect();
-                    .icon-right('@{img-path}next.png', 30px, 25px);
+                    .icon-right(data-uri('../img/next.png'), 30px, 25px);
                     line-height: 30px;
                     float: right;
                     margin: 0 0 0 @margin-medium-horizontal;

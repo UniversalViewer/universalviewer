@@ -1,7 +1,7 @@
-import { XYWH } from "./XYWH";
+import { XYWHFragment } from "./XYWHFragment";
 
 describe("XYWH", () => {
-  const xywh = new XYWH(0, 5, 100, 95);
+  const xywh = new XYWHFragment(0, 5, 100, 95);
 
   it("has accessors available", () => {
     expect(xywh.x).toEqual(0);
@@ -18,7 +18,7 @@ describe("XYWH", () => {
 
   describe("fromString", () => {
     it("creates with arguments in correct order", () => {
-      expect(XYWH.fromString(xywh.toString()).toString()).toEqual(
+      expect(XYWHFragment.fromString(xywh.toString()).toString()).toEqual(
         xywh.toString()
       );
     });

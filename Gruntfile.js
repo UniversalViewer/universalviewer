@@ -32,13 +32,13 @@ module.exports = function(grunt) {
       build: {
         files: [
           // uv-dist-umd
-          {
-            expand: true,
-            cwd: config.directories.distumd,
-            src: ["**"],
-            dest:
-              config.directories.build + "/" + config.directories.distumd + "/",
-          },
+          // {
+          //   expand: true,
+          //   cwd: config.directories.distumd,
+          //   src: ["**"],
+          //   dest:
+          //     config.directories.build + "/" + config.directories.distumd + "/",
+          // },
           // assets
           {
             expand: true,
@@ -46,16 +46,17 @@ module.exports = function(grunt) {
             src: [config.directories.lib + "/bundle.js"],
             dest: config.directories.build + "/uv-assets/js/",
           },
-          {
-            expand: true,
-            flatten: true,
-            src: "src/img/*",
-            dest: config.directories.build + "/uv-assets/img/",
-          },
+          // {
+          //   expand: true,
+          //   flatten: true,
+          //   src: "src/img/*",
+          //   dest: config.directories.build + "/uv-assets/img/",
+          // },
           {
             expand: true,
             flatten: true,
             src: [
+              // Hopefully this is only needed for demo.
               config.directories.src + "/_headers",
               config.directories.src + "/collection.json",
               config.directories.src + "/favicon.ico",
@@ -206,21 +207,36 @@ module.exports = function(grunt) {
 
   grunt.registerTask("build", "", function() {
     grunt.task.run(
-      "clean:themes",
-      "clean:distumd",
-      "sync",
-      "copy:bundle",
-      "concat:bundle",
+      // "clean:themes",
+      // "clean:distumd",
+      // "sync",
+      // "copy:bundle",
+      // "concat:bundle",
+
+      // Cleans builds the extension config
       "clean:extension",
       "configure:apply",
+
+      // Cleans the .build folder
       "clean:build",
+
       //'copy:schema',
+
+      // Runs webpack.
       "webpack",
+
+      // Copies remaining non-webpack managed files:
+      //  - html + fixtures for demo
+      //  - JSON configuration
+      //  - bundle.js
       "copy:build",
-      "theme:create",
-      "theme:dist",
-      "replace:moduleassets",
-      "replace:themeassets",
+
+      // "theme:create",
+      // "theme:dist",
+      // "replace:moduleassets",
+      // "replace:themeassets",
+
+      // Cleans and copies .build to dist and www (could be consolidated, they are identical now)
       "clean:dist",
       "clean:www",
       "copy:dist",

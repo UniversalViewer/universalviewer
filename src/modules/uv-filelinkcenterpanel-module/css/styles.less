@@ -2,22 +2,19 @@
 .uv {
     .centerPanel {
 
-        @img-path: '../../../modules/uv-filelinkcenterpanel-module/img/';
-        @shared-img-path: '../../../modules/uv-shared-module/img/';
-
         .content {
 
             .scroll {
                 margin: @margin-medium-vertical @margin-medium-horizontal @margin-medium-vertical @margin-xlarge-horizontal;
                 overflow: auto;
-                
+
                 ol {
                     margin: @margin-medium-vertical 0 0 0;
                     padding: 0;
                     list-style-type: none;
 
                     li {
-                        
+
                         margin: 0 0 @margin-xlarge-vertical 0;
                         overflow: hidden;
 
@@ -43,7 +40,7 @@
 
                             .description {
                                 display: block;
-                                .icon-left('@{img-path}download.png', 24px, 24px);
+                                .icon-left(data-uri('../img/download.png'), 24px, 24px);
                                 line-height: 24px;
                                 margin: 0 0 0 -4px;
                             }
@@ -51,7 +48,7 @@
                     }
                 }
             }
-            
+
         }
     }
 }
