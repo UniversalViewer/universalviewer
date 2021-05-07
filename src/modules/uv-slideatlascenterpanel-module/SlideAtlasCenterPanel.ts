@@ -68,7 +68,6 @@ export class SlideAtlasCenterPanel extends CenterPanel {
     let imageId = id.substr(id.lastIndexOf("/") + 1);
 
     $.getJSON(tileDescriptor, info => {
-      debugger
       const tileSource = {
         height: info.sizeY,
         width: info.sizeX,
