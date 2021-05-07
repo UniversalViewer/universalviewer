@@ -13,7 +13,7 @@ describe('Universal Viewer', () => {
     const imageSrc = await page.$eval('#thumb0 img', e => e.src);
     expect(imageSrc).toEqual(
       expect.stringContaining(
-        'https://dlcs.io/iiif-img/wellcome/5/b18035723_0001.JP2/full/90,/0/default.jpg?t'
+        'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg?t=1620403788057'
       )
     );
   });
