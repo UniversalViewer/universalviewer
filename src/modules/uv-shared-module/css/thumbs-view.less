@@ -2,8 +2,6 @@
 
     .leftPanel {
 
-        @img-path: '../../../modules/uv-shared-module/img/';
-
         .views {
 
             .thumbsView {
@@ -30,22 +28,22 @@
                             }
 
                             &.loadingFailed {
-                                background-image: data-uri('@{img-path}error.png');
+                                background-image: data-uri('../img/error.png');
                                 background-repeat: no-repeat;
                                 background-position-x: 50%;
                                 background-position-y: 50%;
                             }
 
                             &.audio {
-                                background-image: data-uri('@{img-path}audio.png');
+                                background-image: data-uri('../img/audio.png');
                             }
 
                             &.video {
-                                background-image: data-uri('@{img-path}video.png');
+                                background-image: data-uri('../img/video.png');
                             }
 
                             &.hidden {
-                                background-image: data-uri('@{img-path}hidden_thumb.png');
+                                background-image: data-uri('../img/hidden_thumb.png');
                                 background-repeat: no-repeat;
                                 background-position-x: 50%;
                                 background-position-y: 50%;
@@ -102,7 +100,7 @@
                                 text-overflow: ellipsis;
                                 color: @brand-primary;
                                 padding-left: 14px;
-                                background-image: data-uri('@{img-path}search_result.png');
+                                background-image: data-uri('../img/search_result.png');
                                 background-repeat: no-repeat;
                                 background-position-x: 0px;
                                 background-position-y: 3px;
@@ -111,7 +109,7 @@
 
                         &.placeholder {
                             .wrap {
-                                background-image: data-uri('@{img-path}unavailable.png');
+                                background-image: data-uri('../img/unavailable.png');
                                 background-repeat: no-repeat;
                                 background-position-x: 50%;
                                 background-position-y: 50%;

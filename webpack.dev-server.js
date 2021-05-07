@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const express = require('express')
+const webpack = require('webpack');
+const pkg = require('./package.json');
 
 const config = {
   entry: {
@@ -26,6 +28,29 @@ const config = {
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+            }
+          },
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                strictMath: true,
+              },
+              additionalData: '@theme: "uv-en-gb-theme";',
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|gif|svg)$/i,
@@ -62,6 +87,9 @@ const config = {
     }
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      PACKAGE_VERSION: `${pkg.version} (development)`,
+    }),
     new HtmlWebpackPlugin({
       title: 'UV Examples',
       template: './src/html-templates/index.html',
