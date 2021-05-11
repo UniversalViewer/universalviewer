@@ -23,11 +23,11 @@ export class Shell extends BaseView {
     super.create();
 
     this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
-      this.$overlays.show();
+      this.$overlays.removeClass("hidden");
     });
 
     this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
-      this.$overlays.hide();
+      this.$overlays.addClass("hidden");
     });
 
     // Jump link
@@ -65,6 +65,7 @@ export class Shell extends BaseView {
 
     this.$overlays = $('<div class="overlays"></div>');
     this.$element.append(this.$overlays);
+    this.$overlays.addClass("hidden");
 
     this.$genericDialogue = $(
       '<div class="overlay genericDialogue" aria-hidden="true"></div>'
