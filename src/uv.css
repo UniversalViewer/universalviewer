@@ -9,9 +9,9 @@
 }
 
 /* avoid fouc */
-div.uv .uv * {
+/* div.uv .uv * {
   opacity: 0;
-}
+} */
 
 /* .uv.loading * {
   visibility: hidden !important;

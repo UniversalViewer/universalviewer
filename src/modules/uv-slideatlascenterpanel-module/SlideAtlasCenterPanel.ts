@@ -65,7 +65,7 @@ export class SlideAtlasCenterPanel extends CenterPanel {
     if (id.endsWith("/")) {
       id = id.substr(0, id.length - 1);
     }
-    let imageId = id.substr(id.lastIndexOf("/") + 1);
+    //let imageId = id.substr(id.lastIndexOf("/") + 1);
 
     $.getJSON(tileDescriptor, info => {
       const tileSource = {
@@ -79,10 +79,10 @@ export class SlideAtlasCenterPanel extends CenterPanel {
         spacing: [info.mm_x, info.mm_y],
         getTileUrl: function(level, x, y, z) {
           // https://images.slide-atlas.org/api/v1/item/5ad161631fbb9005ff24cd2c/tiles/zxy/3/0/4
-          // var prefix =
-          //   "https://slide-atlas.org/tile?img=5141c4094834a312d0b82d87&db=5074589002e31023d4292d83&name=";
-          var prefix =
-            `https://slide-atlas.org/tile?img=${imageId}&db=5074589002e31023d4292d83&name=`;
+           var prefix =
+             "https://slide-atlas.org/tile?img=5141c4094834a312d0b82d87&db=5074589002e31023d4292d83&name=";
+          //var prefix =
+          //  `https://slide-atlas.org/tile?img=${imageId}&db=5074589002e31023d4292d83&name=`;
           var name = prefix + "t";
           while (level > 0) {
             --level;
@@ -131,8 +131,10 @@ export class SlideAtlasCenterPanel extends CenterPanel {
           const services: Service[] = body[0].getServices();
 
           for (let i = 0; i < services.length; i++) {
-            const service: Service = services[i];
-            this.loadTilesource(service.id);
+            // const service: Service = services[i];
+            // this.loadTilesource(service.id);
+            // todo: remove
+            this.loadTilesource("https://images.slide-atlas.org/api/v1/item/5b68920870aaa94f2e5c00b1/");
             break;
           }
         }
