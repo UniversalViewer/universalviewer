@@ -1,3 +1,4 @@
+import { isVisible } from "../../Utils";
 import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
@@ -92,9 +93,9 @@ export class Shell extends BaseView {
     const mainHeight: number =
       this.$element.height() -
       parseInt(this.$mainPanel.css("paddingTop")) -
-      (this.$headerPanel.is(":visible") ? this.$headerPanel.height() : 0) -
-      (this.$footerPanel.is(":visible") ? this.$footerPanel.height() : 0) -
-      (this.$mobileFooterPanel.is(":visible")
+      (isVisible(this.$headerPanel) ? this.$headerPanel.height() : 0) -
+      (isVisible(this.$footerPanel) ? this.$footerPanel.height() : 0) -
+      (isVisible(this.$mobileFooterPanel)
         ? this.$mobileFooterPanel.height()
         : 0);
 
