@@ -283,7 +283,7 @@ export class ThumbsView extends BaseView {
 
           $wrap.append($img);
         } else {
-          $wrap.addClass("hidden");
+          $wrap.hide();
         }
       }
     }
