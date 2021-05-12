@@ -11,7 +11,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 import { Strings, Bools } from "@edsilv/utils";
-
+import "./theme/theme.less";
 export default class Extension extends BaseExtension
   implements IAlephExtension {
   $downloadDialogue: JQuery;
