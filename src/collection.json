@@ -1025,6 +1025,21 @@
           "visible": false
         }
       ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "SlideAtlas",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://slideatlas-test-manifests.netlify.app/collection/girder/index.json",
+          "@type": "sc:Manifest",
+          "label": "fish",
+          "visible": true
+        }
+      ]
     }
   ]
 }

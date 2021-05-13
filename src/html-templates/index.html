@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
+    <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
+    <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script>
+    <script src="uv-assets/js/bundle.js"></script>
+    <script src="uv-assets/themes/uv-en-gb-theme/index.js"></script>
+    <%= htmlWebpackPlugin.tags.headTags %>
+    <style>
+      body {
+        margin: 0px;
+        padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      #uv {
+        width: 924px;
+        height: 668px;
+        /* width: 1024px;
+            height: 576px; */
+      }
+
+      #uv-controls .group {
+        padding: 20px 0 0 0;
+      }
+
+      #uv-controls select {
+        width: 200px;
+      }
+
+      #uv-controls input {
+        width: 600px;
+      }
+
+      #uv-controls button {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
+
+    <div id="uv-controls">
+      <div class="group">
+        <select id="manifestSelect"></select>
+        <input id="manifest" type="text" value="" />
+        <button id="setManifestButton" class="button" href="#">
+          Set Manifest
+        </button>
+      </div>
+
+      <div class="group">
+        <input id="target" type="text" value="" />
+        <button id="setTargetButton" class="button" href="#">Set Target</button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function() {
+        var uv, manifest;
+
+        var urlDataProvider = new UV.URLDataProvider();
+
+        loadManifests(function() {
+          setSelectedManifest();
+          setupUV();
+        });
+
+        function setupUV() {
+          var collectionIndex = urlDataProvider.get("c");
+
+          var data = {
+            manifestUri: manifest,
+            configUri: "uv-config.json",
+            collectionIndex:
+              collectionIndex !== undefined
+                ? Number(collectionIndex)
+                : undefined,
+            manifestIndex: Number(urlDataProvider.get("m", 0)),
+            canvasIndex: Number(urlDataProvider.get("cv", 0)),
+            rotation: Number(urlDataProvider.get("r", 0)),
+            rangeId: urlDataProvider.get("rid", ""),
+            xywh: urlDataProvider.get("xywh", ""),
+            target: urlDataProvider.get("target", ""),
+            readOnlyDataProvider: false,
+          };
+
+          uv = UV.init("uv", data);
+
+          uv.on("created", function() {
+            utils.Urls.setHashParameter("manifest", manifest);
+          });
+
+          uv.on("load", function() {
+            console.log("load");
+            // uv.set({
+            //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+            // });
+          });
+
+          uv.on("targetChange", function(target) {
+            console.log("target change", target);
+            $("#target").val(target);
+          });
+
+          uv.on("toggleFullScreen", function(e) {
+            console.log("toggleFullScreen", e);
+          });
+        }
+
+        function loadManifests(cb) {
+          // load manifests
+          $.getJSON("collection.json", function(manifests) {
+            var $manifestSelect = $("#manifestSelect");
+
+            for (var i = 0; i < manifests.collections.length; i++) {
+              var collection = manifests.collections[i];
+
+              if (collection.visible === false) {
+                continue;
+              }
+
+              $manifestSelect.append(
+                '<optgroup label="' + collection.label + '">'
+              );
+
+              for (var j = 0; j < collection.manifests.length; j++) {
+                var manifest = collection.manifests[j];
+
+                if (manifest.visible !== false) {
+                  $manifestSelect.append(
+                    '<option value="' +
+                      manifest["@id"] +
+                      '">' +
+                      manifest.label +
+                      "</option>"
+                  );
+                }
+              }
+
+              $manifestSelect.append("</optgroup>");
+            }
+
+            cb();
+          });
+        }
+
+        function setSelectedManifest() {
+          manifest = utils.Urls.getHashParameter("manifest");
+
+          if (manifest) {
+            $("#manifestSelect").val(manifest);
+          } else {
+            var options = $("#manifestSelect option");
+
+            if (options.length) {
+              manifest = options[0].value;
+            }
+          }
+
+          $("#manifest").val(manifest);
+        }
+
+        $("#manifestSelect").on("change", function() {
+          $("#manifest").val($("#manifestSelect option:selected").val());
+        });
+
+        $("#setManifestButton").on("click", function() {
+          manifest = $("#manifest").val();
+
+          uv.set({
+            manifestUri: manifest,
+            canvasIndex: 0,
+          });
+        });
+
+        $("#setTargetButton").on("click", function() {
+          var target = $("#target").val();
+
+          console.log("test");
+
+          uv.set({
+            target: target,
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

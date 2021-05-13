@@ -26,7 +26,7 @@ export const isValidUrl = (value: string): boolean => {
 };
 
 export const debounce = (callback: (args: any) => void, wait: number) => {
-  let timeout: NodeJS.Timer;
+  let timeout;
   return (...args) => {
     const context = this;
     clearTimeout(timeout);
@@ -58,3 +58,43 @@ export const propertyChanged = (
 ): boolean => {
   return currentData[propertyName] !== newData[propertyName];
 };
+
+function appendScript(src: string) {
+  return new Promise<void>(resolve => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => resolve();
+    document.head.appendChild(script);
+  });
+}
+
+function appendCSS(src: string) {
+  return new Promise<void>(resolve => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = src;
+    link.onload = () => resolve();
+    document.head.appendChild(link);
+  });
+}
+
+export const loadScripts = async (sources: string[]) => {
+  await Promise.all(
+    sources.map(async (src: string) => {
+      await appendScript(src);
+    })
+  );
+}
+
+export const loadCSS = async (sources: string[]) => {
+  await Promise.all(
+    sources.map(async (src: string) => {
+      await appendCSS(src);
+    })
+  );
+}
+
+export const isVisible = (el: JQuery) => {
+  // return el.css("visibility") !== "hidden"
+  return el.is(":visible");
+}

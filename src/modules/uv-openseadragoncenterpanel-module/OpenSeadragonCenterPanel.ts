@@ -7,9 +7,9 @@ import {
   IExternalResourceData
 } from "manifesto.js";
 import { sanitize } from "../../Utils";
-import { ViewingDirection } from "@iiif/vocabulary";
+import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
-import { XYWH } from "../../extensions/uv-openseadragon-extension/XYWH";
+import { XYWHFragment } from "../../extensions/uv-openseadragon-extension/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
@@ -22,9 +22,9 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
-  currentBounds: XYWH | null;
+  currentBounds: XYWHFragment | null;
   handler: any;
-  initialBounds: XYWH | null;
+  initialBounds: XYWHFragment | null;
   initialRotation: any;
   isCreated: boolean = false;
   isLoaded: boolean = false;
@@ -134,7 +134,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWH) => {
+    this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWHFragment) => {
       this.whenLoaded(() => {
         this.fitToBounds(target, false);
       });
@@ -179,8 +179,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
 
+    // Transparent pixel
+    const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
     this.viewer = OpenSeadragon({
-      id: this.viewerId,
+      // id: this.viewerId,
+      element: this.$viewer[0],
       crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
@@ -213,7 +217,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: this.extension.data.assetsDir + "/img/",
+      prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config.options.clickToZoomEnabled,
@@ -222,46 +226,46 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       },
       navImages: {
         zoomIn: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         zoomOut: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         home: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         rotateright: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         rotateleft: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         next: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         },
         previous: {
-          REST: "pixel.gif",
-          GROUP: "pixel.gif",
-          HOVER: "pixel.gif",
-          DOWN: "pixel.gif"
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel
         }
       }
     });
@@ -269,21 +273,25 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
     this.$zoomInButton.attr("tabindex", 0);
     this.$zoomInButton.prop("title", this.content.zoomIn);
+    this.$zoomInButton.prop("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.prop("title", this.content.zoomOut);
+    this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
 
     this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton.attr("tabindex", 0);
     this.$goHomeButton.prop("title", this.content.goHome);
+    this.$goHomeButton.prop("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
 
     this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.prop("title", this.content.rotateRight);
+    this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
@@ -421,7 +429,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.$prevButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$prevButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 
@@ -439,7 +447,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       }
     });
 
-    this.$nextButton.onPressed((e: any) => {
+    this.onAccessibleClick(this.$nextButton, (e: any) => {
       e.preventDefault();
       OpenSeadragon.cancelEvent(e);
 
@@ -515,6 +523,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
               this.openPagesHandler();
             }
             this.resize();
+            this.goHome();
           }
         });
       }
@@ -703,7 +712,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         .data as IOpenSeadragonExtensionData).xywh;
 
       if (xywh) {
-        this.initialBounds = XYWH.fromString(xywh);
+        this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
       }
@@ -759,7 +768,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$nextButton.show();
   }
 
-  fitToBounds(bounds: XYWH, immediate: boolean = true): void {
+  fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
     const rect = new OpenSeadragon.Rect();
     rect.x = Number(bounds.x);
     rect.y = Number(bounds.y);
@@ -781,7 +790,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     );
 
     if (dimensions) {
-      const bounds: XYWH = new XYWH(
+      const bounds: XYWHFragment = new XYWHFragment(
         dimensions.regionPos.x,
         dimensions.regionPos.y,
         dimensions.region.width,
@@ -793,11 +802,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     return null;
   }
 
-  getViewportBounds(): XYWH | null {
+  getViewportBounds(): XYWHFragment | null {
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const b: any = this.viewer.viewport.getBounds(true);
-    const bounds: XYWH = new XYWH(
+    const bounds: XYWHFragment = new XYWHFragment(
       Math.floor(b.x),
       Math.floor(b.y),
       Math.floor(b.width),
@@ -1031,7 +1040,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       )
     ) {
       this.fitToBounds(
-        new XYWH(
+        new XYWHFragment(
           annotationRect.viewportX,
           annotationRect.viewportY,
           annotationRect.width,
@@ -1049,7 +1058,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       const w: number = this.currentBounds.w;
       const h: number = this.currentBounds.h;
 
-      const bounds: XYWH = new XYWH(x, y, w, h);
+      const bounds: XYWHFragment = new XYWHFragment(x, y, w, h);
       this.fitToBounds(bounds);
     }
 

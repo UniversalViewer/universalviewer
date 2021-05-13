@@ -13,14 +13,14 @@ module.exports = {
           "@iiif/iiif-metadata-component/dist/MetadataComponent.js",
           "@iiif/iiif-tree-component/dist/TreeComponent.js"
         ],
-        dest: config.directories.uvEbookExtension + "/lib"
+        dest: "./src/extensions/uv-ebook-extension/lib"
       },
       {
         cwd: config.directories.npm,
         expand: true,
         flatten: true,
         src: "@universalviewer/uv-ebook-components/dist/uv-ebook-components/*",
-        dest: config.directories.uvEbookExtension + "/lib"
+        dest: "./src/extensions/uv-ebook-extension/lib"
       }
     ]
   }

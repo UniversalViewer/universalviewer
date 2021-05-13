@@ -1,5 +1,6 @@
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
+import { BaseEvents } from "./BaseEvents";
 
 export class BaseExpandPanel extends BaseView {
   isExpanded: boolean = false;
@@ -7,6 +8,7 @@ export class BaseExpandPanel extends BaseView {
   isUnopened: boolean = true;
   autoToggled: boolean = false;
   expandFullEnabled: boolean = true;
+  reducedAnimation = false;
 
   $closed: JQuery;
   $closedTitle: JQuery;
@@ -27,49 +29,51 @@ export class BaseExpandPanel extends BaseView {
     this.$top = $('<div class="top"></div>');
     this.$element.append(this.$top);
 
-    this.$title = $('<div class="title"></div>');
-    this.$title.prop("title", this.content.title);
+    this.$title = $('<h2 class="title"></h2>');
     this.$top.append(this.$title);
 
     this.$expandFullButton = $('<a class="expandFullButton" tabindex="0"></a>');
-    this.$expandFullButton.prop("title", this.content.expandFull);
     this.$top.append(this.$expandFullButton);
 
     if (!Bools.getBool(this.config.options.expandFullEnabled, true)) {
       this.$expandFullButton.hide();
     }
 
-    this.$collapseButton = $('<div class="collapseButton" tabindex="0"></div>');
+    this.$collapseButton = $(
+      '<div role="button" class="collapseButton" tabindex="0"></div>'
+    );
     this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
-    this.$expandButton = $('<a class="expandButton" tabindex="0"></a>');
+    this.$expandButton = $(
+      '<a role="button" class="expandButton" tabindex="0"></a>'
+    );
     this.$expandButton.prop("title", this.content.expand);
+
     this.$closed.append(this.$expandButton);
 
     this.$closedTitle = $('<a class="title"></a>');
-    this.$closedTitle.prop("title", this.content.title);
     this.$closed.append(this.$closedTitle);
 
     this.$main = $('<div class="main"></div>');
     this.$element.append(this.$main);
 
-    this.$expandButton.onPressed(() => {
+    this.onAccessibleClick(this.$expandButton, () => {
       this.toggle();
     });
 
-    this.$expandFullButton.onPressed(() => {
+    this.$expandFullButton.on("click", () => {
       this.expandFull();
     });
 
-    this.$closedTitle.onPressed(() => {
+    this.$closedTitle.on("click", () => {
       this.toggle();
     });
 
-    this.$title.onPressed(() => {
+    this.$title.on("click", () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -77,7 +81,7 @@ export class BaseExpandPanel extends BaseView {
       }
     });
 
-    this.$collapseButton.onPressed(() => {
+    this.onAccessibleClick(this.$collapseButton, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -87,6 +91,11 @@ export class BaseExpandPanel extends BaseView {
 
     this.$top.hide();
     this.$main.hide();
+
+    // Subscribe to settings change.
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
+      this.reducedAnimation = args.reducedAnimation || false;
+    });
   }
 
   init(): void {
@@ -111,16 +120,24 @@ export class BaseExpandPanel extends BaseView {
       this.$closed.show();
     }
 
-    this.$element.stop().animate(
-      {
-        width: this.getTargetWidth(),
-        left: this.getTargetLeft()
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.toggled();
-      }
-    );
+    if (this.reducedAnimation) {
+      // This is reduced motion.
+      this.$element.css("width", this.getTargetWidth());
+      this.$element.css("left", this.getTargetLeft());
+      this.toggled();
+    } else {
+      // Otherwise animate.
+      this.$element.stop().animate(
+        {
+          width: this.getTargetWidth(),
+          left: this.getTargetLeft()
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.toggled();
+        }
+      );
+    }
   }
 
   toggled(): void {

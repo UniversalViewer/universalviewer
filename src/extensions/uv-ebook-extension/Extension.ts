@@ -95,7 +95,7 @@ export default class Extension extends BaseExtension
     this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
     this.$downloadDialogue = $(
-      '<div class="overlay download" aria-hidden="true"></div>'
+      '<div class="overlay download" aria-hidden="true" role="region"></div>'
     );
     this.shell.$overlays.append(this.$downloadDialogue);
     this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);

@@ -1,3 +1,4 @@
+import { isVisible } from "../../Utils";
 import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
@@ -29,6 +30,13 @@ export class Shell extends BaseView {
       this.$overlays.hide();
     });
 
+    // Jump link
+    this.$element.append(
+      '<a class="sr-only" href="#download-btn">' +
+        this.extension.data.config.content.skipToDownload +
+        "</a>"
+    );
+
     this.$headerPanel = $('<div class="headerPanel"></div>');
     this.$element.append(this.$headerPanel);
 
@@ -36,6 +44,11 @@ export class Shell extends BaseView {
     this.$element.append(this.$mainPanel);
 
     this.$centerPanel = $('<div class="centerPanel"></div>');
+    this.$centerPanel.append(
+      '<h2 class="sr-only">' +
+        this.extension.data.config.content.mediaViewer +
+        "</h2>"
+    );
     this.$mainPanel.append(this.$centerPanel);
 
     this.$leftPanel = $('<div class="leftPanel"></div>');
@@ -52,6 +65,7 @@ export class Shell extends BaseView {
 
     this.$overlays = $('<div class="overlays"></div>');
     this.$element.append(this.$overlays);
+    this.$overlays.hide();
 
     this.$genericDialogue = $(
       '<div class="overlay genericDialogue" aria-hidden="true"></div>'
@@ -80,9 +94,9 @@ export class Shell extends BaseView {
     const mainHeight: number =
       this.$element.height() -
       parseInt(this.$mainPanel.css("paddingTop")) -
-      (this.$headerPanel.is(":visible") ? this.$headerPanel.height() : 0) -
-      (this.$footerPanel.is(":visible") ? this.$footerPanel.height() : 0) -
-      (this.$mobileFooterPanel.is(":visible")
+      (isVisible(this.$headerPanel) ? this.$headerPanel.height() : 0) -
+      (isVisible(this.$footerPanel) ? this.$footerPanel.height() : 0) -
+      (isVisible(this.$mobileFooterPanel)
         ? this.$mobileFooterPanel.height()
         : 0);
 

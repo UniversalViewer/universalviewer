@@ -13,7 +13,7 @@ import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/R
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
-import { ExternalResourceType, MediaType } from "@iiif/vocabulary";
+import { ExternalResourceType, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   LanguageMap,
   Thumb,
@@ -21,6 +21,7 @@ import {
   Annotation,
   AnnotationBody
 } from "manifesto.js";
+import { TFragment } from "../uv-openseadragon-extension/TFragment";
 
 export default class Extension extends BaseExtension
   implements IMediaElementExtension {
@@ -82,6 +83,14 @@ export default class Extension extends BaseExtension
 
     this.component.subscribe(Events.MEDIA_PLAYED, () => {
       this.fire(Events.MEDIA_PLAYED);
+    });
+
+    this.component.subscribe(Events.MEDIA_TIME_UPDATE, (t: number) => {
+      const canvas: Canvas = this.helper.getCurrentCanvas();
+      if (canvas) {
+        this.data.target = canvas.id + "#" + `t=${t}`;
+        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+      }
     });
   }
 
@@ -145,6 +154,30 @@ export default class Extension extends BaseExtension
 
   render(): void {
     super.render();
+
+    this.checkForTarget();
+  }
+
+  checkForTarget(): void {
+    if (this.data.target) {
+      // Split target into canvas id and selector
+      const components: string[] = this.data.target.split("#");
+      const canvasId: string = components[0];
+
+      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)
+      const index: number | null = this.helper.getCanvasIndexById(canvasId);
+
+      if (index !== null && this.helper.canvasIndex !== index) {
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+      }
+
+      // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
+      const selector: string = components[1];
+      this.component.publish(
+        BaseEvents.SET_TARGET,
+        TFragment.fromString(selector)
+      );
+    }
   }
 
   isLeftPanelEnabled(): boolean {

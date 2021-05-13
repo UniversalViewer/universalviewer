@@ -5,7 +5,7 @@ import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import OpenSeadragonExtension from "./Extension";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Async, Strings, Bools, Files } from "@edsilv/utils";
-import { MediaType } from "@iiif/vocabulary";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   Annotation,
   Canvas,

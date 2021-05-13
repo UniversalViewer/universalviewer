@@ -13,19 +13,12 @@ import {
   Annotation,
   AnnotationBody
 } from "manifesto.js";
-import { MediaType } from "@iiif/vocabulary";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   applyPolyfills,
   defineCustomElements
 } from "@universalviewer/aleph/loader";
-//import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
-<<<<<<< HEAD
-import "@universalviewer/aleph/dist/collection/assets/draco_decoder.js";
-import "@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js";
-=======
->>>>>>> webpack-al
-//import "@universalviewer/aleph/dist/collection/assets/ami.min";
 
 export class AlephCenterPanel extends CenterPanel {
   private _alViewer: any;
@@ -50,11 +43,7 @@ export class AlephCenterPanel extends CenterPanel {
     this.$content.prepend(this._alViewer);
     this._alViewer.setAttribute("width", "100%");
     this._alViewer.setAttribute("height", "100%");
-<<<<<<< HEAD
-    const dracoDecoderPath: string = "https://unpkg.com/@universalviewer/aleph/dist/collection/assets/"; // (window.self !== window.top)? "js/" : "uv-assets/js/";
-=======
     const dracoDecoderPath: string = "https://www.gstatic.com/draco/v1/decoders/";
->>>>>>> webpack-al
     this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
 
     this._alViewer.addEventListener(

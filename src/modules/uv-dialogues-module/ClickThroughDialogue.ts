@@ -31,7 +31,7 @@ export class ClickThroughDialogue extends Dialogue {
       this.close();
     });
 
-    this.$title = $("<h1></h1>");
+    this.$title = $(`<div role="heading" class="heading"></div>`);
     this.$content.append(this.$title);
 
     this.$content.append(

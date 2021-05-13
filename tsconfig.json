@@ -2,7 +2,7 @@
   "compilerOptions": {
     "incremental": true,
     "module": "ESNext",
-    "sourceMap": false,
+    "sourceMap": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": false,
