@@ -28,6 +28,16 @@
 
 // end media queries
 
+.hidden() {
+    display: none;
+    // visibility: hidden;
+}
+
+.visible() {
+    display: block;
+    // visibility: visible;
+}
+
 .loading(@img) {
     background-image: url(@img);
     background-repeat: no-repeat;
@@ -51,7 +61,7 @@
 }
 
 .icon-btn-2(@img) {
-    background-image: data-uri(@img);
+    background-image: @img;
     background-repeat: no-repeat;
     display: inline-block;
     height: 30px;
@@ -61,7 +71,7 @@
 }
 
 .icon-btn(@img, @height) {
-    background-image: data-uri(@img);
+    background-image: @img;
     background-repeat: no-repeat;
     height: @height;
     line-height: @height;

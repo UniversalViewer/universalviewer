@@ -2,7 +2,7 @@
 
     .centerPanel {
 
-        @img-path: '../../../modules/uv-pdfcenterpanel-module/img/';
+
 
         .content {
 
@@ -24,7 +24,7 @@
             button {
                 color: #fff;
             }
-            
+
             // canvas {
             //     position: absolute;
             // }
@@ -48,7 +48,7 @@
 
                 &.zoomIn{
                     cursor: pointer !important;
-                    background-image: data-uri('@{img-path}zoom_in.png') !important;
+                    background-image: data-uri('../img/zoom_in.png') !important;
                     width: 28px;
                     height: 28px;
                     margin: 3px !important;
@@ -64,7 +64,7 @@
 
                 &.zoomOut{
                     cursor: pointer !important;
-                    background-image: data-uri('@{img-path}zoom_out.png') !important;
+                    background-image: data-uri('../img/zoom_out.png') !important;
                     width: 28px;
                     height: 28px;
                     margin: 3px !important;
@@ -80,17 +80,17 @@
 
                 &.prev {
                     margin-left: 5px;
-                    background-image: data-uri('@{img-path}left_arrow.png');
+                    background-image: data-uri('../img/left_arrow.png');
                     &.disabled {
-                        background-image: data-uri('@{img-path}left_arrow_disabled.png');
+                        background-image: data-uri('../img/left_arrow_disabled.png');
                     }
                 }
 
                 &.next {
                     margin-right: 20px;
-                    background-image: data-uri('@{img-path}right_arrow.png');
+                    background-image: data-uri('../img/right_arrow.png');
                     &.disabled {
-                        background-image: data-uri('@{img-path}right_arrow_disabled.png');
+                        background-image: data-uri('../img/right_arrow_disabled.png');
                     }
                 }
             }

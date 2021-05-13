@@ -16,6 +16,9 @@
     <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script>
+
+    <script type="text/javascript" src="uv-assets/themes/uv-en-gb-theme/index.js"></script>
+
     <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
       body {
@@ -191,7 +194,7 @@
 
       $("#setTargetButton").on("click", function() {
         var target = $("#target").val();
-
+        
         uv.set({
           target: target
         });

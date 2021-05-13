@@ -18,6 +18,7 @@ import {
   Range
 } from "manifesto.js";
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
+import { isVisible } from "../../Utils";
 
 export class ContentLeftPanel extends LeftPanel {
   $bottomOptions: JQuery;
@@ -117,7 +118,6 @@ export class ContentLeftPanel extends LeftPanel {
     this.$thumbsButton = $(
       '<a class="thumbs tab" tabindex="0">' + this.content.thumbnails + "</a>"
     );
-    this.$thumbsButton.prop("title", this.content.thumbnails);
     this.$tabs.append(this.$thumbsButton);
 
     this.$tabsContent = $('<div class="tabsContent"></div>');
@@ -170,7 +170,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.$treeView = $('<div class="treeView"></div>');
     this.$views.append(this.$treeView);
 
-    this.$thumbsView = $('<div class="thumbsView" tabindex="0"></div>');
+    this.$thumbsView = $('<div class="thumbsView" tabindex="-1"></div>');
     this.$views.append(this.$thumbsView);
 
     this.$galleryView = $('<div class="galleryView"></div>');
@@ -194,11 +194,11 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$treeViewOptions.hide();
 
-    this.$treeButton.onPressed(() => {
+    this.onAccessibleClick(this.$treeButton, () => {
       this.openTreeView();
     });
 
-    this.$thumbsButton.onPressed(() => {
+    this.onAccessibleClick(this.$thumbsButton, () => {
       this.openThumbsView();
     });
 
@@ -374,7 +374,6 @@ export class ContentLeftPanel extends LeftPanel {
 
   setTreeTabTitle(title: string): void {
     this.$treeButton.text(title);
-    this.$treeButton.prop("title", title);
   }
 
   updateTreeTabBySelection(): void {
@@ -801,7 +800,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$tabsContent.height(
       this.$main.height() -
-        (this.$tabs.is(":visible") ? this.$tabs.height() : 0) -
+        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
         this.$tabsContent.verticalPadding()
     );
     this.$views.height(

@@ -38,7 +38,7 @@ export class MultiSelectDialogue extends Dialogue {
       multiSelectState.setEnabled(false);
     });
 
-    this.$title = $("<h1></h1>");
+    this.$title = $(`<div role="heading" class="heading"></div>`);
     this.$content.append(this.$title);
     this.$title.text(this.content.title);
 

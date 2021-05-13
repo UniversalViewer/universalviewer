@@ -1,4 +1,4 @@
-export class XYWH {
+export class XYWHFragment {
   public x: number;
   public y: number;
   public w: number;
@@ -15,10 +15,10 @@ export class XYWH {
     return `${this.x},${this.y},${this.w},${this.h}`;
   }
 
-  static fromString(bounds: string): XYWH {
+  static fromString(bounds: string): XYWHFragment {
     bounds = bounds.replace("xywh=", "");
     const boundsArr: string[] = bounds.split(",");
-    return new XYWH(
+    return new XYWHFragment(
       Number(boundsArr[0]),
       Number(boundsArr[1]),
       Number(boundsArr[2]),

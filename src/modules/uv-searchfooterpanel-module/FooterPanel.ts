@@ -103,7 +103,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchContainer.append(this.$searchOptions);
 
     this.$searchLabel = $(
-      '<span class="label">' + this.content.searchWithin + "</span>"
+      '<label class="label" for="searchWithinInput">' +
+        this.content.searchWithin +
+        "</label>"
     );
     this.$searchOptions.append(this.$searchLabel);
 
@@ -111,7 +113,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchOptions.append(this.$searchTextContainer);
 
     this.$searchText = $(
-      '<input class="searchText" type="text" maxlength="100" value="' +
+      '<input class="searchText" id="searchWithinInput" type="text" maxlength="100" value="' +
         this.content.enterKeyword +
         '" aria-label="' +
         this.content.searchWithin +
@@ -120,7 +122,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchTextContainer.append(this.$searchText);
 
     this.$searchButton = $(
-      '<a class="imageButton searchButton" tabindex="0"></a>'
+      '<button class="imageButton searchButton"></button>'
     );
     this.$searchTextContainer.append(this.$searchButton);
 
@@ -132,11 +134,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerContainer.prepend(this.$searchPagerControls);
 
     this.$previousResultButton = $(
-      '<a class="previousResult" title="' +
+      '<button class="previousResult">' +
         this.content.previousResult +
-        '">' +
-        this.content.previousResult +
-        "</a>"
+        "</button>"
     );
     this.$searchPagerControls.append(this.$previousResultButton);
 
@@ -146,20 +146,12 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchPagerControls.append(this.$searchResultsInfo);
 
     this.$clearSearchResultsButton = $(
-      '<a class="clearSearch" title="' +
-        this.content.clearSearch +
-        '">' +
-        this.content.clearSearch +
-        "</a>"
+      '<button class="clearSearch">' + this.content.clearSearch + "</button>"
     );
     this.$searchResultsInfo.append(this.$clearSearchResultsButton);
 
     this.$nextResultButton = $(
-      '<a class="nextResult" title="' +
-        this.content.nextResult +
-        '">' +
-        this.content.nextResult +
-        "</a>"
+      '<button class="nextResult">' + this.content.nextResult + "</button>"
     );
     this.$searchPagerControls.append(this.$nextResultButton);
 
@@ -179,7 +171,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$placemarkerDetails = $('<div class="placeMarkerDetails"></div>');
     this.$searchResultsContainer.append(this.$placemarkerDetails);
 
-    this.$placemarkerDetailsTop = $("<h1></h1>");
+    this.$placemarkerDetailsTop = $(
+      `<div role="heading" class="heading"></div>`
+    );
     this.$placemarkerDetails.append(this.$placemarkerDetailsTop);
 
     this.$placemarkerDetailsBottom = $("<p></p>");
@@ -220,7 +214,7 @@ export class FooterPanel extends BaseFooterPanel {
       placemarkers.removeClass("hover");
     });
 
-    this.$placemarkerDetails.on("click", () => {
+    this.onAccessibleClick(this.$placemarkerDetails, () => {
       that.component.publish(
         BaseEvents.CANVAS_INDEX_CHANGE,
         this.currentPlacemarkerIndex
@@ -489,6 +483,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     // clear all existing placemarkers
     const placemarkers: JQuery = this.getSearchResultPlacemarkers();
+    const shouldFocus = placemarkers.length === 0;
     placemarkers.remove();
 
     const pageWidth = this.getPageLineRatio();
@@ -502,7 +497,7 @@ export class FooterPanel extends BaseFooterPanel {
       const result: AnnotationGroup = searchResults[i];
       const distance: number = result.canvasIndex * pageWidth;
       const $placemarker: JQuery = $(
-        '<div class="searchResultPlacemarker" data-index="' +
+        '<div class="searchResultPlacemarker" tabindex="0" data-index="' +
           result.canvasIndex +
           '"></div>'
       );
@@ -516,7 +511,24 @@ export class FooterPanel extends BaseFooterPanel {
       $placemarker.mouseenter(function(e: any) {
         that.onPlacemarkerMouseEnter.call(this, that);
       });
+      $placemarker.focus(function(e: any) {
+        that.onPlacemarkerMouseEnter.call(this, that);
+      });
+      this.onAccessibleClick(
+        $placemarker,
+        e => {
+          that.component.publish(
+            BaseEvents.CANVAS_INDEX_CHANGE,
+            this.currentPlacemarkerIndex
+          );
+          that.onPlacemarkerMouseLeave.call(this, e, that);
+        },
+        false
+      );
       $placemarker.mouseleave(function(e: any) {
+        that.onPlacemarkerMouseLeave.call(this, e, that);
+      });
+      $placemarker.blur(function(e: any) {
         that.onPlacemarkerMouseLeave.call(this, e, that);
       });
 
@@ -529,6 +541,10 @@ export class FooterPanel extends BaseFooterPanel {
         top: top,
         left: left
       });
+
+      if (i === 0 && shouldFocus) {
+        $placemarker.focus();
+      }
     }
   }
 

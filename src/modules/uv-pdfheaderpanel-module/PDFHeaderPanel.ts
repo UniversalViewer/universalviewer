@@ -46,7 +46,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     this.$firstButton = $(`
           <button class="btn imageBtn first" tabindex="0" title="${this.content.first}">
-            <i class="uv-icon-first" aria-hidden="true"></i>${this.content.first}
+            <i class="uv-icon-first" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.first}</span>
           </button>
         `);
     this.$prevOptions.append(this.$firstButton);
@@ -54,7 +55,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     this.$prevButton = $(`
           <button class="btn imageBtn prev" tabindex="0" title="${this.content.previous}">
-            <i class="uv-icon-prev" aria-hidden="true"></i>${this.content.previous}
+            <i class="uv-icon-prev" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.previous}</span>
           </button>
         `);
     this.$prevOptions.append(this.$prevButton);
@@ -84,7 +86,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     this.$nextButton = $(`
           <button class="btn imageBtn next" tabindex="0" title="${this.content.next}">
-            <i class="uv-icon-next" aria-hidden="true"></i>${this.content.next}
+            <i class="uv-icon-next" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.next}</span>
           </button>
         `);
     this.$nextOptions.append(this.$nextButton);
@@ -92,7 +95,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     this.$lastButton = $(`
           <button class="btn imageBtn last" tabindex="0" title="${this.content.last}">
-            <i class="uv-icon-last" aria-hidden="true"></i>${this.content.last}
+            <i class="uv-icon-last" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.last}</span>
           </button>
         `);
     this.$nextOptions.append(this.$lastButton);

@@ -29,15 +29,6 @@ export default class Extension extends BaseExtension
   create(): void {
     super.create();
 
-    // listen for mediaelement enter/exit fullscreen events.
-    $(window).bind("enterfullscreen", () => {
-      this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
-    });
-
-    $(window).bind("exitfullscreen", () => {
-      this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
-    });
-
     this.component.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {

@@ -18,10 +18,9 @@
 @import 'lg';
 @import 'xl';
 
-@img-path: '../../../modules/uv-shared-module/img/';
 
 .hidden {
-    display: none;
+    .hidden();
 }
 
 .uv {
@@ -48,7 +47,7 @@
 
     .action, a.action.black, input.action {
         display: inline-block;
-        background-image: data-uri('@{img-path}sprite.png');
+        background-image: data-uri('../img/sprite.png');
         background-position-x: 0;
         background-position-y: -1000px;
         background-repeat: no-repeat;
@@ -78,7 +77,7 @@
             display: none;
         }
     }
-    
+
     #commsFrame {
         width: 1px;
         height: 1px;
@@ -151,7 +150,6 @@
 }
 
 /* avoid fouc */
-div.uv .uv * {
-    visibility: visible;
-    opacity: 1;
-}
+// div.uv .uv * {
+//     opacity: 1;
+// }

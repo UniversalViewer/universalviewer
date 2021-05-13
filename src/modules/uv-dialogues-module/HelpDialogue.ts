@@ -26,7 +26,7 @@ export class HelpDialogue extends Dialogue {
       this.close();
     });
 
-    this.$title = $("<h1></h1>");
+    this.$title = $(`<div role="heading" class="heading"></div>`);
     this.$content.append(this.$title);
 
     this.$scroll = $('<div class="scroll"></div>');

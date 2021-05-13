@@ -76,14 +76,16 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     this.$firstButton = $(`
           <button class="btn imageBtn first" tabindex="0" title="${this.content.first}">
-            <i class="uv-icon-first" aria-hidden="true"></i><span>${this.content.first}</span>
+            <i class="uv-icon-first" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.first}</span>
           </button>
         `);
     this.$prevOptions.append(this.$firstButton);
 
     this.$prevButton = $(`
           <button class="btn imageBtn prev" tabindex="0" title="${this.content.previous}">
-            <i class="uv-icon-prev" aria-hidden="true"></i><span>${this.content.previous}</span>
+            <i class="uv-icon-prev" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.previous}</span>
           </button>
         `);
     this.$prevOptions.append(this.$prevButton);
@@ -205,7 +207,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      `<a class="go btn btn-primary" title="${this.content.go}" tabindex="0">${this.content.go}</a>`
+      `<a class="go btn btn-primary" tabindex="0">${this.content.go}</a>`
     );
     this.$search.append(this.$searchButton);
 
@@ -214,14 +216,16 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     this.$nextButton = $(`
           <button class="btn imageBtn next" tabindex="0" title="${this.content.next}">
-            <i class="uv-icon-next" aria-hidden="true"></i><span>${this.content.next}</span>
+            <i class="uv-icon-next" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.next}</span>
           </button>
         `);
     this.$nextOptions.append(this.$nextButton);
 
     this.$lastButton = $(`
           <button class="btn imageBtn last" tabindex="0" title="${this.content.last}">
-            <i class="uv-icon-last" aria-hidden="true"></i><span>${this.content.last}</span>
+            <i class="uv-icon-last" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.last}</span>
           </button>
         `);
     this.$nextOptions.append(this.$lastButton);
@@ -244,8 +248,9 @@ export class PagingHeaderPanel extends HeaderPanel {
     }
 
     this.$galleryButton = $(`
-          <button class="btn imageBtn gallery" title="${this.content.gallery}" tabindex="0">
-            <i class="uv-icon-gallery" aria-hidden="true"></i>${this.content.gallery}
+          <button class="btn imageBtn gallery" title="${this.content.gallery}">
+            <i class="uv-icon-gallery" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.gallery}</span>
           </button>
         `);
     this.$rightOptions.prepend(this.$galleryButton);
@@ -254,14 +259,16 @@ export class PagingHeaderPanel extends HeaderPanel {
     this.$rightOptions.prepend(this.$pagingToggleButtons);
 
     this.$oneUpButton = $(`
-          <button class="btn imageBtn one-up" title="${this.content.oneUp}" tabindex="0">
-            <i class="uv-icon-one-up" aria-hidden="true"></i>${this.content.oneUp}
+          <button class="btn imageBtn one-up" title="${this.content.oneUp}">
+            <i class="uv-icon-one-up" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.oneUp}</span>
           </button>`);
     this.$pagingToggleButtons.append(this.$oneUpButton);
 
     this.$twoUpButton = $(`
-          <button class="btn imageBtn two-up" title="${this.content.twoUp}" tabindex="0">
-            <i class="uv-icon-two-up" aria-hidden="true"></i>${this.content.twoUp}
+          <button class="btn imageBtn two-up" title="${this.content.twoUp}">
+            <i class="uv-icon-two-up" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.twoUp}</span>
           </button>
         `);
     this.$pagingToggleButtons.append(this.$twoUpButton);
