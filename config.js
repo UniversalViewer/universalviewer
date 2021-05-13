@@ -3,9 +3,6 @@ const metadata = require('./package');
 module.exports = function () {
     this.name = metadata.name;
     this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
-<<<<<<< HEAD
-    this.wwwPort = 8002;
-=======
     this.dependencies = {
         // goes in assets/js/
         bundle: [
@@ -15,7 +12,6 @@ module.exports = function () {
             'src/lib/window.js'
         ]
     };
->>>>>>> webpack-al
     this.directories = {
         bower: './lib',
         build: './.build',
