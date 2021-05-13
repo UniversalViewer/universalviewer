@@ -177,18 +177,18 @@ export class Viewer extends BaseComponent implements IUVComponent {
     };
 
     this._extensionRegistry[MediaType.DRACO] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLB] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.GLTF] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.ALEPH]
+      //load: this._extensions[Extension.MODELVIEWER]
     };
 
     this._extensionRegistry[MediaType.DICOM] = {
