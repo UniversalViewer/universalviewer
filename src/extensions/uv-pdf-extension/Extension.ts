@@ -13,7 +13,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
-import './theme/theme.less';
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension implements IPDFExtension {
   $downloadDialogue: JQuery;

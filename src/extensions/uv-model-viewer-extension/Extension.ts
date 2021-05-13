@@ -18,6 +18,7 @@ import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Events } from "./Events";
 import { Orbit } from "./Orbit";
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension
   implements IModelViewerExtension {

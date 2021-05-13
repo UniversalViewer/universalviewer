@@ -43,7 +43,7 @@ import {
   Size,
   Utils
 } from "manifesto.js";
-import './theme/theme.less';
+import "./theme/theme.less";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
