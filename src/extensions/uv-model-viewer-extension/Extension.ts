@@ -16,6 +16,8 @@ import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-
 import { ExternalResourceType } from "@iiif/vocabulary";
 import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
+import { Events } from "./Events";
+import { Orbit } from "./Orbit";
 
 export default class Extension extends BaseExtension
   implements IModelViewerExtension {
@@ -40,7 +42,7 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
@@ -49,9 +51,17 @@ export default class Extension extends BaseExtension
     this.component.subscribe(
       BaseEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
       }
     );
+
+    this.component.subscribe(Events.CAMERA_CHANGE, (orbit: Orbit) => {
+      const canvas: Canvas = this.helper.getCurrentCanvas();
+      if (canvas) {
+        this.data.target = canvas.id + "#" + `orbit=${orbit.toString()}`;
+        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+      }
+    });
   }
 
   createModules(): void {
@@ -121,6 +131,27 @@ export default class Extension extends BaseExtension
 
   render(): void {
     super.render();
+
+    this.checkForTarget();
+  }
+
+  checkForTarget(): void {
+    if (this.data.target) {
+      // Split target into canvas id and selector
+      const components: string[] = this.data.target.split("#");
+      const canvasId: string = components[0];
+
+      // get canvas index of canvas id and trigger CANVAS_INDEX_CHANGE (if different)
+      const index: number | null = this.helper.getCanvasIndexById(canvasId);
+
+      if (index !== null && this.helper.canvasIndex !== index) {
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+      }
+
+      // trigger SET_TARGET which sets the camera-orbit attribute in ModelViewerCenterPanel
+      const selector: string = components[1];
+      this.component.publish(BaseEvents.SET_TARGET, Orbit.fromString(selector));
+    }
   }
 
   isLeftPanelEnabled(): boolean {
@@ -148,10 +179,8 @@ export default class Extension extends BaseExtension
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    //const configUri: string = this.data.config.uri || '';
-    //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
     const appUri: string = this.getAppUri();
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
     const script: string = Strings.format(
       template,
       iframeSrc,

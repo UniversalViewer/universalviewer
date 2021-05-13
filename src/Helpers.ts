@@ -1,14 +1,22 @@
-function createUV(selector, data) {
-  var uv;
-  var isFullScreen = false;
-  var container = document.getElementById(selector);
-  container.innerHTML = "";
-  var parent = document.createElement("div");
-  container.appendChild(parent);
-  var uv = document.createElement("div");
-  parent.appendChild(uv);
+import { Viewer } from "./Viewer";
+import { Urls } from "@edsilv/utils";
 
-  function resize() {
+export const init = (el: string | HTMLDivElement, data) => {
+  let uv;
+  let isFullScreen = false;
+  const container = typeof el === "string" ? document.getElementById(el) : el;
+
+  if (!container) {
+    throw new Error("UV target element not found");
+  }
+
+  container.innerHTML = "";
+  const parent = document.createElement("div");
+  container.appendChild(parent);
+  const uvDiv = document.createElement("div");
+  parent.appendChild(uvDiv);
+
+  const resize = () => {
     if (uv) {
       if (isFullScreen) {
         parent.style.width = window.innerWidth + "px";
@@ -19,7 +27,7 @@ function createUV(selector, data) {
       }
       uv.resize();
     }
-  }
+  };
 
   window.addEventListener("resize", function() {
     resize();
@@ -31,24 +39,22 @@ function createUV(selector, data) {
     }, 100);
   });
 
-  uv = new UV.Viewer({
-    target: uv,
+  uv = new Viewer({
+    target: uvDiv,
     data: data
   });
 
-  uv.on("create", function(obj) {}, false);
-
   uv.on(
     "created",
-    function(obj) {
+    function(_obj) {
       resize();
     },
     false
   );
 
   uv.on(
-    "openedMedia",
-    function() {
+    "externalResourceOpened",
+    function(_obj) {
       setTimeout(function() {
         resize();
       }, 100);
@@ -56,69 +62,15 @@ function createUV(selector, data) {
     false
   );
 
-  uv.on(
-    "collectionIndexChanged",
-    function(collectionIndex) {
-      uv.dataProvider.set("c", collectionIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "manifestIndexChanged",
-    function(manifestIndex) {
-      uv.dataProvider.set("m", manifestIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "sequenceIndexChanged",
-    function(sequenceIndex) {
-      uv.dataProvider.set("s", sequenceIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "canvasIndexChanged",
-    function(canvasIndex) {
-      uv.dataProvider.set("cv", canvasIndex);
-    },
-    false
-  );
-
-  uv.on(
-    "rangeChanged",
-    function(rangeId) {
-      uv.dataProvider.set("rid", rangeId);
-    },
-    false
-  );
-
-  uv.on(
-    "openseadragonExtension.rotationChanged",
-    function(rotation) {
-      uv.dataProvider.set("r", rotation);
-    },
-    false
-  );
-
-  uv.on(
-    "openseadragonExtension.xywhChanged",
-    function(xywh) {
-      uv.dataProvider.set("xywh", xywh);
-    },
-    false
-  );
-
-  uv.on(
-    "openseadragonExtension.currentViewUri",
-    function(data) {
-      //console.log('openseadragonExtension.currentViewUri', obj);
-    },
-    false
-  );
+  // uv.on(
+  //   "load",
+  //   function() {
+  //     setTimeout(function() {
+  //       resize();
+  //     }, 100);
+  //   },
+  //   false
+  // );
 
   uv.on(
     "reload",
@@ -139,13 +91,13 @@ function createUV(selector, data) {
       }
 
       if (isFullScreen) {
-        var requestFullScreen = getRequestFullScreen(parent);
+        const requestFullScreen = getRequestFullScreen(parent);
         if (requestFullScreen) {
           requestFullScreen.call(parent);
           resize();
         }
       } else {
-        var exitFullScreen = getExitFullScreen();
+        const exitFullScreen = getExitFullScreen();
         if (exitFullScreen) {
           exitFullScreen.call(document);
           setTimeout(function() {
@@ -172,10 +124,10 @@ function createUV(selector, data) {
   uv.on(
     "bookmark",
     function(data) {
-      var absUri = parent.document.URL;
-      var parts = Utils.Urls.getUrlParts(absUri);
-      var relUri =
-        parts.pathname + parts.search + parent.document.location.hash;
+      const absUri = parent!.ownerDocument!.URL;
+      const parts = Urls.getUrlParts(absUri);
+      let relUri =
+        parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
 
       if (!relUri.startsWith("/")) {
         relUri = "/" + relUri;
@@ -203,8 +155,44 @@ function createUV(selector, data) {
     }
   );
 
+  // todo: iiif-specific
+  uv.on(
+    "collectionIndexChange",
+    function(collectionIndex) {
+      uv.dataProvider.set("c", collectionIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "manifestIndexChange",
+    function(manifestIndex) {
+      uv.dataProvider.set("m", manifestIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "canvasIndexChange",
+    function(canvasIndex) {
+      uv.dataProvider.set("cv", canvasIndex);
+    },
+    false
+  );
+
+  // todo: iiif-specific
+  uv.on(
+    "rangeChange",
+    function(rangeId) {
+      uv.dataProvider.set("rid", rangeId);
+    },
+    false
+  );
+
   return uv;
-}
+};
 
 function getRequestFullScreen(elem) {
   if (elem.webkitRequestFullscreen) {

@@ -48,13 +48,13 @@ export class PagingHeaderPanel extends HeaderPanel {
     super.create();
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.canvasIndexChanged(canvasIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.modeChanged();
       this.updatePagingToggle();
     });
@@ -361,11 +361,11 @@ export class PagingHeaderPanel extends HeaderPanel {
       // visible, since otherwise, clicking on the "Image" label can
       // trigger unexpected/undesired side effects.
       this.$imageModeOption.on("click", () => {
-        this.component.publish(Events.MODE_CHANGED, Mode.image.toString());
+        this.component.publish(Events.MODE_CHANGE, Mode.image.toString());
       });
 
       this.$pageModeOption.on("click", () => {
-        this.component.publish(Events.MODE_CHANGED, Mode.page.toString());
+        this.component.publish(Events.MODE_CHANGE, Mode.page.toString());
       });
     }
 

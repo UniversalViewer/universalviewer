@@ -11,32 +11,20 @@
     "limitLocales": false,
     "metrics": [
       {
-        "type": "watch",
-        "minWidth": 0, 
-        "maxWidth": 312,
-        "minHeight": 0,
-        "maxHeight": 390
+        "type": "sm",
+        "minWidth": 0
       },
       {
-        "type": "mobileportrait",
-        "minWidth": 312, 
-        "maxWidth": 415,
-        "minHeight": 640,
-        "maxHeight": 813
+        "type": "md",
+        "minWidth": 768
       },
       {
-        "type": "mobilelandscape",
-        "minWidth": 640, 
-        "maxWidth": 813,
-        "minHeight": 360,
-        "maxHeight": 415
+        "type": "lg",
+        "minWidth": 1024
       },
       {
-        "type": "desktop",
-        "minWidth": 800,
-        "maxWidth": 100000,
-        "minHeight": 415,
-        "maxHeight": 100000
+        "type": "xl",
+        "minWidth": 1280
       }
     ],
     "multiSelectionMimeType": "application/zip",
@@ -70,7 +58,7 @@
       "topCloseButtonEnabled": false
     },
     "footerPanel": {
-      "options":{
+      "options": {
         "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": false,
@@ -83,16 +71,14 @@
         "shareEnabled": true
       }
     },
-    "genericDialogue": {
-    },
+    "genericDialogue": {},
     "headerPanel": {
       "options": {
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
       }
     },
-    "helpDialogue": {
-    },
+    "helpDialogue": {},
     "moreInfoRightPanel": {
       "options": {
         "canvasDisplayOrder": "",
@@ -112,11 +98,9 @@
       }
     },
     "ebookCenterPanel": {
-      "options": {
-      }
+      "options": {}
     },
-    "settingsDialogue": {
-    },
+    "settingsDialogue": {},
     "shareDialogue": {
       "options": {
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",

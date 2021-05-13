@@ -1,4 +1,3 @@
-//import { isValidUrl } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
@@ -11,7 +10,7 @@ import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
 import { Metric } from "../../modules/uv-shared-module/Metric";
-import { MetricType } from "../../modules/uv-shared-module/MetricType";
+import { MetricType } from "../../modules/uv-shared-module/Metric";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
@@ -58,7 +57,7 @@ export class BaseExtension implements IExtension {
   isLoggedIn: boolean = false;
   lastCanvasIndex: number;
   loginDialogue: LoginDialogue;
-  metric: MetricType = MetricType.NONE;
+  metric: MetricType;
   metrics: Metric[] = [];
   mouseX: number;
   mouseY: number;
@@ -106,11 +105,6 @@ export class BaseExtension implements IExtension {
 
     if (this.isMobile()) {
       this.$element.addClass("mobile");
-    }
-
-    // todo: deprecate?
-    if (this.data.isLightbox) {
-      this.$element.addClass("lightbox");
     }
 
     if (Documents.supportsFullscreen()) {
@@ -251,7 +245,7 @@ export class BaseExtension implements IExtension {
       '<iframe id="commsFrame" style="display:none"></iframe>'
     );
 
-    //this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
+    //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
 
     this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
       this.fire(BaseEvents.ACCEPT_TERMS);
@@ -282,12 +276,12 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.data.canvasIndex = canvasIndex;
         this.lastCanvasIndex = this.helper.canvasIndex;
         this.helper.canvasIndex = canvasIndex;
-        this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
+        this.fire(BaseEvents.CANVAS_INDEX_CHANGE, this.data.canvasIndex);
       }
     );
 
@@ -310,11 +304,11 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(
-      BaseEvents.COLLECTION_INDEX_CHANGED,
+      BaseEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
         this.data.collectionIndex = collectionIndex;
         this.fire(
-          BaseEvents.COLLECTION_INDEX_CHANGED,
+          BaseEvents.COLLECTION_INDEX_CHANGE,
           this.data.collectionIndex
         );
       }
@@ -352,10 +346,10 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.component.subscribe(BaseEvents.OPENED_MEDIA, () => {
+    this.component.subscribe(BaseEvents.LOAD, () => {
       setTimeout(() => {
         this.component.publish(BaseEvents.RESIZE);
-        this.fire(BaseEvents.OPENED_MEDIA);
+        this.fire(BaseEvents.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
@@ -441,17 +435,17 @@ export class BaseExtension implements IExtension {
         that.lastCanvasIndex !== that.helper.canvasIndex
       ) {
         this.component.publish(
-          BaseEvents.CANVAS_INDEX_CHANGED,
+          BaseEvents.CANVAS_INDEX_CHANGE,
           that.lastCanvasIndex
         );
       }
     });
 
     this.component.subscribe(
-      BaseEvents.MANIFEST_INDEX_CHANGED,
+      BaseEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex: number) => {
         this.data.manifestIndex = manifestIndex;
-        this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
+        this.fire(BaseEvents.MANIFEST_INDEX_CHANGE, this.data.manifestIndex);
       }
     );
 
@@ -480,6 +474,10 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
+    this.component.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
+      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    });
+
     this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
       this.fire(BaseEvents.OPEN_RIGHT_PANEL);
       // todo: use global state
@@ -496,20 +494,17 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.PAGE_UP);
     });
 
-    this.component.subscribe(
-      BaseEvents.RANGE_CHANGED,
-      (range: Range | null) => {
-        if (range) {
-          this.data.rangeId = range.id;
-          this.helper.rangeId = range.id;
-          this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
-        } else {
-          this.data.rangeId = undefined;
-          this.helper.rangeId = undefined;
-          this.fire(BaseEvents.RANGE_CHANGED, null);
-        }
+    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+      if (range) {
+        this.data.rangeId = range.id;
+        this.helper.rangeId = range.id;
+        this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
+      } else {
+        this.data.rangeId = undefined;
+        this.helper.rangeId = undefined;
+        this.fire(BaseEvents.RANGE_CHANGE, null);
       }
-    );
+    });
 
     this.component.subscribe(
       BaseEvents.RESOURCE_DEGRADED,
@@ -543,16 +538,8 @@ export class BaseExtension implements IExtension {
       this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
     });
 
-    this.component.subscribe(
-      BaseEvents.SEQUENCE_INDEX_CHANGED,
-      (sequenceIndex: number) => {
-        this.data.sequenceIndex = sequenceIndex;
-        this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
-      }
-    );
-
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: any) => {
-      this.fire(BaseEvents.SETTINGS_CHANGED, args);
+    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: any) => {
+      this.fire(BaseEvents.SETTINGS_CHANGE, args);
     });
 
     this.component.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
@@ -737,7 +724,7 @@ export class BaseExtension implements IExtension {
       this.data.collectionIndex !== this.helper.collectionIndex
     ) {
       this.component.publish(
-        BaseEvents.COLLECTION_INDEX_CHANGED,
+        BaseEvents.COLLECTION_INDEX_CHANGE,
         this.data.collectionIndex
       );
     }
@@ -746,27 +733,23 @@ export class BaseExtension implements IExtension {
       !this.isCreated ||
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
-      this.component.publish(
-        BaseEvents.MANIFEST_INDEX_CHANGED,
-        this.data.manifestIndex
-      );
-    }
-
-    if (
-      !this.isCreated ||
-      this.data.sequenceIndex !== this.helper.sequenceIndex
-    ) {
-      this.component.publish(
-        BaseEvents.SEQUENCE_INDEX_CHANGED,
-        this.data.sequenceIndex
-      );
+      if (this.data.manifestUri !== undefined) {
+        this.component.publish(
+          BaseEvents.MANIFEST_INDEX_CHANGE,
+          this.data.manifestIndex
+        );
+      }
     }
 
     if (!this.isCreated || this.data.canvasIndex !== this.helper.canvasIndex) {
-      this.component.publish(
-        BaseEvents.CANVAS_INDEX_CHANGED,
-        this.data.canvasIndex
-      );
+      if (this.data.canvasIndex !== undefined) {
+        this.component.publish(
+          BaseEvents.CANVAS_INDEX_CHANGE,
+          this.data.canvasIndex
+        );
+      } else {
+        console.error("canvasIndex is undefined");
+      }
     }
 
     if (!this.isCreated || this.data.rangeId !== this.helper.rangeId) {
@@ -774,7 +757,7 @@ export class BaseExtension implements IExtension {
         const range: Range | null = this.helper.getRangeById(this.data.rangeId);
 
         if (range) {
-          this.component.publish(BaseEvents.RANGE_CHANGED, range);
+          this.component.publish(BaseEvents.RANGE_CHANGE, range);
         } else {
           console.warn("range id not found:", this.data.rangeId);
         }
@@ -830,14 +813,11 @@ export class BaseExtension implements IExtension {
   }
 
   private _parseMetrics(): void {
-    const metrics: any[] = this.data.config.options.metrics;
+    const metrics: Metric[] = this.data.config.options.metrics;
 
     if (metrics) {
       for (let i = 0; i < metrics.length; i++) {
-        const m: any = metrics[i];
-        if (typeof m.type === "string") {
-          m.type = new MetricType(m.type);
-        }
+        const m: Metric = metrics[i];
         this.metrics.push(m);
       }
     }
@@ -847,37 +827,19 @@ export class BaseExtension implements IExtension {
     setTimeout(() => {
       // loop through all metrics
       // find one that matches the current dimensions
-      // if a metric is found, and it's not the current metric, set it to be the current metric and publish a METRIC_CHANGED event
-      // if no metric is found, set MetricType.NONE to be the current metric and publish a METRIC_CHANGED event
+      // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
 
-      let metricFound: boolean = false;
-
-      for (let i = 0; i < this.metrics.length; i++) {
+      for (let i = this.metrics.length - 1; i >= 0; i--) {
         const metric: Metric = this.metrics[i];
 
-        // if the current width and height is within this metric's defined range
         const width: number = window.innerWidth;
-        const height: number = window.innerHeight;
 
-        if (
-          width >= metric.minWidth &&
-          width <= metric.maxWidth &&
-          height >= metric.minHeight &&
-          height <= metric.maxHeight
-        ) {
-          metricFound = true;
-
+        if (width >= metric.minWidth) {
           if (this.metric !== metric.type) {
             this.metric = metric.type;
-            this.component.publish(BaseEvents.METRIC_CHANGED);
+            this.component.publish(BaseEvents.METRIC_CHANGE);
           }
-        }
-      }
-
-      if (!metricFound) {
-        if (this.metric !== MetricType.NONE) {
-          this.metric = MetricType.NONE;
-          this.component.publish(BaseEvents.METRIC_CHANGED);
+          break;
         }
       }
     }, 1);
@@ -945,42 +907,13 @@ export class BaseExtension implements IExtension {
   }
 
   getAppUri(): string {
-    const parts: any = Urls.getUrlParts((<any>document).location.href);
-    const origin: string =
+    const appUri: string =
       window.location.protocol +
       "//" +
       window.location.hostname +
       (window.location.port ? ":" + window.location.port : "");
-    let pathname: string = parts.pathname;
 
-    if (!pathname.startsWith("/")) {
-      pathname = "/" + pathname;
-    }
-
-    pathname = pathname.substr(0, pathname.lastIndexOf("/") + 1); // remove the file name
-
-    let appUri: string = origin + pathname;
-    // let assetsDir: string = '';
-
-    // if (!Documents.isInIFrame()) {
-
-    //     assetsDir = this.data.assetsDir || '';
-
-    //     if (assetsDir.startsWith('./')) {
-    //         assetsDir = assetsDir.substr(2);
-    //     }
-
-    //     if (assetsDir && !assetsDir.endsWith('/')) {
-    //         assetsDir += '/';
-    //     }
-    // }
-
-    // // if assetsDir is a URL, use that instead of appUri.
-    // if (isValidUrl(assetsDir)) {
-    //     return assetsDir + 'uv.html';
-    // }
-
-    return appUri + "uv.html";
+    return appUri + "/uv.html";
   }
 
   getSettings(): ISettings {
@@ -1223,15 +1156,11 @@ export class BaseExtension implements IExtension {
   }
 
   isDesktopMetric(): boolean {
-    return this.metric.toString() === MetricType.DESKTOP.toString();
+    return this.metric === "lg" || this.metric === "xl";
   }
 
-  isWatchMetric(): boolean {
-    return this.metric.toString() === MetricType.WATCH.toString();
-  }
-
-  isCatchAllMetric(): boolean {
-    return this.metric.toString() === MetricType.NONE.toString();
+  isMobileMetric(): boolean {
+    return this.metric === "sm" || this.metric === "md";
   }
 
   // todo: use redux in manifold to get reset state
@@ -1240,7 +1169,6 @@ export class BaseExtension implements IExtension {
     data.manifestUri = this.helper.manifestUri;
     data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
     data.manifestIndex = <number>manifest.index;
-    data.sequenceIndex = 0;
     data.canvasIndex = 0;
 
     this.reload(data);
@@ -1255,7 +1183,6 @@ export class BaseExtension implements IExtension {
       : this.helper.manifestUri;
     data.collectionIndex = collection.index;
     data.manifestIndex = 0;
-    data.sequenceIndex = 0;
     data.canvasIndex = 0;
 
     this.reload(data);

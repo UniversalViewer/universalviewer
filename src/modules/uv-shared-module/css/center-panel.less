@@ -4,11 +4,16 @@
         .title {
             font-size: @headings-size-xlarge;
             color: @text-color;
-            padding: 0 20px 0 20px;
+            margin: 5px 0 10px 0;
+            padding: 0 20px 0 10px;
             white-space: nowrap; 
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 30px;
+
+            .xl-mediaquery({
+                padding: 0 20px 0 20px;
+            });
         }
 
         .subtitle {

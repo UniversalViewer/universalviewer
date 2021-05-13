@@ -39,27 +39,24 @@ export class AVCenterPanel extends CenterPanel {
     );
 
     this.component.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGED,
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this._viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(
-      BaseEvents.RANGE_CHANGED,
-      (range: Range | null) => {
-        if (!this._observeRangeChanges()) {
-          return;
-        }
-
-        this._whenMediaReady(() => {
-          that._viewRange(range);
-          that._setTitle();
-        });
+    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+      if (!this._observeRangeChanges()) {
+        return;
       }
-    );
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
+      this._whenMediaReady(() => {
+        that._viewRange(range);
+        that._setTitle();
+      });
+    });
+
+    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
@@ -121,7 +118,6 @@ export class AVCenterPanel extends CenterPanel {
     this.avcomponent.on(
       "mediaready",
       () => {
-        console.log("mediaready");
         this._mediaReady = true;
       },
       false
@@ -141,13 +137,13 @@ export class AVCenterPanel extends CenterPanel {
             const currentRange: Range | null = this.extension.helper.getCurrentRange();
 
             if (range !== currentRange) {
-              this.component.publish(BaseEvents.RANGE_CHANGED, range);
+              this.component.publish(BaseEvents.RANGE_CHANGE, range);
             }
           } else {
-            this.component.publish(BaseEvents.RANGE_CHANGED, null);
+            this.component.publish(BaseEvents.RANGE_CHANGE, null);
           }
         } else {
-          this.component.publish(BaseEvents.RANGE_CHANGED, null);
+          this.component.publish(BaseEvents.RANGE_CHANGE, null);
         }
       },
       false
@@ -265,7 +261,8 @@ export class AVCenterPanel extends CenterPanel {
           posterImageRatio: this.config.options.posterImageRatio
         });
 
-        this.resize();
+        this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+        this.component.publish(BaseEvents.LOAD);
       }
     });
   }

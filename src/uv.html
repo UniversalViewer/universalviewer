@@ -17,7 +17,6 @@
 		-->
 		<script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script>
     <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
-    <script type="text/javascript" src="uv-helpers.js"></script>
     <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
       body {
@@ -52,20 +51,20 @@
         ];
       }
 
-      uv = createUV(
+      uv = UV.init(
         "uv",
         {
           manifestUri: urlDataProvider.get("manifest"),
           configUri: urlDataProvider.get("config"),
           collectionIndex: Number(urlDataProvider.get("c", 0)),
           manifestIndex: Number(urlDataProvider.get("m", 0)),
-          sequenceIndex: Number(urlDataProvider.get("s", 0)),
           canvasIndex: Number(urlDataProvider.get("cv", 0)),
           rangeId: urlDataProvider.get("rid", 0),
           rotation: Number(urlDataProvider.get("r", 0)),
           xywh: urlDataProvider.get("xywh", ""),
           embedded: true,
-          locales: formattedLocales
+          locales: formattedLocales,
+          target: urlDataProvider.get("target")
         },
         urlDataProvider
       );

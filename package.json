@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.0.0-pre.12",
+  "version": "4.0.0-pre.49",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
     "node": ">=8.9.1",
@@ -9,6 +9,7 @@
   "files": [
     "dist/"
   ],
+  "main": "dist/uv-dist-umd/UV.js",
   "scripts": {
     "build:dist": "npm run lint:all && grunt build --dist",
     "build": "grunt build",
@@ -25,10 +26,12 @@
   },
   "keywords": [
     "IIIF",
-    "viewer",
-    "3D",
-    "OpenSeadragon",
-    "PDF"
+    "Viewer",
+    "Image",
+    "AV",
+    "PDF",
+    "ePub",
+    "3D"
   ],
   "author": "@edsilv",
   "license": "MIT",
@@ -75,20 +78,20 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
-    "@edsilv/jquery-plugins": "1.0.7",
+    "@edsilv/jquery-plugins": "1.0.8",
     "@edsilv/key-codes": "1.0.0",
     "@edsilv/utils": "1.0.2",
-    "@google/model-viewer": "0.9.0",
+    "@google/model-viewer": "1.2.1",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.0.1",
     "@iiif/iiif-gallery-component": "1.1.19",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
     "@iiif/manifold": "2.0.2",
-    "@iiif/vocabulary": "1.0.16",
+    "@iiif/vocabulary": "1.0.19",
     "@types/modernizr": "3.2.29",
     "@types/node": "8.10.52",
-    "@universalviewer/aleph": "0.0.11",
+    "@universalviewer/aleph": "0.0.15",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@universalviewer/uv-en-gb-theme": "1.1.3",
@@ -96,7 +99,7 @@
     "core-js": "2.4.1",
     "dashjs": "2.6.7",
     "hls.js": "0.9.1",
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "jquery-binarytransport": "1.0.0",
     "jquery-ui-dist": "1.12.1",
     "jquery-ui-touch-punch": "0.2.3",

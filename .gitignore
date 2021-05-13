@@ -62,7 +62,6 @@ node_modules
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js
-!src/uv-helpers.js
 !dev.build.js
 !dist.build.js
 !jest.setup.js

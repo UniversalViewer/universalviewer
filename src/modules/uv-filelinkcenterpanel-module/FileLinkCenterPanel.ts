@@ -104,7 +104,8 @@ export class FileLinkCenterPanel extends CenterPanel {
       this.$downloadItems.append($item);
     }
 
-    this.component.publish(BaseEvents.OPENED_MEDIA);
+    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.component.publish(BaseEvents.LOAD);
   }
 
   resize() {

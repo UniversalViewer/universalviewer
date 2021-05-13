@@ -2,26 +2,26 @@
 
 // media queries
 
-.watch-mediaquery(@rules) {
-    @media only screen and (min-width: @watch-min-width) and (max-width: @watch-max-width) and (min-height: @watch-min-height) and (max-height: @watch-max-height) {
+.sm-mediaquery(@rules) {
+    @media only screen and (min-width: @sm-min-width) {
         @rules();
     }
 }
 
-.mobile-landscape-mediaquery(@rules) {
-    @media only screen and (min-width: @mobile-landscape-min-width) and (max-width: @mobile-landscape-max-width) and (min-height: @mobile-landscape-min-height) and (max-height: @mobile-landscape-max-height) {
+.md-mediaquery(@rules) {
+    @media only screen and (min-width: @md-min-width) {
         @rules();
     }
 }
 
-.mobile-portrait-mediaquery(@rules) {
-    @media only screen and (min-width: @mobile-portrait-min-width) and (max-width: @mobile-portrait-max-width) and (min-height: @mobile-portrait-min-height) and (max-height: @mobile-portrait-max-height) {
+.lg-mediaquery(@rules) {
+    @media only screen and (min-width: @lg-min-width) {
         @rules();
     }
 }
 
-.desktop-mediaquery(@rules) {
-    @media only screen and (min-width: @desktop-min-width) and (max-width: @desktop-max-width) and (min-height: @desktop-min-height) and (max-height: @desktop-max-height) {
+.xl-mediaquery(@rules) {
+    @media only screen and (min-width: @xl-min-width) {
         @rules();
     }
 }
