@@ -13,7 +13,7 @@ import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/R
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
-import { ExternalResourceType, MediaType } from "@iiif/vocabulary";
+import { ExternalResourceType, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   LanguageMap,
   Thumb,

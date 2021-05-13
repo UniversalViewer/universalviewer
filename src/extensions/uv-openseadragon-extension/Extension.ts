@@ -27,7 +27,7 @@ import {
   IIIFResourceType,
   ExternalResourceType,
   ServiceProfile
-} from "@iiif/vocabulary";
+} from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
   Annotation,

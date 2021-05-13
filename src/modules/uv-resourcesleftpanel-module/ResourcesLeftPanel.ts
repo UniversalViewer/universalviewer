@@ -1,7 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { ThumbsView } from "./ThumbsView";
-import { ViewingDirection, MediaType } from "@iiif/vocabulary";
+import { ViewingDirection, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import { Files } from "@edsilv/utils";
 import { Annotation, LanguageMap, Resource } from "manifesto.js";
 

@@ -28,7 +28,7 @@ import {
   Range,
   Thumb
 } from "manifesto.js";
-import { ViewingHint } from "@iiif/vocabulary";
+import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "@edsilv/key-codes";
 import {
   Bools,

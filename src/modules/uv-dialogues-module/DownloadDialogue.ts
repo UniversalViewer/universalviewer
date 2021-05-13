@@ -11,7 +11,7 @@ import {
   ManifestResource,
   Rendering
 } from "manifesto.js";
-import { RenderingFormat, MediaType } from "@iiif/vocabulary";
+import { RenderingFormat, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 
 export class DownloadDialogue extends Dialogue {
   $downloadOptions: JQuery;

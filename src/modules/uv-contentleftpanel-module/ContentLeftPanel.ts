@@ -2,7 +2,7 @@ const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
-import { ViewingHint, ViewingDirection } from "@iiif/vocabulary";
+import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { GalleryView } from "./GalleryView";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";

@@ -10,7 +10,7 @@ import { IAVExtension } from "./IAVExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { IIIFResourceType } from "@iiif/vocabulary";
+import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 

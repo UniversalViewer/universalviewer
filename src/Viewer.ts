@@ -8,7 +8,7 @@ import {
   RenderingFormat,
   MediaType,
   ExternalResourceType
-} from "@iiif/vocabulary";
+} from "@iiif/vocabulary/dist-commonjs/";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
