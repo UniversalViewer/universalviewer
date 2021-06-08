@@ -11,8 +11,8 @@ module.exports = {
             src: [
                 'dashjs/dist/dash.all.min.js',
                 'hls.js/dist/hls.min.js',
-                '@iiif/iiif-av-component/dist/AVComponent.js',
-                '@iiif/iiif-metadata-component/dist/MetadataComponent.js',
+                '@iiif/iiif-av-component/dist-umd/IIIFAVComponent.js',
+                '@iiif/iiif-metadata-component/dist-umd/IIIFMetadataComponent.js',
                 '@iiif/iiif-tree-component/dist/TreeComponent.js',
                 'jquery-ui-dist/jquery-ui.min.js',
                 'jquery-ui-touch-punch/jquery.ui.touch-punch.min.js',

@@ -15,6 +15,7 @@ module.exports = function () {
             'node_modules/manifesto.js/dist-umd/manifesto.js',
             'node_modules/@iiif/manifold/dist-umd/manifold.js',
             'node_modules/@iiif/vocabulary/dist-umd/vocabulary.js',
+            'node_modules/@iiif/iiif-av-component/dist-umd/IIIFAVComponent.js',
             'node_modules/@iiif/iiif-metadata-component/dist-umd/IIIFMetadataComponent.js',
             'node_modules/@iiif/iiif-gallery-component/dist-umd/GalleryComponent.js',
             'node_modules/pdfjs-dist/build/pdf.combined.js',

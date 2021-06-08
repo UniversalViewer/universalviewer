@@ -54,6 +54,11 @@ define('@iiif/iiif-gallery-component', ['require', '../lib/GalleryComponent.js']
     return m;
 })
 
+// @ts-ignore
+define('@iiif/iiif-av-component', ['require', '../lib/IIIFAVComponent.js', 'IIIFAVComponent'], (require, m) => {
+    return require('IIIFAVComponent');
+})
+
 // bundled into dist/uv.js
 // - things in src/lib that are generic to all extensions
 // - bundled data providers
@@ -82,6 +87,7 @@ requirejs([
     '@iiif/iiif-metadata-component',
     '@iiif/iiif-gallery-component',
     '@iiif/vocabulary',
+    '@iiif/iiif-av-component'
 ], (
     base64: any,
     browserdetect: any,
