@@ -325,6 +325,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
                             if (!extension) {
                                 // try type
+                                // @ts-ignore
                                 const type: ExternalResourceType | null = body[0].getType();
                             
                                 if (type) {
@@ -332,6 +333,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                                 }
                             }
                         } else {
+                            // @ts-ignore
                             const type: ExternalResourceType | null = body[0].getType();
 
                             if (type) {
@@ -341,6 +343,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                     }
 
                 } else {
+                    // @ts-ignore
                     const canvasType: ExternalResourceType | null = canvas.getType();
 
                     if (canvasType) {

@@ -107,8 +107,6 @@ export class AVCenterPanel extends CenterPanel {
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.prepend(this.$avcomponent);
 
-        debugger
-
         // @ts-ignore
         this.avcomponent = new AVComponent({
             target: <HTMLElement>this.$avcomponent[0],
@@ -212,6 +210,7 @@ export class AVCenterPanel extends CenterPanel {
             });
 
             if (item) {
+                // @ts-ignore
                 this.subtitle = LanguageMap.getValue(item.value);
                 break;
             }

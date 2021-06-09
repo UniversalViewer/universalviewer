@@ -204,6 +204,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             }
 
         } else {
+            // @ts-ignore
             const type: ExternalResourceType | null = canvas.getType();
 
             if (type) {

@@ -179,6 +179,7 @@ export class ThumbsView extends BaseView {
             const body: AnnotationBody[] = annotation.getBody();
 
             if (body.length) {
+                // @ts-ignore
                 const type: ExternalResourceType | null = body[0].getType();
 
                 if (type) {
