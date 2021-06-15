@@ -37,6 +37,7 @@ export class AVCenterPanel extends CenterPanel {
 
         this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Range | null) => {
 
+            console.log("range changed");
             if (!this._observeRangeChanges()) {
                 return;
             }
