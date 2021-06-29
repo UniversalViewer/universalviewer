@@ -202,6 +202,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
                     }
                 }
             }
+            
+            return false;
 
         } else {
             // @ts-ignore
