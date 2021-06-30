@@ -79,7 +79,7 @@ export class SettingsDialogue extends Dialogue {
         super.open();
 
         //$.getJSON(this.extension.data.root + "/info.json", (pjson: any) => {
-            this.$version.text("v3.1.3"); // update this on version
+            this.$version.text("v3.1.4"); // update this on version
         //});
     }
 
