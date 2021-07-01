@@ -17,6 +17,7 @@ export class BaseEvents {
     static COLLECTION_INDEX_CHANGED: string         = 'collectionIndexChanged';
     static CREATE: string                           = 'create';
     static CREATED: string                          = 'created';
+    static CURRENT_TIME_CHANGED: string             = 'currentTimeChanged';
     static DOWN_ARROW: string                       = 'downArrow';
     static DOWNLOAD: string                         = 'download';
     static DROP: string                             = 'drop';
@@ -47,6 +48,7 @@ export class BaseEvents {
     static HIDE_SETTINGS_DIALOGUE: string           = 'hideSettingsDialogue';
     static HIDE_SHARE_DIALOGUE: string              = 'hideShareDialogue';
     static HOME: string                             = 'home';
+    static INFO_DISPLAYED: string                   = 'infoDisplayed'
     static LAST: string                             = 'last';
     static LEFT_ARROW: string                       = 'leftArrow';
     static LEFTPANEL_COLLAPSE_FULL_FINISH: string   = 'leftPanelCollapseFullFinish';
@@ -72,9 +74,11 @@ export class BaseEvents {
     static OPEN: string                             = 'open';
     static PAGE_DOWN: string                        = 'pageDown';
     static PAGE_UP: string                          = 'pageUp';
+    static PAUSE: string                            = 'pause';
     static PLUS: string                             = 'plus';
     static PREV: string                             = 'prev';
     static RANGE_CHANGED: string                    = 'rangeChanged';
+    static RANGE_NOT_FOUND: string                  = 'rangeNotFound';
     static REDIRECT: string                         = 'redirect';
     static REFRESH: string                          = 'refresh';
     static RELOAD: string                           = 'reload';
