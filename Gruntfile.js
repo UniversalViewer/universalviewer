@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             libs: [
                 config.directories.src + '/extensions/*/lib/**/*',
                 '!' + config.directories.src + '/extensions/*/lib/**/*.proxy.js'
-            ]           
+            ]
         },
 
         copy: {
@@ -327,7 +327,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -367,7 +366,6 @@ module.exports = function (grunt) {
             'clean:dist',
             'clean:examples',
             'copy:dist',
-            'compress:zip'
         );
     });
 
