@@ -137,23 +137,9 @@ function createUV(selector, data, dataProvider) {
         e.type === 'mozfullscreenchange' && !document.mozFullScreen ||
         e.type === 'MSFullscreenChange' && document.msFullscreenElement === null) {
             uv.exitFullScreen();
-        }
-    });
-
-    // Exit fullscreen bugfix.
-    // @todo possible same as above.
-    document.addEventListener('fullscreenchange', exitFullscreenHandler);
-    document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
-    document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
-    document.addEventListener('MSFullscreenChange', exitFullscreenHandler);
-
-    function exitFullscreenHandler() {
-        if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-            uv.exitFullScreen();
             resize();
         }
-    }
-
+    });
 
     return uv;
 }
