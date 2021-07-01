@@ -531,8 +531,8 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
-        this.component.subscribe(BaseEvents.MESSAGE_DISPLAYED, (e: any, message: Information) => {
-            this.fire(BaseEvents.MESSAGE_DISPLAYED, message);
+        this.component.subscribe(BaseEvents.INFO_DISPLAYED, (e: any, message: Information) => {
+            this.fire(BaseEvents.INFO_DISPLAYED, message);
         });
 
         this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {

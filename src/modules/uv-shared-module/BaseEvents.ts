@@ -48,6 +48,7 @@ export class BaseEvents {
     static HIDE_SETTINGS_DIALOGUE: string           = 'hideSettingsDialogue';
     static HIDE_SHARE_DIALOGUE: string              = 'hideShareDialogue';
     static HOME: string                             = 'home';
+    static INFO_DISPLAYED: string                   = 'infoDisplayed'
     static LAST: string                             = 'last';
     static LEFT_ARROW: string                       = 'leftArrow';
     static LEFTPANEL_COLLAPSE_FULL_FINISH: string   = 'leftPanelCollapseFullFinish';
@@ -60,7 +61,6 @@ export class BaseEvents {
     static LOGOUT: string                           = 'logout';
     static MANIFEST_INDEX_CHANGED: string           = 'manifestIndexChanged';
     static METRIC_CHANGED: string                   = 'metricChanged';
-    static MESSAGE_DISPLAYED: string                = 'messageDisplayed'
     static MINUS: string                            = 'minus';
     static MULTISELECT_CHANGE: string               = 'multiSelectChange';
     static MULTISELECTION_MADE: string              = 'multiSelectionMade';
