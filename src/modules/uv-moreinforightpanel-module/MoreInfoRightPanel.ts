@@ -43,6 +43,18 @@ export class MoreInfoRightPanel extends RightPanel {
         this.metadataComponent.on('iiifViewerLinkClicked', (href: string) => {
             // get the hash param.
             const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
+            const rawTime: string | null = Utils.Urls.getHashParameterFromString('t', href);
+            const time: number | null = rawTime ? parseInt(rawTime, 10) : null;
+            const canvasId: string | null = Utils.Urls.getHashParameterFromString('c', href);
+
+            // First change canvas id.
+            if (canvasId) {
+                const canvasIndex: number | null = this.extension.helper.getCanvasIndexById(canvasId);
+
+                if (canvasIndex) {
+                    $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+                }
+            }
 
             if (rangeId) {
                 const range: Range | null = this.extension.helper.getRangeById(rangeId);
@@ -50,6 +62,12 @@ export class MoreInfoRightPanel extends RightPanel {
                 if (range) {
                     this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 }
+            }
+
+            // Finally change timestamp.
+            if (time !== null) {
+                // @todo validate time? Validation should probably be art of extension.helper.
+                $.publish(BaseEvents.CURRENT_TIME_CHANGED, [time]);
             }
 
         }, false);

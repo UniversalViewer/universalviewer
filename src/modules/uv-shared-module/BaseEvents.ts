@@ -17,6 +17,7 @@ export class BaseEvents {
     static COLLECTION_INDEX_CHANGED: string         = 'collectionIndexChanged';
     static CREATE: string                           = 'create';
     static CREATED: string                          = 'created';
+    static CURRENT_TIME_CHANGED: string             = 'currentTimeChanged';
     static DOWN_ARROW: string                       = 'downArrow';
     static DOWNLOAD: string                         = 'download';
     static DROP: string                             = 'drop';
@@ -59,6 +60,7 @@ export class BaseEvents {
     static LOGOUT: string                           = 'logout';
     static MANIFEST_INDEX_CHANGED: string           = 'manifestIndexChanged';
     static METRIC_CHANGED: string                   = 'metricChanged';
+    static MESSAGE_DISPLAYED: string                = 'messageDisplayed'
     static MINUS: string                            = 'minus';
     static MULTISELECT_CHANGE: string               = 'multiSelectChange';
     static MULTISELECTION_MADE: string              = 'multiSelectionMade';
@@ -75,6 +77,7 @@ export class BaseEvents {
     static PLUS: string                             = 'plus';
     static PREV: string                             = 'prev';
     static RANGE_CHANGED: string                    = 'rangeChanged';
+    static RANGE_NOT_FOUND: string                  = 'rangeNotFound';
     static REDIRECT: string                         = 'redirect';
     static REFRESH: string                          = 'refresh';
     static RELOAD: string                           = 'reload';

@@ -30,6 +30,7 @@ import { MetricType } from "./MetricType";
 import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { SynchronousRequire } from "../../SynchronousRequire";
+import { Information } from './Information';
 
 export class BaseExtension implements IExtension {
 
@@ -111,6 +112,10 @@ export class BaseExtension implements IExtension {
             this.mouseX = e.pageX;
             this.mouseY = e.pageY;
         });
+
+        if (this.isFullScreen()) {
+            this.$element.addClass('fullscreen');
+        }
 
         // events
         if (!this.data.isReload) {
@@ -422,6 +427,10 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
+        $.subscribe(BaseEvents.RANGE_NOT_FOUND, (e: any, rangeId: string) => {
+            this.fire(BaseEvents.RANGE_NOT_FOUND, rangeId)
+        });
+
         this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Range | null) => {
             
             if (range) {
@@ -520,6 +529,10 @@ export class BaseExtension implements IExtension {
 
         this.component.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+        });
+
+        $.subscribe(BaseEvents.MESSAGE_DISPLAYED, (e: any, message: Information) => {
+            this.fire(BaseEvents.MESSAGE_DISPLAYED, message);
         });
 
         this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
@@ -740,10 +753,17 @@ export class BaseExtension implements IExtension {
                 if (range) {
                     this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 } else {
-                    console.warn('range id not found:', this.data.rangeId);
+                    this.component.publish(BaseEvents.RANGE_NOT_FOUND, [this.data.rangeId]);
                 }
             }
-            
+
+        }
+
+        if (!this.isCreated) {
+            if (this.data.startTime) {
+                // @todo check if in bounds.
+                $.publish(BaseEvents.CURRENT_TIME_CHANGED, [this.data.startTime]);
+            }
         }
     }
 
@@ -924,6 +944,7 @@ export class BaseExtension implements IExtension {
 
     getAppUri(): string {
         const parts: any = Utils.Urls.getUrlParts((<any>document).location.href);
+        const embedFile = this.data.config.modules.shareDialogue.options!.embedFile || 'uv.html';
         const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         let pathname: string = parts.pathname;
 
@@ -951,10 +972,10 @@ export class BaseExtension implements IExtension {
 
         // if root is a URL, use that instead of appUri.
         if (UVUtils.isValidUrl(root)) {
-            return root + 'uv.html';
+            return root + embedFile;
         }
 
-        return appUri + root + 'uv.html';
+        return appUri + root + embedFile;
 
     }
 

@@ -36,6 +36,15 @@ function createUV(selector, data, dataProvider) {
 
     uv.on('created', function(obj) {
        resize();
+
+        if (uv.extension.centerPanel.avcomponent) {
+            uv.extension.centerPanel.avcomponent.on('pause', function() {
+                var currentTime = uv.extension.centerPanel.avcomponent.getCurrentTime();
+                if (currentTime > 0) {
+                    dataProvider.set('t', currentTime);
+                }
+            }, false);
+        }
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {
@@ -130,6 +139,21 @@ function createUV(selector, data, dataProvider) {
             uv.exitFullScreen();
         }
     });
+
+    // Exit fullscreen bugfix.
+    // @todo possible same as above.
+    document.addEventListener('fullscreenchange', exitFullscreenHandler);
+    document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
+    document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
+    document.addEventListener('MSFullscreenChange', exitFullscreenHandler);
+
+    function exitFullscreenHandler() {
+        if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            uv.exitFullScreen();
+            resize();
+        }
+    }
+
 
     return uv;
 }

@@ -84,9 +84,10 @@
 
         .label {
             background: rgba(66, 66, 66, 0.85);
-            height: 18px;
+            height: 25px;
             padding: 5px;
             color: #fff;
+            pointer-events: none;
         }
 
         .pointer {
@@ -101,6 +102,11 @@
                 border-left: 6px solid transparent;
                 border-right: 6px solid transparent;
             }
+        }
+        
+        &:focus .av-icon,
+        &:focus .uv-icon {
+            opacity: 1;
         }
     }
 
