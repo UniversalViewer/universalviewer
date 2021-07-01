@@ -37,7 +37,7 @@ export class AVCenterPanel extends CenterPanel {
             }
         });
 
-        $.subscribe(BaseEvents.CURRENT_TIME_CHANGED, (e: any, currentTime: number) => {
+        this.component.subscribe(BaseEvents.CURRENT_TIME_CHANGED, (e: any, currentTime: number) => {
             this._whenMediaReady(() => {
                 if (this.avcomponent) {
                     this.avcomponent.setCurrentTime(currentTime);

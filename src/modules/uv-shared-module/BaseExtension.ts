@@ -427,7 +427,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseEvents.RANGE_NOT_FOUND, (e: any, rangeId: string) => {
+        this.component.subscribe(BaseEvents.RANGE_NOT_FOUND, (e: any, rangeId: string) => {
             this.fire(BaseEvents.RANGE_NOT_FOUND, rangeId)
         });
 
@@ -531,7 +531,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.MESSAGE_DISPLAYED, (e: any, message: Information) => {
+        this.component.subscribe(BaseEvents.MESSAGE_DISPLAYED, (e: any, message: Information) => {
             this.fire(BaseEvents.MESSAGE_DISPLAYED, message);
         });
 
