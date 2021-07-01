@@ -138,8 +138,12 @@ export class AVCenterPanel extends CenterPanel {
             this._mediaReady = true;
         }, false);
 
-        this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
-            
+        this.avcomponent.on('pause', () => {
+            this.component.publish(BaseEvents.PAUSE, this.avcomponent.getCurrentTime())
+        })
+
+        this.avcomponent.on('rangechanged', (rangeId: string | null) => {
+
             if (rangeId) {
 
                 this._setTitle();

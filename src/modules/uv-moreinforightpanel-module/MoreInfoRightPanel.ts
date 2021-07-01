@@ -66,7 +66,7 @@ export class MoreInfoRightPanel extends RightPanel {
 
             // Finally change timestamp.
             if (time !== null) {
-                // @todo validate time? Validation should probably be art of extension.helper.
+                // @todo validate time? Validation should probably be part of extension.helper.
                 this.component.publish(BaseEvents.CURRENT_TIME_CHANGED, [time]);
             }
 

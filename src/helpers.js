@@ -36,14 +36,11 @@ function createUV(selector, data, dataProvider) {
 
     uv.on('created', function(obj) {
        resize();
+    }, false);
 
-        if (uv.extension.centerPanel.avcomponent) {
-            uv.extension.centerPanel.avcomponent.on('pause', function() {
-                var currentTime = uv.extension.centerPanel.avcomponent.getCurrentTime();
-                if (currentTime > 0) {
-                    dataProvider.set('t', currentTime);
-                }
-            }, false);
+    uv.on('pause', function(currentTime) {
+        if (currentTime > 0) {
+            dataProvider.set('t', currentTime);
         }
     }, false);
 
