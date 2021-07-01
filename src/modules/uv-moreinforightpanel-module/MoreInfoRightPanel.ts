@@ -52,7 +52,7 @@ export class MoreInfoRightPanel extends RightPanel {
                 const canvasIndex: number | null = this.extension.helper.getCanvasIndexById(canvasId);
 
                 if (canvasIndex) {
-                    $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+                    this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
                 }
             }
 
@@ -67,7 +67,7 @@ export class MoreInfoRightPanel extends RightPanel {
             // Finally change timestamp.
             if (time !== null) {
                 // @todo validate time? Validation should probably be art of extension.helper.
-                $.publish(BaseEvents.CURRENT_TIME_CHANGED, [time]);
+                this.component.publish(BaseEvents.CURRENT_TIME_CHANGED, [time]);
             }
 
         }, false);

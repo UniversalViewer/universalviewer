@@ -45,7 +45,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             if (this.data.canvasIndex !== thumb.index) {
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
             }
         });
     }

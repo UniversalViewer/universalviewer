@@ -762,7 +762,7 @@ export class BaseExtension implements IExtension {
         if (!this.isCreated) {
             if (this.data.startTime) {
                 // @todo check if in bounds.
-                $.publish(BaseEvents.CURRENT_TIME_CHANGED, [this.data.startTime]);
+                this.component.publish(BaseEvents.CURRENT_TIME_CHANGED, [this.data.startTime]);
             }
         }
     }
