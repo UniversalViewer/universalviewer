@@ -59,6 +59,11 @@
         <input id="target" type="text" value="" />
         <button id="setTargetButton" class="button" href="#">Set Target</button>
       </div>
+
+      <div class="group">
+        <input id="rotation" type="text" value="" />
+        <button id="setRotationButton" class="button" href="#">Set Rotation</button>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -107,6 +112,11 @@
           uv.on("targetChange", function(target) {
             console.log("target change", target);
             $("#target").val(target);
+          });
+
+          uv.on("openseadragonExtension.rotationChange", function(rotation) {
+            console.log("rotation change", rotation);
+            $('#rotation').val(rotation);
           });
 
           uv.on("toggleFullScreen", function(e) {
@@ -182,11 +192,15 @@
 
         $("#setTargetButton").on("click", function() {
           var target = $("#target").val();
-
-          console.log("test");
-
           uv.set({
             target: target,
+          });
+        });
+
+        $("#setRotationButton").on("click", function() {
+          var rotation = $("#rotation").val();
+          uv.set({
+            rotation: rotation,
           });
         });
       });

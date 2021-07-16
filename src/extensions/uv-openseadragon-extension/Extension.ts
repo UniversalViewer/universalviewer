@@ -305,6 +305,10 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.fire(Events.OPENSEADRAGON_ANIMATION);
     });
 
+    this.component.subscribe(Events.OPENSEADRAGON_ROTATION, (degrees: number) => {
+      this.fire(Events.OPENSEADRAGON_ROTATION, degrees);
+    });
+
     this.component.subscribe(
       Events.OPENSEADRAGON_ANIMATION_FINISH,
       (viewer: any) => {
@@ -588,7 +592,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       .rotation;
 
     if (rotation) {
-      this.component.publish(Events.OPENSEADRAGON_ROTATION, rotation);
+      this.component.publish(BaseEvents.SET_ROTATION, rotation);
     }
   }
 

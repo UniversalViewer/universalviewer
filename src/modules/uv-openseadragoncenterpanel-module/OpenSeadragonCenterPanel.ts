@@ -139,6 +139,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.fitToBounds(target, false);
       });
     });
+
+    // todo
+    this.component.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
+      this.whenLoaded(() => {
+        this.viewer.viewport.setRotation(rotation);
+      });
+    });
   }
 
   whenCreated(cb: () => void): void {
@@ -378,6 +385,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     });
 
     this.viewer.addHandler("rotate", (args: any) => {
+      // console.log("rotate");
       this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
     });
 
