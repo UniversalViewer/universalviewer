@@ -315,25 +315,6 @@ export class PDFCenterPanel extends CenterPanel {
             this._canvas.height = this._viewport.height;
             this._canvas.width = this._viewport.width;
 
-
-            // get divisible number between canvas height and content height
-            const divisible_amount = this._canvas.height / this.$content.height()
-            // create a variable for the new canvas height.
-            // (canvas height divided by our divisible_amount) multiply by the viewport scale
-            var canvas_height = (this._canvas.height / divisible_amount) * this._viewport.scale;
-
-            // if canvas height is smaller than our content height
-            // use the content hight instead
-            if(canvas_height < this.$content.height()) {
-                canvas_height = this.$content.height();
-            }
-
-            // set the canvas height with CSS
-            this._$canvas.css({
-                height: canvas_height
-            });
-
-
             // Render PDF page into canvas context
             const renderContext = {
                 canvasContext: this._ctx,
