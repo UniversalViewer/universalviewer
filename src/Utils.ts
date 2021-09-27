@@ -7,14 +7,14 @@ export class UVUtils {
     static sanitize(html: string): string {
         return filterXSS(html, {
             whiteList: {
-                a: ["href", "title", "target", "class"],
+                a: ["href", "title", "target", "class", "data-uv-navigate"],
                 b: [],
                 br: [],
                 i: [],
                 img: ["src", "alt"],
                 p: [],
                 small: [],
-                span: [],
+                span: ["data-uv-navigate"],
                 strong: [],
                 sub: [],
                 sup: []

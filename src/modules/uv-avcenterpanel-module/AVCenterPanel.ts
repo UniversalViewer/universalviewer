@@ -32,12 +32,22 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
-            this._viewCanvas(canvasIndex);           
+            if (this._lastCanvasIndex !== canvasIndex) {
+                this._viewCanvas(canvasIndex);
+            }
+        });
+
+        this.component.subscribe(BaseEvents.CURRENT_TIME_CHANGED, (e: any, currentTime: number) => {
+            this._whenMediaReady(() => {
+                if (this.avcomponent) {
+                    this.avcomponent.setCurrentTime(currentTime);
+                    this._mediaReady = true;
+                    this._flushMediaReadyQueue();
+                }
+            });
         });
 
         this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Range | null) => {
-
-            console.log("range changed");
             if (!this._observeRangeChanges()) {
                 return;
             }
@@ -96,11 +106,19 @@ export class AVCenterPanel extends CenterPanel {
                         virtualCanvasEnabled: true
                     });
                 }
-                
+
             });
         });
 
         this._createAVComponent();
+    }
+
+    _mediaReadyQueue: Function[] = [];
+    private _flushMediaReadyQueue() {
+        for (const cb of this._mediaReadyQueue) {
+            cb();
+        }
+        this._mediaReadyQueue = [];
     }
 
     private _createAVComponent(): void {
@@ -120,8 +138,12 @@ export class AVCenterPanel extends CenterPanel {
             this._mediaReady = true;
         }, false);
 
-        this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
-            
+        this.avcomponent.on('pause', () => {
+            this.component.publish(BaseEvents.PAUSE, this.avcomponent.getCurrentTime())
+        })
+
+        this.avcomponent.on('rangechanged', (rangeId: string | null) => {
+
             if (rangeId) {
 
                 this._setTitle();
@@ -143,6 +165,9 @@ export class AVCenterPanel extends CenterPanel {
                 this.component.publish(BaseEvents.RANGE_CHANGED, null);
             } 
             
+
+            this._setTitle();
+
         }, false);
     }
 
@@ -244,6 +269,8 @@ export class AVCenterPanel extends CenterPanel {
                     helper: this.extension.helper,
                     adaptiveAuthEnabled: this._isCurrentResourceAccessControlled(),
                     autoPlay: this.config.options.autoPlay,
+                    enableFastForward: this.config.options.enableFastForward,
+                    enableFastRewind: this.config.options.enableFastRewind,
                     autoSelectRange: true,
                     constrainNavigationToRange: this._limitToRange(),
                     content: this.content,
@@ -265,16 +292,18 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     private _whenMediaReady(cb: () => void): void {
-        Utils.Async.waitFor(() => {
-            return this._mediaReady;
-        }, cb);
+        if (this._mediaReady) {
+            cb();
+        } else {
+            this._mediaReadyQueue.push(cb);
+        }
     }
 
     private _viewRange(range: Range | null): void {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
-                this.avcomponent.playRange(range.id);
+                this.avcomponent.viewRange(range.id);
             }
             
             // don't resize the av component to avoid expensively redrawing waveforms
