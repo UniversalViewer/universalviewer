@@ -41,8 +41,6 @@ export class AVCenterPanel extends CenterPanel {
             this._whenMediaReady(() => {
                 if (this.avcomponent) {
                     this.avcomponent.setCurrentTime(currentTime);
-                    this._mediaReady = true;
-                    this._flushMediaReadyQueue();
                 }
             });
         });
@@ -114,6 +112,7 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     _mediaReadyQueue: Function[] = [];
+    // call all callbacks in the order they were added, and remove them from the queue
     private _flushMediaReadyQueue() {
         for (const cb of this._mediaReadyQueue) {
             cb();
@@ -136,6 +135,7 @@ export class AVCenterPanel extends CenterPanel {
         this.avcomponent.on('mediaready', () => {
             console.log('mediaready');
             this._mediaReady = true;
+            this._flushMediaReadyQueue();
         }, false);
 
         this.avcomponent.on('pause', () => {
@@ -145,8 +145,6 @@ export class AVCenterPanel extends CenterPanel {
         this.avcomponent.on('rangechanged', (rangeId: string | null) => {
 
             if (rangeId) {
-
-                this._setTitle();
 
                 const range: Range | null = this.extension.helper.getRangeById(rangeId);
 
@@ -165,7 +163,6 @@ export class AVCenterPanel extends CenterPanel {
                 this.component.publish(BaseEvents.RANGE_CHANGED, null);
             } 
             
-
             this._setTitle();
 
         }, false);
@@ -279,6 +276,11 @@ export class AVCenterPanel extends CenterPanel {
                     limitToRange: this._limitToRange(),
                     posterImageRatio: this.config.options.posterImageRatio
                 });
+                
+                // console.log("set up")
+                // this.avcomponent.on('waveformready', () => {
+                //     this.resize();
+                // }, false);
     
                 this.resize();
 
