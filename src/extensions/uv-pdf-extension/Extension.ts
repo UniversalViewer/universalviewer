@@ -134,6 +134,11 @@ export class Extension extends BaseExtension implements IPDFExtension {
         }
     }
 
+    isLeftPanelEnabled(): boolean {
+        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
+                && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
+    }
+
     bookmark() : void {
         super.bookmark();
 
