@@ -359,6 +359,13 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 }
             //}
 
+            // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
+            const hasRanges: boolean = helper.getRanges().length > 0;
+
+            if (extension!.name === 'uv-av-extension' && !hasRanges) {
+                extension = that._getExtensionByName('uv-mediaelement-extension');
+            }
+
             // if there still isn't a matching extension, use the default extension.
             if (!extension) {
                 extension = that._extensions['default'];
@@ -374,6 +381,20 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }).catch(function() {
             that._error('Failed to load manifest.');
         });
+    }
+
+    private _getExtensionByName(name: string): IExtension | undefined {
+        const keys = Object.keys(this._extensions);
+
+        for (let i = 0; i < keys.length; i++) {
+            const extension = this._extensions[keys[i]];
+
+            if (extension.name === name) {
+                return extension;
+            }
+        }
+
+        return undefined;
     }
 
     private _isCORSEnabled(): boolean {

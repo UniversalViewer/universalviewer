@@ -5,15 +5,15 @@
     "command": "grunt",
     "tasks": [
         {
-            "label": "default",
-            "type": "grunt",
-            "task": "default",
-            "problemMatcher": [
-                "$lessCompile",
-                "$tsc",
-                "$jshint"
-            ],
-            "group": "build"
+            "type": "npm",
+            "script": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "label": "npm: build",
+            "detail": "grunt"
         }
     ]
 }

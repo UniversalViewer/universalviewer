@@ -30,15 +30,15 @@ export class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if (this.isVideo()){
-            this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-                if (that.component.isFullScreen) {
-                    that.player.enterFullScreen(false);
-                } else {
-                    that.player.exitFullScreen(false);
-                }
-            });
-        }
+        // if (this.isVideo()){
+        //     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+        //         if (that.component.isFullScreen) {
+        //             that.player.enterFullScreen(false);
+        //         } else {
+        //             that.player.exitFullScreen(false);
+        //         }
+        //     });
+        // }
 
         this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
@@ -132,6 +132,12 @@ export class MediaElementCenterPanel extends CenterPanel {
                     }
                 });
 
+                // prevents errors when entering/exiting full screen
+                this.player.fullscreenBtn = {};
+                this.player.fullscreenBtn.classList = {};
+                this.player.fullscreenBtn.classList.add = () => {};
+                this.player.fullscreenBtn.classList.remove = () => {};
+
             } else { // audio
 
                 this.$media = $('<audio controls="controls" preload="none"></audio>');
@@ -212,16 +218,27 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         if (this.player) {
 
-            if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
-                this.player.setPlayerSize();
-                this.player.setControlsSize();
+            this.player.setPlayerSize();
+            this.player.setControlsSize();
 
-                const $mejs: JQuery = $('.mejs__container');
+            const $mejs: JQuery = $('.mejs__container');
 
-                $mejs.css({
-                    'margin-top': (this.$container.height() - $mejs.height()) / 2
-                });
-            }
+            // if (!this.component.isFullScreen) {
+            $mejs.css({
+                'margin-top': (this.$container.height() - $mejs.height()) / 2
+            });
+            // }
+            
+            // if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
+            //     this.player.setPlayerSize();
+            //     this.player.setControlsSize();
+
+            //     const $mejs: JQuery = $('.mejs__container');
+
+            //     $mejs.css({
+            //         'margin-top': (this.$container.height() - $mejs.height()) / 2
+            //     });
+            // }
 
         }
         
