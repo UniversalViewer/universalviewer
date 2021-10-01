@@ -10,8 +10,6 @@
   }
 ,
 "typescript.check.workspaceVersion": false,
-"workbench.editorAssociations": [
-
-],
+"workbench.editorAssociations": {},
 "editor.codeActionsOnSave": null
 }

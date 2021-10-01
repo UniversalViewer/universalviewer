@@ -1,6 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
-import ITreeNode = Manifold.ITreeNode;
+import { TreeNode } from 'manifesto.js';
 
 export class TreeView extends BaseView {
 
@@ -25,16 +25,17 @@ export class TreeView extends BaseView {
 
         const that = this;
 
+        // @ts-ignore
         this.treeComponent = new IIIFComponents.TreeComponent({
             target:  <HTMLElement>this.$tree[0], 
             data: this.treeData
         });
 
-        this.treeComponent.on('treeNodeSelected', function(node: ITreeNode) {
+        this.treeComponent.on('treeNodeSelected', function(node: TreeNode) {
             that.component.publish(BaseEvents.TREE_NODE_SELECTED, node);
         }, false);
 
-        this.treeComponent.on('treeNodeMultiSelected', function(node: ITreeNode) {
+        this.treeComponent.on('treeNodeMultiSelected', function(node: TreeNode) {
             that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
         }, false);
     }
@@ -54,7 +55,7 @@ export class TreeView extends BaseView {
         this.$element.hide();
     }
 
-    public selectNode(node: Manifold.ITreeNode): void {
+    public selectNode(node: TreeNode): void {
 
         if (!this.treeComponent.selectedNode) {
 
@@ -70,12 +71,12 @@ export class TreeView extends BaseView {
         this.treeComponent.selectNode(node);        
     }
 
-    public expandNode(node: Manifold.ITreeNode, expanded: boolean): void {
+    public expandNode(node: TreeNode, expanded: boolean): void {
         this.treeComponent.expandNode(node, expanded);
     }
 
 
-    public getAllNodes(): Manifold.ITreeNode[] {
+    public getAllNodes(): TreeNode[] {
         return this.treeComponent.getAllNodes();
     }
 
@@ -83,7 +84,7 @@ export class TreeView extends BaseView {
         this.treeComponent.deselectCurrentNode();
     }
 
-    public getNodeById(id: string): ITreeNode {
+    public getNodeById(id: string): TreeNode {
         return this.treeComponent.getNodeById(id);
     }
 

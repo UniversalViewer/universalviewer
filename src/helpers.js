@@ -38,6 +38,12 @@ function createUV(selector, data, dataProvider) {
        resize();
     }, false);
 
+    uv.on('pause', function(currentTime) {
+        if (currentTime > 0) {
+            dataProvider.set('t', currentTime);
+        }
+    }, false);
+
     uv.on('collectionIndexChanged', function(collectionIndex) {
         dataProvider.set('c', collectionIndex);
     }, false);
@@ -128,6 +134,7 @@ function createUV(selector, data, dataProvider) {
         e.type === 'mozfullscreenchange' && !document.mozFullScreen ||
         e.type === 'MSFullscreenChange' && document.msFullscreenElement === null) {
             uv.exitFullScreen();
+            resize();
         }
     });
 

@@ -5,6 +5,8 @@ import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {UVUtils} from "../../Utils";
+import { ViewingDirection } from '@iiif/vocabulary';
+import { ManifestType, Canvas, LanguageMap } from 'manifesto.js';
 
 export class PagingHeaderPanel extends HeaderPanel {
 
@@ -111,13 +113,13 @@ export class PagingHeaderPanel extends HeaderPanel {
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
                     const results: string[] = [];
-                    const canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
+                    const canvases: Canvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()) {
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: Manifesto.ICanvas = canvases[i];
-                            const label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
+                            const canvas: Canvas = canvases[i];
+                            const label: string | null = LanguageMap.getValue(canvas.getLabel());
                             if (label && label.startsWith(term)) {
                                 results.push(label);
                             }
@@ -125,7 +127,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                     } else {
                         // get canvas by index
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: Manifesto.ICanvas = canvases[i];
+                            const canvas: Canvas = canvases[i];
                             if (canvas.index.toString().startsWith(term)) {
                                 results.push(canvas.index.toString());
                             }
@@ -150,8 +152,8 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
-                const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = UVUtils.sanitize(<string>Manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
+                const canvas: Canvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                const label: string = UVUtils.sanitize(<string>LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -195,7 +197,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.extension.helper.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
+        if (this.extension.helper.getManifestType()!.toString() === ManifestType.MANUSCRIPT.toString()){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);
@@ -246,7 +248,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.setNavigationTitles();
         this.setTotal();
 
-        let viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        let viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this.extension.helper.getTotalCanvases() === 1) {
@@ -256,12 +258,12 @@ export class PagingHeaderPanel extends HeaderPanel {
         // ui event handlers.
         this.$firstButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
                     this.component.publish(BaseEvents.FIRST);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.LAST);
                     break;
             }
@@ -269,12 +271,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.$prevButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
                     this.component.publish(BaseEvents.PREV);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.NEXT);
                     break;
             }
@@ -282,12 +284,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.$nextButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
                     this.component.publish(BaseEvents.NEXT);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.PREV);
                     break;
             }
@@ -295,12 +297,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.$lastButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case ViewingDirection.LEFT_TO_RIGHT.toString() :
+                case ViewingDirection.TOP_TO_BOTTOM.toString() :
+                case ViewingDirection.BOTTOM_TO_TOP.toString() :
                     this.component.publish(BaseEvents.LAST);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT.toString() :
                     this.component.publish(BaseEvents.FIRST);
                     break;
             }
@@ -484,12 +486,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     setSearchFieldValue(index: number): void {
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+        const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
         let value: string | null = null;
 
         if (this.isPageModeEnabled()) {
 
-            const orderLabel: string = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+            const orderLabel: string = <string>LanguageMap.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";
@@ -537,7 +539,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                 return;
             }
 
-            const asset: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+            const asset: Canvas = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.pageNotFound);
@@ -556,9 +558,9 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox.val(index);
         }
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-        if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+        if (viewingDirection.toString() === ViewingDirection.RIGHT_TO_LEFT.toString()) {
             if (this.extension.helper.isFirstCanvas()){
                 this.disableLastButton();
                 this.disableNextButton();

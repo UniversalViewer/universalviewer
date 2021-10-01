@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import { IExternalResource } from 'manifesto.js';
 
 export class RestrictedDialogue extends Dialogue {
 
@@ -9,7 +10,7 @@ export class RestrictedDialogue extends Dialogue {
     $title: JQuery;
     acceptCallback: any;
     isAccepted: boolean;
-    resource: Manifesto.IExternalResource;
+    resource: IExternalResource;
 
     constructor($element: JQuery) {
         super($element);

@@ -3,6 +3,8 @@ import {Events} from "../../extensions/uv-mediaelement-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { UVUtils } from "../../Utils";
+import { AnnotationBody, Canvas, IExternalResource, Rendering } from 'manifesto.js';
+import { MediaType } from '@iiif/vocabulary';
 
 export class MediaElementCenterPanel extends CenterPanel {
 
@@ -28,17 +30,17 @@ export class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if (this.isVideo()){
-            this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-                if (that.component.isFullScreen) {
-                    that.player.enterFullScreen(false);
-                } else {
-                    that.player.exitFullScreen(false);
-                }
-            });
-        }
+        // if (this.isVideo()){
+        //     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+        //         if (that.component.isFullScreen) {
+        //             that.player.enterFullScreen(false);
+        //         } else {
+        //             that.player.exitFullScreen(false);
+        //         }
+        //     });
+        // }
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -49,7 +51,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     }
 
-    openMedia(resources: Manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         const that = this;
 
@@ -57,7 +59,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
             this.$container.empty();
 
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
@@ -68,22 +70,22 @@ export class MediaElementCenterPanel extends CenterPanel {
             const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
             const sources: any[] = [];
 
-            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+            const renderings: Rendering[] = canvas.getRenderings();
             
             if (renderings && renderings.length) {
-                canvas.getRenderings().forEach((rendering: Manifesto.IRendering) => {
+                canvas.getRenderings().forEach((rendering: Rendering) => {
                     sources.push({
                         type: rendering.getFormat().toString(),
                         src: rendering.id
                     });
                 });
             } else {
-                const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
+                const formats: AnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
 
                 if (formats && formats.length) {
-                    formats.forEach((format: Manifesto.IAnnotationBody) => {
+                    formats.forEach((format: AnnotationBody) => {
                         
-                        const type: Manifesto.MediaType | null = format.getFormat();
+                        const type: MediaType | null = format.getFormat();
 
                         if (type) {
                             sources.push({
@@ -129,6 +131,12 @@ export class MediaElementCenterPanel extends CenterPanel {
                         mediaElement.setSrc(sources);
                     }
                 });
+
+                // prevents errors when entering/exiting full screen
+                this.player.fullscreenBtn = {};
+                this.player.fullscreenBtn.classList = {};
+                this.player.fullscreenBtn.classList.add = () => {};
+                this.player.fullscreenBtn.classList.remove = () => {};
 
             } else { // audio
 
@@ -210,16 +218,27 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         if (this.player) {
 
-            if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
-                this.player.setPlayerSize();
-                this.player.setControlsSize();
+            this.player.setPlayerSize();
+            this.player.setControlsSize();
 
-                const $mejs: JQuery = $('.mejs__container');
+            const $mejs: JQuery = $('.mejs__container');
 
-                $mejs.css({
-                    'margin-top': (this.$container.height() - $mejs.height()) / 2
-                });
-            }
+            // if (!this.component.isFullScreen) {
+            $mejs.css({
+                'margin-top': (this.$container.height() - $mejs.height()) / 2
+            });
+            // }
+            
+            // if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
+            //     this.player.setPlayerSize();
+            //     this.player.setControlsSize();
+
+            //     const $mejs: JQuery = $('.mejs__container');
+
+            //     $mejs.css({
+            //         'margin-top': (this.$container.height() - $mejs.height()) / 2
+            //     });
+            // }
 
         }
         

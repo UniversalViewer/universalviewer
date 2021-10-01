@@ -1,16 +1,18 @@
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
-import {DownloadDialogue} from "./DownloadDialogue";
-import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
-import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
-import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
-import {IVirtexExtension} from "./IVirtexExtension";
-import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {SettingsDialogue} from "./SettingsDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
+import { Canvas, LanguageMap } from 'manifesto.js';
+import { ExternalResourceType } from '@iiif/vocabulary';
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import { DownloadDialogue } from "./DownloadDialogue";
+import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
+import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
+import { IVirtexExtension } from "./IVirtexExtension";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
+import { VirtexCenterPanel } from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
 
 export class Extension extends BaseExtension implements IVirtexExtension {
 
@@ -108,15 +110,15 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     bookmark(): void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.physicalobject().toString();
+        bookmark.type = ExternalResourceType.PHYSICAL_OBJECT.toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
@@ -125,8 +127,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         //const configUri: string = this.data.config.uri || '';
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
     }
 }

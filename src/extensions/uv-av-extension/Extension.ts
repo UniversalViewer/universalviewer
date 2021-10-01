@@ -1,3 +1,5 @@
+import { TreeNode, Range, Thumb } from 'manifesto.js';
+import { IIIFResourceType } from '@iiif/vocabulary';
 import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
@@ -10,8 +12,6 @@ import { IAVExtension } from "./IAVExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -38,13 +38,15 @@ export class Extension extends BaseExtension implements IAVExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: ITreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: TreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
-            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
+            if (this.data.canvasIndex !== thumb.index) {
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
+            }
         });
     }
 
@@ -117,7 +119,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
     isLeftPanelEnabled(): boolean {
         let isEnabled: boolean = super.isLeftPanelEnabled();
-        const tree: Manifesto.ITreeNode | null = this.helper.getTree();
+        const tree: TreeNode | null = this.helper.getTree();
 
         if (tree && tree.nodes.length) {
             isEnabled = true;
@@ -130,23 +132,30 @@ export class Extension extends BaseExtension implements IAVExtension {
         super.render();
     }
 
-    getEmbedScript(template: string, width: number, height: number): string {
-        const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
-        return script;
+    isThumbsViewOpen(): boolean {
+        if (!this.leftPanel) {
+            return false;
+        }
+
+        return this.leftPanel.isThumbsViewOpen;
     }
 
-    treeNodeSelected(node: ITreeNode): void {
+    getEmbedScript(template: string, width: number, height: number): string {
+        const appUri: string = this.getAppUri();
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
+        return Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+    }
+
+    treeNodeSelected(node: TreeNode): void {
         const data: any = node.data;
 
         if (!data.type) return;
 
         switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
+            case IIIFResourceType.MANIFEST.toString():
                 // do nothing
                 break;
-            case manifesto.IIIFResourceType.collection().toString():
+            case IIIFResourceType.COLLECTION.toString():
                 // do nothing
                 break;
             default:
@@ -156,7 +165,7 @@ export class Extension extends BaseExtension implements IAVExtension {
     }
 
     viewRange(path: string): void {
-        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
+        const range: Range | null = this.helper.getRangeByPath(path);
         if (!range) return;
         this.component.publish(BaseEvents.RANGE_CHANGED, range);
 

@@ -1,6 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Events } from "../../extensions/uv-pdf-extension/Events"; 
+import { Events } from "../../extensions/uv-pdf-extension/Events";
+import { AnnotationBody, Canvas, IExternalResource } from 'manifesto.js';
 
 declare var PDFJS: any;
 
@@ -62,7 +63,7 @@ export class PDFCenterPanel extends CenterPanel {
 
         this.$content.prepend(this._$pdfContainer);
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
             this.openMedia(resources);
         });
 
@@ -233,15 +234,15 @@ export class PDFCenterPanel extends CenterPanel {
         this._$nextButton.show();
     }
 
-    openMedia(resources: Manifesto.IExternalResource[]) {
+    openMedia(resources: IExternalResource[]) {
 
         this._$spinner.show();
         
         this.extension.getExternalResources(resources).then(() => {
 
             let mediaUri: string | null = null;
-            let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-            const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+            const formats: AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
             const pdfUri: string = canvas.id;
 
             if (formats && formats.length) {
@@ -313,6 +314,25 @@ export class PDFCenterPanel extends CenterPanel {
             this._viewport = page.getViewport(this._scale);
             this._canvas.height = this._viewport.height;
             this._canvas.width = this._viewport.width;
+
+
+            // get divisible number between canvas height and content height
+            const divisible_amount = this._canvas.height / this.$content.height()
+            // create a variable for the new canvas height.
+            // (canvas height divided by our divisible_amount) multiply by the viewport scale
+            var canvas_height = (this._canvas.height / divisible_amount) * this._viewport.scale;
+
+            // if canvas height is smaller than our content height
+            // use the content hight instead
+            if(canvas_height < this.$content.height()) {
+                canvas_height = this.$content.height();
+            }
+
+            // set the canvas height with CSS
+            this._$canvas.css({
+                height: canvas_height
+            });
+
 
             // Render PDF page into canvas context
             const renderContext = {

@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 import {UVUtils} from "../../Utils";
+import { Service } from 'manifesto.js';
 
 export class AuthDialogue extends Dialogue {
 
@@ -11,7 +12,7 @@ export class AuthDialogue extends Dialogue {
     $confirmButton: JQuery;
     $message: JQuery;
     $title: JQuery;
-    service: Manifesto.IService;
+    service: Service;
 
     constructor($element: JQuery) {
         super($element);

@@ -1,17 +1,17 @@
 {
   "name": "universalviewer",
-  "version": "3.1.1",
+  "version": "3.1.4",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
-    "node": ">=8.9.1",
-    "npm": ">=3.10.8"
+    "node": ">=8.9.1 <9",
+    "npm": ">=3.10.8  <4"
   },
   "files": [
     "dist/"
   ],
   "scripts": {
-    "postinstall": "opencollective postinstall",
     "server": "node_modules/.bin/http-server -p 4444",
+    "build": "grunt",
     "test": "jest",
     "version": "echo { \"version\": \"%npm_package_version%\" } > ./dist/info.json && cp ./dist/info.json ./examples/uv"
   },
@@ -43,7 +43,6 @@
     "grunt": "1.0.3",
     "grunt-cli": "1.3.1",
     "grunt-contrib-clean": "0.4.0",
-    "grunt-contrib-compress": "1.4.3",
     "grunt-contrib-concat": "1.0.1",
     "grunt-contrib-connect": "2.0.0",
     "grunt-contrib-copy": "0.4.1",
@@ -71,11 +70,12 @@
     "@edsilv/key-codes": "0.0.9",
     "@edsilv/utils": "0.2.6",
     "@iiif/base-component": "1.1.4",
-    "@iiif/iiif-av-component": "0.0.93",
-    "@iiif/iiif-gallery-component": "1.1.13",
-    "@iiif/iiif-metadata-component": "1.1.13",
+    "@iiif/iiif-av-component": "^1.1.4",
+    "@iiif/iiif-gallery-component": "1.1.19",
+    "@iiif/iiif-metadata-component": "1.1.19",
     "@iiif/iiif-tree-component": "1.1.16",
-    "@iiif/manifold": "1.2.38",
+    "@iiif/manifold": "^2.0.5",
+    "@iiif/vocabulary": "^1.0.20",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
@@ -90,9 +90,8 @@
     "jquery-ui-dist": "1.12.1",
     "jquery-ui-touch-punch": "0.2.3",
     "jsviews": "0.9.83",
-    "manifesto.js": "3.0.12",
+    "manifesto.js": "^4.2.4",
     "mediaelement": "4.0.2",
-    "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
     "pdfjs-dist": "2.0.161",
     "pdfobject": "^2.1.1",

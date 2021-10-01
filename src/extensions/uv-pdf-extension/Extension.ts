@@ -1,3 +1,5 @@
+import { ExternalResourceType } from '@iiif/vocabulary';
+import { Canvas, LanguageMap, Thumb } from 'manifesto.js';
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
@@ -10,7 +12,6 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -37,7 +38,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
@@ -133,18 +134,23 @@ export class Extension extends BaseExtension implements IPDFExtension {
         }
     }
 
+    isLeftPanelEnabled(): boolean {
+        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
+                && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
+    }
+
     bookmark() : void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.document().toString();
+        bookmark.type = ExternalResourceType.DOCUMENT.toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
@@ -159,7 +165,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         //const configUri = this.data.config.uri || '';
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
         const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }

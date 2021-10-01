@@ -1,3 +1,5 @@
+import { Canvas, LanguageMap } from 'manifesto.js';
+import { AnnotationGroup } from '@iiif/manifold';
 import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-seadragon-extension/Events";
@@ -6,7 +8,6 @@ import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISead
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
 import {UVUtils} from "../../Utils";
-import AnnotationGroup = Manifold.AnnotationGroup;
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -363,7 +364,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     updatePrintButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.printEnabled, false);
-        //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+        //var printService: Service = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
 
         //if (configEnabled && printService && this.extension.isOnHomeDomain()){
         if (configEnabled){
@@ -378,7 +379,7 @@ export class FooterPanel extends BaseFooterPanel {
         this.terms = terms;
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
-            this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.emptyValue, function(){
+            this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.emptyValue, () => {
                 this.$searchText.focus();
             });
 
@@ -484,14 +485,14 @@ export class FooterPanel extends BaseFooterPanel {
         let title: string = "{0} {1}";
 
         if (that.isPageModeEnabled()) {
-            const canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
-            let label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
+            const canvas: Canvas = that.extension.helper.getCanvasByIndex(canvasIndex);
+            let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
-            if (!label) {
-                label = this.extension.helper.manifest.options.defaultLabel;
+            if (!label && that.extension.helper.manifest) {
+                label = that.extension.helper.manifest.options.defaultLabel;
             }
 
-            title = Utils.Strings.format(title, that.content.pageCaps, label);
+            title = Utils.Strings.format(title, that.content.pageCaps, label as string);
         } else {
             title = Utils.Strings.format(title, that.content.imageCaps, String(canvasIndex + 1));
         }
@@ -637,8 +638,8 @@ export class FooterPanel extends BaseFooterPanel {
         const index: number = this.extension.helper.canvasIndex;
 
         if (this.isPageModeEnabled()) {
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-            let label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
+            const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
+            let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
             if (!label) {
                 label = this.content.defaultLabel;

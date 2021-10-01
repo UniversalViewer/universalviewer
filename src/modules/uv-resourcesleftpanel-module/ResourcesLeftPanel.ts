@@ -1,6 +1,8 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {ThumbsView} from "./ThumbsView";
+import { Annotation, LanguageMap, Thumb } from 'manifesto.js';
+import { MediaType, ViewingDirection } from '@iiif/vocabulary';
 
 export class ResourcesLeftPanel extends LeftPanel {
 
@@ -60,20 +62,20 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        const annotations: Manifesto.IAnnotation[] = this.extension.helper.getCurrentCanvas().getResources();
+        const annotations: Annotation[] = this.extension.helper.getCurrentCanvas().getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();
         }
 
         for (let i = 0; i < annotations.length; i++) {
-            const annotation: Manifesto.IAnnotation = annotations[i];
-            const resource: Manifesto.Resource = annotation.getResource();
+            const annotation: Annotation = annotations[i];
+            const resource = annotation.getResource();
             if (resource) {
-                const label: string | null = Manifesto.LanguageMap.getValue(<Manifesto.LanguageMap>resource.getLabel());
+                const label: string | null = LanguageMap.getValue(<LanguageMap>resource.getLabel());
 
                 if (label) {
-                    const mime: string = Utils.Files.simplifyMimeType((<Manifesto.MediaType>resource.getFormat()).toString());
+                    const mime: string = Utils.Files.simplifyMimeType((<MediaType>resource.getFormat()).toString());
                     const $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + label + ' (' + mime + ')' + '</li>');
                     this.$resources.append($listItem);
                 }
@@ -87,9 +89,9 @@ export class ResourcesLeftPanel extends LeftPanel {
         let width: number;
         let height: number;
 
-        const viewingDirection: Manifesto.ViewingDirection | null = this.extension.helper.getViewingDirection();
+        const viewingDirection: ViewingDirection | null = this.extension.helper.getViewingDirection();
 
-        if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
+        if (viewingDirection && (viewingDirection.toString() === ViewingDirection.LEFT_TO_RIGHT.toString() || viewingDirection.toString() === ViewingDirection.RIGHT_TO_LEFT.toString())) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         } else {
@@ -105,7 +107,7 @@ export class ResourcesLeftPanel extends LeftPanel {
             height = 100;
         }
 
-        this.thumbsView.thumbs = <Manifold.IThumb[]>this.extension.helper.getThumbs(width, height);
+        this.thumbsView.thumbs = <Thumb[]>this.extension.helper.getThumbs(width, height);
         // hide thumb selector for single-part manifests
         if (this.thumbsView.thumbs.length < 2) {
             this.$thumbsView.hide();

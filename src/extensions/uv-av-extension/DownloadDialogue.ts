@@ -1,3 +1,4 @@
+import {Canvas, Range, Annotation,} from 'manifesto.js';
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
@@ -43,7 +44,11 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$manifestOptionsContainer.append(this.$manifestOptions);
 
         const that = this;
-        
+
+        this.$downloadButton.find('.btn-primary').on('click', () => {
+            this.component.publish(BaseEvents.EXIT_FULLSCREEN);
+        });
+
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
@@ -78,7 +83,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         super.open(triggerButton);
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
         
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
@@ -94,7 +99,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
-                    const range: Manifesto.IRange = canvas.ranges[i];
+                    const range: Range = canvas.ranges[i];
                     const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
@@ -102,7 +107,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            const images: Annotation[] = canvas.getImages();
             if (images.length) {
                 this.$downloadOptions.append(this.$imageOptionsContainer);
             }

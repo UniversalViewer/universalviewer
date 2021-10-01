@@ -50,7 +50,7 @@ define(function() {
 
     return function(formats: string[]) {
 
-        var alwaysRequired = ['TreeComponent', 'AVComponent', 'MetadataComponent', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
+        var alwaysRequired = ['TreeComponent', 'IIIFAVComponent', 'IIIFMetadataComponent', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
 
         if (isHLSFormatAvailable(formats) && canPlayHls()) {
             console.log('load HLS');

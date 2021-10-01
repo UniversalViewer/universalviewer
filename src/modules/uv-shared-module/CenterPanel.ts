@@ -1,6 +1,7 @@
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
 import {UVUtils} from "../../Utils";
+import { ILabelValuePair } from '@iiif/manifold';
 
 export class CenterPanel extends BaseView {
 
@@ -42,7 +43,7 @@ export class CenterPanel extends BaseView {
         this.$subtitleExpand = this.$subtitle.find('.expand-btn');
         this.$subtitleText = this.$subtitle.find('.text');
 
-        this.$content = $('<div id="content" class="content"></div>');
+        this.$content = $('<div class="content"></div>');
         this.$element.append(this.$content);
 
         this.$attribution = $(`
@@ -115,7 +116,7 @@ export class CenterPanel extends BaseView {
     }
 
     updateRequiredStatement(): void {
-        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+        const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 

@@ -1,3 +1,4 @@
+import { ILabelValuePair } from '@iiif/manifold';
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
@@ -328,7 +329,7 @@ export class ShareDialogue extends Dialogue {
 
     updateTermsOfUseButton(): void {
 
-        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+        const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
         if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();

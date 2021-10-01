@@ -1,6 +1,7 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
-import IThumb = Manifold.IThumb;
+import { ExternalResourceType, ViewingDirection } from '@iiif/vocabulary';
+import { Annotation, AnnotationBody, Canvas, Thumb } from 'manifesto.js';
 
 export class ThumbsView extends BaseView {
 
@@ -11,7 +12,7 @@ export class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: IThumb[];
+    public thumbs: Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -36,7 +37,7 @@ export class ThumbsView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         this.$thumbs.addClass(viewingDirection.toString()); // defaults to "left-to-right"
 
@@ -76,9 +77,9 @@ export class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                const viewingDirection: Manifesto.ViewingDirection | null = that.extension.helper.getViewingDirection();
+                const viewingDirection: ViewingDirection | null = that.extension.helper.getViewingDirection();
 
-                if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
+                if (viewingDirection && (viewingDirection.toString() === ViewingDirection.LEFT_TO_RIGHT.toString() || viewingDirection.toString() === ViewingDirection.RIGHT_TO_LEFT.toString())) {
                     className += " twoCol";
                 } else if (that.extension.helper.isPaged()) {
                     className += " twoCol";
@@ -130,14 +131,14 @@ export class ThumbsView extends BaseView {
         let heights: number[] = [];
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: IThumb = this.thumbs[i];
+            const thumb: Thumb = this.thumbs[i];
             heights.push(thumb.height);
         }
 
         const medianHeight: number = Utils.Maths.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: IThumb = this.thumbs[i];
+            const thumb: Thumb = this.thumbs[i];
             thumb.height = medianHeight;
         }
 
@@ -170,15 +171,16 @@ export class ThumbsView extends BaseView {
         let thumbType: string | undefined;
 
         // get the type of the canvas content
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        const canvas: Canvas = this.extension.helper.getCanvasByIndex(index);
+        const annotations: Annotation[] = canvas.getContent();
 
         if (annotations.length) {
-            const annotation: Manifesto.IAnnotation = annotations[0];
-            const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+            const annotation: Annotation = annotations[0];
+            const body: AnnotationBody[] = annotation.getBody();
 
             if (body.length) {
-                const type: Manifesto.ResourceType | null = body[0].getType();
+                // @ts-ignore
+                const type: ExternalResourceType | null = body[0].getType();
 
                 if (type) {
                     thumbType = type.toString().toLowerCase();
@@ -255,8 +257,8 @@ export class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean {
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-        const type: Manifesto.ResourceType | null = canvas.getType();
+        const canvas: Canvas = this.extension.helper.getCurrentCanvas();
+        const type = canvas.getType();
 
         if (type) {
             return (type.toString().includes("pdf"));

@@ -1,3 +1,6 @@
+import { Annotation, AnnotationBody, Canvas, Sequence } from 'manifesto.js';
+import { Helper, loadManifest } from '@iiif/manifold';
+import { ExternalResourceType, IIIFResourceType, MediaType, RenderingFormat } from '@iiif/vocabulary';
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
 import {Extension as AVExtension} from "./extensions/uv-av-extension/Extension";
 import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
@@ -41,22 +44,22 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         this._extensions = <IExtension[]>{};
 
-        this._extensions[manifesto.ResourceType.canvas().toString()] = {
+        this._extensions[IIIFResourceType.CANVAS.toString()] = {
             type: OpenSeadragonExtension,
             name: 'uv-seadragon-extension'
         };
 
-        this._extensions[manifesto.ResourceType.image().toString()] = {
+        this._extensions[ExternalResourceType.IMAGE.toString()] = {
             type: OpenSeadragonExtension,
             name: 'uv-seadragon-extension'
         };
 
-        this._extensions[manifesto.ResourceType.movingimage().toString()] = {
+        this._extensions[ExternalResourceType.MOVING_IMAGE.toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
 
-        this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
+        this._extensions[ExternalResourceType.PHYSICAL_OBJECT.toString()] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
         };
@@ -66,39 +69,39 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-virtex-extension'
         };
 
-        this._extensions[manifesto.ResourceType.sound().toString()] = {
+        this._extensions[ExternalResourceType.SOUND.toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
 
-        this._extensions[manifesto.RenderingFormat.pdf().toString()] = {
+        this._extensions[RenderingFormat.PDF.toString()] = {
             type: PDFExtension,
             name: 'uv-pdf-extension'
         };
 
         // presentation 3
 
-        this._extensions[manifesto.MediaType.jpg().toString()] = {
+        this._extensions[MediaType.JPG.toString()] = {
             type: OpenSeadragonExtension,
             name: 'uv-seadragon-extension'
         };
         
-        this._extensions[manifesto.MediaType.pdf().toString()] = {
+        this._extensions[MediaType.PDF.toString()] = {
             type: PDFExtension,
             name: 'uv-pdf-extension'
         };
 
-        this._extensions[manifesto.MediaType.mp4().toString()] = {
+        this._extensions[MediaType.VIDEO_MP4.toString()] = {
             type: AVExtension,
             name: 'uv-av-extension'
         };
 
-        this._extensions[manifesto.MediaType.webm().toString()] = {
+        this._extensions[MediaType.WEBM.toString()] = {
             type: AVExtension,
             name: 'uv-av-extension'
         };
 
-        this._extensions[manifesto.MediaType.threejs().toString()] = {
+        this._extensions[MediaType.THREEJS.toString()] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
         };
@@ -259,21 +262,23 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         const that = this;
 
-        Manifold.loadManifest(<Manifold.IManifoldOptions>{
-            iiifResourceUri: data.iiifResourceUri,
+        loadManifest({
+            manifestUri: data.iiifResourceUri as string,
             collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
             manifestIndex: data.manifestIndex || 0,
             sequenceIndex: data.sequenceIndex || 0,
             canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
-        }).then((helper: Manifold.IHelper) => {
+        }).then((helper) => {
             
-            let trackingLabel: string = helper.getTrackingLabel();
-            trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
-            window.trackingLabel = trackingLabel;
+            let trackingLabel = helper.getTrackingLabel() as string;
+            if (trackingLabel) {
+                trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
+                window.trackingLabel = trackingLabel;
+            }
 
-            let sequence: Manifesto.ISequence | undefined;
+            let sequence: Sequence | undefined;
 
             if (data.sequenceIndex !== undefined) {
                 sequence = helper.getSequenceByIndex(data.sequenceIndex);
@@ -284,7 +289,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 }
             }
 
-            let canvas: Manifesto.ICanvas | undefined;
+            let canvas: Canvas | undefined;
 
             if (data.canvasIndex !== undefined) {
                 canvas = helper.getCanvasByIndex(data.canvasIndex);
@@ -306,28 +311,30 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 // canvasType will always be "canvas" in IIIF presentation 3.0
                 // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
                 // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
-                const content: Manifesto.IAnnotation[] = canvas.getContent();
+                const content: Annotation[] = canvas.getContent();
                 
                 if (content.length) {
-                    const annotation: Manifesto.IAnnotation = content[0];
-                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+                    const annotation: Annotation = content[0];
+                    const body: AnnotationBody[] = annotation.getBody();
 
                     if (body && body.length) {
-                        const format: Manifesto.MediaType | null = body[0].getFormat();
+                        const format: MediaType | null = body[0].getFormat();
 
                         if (format) {
                             extension = that._extensions[format.toString()];
 
                             if (!extension) {
                                 // try type
-                                const type: Manifesto.ResourceType | null = body[0].getType();
+                                // @ts-ignore
+                                const type: ExternalResourceType | null = body[0].getType();
                             
                                 if (type) {
                                     extension = that._extensions[type.toString()];
                                 }
                             }
                         } else {
-                            const type: Manifesto.ResourceType | null = body[0].getType();
+                            // @ts-ignore
+                            const type: ExternalResourceType | null = body[0].getType();
 
                             if (type) {
                                 extension = that._extensions[type.toString()];
@@ -336,7 +343,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                     }
 
                 } else {
-                    const canvasType: Manifesto.ResourceType | null = canvas.getType();
+                    // @ts-ignore
+                    const canvasType: ExternalResourceType | null = canvas.getType();
 
                     if (canvasType) {
                         // try using canvasType
@@ -350,6 +358,13 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                     }
                 }
             //}
+
+            // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
+            const hasRanges: boolean = helper.getRanges().length > 0;
+
+            if (extension!.name === 'uv-av-extension' && !hasRanges) {
+                extension = that._getExtensionByName('uv-mediaelement-extension');
+            }
 
             // if there still isn't a matching extension, use the default extension.
             if (!extension) {
@@ -366,6 +381,20 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }).catch(function() {
             that._error('Failed to load manifest.');
         });
+    }
+
+    private _getExtensionByName(name: string): IExtension | undefined {
+        const keys = Object.keys(this._extensions);
+
+        for (let i = 0; i < keys.length; i++) {
+            const extension = this._extensions[keys[i]];
+
+            if (extension.name === name) {
+                return extension;
+            }
+        }
+
+        return undefined;
     }
 
     private _isCORSEnabled(): boolean {
@@ -461,7 +490,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
-    private _createExtension(extension: any, data: IUVData, helper: Manifold.IHelper): void {
+    private _createExtension(extension: any, data: IUVData, helper: Helper): void {
         this.extension = new extension.type();
         if (this.extension) {
             this.extension.component = this;
