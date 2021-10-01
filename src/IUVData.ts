@@ -15,4 +15,5 @@ export interface IUVData {
     rangeId?: string;
     root?: string;
     sequenceIndex?: number;
+    startTime?: number;
 }

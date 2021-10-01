@@ -365,7 +365,7 @@ module.exports = function (grunt) {
             'replace:themeassets',
             'clean:dist',
             'clean:examples',
-            'copy:dist',
+            'copy:dist'
         );
     });
 
