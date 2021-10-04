@@ -7,8 +7,5 @@
     name: "app",
     out: "src/build.js",
     preserveLicenseComments: false,
-    include: ["requireLib"],
-    uglify: {
-        no_mangle: true
-    }
+    include: ["requireLib"]
 })

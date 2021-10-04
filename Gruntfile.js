@@ -257,6 +257,12 @@ module.exports = function (grunt) {
             distbuild: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js optimize=none'
             },
+            terser: {
+                cmd: 'node node_modules/terser/bin/terser --compress --output src/build.js src/build.js'
+            },
+            noop: {
+                cmd: 'echo'
+            }
         },
 
         replace: {
@@ -317,19 +323,12 @@ module.exports = function (grunt) {
             },
             dist: {
             }
-        },
-
-        uglify: {
-            options: {
-                mangle: false
-            }
         }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-connect');
@@ -343,8 +342,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', '', function() {
 
-        var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
-        var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
+        var tsBuild = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
+        var rjsBuild = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
+        var terser = (grunt.option('dist')) ? 'exec:terser' : 'exec:noop';
 
         grunt.task.run(
             'clean:libs',
@@ -352,12 +352,13 @@ module.exports = function (grunt) {
             'sync',
             'copy:bundle',
             'concat:offline',
-            tsType,
+            tsBuild,
             'clean:extension',
             'configure:apply',
             'clean:build',
             'copy:schema',
-            execType,
+            rjsBuild,
+            terser,
             'copy:build',
             'theme:create',
             'theme:dist',
