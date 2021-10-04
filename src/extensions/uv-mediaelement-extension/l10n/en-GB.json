@@ -62,7 +62,9 @@
       }
     },
     "mediaelementCenterPanel": {
-      "content": {}
+      "content": {
+        "attribution": "Attribution"
+      }
     },
     "moreInfoRightPanel": {
       "content": {

@@ -1,8 +1,8 @@
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
-import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
+import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
 import { BaseEvents } from "./BaseEvents";
-import { ClickThroughDialogue } from "../../modules/uv-dialogues-module/ClickThroughDialogue";
+import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
 import { IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";

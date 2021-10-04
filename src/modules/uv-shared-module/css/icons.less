@@ -4,6 +4,17 @@
   .@{icon-prefix}, i {
     display: inline-block;
   }
+
+  .av-icon, .@{icon-prefix} {
+    opacity: .8;
+    transition: opacity .4s;
+    &:hover {
+      opacity: 1;
+    }
+    .btn:focus & {
+      opacity: 1;
+    }
+  }
 }
 
 .@{icon-prefix}-more-info {

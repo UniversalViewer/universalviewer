@@ -3,8 +3,8 @@
   "version": "4.0.0-pre.55",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
-    "node": ">=8.9.1",
-    "npm": ">=3.10.8"
+    "node": ">=8.9.1 <9",
+    "npm": ">=3.10.8  <4"
   },
   "files": [
     "dist/",
@@ -16,7 +16,6 @@
     "build": "grunt build",
     "e2eserve": "npx serve www -p 4444",
     "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\" \"!./src/lib/* \"",
-    "postinstall": "opencollective postinstall",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build:webpack": "webpack -c webpack.config.js",
     "theme:en": "THEME=uv-en-gb-theme NPM_THEME=@universalviewer/uv-en-gb-theme webpack -c webpack.theme.js",
@@ -118,7 +117,6 @@
     "manifesto.js": "4.0.1",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "^2.5.1",
-    "opencollective": "1.0.3",
     "openseadragon": "2.4.2",
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
