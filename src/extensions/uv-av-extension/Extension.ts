@@ -1,5 +1,3 @@
-import { TreeNode, Range, Thumb } from 'manifesto.js';
-import { IIIFResourceType } from '@iiif/vocabulary';
 import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
