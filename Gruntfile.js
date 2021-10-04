@@ -255,7 +255,7 @@ module.exports = function (grunt) {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none'
             },
             distbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
+                cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js optimize=none'
             },
         },
 
