@@ -145,40 +145,19 @@ export const init = (el: string | HTMLDivElement, data) => {
       (e.type === "webkitfullscreenchange" && !document.webkitIsFullScreen) ||
       (e.type === "fullscreenchange" && !document.fullscreenElement) ||
       (e.type === "mozfullscreenchange" && !document.mozFullScreen) ||
-      (e.type === "MSFullscreenChange" &&
-        document.msFullscreenElement === null)
+      (e.type === "MSFullscreenChange" && document.msFullscreenElement === null)
     ) {
       uv.exitFullScreen();
     }
   }
 
-  document.addEventListener(
-    "fullscreenchange",
-    fullScreenChange
-    ,
-    false
-  );
+  document.addEventListener("fullscreenchange", fullScreenChange, false);
 
-  document.addEventListener(
-    "webkitfullscreenchange",
-    fullScreenChange
-    ,
-    false
-  );
+  document.addEventListener("webkitfullscreenchange", fullScreenChange, false);
 
-  document.addEventListener(
-    "mozfullscreenchange",
-    fullScreenChange
-    ,
-    false
-  );
+  document.addEventListener("mozfullscreenchange", fullScreenChange, false);
 
-  document.addEventListener(
-    "MSFullscreenChange",
-    fullScreenChange
-    ,
-    false
-  );
+  document.addEventListener("MSFullscreenChange", fullScreenChange, false);
 
   // todo: iiif-specific
   uv.on(

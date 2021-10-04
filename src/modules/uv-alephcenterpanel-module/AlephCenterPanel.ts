@@ -43,7 +43,8 @@ export class AlephCenterPanel extends CenterPanel {
     this.$content.prepend(this._alViewer);
     this._alViewer.setAttribute("width", "100%");
     this._alViewer.setAttribute("height", "100%");
-    const dracoDecoderPath: string = "https://www.gstatic.com/draco/v1/decoders/";
+    const dracoDecoderPath: string =
+      "https://www.gstatic.com/draco/v1/decoders/";
     this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
 
     this._alViewer.addEventListener(

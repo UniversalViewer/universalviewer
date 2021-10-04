@@ -13,7 +13,7 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
-import './uv.css';
+import "./uv.css";
 
 interface IExtensionLoaderCollection {
   [key: string]: () => any;
@@ -32,7 +32,7 @@ enum Extension {
   MODELVIEWER = "uv-model-viewer-extension",
   OSD = "uv-openseadragon-extension",
   PDF = "uv-pdf-extension",
-  SLIDEATLAS = "uv-slideatlas-extension",
+  SLIDEATLAS = "uv-slideatlas-extension"
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {

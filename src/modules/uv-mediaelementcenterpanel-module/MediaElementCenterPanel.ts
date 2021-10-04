@@ -300,7 +300,13 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.$content.height()
     );
 
-    console.log(size, this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+    console.log(
+      size,
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
     this.$container.height(size.height);
     this.$container.width(size.width);

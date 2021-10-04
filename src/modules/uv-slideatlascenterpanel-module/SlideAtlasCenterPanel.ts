@@ -5,7 +5,7 @@ import {
   Canvas,
   Annotation,
   AnnotationBody,
-  Service,
+  Service
 } from "manifesto.js";
 import { loadCSS, loadScripts } from "../../Utils";
 
@@ -31,13 +31,11 @@ export class SlideAtlasCenterPanel extends CenterPanel {
   }
 
   async loadTilesource(id: string) {
-    await loadCSS([
-      "https://unpkg.com/slideatlas-viewer@4.4.1/dist/sa.css"
-    ]);
+    await loadCSS(["https://unpkg.com/slideatlas-viewer@4.4.1/dist/sa.css"]);
 
     await loadScripts([
       "https://unpkg.com/slideatlas-viewer@4.4.1/dist/sa-lib.js",
-      "https://unpkg.com/slideatlas-viewer@4.4.1/dist/sa.max.js",
+      "https://unpkg.com/slideatlas-viewer@4.4.1/dist/sa.max.js"
     ]);
 
     let tileDescriptor = id;
@@ -58,26 +56,26 @@ export class SlideAtlasCenterPanel extends CenterPanel {
         tileHeight: info.tileHeight,
         minLevel: 0,
         maxLevel: info.levels - 1,
-        units: 'mm',
+        units: "mm",
         spacing: [info.mm_x, info.mm_y],
-        getTileUrl: function (level, x, y, query) {
-          var url = tileDescriptor + '/zxy/' +
-            level + '/' + x + '/' + y;
+        getTileUrl: function(level, x, y, query) {
+          var url = tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
           if (query) {
-            url += '?' + $.param(query);
+            url += "?" + $.param(query);
           }
           return url;
         }
       };
 
       if (!info.mm_x) {
-        tileSource.units = 'pixels';
+        tileSource.units = "pixels";
         tileSource.spacing = [1, 1];
       }
 
       SA.SAViewer(this.$content, {
         zoomWidget: true,
         drawWidget: true,
+        navigationWidget: true,
         prefixUrl: "https://unpkg.com/slideatlas-viewer@4.4.1/dist/img/",
         tileSource: tileSource
       });
@@ -86,8 +84,11 @@ export class SlideAtlasCenterPanel extends CenterPanel {
       // new SAM.LayerPanel(viewer, this.itemId);
       // this.$content.css({position: 'relative'});
 
-      SA.SAFullScreenButton(this.$content)
-        .css({'position': 'absolute', 'left': '2px', 'top': '2px'});
+      SA.SAFullScreenButton(this.$content).css({
+        position: "absolute",
+        left: "2px",
+        top: "2px"
+      });
     });
   }
 

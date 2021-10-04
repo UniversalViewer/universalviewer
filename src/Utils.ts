@@ -84,7 +84,7 @@ export const loadScripts = async (sources: string[]) => {
       await appendScript(src);
     })
   );
-}
+};
 
 export const loadCSS = async (sources: string[]) => {
   await Promise.all(
@@ -92,9 +92,9 @@ export const loadCSS = async (sources: string[]) => {
       await appendCSS(src);
     })
   );
-}
+};
 
 export const isVisible = (el: JQuery) => {
   // return el.css("visibility") !== "hidden"
   return el.is(":visible");
-}
+};

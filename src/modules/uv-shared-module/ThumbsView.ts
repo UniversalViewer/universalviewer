@@ -1,6 +1,9 @@
 import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";
-import { ExternalResourceType, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
+import {
+  ExternalResourceType,
+  ViewingDirection
+} from "@iiif/vocabulary/dist-commonjs/";
 import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
 import * as KeyCodes from "@edsilv/key-codes";
 import { Dates, Keyboard, Maths, Strings } from "@edsilv/utils";
