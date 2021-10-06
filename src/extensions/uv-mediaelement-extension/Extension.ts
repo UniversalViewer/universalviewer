@@ -25,6 +25,7 @@ import {
   AnnotationBody
 } from "manifesto.js";
 import { TFragment } from "../uv-openseadragon-extension/TFragment";
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension
   implements IMediaElementExtension {

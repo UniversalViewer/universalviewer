@@ -1040,6 +1040,51 @@
           "visible": true
         }
       ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "biiif template",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json",
+          "@type": "sc:Manifest",
+          "label": "Astronaut",
+          "visible": false
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/video/index.json",
+          "@type": "sc:Manifest",
+          "label": "Big Buck Bunny",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/audio/index.json",
+          "@type": "sc:Manifest",
+          "label": "One Small Step for Man",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/pdf/index.json",
+          "@type": "sc:Manifest",
+          "label": "Science and the Public",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/images/index.json",
+          "@type": "sc:Manifest",
+          "label": "Vincent",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-zine.vercel.app/index.json",
+          "@type": "sc:Manifest",
+          "label": "Zine",
+          "visible": true
+        }
+      ]
     }
   ]
 }
