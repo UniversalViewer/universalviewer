@@ -13,14 +13,12 @@ import {
   Annotation,
   AnnotationBody
 } from "manifesto.js";
-import { MediaType } from "@iiif/vocabulary";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   applyPolyfills,
   defineCustomElements
 } from "@universalviewer/aleph/loader";
-import "@universalviewer/aleph/dist/collection/assets/aframe-1.0.3.min";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
-import "@universalviewer/aleph/dist/collection/assets/ami.min";
 
 export class AlephCenterPanel extends CenterPanel {
   private _alViewer: any;
@@ -46,11 +44,11 @@ export class AlephCenterPanel extends CenterPanel {
     this._alViewer.setAttribute("width", "100%");
     this._alViewer.setAttribute("height", "100%");
     const dracoDecoderPath: string =
-      window.self !== window.top ? "lib/" : "uv/lib/";
+      "https://www.gstatic.com/draco/v1/decoders/";
     this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
 
     this._alViewer.addEventListener(
-      "changed",
+      "change",
       (e: any) => {
         if (this._alViewerReady) {
           this._nextState(
@@ -203,8 +201,8 @@ export class AlephCenterPanel extends CenterPanel {
     );
   }
 
-  openMedia(resources: IExternalResource[]) {
-    this.extension.getExternalResources(resources).then(() => {
+  async openMedia(resources: IExternalResource[]) {
+    this.extension.getExternalResources(resources).then(async () => {
       let canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
       const annotations: Annotation[] = canvas.getContent();
@@ -222,10 +220,12 @@ export class AlephCenterPanel extends CenterPanel {
               ? DisplayMode.MESH
               : DisplayMode.SLICES;
 
-          // todo: only load AMI if not DisplayMode.MESH
-          // PDFJS = await import(
-          //   /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
-          // );
+          // only load AMI if not DisplayMode.MESH
+          // if (displayMode !== DisplayMode.MESH) {
+          //   window.AMI = await import(
+          //     /* webpackChunkName: "ami" */ /* webpackMode: "lazy" */ "@universalviewer/aleph/dist/collection/assets/ami.min"
+          //   );
+          // }
 
           this._nextState({
             src: media.id,

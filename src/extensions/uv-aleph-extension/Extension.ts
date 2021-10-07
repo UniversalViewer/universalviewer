@@ -11,6 +11,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 import { Strings, Bools } from "@edsilv/utils";
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension
   implements IAlephExtension {
@@ -39,7 +40,7 @@ export default class Extension extends BaseExtension
     );
   }
 
-  createModules(): void {
+  async createModules(): Promise<void> {
     super.createModules();
 
     if (this.isHeaderPanelEnabled()) {

@@ -7,7 +7,7 @@ import {
   IExternalResourceData
 } from "manifesto.js";
 import { sanitize } from "../../Utils";
-import { ViewingDirection } from "@iiif/vocabulary";
+import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { XYWHFragment } from "../../extensions/uv-openseadragon-extension/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
@@ -139,6 +139,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.fitToBounds(target, false);
       });
     });
+
+    // todo
+    this.component.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
+      this.whenLoaded(() => {
+        this.viewer.viewport.setRotation(rotation);
+      });
+    });
   }
 
   whenCreated(cb: () => void): void {
@@ -180,7 +187,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$content.append(this.$spinner);
 
     // Transparent pixel
-    const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+    const pixel =
+      "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
 
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
@@ -378,6 +386,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     });
 
     this.viewer.addHandler("rotate", (args: any) => {
+      // console.log("rotate");
       this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
     });
 

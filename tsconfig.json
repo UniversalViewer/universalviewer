@@ -5,10 +5,10 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
+    "moduleResolution": "node",
     "noImplicitThis": false,
     "noLib": false,
     "lib": ["ES2015", "DOM"],
-    "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": false,
@@ -24,6 +24,7 @@
       "node"
     ]
   },
+
   "exclude": [
     "node_modules",
     "src/**/*.test.ts",

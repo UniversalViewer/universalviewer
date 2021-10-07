@@ -1,4 +1,4 @@
-var metadata = require('./package');
+const metadata = require('./package');
 
 module.exports = function () {
     this.name = metadata.name;

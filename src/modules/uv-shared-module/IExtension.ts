@@ -1,17 +1,9 @@
+import { AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, Range, Manifest } from 'manifesto.js';
 import { ILocale } from "../../ILocale";
 import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { Shell } from "./Shell";
 import {} from "@iiif/manifold";
-import {
-  AnnotationBody,
-  Canvas,
-  Collection,
-  IExternalResource,
-  IExternalResourceData,
-  Manifest,
-  Range
-} from "manifesto.js";
 import { MetricType } from "./Metric";
 
 export interface IExtension {

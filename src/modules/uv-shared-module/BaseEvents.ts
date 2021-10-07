@@ -89,6 +89,7 @@ export class BaseEvents {
   static RIGHTPANEL_COLLAPSE_FULL_START: string = "rightPanelCollapseFullStart";
   static RIGHTPANEL_EXPAND_FULL_FINISH: string = "rightPanelExpandFullFinish";
   static RIGHTPANEL_EXPAND_FULL_START: string = "rightPanelExpandFullStart";
+  static SET_ROTATION: string = "setRotation";
   static SET_TARGET: string = "setTarget";
   static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";

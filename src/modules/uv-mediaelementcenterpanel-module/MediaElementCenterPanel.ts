@@ -4,7 +4,7 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../Utils";
 import { Dimensions, Size } from "@edsilv/utils";
-import { MediaType } from "@iiif/vocabulary";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
   Canvas,
@@ -300,7 +300,13 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.$content.height()
     );
 
-    console.log(size, this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+    console.log(
+      size,
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
     this.$container.height(size.height);
     this.$container.width(size.width);

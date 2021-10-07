@@ -27,7 +27,7 @@ import {
   IIIFResourceType,
   ExternalResourceType,
   ServiceProfile
-} from "@iiif/vocabulary";
+} from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
   Annotation,
@@ -43,7 +43,7 @@ import {
   Size,
   Utils
 } from "manifesto.js";
-import './theme/theme.less';
+import "./theme/theme.less";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -304,6 +304,13 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.component.subscribe(Events.OPENSEADRAGON_ANIMATION, () => {
       this.fire(Events.OPENSEADRAGON_ANIMATION);
     });
+
+    this.component.subscribe(
+      Events.OPENSEADRAGON_ROTATION,
+      (degrees: number) => {
+        this.fire(Events.OPENSEADRAGON_ROTATION, degrees);
+      }
+    );
 
     this.component.subscribe(
       Events.OPENSEADRAGON_ANIMATION_FINISH,
@@ -588,7 +595,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       .rotation;
 
     if (rotation) {
-      this.component.publish(Events.OPENSEADRAGON_ROTATION, rotation);
+      this.component.publish(BaseEvents.SET_ROTATION, rotation);
     }
   }
 

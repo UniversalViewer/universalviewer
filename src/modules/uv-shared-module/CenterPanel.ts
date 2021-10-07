@@ -89,15 +89,15 @@ export class CenterPanel extends BaseView {
     });
 
     if (Bools.getBool(this.options.titleEnabled, true)) {
-      this.$title.removeClass("hidden");
+      this.$title.show();
     } else {
-      this.$title.addClass("hidden");
+      this.$title.hide();
     }
 
     if (Bools.getBool(this.options.subtitleEnabled, false)) {
-      this.$subtitle.removeClass("hidden");
+      this.$subtitle.show();
     } else {
-      this.$subtitle.addClass("hidden");
+      this.$subtitle.hide();
     }
 
     this.whenResized(() => {
@@ -265,7 +265,7 @@ export class CenterPanel extends BaseView {
         sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, "; "))
       );
       this.$subtitleText.removeClass("elided");
-      this.$subtitle.removeClass("hidden");
+      this.$subtitle.show();
       this.$subtitleWrapper.css(
         "max-height",
         this.$content.height() + this.$subtitle.outerHeight()
@@ -297,7 +297,7 @@ export class CenterPanel extends BaseView {
         );
       }
     } else {
-      this.$subtitle.addClass("hidden");
+      this.$subtitle.hide();
     }
   }
 }

@@ -1,8 +1,8 @@
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
-import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
+import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
 import { BaseEvents } from "./BaseEvents";
-import { ClickThroughDialogue } from "../../modules/uv-dialogues-module/ClickThroughDialogue";
+import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
 import { IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";
@@ -28,7 +28,7 @@ import {
   Range,
   Thumb
 } from "manifesto.js";
-import { ViewingHint } from "@iiif/vocabulary";
+import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "@edsilv/key-codes";
 import {
   Bools,
@@ -1130,7 +1130,6 @@ export class BaseExtension implements IExtension {
   }
 
   viewCanvas(canvasIndex: number): void {
-    console.log("view canvas");
     if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
       this.showMessage(this.data.config.content.canvasIndexOutOfRange);
       return;
