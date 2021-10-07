@@ -152,7 +152,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
 }
 
 .mejs__overlay-button {
-    background: url('mejs-controls.svg') no-repeat;
+    background: @bgsvg no-repeat;
     background-position: 0 -39px;
     height: 80px;
     width: 80px;
@@ -170,7 +170,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
 .mejs__overlay-loading-bg-img {
     -webkit-animation: mejs__loading-spinner 1s linear infinite;
             animation: mejs__loading-spinner 1s linear infinite;
-    background: transparent url('mejs-controls.svg') -160px -40px no-repeat;
+    background: transparent @bgsvg -160px -40px no-repeat;
     display: block;
     height: 80px;
     width: 80px;
@@ -227,7 +227,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
 }
 
 .mejs__button > button {
-    background: transparent url('mejs-controls.svg');
+    background: transparent @bgsvg;
     border: 0;
     cursor: pointer;
     display: block;
