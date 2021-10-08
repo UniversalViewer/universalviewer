@@ -5,13 +5,15 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>UV Examples</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="uv.css" />
     <script src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
     <script src="uv-assets/js/bundle.js"></script>
     <script src="uv-assets/themes/uv-en-gb-theme/index.js"></script>
-    <%= htmlWebpackPlugin.tags.headTags %>
+    <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
       body {
         margin: 0px;
