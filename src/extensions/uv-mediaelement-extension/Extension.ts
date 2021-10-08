@@ -260,6 +260,9 @@ export default class Extension extends BaseExtension
           }
         }
       }
+
+      return false;
+      
     } else {
       const type: ExternalResourceType | null = canvas.getType();
 

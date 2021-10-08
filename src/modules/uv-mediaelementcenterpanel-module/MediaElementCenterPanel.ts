@@ -3,7 +3,6 @@ import { Events } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../Utils";
-// import { Dimensions, Size } from "@edsilv/utils";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
@@ -17,8 +16,6 @@ import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../../extensions/uv-openseadragon-extension/TFragment";
 
 export class MediaElementCenterPanel extends CenterPanel {
-  _$mejsContainer: JQuery;
-  _$mejsLayers: JQuery;
   $wrapper: JQuery;
   $container: JQuery;
   $media: JQuery;
@@ -38,23 +35,10 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     const that = this;
 
-    // events.
-
     this.component.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
       that.player.setCurrentTime(target.t);
       that.player.play();
     });
-
-    // only full screen video
-    // if (this.isVideo()) {
-    //   this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-    //     if (that.component.isFullScreen) {
-    //       that.player.enterFullScreen(false);
-    //     } else {
-    //       that.player.exitFullScreen(false);
-    //     }
-    //   });
-    // }
 
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
@@ -83,12 +67,6 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     this.mediaHeight = this.config.defaultHeight;
     this.mediaWidth = this.config.defaultWidth;
-
-    console.log("mediaHeight", this.mediaHeight);
-    console.log("mediaWidth", this.mediaWidth);
-
-    // this.$container.height(this.mediaHeight);
-    // this.$container.width(this.mediaWidth);
 
     const poster: string = (<IMediaElementExtension>(
       this.extension
@@ -172,9 +150,9 @@ export class MediaElementCenterPanel extends CenterPanel {
         ],
         stretching : "responsive",
         success: function(mediaElement: any, originalNode: any) {
-          console.log("success");
+
           mediaElement.addEventListener("loadstart", () => {
-            console.log("loadstart");
+            // console.log("loadstart");
             that.resize();
           });
 
@@ -216,7 +194,16 @@ export class MediaElementCenterPanel extends CenterPanel {
     } else {
       // audio
 
-      this.$media = $('<audio controls="controls" preload="none"></audio>');
+      this.$media = $('<audio controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></audio>');
+      
+      for (const source of sources) {
+        this.$media.append(
+          $(
+            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+          )
+        );
+      }
+
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("audio")[0], {
@@ -230,13 +217,11 @@ export class MediaElementCenterPanel extends CenterPanel {
           "volume",
           "sourcechooser",
         ],
+        stretching : "responsive",
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function(mediaElement: any, originalNode: any) {
-          mediaElement.addEventListener("loadedmetadata", () => {
-            that.resize();
-          });
 
           mediaElement.addEventListener("play", () => {
             that.component.publish(
@@ -265,19 +250,15 @@ export class MediaElementCenterPanel extends CenterPanel {
             );
           });
 
-          for (const source of sources) {
-            mediaElement.append(
-              $(
-                `<source src="${source.src}" type="${source.type}" title="${source.label}">`
-              )
+          mediaElement.addEventListener("timeupdate", () => {
+            that.component.publish(
+              Events.MEDIA_TIME_UPDATE,
+              Math.floor(mediaElement.currentTime)
             );
-          }
+          });
         },
       });
     }
-
-    this._$mejsContainer = this.$container.find(".mejs__container");
-    this._$mejsLayers = this.$container.find(".mejs__layer");
 
     this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
     this.component.publish(BaseEvents.LOAD);
@@ -290,47 +271,9 @@ export class MediaElementCenterPanel extends CenterPanel {
   resize() {
     super.resize();
 
-    //const that = this;
-
     if (!this.mediaWidth || !this.mediaHeight) {
       return;
     }
-
-    // fit media to available space.
-    // const size: Size = Dimensions.fitRect(
-    //   this.mediaWidth,
-    //   this.mediaHeight,
-    //   this.$content.width(),
-    //   this.$content.height()
-    // );
-
-    // console.log(
-    //   size,
-    //   this.mediaWidth,
-    //   this.mediaHeight,
-    //   this.$content.width(),
-    //   this.$content.height()
-    // );
-
-    // this.$container.height(size.height);
-    // this.$container.width(size.width);
-
-    // if (this.player && !this.extension.isFullScreen()) {
-    //   this.$media.width(size.width);
-    //   this.$media.height(size.height);
-    // }
-
-    // const left: number = Math.floor(
-    //   (this.$content.width() - this.$container.width()) / 2
-    // );
-    // const top: number = Math.floor(
-    //   (this.$content.height() - this.$container.height()) / 2
-    // );
-
-    // this.$container.css({
-    //   left: left,
-    //   top: top
-    // });
 
     if (this.title) {
       this.$title.text(sanitize(this.title));
@@ -340,84 +283,7 @@ export class MediaElementCenterPanel extends CenterPanel {
       if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
         this.player.setPlayerSize();
         this.player.setControlsSize();
-
-        // this._$mejsContainer.height(this.$container.height());
-        // this._$mejsContainer.width(this.$container.width());
-
-        // this._$mejsLayers.each(function() {
-        //   $(this).height(that.$container.height());
-        //   $(this).width(that.$container.width());
-        // });
       }
     }
   }
-
-  //resize() {
-    //   super.resize();
-  
-    //   // if in Firefox < v13 don't resize the media container.
-    //   if (
-    //     window.browserDetect.browser === "Firefox" &&
-    //     window.browserDetect.version < 13
-    //   ) {
-    //     this.$container.width(this.mediaWidth);
-    //     this.$container.height(this.mediaHeight);
-    //   } else {
-    //     // fit media to available space.
-    //     const size: Size = Dimensions.fitRect(
-    //       this.mediaWidth,
-    //       this.mediaHeight,
-    //       this.$content.width(),
-    //       this.$content.height()
-    //     );
-  
-    //     this.$container.height(size.height);
-    //     this.$container.width(size.width);
-  
-    //     if (this.player && !this.extension.isFullScreen()) {
-    //       this.$media.width(size.width);
-    //       this.$media.height(size.height);
-    //     }
-    //   }
-  
-    //   const left: number = Math.floor(
-    //     (this.$content.width() - this.$container.width()) / 2
-    //   );
-    //   const top: number = Math.floor(
-    //     (this.$content.height() - this.$container.height()) / 2
-    //   );
-  
-    //   this.$container.css({
-    //     left: left,
-    //     top: top,
-    //   });
-  
-    //   if (this.title) {
-    //     this.$title.text(sanitize(this.title));
-    //   }
-  
-    //   if (this.player) {
-    //     this.player.setPlayerSize();
-    //     this.player.setControlsSize();
-  
-    //     const $mejs: JQuery = $(".mejs__container");
-  
-    //     // if (!this.component.isFullScreen) {
-    //     $mejs.css({
-    //       "margin-top": (this.$container.height() - $mejs.height()) / 2,
-    //     });
-    //     // }
-  
-    //     // if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
-    //     //     this.player.setPlayerSize();
-    //     //     this.player.setControlsSize();
-  
-    //     //     const $mejs: JQuery = $('.mejs__container');
-  
-    //     //     $mejs.css({
-    //     //         'margin-top': (this.$container.height() - $mejs.height()) / 2
-    //     //     });
-    //     // }
-    //   }
-    // }
 }

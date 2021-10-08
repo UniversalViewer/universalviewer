@@ -1052,7 +1052,7 @@
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json",
           "@type": "sc:Manifest",
           "label": "Astronaut",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/video/index.json",

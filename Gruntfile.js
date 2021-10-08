@@ -59,7 +59,7 @@ module.exports = function(grunt) {
               config.directories.src + "/_headers",
               config.directories.src + "/collection.json",
               config.directories.src + "/favicon.ico",
-              config.directories.src + "/index.html",
+              config.directories.src + "/html-templates/index.html",
               config.directories.src + "/mobile.html",
               config.directories.src + "/production.html",
               config.directories.src + "/uv-config.json",
@@ -84,17 +84,6 @@ module.exports = function(grunt) {
           },
         ],
       },
-      // www: {
-      //   // copy contents of /.build to /www
-      //   files: [
-      //     {
-      //       cwd: config.directories.build,
-      //       expand: true,
-      //       src: ["**"],
-      //       dest: config.directories.www,
-      //     },
-      //   ],
-      // },
       dist: {
         // copy contents of /.build to /dist
         files: [
@@ -108,58 +97,6 @@ module.exports = function(grunt) {
       },
     },
 
-    // sync: {
-    //   themes: {
-    //     files: [
-    //       {
-    //         cwd: config.directories.npmthemes,
-    //         expand: true,
-    //         src: ["uv-*-theme/**"],
-    //         dest: config.directories.themes,
-    //       },
-    //     ],
-    //   },
-    // },
-    
-    // concat: {
-    //   bundle: {
-    //     cwd: ".",
-    //     src: config.dependencies.bundle,
-    //     dest: config.directories.lib + "/bundle.js",
-    //   },
-    // },
-
-    // replace all assets paths in built theme css files
-    // I think this is now only needed for the mediaelement icons svg!
-    // replace: {
-    //   // ../../../modules/<module>/assets/<asset>
-    //   // becomes
-    //   // ../../../<module>/<asset>
-    //   moduleassets: {
-    //     src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
-    //     overwrite: true,
-    //     replacements: [
-    //       {
-    //         from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-    //         to: "('../../assets/$1/$2')",
-    //       },
-    //     ],
-    //   },
-    //   // ../../../themes/uv-<extension>-theme/assets/<asset>
-    //   // becomes
-    //   // ../../assets/<asset>
-    //   themeassets: {
-    //     src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
-    //     overwrite: true,
-    //     replacements: [
-    //       {
-    //         from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-    //         to: "('../../assets/$2')",
-    //       },
-    //     ],
-    //   },
-    // },
-
     configure: {
       apply: {
         options: {
@@ -168,17 +105,17 @@ module.exports = function(grunt) {
       },
     },
 
-    theme: {
-      create: {
-        files: [
-          {
-            expand: true,
-            src: "./src/extensions/*/theme/theme.less",
-          },
-        ],
-      },
-      dist: {},
-    },
+    // theme: {
+    //   create: {
+    //     files: [
+    //       {
+    //         expand: true,
+    //         src: "./src/extensions/*/theme/theme.less",
+    //       },
+    //     ],
+    //   },
+    //   dist: {},
+    // },
 
     webpack: {
       main: function() {
@@ -217,9 +154,7 @@ module.exports = function(grunt) {
       "copy:build",
       // Cleans and copies .build to dist and www (could be consolidated, they are identical now)
       "clean:dist",
-      ///"clean:www",
       "copy:dist",
-      //"copy:www"
     );
   });
 };
