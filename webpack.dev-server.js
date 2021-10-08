@@ -77,13 +77,13 @@ const config = {
       app.use('/uv.css',
           express.static(path.join(__dirname, 'src', 'uv.css')));
       app.use('/uv-assets/config',
-          express.static(path.join(__dirname, 'www', 'uv-assets', 'config')));
+          express.static(path.join(__dirname, 'dist', 'uv-assets', 'config')));
       app.use('/uv-assets/themes',
-          express.static(path.join(__dirname, 'www', 'uv-assets', 'themes')));
+          express.static(path.join(__dirname, 'dist', 'uv-assets', 'themes')));
       app.use('/uv-assets/img',
-          express.static(path.join(__dirname, 'www', 'uv-assets', 'img')));
+          express.static(path.join(__dirname, 'dist', 'uv-assets', 'img')));
       app.use('/uv-assets/js/bundle.js',
-          express.static(path.join(__dirname, 'www', 'uv-assets', 'js', 'bundle.js')));
+          express.static(path.join(__dirname, 'dist', 'uv-assets', 'js', 'bundle.js')));
     }
   },
   plugins: [

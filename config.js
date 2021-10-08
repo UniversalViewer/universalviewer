@@ -17,7 +17,6 @@ module.exports = function () {
         build: './.build',
         dist: './dist',
         distumd: './uv-dist-umd',
-        www: './www',
         extensions: './src/extensions',
         lib: './src/lib',
         modules: './src/modules',

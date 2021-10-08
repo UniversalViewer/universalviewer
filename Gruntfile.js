@@ -10,23 +10,22 @@ module.exports = function(grunt) {
       build: config.directories.build,
       dist: config.directories.dist,
       distumd: config.directories.distumd,
-      www: config.directories.www,
       extension: config.directories.src + "/extensions/*/.build/*",
     },
 
     copy: {
-      bundle: {
-        files: [
-          // node modules to go in bundle.js
-          {
-            expand: true,
-            flatten: true,
-            cwd: ".",
-            src: config.dependencies.bundle,
-            dest: config.directories.lib,
-          },
-        ],
-      },
+      // bundle: {
+      //   files: [
+      //     // node modules to go in bundle.js
+      //     {
+      //       expand: true,
+      //       flatten: true,
+      //       cwd: ".",
+      //       src: config.dependencies.bundle,
+      //       dest: config.directories.lib,
+      //     },
+      //   ],
+      // },
       // everything first gets built into an intermediary .build folder
       // the contents of .build are then copied into the (cleaned) dist and www folders
       build: {
@@ -85,17 +84,17 @@ module.exports = function(grunt) {
           },
         ],
       },
-      www: {
-        // copy contents of /.build to /www
-        files: [
-          {
-            cwd: config.directories.build,
-            expand: true,
-            src: ["**"],
-            dest: config.directories.www,
-          },
-        ],
-      },
+      // www: {
+      //   // copy contents of /.build to /www
+      //   files: [
+      //     {
+      //       cwd: config.directories.build,
+      //       expand: true,
+      //       src: ["**"],
+      //       dest: config.directories.www,
+      //     },
+      //   ],
+      // },
       dist: {
         // copy contents of /.build to /dist
         files: [
@@ -109,57 +108,57 @@ module.exports = function(grunt) {
       },
     },
 
-    sync: {
-      themes: {
-        files: [
-          {
-            cwd: config.directories.npmthemes,
-            expand: true,
-            src: ["uv-*-theme/**"],
-            dest: config.directories.themes,
-          },
-        ],
-      },
-    },
+    // sync: {
+    //   themes: {
+    //     files: [
+    //       {
+    //         cwd: config.directories.npmthemes,
+    //         expand: true,
+    //         src: ["uv-*-theme/**"],
+    //         dest: config.directories.themes,
+    //       },
+    //     ],
+    //   },
+    // },
     
-    concat: {
-      bundle: {
-        cwd: ".",
-        src: config.dependencies.bundle,
-        dest: config.directories.lib + "/bundle.js",
-      },
-    },
+    // concat: {
+    //   bundle: {
+    //     cwd: ".",
+    //     src: config.dependencies.bundle,
+    //     dest: config.directories.lib + "/bundle.js",
+    //   },
+    // },
 
     // replace all assets paths in built theme css files
     // I think this is now only needed for the mediaelement icons svg!
-    replace: {
-      // ../../../modules/<module>/assets/<asset>
-      // becomes
-      // ../../../<module>/<asset>
-      moduleassets: {
-        src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
-        overwrite: true,
-        replacements: [
-          {
-            from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-            to: "('../../assets/$1/$2')",
-          },
-        ],
-      },
-      // ../../../themes/uv-<extension>-theme/assets/<asset>
-      // becomes
-      // ../../assets/<asset>
-      themeassets: {
-        src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
-        overwrite: true,
-        replacements: [
-          {
-            from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-            to: "('../../assets/$2')",
-          },
-        ],
-      },
-    },
+    // replace: {
+    //   // ../../../modules/<module>/assets/<asset>
+    //   // becomes
+    //   // ../../../<module>/<asset>
+    //   moduleassets: {
+    //     src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
+    //     overwrite: true,
+    //     replacements: [
+    //       {
+    //         from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
+    //         to: "('../../assets/$1/$2')",
+    //       },
+    //     ],
+    //   },
+    //   // ../../../themes/uv-<extension>-theme/assets/<asset>
+    //   // becomes
+    //   // ../../assets/<asset>
+    //   themeassets: {
+    //     src: [config.directories.build + "/uv-assets/themes/*/css/*/theme.css"],
+    //     overwrite: true,
+    //     replacements: [
+    //       {
+    //         from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
+    //         to: "('../../assets/$2')",
+    //       },
+    //     ],
+    //   },
+    // },
 
     configure: {
       apply: {
@@ -194,10 +193,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-sync");
-  grunt.loadNpmTasks("grunt-text-replace");
   grunt.loadNpmTasks("grunt-webpack");
 
   configure(grunt);
@@ -207,40 +203,23 @@ module.exports = function(grunt) {
 
   grunt.registerTask("build", "", function() {
     grunt.task.run(
-      // "clean:themes",
-      // "clean:distumd",
-      // "sync",
-      // "copy:bundle",
-      // "concat:bundle",
-
       // Cleans builds the extension config
       "clean:extension",
       "configure:apply",
-
       // Cleans the .build folder
       "clean:build",
-
-      //'copy:schema',
-
       // Runs webpack.
       "webpack",
-
       // Copies remaining non-webpack managed files:
       //  - html + fixtures for demo
       //  - JSON configuration
       //  - bundle.js
       "copy:build",
-
-      // "theme:create",
-      // "theme:dist",
-      // "replace:moduleassets",
-      // "replace:themeassets",
-
       // Cleans and copies .build to dist and www (could be consolidated, they are identical now)
       "clean:dist",
-      "clean:www",
+      ///"clean:www",
       "copy:dist",
-      "copy:www"
+      //"copy:www"
     );
   });
 };
