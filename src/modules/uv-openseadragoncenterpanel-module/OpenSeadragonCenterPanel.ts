@@ -14,8 +14,6 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
-// todo: replace when #1853 is merged
-//import OpenSeadragon from "../../lib/openseadragon";
 import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 

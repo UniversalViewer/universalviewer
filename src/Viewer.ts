@@ -24,7 +24,7 @@ interface IExtensionRegistry {
 }
 
 enum Extension {
-  //AV = "uv-av-extension",
+  AV = "uv-av-extension",
   ALEPH = "uv-aleph-extension",
   DEFAULT = "uv-default-extension",
   EBOOK = "uv-ebook-extension",
@@ -59,12 +59,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
     super._init();
 
     this._extensions = {
-      // [Extension.AV]: async () => {
-      //     const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
-      //     const extension = new m.default();
-      //     extension.name = Extension.AV;
-      //     return extension;
-      // },
+      [Extension.AV]: async () => {
+          const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
+          const extension = new m.default();
+          extension.name = Extension.AV;
+          return extension;
+      },
       [Extension.ALEPH]: async () => {
         const m = (await import(
           /* webpackChunkName: "uv-aleph-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-aleph-extension/Extension"
@@ -221,8 +221,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
     };
 
     this._extensionRegistry[MediaType.VIDEO_MP4] = {
-      //load: this._extensions[Extension.AV]
-      load: this._extensions[Extension.MEDIAELEMENT]
+      load: this._extensions[Extension.AV]
+      //load: this._extensions[Extension.MEDIAELEMENT]
     };
 
     // this._extensionRegistry[MediaType.WEBM] = {

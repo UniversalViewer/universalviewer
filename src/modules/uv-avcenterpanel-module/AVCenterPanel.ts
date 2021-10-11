@@ -1,3 +1,6 @@
+// require("jquery"),
+// require("jquery-ui");
+// require("jquery-ui/ui/widgets/slider");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
@@ -10,6 +13,17 @@ import {
   LanguageMap,
   Range
 } from "manifesto.js";
+// require("jquery-ui");
+//import "jquery-ui/ui/widgets/slider";
+//require('~jquery-ui-dist/jquery-ui.min.js');
+// require('jquery.ui.touch-punch');
+// require('jquery.binarytransport');
+// require('waveform-data');
+
+// "jquery-ui.min",
+// "jquery.ui.touch-punch.min",
+// "jquery.binarytransport",
+// "waveform-data"
 import { AVComponent } from "@iiif/iiif-av-component";
 
 export class AVCenterPanel extends CenterPanel {

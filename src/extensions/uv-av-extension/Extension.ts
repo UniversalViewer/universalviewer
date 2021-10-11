@@ -13,6 +13,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension implements IAVExtension {
   $downloadDialogue: JQuery;
@@ -58,7 +59,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     if (index === (<any>this).getDependencyIndex("waveform-data")) {
       window.WaveformData = dep;
     } else if (index === (<any>this).getDependencyIndex("hls")) {
-      window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
+      window.Hls = dep; // https://github.com/mrdoob/three.js/issues/9602
     }
   }
 

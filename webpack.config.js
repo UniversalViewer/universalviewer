@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const { resolvePath, createThemeConfig } = require('./webpack-helpers');
 const pkg = require('./package.json');
+const path = require('path');
 
 const config = [{
   entry: {
@@ -16,6 +17,12 @@ const config = [{
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
+    alias: {
+      // bind version of jquery-ui
+      "jquery-ui": "jquery-ui/jquery-ui.js",      
+      // bind to modules;
+      modules: path.join(__dirname, "node_modules"),
+    },
   },
   module: {
     rules: [
@@ -67,7 +74,12 @@ const config = [{
     new webpack.EnvironmentPlugin({
       PACKAGE_VERSION: pkg.version,
     }),
-  ]
+    new webpack.ProvidePlugin({
+      "$":"jquery",
+      "jQuery":"jquery",
+      "window.jQuery":"jquery"
+    }),
+  ],
 }];
 
 config.push(createThemeConfig('uv-en-gb-theme', require.resolve('@universalviewer/uv-en-gb-theme/theme.less')));
