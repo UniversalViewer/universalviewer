@@ -1045,43 +1045,43 @@
       "@context": "http://iiif.io/api/presentation/2/context.json",
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
-      "label": "biiif template",
+      "label": "biiif-template",
       "visible": true,
       "manifests": [
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json",
           "@type": "sc:Manifest",
-          "label": "Astronaut",
+          "label": "Astronaut (3D)",
           "visible": true
         },
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/video/index.json",
           "@type": "sc:Manifest",
-          "label": "Big Buck Bunny",
+          "label": "Big Buck Bunny (Video)",
           "visible": true
         },
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/audio/index.json",
           "@type": "sc:Manifest",
-          "label": "One Small Step for Man",
+          "label": "One Small Step for Man (Audio)",
           "visible": true
         },
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/pdf/index.json",
           "@type": "sc:Manifest",
-          "label": "Science and the Public",
+          "label": "Science and the Public (PDF)",
           "visible": true
         },
         {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/images/index.json",
           "@type": "sc:Manifest",
-          "label": "Vincent",
+          "label": "Vincent (IIIF Image)",
           "visible": true
         },
         {
           "@id": "https://biiif-template-zine.vercel.app/index.json",
           "@type": "sc:Manifest",
-          "label": "Zine",
+          "label": "Zine (IIIF Images)",
           "visible": true
         }
       ]
