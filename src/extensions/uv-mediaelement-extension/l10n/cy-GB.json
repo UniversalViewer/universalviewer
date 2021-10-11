@@ -87,7 +87,7 @@
       "content": {
         "locale": "Iaith",
         "pagingEnabled": "Arddangos dwy dudalen",
-        "reducedMotion": "Reduce motion (disables animations)",
+        "reducedMotion": "Lleihau symudiad (analluogi animeiddiadau)",
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
