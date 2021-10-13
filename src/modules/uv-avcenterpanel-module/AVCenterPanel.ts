@@ -1,6 +1,11 @@
-const $ = require("jquery");
+//const $ = require("jquery");
 //require("jquery-ui")($);
-require("jquery-ui/ui/widgets/slider");
+//require("jquery-ui/ui/widgets/slider");
+// require("./jquery-ui.min");
+// import "./jquery-ui.min.css";
+require("jquery-ui-dist/jquery-ui");
+require("jquery-ui-dist/jquery-ui.css");
+// import "jquery-ui";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
@@ -11,6 +16,7 @@ import {
   IExternalResource,
   LabelValuePair,
   LanguageMap,
+  PropertyValue,
   Range
 } from "manifesto.js";
 // require("jquery-ui");
@@ -25,6 +31,7 @@ import {
 // "jquery.binarytransport",
 // "waveform-data"
 import { AVComponent } from "@iiif/iiif-av-component";
+import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 
 export class AVCenterPanel extends CenterPanel {
   $avcomponent: JQuery;
@@ -211,14 +218,14 @@ export class AVCenterPanel extends CenterPanel {
     this.title = title;
 
     // set subtitle
-    const groups: manifold.MetadataGroup[] = this.extension.helper.getMetadata(<
-      manifold.MetadataOptions
+    const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
+      MetadataOptions
     >{
       range: currentRange
     });
 
     for (let i = 0; i < groups.length; i++) {
-      const group: manifold.MetadataGroup = groups[i];
+      const group: MetadataGroup = groups[i];
 
       const item: LabelValuePair | undefined = group.items.find(
         (el: LabelValuePair) => {
@@ -237,7 +244,7 @@ export class AVCenterPanel extends CenterPanel {
       );
 
       if (item) {
-        this.subtitle = LanguageMap.getValue(item.value);
+        this.subtitle = LanguageMap.getValue(item.value as PropertyValue);
         break;
       }
     }

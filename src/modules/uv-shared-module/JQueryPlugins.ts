@@ -247,7 +247,7 @@ export default function jqueryPlugins($) {
   function documentHandler() {
     const $current: JQuery = this === document ? $(this) : $(this).contents();
     $current.mousemove(function(e) {
-      jQuery.mlp = { x: e.pageX, y: e.pageY };
+      $.mlp = { x: e.pageX, y: e.pageY };
     });
     $current.find("iframe").on("load", documentHandler);
   }
@@ -540,10 +540,6 @@ export default function jqueryPlugins($) {
     );
   };
 }
-
-// interface JQueryStatic {
-//   mlp: any;
-// }
 
 interface JQuery {
   attr: any;

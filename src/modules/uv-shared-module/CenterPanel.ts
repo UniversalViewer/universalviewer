@@ -1,7 +1,7 @@
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../Utils";
-import {} from "@iiif/manifold";
+import { ILabelValuePair } from "@iiif/manifold";
 import { Bools } from "@edsilv/utils";
 
 export class CenterPanel extends BaseView {
@@ -116,7 +116,7 @@ export class CenterPanel extends BaseView {
   }
 
   updateRequiredStatement(): void {
-    const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
     //var license = this.provider.getLicense();
     //var logo = this.provider.getLogo();
 

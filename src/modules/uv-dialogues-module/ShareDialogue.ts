@@ -1,6 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { Bools, Numbers } from "@edsilv/utils";
+import { ILabelValuePair } from "@iiif/manifold";
 
 export class ShareDialogue extends Dialogue {
   $code: JQuery;
@@ -371,7 +372,7 @@ export class ShareDialogue extends Dialogue {
   }
 
   updateTermsOfUseButton(): void {
-    const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
     if (
       Bools.getBool(

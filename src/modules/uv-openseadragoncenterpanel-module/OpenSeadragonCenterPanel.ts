@@ -7,7 +7,7 @@ import {
   IExternalResourceData
 } from "manifesto.js";
 import { sanitize } from "../../Utils";
-import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
+import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { XYWHFragment } from "../../extensions/uv-openseadragon-extension/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";

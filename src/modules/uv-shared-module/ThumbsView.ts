@@ -122,6 +122,7 @@ export class ThumbsView extends BaseView {
 
     // use unevent to detect scroll stop.
     this.$element.on(
+      // @ts-ignore
       "scroll",
       () => {
         this.scrollStop();

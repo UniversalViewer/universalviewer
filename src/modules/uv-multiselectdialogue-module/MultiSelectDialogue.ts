@@ -4,6 +4,7 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { Bools } from "@edsilv/utils";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
+import { MultiSelectState } from "@iiif/manifold";
 
 export class MultiSelectDialogue extends Dialogue {
   $title: JQuery;
@@ -27,14 +28,14 @@ export class MultiSelectDialogue extends Dialogue {
 
     this.component.subscribe(this.openCommand, () => {
       this.open();
-      const multiSelectState: manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+      const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(true);
       this.galleryComponent.set(this.data);
     });
 
     this.component.subscribe(this.closeCommand, () => {
       this.close();
-      const multiSelectState: manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+      const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(false);
     });
 

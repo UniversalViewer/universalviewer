@@ -12,6 +12,7 @@ import {
   Rendering
 } from "manifesto.js";
 import { RenderingFormat, MediaType } from "@iiif/vocabulary/dist-commonjs/";
+import { ILabelValuePair } from "@iiif/manifold";
 
 export class DownloadDialogue extends Dialogue {
   $downloadOptions: JQuery;
@@ -254,7 +255,7 @@ export class DownloadDialogue extends Dialogue {
   }
 
   updateTermsOfUseButton(): void {
-    const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
     if (
       Bools.getBool(

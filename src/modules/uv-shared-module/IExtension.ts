@@ -3,7 +3,7 @@ import { ILocale } from "../../ILocale";
 import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { Shell } from "./Shell";
-import {} from "@iiif/manifold";
+import { Helper } from "@iiif/manifold";
 import { MetricType } from "./Metric";
 
 export interface IExtension {
@@ -33,7 +33,7 @@ export interface IExtension {
   getSettings(): ISettings;
   getShareUrl(): string | null;
   height(): number;
-  helper: manifold.Helper;
+  helper: Helper;
   isCreated: boolean;
   isDesktopMetric(): boolean;
   isFooterPanelEnabled(): boolean;

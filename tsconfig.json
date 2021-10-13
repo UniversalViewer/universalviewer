@@ -17,14 +17,12 @@
     "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",
     "types": [
-      "@edsilv/jquery-plugins",
       "@iiif/base-component",
       "jest",
       "jquery",
-      "node"
+      "node",
     ]
   },
-
   "exclude": [
     "node_modules",
     "src/**/*.test.ts",
