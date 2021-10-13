@@ -13,27 +13,27 @@ module.exports = function(grunt) {
       extension: config.directories.src + "/extensions/*/.build/*",
     },
 
-    concat: {
-      bundle: {
-        cwd: ".",
-        src: config.dependencies.bundle,
-        dest: config.directories.lib + "/bundle.js",
-      },
-    },
+    // concat: {
+    //   bundle: {
+    //     cwd: ".",
+    //     src: config.dependencies.bundle,
+    //     dest: config.directories.lib + "/bundle.js",
+    //   },
+    // },
 
     copy: {
-      bundle: {
-        files: [
-          // node modules to go in bundle.js
-          {
-            expand: true,
-            flatten: true,
-            cwd: ".",
-            src: config.dependencies.bundle,
-            dest: config.directories.lib,
-          },
-        ],
-      },
+      // bundle: {
+      //   files: [
+      //     // node modules to go in bundle.js
+      //     {
+      //       expand: true,
+      //       flatten: true,
+      //       cwd: ".",
+      //       src: config.dependencies.bundle,
+      //       dest: config.directories.lib,
+      //     },
+      //   ],
+      // },
       // everything first gets built into an intermediary .build folder
       // the contents of .build are then copied into the (cleaned) dist and www folders
       build: {
@@ -47,12 +47,12 @@ module.exports = function(grunt) {
           //     config.directories.build + "/" + config.directories.distumd + "/",
           // },
           // assets
-          {
-            expand: true,
-            flatten: true,
-            src: [config.directories.lib + "/bundle.js"],
-            dest: config.directories.build + "/uv-assets/js/",
-          },
+          // {
+          //   expand: true,
+          //   flatten: true,
+          //   src: [config.directories.lib + "/bundle.js"],
+          //   dest: config.directories.build + "/uv-assets/js/",
+          // },
           // {
           //   expand: true,
           //   flatten: true,
@@ -137,7 +137,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-concat");
+  // grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-webpack");
 
@@ -149,8 +149,8 @@ module.exports = function(grunt) {
   grunt.registerTask("build", "", function() {
     grunt.task.run(
       // generate bundle (jquery, jsviews, ...)
-      "copy:bundle",
-      "concat:bundle",
+      // "copy:bundle",
+      // "concat:bundle",
       // Cleans builds the extension config
       "clean:extension",
       "configure:apply",

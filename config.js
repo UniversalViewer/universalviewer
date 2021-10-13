@@ -3,15 +3,15 @@ const metadata = require('./package');
 module.exports = function () {
     this.name = metadata.name;
     this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
-    this.dependencies = {
-        // goes in assets/js/
-        bundle: [
-            'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/jsviews/jsviews.min.js',
-            'node_modules/@edsilv/jquery-plugins/dist/jquery-plugins.min.js',
-            'src/lib/window.js'
-        ]
-    };
+    // this.dependencies = {
+    //     // goes in assets/js/
+    //     bundle: [
+    //         'node_modules/jquery/dist/jquery.min.js',
+    //         'node_modules/jsviews/jsviews.min.js',
+    //         'node_modules/@edsilv/jquery-plugins/dist/jquery-plugins.min.js',
+    //         'src/lib/window.js'
+    //     ]
+    // };
     this.directories = {
         bower: './lib',
         build: './.build',

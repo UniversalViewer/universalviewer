@@ -1,5 +1,6 @@
-//require("jquery-ui-dist")($);
-// require("jquery-ui/ui/widgets/slider");
+const $ = require("jquery");
+//require("jquery-ui")($);
+require("jquery-ui/ui/widgets/slider");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
