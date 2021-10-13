@@ -18,6 +18,12 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
+    alias: {
+      // bind version of jquery-ui
+      "jquery-ui": "jquery-ui/jquery-ui.js",      
+      // bind to modules;
+      modules: path.join(__dirname, "node_modules"),
+    },
   },
   module: {
     rules: [
@@ -95,6 +101,11 @@ const config = {
       template: './src/html-templates/index.html',
       minify: false,
       inject: 'head',
+    }),
+    new webpack.ProvidePlugin({
+      "$":"jquery",
+      "jQuery":"jquery",
+      "window.jQuery":"jquery",
     }),
   ]
 };

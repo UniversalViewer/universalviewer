@@ -7,7 +7,7 @@ import { PubSub } from "./PubSub";
 import {
   RenderingFormat,
   MediaType,
-  ExternalResourceType
+  ExternalResourceType,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
@@ -32,7 +32,7 @@ enum Extension {
   MODELVIEWER = "uv-model-viewer-extension",
   OSD = "uv-openseadragon-extension",
   PDF = "uv-pdf-extension",
-  SLIDEATLAS = "uv-slideatlas-extension"
+  SLIDEATLAS = "uv-slideatlas-extension",
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {
@@ -60,10 +60,12 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     this._extensions = {
       [Extension.AV]: async () => {
-          const m = await import(/* webpackChunkName: "uv-av-extension" *//* webpackMode: "lazy" */"./extensions/uv-av-extension/Extension") as any;
-          const extension = new m.default();
-          extension.name = Extension.AV;
-          return extension;
+        const m = (await import(
+          /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
+        )) as any;
+        const extension = new m.default();
+        extension.name = Extension.AV;
+        return extension;
       },
       [Extension.ALEPH]: async () => {
         const m = (await import(
@@ -128,37 +130,37 @@ export class Viewer extends BaseComponent implements IUVComponent {
         const extension = new m.default();
         extension.name = Extension.SLIDEATLAS;
         return extension;
-      }
+      },
     };
 
     this._extensionRegistry = {};
 
     this._extensionRegistry[ExternalResourceType.CANVAS] = {
-      load: this._extensions[Extension.OSD]
+      load: this._extensions[Extension.OSD],
     };
 
     this._extensionRegistry[ExternalResourceType.DOCUMENT] = {
-      load: this._extensions[Extension.PDF]
+      load: this._extensions[Extension.PDF],
     };
 
     this._extensionRegistry[ExternalResourceType.IMAGE] = {
-      load: this._extensions[Extension.OSD]
+      load: this._extensions[Extension.OSD],
     };
 
     this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] = {
-      load: this._extensions[Extension.MEDIAELEMENT]
+      load: this._extensions[Extension.MEDIAELEMENT],
     };
 
     this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] = {
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.MODELVIEWER],
     };
 
     this._extensionRegistry[ExternalResourceType.SOUND] = {
-      load: this._extensions[Extension.MEDIAELEMENT]
+      load: this._extensions[Extension.MEDIAELEMENT],
     };
 
     this._extensionRegistry[RenderingFormat.PDF] = {
-      load: this._extensions[Extension.PDF]
+      load: this._extensions[Extension.PDF],
     };
 
     // presentation 3
@@ -169,34 +171,34 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     this._extensionRegistry[MediaType.AUDIO_MP4] = {
       //load: this._extensions[Extension.AV]
-      load: this._extensions[Extension.MEDIAELEMENT]
+      load: this._extensions[Extension.MEDIAELEMENT],
     };
 
     this._extensionRegistry["default"] = {
-      load: this._extensions[Extension.DEFAULT]
+      load: this._extensions[Extension.DEFAULT],
     };
 
     this._extensionRegistry[MediaType.DRACO] = {
       //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.MODELVIEWER],
     };
 
     this._extensionRegistry[MediaType.GLB] = {
       //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.MODELVIEWER],
     };
 
     this._extensionRegistry[MediaType.GLTF] = {
       //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.MODELVIEWER],
     };
 
     this._extensionRegistry[MediaType.DICOM] = {
-      load: this._extensions[Extension.ALEPH]
+      load: this._extensions[Extension.ALEPH],
     };
 
     this._extensionRegistry[MediaType.JPG] = {
-      load: this._extensions[Extension.OSD]
+      load: this._extensions[Extension.OSD],
     };
 
     // this._extensionRegistry[MediaType.M3U8] = {
@@ -205,7 +207,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     this._extensionRegistry[MediaType.MP3] = {
       //load: this._extensions[Extension.AV]
-      load: this._extensions[Extension.MEDIAELEMENT]
+      load: this._extensions[Extension.MEDIAELEMENT],
     };
 
     // this._extensionRegistry[MediaType.MPEG_DASH] = {
@@ -213,15 +215,15 @@ export class Viewer extends BaseComponent implements IUVComponent {
     // };
 
     this._extensionRegistry[MediaType.PDF] = {
-      load: this._extensions[Extension.PDF]
+      load: this._extensions[Extension.PDF],
     };
 
     this._extensionRegistry[MediaType.USDZ] = {
-      load: this._extensions[Extension.MODELVIEWER]
+      load: this._extensions[Extension.MODELVIEWER],
     };
 
     this._extensionRegistry[MediaType.VIDEO_MP4] = {
-      load: this._extensions[Extension.AV]
+      load: this._extensions[Extension.AV],
       //load: this._extensions[Extension.MEDIAELEMENT]
     };
 
@@ -230,15 +232,15 @@ export class Viewer extends BaseComponent implements IUVComponent {
     // };
 
     this._extensionRegistry[MediaType.EPUB] = {
-      load: this._extensions[Extension.EBOOK]
+      load: this._extensions[Extension.EBOOK],
     };
 
     this._extensionRegistry[MediaType.OPF] = {
-      load: this._extensions[Extension.EBOOK]
+      load: this._extensions[Extension.EBOOK],
     };
 
     this._extensionRegistry["image/vnd.kitware.girder"] = {
-      load: this._extensions[Extension.SLIDEATLAS]
+      load: this._extensions[Extension.SLIDEATLAS],
     };
 
     this.set(this.options.data);
@@ -256,10 +258,10 @@ export class Viewer extends BaseComponent implements IUVComponent {
       manifestUri: "",
       locales: [
         {
-          name: "en-GB"
-        }
+          name: "en-GB",
+        },
       ],
-      target: ""
+      target: "",
     } as IUVData;
   }
 
@@ -343,7 +345,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
       manifestIndex: data.manifestIndex || 0,
       canvasIndex: data.canvasIndex || 0,
       rangeId: data.rangeId,
-      locale: data.locales ? data.locales[0].name : undefined
+      locale: data.locales ? data.locales[0].name : undefined,
     } as IManifoldOptions);
 
     let trackingLabel: string | null = helper.getTrackingLabel();
@@ -449,7 +451,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
           data.locales[0].name +
           ".config.json";
 
-        $.getJSON(configPath, config => {
+        $.getJSON(configPath, (config) => {
           this._extendConfig(data, extension, config, configExtension, cb);
         });
       }
