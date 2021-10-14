@@ -15,12 +15,8 @@ import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
 import "./uv.css";
 
-interface IExtensionLoaderCollection {
-  [key: string]: () => any;
-}
-
 interface IExtensionRegistry {
-  [key: string]: { load: () => any };
+  [key: string]: string;
 }
 
 enum Extension {
@@ -36,7 +32,6 @@ enum Extension {
 }
 
 export class Viewer extends BaseComponent implements IUVComponent {
-  private _extensions: IExtensionLoaderCollection;
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
@@ -58,190 +53,30 @@ export class Viewer extends BaseComponent implements IUVComponent {
   protected _init(): boolean {
     super._init();
 
-    this._extensions = {
-      [Extension.AV]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.AV;
-        return extension;
-      },
-      [Extension.ALEPH]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-aleph-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-aleph-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.ALEPH;
-        return extension;
-      },
-      [Extension.DEFAULT]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-default-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-default-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.DEFAULT;
-        return extension;
-      },
-      [Extension.EBOOK]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-ebook-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-ebook-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.EBOOK;
-        return extension;
-      },
-      [Extension.MEDIAELEMENT]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-mediaelement-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-mediaelement-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.MEDIAELEMENT;
-        return extension;
-      },
-      [Extension.MODELVIEWER]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-model-viewer-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-model-viewer-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.MODELVIEWER;
-        return extension;
-      },
-      [Extension.OSD]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-openseadragon-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-openseadragon-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.OSD;
-        return extension;
-      },
-      [Extension.PDF]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-pdf-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-pdf-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.PDF;
-        return extension;
-      },
-      [Extension.SLIDEATLAS]: async () => {
-        const m = (await import(
-          /* webpackChunkName: "uv-pdf-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-slideatlas-extension/Extension"
-        )) as any;
-        const extension = new m.default();
-        extension.name = Extension.SLIDEATLAS;
-        return extension;
-      },
-    };
-
     this._extensionRegistry = {};
 
-    this._extensionRegistry[ExternalResourceType.CANVAS] = {
-      load: this._extensions[Extension.OSD],
-    };
-
-    this._extensionRegistry[ExternalResourceType.DOCUMENT] = {
-      load: this._extensions[Extension.PDF],
-    };
-
-    this._extensionRegistry[ExternalResourceType.IMAGE] = {
-      load: this._extensions[Extension.OSD],
-    };
-
-    this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] = {
-      load: this._extensions[Extension.MEDIAELEMENT],
-    };
-
-    this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] = {
-      load: this._extensions[Extension.MODELVIEWER],
-    };
-
-    this._extensionRegistry[ExternalResourceType.SOUND] = {
-      load: this._extensions[Extension.MEDIAELEMENT],
-    };
-
-    this._extensionRegistry[RenderingFormat.PDF] = {
-      load: this._extensions[Extension.PDF],
-    };
-
-    // presentation 3
-
-    // this._extensionRegistry["av"] = {
-    //     load: this._extensions[Extension.AV]
-    // };
-
-    this._extensionRegistry[MediaType.AUDIO_MP4] = {
-      //load: this._extensions[Extension.AV]
-      load: this._extensions[Extension.MEDIAELEMENT],
-    };
-
-    this._extensionRegistry["default"] = {
-      load: this._extensions[Extension.DEFAULT],
-    };
-
-    this._extensionRegistry[MediaType.DRACO] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER],
-    };
-
-    this._extensionRegistry[MediaType.GLB] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER],
-    };
-
-    this._extensionRegistry[MediaType.GLTF] = {
-      //load: this._extensions[Extension.ALEPH]
-      load: this._extensions[Extension.MODELVIEWER],
-    };
-
-    this._extensionRegistry[MediaType.DICOM] = {
-      load: this._extensions[Extension.ALEPH],
-    };
-
-    this._extensionRegistry[MediaType.JPG] = {
-      load: this._extensions[Extension.OSD],
-    };
-
-    // this._extensionRegistry[MediaType.M3U8] = {
-    //     load: this._extensions[Extension.AV]
-    // };
-
-    this._extensionRegistry[MediaType.MP3] = {
-      //load: this._extensions[Extension.AV]
-      load: this._extensions[Extension.MEDIAELEMENT],
-    };
-
-    // this._extensionRegistry[MediaType.MPEG_DASH] = {
-    //     load: this._extensions[Extension.AV]
-    // };
-
-    this._extensionRegistry[MediaType.PDF] = {
-      load: this._extensions[Extension.PDF],
-    };
-
-    this._extensionRegistry[MediaType.USDZ] = {
-      load: this._extensions[Extension.MODELVIEWER],
-    };
-
-    this._extensionRegistry[MediaType.VIDEO_MP4] = {
-      load: this._extensions[Extension.AV],
-      //load: this._extensions[Extension.MEDIAELEMENT]
-    };
-
-    // this._extensionRegistry[MediaType.WEBM] = {
-    //     load: this._extensions[Extension.AV]
-    // };
-
-    this._extensionRegistry[MediaType.EPUB] = {
-      load: this._extensions[Extension.EBOOK],
-    };
-
-    this._extensionRegistry[MediaType.OPF] = {
-      load: this._extensions[Extension.EBOOK],
-    };
-
-    this._extensionRegistry["image/vnd.kitware.girder"] = {
-      load: this._extensions[Extension.SLIDEATLAS],
-    };
+    this._extensionRegistry[ExternalResourceType.CANVAS] = Extension.OSD;
+    this._extensionRegistry[ExternalResourceType.DOCUMENT] = Extension.PDF;
+    this._extensionRegistry[ExternalResourceType.IMAGE] = Extension.OSD;
+    this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] = Extension.MEDIAELEMENT;
+    this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] = Extension.MODELVIEWER;
+    this._extensionRegistry[ExternalResourceType.SOUND] = Extension.MEDIAELEMENT;
+    this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
+    this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
+    this._extensionRegistry[MediaType.JPG] = Extension.OSD;
+    this._extensionRegistry[MediaType.MP3] = Extension.AV;
+    this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
+    this._extensionRegistry[MediaType.PDF] = Extension.PDF;
+    this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.WEBM] = Extension.AV;
+    this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
+    this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
+    this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
 
     this.set(this.options.data);
 
@@ -298,12 +133,21 @@ export class Viewer extends BaseComponent implements IUVComponent {
     }
   }
 
-  private _getExtension(key: string): IExtension {
-    if (!this._extensionRegistry[key]) {
-      key = "default";
+  private _getExtensionByFormat(format: string): any {
+    if (!this._extensionRegistry[format]) {
+      return this._getExtensionByName(Extension.DEFAULT);
     }
 
-    return this._extensionRegistry[key].load();
+    return this._getExtensionByName(this._extensionRegistry[format]);
+  }
+
+  private async _getExtensionByName(name: string): Promise<any> {
+    const m = (await import(
+      /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
+    )) as any;
+    const extension = new m.default();
+    extension.name = name;
+    return extension;
   }
 
   public get(key: string): any {
@@ -388,21 +232,21 @@ export class Viewer extends BaseComponent implements IUVComponent {
         const format: MediaType | null = body[0].getFormat();
 
         if (format) {
-          extension = await that._getExtension(format);
+          extension = await that._getExtensionByFormat(format);
 
           if (!extension) {
             // try type
             const type: ExternalResourceType | null = body[0].getType();
 
             if (type) {
-              extension = await that._getExtension(type);
+              extension = await that._getExtensionByFormat(type);
             }
           }
         } else {
           const type: ExternalResourceType | null = body[0].getType();
 
           if (type) {
-            extension = await that._getExtension(type);
+            extension = await that._getExtensionByFormat(type);
           }
         }
       }
@@ -411,19 +255,26 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
       if (canvasType) {
         // try using canvasType
-        extension = await that._getExtension(canvasType);
+        extension = await that._getExtensionByFormat(canvasType);
       }
 
       // if there isn't an extension for the canvasType, try the format
       if (!extension) {
         const format: any = canvas.getProperty("format");
-        extension = await that._getExtension(format);
+        extension = await that._getExtensionByFormat(format);
       }
+    }
+
+    // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
+    const hasRanges: boolean = helper.getRanges().length > 0;
+
+    if (extension!.name === Extension.AV && !hasRanges) {
+      extension = await that._getExtensionByName(Extension.MEDIAELEMENT);
     }
 
     // if there still isn't a matching extension, use the default extension.
     if (!extension) {
-      extension = await that._getExtension("default");
+      extension = await that._getExtensionByFormat(Extension.DEFAULT);
     }
 
     that._configure(data, extension, (config: any) => {
