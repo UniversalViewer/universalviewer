@@ -54,33 +54,50 @@ export class Viewer extends BaseComponent implements IUVComponent {
     super._init();
 
     this._extensionRegistry = {};
-
     this._extensionRegistry[ExternalResourceType.CANVAS] = Extension.OSD;
     this._extensionRegistry[ExternalResourceType.DOCUMENT] = Extension.PDF;
     this._extensionRegistry[ExternalResourceType.IMAGE] = Extension.OSD;
     this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] = Extension.MEDIAELEMENT;
     this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] = Extension.MODELVIEWER;
     this._extensionRegistry[ExternalResourceType.SOUND] = Extension.MEDIAELEMENT;
-    this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
+    this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
     this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
+    this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
-    this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
-    this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
-    this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
+    this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 
     this.set(this.options.data);
 
     return true;
+  }
+
+  private async _getExtensionByName(name: string): Promise<any> {
+    // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
+    const m = (await import(
+      /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
+    )) as any;
+    const extension = new m.default();
+    extension.name = name;
+    return extension;
+  }
+
+  private _getExtensionByFormat(format: string): any {
+    if (!this._extensionRegistry[format]) {
+      return this._getExtensionByName(Extension.DEFAULT);
+    }
+
+    return this._getExtensionByName(this._extensionRegistry[format]);
   }
 
   public data(): IUVData {
@@ -131,23 +148,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
         this.extension.render();
       }
     }
-  }
-
-  private _getExtensionByFormat(format: string): any {
-    if (!this._extensionRegistry[format]) {
-      return this._getExtensionByName(Extension.DEFAULT);
-    }
-
-    return this._getExtensionByName(this._extensionRegistry[format]);
-  }
-
-  private async _getExtensionByName(name: string): Promise<any> {
-    const m = (await import(
-      /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
-    )) as any;
-    const extension = new m.default();
-    extension.name = name;
-    return extension;
   }
 
   public get(key: string): any {

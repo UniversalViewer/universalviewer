@@ -1,11 +1,9 @@
-//const $ = require("jquery");
-//require("jquery-ui")($);
-//require("jquery-ui/ui/widgets/slider");
-// require("./jquery-ui.min");
-// import "./jquery-ui.min.css";
 require("jquery-ui-dist/jquery-ui");
 require("jquery-ui-dist/jquery-ui.css");
-// import "jquery-ui";
+import "dashjs";
+import "jquery-ui-touch-punch";
+// import "jquery.binarytransport";
+import "waveform-data";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
@@ -19,17 +17,6 @@ import {
   PropertyValue,
   Range
 } from "manifesto.js";
-// require("jquery-ui");
-//import "jquery-ui/ui/widgets/slider";
-//require('~jquery-ui-dist/jquery-ui.min.js');
-// require('jquery.ui.touch-punch');
-// require('jquery.binarytransport');
-// require('waveform-data');
-
-// "jquery-ui.min",
-// "jquery.ui.touch-punch.min",
-// "jquery.binarytransport",
-// "waveform-data"
 import { AVComponent } from "@iiif/iiif-av-component";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 
