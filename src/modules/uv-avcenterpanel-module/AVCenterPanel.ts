@@ -3,7 +3,7 @@ require("jquery-ui-dist/jquery-ui.css");
 import "dashjs";
 import "jquery-ui-touch-punch";
 // import "jquery.binarytransport";
-import "waveform-data";
+// import "waveform-data";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";

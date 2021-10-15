@@ -83,6 +83,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private async _getExtensionByName(name: string): Promise<any> {
+    console.log("get extension")
     // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
     const m = (await import(
       /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
@@ -277,6 +278,8 @@ export class Viewer extends BaseComponent implements IUVComponent {
       extension = await that._getExtensionByFormat(Extension.DEFAULT);
     }
 
+    console.log(extension)
+
     that._configure(data, extension, (config: any) => {
       data.config = config;
       that._createExtension(extension, data, helper);
@@ -361,6 +364,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
     data: IUVData,
     helper: Helper
   ): void {
+    console.log("createExtension")
     this.extension = extension;
     if (this.extension) {
       this.extension.component = this;

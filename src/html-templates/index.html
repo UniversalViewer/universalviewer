@@ -139,7 +139,7 @@
           if (manifest) {
             $manifestSelect.value = manifest;
           } else {
-            var options = document.querySelector("#manifestSelect option");
+            var options = document.querySelectorAll("#manifestSelect optgroup option")
 
             if (options.length) {
               manifest = options[0].value;

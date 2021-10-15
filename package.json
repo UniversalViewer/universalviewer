@@ -118,7 +118,7 @@
     "pdfjs-dist": "2.0.161",
     "pdfobject": "2.1.1",
     "slideatlas-viewer": "4.4.1",
-    "waveform-data": "2.0.2",
+    "waveform-data": "^4.3.0",
     "webpack-dev-server": "^3.11.0",
     "whatwg-fetch": "^3.0.0",
     "xss": "1.0.3"

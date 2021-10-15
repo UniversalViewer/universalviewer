@@ -1045,6 +1045,21 @@
       "@context": "http://iiif.io/api/presentation/2/context.json",
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
+      "label": "ebooks",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/alice-in-wonderland/index.json",
+          "@type": "sc:Manifest",
+          "label": "Alice in Wonderland",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
       "label": "biiif-template",
       "visible": true,
       "manifests": [
