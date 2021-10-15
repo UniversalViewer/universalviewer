@@ -9,7 +9,6 @@
     <script src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
-    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
     <script src="uv-assets/themes/uv-en-gb-theme/index.js"></script>
     <%= htmlWebpackPlugin.tags.headTags %>
     <style>
@@ -62,20 +61,123 @@
 
       <div class="group">
         <input id="rotation" type="text" value="" />
-        <button id="setRotationButton" class="button" href="#">Set Rotation</button>
+        <button id="setRotationButton" class="button" href="#">
+          Set Rotation
+        </button>
       </div>
     </div>
 
     <script type="text/javascript">
+      function loadJSON(path, callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open("GET", path, true); // Replace 'my_data' with the path to your file
+        xobj.onreadystatechange = function() {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(JSON.parse(xobj.responseText));
+          }
+        };
+        xobj.send(null);
+      }
+
+      function createOptGroup(label) {
+        var optGroup = document.createElement("optgroup");
+        optGroup.label = label;
+        return optGroup;
+      }
+
+      function createOption(text, value) {
+        var option = document.createElement("option");
+        option.text = text;
+        option.value = value;
+        return option;
+      }
+
       document.addEventListener("DOMContentLoaded", function() {
         var uv, manifest;
+        var $manifest = document.getElementById("manifest");
+        var $manifestSelect = document.getElementById("manifestSelect");
+        var $target = document.getElementById("target");
+        var $rotation = document.getElementById("rotation");
+        var $setManifestButton = document.getElementById("setManifestButton");
+        var $setTargetButton = document.getElementById("setTargetButton");
+        var $setRotationButton = document.getElementById("setRotationButton");
 
         var urlDataProvider = new UV.URLDataProvider();
 
-        loadManifests(function() {
-          setSelectedManifest();
-          setupUV();
-        });
+        function loadManifests(cb) {
+          // load manifests
+          loadJSON("collection.json", function(manifests) {
+            for (var i = 0; i < manifests.collections.length; i++) {
+              var collection = manifests.collections[i];
+
+              if (collection.visible === false) {
+                continue;
+              }
+
+              var optGroup = createOptGroup(collection.label);
+              $manifestSelect.appendChild(optGroup);
+
+              for (var j = 0; j < collection.manifests.length; j++) {
+                var manifest = collection.manifests[j];
+
+                if (manifest.visible !== false) {
+                  var option = createOption(manifest.label, manifest["@id"]);
+                  optGroup.appendChild(option);
+                }
+              }
+            }
+
+            cb();
+          });
+        }
+
+        function setSelectedManifest() {
+          manifest = utils.Urls.getHashParameter("manifest");
+
+          if (manifest) {
+            $manifestSelect.value = manifest;
+          } else {
+            var options = document.querySelector("#manifestSelect option");
+
+            if (options.length) {
+              manifest = options[0].value;
+            }
+          }
+
+          $manifest.value = manifest;
+        }
+
+        $manifestSelect.onchange = function() {
+          var $selectedOption = document.querySelector(
+            "#manifestSelect option:checked"
+          );
+          $manifest.value = $selectedOption.value;
+        };
+
+        $setManifestButton.onclick = function() {
+          manifest = $manifest.value;
+
+          uv.set({
+            manifestUri: manifest,
+            canvasIndex: 0,
+          });
+        };
+
+        $setTargetButton.onclick = function() {
+          var target = $target.value;
+          uv.set({
+            target: target,
+          });
+        };
+
+        $setRotationButton.onclick = function() {
+          var rotation = $rotation.value;
+          uv.set({
+            rotation: rotation,
+          });
+        };
 
         function setupUV() {
           var collectionIndex = urlDataProvider.get("c");
@@ -111,12 +213,12 @@
 
           uv.on("targetChange", function(target) {
             console.log("target change", target);
-            $("#target").val(target);
+            $target.value = target;
           });
 
           uv.on("openseadragonExtension.rotationChange", function(rotation) {
             console.log("rotation change", rotation);
-            $('#rotation').val(rotation);
+            $rotation.value = rotation;
           });
 
           uv.on("toggleFullScreen", function(e) {
@@ -124,84 +226,9 @@
           });
         }
 
-        function loadManifests(cb) {
-          // load manifests
-          $.getJSON("collection.json", function(manifests) {
-            var $manifestSelect = $("#manifestSelect");
-
-            for (var i = 0; i < manifests.collections.length; i++) {
-              var collection = manifests.collections[i];
-
-              if (collection.visible === false) {
-                continue;
-              }
-
-              $manifestSelect.append(
-                '<optgroup label="' + collection.label + '">'
-              );
-
-              for (var j = 0; j < collection.manifests.length; j++) {
-                var manifest = collection.manifests[j];
-
-                if (manifest.visible !== false) {
-                  $manifestSelect.append(
-                    '<option value="' +
-                      manifest["@id"] +
-                      '">' +
-                      manifest.label +
-                      "</option>"
-                  );
-                }
-              }
-
-              $manifestSelect.append("</optgroup>");
-            }
-
-            cb();
-          });
-        }
-
-        function setSelectedManifest() {
-          manifest = utils.Urls.getHashParameter("manifest");
-
-          if (manifest) {
-            $("#manifestSelect").val(manifest);
-          } else {
-            var options = $("#manifestSelect option");
-
-            if (options.length) {
-              manifest = options[0].value;
-            }
-          }
-
-          $("#manifest").val(manifest);
-        }
-
-        $("#manifestSelect").on("change", function() {
-          $("#manifest").val($("#manifestSelect option:selected").val());
-        });
-
-        $("#setManifestButton").on("click", function() {
-          manifest = $("#manifest").val();
-
-          uv.set({
-            manifestUri: manifest,
-            canvasIndex: 0,
-          });
-        });
-
-        $("#setTargetButton").on("click", function() {
-          var target = $("#target").val();
-          uv.set({
-            target: target,
-          });
-        });
-
-        $("#setRotationButton").on("click", function() {
-          var rotation = $("#rotation").val();
-          uv.set({
-            rotation: rotation,
-          });
+        loadManifests(function() {
+          setSelectedManifest();
+          setupUV();
         });
       });
     </script>

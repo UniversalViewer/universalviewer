@@ -8,17 +8,16 @@ import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
 import { sanitize } from "../../Utils";
-import { Async, Bools } from "@edsilv/utils";
 import {
   Canvas,
   IExternalResource,
   LabelValuePair,
   LanguageMap,
-  PropertyValue,
-  Range
+  Range,
 } from "manifesto.js";
-import { AVComponent } from "@iiif/iiif-av-component";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
+import { AVComponent } from "@iiif/iiif-av-component";
+import { Bools } from "@edsilv/utils";
 
 export class AVCenterPanel extends CenterPanel {
   $avcomponent: JQuery;
@@ -49,7 +48,20 @@ export class AVCenterPanel extends CenterPanel {
     this.component.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
-        this._viewCanvas(canvasIndex);
+        if (this._lastCanvasIndex !== canvasIndex) {
+          this._viewCanvas(canvasIndex);
+        }
+      }
+    );
+
+    this.component.subscribe(
+      BaseEvents.CURRENT_TIME_CHANGE,
+      (e: any, currentTime: number) => {
+        this._whenMediaReady(() => {
+          if (this.avcomponent) {
+            this.avcomponent.setCurrentTime(currentTime);
+          }
+        });
       }
     );
 
@@ -69,7 +81,7 @@ export class AVCenterPanel extends CenterPanel {
         if (this.avcomponent) {
           this.avcomponent.set({
             limitToRange: this._limitToRange(),
-            constrainNavigationToRange: this._limitToRange()
+            constrainNavigationToRange: this._limitToRange(),
           });
         }
       });
@@ -85,7 +97,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: false
+            virtualCanvasEnabled: false,
           });
 
           const canvas: Canvas | null = this.extension.helper.getCurrentCanvas();
@@ -103,7 +115,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: true
+            virtualCanvasEnabled: true,
           });
         }
       });
@@ -112,31 +124,47 @@ export class AVCenterPanel extends CenterPanel {
     this._createAVComponent();
   }
 
+  _mediaReadyQueue: Function[] = [];
+  // call all callbacks in the order they were added, and remove them from the queue
+  private _flushMediaReadyQueue() {
+    for (const cb of this._mediaReadyQueue) {
+      cb();
+    }
+    this._mediaReadyQueue = [];
+  }
+
   private _createAVComponent(): void {
     this.$avcomponent = $('<div class="iiif-av-component"></div>');
     this.$content.prepend(this.$avcomponent);
 
+    // @ts-ignore
     this.avcomponent = new AVComponent({
       target: <HTMLElement>this.$avcomponent[0],
-      data: {
-        posterImageExpanded: this.options.posterImageExpanded
-      }
+      // @ts-ignore
+      posterImageExpanded: this.options.posterImageExpanded,
     });
 
     this.avcomponent.on(
       "mediaready",
       () => {
+        console.log("mediaready");
         this._mediaReady = true;
+        this._flushMediaReadyQueue();
       },
       false
     );
 
+    this.avcomponent.on("pause", () => {
+      this.component.publish(
+        BaseEvents.PAUSE,
+        this.avcomponent.getCurrentTime()
+      );
+    });
+
     this.avcomponent.on(
-      "rangechanged",
+      "rangechange",
       (rangeId: string | null) => {
         if (rangeId) {
-          this._setTitle();
-
           const range: Range | null = this.extension.helper.getRangeById(
             rangeId
           );
@@ -153,17 +181,15 @@ export class AVCenterPanel extends CenterPanel {
         } else {
           this.component.publish(BaseEvents.RANGE_CHANGE, null);
         }
+
+        this._setTitle();
       },
       false
     );
   }
 
   private _observeRangeChanges(): boolean {
-    if (!this._isThumbsViewOpen) {
-      return true;
-    }
-
-    return false;
+    return !this._isThumbsViewOpen;
   }
 
   private _setTitle(): void {
@@ -208,7 +234,7 @@ export class AVCenterPanel extends CenterPanel {
     const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
       MetadataOptions
     >{
-      range: currentRange
+      range: currentRange,
     });
 
     for (let i = 0; i < groups.length; i++) {
@@ -231,7 +257,8 @@ export class AVCenterPanel extends CenterPanel {
       );
 
       if (item) {
-        this.subtitle = LanguageMap.getValue(item.value as PropertyValue);
+        // @ts-ignore
+        this.subtitle = LanguageMap.getValue(item.value);
         break;
       }
     }
@@ -260,17 +287,23 @@ export class AVCenterPanel extends CenterPanel {
           helper: this.extension.helper,
           adaptiveAuthEnabled: this._isCurrentResourceAccessControlled(),
           autoPlay: this.config.options.autoPlay,
+          enableFastForward: this.config.options.enableFastForward,
+          enableFastRewind: this.config.options.enableFastRewind,
           autoSelectRange: true,
           constrainNavigationToRange: this._limitToRange(),
           content: this.content,
           defaultAspectRatio: 0.56,
           doubleClickMS: 350,
           limitToRange: this._limitToRange(),
-          posterImageRatio: this.config.options.posterImageRatio
+          posterImageRatio: this.config.options.posterImageRatio,
         });
 
-        this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-        this.component.publish(BaseEvents.LOAD);
+        // console.log("set up")
+        // this.avcomponent.on('waveformready', () => {
+        //     this.resize();
+        // }, false);
+
+        this.resize();
       }
     });
   }
@@ -280,15 +313,17 @@ export class AVCenterPanel extends CenterPanel {
   }
 
   private _whenMediaReady(cb: () => void): void {
-    Async.waitFor(() => {
-      return this._mediaReady;
-    }, cb);
+    if (this._mediaReady) {
+      cb();
+    } else {
+      this._mediaReadyQueue.push(cb);
+    }
   }
 
   private _viewRange(range: Range | null): void {
     this._whenMediaReady(() => {
       if (range && this.avcomponent) {
-        this.avcomponent.playRange(range.id);
+        this.avcomponent.viewRange(range.id);
       }
 
       // don't resize the av component to avoid expensively redrawing waveforms
