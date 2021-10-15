@@ -14,6 +14,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
 import { Strings } from "@edsilv/utils";
+import "./theme/theme.less";
 
 export default class Extension extends BaseExtension
   implements IEbookExtension {
