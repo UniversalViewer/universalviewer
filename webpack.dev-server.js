@@ -18,12 +18,6 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
-    alias: {
-      // bind version of jquery-ui
-      "jquery-ui": "jquery-ui/ui/widget.js",      
-      // bind to modules;
-      modules: path.join(__dirname, "node_modules"),
-    },
   },
   module: {
     rules: [

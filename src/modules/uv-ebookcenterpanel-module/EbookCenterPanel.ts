@@ -15,6 +15,7 @@ import {
   defineCustomElements
 } from "@universalviewer/uv-ebook-components/loader";
 
+
 export class EbookCenterPanel extends CenterPanel {
   private _cfi: string;
   private _ebookReader: any;

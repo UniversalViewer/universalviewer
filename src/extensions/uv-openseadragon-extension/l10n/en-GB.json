@@ -117,8 +117,11 @@
     "moreInfoRightPanel": {
       "content": {
         "attribution": "Attribution",
+        "canvasHeader": "About the image",
         "collapse": "Collapse Information",
         "collapseFull": "Collapse Gallery",
+        "copiedToClipboard": "Copied to clipboard",
+        "copyToClipboard": "Copy to clipboard",
         "description": "Description",
         "expand": "Expand Information",
         "expandFull": "Expand Gallery",
@@ -126,14 +129,12 @@
         "less": "less",
         "license": "License",
         "logo": "Logo",
+        "manifestHeader": "About the item",
         "more": "more",
         "noData": "No data to display",
         "page": "Page",
-        "title": "More Information",
-        "manifestHeader": "About the item",
-        "canvasHeader": "About the image",
-        "copyToClipboard": "Copy to clipboard",
-        "copiedToClipboard": "Copied to clipboard"
+        "rangeHeader": "About this section",
+        "title": "More Information"
       }
     },
     "multiSelectDialogue": {

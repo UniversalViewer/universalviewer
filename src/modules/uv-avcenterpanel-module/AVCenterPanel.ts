@@ -1,9 +1,3 @@
-require("jquery-ui-dist/jquery-ui");
-require("jquery-ui-dist/jquery-ui.css");
-import "dashjs";
-import "jquery-ui-touch-punch";
-// import "jquery.binarytransport";
-// import "waveform-data";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
@@ -141,7 +135,10 @@ export class AVCenterPanel extends CenterPanel {
     this.avcomponent = new AVComponent({
       target: <HTMLElement>this.$avcomponent[0],
       // @ts-ignore
-      posterImageExpanded: this.options.posterImageExpanded,
+      // data: {
+      //   posterImageExpanded: this.options.posterImageExpanded,
+      //   enableFastForward: true,
+      // }
     });
 
     this.avcomponent.on(

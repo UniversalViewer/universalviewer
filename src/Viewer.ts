@@ -83,7 +83,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private async _getExtensionByName(name: string): Promise<any> {
-    console.log("get extension")
     // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
     const m = (await import(
       /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
@@ -166,6 +165,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
   }
 
   private async _reload(data: IUVData): Promise<void> {
+    
+    this.el.parentElement!.parentElement!.classList.add("loading");
+    
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target
@@ -178,9 +180,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     // empty the containing element
     $elem.empty();
-
-    // add loading class
-    $elem.addClass("loading");
 
     const that = this;
 
@@ -214,15 +213,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     let extension: IExtension | undefined;
 
-    // if the canvas has a duration, use the uv-av-extension
-    // const duration: number | null = canvas.getDuration();
-
-    // if (typeof(duration) !== 'undefined') {
-    //     extension = that._extensions["av"];
-    // } else {
-    // canvasType will always be "canvas" in IIIF presentation 3.0
-    // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
-    // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
     const content: Annotation[] = canvas.getContent();
 
     if (content.length) {
@@ -278,10 +268,9 @@ export class Viewer extends BaseComponent implements IUVComponent {
       extension = await that._getExtensionByFormat(Extension.DEFAULT);
     }
 
-    console.log(extension)
-
     that._configure(data, extension, (config: any) => {
       data.config = config;
+      that.el.parentElement!.parentElement!.classList.remove("loading");
       that._createExtension(extension, data, helper);
     });
   }
@@ -364,7 +353,6 @@ export class Viewer extends BaseComponent implements IUVComponent {
     data: IUVData,
     helper: Helper
   ): void {
-    console.log("createExtension")
     this.extension = extension;
     if (this.extension) {
       this.extension.component = this;

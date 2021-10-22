@@ -152,11 +152,8 @@ export const init = (el: string | HTMLDivElement, data) => {
   }
 
   document.addEventListener("fullscreenchange", fullScreenChange, false);
-
   document.addEventListener("webkitfullscreenchange", fullScreenChange, false);
-
   document.addEventListener("mozfullscreenchange", fullScreenChange, false);
-
   document.addEventListener("MSFullscreenChange", fullScreenChange, false);
 
   // todo: iiif-specific

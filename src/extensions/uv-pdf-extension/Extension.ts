@@ -54,18 +54,6 @@ export default class Extension extends BaseExtension implements IPDFExtension {
       this.resize();
     });
 
-    this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
-      if (this.IsOldIE()) {
-        this.centerPanel.$element.hide();
-      }
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
-      if (this.IsOldIE()) {
-        this.centerPanel.$element.show();
-      }
-    });
-
     this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
       setTimeout(() => {
         this.resize();
@@ -75,14 +63,6 @@ export default class Extension extends BaseExtension implements IPDFExtension {
 
   render(): void {
     super.render();
-  }
-
-  IsOldIE(): boolean {
-    const browser: string = window.browserDetect.browser;
-    const version: number = window.browserDetect.version;
-
-    if (browser === "Explorer" && version <= 9) return true;
-    return false;
   }
 
   isHeaderPanelEnabled(): boolean {
