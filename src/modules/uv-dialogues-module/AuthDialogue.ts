@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { sanitize } from "../../Utils";
