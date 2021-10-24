@@ -1,3 +1,7 @@
+const $ = require("jquery");
+require("jsviews")($);
+import jQueryPlugins from "./JQueryPlugins";
+jQueryPlugins($);
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { IExtension } from "./modules/uv-shared-module/IExtension";
 import { IUVComponent } from "./IUVComponent";
