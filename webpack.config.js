@@ -16,6 +16,10 @@ const config = [{
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
+    fallback: {
+      "zlib": false,
+      "stream": false,
+    }
   },
   module: {
     rules: [

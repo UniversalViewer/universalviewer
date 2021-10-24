@@ -157,7 +157,7 @@ export class Auth09 {
             if (rejectOnError) {
               reject(token.errorDescription);
             } else {
-              resolve(undefined);
+              reject(undefined);
             }
           } else {
             resolve(token);
@@ -198,7 +198,7 @@ export class Auth09 {
     resource: IExternalResource,
     storageStrategy: StorageType
   ): Promise<IAccessToken> {
-    return new Promise<IAccessToken>((resolve, reject) => {
+    return new Promise<IAccessToken>((resolve, _reject) => {
       let foundItems: StorageItem[] = [];
       let item: StorageItem | null = null;
 
@@ -229,13 +229,12 @@ export class Auth09 {
         return a.expiresAt - b.expiresAt;
       });
 
-      let foundToken: IAccessToken | undefined;
+      let foundToken: IAccessToken;
 
       if (foundItems.length) {
-        foundToken = <IAccessToken>foundItems[foundItems.length - 1].value;
+        foundToken = foundItems[foundItems.length - 1].value;
+        resolve(foundToken);
       }
-
-      resolve(foundToken);
     });
   }
 

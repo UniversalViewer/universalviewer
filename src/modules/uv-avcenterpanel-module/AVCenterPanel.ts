@@ -119,6 +119,10 @@ export class AVCenterPanel extends CenterPanel {
       this.resize();
     });
 
+    this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+      this.resize();
+    });
+
     this._createAVComponent();
   }
 

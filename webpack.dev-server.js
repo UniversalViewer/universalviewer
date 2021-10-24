@@ -18,6 +18,10 @@ const config = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
+    fallback: {
+      "zlib": false,
+      "stream": false,
+    }
   },
   module: {
     rules: [
@@ -66,23 +70,27 @@ const config = {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname),
+    static: path.join(__dirname),
+    client: {
+      progress: true,
+    },
+    open: true,
     compress: true,
-    port: 5020,
-    setup(app) {
-      app.use('/collection.json',
+    port: 8080,
+    onListening(devServer) {
+      devServer.app.use('/collection.json',
           express.static(path.join(__dirname, 'src', 'collection.json')));
-      app.use('/uv-config.json',
+      devServer.app.use('/uv-config.json',
           express.static(path.join(__dirname, 'src', 'uv-config.json')));
-      app.use('/uv.css',
+      devServer.app.use('/uv.css',
           express.static(path.join(__dirname, 'src', 'uv.css')));
-      app.use('/uv-assets/config',
+      devServer.app.use('/uv-assets/config',
           express.static(path.join(__dirname, 'dist', 'uv-assets', 'config')));
-      app.use('/uv-assets/themes',
+      devServer.app.use('/uv-assets/themes',
           express.static(path.join(__dirname, 'dist', 'uv-assets', 'themes')));
-      app.use('/uv-assets/img',
+      devServer.app.use('/uv-assets/img',
           express.static(path.join(__dirname, 'dist', 'uv-assets', 'img')));
-      app.use('/uv-assets/js/bundle.js',
+      devServer.app.use('/uv-assets/js/bundle.js',
           express.static(path.join(__dirname, 'dist', 'uv-assets', 'js', 'bundle.js')));
     }
   },
