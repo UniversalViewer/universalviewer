@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { Panel } from "./Panel";
 import { IExtension } from "./IExtension";
 import { IUVComponent } from "../../IUVComponent";
