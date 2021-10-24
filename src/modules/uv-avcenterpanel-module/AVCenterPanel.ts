@@ -115,6 +115,10 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
+    this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+      this.resize();
+    });
+
     this._createAVComponent();
   }
 
@@ -144,7 +148,6 @@ export class AVCenterPanel extends CenterPanel {
     this.avcomponent.on(
       "mediaready",
       () => {
-        console.log("mediaready");
         this._mediaReady = true;
         this._flushMediaReadyQueue();
       },
@@ -299,8 +302,7 @@ export class AVCenterPanel extends CenterPanel {
         // this.avcomponent.on('waveformready', () => {
         //     this.resize();
         // }, false);
-
-        this.resize();
+        
       }
     });
   }
