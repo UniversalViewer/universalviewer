@@ -166,7 +166,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
   private async _reload(data: IUVData): Promise<void> {
     
-    this.el.parentElement!.parentElement!.classList.add("loading");
+    this.el.parentElement!.parentElement!.classList.remove("loaded");
     
     this._pubsub.dispose(); // remove any existing event listeners
 
@@ -270,7 +270,7 @@ export class Viewer extends BaseComponent implements IUVComponent {
 
     that._configure(data, extension, (config: any) => {
       data.config = config;
-      that.el.parentElement!.parentElement!.classList.remove("loading");
+      that.el.parentElement!.parentElement!.classList.add("loaded");
       that._createExtension(extension, data, helper);
     });
   }
