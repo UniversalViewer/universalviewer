@@ -1,5 +1,3 @@
-const $ = require("jquery");
-
 export default function jqueryPlugins($) {
   $.fn.checkboxButton = function(onClick: (checked: boolean) => void) {
     return this.each(function() {
