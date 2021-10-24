@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { AutoComplete } from "../uv-shared-module/AutoComplete";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";

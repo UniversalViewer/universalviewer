@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "./BaseEvents";
 import { Dialogue } from "./Dialogue";
 

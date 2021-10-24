@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { RightPanel } from "../uv-shared-module/RightPanel";
 import { sanitize } from "../../Utils";

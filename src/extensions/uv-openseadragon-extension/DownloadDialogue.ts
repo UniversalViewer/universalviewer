@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";

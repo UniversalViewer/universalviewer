@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";

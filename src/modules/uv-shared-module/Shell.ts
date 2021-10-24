@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { isVisible } from "../../Utils";
 import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";

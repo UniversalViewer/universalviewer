@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { SettingsDialogue as BaseSettingsDialogue } from "../../modules/uv-dialogues-module/SettingsDialogue";
 
 export class SettingsDialogue extends BaseSettingsDialogue {

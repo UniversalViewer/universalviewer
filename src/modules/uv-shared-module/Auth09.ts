@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "./BaseEvents";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";

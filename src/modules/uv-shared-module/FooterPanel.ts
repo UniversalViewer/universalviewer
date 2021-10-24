@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "./BaseEvents";
 import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";

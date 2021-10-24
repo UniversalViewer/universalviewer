@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import "@webcomponents/webcomponentsjs/webcomponents-bundle.js";
 import "../../../node_modules/@google/model-viewer/dist/model-viewer-legacy";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";

@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Events } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";

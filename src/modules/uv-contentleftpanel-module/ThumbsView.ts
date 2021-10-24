@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { ThumbsView as BaseThumbsView } from "../uv-shared-module/ThumbsView";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";

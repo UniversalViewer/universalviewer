@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { Dialogue } from "../../modules/uv-shared-module/Dialogue";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";

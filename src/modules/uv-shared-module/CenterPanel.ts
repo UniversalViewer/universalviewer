@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../Utils";

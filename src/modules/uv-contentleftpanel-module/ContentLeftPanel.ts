@@ -1,3 +1,4 @@
+const $ = require("jquery");
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
