@@ -1,3 +1,4 @@
+const $ = require("jquery");
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
