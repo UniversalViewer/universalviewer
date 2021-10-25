@@ -205,25 +205,58 @@
           });
 
           uv.on("load", function() {
-            console.log("load");
+            // console.log("load");
             // uv.set({
             //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
             // });
           });
 
+          uv.on(
+            "collectionIndexChange",
+            function(collectionIndex) {
+              uv.dataProvider.set("c", collectionIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "manifestIndexChange",
+            function(manifestIndex) {
+              uv.dataProvider.set("m", manifestIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "canvasIndexChange",
+            function(canvasIndex) {
+              uv.dataProvider.set("cv", canvasIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "rangeChange",
+            function(rangeId) {
+              uv.dataProvider.set("rid", rangeId);
+            },
+            false
+          );
+
           uv.on("targetChange", function(target) {
-            console.log("target change", target);
+            // console.log("target change", target);
             $target.value = target;
           });
 
           uv.on("openseadragonExtension.rotationChange", function(rotation) {
-            console.log("rotation change", rotation);
+            // console.log("rotation change", rotation);
             $rotation.value = rotation;
           });
 
           uv.on("toggleFullScreen", function(e) {
-            console.log("toggleFullScreen", e);
+            // console.log("toggleFullScreen", e);
           });
+          
         }
 
         loadManifests(function() {

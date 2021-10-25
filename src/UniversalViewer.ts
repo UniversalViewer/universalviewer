@@ -18,6 +18,7 @@ import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { URLDataProvider } from "./URLDataProvider";
 import "./uv.css";
+import "./themes/theme.less";
 
 interface IExtensionRegistry {
   [key: string]: string;
@@ -35,7 +36,7 @@ enum Extension {
   SLIDEATLAS = "uv-slideatlas-extension",
 }
 
-export class Viewer extends BaseComponent implements IUVComponent {
+export class UniversalViewer extends BaseComponent implements IUVComponent {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;

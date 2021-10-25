@@ -1,3 +1,3 @@
 export { URLDataProvider } from "./URLDataProvider";
-export { Viewer } from "./Viewer";
+export { UniversalViewer as Viewer } from "./UniversalViewer";
 export { init } from "./Init";

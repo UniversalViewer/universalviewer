@@ -1,5 +1,4 @@
-import { Viewer } from "./Viewer";
-import { Urls } from "@edsilv/utils";
+import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
   let uv;
@@ -39,7 +38,7 @@ export const init = (el: string | HTMLDivElement, data) => {
     }, 100);
   });
 
-  uv = new Viewer({
+  uv = new UniversalViewer({
     target: uvDiv,
     data: data
   });
@@ -61,16 +60,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-
-  // uv.on(
-  //   "load",
-  //   function() {
-  //     setTimeout(function() {
-  //       resize();
-  //     }, 100);
-  //   },
-  //   false
-  // );
 
   uv.on(
     "reload",
@@ -121,24 +110,24 @@ export const init = (el: string | HTMLDivElement, data) => {
     false
   );
 
-  uv.on(
-    "bookmark",
-    function(data) {
-      const absUri = parent!.ownerDocument!.URL;
-      const parts = Urls.getUrlParts(absUri);
-      let relUri =
-        parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
+  // uv.on(
+  //   "bookmark",
+  //   function(data) {
+  //     const absUri = parent!.ownerDocument!.URL;
+  //     const parts = Urls.getUrlParts(absUri);
+  //     let relUri =
+  //       parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
 
-      if (!relUri.startsWith("/")) {
-        relUri = "/" + relUri;
-      }
+  //     if (!relUri.startsWith("/")) {
+  //       relUri = "/" + relUri;
+  //     }
 
-      data.path = relUri;
+  //     data.path = relUri;
 
-      console.log("bookmark", data);
-    },
-    false
-  );
+  //     console.log("bookmark", data);
+  //   },
+  //   false
+  // );
 
   function fullScreenChange(e) {
     if (
@@ -155,42 +144,6 @@ export const init = (el: string | HTMLDivElement, data) => {
   document.addEventListener("webkitfullscreenchange", fullScreenChange, false);
   document.addEventListener("mozfullscreenchange", fullScreenChange, false);
   document.addEventListener("MSFullscreenChange", fullScreenChange, false);
-
-  // todo: iiif-specific
-  uv.on(
-    "collectionIndexChange",
-    function(collectionIndex) {
-      uv.dataProvider.set("c", collectionIndex);
-    },
-    false
-  );
-
-  // todo: iiif-specific
-  uv.on(
-    "manifestIndexChange",
-    function(manifestIndex) {
-      uv.dataProvider.set("m", manifestIndex);
-    },
-    false
-  );
-
-  // todo: iiif-specific
-  uv.on(
-    "canvasIndexChange",
-    function(canvasIndex) {
-      uv.dataProvider.set("cv", canvasIndex);
-    },
-    false
-  );
-
-  // todo: iiif-specific
-  uv.on(
-    "rangeChange",
-    function(rangeId) {
-      uv.dataProvider.set("rid", rangeId);
-    },
-    false
-  );
 
   return uv;
 };

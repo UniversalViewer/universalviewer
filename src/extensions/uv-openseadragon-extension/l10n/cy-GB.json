@@ -204,6 +204,7 @@
         "navigatorEnabled": "Ffenest llywio ar gael",
         "clickToZoomEnabled": "Cliciwch gyda'r llygoden i glosio",
         "pagingEnabled": "Arddangos dwy dudalen",
+        "reducedMotion": "Lleihau symudiad (analluogi animeiddiadau)",
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>mwy o wybodaeth</a>"
