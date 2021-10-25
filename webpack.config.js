@@ -71,6 +71,11 @@ const config = [{
     new webpack.EnvironmentPlugin({
       PACKAGE_VERSION: pkg.version,
     }),
+    new webpack.ProvidePlugin({
+      "$":"jquery",
+      "jQuery":"jquery",
+      "window.jQuery":"jquery",
+    }),
   ],
 }];
 
