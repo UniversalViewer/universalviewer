@@ -276,7 +276,6 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
 
     that._configure(data, extension, (config: any) => {
       data.config = config;
-      that.el.parentElement!.parentElement!.classList.add("loaded");
       that._createExtension(extension, data, helper);
     });
   }
