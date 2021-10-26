@@ -2,6 +2,7 @@ const $ = require("jquery");
 require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
+const merge = require('lodash/merge');
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { IExtension } from "./modules/uv-shared-module/IExtension";
 import { IUVComponent } from "./IUVComponent";
@@ -274,63 +275,55 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
       extension = await that._getExtensionByFormat(Extension.DEFAULT);
     }
 
-    that._configure(data, extension, (config: any) => {
-      data.config = config;
-      that._createExtension(extension, data, helper);
-    });
+    data.config = await that._configure(data, extension);
+
+    that._createExtension(extension, data, helper);
   }
 
   private _error(message: string): void {
     this.fire(BaseEvents.ERROR, message);
   }
 
-  private _configure(
+  private async _configure(
     data: IUVData,
     extension: any,
-    cb: (config: any) => void
-  ): void {
-    this._getConfigExtension(data, extension, (configExtension: any) => {
-      if (data.locales) {
-        const configPath: string =
-          data.assetsDir +
-          "/config/" +
-          extension.name +
-          "." +
-          data.locales[0].name +
-          ".config.json";
+  ): Promise<any> {
+    // if there is a configUri, load it and pass it to the extension
+    const configExtension = await this._getConfigExtension(data, extension);
 
-        $.getJSON(configPath, (config) => {
-          this._extendConfig(data, extension, config, configExtension, cb);
-        });
-      }
-    });
+    if (data.locales) {
+      // import the config file
+      let config = await import(`./extensions/${extension.name}/config/${data.locales[0].name}.json`);
+      config = JSON.parse(JSON.stringify(config));
+      return this._extendConfig(data, extension, config, configExtension);
+    }
+
+    return null;
   }
 
-  private _extendConfig(
+  private async _extendConfig(
     data: IUVData,
     extension: any,
     config: any,
-    configExtension: any,
-    cb: (config: any) => void
-  ): void {
+    configExtension: any
+  ): Promise<any> {
     config.name = extension.name;
 
     // if configUri has been set, extend the existing config object.
     if (configExtension) {
       // save a reference to the config extension uri.
       config.uri = data.configUri;
-      $.extend(true, config, configExtension);
-      //$.extend(true, config, configExtension, data.config);
+      config = merge(config, configExtension)
+      // $.extend(true, config, configExtension);
     }
 
-    cb(config);
+    return config;
   }
 
-  private _getConfigExtension(
+  private async _getConfigExtension(
     data: IUVData,
     extension: any,
-    cb: (configExtension: any) => void
-  ): void {
+  ): Promise<any> {
     if (!data.locales) {
       return;
     }
@@ -338,18 +331,18 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     const sessionConfig: string | null = sessionStorage.getItem(
       extension.name + "." + data.locales[0].name
     );
+
     const configUri: string | undefined = data.configUri;
 
     if (sessionConfig) {
       // if config is stored in sessionstorage
-      cb(JSON.parse(sessionConfig));
+      return JSON.parse(sessionConfig);
     } else if (configUri) {
       // if data.configUri has been set
-      $.getJSON(configUri, (configExtension: any) => {
-        cb(configExtension);
-      });
+      return fetch(configUri)
+        .then(response => response.json())
     } else {
-      cb(null);
+      return null;
     }
   }
 

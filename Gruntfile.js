@@ -1,4 +1,4 @@
-var configure = require("./tasks/configure");
+// var configure = require("./tasks/configure");
 var c = require("./config");
 var config = new c();
 
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-webpack");
 
-  configure(grunt);
+  // configure(grunt);
 
   grunt.registerTask("default", ["build"]);
 

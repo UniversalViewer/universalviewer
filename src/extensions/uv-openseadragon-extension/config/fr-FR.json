@@ -82,25 +82,25 @@
         "twoColThumbWidth": 90
       },
       "content": {
-        "collapse": "Collapse Contents",
-        "collapseFull": "Collapse Gallery",
+        "collapse": "Masquer les contenus",
+        "collapseFull": "Masquer la galerie",
         "date": "date",
-        "expand": "Expand Contents",
-        "expandFull": "Expand Gallery",
+        "expand": "Afficher les contenus",
+        "expandFull": "Afficher la galerie",
         "index": "Index",
-        "manifestRanges": "Manifest Ranges",
-        "searchResult": "{0} search result",
-        "searchResults": "{0} search results",
-        "sortBy": "Sort By:",
-        "thumbnails": "Thumbnails",
-        "title": "Contents",
+        "manifestRanges": "Manifestes",
+        "searchResult": "{0} résultats",
+        "searchResults": "{0} résultats",
+        "sortBy": "Trier par :",
+        "thumbnails": "Vignettes",
+        "title": "Contenus",
         "volume": "volume"
       }
     },
     "dialogue": {
       "topCloseButtonEnabled": false,
       "content": {
-        "close": "Close"
+        "close": "Fermer"
       }
     },
     "downloadDialogue": {
@@ -112,24 +112,24 @@
         "selectionEnabled": false
       },
       "content": {
-        "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
-        "currentViewAsJpgExplanation": "Opens in a new window",
-        "download": "Download",
-        "downloadSelection": "Download Selection",
-        "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
-        "editSettings": "Edit Settings",
-        "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file",
-        "noneAvailable": "No download options are available.",
-        "pagingNote": "Please turn off Two Page View for additional options.",
-        "preview": "Preview",
-        "title": "Download",
-        "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
-        "wholeImageHighResExplanation": "Opens in a new window.",
-        "wholeImagesHighRes": "Whole images ({0})",
-        "wholeImagesHighResExplanation": "Opens in two new windows.",
-        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
+        "currentViewAsJpg": "Vue actuelle {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Ouvre une nouvelle fenêtre",
+        "download": "Télécharger",
+        "downloadSelection": "Télécharger la sélection",
+        "downloadSelectionExplanation": "Ouvre une fenêtre pour sélectionner les pages à télécharger.",
+        "editSettings": "Modifier les paramètres",
+        "entireDocument": "Document entier ({0})",
+        "entireFileAsOriginal": "Fichier complet",
+        "noneAvailable": "Aucune option de téléchargement n'est disponible.",
+        "pagingNote": "Veuillez fermer l'affichage en double page pour accéder aux options supplémentaires.",
+        "preview": "Aperçu",
+        "title": "Télécharger",
+        "wholeImageHighRes": "Image {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Ouvre une nouvelle fenêtre.",
+        "wholeImagesHighRes": "Images ({0})",
+        "wholeImagesHighResExplanation": "S'ouvre dans deux nouvelles fenêtres.",
+        "wholeImageLowResAsJpg": "Image {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Ouvre une nouvelle fenêtre."
       }
     },
     "footerPanel": {
@@ -147,25 +147,25 @@
         "shareEnabled": true
       },
       "content": {
-        "bookmark": "Add to bookmarks",
-        "download": "Download",
-        "embed": "Embed",
-        "exitFullScreen": "Exit Full Screen",
-        "feedback": "Feedback",
-        "fullScreen": "Full Screen",
-        "moreInfo": "More Information",
-        "open": "Open",
-        "share": "Share"
+        "bookmark": "Ajouter aux favoris",
+        "download": "Télécharger",
+        "embed": "Intégrer",
+        "exitFullScreen": "Quitter le mode plein écran",
+        "feedback": "Commentaire",
+        "fullScreen": "Affichage en plein écran",
+        "moreInfo": "Informations",
+        "open": "Ouvrir",
+        "share": "Partager"
       }
     },
     "genericDialogue": {
       "content": {
-        "emptyValue": "please enter a value.",
-        "invalidNumber": "Please enter a valid number.",
-        "noMatches": "No matches were found.",
+        "emptyValue": "veuillez saisir une valeur.",
+        "invalidNumber": "Veuillez saisir un nombre valide.",
+        "noMatches": "Aucune correspondance n'a été trouvée.",
         "ok": "OK",
-        "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
-        "refresh": "Refresh"
+        "pageNotFound": "Ce contenu ne contient pas de page avec le numéro indiqué. Veuillez essayer de basculer le mode de numérotation sur 'image'.",
+        "refresh": "Rafraîchir"
       }
     },
     "headerPanel": {
@@ -177,8 +177,8 @@
     },
     "helpDialogue": {
       "content": {
-        "text": "placeholder text",
-        "title": "Help"
+        "text": "texte d'exemple",
+        "title": "Aide"
       }
     },
     "moreInfoRightPanel": {
@@ -199,24 +199,23 @@
       },
       "content": {
         "attribution": "Attribution",
-        "canvasHeader": "About the image",
-        "collapse": "Collapse Information",
-        "collapseFull": "Collapse Gallery",
-        "copiedToClipboard": "Copied to clipboard",
-        "copyToClipboard": "Copy to clipboard",
+        "collapse": "Masquer les informations",
+        "collapseFull": "Masquer la galerie",
         "description": "Description",
-        "expand": "Expand Information",
-        "expandFull": "Expand Gallery",
-        "holdingText": "Your module goes here!",
-        "less": "less",
-        "license": "License",
+        "expand": "Afficher les informations",
+        "expandFull": "Afficher la galerie",
+        "holdingText": "Votre module vient ici !",
+        "less": "moins",
+        "license": "Licence",
         "logo": "Logo",
-        "manifestHeader": "About the item",
-        "more": "more",
-        "noData": "No data to display",
+        "more": "suite",
+        "noData": "Aucune donnée à afficher",
         "page": "Page",
-        "rangeHeader": "About this section",
-        "title": "More Information"
+        "title": "Informations",
+        "manifestHeader": "A propos du contenu",
+        "canvasHeader": "A propos de l'image",
+        "copyToClipboard": "Copier dans le presse-papiers",
+        "copiedToClipboard": "Copié dans le presse-papiers"
       }
     },
     "multiSelectDialogue": {
@@ -229,9 +228,9 @@
         "pageModeEnabled": true
       },
       "content": {
-        "select": "Download",
-        "selectAll": "Select All",
-        "title": "Select Pages for Download"
+        "select": "Télécharger",
+        "selectAll": "Tout sélectionner",
+        "title": "Sélectionner les pages à télécharger"
       }
     },
     "pagingHeaderPanel": {
@@ -244,31 +243,31 @@
         "pagingToggleEnabled": true
       },
       "content": {
-        "close": "Close",
-        "emptyValue": "Please enter a value",
-        "first": "First",
-        "firstImage": "First Image",
-        "firstPage": "First Page",
+        "close": "Fermer",
+        "emptyValue": "Veuillez saisir une valeur",
+        "first": "Premier",
+        "firstImage": "Première image",
+        "firstPage": "Première page",
         "folio": "Folio",
-        "gallery": "Gallery",
-        "go": "Go",
-        "help": "Help",
+        "gallery": "Gallerie",
+        "go": "Aller",
+        "help": "Aide",
         "image": "Image",
-        "last": "Last",
-        "lastImage": "Last Image",
-        "lastPage": "Last Page",
-        "next": "Next",
-        "nextImage": "Next Image",
-        "nextPage": "Next Page",
-        "of": "of {0}",
-        "oneUp": "Single page view",
+        "last": "Dernier",
+        "lastImage": "Dernière image",
+        "lastPage": "Dernière page",
+        "next": "Suivant",
+        "nextImage": "Prochaine image",
+        "nextPage": "Page suivante",
+        "of": "de {0}",
+        "oneUp": "Affichage en mode page simple",
         "page": "Page",
-        "pageSearchLabel": "Search by Page Number",
-        "previous": "Previous",
-        "previousImage": "Previous Image",
-        "previousPage": "Previous Page",
-        "settings": "Settings",
-        "twoUp": "Two page view"
+        "pageSearchLabel": "Recherche par numéro de page.",
+        "previous": "Précédent",
+        "previousImage": "Image précédente",
+        "previousPage": "Page précédente",
+        "settings": "Paramètres",
+        "twoUp": "Affichage double page"
       }
     },
     "openSeadragonCenterPanel": {
@@ -292,13 +291,13 @@
       },
       "content": {
         "attribution": "Attribution",
-        "goHome": "Go Home",
-        "imageUnavailable": "Image Unavailable",
-        "next": "Next",
-        "previous": "Previous",
-        "rotateRight": "Rotate Right",
-        "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "goHome": "Retour",
+        "imageUnavailable": "Image non disponible",
+        "next": "Prochain",
+        "previous": "Précédent",
+        "rotateRight": "Pivoter à droite",
+        "zoomIn": "Zoomer",
+        "zoomOut": "Dézoomer"
       }
     },
     "searchFooterPanel": {
@@ -310,34 +309,33 @@
         "positionMarkerEnabled": true
       },
       "content": {
-        "clearSearch": "Clear",
+        "clearSearch": "Effacer",
         "defaultLabel": "-",
-        "displaying": "{0} {1} of {2}",
-        "enterKeyword": "Enter Keyword",
+        "displaying": "{0} {1} de {2}",
+        "enterKeyword": "Saisir un mot",
         "image": "image",
         "imageCaps": "Image",
-        "instanceFound": "1 instance of '{0}' found",
-        "instancesFound": "{0} instances of '{1}' found",
-        "nextResult": "Next Result",
+        "instanceFound": "1 instance de '{0}' trouvée",
+        "instancesFound": "{0} instances de '{1}' trouvées",
+        "nextResult": "Résultat suivant",
         "page": "page",
         "pageCaps": "Page",
-        "previousResult": "Previous Result",
-        "print": "Print",
-        "resultFoundFor": "result found for",
-        "resultsFoundFor": "results found for",
-        "searchWithin": "Search within this item:"
+        "previousResult": "Résultat précédent",
+        "print": "Imprimer",
+        "resultFoundFor": "résultat trouvé pour ",
+        "resultsFoundFor": "résultats trouvés pour",
+        "searchWithin": "Chercher dans ce document :"
       }
     },
     "settingsDialogue": {
       "content": {
-        "locale": "Locale",
-        "navigatorEnabled": "Navigator Enabled",
-        "clickToZoomEnabled": "Mouse Click To Zoom",
-        "pagingEnabled": "Two Page View",
-        "reducedMotion": "Reduce motion (disables animations)",
-        "preserveViewport": "Preserve Zoom",
-        "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "locale": "Langues",
+        "navigatorEnabled": "Navigateur activé",
+        "clickToZoomEnabled": "Cliquer pour zoomer",
+        "pagingEnabled": "Affichage double page",
+        "preserveViewport": "Conserver le zoom",
+        "title": "Paramètres",
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>informations</a>"
       }
     },
     "shareDialogue": {
@@ -348,51 +346,51 @@
         "shareManifestsEnabled": true
       },
       "content": {
-        "customSize": "custom",
-        "embed": "Embed",
-        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
-        "height": "Height",
-        "iiif": "IIIF Manifest",
-        "share": "Share",
-        "shareInstructions": "To share this item, copy the URL below.",
-        "size": "Size:",
-        "width": "Width"
+        "customSize": "personnalisée",
+        "embed": "Intégrer",
+        "embedInstructions": "Pour afficher ce contenu sur votre site internet, copier-collez le code ci-dessous.",
+        "height": "Hauteur",
+        "iiif": "Manifeste IIIF",
+        "share": "Partager",
+        "shareInstructions": "Pour partager ce contenu, copier l'URL ci-dessous.",
+        "size": "Taille :",
+        "width": "Largeur"
       }
     },
     "authDialogue": {
       "content": {
-        "cancel": "Cancel",
-        "confirm": "Confirm"
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
       }
     },
     "clickThroughDialogue": {
       "content": {
-        "viewTerms": "Read Full Terms and Conditions"
+        "viewTerms": "Lire les termes et les conditions d'utilisation"
       }
     },
     "loginDialogue": {
       "content": {
-        "login": "Login",
-        "logout": "Logout",
-        "cancel": "Cancel"
+        "login": "Connexion",
+        "logout": "Déconnexion",
+        "cancel": "Annuler"
       }
     },
     "mobileFooterPanel": {
       "content": {
-        "rotateRight": "Rotate Right",
-        "moreInfo": "More Information",
-        "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "rotateRight": "Pivoter à droite",
+        "moreInfo": "Informations",
+        "zoomIn": "Zoom avant",
+        "zoomOut": "Zoom arrière"
       }
     },
     "restrictedDialogue": {
       "content": {
-        "cancel": "Cancel"
+        "cancel": "Annuler"
       }
     }
   },
   "localisation": {
-    "label": "English (GB)",
+    "label": "Français (FR)",
     "locales": [
       {
         "name": "cy-GB",
@@ -417,14 +415,12 @@
     ]
   },
   "content": {
-    "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
-    "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
-    "canvasIndexOutOfRange": "Canvas index out of range.",
-    "fallbackDegradedLabel": "Login",
-    "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
-    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
-    "mediaViewer": "Media Viewer",
-    "skipToDownload": "Skip to downloads and alternative formats",
-    "termsOfUse": "Terms of Use"
+    "authCORSError": "Votre navigateur ne supporte pas CORS, veuillez mettre à jour votre navigateur pour afficher ce contenu.",
+    "authorisationFailedMessage": "Votre tentative de connexion semble avoir échoué. Veuillez réessayer.",
+    "canvasIndexOutOfRange": "Valeur d'index invalide pour la balise Canvas.",
+    "fallbackDegradedLabel": "Connexion",
+    "fallbackDegradedMessage": "Connectez-vous pour visualisez ce contenu en résolution maximale.",
+    "forbiddenResourceMessage": "Vos droits d'accès ne vous permettent pas de visualiser cette image",
+    "termsOfUse": "Conditions d'utilisation"
   }
 }

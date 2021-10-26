@@ -49,6 +49,7 @@ export class SlideAtlasCenterPanel extends CenterPanel {
       id = id.substr(0, id.length - 1);
     }
 
+    // todo: replace with fetch
     $.getJSON(tileDescriptor, info => {
       const tileSource = {
         height: info.sizeY,

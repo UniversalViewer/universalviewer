@@ -126,13 +126,13 @@ export class SettingsDialogue extends Dialogue {
     this.$reducedAnimationCheckbox = $(
       '<input id="reducedAnimation" type="checkbox" tabindex="0" />'
     );
+    
     this.$reducedAnimation.append(this.$reducedAnimationCheckbox);
-
-    console.log(this.content);
 
     this.$reducedAnimationLabel = $(
       '<label for="reducedAnimation">' + this.content.reducedMotion + "</label>"
     );
+
     this.$reducedAnimation.append(this.$reducedAnimationLabel);
 
     this.$reducedAnimationCheckbox.change(() => {

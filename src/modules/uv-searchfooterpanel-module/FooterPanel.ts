@@ -261,12 +261,11 @@ export class FooterPanel extends BaseFooterPanel {
       new AutoComplete(
         this.$searchText,
         (terms: string, cb: (results: string[]) => void) => {
-          $.getJSON(
-            Strings.format(autocompleteService, terms),
-            (results: string[]) => {
+          fetch(Strings.format(autocompleteService, terms))
+            .then(response => response.json())
+            .then(results => {
               cb(results);
-            }
-          );
+            });
         },
         (results: any) => {
           return $.map(results.terms, (result: any) => {

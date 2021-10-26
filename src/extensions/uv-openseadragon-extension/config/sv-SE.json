@@ -82,25 +82,25 @@
         "twoColThumbWidth": 90
       },
       "content": {
-        "collapse": "Collapse Contents",
-        "collapseFull": "Collapse Gallery",
-        "date": "date",
-        "expand": "Expand Contents",
-        "expandFull": "Expand Gallery",
+        "collapse": "Fäll ihop innehåll",
+        "collapseFull": "Fäll ihop galleri",
+        "date": "datum",
+        "expand": "Expandera innehåll",
+        "expandFull": "Expandera galleri",
         "index": "Index",
-        "manifestRanges": "Manifest Ranges",
-        "searchResult": "{0} search result",
-        "searchResults": "{0} search results",
-        "sortBy": "Sort By:",
-        "thumbnails": "Thumbnails",
-        "title": "Contents",
-        "volume": "volume"
+        "manifestRanges": "Manifest-omfång",
+        "searchResult": "{0} sökträffar",
+        "searchResults": "{0} sökträffar",
+        "sortBy": "Sortera efter:",
+        "thumbnails": "Småbilder",
+        "title": "Innehåll",
+        "volume": "volym"
       }
     },
     "dialogue": {
       "topCloseButtonEnabled": false,
       "content": {
-        "close": "Close"
+        "close": "Stäng"
       }
     },
     "downloadDialogue": {
@@ -112,24 +112,24 @@
         "selectionEnabled": false
       },
       "content": {
-        "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
-        "currentViewAsJpgExplanation": "Opens in a new window",
-        "download": "Download",
-        "downloadSelection": "Download Selection",
-        "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
-        "editSettings": "Edit Settings",
-        "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file",
-        "noneAvailable": "No download options are available.",
-        "pagingNote": "Please turn off Two Page View for additional options.",
-        "preview": "Preview",
-        "title": "Download",
-        "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
-        "wholeImageHighResExplanation": "Opens in a new window.",
-        "wholeImagesHighRes": "Whole images ({0})",
-        "wholeImagesHighResExplanation": "Opens in two new windows.",
-        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
+        "currentViewAsJpg": "Aktuell vy {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Öppnas i nytt fönster",
+        "download": "Ladda ner",
+        "downloadSelection": "Ladda ner valt område",
+        "downloadSelectionExplanation": "Öppnar dialog där du får välja sidor att ladda ner.",
+        "editSettings": "Ändra inställningar",
+        "entireDocument": "Hela dokumentet ({0})",
+        "entireFileAsOriginal": "Hela filen",
+        "noneAvailable": "Inga nedladdningsalternativ är tillgängliga.",
+        "pagingNote": "Stäng dubbelsidig vy för fler alternativ",
+        "preview": "Förhandsgranska",
+        "title": "Ladda ner",
+        "wholeImageHighRes": "Hela bilden {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Öppnas i nytt fönster.",
+        "wholeImagesHighRes": "Hela bilder ({0})",
+        "wholeImagesHighResExplanation": "Öppnas i två nya fönster.",
+        "wholeImageLowResAsJpg": "Hela bilden {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Öppnas i nytt fönster."
       }
     },
     "footerPanel": {
@@ -147,25 +147,25 @@
         "shareEnabled": true
       },
       "content": {
-        "bookmark": "Add to bookmarks",
-        "download": "Download",
-        "embed": "Embed",
-        "exitFullScreen": "Exit Full Screen",
+        "bookmark": "Lägg till bokmärke",
+        "download": "Ladda ner",
+        "embed": "Bädda in",
+        "exitFullScreen": "Avsluta helskärm",
         "feedback": "Feedback",
-        "fullScreen": "Full Screen",
-        "moreInfo": "More Information",
-        "open": "Open",
-        "share": "Share"
+        "fullScreen": "Helskärm",
+        "moreInfo": "Mer information",
+        "open": "Öppna",
+        "share": "Dela"
       }
     },
     "genericDialogue": {
       "content": {
-        "emptyValue": "please enter a value.",
-        "invalidNumber": "Please enter a valid number.",
-        "noMatches": "No matches were found.",
+        "emptyValue": "ange ett värde.",
+        "invalidNumber": "Ange ett giltigt nummer.",
+        "noMatches": "Inga träffar hittades.",
         "ok": "OK",
-        "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
-        "refresh": "Refresh"
+        "pageNotFound": "Detta objekt har ingen sida med det nummer du angett. Testa att byta numreringsläge till 'bild'.",
+        "refresh": "Uppdatera"
       }
     },
     "headerPanel": {
@@ -177,8 +177,8 @@
     },
     "helpDialogue": {
       "content": {
-        "text": "placeholder text",
-        "title": "Help"
+        "text": "platshållartext",
+        "title": "Hjälp"
       }
     },
     "moreInfoRightPanel": {
@@ -198,25 +198,24 @@
         "textLimitType": "lines"
       },
       "content": {
-        "attribution": "Attribution",
-        "canvasHeader": "About the image",
-        "collapse": "Collapse Information",
-        "collapseFull": "Collapse Gallery",
-        "copiedToClipboard": "Copied to clipboard",
-        "copyToClipboard": "Copy to clipboard",
-        "description": "Description",
-        "expand": "Expand Information",
-        "expandFull": "Expand Gallery",
-        "holdingText": "Your module goes here!",
-        "less": "less",
-        "license": "License",
-        "logo": "Logo",
-        "manifestHeader": "About the item",
-        "more": "more",
-        "noData": "No data to display",
-        "page": "Page",
-        "rangeHeader": "About this section",
-        "title": "More Information"
+        "attribution": "Upphov",
+        "collapse": "Fäll ihop information",
+        "collapseFull": "Fäll ihop galleri",
+        "description": "Beskrivning",
+        "expand": "Expandera information",
+        "expandFull": "Expandera galleri",
+        "holdingText": "Plats för din modul!",
+        "less": "mindre",
+        "license": "Licensvillkor",
+        "logo": "Logotyp",
+        "more": "mer",
+        "noData": "Ingen information att visa",
+        "page": "Sida",
+        "title": "Mer information",
+        "manifestHeader": "Om objektet",
+        "canvasHeader": "Om bilden",
+        "copyToClipboard": "Kopiera till urklipp",
+        "copiedToClipboard": "Kopierade till urklipp"
       }
     },
     "multiSelectDialogue": {
@@ -229,9 +228,9 @@
         "pageModeEnabled": true
       },
       "content": {
-        "select": "Download",
-        "selectAll": "Select All",
-        "title": "Select Pages for Download"
+        "select": "Ladda ner",
+        "selectAll": "Markera alla",
+        "title": "Välj sidor att ladda ner"
       }
     },
     "pagingHeaderPanel": {
@@ -244,31 +243,31 @@
         "pagingToggleEnabled": true
       },
       "content": {
-        "close": "Close",
-        "emptyValue": "Please enter a value",
-        "first": "First",
-        "firstImage": "First Image",
-        "firstPage": "First Page",
+        "close": "Stäng",
+        "emptyValue": "Ange ett värde",
+        "first": "Första",
+        "firstImage": "Första bild",
+        "firstPage": "Första sidan",
         "folio": "Folio",
-        "gallery": "Gallery",
-        "go": "Go",
-        "help": "Help",
-        "image": "Image",
-        "last": "Last",
-        "lastImage": "Last Image",
-        "lastPage": "Last Page",
-        "next": "Next",
-        "nextImage": "Next Image",
-        "nextPage": "Next Page",
-        "of": "of {0}",
-        "oneUp": "Single page view",
-        "page": "Page",
-        "pageSearchLabel": "Search by Page Number",
-        "previous": "Previous",
-        "previousImage": "Previous Image",
-        "previousPage": "Previous Page",
-        "settings": "Settings",
-        "twoUp": "Two page view"
+        "gallery": "Galleri",
+        "go": "Gå",
+        "help": "Hjälp",
+        "image": "Bild",
+        "last": "Sista",
+        "lastImage": "Sista bilden",
+        "lastPage": "Sista sidan",
+        "next": "Nästa",
+        "nextImage": "Nästa bild",
+        "nextPage": "Nästa sida",
+        "of": "av {0}",
+        "oneUp": "Enkelsidig vy",
+        "page": "Sida",
+        "pageSearchLabel": "Sök med sidnummer",
+        "previous": "Föregående",
+        "previousImage": "Föregående bild",
+        "previousPage": "Föregående sida",
+        "settings": "Inställningar",
+        "twoUp": "Dubbelsidig vy"
       }
     },
     "openSeadragonCenterPanel": {
@@ -291,14 +290,14 @@
         "visibilityRatio": 0.5
       },
       "content": {
-        "attribution": "Attribution",
-        "goHome": "Go Home",
-        "imageUnavailable": "Image Unavailable",
-        "next": "Next",
-        "previous": "Previous",
-        "rotateRight": "Rotate Right",
-        "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "attribution": "Upphov",
+        "goHome": "Visa hela sidan",
+        "imageUnavailable": "Bild ej tillgänglig",
+        "next": "Nästa",
+        "previous": "Föregående",
+        "rotateRight": "Rotera höger",
+        "zoomIn": "Zooma in",
+        "zoomOut": "Zooma ut"
       }
     },
     "searchFooterPanel": {
@@ -310,34 +309,33 @@
         "positionMarkerEnabled": true
       },
       "content": {
-        "clearSearch": "Clear",
+        "clearSearch": "Rensa sökning",
         "defaultLabel": "-",
-        "displaying": "{0} {1} of {2}",
-        "enterKeyword": "Enter Keyword",
-        "image": "image",
-        "imageCaps": "Image",
-        "instanceFound": "1 instance of '{0}' found",
-        "instancesFound": "{0} instances of '{1}' found",
-        "nextResult": "Next Result",
-        "page": "page",
-        "pageCaps": "Page",
-        "previousResult": "Previous Result",
-        "print": "Print",
-        "resultFoundFor": "result found for",
-        "resultsFoundFor": "results found for",
-        "searchWithin": "Search within this item:"
+        "displaying": "{0} {1} av {2}",
+        "enterKeyword": "Ange sökord",
+        "image": "bild",
+        "imageCaps": "Bild",
+        "instanceFound": "1 instans av '{0}' hittades",
+        "instancesFound": "{0} instanser av '{1}' hittades",
+        "nextResult": "Nästa träff",
+        "page": "sida",
+        "pageCaps": "Sida",
+        "previousResult": "Föregående träff",
+        "print": "Skriv ut",
+        "resultFoundFor": "träff hittades för",
+        "resultsFoundFor": "träffar hittades för",
+        "searchWithin": "Sök inom detta objekt:"
       }
     },
     "settingsDialogue": {
       "content": {
-        "locale": "Locale",
-        "navigatorEnabled": "Navigator Enabled",
-        "clickToZoomEnabled": "Mouse Click To Zoom",
-        "pagingEnabled": "Two Page View",
-        "reducedMotion": "Reduce motion (disables animations)",
-        "preserveViewport": "Preserve Zoom",
-        "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "locale": "Språk",
+        "navigatorEnabled": "Visa minivy",
+        "clickToZoomEnabled": "Zooma med musklick",
+        "pagingEnabled": "Dubbelsidig vy",
+        "preserveViewport": "Behåll zoomnivå",
+        "title": "Inställningar",
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>mer info</a>"
       }
     },
     "shareDialogue": {
@@ -348,51 +346,63 @@
         "shareManifestsEnabled": true
       },
       "content": {
-        "customSize": "custom",
-        "embed": "Embed",
-        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
-        "height": "Height",
+        "customSize": "Anpassad",
+        "embed": "Bädda in",
+        "embedInstructions": "För att bädda in det här objektet i din egen webbplats, kopiera och klistra koden nedan.",
+        "height": "Höjd",
         "iiif": "IIIF Manifest",
-        "share": "Share",
-        "shareInstructions": "To share this item, copy the URL below.",
-        "size": "Size:",
-        "width": "Width"
+        "share": "Dela",
+        "shareInstructions": "Kopiera länken nedan för att dela det här objektet.",
+        "size": "Storlek:",
+        "width": "Bredd"
       }
     },
     "authDialogue": {
       "content": {
-        "cancel": "Cancel",
-        "confirm": "Confirm"
+        "cancel": "Avbryt",
+        "confirm": "Bekräfta"
       }
     },
     "clickThroughDialogue": {
       "content": {
-        "viewTerms": "Read Full Terms and Conditions"
+        "viewTerms": "Läs fullständiga villkor"
       }
     },
     "loginDialogue": {
       "content": {
-        "login": "Login",
-        "logout": "Logout",
-        "cancel": "Cancel"
+        "login": "Logga in",
+        "logout": "Logga ut",
+        "cancel": "Avbryt"
       }
     },
     "mobileFooterPanel": {
       "content": {
-        "rotateRight": "Rotate Right",
-        "moreInfo": "More Information",
-        "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "rotateRight": "Rotera höger",
+        "moreInfo": "Mer information",
+        "zoomIn": "Zooma in",
+        "zoomOut": "Zooma ut"
+      }
+    },
+    "avCenterPanel": {
+      "content": {
+        "currentTime": "Aktuell tid",
+        "delimiter": " - ",
+        "duration": "Speltid",
+        "mute": "Tyst",
+        "next": "Nästa",
+        "pause": "Paus",
+        "play": "Spela",
+        "previous": "Föregående"
       }
     },
     "restrictedDialogue": {
       "content": {
-        "cancel": "Cancel"
+        "cancel": "Avbryt"
       }
     }
   },
   "localisation": {
-    "label": "English (GB)",
+    "label": "Svenska",
     "locales": [
       {
         "name": "cy-GB",
@@ -417,14 +427,12 @@
     ]
   },
   "content": {
-    "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
-    "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
-    "canvasIndexOutOfRange": "Canvas index out of range.",
-    "fallbackDegradedLabel": "Login",
-    "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
-    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
-    "mediaViewer": "Media Viewer",
-    "skipToDownload": "Skip to downloads and alternative formats",
-    "termsOfUse": "Terms of Use"
+    "authCORSError": "Din webbläsare stöder inte CORS. Uppgradera den för att kunna se detta innehåll.",
+    "authorisationFailedMessage": "Din inloggning misslyckades. Vänligen försök igen.",
+    "canvasIndexOutOfRange": "Canvas-index ogiltigt.",
+    "fallbackDegradedLabel": "Logga in",
+    "fallbackDegradedMessage": "Logga in för att se bilden i bästa kvalitet.",
+    "forbiddenResourceMessage": "Du har inte behörighet att se den här bilden",
+    "termsOfUse": "Användningsvillkor"
   }
 }

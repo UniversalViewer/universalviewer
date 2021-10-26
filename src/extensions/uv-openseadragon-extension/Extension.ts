@@ -1235,17 +1235,32 @@ export default class OpenSeadragonExtension extends BaseExtension {
     searchResults: AnnotationGroup[],
     cb: (results: AnnotationGroup[]) => void
   ): void {
-    $.getJSON(searchUri, (results: any) => {
-      if (results.resources && results.resources.length) {
-        searchResults = searchResults.concat(this.parseAnnotationList(results));
-      }
 
-      if (results.next) {
-        this.getSearchResults(results.next, terms, searchResults, cb);
-      } else {
-        cb(searchResults);
-      }
-    });
+    fetch(searchUri)
+      .then(response => response.json())
+      .then(results => {
+        if (results.resources && results.resources.length) {
+          searchResults = searchResults.concat(this.parseAnnotationList(results));
+        }
+  
+        if (results.next) {
+          this.getSearchResults(results.next, terms, searchResults, cb);
+        } else {
+          cb(searchResults);
+        }
+      })
+
+    // $.getJSON(searchUri, (results: any) => {
+    //   if (results.resources && results.resources.length) {
+    //     searchResults = searchResults.concat(this.parseAnnotationList(results));
+    //   }
+
+    //   if (results.next) {
+    //     this.getSearchResults(results.next, terms, searchResults, cb);
+    //   } else {
+    //     cb(searchResults);
+    //   }
+    // });
   }
 
   parseAnnotationList(annotations: any): AnnotationGroup[] {

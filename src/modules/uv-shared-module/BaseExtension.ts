@@ -777,7 +777,6 @@ export class BaseExtension implements IExtension {
   }
 
   private _initLocales(): void {
-    console.log("initLocales");
     const availableLocales: any[] = this.data.config.localisation.locales.slice(
       0
     );

@@ -1,0 +1,13 @@
+{
+  "extends": "en-GB",
+  "options": {
+    "theme": "uv-cy-GB-theme"
+  },
+  "modules": {
+    "searchFooterPanel": {
+      "options": {
+        "elideResultsTermsCount": 5
+      }
+    }
+  }
+}
