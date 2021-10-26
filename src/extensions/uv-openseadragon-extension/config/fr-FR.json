@@ -333,6 +333,7 @@
         "navigatorEnabled": "Navigateur activé",
         "clickToZoomEnabled": "Cliquer pour zoomer",
         "pagingEnabled": "Affichage double page",
+        "reducedMotion": "Réduire le mouvement (désactive les animations)",
         "preserveViewport": "Conserver le zoom",
         "title": "Paramètres",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>informations</a>"

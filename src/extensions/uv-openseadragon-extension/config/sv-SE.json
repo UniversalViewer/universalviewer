@@ -333,6 +333,7 @@
         "navigatorEnabled": "Visa minivy",
         "clickToZoomEnabled": "Zooma med musklick",
         "pagingEnabled": "Dubbelsidig vy",
+        "reducedMotion": "Minska rörelse (inaktiverar animationer)",
         "preserveViewport": "Behåll zoomnivå",
         "title": "Inställningar",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>mer info</a>"
