@@ -123,6 +123,9 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
   }
 
   public set(data: IUVData): void {
+
+    this.fire(BaseEvents.SET, data);
+
     // if this is the first set
     if (!this.extension) {
       if (!data.manifestUri) {
@@ -170,9 +173,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
   }
 
   private async _reload(data: IUVData): Promise<void> {
-    
-    this.el.parentElement!.parentElement!.classList.remove("loaded");
-    
+
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target

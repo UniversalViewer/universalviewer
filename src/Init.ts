@@ -44,8 +44,19 @@ export const init = (el: string | HTMLDivElement, data) => {
   });
 
   uv.on(
+    "set",
+    function(_obj) {
+      // remove loaded class to show spinner
+      uv.el.parentElement!.parentElement!.classList.remove("loaded");
+    },
+    false
+  );
+
+  uv.on(
     "created",
     function(_obj) {
+      // add loaded class to hide spinner
+      uv.el.parentElement!.parentElement!.classList.add("loaded");
       resize();
     },
     false
@@ -69,7 +80,7 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-
+  
   uv.on(
     "toggleFullScreen",
     function(data) {

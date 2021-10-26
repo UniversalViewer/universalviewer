@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const { resolvePath, createThemeConfig } = require('./webpack-helpers');
+const { resolvePath } = require('./webpack-helpers');
 const pkg = require('./package.json');
 
 const config = [{
@@ -49,7 +49,6 @@ const config = [{
               lessOptions: {
                 strictMath: true,
               },
-              additionalData: '@theme: "uv-en-gb-theme";',
             },
           },
         ],
@@ -78,9 +77,6 @@ const config = [{
     }),
   ],
 }];
-
-config.push(createThemeConfig('uv-en-gb-theme', require.resolve('@universalviewer/uv-en-gb-theme/theme.less')));
-config.push(createThemeConfig('uv-cy-gb-theme', require.resolve('@universalviewer/uv-cy-gb-theme/theme.less')));
 
 if (process.env.NODE_WEBPACK_LIBRARY_PATH) {
   config.output.path = resolvePath(process.env.NODE_WEBPACK_LIBRARY_PATH);

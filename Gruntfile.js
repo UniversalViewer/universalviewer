@@ -1,5 +1,4 @@
 var configure = require("./tasks/configure");
-var theme = require("./tasks/theme");
 var c = require("./config");
 var config = new c();
 
@@ -86,7 +85,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-webpack");
 
   configure(grunt);
-  theme(grunt);
 
   grunt.registerTask("default", ["build"]);
 

@@ -663,7 +663,6 @@ export class BaseExtension implements IExtension {
     this.component.publish(BaseEvents.RESIZE); // initial sizing
 
     setTimeout(() => {
-      //this.component.el.classList.add("created");
       this.render();
       this.component.publish(BaseEvents.CREATED);
       this._setDefaultFocus();
