@@ -92,10 +92,6 @@ const config = [
             },
           },
           {
-            from: resolvePath("./src/_headers"),
-            to: resolvePath("./dist"),
-          },
-          {
             from: resolvePath("./src/collection.json"),
             to: resolvePath("./dist"),
           },
