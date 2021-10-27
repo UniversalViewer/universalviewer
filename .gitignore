@@ -8,10 +8,6 @@ examples
 ## lib folders
 #################
 
-lib
-src/lib/bundle.js
-src/lib/bundle.min.js
-!src/lib
 !src/extensions/**/lib
 
 #################
@@ -61,8 +57,8 @@ node_modules
 !webpack.config.js
 !webpack.dev-server.js
 !webpack.theme.js
-!src/lib/*.js
-!src/*/*/lib/*.js
+!src/js/*.js
+!src/*/*/js/*.js
 !src/extensions/*/dependencies.js
 !dev.build.js
 !dist.build.js

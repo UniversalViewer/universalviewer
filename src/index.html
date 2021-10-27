@@ -5,11 +5,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>UV Examples</title>
+    <title>Universal Viewer Examples</title>
     <script src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
-    <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
+    <%= htmlWebpackPlugin.tags.headTags %>
     <style>
       body {
         margin: 0px;
@@ -204,25 +204,58 @@
           });
 
           uv.on("load", function() {
-            console.log("load");
+            // console.log("load");
             // uv.set({
             //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
             // });
           });
 
+          uv.on(
+            "collectionIndexChange",
+            function(collectionIndex) {
+              uv.dataProvider.set("c", collectionIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "manifestIndexChange",
+            function(manifestIndex) {
+              uv.dataProvider.set("m", manifestIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "canvasIndexChange",
+            function(canvasIndex) {
+              uv.dataProvider.set("cv", canvasIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "rangeChange",
+            function(rangeId) {
+              uv.dataProvider.set("rid", rangeId);
+            },
+            false
+          );
+
           uv.on("targetChange", function(target) {
-            console.log("target change", target);
+            // console.log("target change", target);
             $target.value = target;
           });
 
           uv.on("openseadragonExtension.rotationChange", function(rotation) {
-            console.log("rotation change", rotation);
+            // console.log("rotation change", rotation);
             $rotation.value = rotation;
           });
 
           uv.on("toggleFullScreen", function(e) {
-            console.log("toggleFullScreen", e);
+            // console.log("toggleFullScreen", e);
           });
+          
         }
 
         loadManifests(function() {

@@ -8,7 +8,7 @@ const config = {
   entry: {
     UV: ["./src/index.ts"],
   },
-  mode: 'development',
+  mode: "development",
   output: {
     libraryTarget: "umd",
     library: "UV",
@@ -84,8 +84,6 @@ const config = {
           express.static(path.join(__dirname, 'src', 'uv-config.json')));
       devServer.app.use('/uv.css',
           express.static(path.join(__dirname, 'src', 'uv.css')));
-      devServer.app.use('/uv-assets/config',
-          express.static(path.join(__dirname, 'dist', 'uv-assets', 'config')));
     }
   },
   plugins: [
@@ -94,7 +92,7 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       title: 'UV Examples',
-      template: './src/html-templates/index.html',
+      template: './src/index.html',
       minify: false,
       inject: 'head',
     }),

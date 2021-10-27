@@ -4,8 +4,12 @@
     {
       "label": "npm:build",
       "type": "shell",
-      "group": { "kind": "build", "isDefault": true },
-      "command": "npm run build"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "npm run build",
+      "problemMatcher": []
     }
   ]
 }

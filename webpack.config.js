@@ -1,82 +1,125 @@
-const webpack = require('webpack');
-const { resolvePath } = require('./webpack-helpers');
-const pkg = require('./package.json');
+const webpack = require("webpack");
+const pkg = require("./package.json");
+const CopyPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
-const config = [{
-  entry: {
-    UV: ["./src/index.ts"],
-  },
-  output: {
-    path: resolvePath(".build/uv-dist-umd"),
-    publicPath: "/uv-dist-umd/",
-    libraryTarget: "umd",
-    library: "UV",
-    umdNamedDefine: true,
-    chunkFilename: "[name].[contenthash].js",
-  },
-  resolve: {
-    extensions: [".ts", ".tsx", ".js"],
-    fallback: {
-      "zlib": false,
-      "stream": false,
-    }
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: [{ loader: "ts-loader" }],
+function resolvePath(p) {
+  return path.resolve(__dirname, p);
+}
+
+const config = [
+  {
+    entry: {
+      UV: ["./src/index.ts"],
+    },
+    mode: "production",
+    output: {
+      path: resolvePath("dist/uv-dist-umd"),
+      publicPath: "/uv-dist-umd/",
+      libraryTarget: "umd",
+      library: "UV",
+      umdNamedDefine: true,
+      chunkFilename: "[name].[contenthash].js",
+    },
+    resolve: {
+      extensions: [".ts", ".tsx", ".js"],
+      fallback: {
+        zlib: false,
+        stream: false,
       },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.less$/,
-        use: [
-          {
-            loader: "style-loader",
-          },
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true,
-            }
-          },
-          {
-            loader: "less-loader",
-            options: {
-              lessOptions: {
-                strictMath: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: [{ loader: "ts-loader" }],
+        },
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
+        {
+          test: /\.less$/,
+          use: [
+            {
+              loader: "style-loader",
+            },
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true,
               },
             },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/i,
-        use: [
+            {
+              loader: "less-loader",
+              options: {
+                lessOptions: {
+                  strictMath: true,
+                },
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|jpg|gif|svg)$/i,
+          use: [
+            {
+              loader: "url-loader",
+              options: {
+                limit: 8192,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new webpack.EnvironmentPlugin({
+        PACKAGE_VERSION: pkg.version,
+      }),
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        "window.jQuery": "jquery",
+      }),
+      new CopyPlugin({
+        patterns: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
+            from: resolvePath("./src/index.html"),
+            to: resolvePath("./dist"),
+            transform(content) {
+              return Promise.resolve(Buffer.from(content.toString().replace('<%= htmlWebpackPlugin.tags.headTags %>', '<script type="text/javascript" src="uv-dist-umd/UV.js"></script>'), 'utf8'))
             },
           },
+          {
+            from: resolvePath("./src/_headers"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/collection.json"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/favicon.ico"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/uv-config.json"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/uv.css"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/uv.html"),
+            to: resolvePath("./dist"),
+          },
         ],
-      },
+      }),
     ],
   },
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      PACKAGE_VERSION: pkg.version,
-    }),
-    new webpack.ProvidePlugin({
-      "$":"jquery",
-      "jQuery":"jquery",
-      "window.jQuery":"jquery",
-    }),
-  ],
-}];
+];
 
 if (process.env.NODE_WEBPACK_LIBRARY_PATH) {
   config.output.path = resolvePath(process.env.NODE_WEBPACK_LIBRARY_PATH);
