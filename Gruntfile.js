@@ -60,13 +60,13 @@ module.exports = function(grunt) {
       },
     },
 
-    configure: {
-      apply: {
-        options: {
-          default: "en-GB",
-        },
-      },
-    },
+    // configure: {
+    //   apply: {
+    //     options: {
+    //       default: "en-GB",
+    //     },
+    //   },
+    // },
 
     webpack: {
       main: function() {
