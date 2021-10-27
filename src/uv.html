@@ -30,9 +30,9 @@
 
     <script type="text/javascript">
 
-      urlDataProvider = new UV.URLDataProvider(true);
+      var urlAdaptor = new UV.URLAdaptor(true);
       var formattedLocales;
-      var locales = urlDataProvider.get("locales", "");
+      var locales = urlAdaptor.get("locales", "");
 
       if (locales) {
         var names = locales.split(",");
@@ -53,34 +53,33 @@
       uv = UV.init(
         "uv",
         {
-          manifestUri: urlDataProvider.get("manifest"),
-          configUri: urlDataProvider.get("config"),
-          collectionIndex: Number(urlDataProvider.get("c", 0)),
-          manifestIndex: Number(urlDataProvider.get("m", 0)),
-          canvasIndex: Number(urlDataProvider.get("cv", 0)),
-          rangeId: urlDataProvider.get("rid", 0),
-          rotation: Number(urlDataProvider.get("r", 0)),
-          xywh: urlDataProvider.get("xywh", ""),
+          manifestUri: urlAdaptor.get("manifest"),
+          configUri: urlAdaptor.get("config"),
+          collectionIndex: Number(urlAdaptor.get("c", 0)),
+          manifestIndex: Number(urlAdaptor.get("m", 0)),
+          canvasIndex: Number(urlAdaptor.get("cv", 0)),
+          rangeId: urlAdaptor.get("rid", 0),
+          rotation: Number(urlAdaptor.get("r", 0)),
+          xywh: urlAdaptor.get("xywh", ""),
           embedded: true,
           locales: formattedLocales,
-          target: urlDataProvider.get("target")
+          target: urlAdaptor.get("target")
         },
-        urlDataProvider
+        urlAdaptor
       );
     </script>
 
     <script>
-      $(function() {
-        var $UV = $("#uv");
+      document.addEventListener("DOMContentLoaded", function() {
+        var $UV = document.getElementById("uv");
 
         function resize() {
-          var windowWidth = window.innerWidth;
-          var windowHeight = window.innerHeight;
-          $UV.width(windowWidth);
+          $UV.setAttribute("style", "width:" + window.innerWidth + "px");
+          $UV.setAttribute("style", "height:" + window.innerHeight + "px");
           $UV.height(windowHeight);
         }
 
-        $(window).on("resize", function() {
+        document.addEventListener("resize", function() {
           resize();
         });
 

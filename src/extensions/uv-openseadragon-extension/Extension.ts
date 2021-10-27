@@ -1249,18 +1249,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
           cb(searchResults);
         }
       })
-
-    // $.getJSON(searchUri, (results: any) => {
-    //   if (results.resources && results.resources.length) {
-    //     searchResults = searchResults.concat(this.parseAnnotationList(results));
-    //   }
-
-    //   if (results.next) {
-    //     this.getSearchResults(results.next, terms, searchResults, cb);
-    //   } else {
-    //     cb(searchResults);
-    //   }
-    // });
   }
 
   parseAnnotationList(annotations: any): AnnotationGroup[] {

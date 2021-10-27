@@ -37,17 +37,20 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b16659090/manifest",
           "@type": "sc:Manifest",
-          "label": "The story of the Wellcome Foundation Ltd (video)"
+          "label": "The story of the Wellcome Foundation Ltd (video)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b20605055/manifest",
           "@type": "sc:Manifest",
-          "label": "English folding almanac in Latin (video)"
+          "label": "English folding almanac in Latin (video)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b16748967/manifest",
           "@type": "sc:Manifest",
-          "label": "Entebbe encounter (video with transcript)"
+          "label": "Entebbe encounter (video with transcript)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b17307922/manifest",
@@ -62,32 +65,38 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b17564980/manifest",
           "@type": "sc:Manifest",
-          "label": "First Thursday Club (click through)"
+          "label": "First Thursday Club (click through)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b19813508/manifest",
           "@type": "sc:Manifest",
-          "label": "Kourilsky, Philippe (restricted content)"
+          "label": "Kourilsky, Philippe (restricted content)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b1818893x/manifest",
           "@type": "sc:Manifest",
-          "label": "Correspondence Concerning Publication (click through)"
+          "label": "Correspondence Concerning Publication (click through)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b17307703/manifest",
           "@type": "sc:Manifest",
-          "label": "I Remember Sir Henry Dale (audio, click through)"
+          "label": "I Remember Sir Henry Dale (audio, click through)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b11599820/manifest",
           "@type": "sc:Manifest",
-          "label": "Sixteen feet in profile (degraded image)"
+          "label": "Sixteen feet in profile (degraded image)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b21072061/manifest",
           "@type": "sc:Manifest",
-          "label": "An Atlas of Clinical Microscopy (clinical login)"
+          "label": "An Atlas of Clinical Microscopy (clinical login)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b19684538/manifest",
@@ -122,7 +131,8 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b16625948/manifest",
           "@type": "sc:Manifest",
-          "label": "Public perspectives (Embed disabled using UI Extension)"
+          "label": "Public perspectives (Embed disabled using UI Extension)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b20641151/manifest",
@@ -169,7 +179,7 @@
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
       "label": "Internet Archive",
-      "visible": true,
+      "visible": false,
       "manifests": [
         {
           "@id": "https://iiif.archivelab.org/iiif/principleofrelat00eins/manifest.json",
@@ -210,21 +220,6 @@
           "@id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100022545251.0x000002/manifest.json",
           "@type": "sc:Manifest",
           "label": "Anzac bulletin"
-        },
-        {
-          "@id": "https://dlcs.io/iiif-resource/british-library-3/manifest/G_809",
-          "@type": "sc:Manifest",
-          "label": "Blest With Thee My Soul's Dear Treasure"
-        },
-        {
-          "@id": "https://dlcs.io/iiif-resource/british-library-3/manifest/H_3690_tt",
-          "@type": "sc:Manifest",
-          "label": "A Duet for two Performers on one Piano Forte or Harpsichord"
-        },
-        {
-          "@id": "http://sanddragon.bl.uk/IIIFMetadataService/egerton_ms_3512.json",
-          "@type": "sc:Manifest",
-          "label": "Egerton MS 3512"
         },
         {
           "@id": "http://files.universalviewer.io/manifests/adiks/Add_11831.json",
@@ -361,16 +356,6 @@
           "@id": "http://dams.llgc.org.uk/iiif/archive/3975658/fonds.json",
           "@type": "sc:Collection",
           "label": "Cardiganshire Great War Tribunal (Appeals) Records"
-        },
-        {
-          "@id": "http://dev.llgc.org.uk/iiif/search/4623730.json",
-          "@type": "sc:Manifest",
-          "label": "Map of the parish of Llanbadarn Fawr in the County of Cardigan"
-        },
-        {
-          "@id": "https://damsssl.llgc.org.uk/iiif/2.0/4566425/manifest.json",
-          "@type": "sc:Manifest",
-          "label": "Map of the parish of Llanbadarn Fawr in the County of Cardigan"
         }
       ]
     },
@@ -397,6 +382,7 @@
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
       "label": "Stanford University",
+      "visible": false,
       "manifests": [
         {
           "@id": "http://dms-data.stanford.edu/data/manifests/RomanCoins/bb853kn3021/manifest.json",
@@ -439,7 +425,7 @@
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
       "label": "LUNA Imaging",
-      "visible": true,
+      "visible": false,
       "manifests": [
         {
           "@id": "http://luna.folger.edu/luna/servlet/iiif/m/FOLGERCM1~6~6~899189~195467/manifest",
@@ -648,6 +634,7 @@
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
       "label": "3D",
+      "visible": false,
       "manifests": [
         {
           "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/flight-helmet/index.json",

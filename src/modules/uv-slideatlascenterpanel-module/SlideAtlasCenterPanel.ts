@@ -49,49 +49,50 @@ export class SlideAtlasCenterPanel extends CenterPanel {
       id = id.substr(0, id.length - 1);
     }
 
-    // todo: replace with fetch
-    $.getJSON(tileDescriptor, info => {
-      const tileSource = {
-        height: info.sizeY,
-        width: info.sizeX,
-        tileWidth: info.tileWidth,
-        tileHeight: info.tileHeight,
-        minLevel: 0,
-        maxLevel: info.levels - 1,
-        units: "mm",
-        spacing: [info.mm_x, info.mm_y],
-        getTileUrl: function(level, x, y, query) {
-          var url = tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
-          if (query) {
-            url += "?" + $.param(query);
+    fetch(tileDescriptor)
+      .then(response => response.json())
+      .then(info => {
+        const tileSource = {
+          height: info.sizeY,
+          width: info.sizeX,
+          tileWidth: info.tileWidth,
+          tileHeight: info.tileHeight,
+          minLevel: 0,
+          maxLevel: info.levels - 1,
+          units: "mm",
+          spacing: [info.mm_x, info.mm_y],
+          getTileUrl: function(level, x, y, query) {
+            var url = tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
+            if (query) {
+              url += "?" + $.param(query);
+            }
+            return url;
           }
-          return url;
+        };
+  
+        if (!info.mm_x) {
+          tileSource.units = "pixels";
+          tileSource.spacing = [1, 1];
         }
-      };
-
-      if (!info.mm_x) {
-        tileSource.units = "pixels";
-        tileSource.spacing = [1, 1];
-      }
-
-      SA.SAViewer(this.$content, {
-        zoomWidget: true,
-        drawWidget: true,
-        navigationWidget: true,
-        prefixUrl: "https://unpkg.com/slideatlas-viewer@4.4.1/dist/img/",
-        tileSource: tileSource
-      });
-
-      // Create the annotation GUI
-      // new SAM.LayerPanel(viewer, this.itemId);
-      // this.$content.css({position: 'relative'});
-
-      SA.SAFullScreenButton(this.$content).css({
-        position: "absolute",
-        left: "2px",
-        top: "2px"
-      });
-    });
+  
+        SA.SAViewer(this.$content, {
+          zoomWidget: true,
+          drawWidget: true,
+          navigationWidget: true,
+          prefixUrl: "https://unpkg.com/slideatlas-viewer@4.4.1/dist/img/",
+          tileSource: tileSource
+        });
+  
+        // Create the annotation GUI
+        // new SAM.LayerPanel(viewer, this.itemId);
+        // this.$content.css({position: 'relative'});
+  
+        SA.SAFullScreenButton(this.$content).css({
+          position: "absolute",
+          left: "2px",
+          top: "2px"
+        });
+      })
   }
 
   async openMedia(resources: IExternalResource[]) {
