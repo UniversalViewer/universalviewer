@@ -1,7 +1,7 @@
-import { UVDataProvider } from "./UVDataProvider";
+import { UVAdaptor } from "./UVAdaptor";
 import { Urls } from "@edsilv/utils";
 
-export class URLDataProvider extends UVDataProvider {
+export class URLAdaptor extends UVAdaptor {
   constructor(readonly: boolean = false) {
     super(readonly);
   }

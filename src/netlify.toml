@@ -1,0 +1,13 @@
+[[headers]]
+  for = "/*"
+[headers.values]
+  Access-Control-Allow-Origin = "*"
+
+[build]
+  base = ""
+  publish = "dist"
+  command = "CI= npm run build"
+
+[build.environment]
+  SHOW_NETLIFY_BADGE = "true"
+  NODE_VERSION = "14"

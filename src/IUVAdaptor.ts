@@ -1,4 +1,4 @@
-export interface IUVDataProvider {
+export interface IUVAdaptor {
   get(key: string, defaultValue: string | null): string | null;
   set(key: string, value: string): void;
 }

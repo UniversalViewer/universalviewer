@@ -1,6 +1,6 @@
-import { IUVDataProvider } from "./IUVDataProvider";
+import { IUVAdaptor } from "./IUVAdaptor";
 
-export class UVDataProvider implements IUVDataProvider {
+export class UVAdaptor implements IUVAdaptor {
   public readonly: boolean = false;
 
   constructor(readonly: boolean) {

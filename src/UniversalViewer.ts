@@ -7,7 +7,7 @@ import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { IExtension } from "./modules/uv-shared-module/IExtension";
 import { IUVComponent } from "./IUVComponent";
 import { IUVData } from "./IUVData";
-import { IUVDataProvider } from "./IUVDataProvider";
+import { IUVAdaptor } from "./IUVAdaptor";
 import { PubSub } from "./PubSub";
 import {
   RenderingFormat,
@@ -17,7 +17,7 @@ import {
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
-import { URLDataProvider } from "./URLDataProvider";
+import { URLAdaptor } from "./URLAdaptor";
 import "./uv.css";
 import "./themes/theme.less";
 
@@ -42,14 +42,15 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
   private _pubsub: PubSub;
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
-  public dataProvider: IUVDataProvider;
+  public adaptor: IUVAdaptor;
 
   constructor(options: IBaseComponentOptions) {
     super(options);
 
-    this.dataProvider = new URLDataProvider(
-      !!options.data.readOnlyDataProvider
+    this.adaptor = new URLAdaptor(
+      !!options.data.readOnlyAdaptor
     );
+
     this._pubsub = new PubSub();
 
     this._init();
