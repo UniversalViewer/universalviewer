@@ -38,7 +38,7 @@
           "@id": "https://wellcomelibrary.org/iiif/b16659090/manifest",
           "@type": "sc:Manifest",
           "label": "The story of the Wellcome Foundation Ltd (video)",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b20605055/manifest",

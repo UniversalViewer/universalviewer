@@ -113,7 +113,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     if (this.isVideo()) {
       this.$media = $(
-        '<video controls="controls" preload="none" crossorigin="" style="width:100%;height:100%;" width="100%" height="100%"></video>'
+        '<video controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
       // Add VTT subtitles/captions.
@@ -121,7 +121,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         this.$media.append(
           $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
             subtitle.language
-          }" crossorigin="" src="${subtitle.id}" ${
+          }" src="${subtitle.id}" ${
             subtitles.indexOf(subtitle) === 0 ? "default" : ""
           }>
 `)
