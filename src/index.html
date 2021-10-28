@@ -148,7 +148,6 @@
 
         $setManifestButton.onclick = function() {
           manifest = $manifest.value;
-
           uv.set({
             manifestUri: manifest,
             canvasIndex: 0,
@@ -200,6 +199,16 @@
             //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
             // });
           });
+
+          uv.on("configure", function({ config, cb }) {
+            setTimeout(() => {
+              cb(config)
+            }, 2000)
+          });
+
+                      // overrideConfig(
+            //   fetch(`./config/${extension.name}/${locale}.config.json`).then(r => r.json())
+            // );
 
           uv.on(
             "collectionIndexChange",

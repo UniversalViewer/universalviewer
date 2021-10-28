@@ -14,6 +14,7 @@ export class BaseEvents {
   static CLOSE_LEFT_PANEL: string = "closeLeftPanel";
   static CLOSE_RIGHT_PANEL: string = "closeRightPanel";
   static COLLECTION_INDEX_CHANGE: string = "collectionIndexChange";
+  static CONFIGURE: string = "configure";
   static CREATE: string = "create";
   static CREATED: string = "created";
   static CURRENT_TIME_CHANGE: string = 'currentTimeChanged';
