@@ -6,7 +6,6 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Universal Viewer Examples</title>
-    <script src="https://unpkg.com/@edsilv/utils@1.0.2/dist-umd/utils.js"></script>
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
     <%= htmlWebpackPlugin.tags.headTags %>
@@ -122,7 +121,7 @@
         }
 
         function setSelectedManifest() {
-          manifest = utils.Urls.getHashParameter("manifest");
+          manifest = urlAdaptor.get("manifest");
 
           if (manifest) {
             $manifestSelect.value = manifest;
@@ -144,6 +143,7 @@
             "#manifestSelect option:checked"
           );
           $manifest.value = $selectedOption.value;
+          urlAdaptor.set("manifest", $selectedOption.value);
         };
 
         $setManifestButton.onclick = function() {
@@ -173,7 +173,6 @@
 
           var data = {
             manifestUri: manifest,
-            configUri: "uv-config.json",
             collectionIndex:
               collectionIndex !== undefined
                 ? Number(collectionIndex)
@@ -183,37 +182,39 @@
             rotation: Number(urlAdaptor.get("r", 0)),
             rangeId: urlAdaptor.get("rid", ""),
             xywh: urlAdaptor.get("xywh", ""),
-            target: urlAdaptor.get("target", ""),
-            readOnlyAdaptor: false,
+            target: urlAdaptor.get("target", "")
           };
 
           uv = UV.init("uv", data);
 
-          uv.on("created", function() {
-            utils.Urls.setHashParameter("manifest", manifest);
-          });
-
           uv.on("load", function() {
-            // console.log("load");
             // uv.set({
             //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
             // });
           });
 
           uv.on("configure", function({ config, cb }) {
-            setTimeout(() => {
-              cb(config)
-            }, 2000)
+            cb(new Promise(resolve => {
+              fetch("uv-config.json").then(response => {
+                resolve(response.json());
+              });
+            }));
           });
 
-                      // overrideConfig(
-            //   fetch(`./config/${extension.name}/${locale}.config.json`).then(r => r.json())
-            // );
+          // uv.on("configure", function({ config, cb }) {
+          //   cb((async () => {
+          //     await fetch("uv-config.json");
+          //   })());
+          // });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb({ options: { headerPanelEnabled: false } });  
+          // });
 
           uv.on(
             "collectionIndexChange",
             function(collectionIndex) {
-              uv.adaptor.set("c", collectionIndex);
+              urlAdaptor.set("c", collectionIndex);
             },
             false
           );
@@ -221,7 +222,7 @@
           uv.on(
             "manifestIndexChange",
             function(manifestIndex) {
-              uv.adaptor.set("m", manifestIndex);
+              urlAdaptor.set("m", manifestIndex);
             },
             false
           );
@@ -229,7 +230,7 @@
           uv.on(
             "canvasIndexChange",
             function(canvasIndex) {
-              uv.adaptor.set("cv", canvasIndex);
+              urlAdaptor.set("cv", canvasIndex);
             },
             false
           );
@@ -237,18 +238,17 @@
           uv.on(
             "rangeChange",
             function(rangeId) {
-              uv.adaptor.set("rid", rangeId);
+              urlAdaptor.set("rid", rangeId);
             },
             false
           );
 
           uv.on("targetChange", function(target) {
-            // console.log("target change", target);
             $target.value = target;
+            urlAdaptor.set("xywh", urlAdaptor.getFragment("xywh", target));
           });
 
           uv.on("openseadragonExtension.rotationChange", function(rotation) {
-            // console.log("rotation change", rotation);
             $rotation.value = rotation;
           });
 

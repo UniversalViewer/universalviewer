@@ -2,7 +2,7 @@ const $ = require("jquery");
 require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
-// const merge = require('lodash/merge');
+const merge = require('lodash/merge');
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { IExtension } from "./modules/uv-shared-module/IExtension";
 import { IUVComponent } from "./IUVComponent";
@@ -17,7 +17,6 @@ import {
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
-import { URLAdaptor } from "./URLAdaptor";
 import "./uv.css";
 import "./themes/theme.less";
 
@@ -46,10 +45,6 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
 
   constructor(options: IBaseComponentOptions) {
     super(options);
-
-    this.adaptor = new URLAdaptor(
-      !!options.data.readOnlyAdaptor
-    );
 
     this._pubsub = new PubSub();
 
@@ -289,68 +284,33 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     data: IUVData,
     extension: any,
   ): Promise<any> {
-    // if there is a configUri, load it and pass it to the extension
-    // const configExtension = await this._getConfigExtension(data, extension);
 
-    return new Promise<any>(async (resolve) => {
-      if (data.locales) {
-        // import the config file
-        let config = await import(`./extensions/${extension.name}/config/${data.locales[0].name}.json`);
-        config = JSON.parse(JSON.stringify(config));
-  
-        this.fire(BaseEvents.CONFIGURE, { config, cb: (extended) => {
-          resolve(extended);
-        }});
-      }
-    });
+    if (!data.locales) {
+      throw new Error("locales required.");
+    }
+
+    // import the config file
+    let config = await import(`./extensions/${extension.name}/config/${data.locales[0].name}.json`);
+    config = JSON.parse(JSON.stringify(config));
+
+    let promises: Promise<any>[] = [];
+
+    this.fire(BaseEvents.CONFIGURE, { config, cb: (promise) => {
+      promises.push(promise);
+    }});
+
+    if (promises.length) {
+      const configs = await Promise.all(promises);
+
+      const mergedConfigs = configs.reduce((previous, current) => {
+        return merge(previous, current);
+      });
+
+      config = merge(config, mergedConfigs);
+    }
+
+    return config;
   }
-
-  // return this._extendConfig(data, extension, config, configExtension);
-
-  // private async _extendConfig(
-  //   data: IUVData,
-  //   extension: any,
-  //   config: any,
-  //   configExtension: any
-  // ): Promise<any> {
-  //   config.name = extension.name;
-
-  //   // if configUri has been set, extend the existing config object.
-  //   if (configExtension) {
-  //     // save a reference to the config extension uri.
-  //     config.uri = data.configUri;
-  //     config = merge(config, configExtension)
-  //     // $.extend(true, config, configExtension);
-  //   }
-
-  //   return config;
-  // }
-
-  // private async _getConfigExtension(
-  //   data: IUVData,
-  //   extension: any,
-  // ): Promise<any> {
-  //   if (!data.locales) {
-  //     return;
-  //   }
-
-  //   const sessionConfig: string | null = sessionStorage.getItem(
-  //     extension.name + "." + data.locales[0].name
-  //   );
-
-  //   const configUri: string | undefined = data.configUri;
-
-  //   if (sessionConfig) {
-  //     // if config is stored in sessionstorage
-  //     return JSON.parse(sessionConfig);
-  //   } else if (configUri) {
-  //     // if data.configUri has been set
-  //     return fetch(configUri)
-  //       .then(response => response.json())
-  //   } else {
-  //     return null;
-  //   }
-  // }
 
   private _createExtension(
     extension: any,

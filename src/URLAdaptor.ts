@@ -10,6 +10,12 @@ export class URLAdaptor extends UVAdaptor {
     return Urls.getHashParameter(key, document) || defaultValue;
   }
 
+  public getFragment(key: string, url: string): string | null {
+    const regex = new RegExp("#.*" + key + "=([^&]+)(&|$)");
+    const match = regex.exec(url);
+    return(match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
+  }
+
   public set(key: string, value: string): void {
     if (!this.readonly) {
       if (value) {
