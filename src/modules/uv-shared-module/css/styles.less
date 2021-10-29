@@ -12,25 +12,20 @@
 @import 'center-panel';
 @import 'footer-panel';
 @import 'overlays';
-@import 'iiif-av-component';
-@import 'iiif-gallery-component';
-@import 'iiif-tree-component';
-@import 'iiif-metadata-component';
 @import 'catch-all';
-@import 'watch';
-@import 'mobile-landscape';
-@import 'mobile-portrait';
-@import 'desktop';
+@import 'sm';
+@import 'md';
+@import 'lg';
+@import 'xl';
 
-@img-path: '../../../modules/uv-shared-module/img/';
 
 .hidden {
-    display: none;
+    .hidden();
 }
 
 .uv {
 
-    background-color: @body-bg;
+    // background-color: @body-bg;
     position: relative;
 
     // Common styles
@@ -52,7 +47,7 @@
 
     .action, a.action.black, input.action {
         display: inline-block;
-        background-image: data-uri('@{img-path}sprite.png');
+        background-image: data-uri('../img/sprite.png');
         background-position-x: 0;
         background-position-y: -1000px;
         background-repeat: no-repeat;
@@ -66,23 +61,23 @@
         position: fixed;
         z-index: 1000;
 
-        #watch {
+        #sm {
             display: none;
         }
 
-        #mobile-portrait {
+        #md {
             display: none;
         }
 
-        #mobile-landscape {
+        #lg {
             display: none;
         }
 
-        #desktop {
+        #xl {
             display: none;
         }
     }
-    
+
     #commsFrame {
         width: 1px;
         height: 1px;
@@ -101,6 +96,7 @@
         margin-right: @panel-margin;
         margin-bottom: 0px;
         margin-left: @panel-margin;
+        background: @body-bg; // important, otherwise you see two spinners
     }
 
     .leftPanel {

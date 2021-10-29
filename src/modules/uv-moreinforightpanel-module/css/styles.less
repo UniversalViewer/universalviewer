@@ -1,8 +1,8 @@
-﻿
+﻿@import "../../../../node_modules/@iiif/iiif-metadata-component/dist-css/styles.less";
+
 .uv{
 
     .rightPanel{
-        @img-path: '../../../modules/uv-moreinforightpanel-module/img/';
 
         .top{
             .title{
@@ -29,6 +29,13 @@
             .groups {
                 padding: @padding-medium-vertical @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
 
+                .group {
+                    
+                    .header {
+                        text-transform: uppercase;
+                    }
+                }
+
                 .items{
 
                     .header {
@@ -41,6 +48,10 @@
                         .header{
                             font-size: @font-size-small;
                             text-transform: uppercase;
+                        }
+
+                        .value{
+                            color: @text-color;
                         }
                     }
                 }
@@ -55,7 +66,7 @@
                     }
                 }
             }
-            
+
         }
     }
 }

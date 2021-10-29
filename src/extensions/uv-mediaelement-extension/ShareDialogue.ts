@@ -1,32 +1,30 @@
-import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
-import {IMediaElementExtension} from "./IMediaElementExtension";
+import { ShareDialogue as BaseShareDialogue } from "../../modules/uv-dialogues-module/ShareDialogue";
+import { IMediaElementExtension } from "./IMediaElementExtension";
 
 export class ShareDialogue extends BaseShareDialogue {
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("shareDialogue");
 
-    create(): void {
-        
-        this.setConfig('shareDialogue');
-        
-        super.create();
-    }
+    super.create();
+  }
 
-    update(): void {
+  update(): void {
+    super.update();
 
-        super.update();
+    this.code = (<IMediaElementExtension>this.extension).getEmbedScript(
+      this.options.embedTemplate,
+      this.currentWidth,
+      this.currentHeight
+    );
 
-        this.code = (<IMediaElementExtension>this.extension).getEmbedScript(
-            this.options.embedTemplate,
-            this.currentWidth,
-            this.currentHeight);
+    this.$code.val(this.code);
+  }
 
-        this.$code.val(this.code);        
-    }
-
-    resize(): void {
-        super.resize();
-    }
+  resize(): void {
+    super.resize();
+  }
 }

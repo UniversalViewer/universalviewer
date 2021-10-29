@@ -1,34 +1,34 @@
 .uv {
 
     .headerPanel {
-        display: none;
+        .hidden();
     }
 
     .mainPanel {
 
         .leftPanel {
-            display: none;
+            .hidden();
         }
 
         .rightPanel {
-            display: none;
+            .hidden();
         }
     }
 
     .footerPanel {
-        display: none;
+        .hidden();
     }
 
     .mobileFooterPanel {
 
-        display: block;
+        .visible();
         position: relative;
-        height: 50px;
+        height: 42px;
 
         .options {
 
             position: absolute;
-            width: 315px;
+            /*width: 315px;*/
             height: 42px;
 
             .spacer {
@@ -45,7 +45,7 @@
               	font-size: 0;
 
                 &.moreInfo {
-                    display: none;
+                    display: inline-block;
                 }
 
                 &.bookmark {
@@ -65,7 +65,7 @@
                 }
                 
                 &.fullScreen {
-                    display: none;
+                    display: inline-block;
                 }
             }
         }

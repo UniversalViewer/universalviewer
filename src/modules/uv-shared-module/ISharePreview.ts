@@ -1,4 +1,4 @@
 export interface ISharePreview {
-    title: string | null;
-    image: string;
+  title: string | null;
+  image: string;
 }

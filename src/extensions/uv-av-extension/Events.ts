@@ -1,3 +1,3 @@
 export class Events {
-    static namespace: string = 'avExtension.';
+  static namespace: string = "avExtension.";
 }

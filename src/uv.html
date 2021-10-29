@@ -4,87 +4,86 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="uv.css">
-    <script type="text/javascript" src="lib/offline.js"></script>
-    <script type="text/javascript" src="helpers.js"></script>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" href="favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="uv.css" />
+		<!-- 
+			resize observer is needed for model-viewer
+			https://github.com/google/model-viewer/issues/1088#issuecomment-599237719
+		-->
+		<!-- <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script> -->
+    <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
     </style>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
+
     <script type="text/javascript">
-    window.addEventListener('uvLoaded', function(e) { 
-            urlDataProvider = new UV.URLDataProvider(true);
-            var formattedLocales;
-            var locales = urlDataProvider.get('locales', '');
 
-            if (locales) {
-                var names = locales.split(',');
-                formattedLocales = [];
+      var urlAdaptor = new UV.URLAdaptor(true);
+      var formattedLocales;
+      var locales = urlAdaptor.get("locales", "");
 
-                for (var i in names) {
-                    var nameparts = String(names[i]).split(':');
-                    formattedLocales[i] = {name: nameparts[0], label: nameparts[1]};
-                }
-                
-            } else {
-                formattedLocales = [
-                    {
-                        name: 'en-GB'
-                    }
-                ]
-            }
+      if (locales) {
+        var names = locales.split(",");
+        formattedLocales = [];
 
-            uv = createUV('#uv', {
-                root: '.',
-                iiifResourceUri: urlDataProvider.get('manifest'),
-                configUri: urlDataProvider.get('config'),
-                collectionIndex: Number(urlDataProvider.get('c', 0)),
-                manifestIndex: Number(urlDataProvider.get('m', 0)),
-                sequenceIndex: Number(urlDataProvider.get('s', 0)),
-                canvasIndex: Number(urlDataProvider.get('cv', 0)),
-                rangeId: urlDataProvider.get('rid', 0),
-                rotation: Number(urlDataProvider.get('r', 0)),
-                xywh: urlDataProvider.get('xywh', ''),
-                embedded: true,
-                locales: formattedLocales
-            }, urlDataProvider);
+        for (var i in names) {
+          var nameparts = String(names[i]).split(":");
+          formattedLocales[i] = { name: nameparts[0], label: nameparts[1] };
+        }
+      } else {
+        formattedLocales = [
+          {
+            name: "en-GB"
+          }
+        ];
+      }
 
-        }, false);
+      uv = UV.init(
+        "uv",
+        {
+          manifestUri: urlAdaptor.get("manifest"),
+          configUri: urlAdaptor.get("config"),
+          collectionIndex: Number(urlAdaptor.get("c", 0)),
+          manifestIndex: Number(urlAdaptor.get("m", 0)),
+          canvasIndex: Number(urlAdaptor.get("cv", 0)),
+          rangeId: urlAdaptor.get("rid", 0),
+          rotation: Number(urlAdaptor.get("r", 0)),
+          xywh: urlAdaptor.get("xywh", ""),
+          embedded: true,
+          locales: formattedLocales,
+          target: urlAdaptor.get("target")
+        }
+      );
     </script>
-</head>    
-<body>
 
-<div id="uv" class="uv"></div>
-
-<script>
-
-    $(function() {
-
-        var $UV = $('#uv');
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var $UV = document.getElementById("uv");
 
         function resize() {
-            var windowWidth = window.innerWidth;
-            var windowHeight = window.innerHeight;
-            $UV.width(windowWidth);
-            $UV.height(windowHeight);
+          $UV.setAttribute("style", "width:" + window.innerWidth + "px");
+          $UV.setAttribute("style", "height:" + window.innerHeight + "px");
+          $UV.height(windowHeight);
         }
 
-        $(window).on('resize', function() {
-            resize();
+        document.addEventListener("resize", function() {
+          resize();
         });
-        
+
         resize();
-    });
-    
-</script>
-
-<script type="text/javascript" src="uv.js"></script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

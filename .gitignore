@@ -1,12 +1,5 @@
-#################
-## lib folders
-#################
-
-lib
-src/lib/bundle.js
-src/lib/bundle.min.js
-!src/lib
-!src/extensions/**/lib
+.buildcache
+dist
 
 #################
 ## TypeScript
@@ -48,38 +41,15 @@ node_modules
 *.js
 *.js.map
 *.min.map
-!tasks/*.js
 /config.js
 !src/extensions/*/config.js
-!Gruntfile.js
-!src/lib/*.js
-!src/*/*/lib/*.js
+!src/js/*.js
+!src/*/*/js/*.js
 !src/extensions/*/dependencies.js
-!src/helpers.js
-!dev.build.js
-!dist.build.js
 !jest.setup.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
-
-#################
-## Build
-#################
-
-.build/
-src/extensions/*/.build
-
-#################
-## Dist
-#################
-
-dist
-
-#################
-## Themes
-#################
-
-src/themes
+!src/extensions/*/config.js
 
 #################
 ## Misc

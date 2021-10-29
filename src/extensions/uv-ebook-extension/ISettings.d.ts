@@ -1,3 +1,1 @@
-interface ISettings {
-
-}
+interface ISettings {}

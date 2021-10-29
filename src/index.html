@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Universal Viewer Examples</title>
+    <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
+    <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
+    <%= htmlWebpackPlugin.tags.headTags %>
+    <style>
+      body {
+        margin: 0px;
+        padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      #uv {
+        width: 924px;
+        height: 668px;
+        /* width: 1024px;
+            height: 576px; */
+      }
+
+      #uv-controls .group {
+        padding: 20px 0 0 0;
+      }
+
+      #uv-controls select {
+        width: 200px;
+      }
+
+      #uv-controls input {
+        width: 600px;
+      }
+
+      #uv-controls button {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
+
+    <div id="uv-controls">
+      <div class="group">
+        <select id="manifestSelect"></select>
+        <input id="manifest" type="text" value="" />
+        <button id="setManifestButton" class="button" href="#">
+          Set Manifest
+        </button>
+      </div>
+
+      <div class="group">
+        <input id="target" type="text" value="" />
+        <button id="setTargetButton" class="button" href="#">Set Target</button>
+      </div>
+
+      <div class="group">
+        <input id="rotation" type="text" value="" />
+        <button id="setRotationButton" class="button" href="#">
+          Set Rotation
+        </button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function createOptGroup(label) {
+        var optGroup = document.createElement("optgroup");
+        optGroup.label = label;
+        return optGroup;
+      }
+
+      function createOption(text, value) {
+        var option = document.createElement("option");
+        option.text = text;
+        option.value = value;
+        return option;
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var uv, manifest;
+        var $manifest = document.getElementById("manifest");
+        var $manifestSelect = document.getElementById("manifestSelect");
+        var $target = document.getElementById("target");
+        var $rotation = document.getElementById("rotation");
+        var $setManifestButton = document.getElementById("setManifestButton");
+        var $setTargetButton = document.getElementById("setTargetButton");
+        var $setRotationButton = document.getElementById("setRotationButton");
+
+        var urlAdaptor = new UV.URLAdaptor();
+
+        function loadManifests(cb) {
+          // load manifests
+          fetch("collection.json")
+            .then((response) => response.json())
+            .then((manifests) => {
+              for (var i = 0; i < manifests.collections.length; i++) {
+                var collection = manifests.collections[i];
+
+                if (collection.visible === false) {
+                  continue;
+                }
+
+                var optGroup = createOptGroup(collection.label);
+                $manifestSelect.appendChild(optGroup);
+
+                for (var j = 0; j < collection.manifests.length; j++) {
+                  var manifest = collection.manifests[j];
+
+                  if (manifest.visible !== false) {
+                    var option = createOption(manifest.label, manifest["@id"]);
+                    optGroup.appendChild(option);
+                  }
+                }
+              }
+
+              cb();
+            });
+        }
+
+        function setSelectedManifest() {
+          manifest = urlAdaptor.get("manifest");
+
+          if (manifest) {
+            $manifestSelect.value = manifest;
+          } else {
+            var options = document.querySelectorAll(
+              "#manifestSelect optgroup option"
+            );
+
+            if (options.length) {
+              manifest = options[0].value;
+            }
+          }
+
+          $manifest.value = manifest;
+        }
+
+        $manifestSelect.onchange = function() {
+          var $selectedOption = document.querySelector(
+            "#manifestSelect option:checked"
+          );
+          $manifest.value = $selectedOption.value;
+          urlAdaptor.set("manifest", $selectedOption.value);
+        };
+
+        $setManifestButton.onclick = function() {
+          manifest = $manifest.value;
+          uv.set({
+            manifestUri: manifest,
+            canvasIndex: 0,
+          });
+        };
+
+        $setTargetButton.onclick = function() {
+          var target = $target.value;
+          uv.set({
+            target: target,
+          });
+        };
+
+        $setRotationButton.onclick = function() {
+          var rotation = $rotation.value;
+          uv.set({
+            rotation: rotation,
+          });
+        };
+
+        function setupUV() {
+          var collectionIndex = urlAdaptor.get("c");
+
+          var data = {
+            manifestUri: manifest,
+            collectionIndex:
+              collectionIndex !== undefined
+                ? Number(collectionIndex)
+                : undefined,
+            manifestIndex: Number(urlAdaptor.get("m", 0)),
+            canvasIndex: Number(urlAdaptor.get("cv", 0)),
+            rotation: Number(urlAdaptor.get("r", 0)),
+            rangeId: urlAdaptor.get("rid", ""),
+            xywh: urlAdaptor.get("xywh", ""),
+            target: urlAdaptor.get("target", "")
+          };
+
+          uv = UV.init("uv", data);
+
+          uv.on("load", function() {
+            // uv.set({
+            //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+            // });
+          });
+
+          uv.on("reload", function(data) {
+            console.log("reload");
+            // urlAdaptor.set("xywh", "");
+          });
+
+          uv.on("configure", function({ config, cb }) {
+            cb(new Promise(function(resolve) {
+              fetch("uv-config.json").then(function(response) {
+                resolve(response.json());
+              });
+            }));
+          });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb((async () => {
+          //     await fetch("uv-config.json");
+          //   })());
+          // });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb({ options: { headerPanelEnabled: false } });  
+          // });
+
+          uv.on(
+            "collectionIndexChange",
+            function(collectionIndex) {
+              urlAdaptor.set("c", collectionIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "manifestIndexChange",
+            function(manifestIndex) {
+              urlAdaptor.set("m", manifestIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "canvasIndexChange",
+            function(canvasIndex) {
+              urlAdaptor.set("cv", canvasIndex);
+            },
+            false
+          );
+
+          uv.on(
+            "rangeChange",
+            function(rangeId) {
+              urlAdaptor.set("rid", rangeId);
+            },
+            false
+          );
+
+          uv.on("targetChange", function(target) {
+            $target.value = target;
+            urlAdaptor.set("xywh", urlAdaptor.getFragment("xywh", target));
+          });
+
+          uv.on("openseadragonExtension.rotationChange", function(rotation) {
+            $rotation.value = rotation;
+          });
+
+          uv.on("toggleFullScreen", function(e) {
+            // console.log("toggleFullScreen", e);
+          });
+        }
+
+        loadManifests(function() {
+          setSelectedManifest();
+          setupUV();
+        });
+      });
+    </script>
+  </body>
+</html>

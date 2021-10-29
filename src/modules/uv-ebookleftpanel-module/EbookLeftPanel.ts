@@ -1,75 +1,93 @@
+const $ = require("jquery");
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
+import { Async } from "@edsilv/utils";
+import {
+  applyPolyfills,
+  defineCustomElements
+} from "@universalviewer/uv-ebook-components/loader";
 
 export class EbookLeftPanel extends LeftPanel {
+  private _ebookTOC: any;
+  private _$container: JQuery;
+  private _$ebookTOC: JQuery;
 
-    private _ebookTOC: any;
-    private _$container: JQuery;
-    private _$ebookTOC: JQuery;
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  async create(): Promise<void> {
+    this.setConfig("ebookLeftPanel");
+    super.create();
 
-    create(): void {
-        this.setConfig("ebookLeftPanel");
-        super.create();
+    this._$container = $('<div class="container"></div>');
 
-        this._$container = $('<div class="container"></div>');
-        this._ebookTOC = document.createElement("uv-ebook-toc");
-        this._$ebookTOC = $(this._ebookTOC);
-        //this._ebookTOC.setAttribute("src-tab-enabled", this.config.options.srcTabEnabled);
-        this.$main.addClass("disabled");
-        this.$main.append(this._$container);
-        this._$container.append(this._$ebookTOC);
+    await applyPolyfills();
+    defineCustomElements(window);
 
-        this.setTitle(this.content.title);
+    this._ebookTOC = document.createElement("uv-ebook-toc");
+    this._$ebookTOC = $(this._ebookTOC);
+    //this._ebookTOC.setAttribute("src-tab-enabled", this.config.options.srcTabEnabled);
+    this.$main.addClass("disabled");
+    this.$main.append(this._$container);
+    this._$container.append(this._$ebookTOC);
 
-        this.component.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
-            this.$main.removeClass("disabled");
-            this._ebookTOC.toc = navigation.toc;    
+    this.setTitle(this.content.title);
+
+    this.component.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
+      this.$main.removeClass("disabled");
+      this._ebookTOC.toc = navigation.toc;
+    });
+
+    this.component.subscribe(Events.RELOCATED, (location: any) => {
+      this._ebookTOC.selected = location.start.href;
+    });
+
+    this._ebookTOC.addEventListener(
+      "itemClicked",
+      (e: any) => {
+        this.component.publish(Events.ITEM_CLICKED, e.detail);
+      },
+      false
+    );
+
+    Async.waitFor(
+      () => {
+        return window.customElements !== undefined;
+      },
+      () => {
+        customElements.whenDefined("uv-ebook-toc").then(() => {
+          this.component.publish(Events.TOC_READY);
         });
+      }
+    );
+  }
 
-        this.component.subscribe(Events.RELOCATED, (location: any) => {
-            this._ebookTOC.selected = location.start.href;   
-        });
+  expandFullStart(): void {
+    super.expandFullStart();
+    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+  }
 
-        this._ebookTOC.addEventListener("itemClicked", (e: any) => {
-            this.component.publish(Events.ITEM_CLICKED, e.detail);
-        }, false);
+  expandFullFinish(): void {
+    super.expandFullFinish();
+    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+  }
 
-        Utils.Async.waitFor(() => {
-            return (window.customElements !== undefined);
-        }, () => {
-            customElements.whenDefined("uv-ebook-toc").then(() => {
-                this.component.publish(Events.TOC_READY);
-            });
-        });
-    }
+  collapseFullStart(): void {
+    super.collapseFullStart();
+    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+  }
 
-    expandFullStart(): void {
-        super.expandFullStart();
-        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
-    }
+  collapseFullFinish(): void {
+    super.collapseFullFinish();
+    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+  }
 
-    expandFullFinish(): void {
-        super.expandFullFinish();
-        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
-    }
-
-    collapseFullStart(): void {
-        super.collapseFullStart();
-        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
-    }
-
-    collapseFullFinish(): void {
-        super.collapseFullFinish();
-        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
-    }
-
-    resize(): void {
-        super.resize();
-        this._$container.height(this.$main.height() - this._$container.verticalPadding());
-    }
+  resize(): void {
+    super.resize();
+    this._$container.height(
+      this.$main.height() - this._$container.verticalPadding()
+    );
+  }
 }

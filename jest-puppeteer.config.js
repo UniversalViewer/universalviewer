@@ -3,7 +3,7 @@ module.exports = {
     headless: process.env.CI === 'true',
   },
   server: {
-    command: 'npm run server',
+    command: 'npm run e2eserve',
     port: 4444,
   },
   setupFilesAfterEnv: [

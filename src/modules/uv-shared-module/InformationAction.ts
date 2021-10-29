@@ -1,8 +1,6 @@
 export class InformationAction {
-    public label: string | null;
-    public action: () => void;
+  public label: string | null;
+  public action: () => void;
 
-    constructor() {
-
-    }
+  constructor() {}
 }

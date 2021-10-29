@@ -1,4 +1,4 @@
-@import 'icons';﻿
+@import 'icons';
 
 .uv {
 
@@ -7,7 +7,6 @@
         color: @text-secondary-color;
 
         button.btn.imageBtn {
-            font-size: 0;
             padding-left: 2px;
             padding-right: 2px;
 
@@ -23,13 +22,11 @@
                 }
             }
 
-            &.disabled {
-                opacity: 0.4;
-                filter: alpha(opacity=40);
+            &.disabled,
+            &.disabled:hover,
+            &.disabled i,
+            &.disabled i:hover {
                 background-color: transparent;
-                &:hover {
-                    background-color: transparent;
-                }
             }
         }
 

@@ -1,44 +1,34 @@
 {
-  "src": ["./src/**/*.ts"],
   "compilerOptions": {
-    "module": "amd",
+    "incremental": true,
+    "module": "ESNext",
     "sourceMap": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "noImplicitThis": false,
     "noLib": false,
-    "lib": ["es6", "dom"],
+    "lib": ["ES2015", "DOM"],
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "skipLibCheck": true,
-    "target": "es5",
+    "target": "ES5",
+    "tsBuildInfoFile": "./buildcache/front-end",
     "types": [
-      "@edsilv/exjs",
-      "@edsilv/http-status-codes",
-      "@edsilv/jquery-plugins",
-      "@edsilv/key-codes",
-      "@edsilv/utils",
       "@iiif/base-component",
-      "@iiif/manifold",
-      "@iiif/vocabulary",
       "jest",
       "jquery",
-      "modernizr",
-      "manifesto.js",
-      "three",
-      "virtex3d"
+      "node",
     ]
   },
-
   "exclude": [
+    "node_modules",
     "src/**/*.test.ts",
     "src/**/*.spec.ts"
   ],
   "include": [
-    "src/**/*"
+    "src"
   ]
 }

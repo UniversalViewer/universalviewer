@@ -1,107 +1,123 @@
-import { Annotation, AnnotationBody, Canvas, IExternalResource, LanguageMap } from 'manifesto.js';
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {UVUtils} from "../../Utils";
+const $ = require("jquery");
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { sanitize } from "../../Utils";
+import {
+  Annotation,
+  AnnotationBody,
+  Canvas,
+  IExternalResource,
+  LanguageMap
+} from "manifesto.js";
 
 export class FileLinkCenterPanel extends CenterPanel {
+  $scroll: JQuery;
+  $downloadItems: JQuery;
+  $downloadItemTemplate: JQuery;
 
-    $scroll: JQuery;
-    $downloadItems: JQuery;
-    $downloadItemTemplate: JQuery;
+  constructor($element: JQuery) {
+    super($element);
+  }
 
-    constructor($element: JQuery) {
-        super($element);
-    }
+  create(): void {
+    this.setConfig("fileLinkCenterPanel");
 
-    create(): void {
+    super.create();
 
-        this.setConfig('fileLinkCenterPanel');
+    this.component.subscribe(
+      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      (resources: IExternalResource[]) => {
+        this.openMedia(resources);
+      }
+    );
 
-        super.create();
+    this.$scroll = $('<div class="scroll"></div>');
+    this.$content.append(this.$scroll);
 
-        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: IExternalResource[]) => {
-            this.openMedia(resources);
-        });
+    this.$downloadItems = $("<ol></ol>");
+    this.$scroll.append(this.$downloadItems);
 
-        this.$scroll = $('<div class="scroll"></div>');
-        this.$content.append(this.$scroll);
+    this.$downloadItemTemplate = $(
+      '<li><img/><div class="col2"><a class="filename" target="_blank" download=""></a><span class="label"></span><a class="description" target="_blank" download=""></a></div></li>'
+    );
 
-        this.$downloadItems = $('<ol></ol>');
-        this.$scroll.append(this.$downloadItems);
+    this.title = this.extension.helper.getLabel();
+  }
 
-        this.$downloadItemTemplate = $('<li><img/><div class="col2"><a class="filename" target="_blank" download=""></a><span class="label"></span><a class="description" target="_blank" download=""></a></div></li>');
+  async openMedia(resources: IExternalResource[]) {
+    await this.extension.getExternalResources(resources);
 
-        this.title = this.extension.helper.getLabel();
-    }
+    const canvas: Canvas = this.extension.helper.getCurrentCanvas();
+    const annotations: Annotation[] = canvas.getContent();
 
-    openMedia(resources: IExternalResource[]) {
+    let $item: JQuery;
 
-        this.extension.getExternalResources(resources).then(() => {
-            
-            const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-            const annotations: Annotation[] = canvas.getContent();
+    for (let i = 0; i < annotations.length; i++) {
+      const annotation: Annotation = annotations[i];
 
-            let $item: JQuery;
+      if (!annotation.getBody().length) {
+        continue;
+      }
 
-            for (let i = 0; i < annotations.length; i++) {
-                const annotation: Annotation = annotations[i];
+      $item = this.$downloadItemTemplate.clone();
+      const $fileName: JQuery = $item.find(".filename");
+      const $label: JQuery = $item.find(".label");
+      const $thumb: JQuery = $item.find("img");
+      const $description: JQuery = $item.find(".description");
 
-                if (!annotation.getBody().length) {
-                    continue;
-                }
+      const annotationBody: AnnotationBody = annotation.getBody()[0];
 
-                $item = this.$downloadItemTemplate.clone();
-                const $fileName: JQuery = $item.find('.filename');
-                const $label: JQuery = $item.find('.label');
-                const $thumb: JQuery = $item.find('img');
-                const $description: JQuery = $item.find('.description');
+      const id: string | null = annotationBody.getProperty("id");
 
-                const annotationBody: AnnotationBody = annotation.getBody()[0];
+      if (id) {
+        $fileName.prop("href", id);
+        $fileName.text(id.substr(id.lastIndexOf("/") + 1));
+      }
 
-                const id: string | null = annotationBody.getProperty('id');
+      let label: string | null = LanguageMap.getValue(
+        annotationBody.getLabel()
+      );
 
-                if (id) {
-                    $fileName.prop('href', id);
-                    $fileName.text(id.substr(id.lastIndexOf('/') + 1));
-                }
+      if (label) {
+        $label.text(sanitize(label));
+      }
 
-                let label: string | null = LanguageMap.getValue(annotationBody.getLabel());
+      const thumbnail: string = annotation.getProperty("thumbnail");
 
-                if (label) {
-                    $label.text(UVUtils.sanitize(label));
-                }
+      if (thumbnail) {
+        $thumb.prop("src", thumbnail);
+      } else {
+        $thumb.hide();
+      }
 
-                const thumbnail: string = annotation.getProperty('thumbnail');
+      let description: string | null = annotationBody.getProperty(
+        "description"
+      );
 
-                if (thumbnail) {
-                    $thumb.prop('src', thumbnail);
-                } else {
-                    $thumb.hide();
-                }
+      if (description) {
+        $description.text(sanitize(description));
 
-                let description: string | null = annotationBody.getProperty('description');
-
-                if (description) {
-                    $description.text(UVUtils.sanitize(description));
-
-                    if (id) {
-                        $description.prop('href', id);
-                    }
-                }
-
-                this.$downloadItems.append($item);
-            }
-
-        });
-    }
-
-    resize() {
-        super.resize();
-
-        if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+        if (id) {
+          $description.prop("href", id);
         }
+      }
 
-        this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());
+      this.$downloadItems.append($item);
     }
+
+    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.component.publish(BaseEvents.LOAD);
+  }
+
+  resize() {
+    super.resize();
+
+    if (this.title) {
+      this.$title.text(sanitize(this.title));
+    }
+
+    this.$scroll.height(
+      this.$content.height() - this.$scroll.verticalMargins()
+    );
+  }
 }

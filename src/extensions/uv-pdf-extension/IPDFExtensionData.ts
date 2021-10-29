@@ -1,5 +1,5 @@
-import {IUVData} from "../../IUVData";
+import { IUVData } from "../../IUVData";
 
 export interface IPDFExtensionData extends IUVData {
-    anchor: string | null;
+  anchor: string | null;
 }
