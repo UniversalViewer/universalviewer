@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="https://avatars0.githubusercontent.com/u/9430521">
     <h1 align="center">Universal Viewer</h1>
@@ -6,29 +5,28 @@
 
 <p align="center">
 
-    <a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;"></a>
+  <a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;"></a>
 
-    <a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;"></a>
-    
-    <a href="https://app.netlify.com/sites/uv/deploys">
-      <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
-    </a>
+  <a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;"></a>
 
-    <a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
+  <a href="https://app.netlify.com/sites/uv/deploys">
+    <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
+  </a>
+
+  <a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
+
 </p>
 
 <!--
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/universalviewer/sponsors/badge.svg)](#sponsors)
-[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) 
+[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer?ref=badge_shield)
 &nbsp;&nbsp;
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
 -->
 
 <p align="center">
-    <a href="http://universalviewer.io/examples/">examples</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="https://groups.google.com/forum/#!forum/universalviewer">google group</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow">#slack</a>
 </p>
@@ -66,7 +64,7 @@
 
 ## Getting Started
 
-For a "hello world" getting started example see [uv-hello-world](https://github.com/UniversalViewer/uv-hello-world).
+See [uv-examples](https://github.com/UniversalViewer/uv-examples) for how to set up the UV with plain javascript, or using javascript frameworks.
 
 ## Contributing
 
@@ -90,13 +88,14 @@ Read below to learn how to take part in improving the UV:
 ## Feedback
 
 Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
+
 - Join the discussion on [Slack](http://universalviewer.io/#contact).
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new).
 - Star the repository to show your support ⭐
 
 ## Sponsors
 
-[Become a backer](https://opencollective.com/universalviewer#backer) and support us with a monthly donation and help us continue our activities. 
+[Become a backer](https://opencollective.com/universalviewer#backer) and support us with a monthly donation and help us continue our activities.
 
 <a href="https://opencollective.com/universalviewer/backer/0/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/backer/1/website" target="_blank"><img src="https://opencollective.com/universalviewer/backer/1/avatar.svg"></a>
@@ -169,4 +168,3 @@ The Universal Viewer is released under the [MIT license](https://github.com/Univ
 ## Accessibility Statement
 
 https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement
-
