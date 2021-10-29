@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://avatars0.githubusercontent.com/u/9430521" />
+<img src="https://avatars0.githubusercontent.com/u/9430521" style="width: 150px;" />
 <h1 align="center">Universal Viewer</h1>
 </p>
 
