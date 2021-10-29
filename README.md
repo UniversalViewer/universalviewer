@@ -42,7 +42,7 @@
 
 ## Website
 
-[Visit the UV demo page](https://universalviewer.io/examples) to try it out.
+[Visit the UV demo page](https://uv-v3.netlify.app) to try it out.
 
 ## Scope:
 
