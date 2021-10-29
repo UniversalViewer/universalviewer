@@ -26,33 +26,25 @@ Once you are all setup, following the Github's guide of how to fork a repository
 
     `npm install`
 
-## Debug Builds
+## Running the examples on localhost
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
-    npm run build
+    npm start
 
-This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js.
+This will compile the project using webpack and serve the examples on `localhost:8080`
 
 ## Distribution Builds
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
-    npm run build:dist
-
-## Examples
-
-To view the examples run:
-
-    npm start
+    npm run build
 
 #### 2. Open `universalviewer` folder in your IDE
 
 UV source code lives inside the `/src/` folder.
 
 Here is a [diagram](https://docs.google.com/drawings/d/1i484Jd32FoLwtE5uvkBA6l5LV-DioSOZDIWD0WfhWl8/edit?usp=sharing) showing the overall architecture of the project.
-
-The UV aims to be "framework agnostic", as it needs to be used in a variety of contexts. Therefore it is written in "plain" TypeScript and doesn't use a framework such as React or AngularJS. However, [StencilJS](https://stenciljs.com) is now being used to develop parts of the UV as generic Web Components, e.g. https://github.com/UniversalViewer/uv-ebook-components
 
 #### 3. Run test suite
 
