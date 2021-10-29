@@ -71,9 +71,6 @@ const config = {
   },
   devServer: {
     static: path.join(__dirname),
-    client: {
-      progress: true,
-    },
     open: true,
     compress: true,
     port: 8080,

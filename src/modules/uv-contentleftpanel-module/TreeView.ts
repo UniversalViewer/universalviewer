@@ -48,10 +48,8 @@ export class TreeView extends BaseView {
   }
 
   public databind(): void {
-    setTimeout(() => {
-      this.treeComponent.set(this.treeData);
-      this.resize();
-    }, 1);
+    this.treeComponent.set(this.treeData);
+    this.resize();
   }
 
   public show(): void {
