@@ -29,7 +29,6 @@
       "jquery",
       "modernizr",
       "manifesto.js",
-//      "requirejs",
       "three",
       "virtex3d"
     ]
