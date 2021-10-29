@@ -75,7 +75,6 @@ export class TreeView extends BaseView {
         this.treeComponent.expandNode(node, expanded);
     }
 
-
     public getAllNodes(): TreeNode[] {
         return this.treeComponent.getAllNodes();
     }

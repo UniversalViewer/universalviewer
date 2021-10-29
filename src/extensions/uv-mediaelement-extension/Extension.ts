@@ -184,6 +184,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
     isVideo(): boolean {
 
+        console.log("isVideo");
+
         const canvas: Canvas = this.helper.getCurrentCanvas();
         const annotations: Annotation[] = canvas.getContent();
 
