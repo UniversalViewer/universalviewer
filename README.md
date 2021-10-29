@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://avatars0.githubusercontent.com/u/9430521" style="width: 150px; margin-bottom: -15px" />
+<img src="https://avatars0.githubusercontent.com/u/9430521" style="width: 150px;" />
 <h1 align="center">Universal Viewer</h1>
 </p>
 
@@ -33,7 +33,7 @@
 
 [Visit the UV demo page](https://uv.netlify.app) to try it out.
 
-## Scope:
+## Scope
 
 Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
