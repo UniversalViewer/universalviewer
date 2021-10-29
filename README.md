@@ -1,20 +1,15 @@
 <p align="center">
-    <img src="https://avatars0.githubusercontent.com/u/9430521">
-    <h1 align="center">Universal Viewer</h1>
+<img src="https://avatars0.githubusercontent.com/u/9430521" />
+<h1 align="center">Universal Viewer</h1>
 </p>
 
 <p align="center">
-
-  <a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;"></a>
-
-  <a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;"></a>
-
-  <a href="https://app.netlify.com/sites/uv/deploys">
-    <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
-  </a>
-
-  <a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
-
+<a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;" /></a>
+<a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;" /></a>
+<a href="https://app.netlify.com/sites/uv/deploys">
+<img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
+</a>
+<a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
 </p>
 
 <!--
@@ -49,18 +44,7 @@
 
 ## Scope:
 
-- **Zoomable**
-  <p><a href="https://openseadragon.github.io/">OpenSeadragon</a> image zooming using the <a href="http://iiif.io/api/image/2.0/">IIIF image API</a></p>
-- **Embeddable**
-  <p>YouTube-style embedding with deep links to specific pages/zoom regions.</p>
-- **Themable**
-  <p>Fork the <a href="https://github.com/UniversalViewer/uv-en-GB-theme">UV theme</a> on github to create your own.</p>
-- **Configurable**
-  <p>The UV has its own visual configuration editor allowing all settings to be customised.</p>
-- **Extensible**
-  <p>Supports IIIF Presentation API v3, allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
-
-[More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
+Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
 ## Getting Started
 
@@ -167,4 +151,4 @@ The Universal Viewer is released under the [MIT license](https://github.com/Univ
 
 ## Accessibility Statement
 
-https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement
+Read our [Accessibility Statement](https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement)
