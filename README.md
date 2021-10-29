@@ -33,7 +33,7 @@
 
 [Visit the UV demo page](https://uv-v3.netlify.app) to try it out.
 
-## Scope:
+## Scope
 
 Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
