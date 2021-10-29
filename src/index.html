@@ -193,11 +193,6 @@
             // });
           });
 
-          uv.on("reload", function(data) {
-            console.log("reload");
-            // urlAdaptor.set("xywh", "");
-          });
-
           uv.on("configure", function({ config, cb }) {
             cb(new Promise(function(resolve) {
               fetch("uv-config.json").then(function(response) {
