@@ -29,19 +29,19 @@
 - [**Sponsors**](#sponsors)
 - [**License**](#license)
 
-## Website
+## 🌐 Website
 
 [Visit the UV demo page](https://uv.netlify.app) to try it out.
 
-## Scope
+## 📖 Scope
 
 Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
-## Getting Started
+## 💻 Getting Started
 
 See [uv-examples](https://github.com/UniversalViewer/uv-examples) for how to set up the UV with plain javascript, or using javascript frameworks.
 
-## Contributing
+## 💻 Contributing
 
 Read below to learn how to take part in improving the UV:
 
@@ -54,28 +54,28 @@ Read below to learn how to take part in improving the UV:
   - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
 - Could not find an issue? Look for bugs, typos, and missing features.
 
-### Contributors
+### 🏅 Contributors
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
 <a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
-## Feedback
+## 🏅 Sponsors
+
+[Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
+
+## 📖 License
+
+The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
+
+## 📖 Accessibility Statement
+
+Read our [Accessibility Statement](https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement)
+
+## 👂 Feedback
 
 Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 
 - Join the discussion on [Slack](http://universalviewer.io/#contact).
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new).
 - Star the repository to show your support ⭐
-
-## Sponsors
-
-[Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
-
-## License
-
-The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
-
-## Accessibility Statement
-
-Read our [Accessibility Statement](https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement)
