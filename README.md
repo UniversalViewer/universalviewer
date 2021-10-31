@@ -27,8 +27,8 @@
 - [**Contributing**](#-contributing)
 - [**Sponsors**](#-sponsors)
 - [**License**](#-license)
-- [**Accessibility Statement**](#accessibility-statement)
-- [**Feedback**](#feedback)
+- [**Accessibility Statement**](#-accessibility-statement)
+- [**Feedback**](#-feedback)
 
 
 ## 🌐 Website
