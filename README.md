@@ -17,6 +17,8 @@
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow">#slack</a>
 </p>
 
+A community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎
+
 <br>
 
     npm install universalviewer --save
