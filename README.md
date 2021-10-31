@@ -72,7 +72,7 @@ The Universal Viewer is released under the [MIT license](https://github.com/Univ
 
 Read our [Accessibility Statement](https://github.com/UniversalViewer/universalviewer/wiki/Accessibility-Statement)
 
-## 👂 Feedback
+## 📣 Feedback
 
 Read below how to engage with the UV [community](COMMUNITY_TEAM.md):
 
