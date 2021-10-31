@@ -56,8 +56,6 @@ Read below to learn how to take part in improving the UV:
   - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
 - Could not find an issue? Look for bugs, typos, and missing features.
 
-### Contributors
-
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
 <a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
