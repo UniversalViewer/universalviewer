@@ -21,12 +21,12 @@
 
     npm install universalviewer --save
 
-- [**Website**](#website)
-- [**Scope**](#scope)
-- [**Getting Started**](#getting-started)
-- [**Contributing**](#contributing)
-- [**Sponsors**](#sponsors)
-- [**License**](#license)
+- [**Website**](#-website)
+- [**Scope**](#-scope)
+- [**Getting Started**](#-getting-started)
+- [**Contributing**](#-contributing)
+- [**Sponsors**](#-sponsors)
+- [**License**](#-license)
 - [**Accessibility Statement**](#accessibility-statement)
 - [**Feedback**](#feedback)
 
