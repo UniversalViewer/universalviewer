@@ -25,9 +25,11 @@
 - [**Scope**](#scope)
 - [**Getting Started**](#getting-started)
 - [**Contributing**](#contributing)
-- [**Feedback**](#feedback)
 - [**Sponsors**](#sponsors)
 - [**License**](#license)
+- [**Accessibility Statement**](#accessibility-statement)
+- [**Feedback**](#feedback)
+
 
 ## 🌐 Website
 
@@ -54,7 +56,7 @@ Read below to learn how to take part in improving the UV:
   - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
 - Could not find an issue? Look for bugs, typos, and missing features.
 
-### 🏅 Contributors
+### Contributors
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
