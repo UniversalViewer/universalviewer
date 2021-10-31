@@ -1,6 +1,7 @@
 <p align="center">
 <img src="https://avatars0.githubusercontent.com/u/9430521" style="width: 150px;" />
 <h1 align="center">Universal Viewer</h1>
+A community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎
 </p>
 
 <p align="center">
@@ -16,8 +17,6 @@
 <a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow">#slack</a>
 </p>
-
-A community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎
 
 <br>
 
