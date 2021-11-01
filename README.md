@@ -16,8 +16,8 @@ A community-developed open source project on a mission<br/> to help you share yo
 </p>
 
 <p align="center">
-<a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow">#slack</a>
+    <a href="https://twitter.com/universalviewer"><strong>@</strong> twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow"><strong>#</strong> slack</a>
 </p>
 
 <br>
