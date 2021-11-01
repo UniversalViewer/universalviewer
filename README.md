@@ -2,7 +2,7 @@
 <img src="https://avatars0.githubusercontent.com/u/9430521" style="width: 150px;" />
 <h1 align="center">Universal Viewer</h1>
 <p align="center">
-A community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎
+A community-developed open source project on a mission<br/> to help you share your 📚📜📰📽️📻🗿 with the 🌎
 </p>
 </p>
 <br/>
