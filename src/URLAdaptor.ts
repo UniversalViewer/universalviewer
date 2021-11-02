@@ -34,9 +34,9 @@ export class URLAdaptor extends UVAdaptor {
           this.get("c") !== undefined
               ? Number(this.get("c"))
               : undefined,
-      manifestIndex: Number(this.get("m", 0)),
-      canvasIndex: Number(this.get("cv", 0)),
-      rotation: Number(this.get("r", 0)),
+      manifestIndex: Number(this.get("m", "0")),
+      canvasIndex: Number(this.get("cv", "0")),
+      rotation: Number(this.get("r", "0")),
       rangeId: this.get("rid", ""),
       xywh: this.get("xywh", ""),
       target: this.get("target", "")
