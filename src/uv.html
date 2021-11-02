@@ -10,12 +10,12 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <link rel="icon" href="favicon.ico" />
-		<link rel="stylesheet" type="text/css" href="uv.css" />
-		<!-- 
+    <link rel="stylesheet" type="text/css" href="uv.css" />
+    <!-- 
 			resize observer is needed for model-viewer
 			https://github.com/google/model-viewer/issues/1088#issuecomment-599237719
 		-->
-		<!-- <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script> -->
+    <!-- <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script> -->
     <script type="text/javascript" src="umd/UV.js"></script>
     <style>
       body {
@@ -29,43 +29,13 @@
     <div id="uv" class="uv"></div>
 
     <script type="text/javascript">
-
       var urlAdaptor = new UV.URLAdaptor(true);
-      var formattedLocales;
-      var locales = urlAdaptor.get("locales", "");
 
-      if (locales) {
-        var names = locales.split(",");
-        formattedLocales = [];
+      const data = urlAdaptor.getInitialData({
+        embedded: true,
+      });
 
-        for (var i in names) {
-          var nameparts = String(names[i]).split(":");
-          formattedLocales[i] = { name: nameparts[0], label: nameparts[1] };
-        }
-      } else {
-        formattedLocales = [
-          {
-            name: "en-GB"
-          }
-        ];
-      }
-
-      uv = UV.init(
-        "uv",
-        {
-          manifestUri: urlAdaptor.get("manifest"),
-          configUri: urlAdaptor.get("config"),
-          collectionIndex: Number(urlAdaptor.get("c", 0)),
-          manifestIndex: Number(urlAdaptor.get("m", 0)),
-          canvasIndex: Number(urlAdaptor.get("cv", 0)),
-          rangeId: urlAdaptor.get("rid", 0),
-          rotation: Number(urlAdaptor.get("r", 0)),
-          xywh: urlAdaptor.get("xywh", ""),
-          embedded: true,
-          locales: formattedLocales,
-          target: urlAdaptor.get("target")
-        }
-      );
+      uv = UV.init("uv", data);
     </script>
 
     <script>
