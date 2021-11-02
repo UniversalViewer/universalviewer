@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import "@webcomponents/webcomponentsjs/webcomponents-bundle.js";
-import "../../../node_modules/@google/model-viewer/dist/model-viewer-legacy";
+import "@google/model-viewer/dist/model-viewer-legacy";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { sanitize, debounce } from "../../Utils";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";

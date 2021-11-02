@@ -22,7 +22,7 @@
       "@iiif/base-component",
       "jest",
       "jquery",
-      "node",
+      "node"
     ]
   },
   "exclude": [

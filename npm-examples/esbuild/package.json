@@ -1,0 +1,12 @@
+{
+  "name": "esbuild-demo",
+  "scripts": {
+    "start": "node esbuild.mjs -w",
+    "build": "node esbuild.mjs"
+  },
+  "dependencies": {
+    "esbuild": "^0.13.12",
+    "create-serve": "^1.0.1",
+    "universalviewer": "../../"
+  }
+}
