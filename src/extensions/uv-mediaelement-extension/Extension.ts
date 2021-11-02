@@ -26,6 +26,7 @@ import {
 } from "manifesto.js";
 import { TFragment } from "../uv-openseadragon-extension/TFragment";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension
   implements IMediaElementExtension {
@@ -42,6 +43,14 @@ export default class Extension extends BaseExtension
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
+  defaultConfig: any = defaultConfig;
+  locales = {
+    "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
+  };
 
   create(): void {
     super.create();

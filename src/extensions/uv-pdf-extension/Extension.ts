@@ -14,6 +14,7 @@ import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension implements IPDFExtension {
   $downloadDialogue: JQuery;
@@ -28,6 +29,14 @@ export default class Extension extends BaseExtension implements IPDFExtension {
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
+  defaultConfig: any = defaultConfig;
+  locales = {
+    "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
+  };
 
   create(): void {
     super.create();

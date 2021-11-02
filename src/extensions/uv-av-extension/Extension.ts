@@ -14,6 +14,7 @@ import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension implements IAVExtension {
   $downloadDialogue: JQuery;
@@ -29,6 +30,14 @@ export default class Extension extends BaseExtension implements IAVExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
+  defaultConfig: any = defaultConfig;
+  locales = {
+    "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
+  };
 
   create(): void {
     super.create();

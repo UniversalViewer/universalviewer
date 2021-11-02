@@ -4,7 +4,7 @@ import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
 import { BaseEvents } from "./BaseEvents";
 import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
-import { IExtension } from "./IExtension";
+import { ExtensionLoader, IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";
 import { IUVComponent } from "../../IUVComponent";
@@ -63,13 +63,15 @@ export class BaseExtension implements IExtension {
   metrics: Metric[] = [];
   mouseX: number;
   mouseY: number;
-  name: string;
+  type: ExtensionLoader;
   resources: IExternalResourceData[] | null;
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
+  locales = {};
+  defaultConfig: any;
 
   public create(): void {
     const that = this;
@@ -100,7 +102,7 @@ export class BaseExtension implements IExtension {
     if (this.data.locales) {
       this.$element.addClass(this.data.locales[0].name.toLowerCase());
     }
-    this.$element.addClass(this.name);
+    this.$element.addClass(this.type.name);
     this.$element.addClass("browser-" + this.browserDetect.browser);
     this.$element.addClass("browser-version-" + this.browserDetect.version);
     this.$element.prop("tabindex", -1);
@@ -667,6 +669,18 @@ export class BaseExtension implements IExtension {
       this.component.publish(BaseEvents.CREATED);
       this._setDefaultFocus();
     }, 1);
+  }
+
+  public async loadConfig(locale: string): Promise<any> {
+    let config = this.locales[locale] || this.defaultConfig;
+    if (config !== this.defaultConfig) {
+      config = await config();
+    }
+    if (!config) {
+      throw new Error("Unable to load config");
+    }
+    config = JSON.parse(JSON.stringify(config));
+    return config;
   }
 
   createModules(): void {

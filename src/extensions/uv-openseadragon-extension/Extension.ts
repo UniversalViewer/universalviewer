@@ -44,6 +44,7 @@ import {
   Utils
 } from "manifesto.js";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -72,6 +73,14 @@ export default class OpenSeadragonExtension extends BaseExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
+  defaultConfig: any = defaultConfig;
+  locales = {
+    "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
+  };
 
   create(): void {
     super.create();

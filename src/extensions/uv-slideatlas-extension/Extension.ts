@@ -13,6 +13,7 @@ import { ShareDialogue } from "./ShareDialogue";
 // import { ISlideAtlasExtensionData } from "./ISlideAtlasExtensionData";
 import { Strings } from "@edsilv/utils";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension
   implements ISlideAtlasExtension {
@@ -29,6 +30,12 @@ export default class Extension extends BaseExtension
   moreInfoDialogue: MoreInfoDialogue;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
+  locales = {
+    "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
+  };
 
   create(): void {
     super.create();

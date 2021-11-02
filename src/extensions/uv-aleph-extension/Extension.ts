@@ -12,6 +12,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 import { Strings, Bools } from "@edsilv/utils";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension
   implements IAlephExtension {
@@ -28,6 +29,10 @@ export default class Extension extends BaseExtension
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
+  defaultConfig: any = defaultConfig;
+  locales = {
+    "en-GB": defaultConfig,
+  };
 
   create(): void {
     super.create();

@@ -703,7 +703,7 @@ export class ContentLeftPanel extends LeftPanel {
   selectCurrentTreeNode(): void {
     // todo: merge selectCurrentTreeNodeByCanvas and selectCurrentTreeNodeByRange
     // the openseadragon extension should keep track of the current range instead of using canvas index
-    if (this.extension.name === "uv-openseadragon-extension") {
+    if (this.extension.type?.name === "uv-openseadragon-extension") {
       this.selectCurrentTreeNodeByCanvas();
     } else {
       this.selectCurrentTreeNodeByRange();

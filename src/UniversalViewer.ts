@@ -4,7 +4,7 @@ import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
 const merge = require('lodash/merge');
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
-import { IExtension } from "./modules/uv-shared-module/IExtension";
+import { ExtensionLoader, IExtension } from "./modules/uv-shared-module/IExtension";
 import { IUVComponent } from "./IUVComponent";
 import { IUVData } from "./IUVData";
 import { IUVAdaptor } from "./IUVAdaptor";
@@ -21,19 +21,20 @@ import "./uv.css";
 import "./themes/theme.less";
 
 interface IExtensionRegistry {
-  [key: string]: string;
+  [key: string]: ExtensionLoader;
 }
 
-enum Extension {
-  AV = "uv-av-extension",
-  ALEPH = "uv-aleph-extension",
-  DEFAULT = "uv-default-extension",
-  EBOOK = "uv-ebook-extension",
-  MEDIAELEMENT = "uv-mediaelement-extension",
-  MODELVIEWER = "uv-model-viewer-extension",
-  OSD = "uv-openseadragon-extension",
-  PDF = "uv-pdf-extension",
-  SLIDEATLAS = "uv-slideatlas-extension",
+// use static paths (not based on variable) so webpack can use publicPath: "auto"
+const Extension = {
+  AV: {name: "uv-av-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-av-extension/Extension')},
+  ALEPH: {name: "uv-aleph-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-aleph-extension/Extension')},
+  DEFAULT: {name: "uv-default-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-default-extension/Extension')},
+  EBOOK: {name: "uv-ebook-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-ebook-extension/Extension')},
+  MEDIAELEMENT: {name: "uv-mediaelement-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-mediaelement-extension/Extension')},
+  MODELVIEWER: {name: "uv-model-viewer-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-model-viewer-extension/Extension')},
+  OSD: {name: "uv-openseadragon-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-openseadragon-extension/Extension')},
+  PDF: {name: "uv-pdf-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-pdf-extension/Extension')},
+  SLIDEATLAS: {name: "uv-slideatlas-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-slideatlas-extension/Extension')},
 }
 
 export class UniversalViewer extends BaseComponent implements IUVComponent {
@@ -84,27 +85,27 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     return true;
   }
 
-  private async _getExtensionByName(name: string): Promise<any> {
+  private async _getExtensionByType(type: ExtensionLoader): Promise<any> {
     // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
-    const m = (await import(
-      /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
-    )) as any;
-    const extension = new m.default();
-    extension.name = name;
+    // const m = (await import(
+    //   /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
+    // )) as any;
+    const m = await type.loader();
+    const extension: IExtension = new m.default();
+    extension.type = type;
     return extension;
   }
 
   private _getExtensionByFormat(format: string): any {
     if (!this._extensionRegistry[format]) {
-      return this._getExtensionByName(Extension.DEFAULT);
+      return this._getExtensionByType(Extension.DEFAULT);
     }
 
-    return this._getExtensionByName(this._extensionRegistry[format]);
+    return this._getExtensionByType(this._extensionRegistry[format]);
   }
 
   public data(): IUVData {
     return {
-      assetsDir: "/uv-assets",
       canvasIndex: 0,
       embedded: false,
       isReload: false,
@@ -128,11 +129,6 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
       if (!data.manifestUri) {
         console.warn(`manifestUri is required.`);
         return;
-      }
-
-      // remove '/' from assetsDir
-      if (data.assetsDir && data.assetsDir.endsWith("/")) {
-        data.assetsDir = data.assetsDir.substring(0, data.assetsDir.length - 1);
       }
 
       this._reload(data);
@@ -262,13 +258,13 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
     const hasRanges: boolean = helper.getRanges().length > 0;
 
-    if (extension!.name === Extension.AV && !hasRanges) {
-      extension = await that._getExtensionByName(Extension.MEDIAELEMENT);
+    if (extension!.type === Extension.AV && !hasRanges) {
+      extension = await that._getExtensionByType(Extension.MEDIAELEMENT);
     }
 
     // if there still isn't a matching extension, use the default extension.
     if (!extension) {
-      extension = await that._getExtensionByFormat(Extension.DEFAULT);
+      extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
     }
 
     data.config = await that._configure(data, extension);
@@ -290,10 +286,9 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     }
 
     // import the config file
-    let config = await import(`./extensions/${extension.name}/config/${data.locales[0].name}.json`);
-    config = JSON.parse(JSON.stringify(config));
+    let config = await extension.loadConfig(data.locales[0].name);
 
-    let promises: Promise<any>[] = [];
+    let promises: Promise<any>[] = [] as any;
 
     this.fire(BaseEvents.CONFIGURE, { config, cb: (promise) => {
       promises.push(promise);

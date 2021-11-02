@@ -6,6 +6,12 @@ import { Shell } from "./Shell";
 import { Helper } from "@iiif/manifold";
 import { MetricType } from "./Metric";
 
+export type ExtensionLoader = { name: string; loader: () => Promise<any> }
+
+export type LocaleRegistry = {
+  [key: string]: any
+};
+
 export interface IExtension {
   $element: JQuery;
   addTimestamp(uri: string): string;
@@ -14,6 +20,7 @@ export interface IExtension {
   create(): void;
   createModules(): void;
   data: IUVData;
+  defaultConfig: any;
   exitFullScreen(): void;
   fire(name: string, ...args: any[]): void;
   getAlternateLocale(): ILocale | null;
@@ -47,10 +54,11 @@ export interface IExtension {
   isSeeAlsoEnabled(): boolean;
   isMobileMetric(): boolean;
   lastCanvasIndex: number;
+  locales: LocaleRegistry;
   metric: MetricType;
   mouseX: number;
   mouseY: number;
-  name: string;
+  type: ExtensionLoader;
   redirect(uri: string): void;
   refresh(): void;
   reload(data?: IUVData): void;

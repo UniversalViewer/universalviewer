@@ -15,7 +15,7 @@ const config = [
     mode: "production",
     output: {
       path: resolvePath("dist/uv-dist-umd"),
-      publicPath: "/uv-dist-umd/",
+      publicPath: "auto",
       libraryTarget: "umd",
       library: "UV",
       umdNamedDefine: true,
