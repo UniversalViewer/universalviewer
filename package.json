@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.0.0-pre.59",
+  "version": "4.0.0-pre.62",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=14.18.1",
@@ -10,12 +10,15 @@
     "dist/",
     "webpack-helpers.js"
   ],
-  "main": "dist/uv-dist-umd/UV.js",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/cjs/index.d.ts",
+  "web": "dist/umd/UV.js",
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
     "lint": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build": "webpack -c webpack.config.js",
+    "build-tsc": "tsc --skipLibCheck --outDir ./dist/cjs -p . ",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },

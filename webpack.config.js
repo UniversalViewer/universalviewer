@@ -14,7 +14,7 @@ const config = [
     },
     mode: "production",
     output: {
-      path: resolvePath("dist/uv-dist-umd"),
+      path: resolvePath("dist/umd"),
       publicPath: "auto",
       libraryTarget: "umd",
       library: "UV",
@@ -88,7 +88,7 @@ const config = [
             from: resolvePath("./src/index.html"),
             to: resolvePath("./dist"),
             transform(content) {
-              return Promise.resolve(Buffer.from(content.toString().replace('<%= htmlWebpackPlugin.tags.headTags %>', '<script type="text/javascript" src="uv-dist-umd/UV.js"></script>'), 'utf8'))
+              return Promise.resolve(Buffer.from(content.toString().replace('<%= htmlWebpackPlugin.tags.headTags %>', '<script type="text/javascript" src="umd/UV.js"></script>'), 'utf8'))
             },
           },
           {

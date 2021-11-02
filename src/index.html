@@ -169,20 +169,18 @@
         };
 
         function setupUV() {
-          var collectionIndex = urlAdaptor.get("c");
-
           var data = {
             manifestUri: manifest,
             collectionIndex:
-              collectionIndex !== undefined
-                ? Number(collectionIndex)
+              urlAdaptor.get("c") !== undefined
+                ? Number(urlAdaptor.get("c"))
                 : undefined,
             manifestIndex: Number(urlAdaptor.get("m", 0)),
             canvasIndex: Number(urlAdaptor.get("cv", 0)),
             rotation: Number(urlAdaptor.get("r", 0)),
             rangeId: urlAdaptor.get("rid", ""),
             xywh: urlAdaptor.get("xywh", ""),
-            target: urlAdaptor.get("target", "")
+            target: urlAdaptor.get("target", ""),
           };
 
           uv = UV.init("uv", data);
@@ -194,11 +192,13 @@
           });
 
           uv.on("configure", function({ config, cb }) {
-            cb(new Promise(function(resolve) {
-              fetch("uv-config.json").then(function(response) {
-                resolve(response.json());
-              });
-            }));
+            cb(
+              new Promise(function(resolve) {
+                fetch("uv-config.json").then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
           });
 
           // uv.on("configure", function({ config, cb }) {
@@ -208,7 +208,7 @@
           // });
 
           // uv.on("configure", function({ config, cb }) {
-          //   cb({ options: { headerPanelEnabled: false } });  
+          //   cb({ options: { headerPanelEnabled: false } });
           // });
 
           uv.on(
