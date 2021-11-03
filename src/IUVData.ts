@@ -9,7 +9,7 @@ export interface IUVData {
   isReload?: boolean;
   locales?: ILocale[];
   manifestIndex?: number;
-  manifestUri?: string;
+  manifest?: string;
   rangeId?: string;
   target?: string;
 }

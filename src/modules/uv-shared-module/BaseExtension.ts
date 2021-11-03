@@ -169,7 +169,7 @@ export class BaseExtension implements IExtension {
           if (manifestUri) {
             this.fire(BaseEvents.DROP, manifestUri);
             const data: IUVData = <IUVData>{};
-            data.manifestUri = manifestUri;
+            data.manifest = manifestUri;
             this.reload(data);
           }
         });
@@ -758,7 +758,7 @@ export class BaseExtension implements IExtension {
       !this.isCreated ||
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
-      if (this.data.manifestUri !== undefined) {
+      if (this.data.manifest !== undefined) {
         this.component.publish(
           BaseEvents.MANIFEST_INDEX_CHANGE,
           this.data.manifestIndex
@@ -1191,7 +1191,7 @@ export class BaseExtension implements IExtension {
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData = <IUVData>{};
-    data.manifestUri = this.helper.manifestUri;
+    data.manifest = this.helper.manifestUri;
     data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
     data.manifestIndex = <number>manifest.index;
     data.canvasIndex = 0;
@@ -1203,7 +1203,7 @@ export class BaseExtension implements IExtension {
   viewCollection(collection: Collection): void {
     const data: IUVData = <IUVData>{};
     //data.manifestUri = this.helper.manifestUri;
-    data.manifestUri = collection.parentCollection
+    data.manifest = collection.parentCollection
       ? collection.parentCollection.id
       : this.helper.manifestUri;
     data.collectionIndex = collection.index;

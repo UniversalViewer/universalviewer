@@ -149,7 +149,7 @@
         $setManifestButton.onclick = function() {
           manifest = $manifest.value;
           uv.set({
-            manifestUri: manifest,
+            manifest: manifest,
             canvasIndex: 0,
           });
         };
@@ -169,27 +169,12 @@
         };
 
         function setupUV() {
-          var data = {
-            manifestUri: manifest,
-            collectionIndex:
-              urlAdaptor.get("c") !== undefined
-                ? Number(urlAdaptor.get("c"))
-                : undefined,
-            manifestIndex: Number(urlAdaptor.get("m", 0)),
-            canvasIndex: Number(urlAdaptor.get("cv", 0)),
-            rotation: Number(urlAdaptor.get("r", 0)),
-            rangeId: urlAdaptor.get("rid", ""),
-            xywh: urlAdaptor.get("xywh", ""),
-            target: urlAdaptor.get("target", ""),
-          };
+          const data = urlAdaptor.getInitialData({
+            manifest: manifest
+          });
 
           uv = UV.init("uv", data);
-
-          uv.on("load", function() {
-            // uv.set({
-            //   target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
-            // });
-          });
+          urlAdaptor.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
             cb(
@@ -211,50 +196,23 @@
           //   cb({ options: { headerPanelEnabled: false } });
           // });
 
-          uv.on(
-            "collectionIndexChange",
-            function(collectionIndex) {
-              urlAdaptor.set("c", collectionIndex);
-            },
-            false
-          );
-
-          uv.on(
-            "manifestIndexChange",
-            function(manifestIndex) {
-              urlAdaptor.set("m", manifestIndex);
-            },
-            false
-          );
-
-          uv.on(
-            "canvasIndexChange",
-            function(canvasIndex) {
-              urlAdaptor.set("cv", canvasIndex);
-            },
-            false
-          );
-
-          uv.on(
-            "rangeChange",
-            function(rangeId) {
-              urlAdaptor.set("rid", rangeId);
-            },
-            false
-          );
-
           uv.on("targetChange", function(target) {
             $target.value = target;
-            urlAdaptor.set("xywh", urlAdaptor.getFragment("xywh", target));
           });
 
-          uv.on("openseadragonExtension.rotationChange", function(rotation) {
-            $rotation.value = rotation;
-          });
+          // uv.on("load", function() {
+          //   uv.set({
+          //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+          //   });
+          // });
 
-          uv.on("toggleFullScreen", function(e) {
-            // console.log("toggleFullScreen", e);
-          });
+          // uv.on("openseadragonExtension.rotationChange", function(rotation) {
+          //   $rotation.value = rotation;
+          // });
+
+          // uv.on("toggleFullScreen", function(e) {
+          //   console.log("toggleFullScreen", e);
+          // });
         }
 
         loadManifests(function() {

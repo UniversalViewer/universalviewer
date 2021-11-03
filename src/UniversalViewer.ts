@@ -110,7 +110,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
       embedded: false,
       isReload: false,
       limitLocales: false,
-      manifestUri: "",
+      manifest: "",
       locales: [
         {
           name: "en-GB",
@@ -126,8 +126,8 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
 
     // if this is the first set
     if (!this.extension) {
-      if (!data.manifestUri) {
-        console.warn(`manifestUri is required.`);
+      if (!data.manifest) {
+        console.warn(`manifest is required.`);
         return;
       }
 
@@ -137,7 +137,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
       const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
         newData.isReload ||
-        newData.manifestUri !== this.extension.data.manifestUri ||
+        newData.manifest !== this.extension.data.manifest ||
         newData.manifestIndex !== this.extension.data.manifestIndex ||
         newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
@@ -183,7 +183,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     const that = this;
 
     const helper: Helper = await loadManifest({
-      manifestUri: data.manifestUri,
+      manifestUri: data.manifest,
       collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
       manifestIndex: data.manifestIndex || 0,
       canvasIndex: data.canvasIndex || 0,
