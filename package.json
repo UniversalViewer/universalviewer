@@ -11,6 +11,7 @@
     "webpack-helpers.js"
   ],
   "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "typings": "dist/cjs/index.d.ts",
   "web": "dist/umd/UV.js",
   "scripts": {
@@ -18,9 +19,11 @@
     "lint": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build": "webpack -c webpack.config.js",
-    "build-tsc": "tsc --skipLibCheck --outDir ./dist/cjs -p . ",
+    "build-es": "node ./esbuild.mjs",
+    "build-tsc": "tsc --skipLibCheck --module CommonJS --esModuleInterop --declarationDir ./dist/cjs --declaration --outDir ./dist/cjs -p . && npm run copy-files",
+    "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
     "test": "jest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es"
   },
   "repository": {
     "type": "git",
@@ -89,8 +92,14 @@
     "@universalviewer/aleph": "0.0.15",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
+    "clean-css": "^5.2.2",
+    "copyfiles": "^2.4.1",
+    "esbuild": "^0.13.12",
+    "esbuild-plugin-less": "^1.1.5",
+    "esbuild-plugin-svg": "^0.1.0",
     "jquery": "3.5.0",
     "jsviews": "0.9.83",
+    "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "4.2.4",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "2.5.1",
