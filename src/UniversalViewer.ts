@@ -43,6 +43,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
   public adaptor: IUVAdaptor;
+  public disposed = false;
 
   constructor(options: IBaseComponentOptions) {
     super(options);
@@ -161,8 +162,19 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     this._pubsub.publish(event, args);
   }
 
-  public subscribe(event: string, cb: any): void {
+  public subscribe(event: string, cb: any) {
     this._pubsub.subscribe(event, cb);
+
+    return () => {
+      this._pubsub.unsubscribe(event, cb);
+    }
+  }
+
+  public dispose() {
+    this._pubsub.dispose();
+    this.disposed = true;
+    const $elem: JQuery = $(this.options.target);
+    $elem.empty();
   }
 
   private async _reload(data: IUVData): Promise<void> {
@@ -318,6 +330,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
       this.extension.data = data;
       this.extension.helper = helper;
       this.extension.create();
+      this.el.classList.add(extension.name)
     }
   }
 
@@ -328,7 +341,7 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
   }
 
   public resize(): void {
-    if (this.extension) {
+    if (this.extension && !this.disposed) {
       this.extension.resize();
     }
   }
