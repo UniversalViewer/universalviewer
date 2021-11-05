@@ -60,7 +60,8 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b17502792/manifest",
           "@type": "sc:Manifest",
-          "label": "A Review of Science Communication and Public Attitudes to Science in Britain (PDF)"
+          "label": "A Review of Science Communication and Public Attitudes to Science in Britain (PDF)",
+          "visible": true
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b17564980/manifest",
@@ -778,7 +779,7 @@
           "@id": "https://edsilv.github.io/test-manifests/pres3-pdf.json",
           "@type": "sc:Manifest",
           "label": "Presentation 3 PDF",
-          "visible": true
+          "visible": false
         },
         {
           "@id": "https://purl.stanford.edu/bh502xm3351/iiif3/manifest",

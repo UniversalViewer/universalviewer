@@ -443,10 +443,10 @@ export class BaseExtension implements IExtension {
   }
 
   public async loadConfig(locale: string): Promise<any> {
-    let config = this.locales[locale] || this.defaultConfig;
-    if (config !== this.defaultConfig) {
-      config = await config();
-    }
+    let config = this.locales[locale]; // || this.defaultConfig;
+    // if (config !== this.defaultConfig) {
+    //   config = await config();
+    // }
     if (!config) {
       throw new Error("Unable to load config");
     }
