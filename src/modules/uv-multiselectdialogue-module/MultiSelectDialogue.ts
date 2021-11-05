@@ -27,14 +27,14 @@ export class MultiSelectDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_MULTISELECT_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_MULTISELECT_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, () => {
+    this.extensionHost.subscribe(this.openCommand, () => {
       this.open();
       const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(true);
       this.galleryComponent.set(this.data);
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
       const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(false);
@@ -76,7 +76,7 @@ export class MultiSelectDialogue extends Dialogue {
     this.galleryComponent.on(
       "multiSelectionMade",
       (ids: string[]) => {
-        this.component.publish(BaseEvents.MULTISELECTION_MADE, ids);
+        this.extensionHost.publish(BaseEvents.MULTISELECTION_MADE, ids);
         that.close();
       },
       false

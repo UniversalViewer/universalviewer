@@ -36,8 +36,8 @@ export class InformationFactory {
 
         loginAction.action = () => {
           resource.authHoldingPage = window.open("", "_blank");
-          this.extension.component.publish(BaseEvents.HIDE_INFORMATION);
-          this.extension.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [
+          this.extension.extensionHost.publish(BaseEvents.HIDE_INFORMATION);
+          this.extension.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [
             [resource]
           ]);
         };

@@ -24,7 +24,7 @@ export class FileLinkCenterPanel extends CenterPanel {
 
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.openMedia(resources);
@@ -105,8 +105,8 @@ export class FileLinkCenterPanel extends CenterPanel {
       this.$downloadItems.append($item);
     }
 
-    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.component.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(BaseEvents.LOAD);
   }
 
   resize() {

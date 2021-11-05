@@ -94,7 +94,7 @@ export class BaseExpandPanel extends BaseView {
     this.$main.hide();
 
     // Subscribe to settings change.
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
+    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
       this.reducedAnimation = args.reducedAnimation || false;
     });
   }

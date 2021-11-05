@@ -23,11 +23,11 @@ export class Shell extends BaseView {
   create(): void {
     super.create();
 
-    this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+    this.extensionHost.subscribe(BaseEvents.SHOW_OVERLAY, () => {
       this.$overlays.show();
     });
 
-    this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+    this.extensionHost.subscribe(BaseEvents.HIDE_OVERLAY, () => {
       this.$overlays.hide();
     });
 
@@ -76,7 +76,7 @@ export class Shell extends BaseView {
     this.$overlays.on("click", e => {
       if ($(e.target).hasClass("overlays")) {
         e.preventDefault();
-        this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+        this.extensionHost.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
       }
     });
 

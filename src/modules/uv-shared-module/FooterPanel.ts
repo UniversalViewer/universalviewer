@@ -23,23 +23,23 @@ export class FooterPanel extends BaseView {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
       this.updateFullScreenButton();
 
       // hack for firefox when exiting full screen
-      if (!this.component.isFullScreen) {
+      if (!this.extensionHost.isFullScreen) {
         setTimeout(() => {
           this.resize();
         }, 1001); // wait one ms longer than the resize timeout in uv-helpers.js
       }
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.updateMinimisedButtons();
       this.updateMoreInfoButton();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.updateDownloadButton();
     });
 
@@ -111,34 +111,34 @@ export class FooterPanel extends BaseView {
     this.$options.append(this.$fullScreenBtn);
 
     this.$openButton.onPressed(() => {
-      this.component.publish(BaseEvents.OPEN);
+      this.extensionHost.publish(BaseEvents.OPEN);
     });
 
     this.$feedbackButton.onPressed(() => {
-      this.component.publish(BaseEvents.FEEDBACK);
+      this.extensionHost.publish(BaseEvents.FEEDBACK);
     });
 
     this.$bookmarkButton.onPressed(() => {
-      this.component.publish(BaseEvents.BOOKMARK);
+      this.extensionHost.publish(BaseEvents.BOOKMARK);
     });
 
     this.$shareButton.onPressed(() => {
-      this.component.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
+      this.extensionHost.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
     });
 
     this.$embedButton.onPressed(() => {
-      this.component.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
+      this.extensionHost.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
     });
 
     this.$downloadButton.onPressed(() => {
-      this.component.publish(
+      this.extensionHost.publish(
         BaseEvents.SHOW_DOWNLOAD_DIALOGUE,
         this.$downloadButton
       );
     });
 
     this.$moreInfoButton.onPressed(() => {
-      this.component.publish(
+      this.extensionHost.publish(
         BaseEvents.SHOW_MOREINFO_DIALOGUE,
         this.$moreInfoButton
       );
@@ -148,7 +148,7 @@ export class FooterPanel extends BaseView {
       this.$fullScreenBtn,
       e => {
         e.preventDefault();
-        this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       },
       true
     );

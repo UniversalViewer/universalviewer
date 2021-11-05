@@ -64,16 +64,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
     this.$content.prepend(this.$viewer);
 
-    this.component.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
       this.zoomToInitialAnnotation();
     });
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
+    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
       this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.whenResized(async () => {
@@ -84,63 +84,63 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           this.isLoaded = false;
           await this.openMedia(resources);
           this.isLoaded = true;
-          this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-          this.component.publish(BaseEvents.LOAD);
+          this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+          this.extensionHost.publish(BaseEvents.LOAD);
         });
       }
     );
 
-    this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+    this.extensionHost.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
       this.whenCreated(() => {
         (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
         this.clearAnnotations();
       });
     });
 
-    this.component.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+    this.extensionHost.subscribe(Events.NEXT_SEARCH_RESULT, () => {
       this.whenCreated(() => {
         this.nextAnnotation();
       });
     });
 
-    this.component.subscribe(Events.PREV_SEARCH_RESULT, () => {
+    this.extensionHost.subscribe(Events.PREV_SEARCH_RESULT, () => {
       this.whenCreated(() => {
         this.prevAnnotation();
       });
     });
 
-    this.component.subscribe(Events.ZOOM_IN, () => {
+    this.extensionHost.subscribe(Events.ZOOM_IN, () => {
       this.whenCreated(() => {
         this.zoomIn();
       });
     });
 
-    this.component.subscribe(Events.ZOOM_OUT, () => {
+    this.extensionHost.subscribe(Events.ZOOM_OUT, () => {
       this.whenCreated(() => {
         this.zoomOut();
       });
     });
 
-    this.component.subscribe(Events.ROTATE, () => {
+    this.extensionHost.subscribe(Events.ROTATE, () => {
       this.whenCreated(() => {
         this.rotateRight();
       });
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this.whenCreated(() => {
         this.updateResponsiveView();
       });
     });
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: XYWHFragment) => {
+    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: XYWHFragment) => {
       this.whenLoaded(() => {
         this.fitToBounds(target, false);
       });
     });
 
     // todo
-    this.component.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
+    this.extensionHost.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
       this.whenLoaded(() => {
         this.viewer.viewport.setRotation(rotation);
       });
@@ -364,16 +364,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     //});
 
     this.viewer.addHandler("resize", (viewer: any) => {
-      this.component.publish(Events.OPENSEADRAGON_RESIZE, viewer);
+      this.extensionHost.publish(Events.OPENSEADRAGON_RESIZE, viewer);
       this.viewerResize(viewer);
     });
 
     this.viewer.addHandler("animation-start", (viewer: any) => {
-      this.component.publish(Events.OPENSEADRAGON_ANIMATION_START, viewer);
+      this.extensionHost.publish(Events.OPENSEADRAGON_ANIMATION_START, viewer);
     });
 
     this.viewer.addHandler("animation", (viewer: any) => {
-      this.component.publish(Events.OPENSEADRAGON_ANIMATION, viewer);
+      this.extensionHost.publish(Events.OPENSEADRAGON_ANIMATION, viewer);
     });
 
     this.viewer.addHandler("animation-finish", (viewer: any) => {
@@ -381,12 +381,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
       this.updateVisibleAnnotationRects();
 
-      this.component.publish(Events.OPENSEADRAGON_ANIMATION_FINISH, viewer);
+      this.extensionHost.publish(Events.OPENSEADRAGON_ANIMATION_FINISH, viewer);
     });
 
     this.viewer.addHandler("rotate", (args: any) => {
       // console.log("rotate");
-      this.component.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
+      this.extensionHost.publish(Events.OPENSEADRAGON_ROTATION, args.degrees);
     });
 
     this.title = this.extension.helper.getLabel();
@@ -447,10 +447,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.component.publish(BaseEvents.PREV);
+          this.extensionHost.publish(BaseEvents.PREV);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(BaseEvents.NEXT);
           break;
       }
     });
@@ -465,10 +465,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.component.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(BaseEvents.NEXT);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.PREV);
+          this.extensionHost.publish(BaseEvents.PREV);
           break;
       }
     });
@@ -611,7 +611,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   openPagesHandler(): void {
-    this.component.publish(Events.OPENSEADRAGON_OPEN);
+    this.extensionHost.publish(Events.OPENSEADRAGON_OPEN);
 
     if (
       this.extension.helper.isMultiCanvas() &&
@@ -940,7 +940,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         (this
           .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
+        this.extensionHost.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
@@ -948,7 +948,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       }
     } else {
       this.navigatedFromSearch = true;
-      this.component.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+      this.extensionHost.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
     }
   }
 
@@ -987,7 +987,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         (this
           .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
-        this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
+        this.extensionHost.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect
         ]);
       } else {
@@ -995,7 +995,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       }
     } else {
       this.navigatedFromSearch = true;
-      this.component.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+      this.extensionHost.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
     }
   }
 
@@ -1072,7 +1072,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     this.highlightAnnotationRect(annotationRect);
 
-    this.component.publish(BaseEvents.ANNOTATION_CHANGE);
+    this.extensionHost.publish(BaseEvents.ANNOTATION_CHANGE);
   }
 
   highlightAnnotationRect(annotationRect: AnnotationRect): void {

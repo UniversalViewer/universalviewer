@@ -22,13 +22,13 @@ export class ClickThroughDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_CLICKTHROUGH_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, (params: any) => {
+    this.extensionHost.subscribe(this.openCommand, (params: any) => {
       this.acceptCallback = params.acceptCallback;
       this.resource = params.resource;
       this.open();
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
     });
 
@@ -56,7 +56,7 @@ export class ClickThroughDialogue extends Dialogue {
     this.$acceptTermsButton.on("click", e => {
       e.preventDefault();
       this.close();
-      this.component.publish(BaseEvents.ACCEPT_TERMS);
+      this.extensionHost.publish(BaseEvents.ACCEPT_TERMS);
       if (this.acceptCallback) this.acceptCallback();
     });
   }

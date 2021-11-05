@@ -136,25 +136,25 @@ export class ResourcesLeftPanel extends LeftPanel {
 
   expandFullStart(): void {
     super.expandFullStart();
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
   }
 
   expandFullFinish(): void {
     super.expandFullFinish();
 
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
   }
 
   collapseFullStart(): void {
     super.collapseFullStart();
 
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
   }
 
   collapseFullFinish(): void {
     super.collapseFullFinish();
 
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
   }
 
   resize(): void {

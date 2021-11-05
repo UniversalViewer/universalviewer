@@ -59,15 +59,15 @@ export class ContentLeftPanel extends LeftPanel {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.databind();
     });
 
-    this.component.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+    this.extensionHost.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
       this.collapseFull();
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
       if (!this.extension.isDesktopMetric()) {
         if (this.isFullyExpanded) {
           this.collapseFull();
@@ -75,22 +75,22 @@ export class ContentLeftPanel extends LeftPanel {
       }
     });
 
-    this.component.subscribe(BaseEvents.ANNOTATIONS, () => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.component.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }
@@ -99,7 +99,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.updateTreeTabBySelection();
     });
 
-    this.component.subscribe(BaseEvents.RANGE_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }
@@ -589,7 +589,7 @@ export class ContentLeftPanel extends LeftPanel {
 
   expandFullStart(): void {
     super.expandFullStart();
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
   }
 
   expandFullFinish(): void {
@@ -601,13 +601,13 @@ export class ContentLeftPanel extends LeftPanel {
       this.openThumbsView();
     }
 
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
   }
 
   collapseFullStart(): void {
     super.collapseFullStart();
 
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
   }
 
   collapseFullFinish(): void {
@@ -620,7 +620,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.openThumbsView();
     }
 
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
   }
 
   openTreeView(): void {
@@ -646,7 +646,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.resize();
     this.treeView.resize();
 
-    this.component.publish(BaseEvents.OPEN_TREE_VIEW);
+    this.extensionHost.publish(BaseEvents.OPEN_TREE_VIEW);
   }
 
   openThumbsView(): void {
@@ -681,7 +681,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.thumbsView.resize();
     }
 
-    this.component.publish(BaseEvents.OPEN_THUMBS_VIEW);
+    this.extensionHost.publish(BaseEvents.OPEN_THUMBS_VIEW);
   }
 
   selectTopRangeIndex(index: number): void {

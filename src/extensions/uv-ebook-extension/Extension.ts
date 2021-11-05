@@ -47,14 +47,14 @@ export default class Extension extends BaseExtension
   create(): void {
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
+    this.extensionHost.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
       this.cfiFragement = cfi;
       this.fire(Events.CFI_FRAGMENT_CHANGE, this.cfiFragement);
     });
@@ -158,7 +158,7 @@ export default class Extension extends BaseExtension
     const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
 
     if (cfi) {
-      this.component.publish(Events.CFI_FRAGMENT_CHANGE, cfi);
+      this.extensionHost.publish(Events.CFI_FRAGMENT_CHANGE, cfi);
     }
   }
 }

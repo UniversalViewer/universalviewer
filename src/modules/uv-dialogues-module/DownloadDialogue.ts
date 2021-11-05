@@ -42,12 +42,12 @@ export class DownloadDialogue extends Dialogue {
     this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
     let lastButton: HTMLElement;
-    this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+    this.extensionHost.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
       lastButton = triggerButton;
       this.open(triggerButton);
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       if (lastButton) {
         lastButton.focus();
       }
@@ -77,7 +77,7 @@ export class DownloadDialogue extends Dialogue {
     this.$footer.append(this.$termsOfUseButton);
 
     this.$termsOfUseButton.onPressed(() => {
-      this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
+      this.extensionHost.publish(BaseEvents.SHOW_TERMS_OF_USE);
     });
 
     // hide

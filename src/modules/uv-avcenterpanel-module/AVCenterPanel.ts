@@ -33,14 +33,14 @@ export class AVCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         if (this._lastCanvasIndex !== canvasIndex) {
@@ -49,7 +49,7 @@ export class AVCenterPanel extends CenterPanel {
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CURRENT_TIME_CHANGE,
       (currentTime: number) => {
         this._whenMediaReady(() => {
@@ -60,7 +60,7 @@ export class AVCenterPanel extends CenterPanel {
       }
     );
 
-    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
       if (!this._observeRangeChanges()) {
         return;
       }
@@ -71,7 +71,7 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
@@ -82,11 +82,11 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.CREATED, () => {
+    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
       this._setTitle();
     });
 
-    this.component.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
       this._isThumbsViewOpen = true;
 
       this._whenMediaReady(() => {
@@ -104,7 +104,7 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
       this._isThumbsViewOpen = false;
 
       this._whenMediaReady(() => {
@@ -116,11 +116,11 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
       this.resize();
     });
 
-    this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
       this.resize();
     });
 
@@ -160,7 +160,7 @@ export class AVCenterPanel extends CenterPanel {
     );
 
     this.avcomponent.on("pause", () => {
-      this.component.publish(
+      this.extensionHost.publish(
         BaseEvents.PAUSE,
         this.avcomponent.getCurrentTime()
       );
@@ -178,13 +178,13 @@ export class AVCenterPanel extends CenterPanel {
             const currentRange: Range | null = this.extension.helper.getCurrentRange();
 
             if (range !== currentRange) {
-              this.component.publish(BaseEvents.RANGE_CHANGE, range);
+              this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
             }
           } else {
-            this.component.publish(BaseEvents.RANGE_CHANGE, null);
+            this.extensionHost.publish(BaseEvents.RANGE_CHANGE, null);
           }
         } else {
-          this.component.publish(BaseEvents.RANGE_CHANGE, null);
+          this.extensionHost.publish(BaseEvents.RANGE_CHANGE, null);
         }
 
         this._setTitle();
@@ -307,6 +307,8 @@ export class AVCenterPanel extends CenterPanel {
         // this.avcomponent.on('waveformready', () => {
         //     this.resize();
         // }, false);
+
+        this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
         
       }
     });

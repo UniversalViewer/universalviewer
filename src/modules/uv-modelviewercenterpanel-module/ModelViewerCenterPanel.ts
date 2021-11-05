@@ -26,14 +26,14 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: Orbit) => {
+    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: Orbit) => {
       this.whenLoaded(() => {
         (that.$modelViewer[0] as any).cameraOrbit = target.toAttributeString();
       });
@@ -62,8 +62,8 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.isLoaded = true;
       this.$content.removeClass("loading");
       this.$spinner.hide();
-      this.component.publish(BaseEvents.LOAD);
-      this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
+      this.extensionHost.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
     });
 
     this.$modelViewer[0].addEventListener(
@@ -71,7 +71,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       debounce((obj: any) => {
         if (this.isLoaded) {
           //if (obj.detail.source === "user-interaction") {
-          this.component.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
+          this.extensionHost.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
           //}
         }
       }, this.config.options.cameraChangeDelay)
@@ -115,7 +115,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelViewer.attr("ios-src", mediaUri);
-    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
   }
 
   resize() {

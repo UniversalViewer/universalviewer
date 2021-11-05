@@ -22,15 +22,15 @@ export class MoreInfoDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+    this.extensionHost.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
       this.open(triggerButton);
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
     });
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       this.metadataComponent.set(this._getData());
     });
 

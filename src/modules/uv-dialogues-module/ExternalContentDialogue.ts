@@ -17,12 +17,12 @@ export class ExternalContentDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, (params: any) => {
+    this.extensionHost.subscribe(this.openCommand, (params: any) => {
       this.open();
       this.$iframe.prop("src", params.uri);
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
     });
 

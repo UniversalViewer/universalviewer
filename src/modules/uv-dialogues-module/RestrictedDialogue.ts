@@ -24,14 +24,14 @@ export class RestrictedDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_RESTRICTED_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_RESTRICTED_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, (e: any) => {
+    this.extensionHost.subscribe(this.openCommand, (e: any) => {
       this.acceptCallback = e.acceptCallback;
       this.options = e.options;
       this.resource = e.resource;
       this.open();
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
     });
 

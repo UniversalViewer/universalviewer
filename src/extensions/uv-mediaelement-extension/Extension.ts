@@ -57,48 +57,48 @@ export default class Extension extends BaseExtension
 
     // listen for mediaelement enter/exit fullscreen events.
     $(window).bind("enterfullscreen", () => {
-      this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
     });
 
     $(window).bind("exitfullscreen", () => {
-      this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    this.extensionHost.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
+      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.shell.$centerPanel.hide();
       this.shell.$rightPanel.hide();
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
       this.shell.$centerPanel.show();
       this.shell.$rightPanel.show();
       this.resize();
     });
 
-    this.component.subscribe(Events.MEDIA_ENDED, () => {
+    this.extensionHost.subscribe(Events.MEDIA_ENDED, () => {
       this.fire(Events.MEDIA_ENDED);
     });
 
-    this.component.subscribe(Events.MEDIA_PAUSED, () => {
+    this.extensionHost.subscribe(Events.MEDIA_PAUSED, () => {
       this.fire(Events.MEDIA_PAUSED);
     });
 
-    this.component.subscribe(Events.MEDIA_PLAYED, () => {
+    this.extensionHost.subscribe(Events.MEDIA_PLAYED, () => {
       this.fire(Events.MEDIA_PLAYED);
     });
 
-    this.component.subscribe(Events.MEDIA_TIME_UPDATE, (t: number) => {
+    this.extensionHost.subscribe(Events.MEDIA_TIME_UPDATE, (t: number) => {
       const canvas: Canvas = this.helper.getCurrentCanvas();
       if (canvas) {
         this.data.target = canvas.id + "#" + `t=${t}`;
@@ -181,12 +181,12 @@ export default class Extension extends BaseExtension
       const index: number | null = this.helper.getCanvasIndexById(canvasId);
 
       if (index !== null && this.helper.canvasIndex !== index) {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
       }
 
       // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
       const selector: string = components[1];
-      this.component.publish(
+      this.extensionHost.publish(
         BaseEvents.SET_TARGET,
         TFragment.fromString(selector)
       );

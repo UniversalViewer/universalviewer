@@ -16,7 +16,7 @@ export interface IExtension {
   $element: JQuery;
   addTimestamp(uri: string): string;
   changeLocale(locale: string): void;
-  component: IExtensionHost;
+  extensionHost: IExtensionHost;
   create(): void;
   createModules(): void;
   data: IUVData;

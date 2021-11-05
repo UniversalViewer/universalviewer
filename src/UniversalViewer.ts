@@ -334,7 +334,7 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
   ): void {
     this.extension = extension;
     if (this.extension) {
-      this.extension.component = this;
+      this.extension.extensionHost = this;
       this.extension.data = data;
       this.extension.helper = helper;
       this.extension.create();

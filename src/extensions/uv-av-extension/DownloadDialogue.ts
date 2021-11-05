@@ -73,7 +73,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         window.open(id);
       }
 
-      this.component.publish(BaseEvents.DOWNLOAD, {
+      this.extensionHost.publish(BaseEvents.DOWNLOAD, {
         type: type,
         label: label
       });

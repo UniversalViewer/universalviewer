@@ -42,15 +42,15 @@ export class FooterPanel extends BaseFooterPanel {
     this.$options.prepend(this.$zoomInButton);
 
     this.$zoomInButton.onPressed(() => {
-      this.component.publish(Events.ZOOM_IN);
+      this.extensionHost.publish(Events.ZOOM_IN);
     });
 
     this.$zoomOutButton.onPressed(() => {
-      this.component.publish(Events.ZOOM_OUT);
+      this.extensionHost.publish(Events.ZOOM_OUT);
     });
 
     this.$rotateButton.onPressed(() => {
-      this.component.publish(Events.ROTATE);
+      this.extensionHost.publish(Events.ROTATE);
     });
   }
 

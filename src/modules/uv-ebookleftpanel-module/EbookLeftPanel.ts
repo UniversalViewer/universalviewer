@@ -35,19 +35,19 @@ export class EbookLeftPanel extends LeftPanel {
 
     this.setTitle(this.content.title);
 
-    this.component.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
+    this.extensionHost.subscribe(Events.LOADED_NAVIGATION, (navigation: any) => {
       this.$main.removeClass("disabled");
       this._ebookTOC.toc = navigation.toc;
     });
 
-    this.component.subscribe(Events.RELOCATED, (location: any) => {
+    this.extensionHost.subscribe(Events.RELOCATED, (location: any) => {
       this._ebookTOC.selected = location.start.href;
     });
 
     this._ebookTOC.addEventListener(
       "itemClicked",
       (e: any) => {
-        this.component.publish(Events.ITEM_CLICKED, e.detail);
+        this.extensionHost.publish(Events.ITEM_CLICKED, e.detail);
       },
       false
     );
@@ -58,7 +58,7 @@ export class EbookLeftPanel extends LeftPanel {
       },
       () => {
         customElements.whenDefined("uv-ebook-toc").then(() => {
-          this.component.publish(Events.TOC_READY);
+          this.extensionHost.publish(Events.TOC_READY);
         });
       }
     );
@@ -66,22 +66,22 @@ export class EbookLeftPanel extends LeftPanel {
 
   expandFullStart(): void {
     super.expandFullStart();
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
   }
 
   expandFullFinish(): void {
     super.expandFullFinish();
-    this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
   }
 
   collapseFullStart(): void {
     super.collapseFullStart();
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
   }
 
   collapseFullFinish(): void {
     super.collapseFullFinish();
-    this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
   }
 
   resize(): void {

@@ -30,12 +30,12 @@ export class SettingsDialogue extends Dialogue {
     this.closeCommand = BaseEvents.HIDE_SETTINGS_DIALOGUE;
 
     let lastElement: HTMLElement;
-    this.component.subscribe(this.openCommand, (element: HTMLElement) => {
+    this.extensionHost.subscribe(this.openCommand, (element: HTMLElement) => {
       lastElement = element;
       this.open();
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       if (lastElement) {
         lastElement.focus();
       }
@@ -85,7 +85,7 @@ export class SettingsDialogue extends Dialogue {
   updateSettings(settings: ISettings): void {
     this.extension.updateSettings(settings);
 
-    this.component.publish(BaseEvents.UPDATE_SETTINGS, settings);
+    this.extensionHost.publish(BaseEvents.UPDATE_SETTINGS, settings);
   }
 
   open(): void {

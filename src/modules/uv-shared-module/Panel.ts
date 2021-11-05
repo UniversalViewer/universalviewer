@@ -3,7 +3,7 @@ import { IExtensionHost } from "../../IExtensionHost";
 import { Async } from "@edsilv/utils";
 
 export class Panel {
-  component: IExtensionHost;
+  extensionHost: IExtensionHost;
   $element: JQuery;
   fitToParentWidth: boolean;
   fitToParentHeight: boolean;
@@ -22,7 +22,7 @@ export class Panel {
   }
 
   create(): void {
-    this.component.subscribe(BaseEvents.RESIZE, () => {
+    this.extensionHost.subscribe(BaseEvents.RESIZE, () => {
       this.resize();
     });
   }

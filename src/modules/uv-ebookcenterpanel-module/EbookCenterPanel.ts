@@ -44,7 +44,7 @@ export class EbookCenterPanel extends CenterPanel {
     this._ebookReader.addEventListener(
       "loadedNavigation",
       (e: any) => {
-        this.component.publish(Events.LOADED_NAVIGATION, e.detail);
+        this.extensionHost.publish(Events.LOADED_NAVIGATION, e.detail);
       },
       false
     );
@@ -52,9 +52,9 @@ export class EbookCenterPanel extends CenterPanel {
     this._ebookReader.addEventListener(
       "relocated",
       (e: any) => {
-        this.component.publish(Events.RELOCATED, e.detail);
+        this.extensionHost.publish(Events.RELOCATED, e.detail);
         this._cfi = e.detail.start.cfi;
-        this.component.publish(Events.CFI_FRAGMENT_CHANGE, this._cfi);
+        this.extensionHost.publish(Events.CFI_FRAGMENT_CHANGE, this._cfi);
       },
       false
     );
@@ -72,20 +72,20 @@ export class EbookCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
-    this.component.subscribe(Events.ITEM_CLICKED, (href: string) => {
+    this.extensionHost.subscribe(Events.ITEM_CLICKED, (href: string) => {
       this._nextState({
         cfi: href
       });
     });
 
-    this.component.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
+    this.extensionHost.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
       Async.waitFor(
         () => {
           return this._ebookReaderReady;
@@ -121,8 +121,8 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.component.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(BaseEvents.LOAD);
     });
   }
 

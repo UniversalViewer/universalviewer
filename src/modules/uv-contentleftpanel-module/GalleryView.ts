@@ -31,8 +31,8 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "thumbSelected",
       function(thumb: any) {
-        that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
-        that.component.publish(BaseEvents.THUMB_SELECTED, thumb);
+        that.extensionHost.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
+        that.extensionHost.publish(BaseEvents.THUMB_SELECTED, thumb);
       },
       false
     );
@@ -40,7 +40,7 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "decreaseSize",
       function() {
-        that.component.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+        that.extensionHost.publish(BaseEvents.GALLERY_DECREASE_SIZE);
       },
       false
     );
@@ -48,7 +48,7 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "increaseSize",
       function() {
-        that.component.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+        that.extensionHost.publish(BaseEvents.GALLERY_INCREASE_SIZE);
       },
       false
     );

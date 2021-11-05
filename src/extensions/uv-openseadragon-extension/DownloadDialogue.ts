@@ -191,7 +191,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return !this.isActive;
               },
               () => {
-                this.component.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
+                this.extensionHost.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
               }
             );
             break;
@@ -226,7 +226,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
       }
 
-      this.component.publish(BaseEvents.DOWNLOAD, {
+      this.extensionHost.publish(BaseEvents.DOWNLOAD, {
         type: type,
         label: label
       });
@@ -235,8 +235,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     });
 
     this.$settingsButton.onPressed(() => {
-      this.component.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
-      this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+      this.extensionHost.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
+      this.extensionHost.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
     });
   }
 

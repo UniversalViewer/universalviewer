@@ -22,11 +22,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       this.databind();
     });
 
-    this.component.subscribe(BaseEvents.RANGE_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, () => {
       this.databind();
     });
 
@@ -55,7 +55,7 @@ export class MoreInfoRightPanel extends RightPanel {
           );
 
           if (range) {
-            this.component.publish(BaseEvents.RANGE_CHANGE, range);
+            this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
           }
         }
       },

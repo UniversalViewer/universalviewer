@@ -52,7 +52,7 @@ export class ShareDialogue extends Dialogue {
     this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
 
     let lastElement: HTMLElement;
-    this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+    this.extensionHost.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
       lastElement = triggerButton;
       this.open(triggerButton);
 
@@ -63,14 +63,14 @@ export class ShareDialogue extends Dialogue {
       }
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       if (lastElement) {
         lastElement.focus();
       }
       this.close();
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.SHOW_EMBED_DIALOGUE,
       (triggerButton: HTMLElement) => {
         this.open(triggerButton);
@@ -230,7 +230,7 @@ export class ShareDialogue extends Dialogue {
     });
 
     this.onAccessibleClick(this.$termsOfUseButton, () => {
-      this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
+      this.extensionHost.publish(BaseEvents.SHOW_TERMS_OF_USE);
     });
 
     this.$element.hide();

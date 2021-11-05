@@ -29,7 +29,7 @@ export class Dialogue extends BaseView {
     super.create();
 
     // events.
-    this.component.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+    this.extensionHost.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       if (this.isActive) {
         if (this.allowClose) {
           this.close();
@@ -37,7 +37,7 @@ export class Dialogue extends BaseView {
       }
     });
 
-    this.component.subscribe(BaseEvents.ESCAPE, () => {
+    this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
       if (this.isActive) {
         if (this.allowClose) {
           this.close();
@@ -165,7 +165,7 @@ export class Dialogue extends BaseView {
       }
     }, 1);
 
-    this.component.publish(BaseEvents.SHOW_OVERLAY);
+    this.extensionHost.publish(BaseEvents.SHOW_OVERLAY);
 
     if (this.isUnopened) {
       this.isUnopened = false;
@@ -183,8 +183,8 @@ export class Dialogue extends BaseView {
     this.$element.hide();
     this.isActive = false;
 
-    this.component.publish(this.closeCommand);
-    this.component.publish(BaseEvents.HIDE_OVERLAY);
+    this.extensionHost.publish(this.closeCommand);
+    this.extensionHost.publish(BaseEvents.HIDE_OVERLAY);
   }
 
   resize(): void {

@@ -48,27 +48,27 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.canvasIndexChanged(canvasIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
       this.modeChanged();
       this.updatePagingToggle();
     });
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
       this.setSearchFieldValue(this.extension.helper.canvasIndex);
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.openGallery();
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
       this.closeGallery();
     });
 
@@ -200,7 +200,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
       this.$imageSelectionBox.change(() => {
         const imageIndex: number = parseInt(this.$imageSelectionBox.val());
-        this.component.publish(Events.IMAGE_SEARCH, imageIndex);
+        this.extensionHost.publish(Events.IMAGE_SEARCH, imageIndex);
       });
     }
 
@@ -280,17 +280,17 @@ export class PagingHeaderPanel extends HeaderPanel {
     this.$oneUpButton.onPressed(() => {
       const enabled: boolean = false;
       this.updateSettings({ pagingEnabled: enabled });
-      this.component.publish(Events.PAGING_TOGGLED, enabled);
+      this.extensionHost.publish(Events.PAGING_TOGGLED, enabled);
     });
 
     this.$twoUpButton.onPressed(() => {
       const enabled: boolean = true;
       this.updateSettings({ pagingEnabled: enabled });
-      this.component.publish(Events.PAGING_TOGGLED, enabled);
+      this.extensionHost.publish(Events.PAGING_TOGGLED, enabled);
     });
 
     this.$galleryButton.onPressed(() => {
-      this.component.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
+      this.extensionHost.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
     });
 
     this.setNavigationTitles();
@@ -311,10 +311,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.TOP_TO_BOTTOM:
         case ViewingDirection.BOTTOM_TO_TOP:
-          this.component.publish(BaseEvents.FIRST);
+          this.extensionHost.publish(BaseEvents.FIRST);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.LAST);
+          this.extensionHost.publish(BaseEvents.LAST);
           break;
       }
     });
@@ -324,10 +324,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.component.publish(BaseEvents.PREV);
+          this.extensionHost.publish(BaseEvents.PREV);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(BaseEvents.NEXT);
           break;
       }
     });
@@ -337,10 +337,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.component.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(BaseEvents.NEXT);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.PREV);
+          this.extensionHost.publish(BaseEvents.PREV);
           break;
       }
     });
@@ -350,10 +350,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.TOP_TO_BOTTOM:
         case ViewingDirection.BOTTOM_TO_TOP:
-          this.component.publish(BaseEvents.LAST);
+          this.extensionHost.publish(BaseEvents.LAST);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.component.publish(BaseEvents.FIRST);
+          this.extensionHost.publish(BaseEvents.FIRST);
           break;
       }
     });
@@ -369,11 +369,11 @@ export class PagingHeaderPanel extends HeaderPanel {
       // visible, since otherwise, clicking on the "Image" label can
       // trigger unexpected/undesired side effects.
       this.$imageModeOption.on("click", () => {
-        this.component.publish(Events.MODE_CHANGE, Mode.image.toString());
+        this.extensionHost.publish(Events.MODE_CHANGE, Mode.image.toString());
       });
 
       this.$pageModeOption.on("click", () => {
-        this.component.publish(Events.MODE_CHANGE, Mode.page.toString());
+        this.extensionHost.publish(Events.MODE_CHANGE, Mode.page.toString());
       });
     }
 
@@ -578,13 +578,13 @@ export class PagingHeaderPanel extends HeaderPanel {
   search(value: string): void {
     if (!value) {
       this.extension.showMessage(this.content.emptyValue);
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
 
       return;
     }
 
     if (this.isPageModeEnabled()) {
-      this.component.publish(Events.PAGE_SEARCH, value);
+      this.extensionHost.publish(Events.PAGE_SEARCH, value);
     } else {
       let index: number;
 
@@ -601,7 +601,7 @@ export class PagingHeaderPanel extends HeaderPanel {
           this.extension.data.config.modules.genericDialogue.content
             .invalidNumber
         );
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         return;
       }
 
@@ -612,11 +612,11 @@ export class PagingHeaderPanel extends HeaderPanel {
           this.extension.data.config.modules.genericDialogue.content
             .pageNotFound
         );
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         return;
       }
 
-      this.component.publish(Events.IMAGE_SEARCH, index);
+      this.extensionHost.publish(Events.IMAGE_SEARCH, index);
     }
   }
 

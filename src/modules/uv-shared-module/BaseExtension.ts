@@ -50,7 +50,7 @@ export class BaseExtension implements IExtension {
   $restrictedDialogue: JQuery;
   authDialogue: AuthDialogue;
   clickThroughDialogue: ClickThroughDialogue;
-  component: IExtensionHost;
+  extensionHost: IExtensionHost;
   data: IUVData;
   extensions: any;
   helper: Helper;
@@ -78,11 +78,11 @@ export class BaseExtension implements IExtension {
     this.browserDetect = new BrowserDetect();
     this.browserDetect.init();
 
-    Auth09.publish = this.component.publish.bind(this.component);
-    Auth1.publish = this.component.publish.bind(this.component);
+    Auth09.publish = this.extensionHost.publish.bind(this.extensionHost);
+    Auth1.publish = this.extensionHost.publish.bind(this.extensionHost);
 
-    this.$element = $(this.component.options.target);
-    this.$element.data("component", this.component);
+    this.$element = $(this.extensionHost.options.target);
+    this.$element.data("component", this.extensionHost);
 
     this.fire(BaseEvents.CREATE, {
       data: this.data,
@@ -234,17 +234,17 @@ export class BaseExtension implements IExtension {
           if (preventDefault) {
             e.preventDefault();
           }
-          this.component.publish(event);
+          this.extensionHost.publish(event);
         }
       });
     }
 
-    this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
       if (this.isOverlayActive()) {
-        this.component.publish(BaseEvents.ESCAPE);
+        this.extensionHost.publish(BaseEvents.ESCAPE);
       }
-      this.component.publish(BaseEvents.ESCAPE);
-      this.component.publish(BaseEvents.RESIZE);
+      this.extensionHost.publish(BaseEvents.ESCAPE);
+      this.extensionHost.publish(BaseEvents.RESIZE);
     });
 
     // this.$element.append('<a href="/" id="top"></a>');
@@ -255,33 +255,33 @@ export class BaseExtension implements IExtension {
     //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
 
     // subscribe to all UV events except those handled below with their own fire() call
-    // this.component.subscribeAll((args) => {
-    //   console.log(args)
-    //   // this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
-    // },
-    // [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED]);
+    this.extensionHost.subscribeAll((args) => {
+      console.log(args)
+      //this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
+    },
+    [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED]);
 
-    this.component.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
+    this.extensionHost.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
       this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
     });
 
-    this.component.subscribe(BaseEvents.LOGIN_FAILED, () => {
+    this.extensionHost.subscribe(BaseEvents.LOGIN_FAILED, () => {
       this.showMessage(this.data.config.content.authorisationFailedMessage);
     });
 
-    this.component.subscribe(BaseEvents.LOGIN, () => {
+    this.extensionHost.subscribe(BaseEvents.LOGIN, () => {
       this.isLoggedIn = true;
     });
 
-    this.component.subscribe(BaseEvents.LOGOUT, () => {
+    this.extensionHost.subscribe(BaseEvents.LOGOUT, () => {
       this.isLoggedIn = false;
     });
 
-    this.component.subscribe(BaseEvents.BOOKMARK, () => {
+    this.extensionHost.subscribe(BaseEvents.BOOKMARK, () => {
       this.bookmark();
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.data.canvasIndex = canvasIndex;
@@ -290,67 +290,67 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.component.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
       this.resize();
     });
 
-    this.component.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
       this.resize();
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
         this.data.collectionIndex = collectionIndex;
       }
     );
 
-    this.component.subscribe(BaseEvents.CREATED, () => {
+    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
       this.isCreated = true;
     });
 
-    this.component.subscribe(BaseEvents.ESCAPE, () => {
+    this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
       if (this.isFullScreen() && !this.isOverlayActive()) {
-        this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       }
     });
 
-    this.component.subscribe(BaseEvents.LOAD, () => {
+    this.extensionHost.subscribe(BaseEvents.LOAD, () => {
       setTimeout(() => {
-        this.component.publish(BaseEvents.RESIZE);
+        this.extensionHost.publish(BaseEvents.RESIZE);
         this.fire(BaseEvents.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
 
-    this.component.subscribe(BaseEvents.FEEDBACK, () => {
+    this.extensionHost.subscribe(BaseEvents.FEEDBACK, () => {
       this.feedback();
     });
 
-    this.component.subscribe(BaseEvents.FORBIDDEN, () => {
-      this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+    this.extensionHost.subscribe(BaseEvents.FORBIDDEN, () => {
+      this.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
-    this.component.subscribe(BaseEvents.LOAD_FAILED, () => {
+    this.extensionHost.subscribe(BaseEvents.LOAD_FAILED, () => {
       if (
         !that.lastCanvasIndex == null &&
         that.lastCanvasIndex !== that.helper.canvasIndex
       ) {
-        this.component.publish(
+        this.extensionHost.publish(
           BaseEvents.CANVAS_INDEX_CHANGE,
           that.lastCanvasIndex
         );
       }
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex: number) => {
         this.data.manifestIndex = manifestIndex;
       }
     );
 
-    this.component.subscribe(BaseEvents.OPEN, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN, () => {
       const openUri: string = Strings.format(
         this.data.config.options.openTemplate,
         this.helper.manifestUri
@@ -358,19 +358,19 @@ export class BaseExtension implements IExtension {
       window.open(openUri);
     });
 
-    this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
     });
 
-    this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
     });
 
-    this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
+    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
       if (range) {
         this.data.rangeId = range.id;
         this.helper.rangeId = range.id;
@@ -380,18 +380,18 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.RESOURCE_DEGRADED,
       (resource: IExternalResource) => {
         Auth09.handleDegraded(resource);
       }
     );
 
-    this.component.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
+    this.extensionHost.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
       this.showMessage(message);
     });
 
-    this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
+    this.extensionHost.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
       let terms: string | null = this.helper.getLicense();
 
       if (!terms) {
@@ -407,16 +407,16 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
       const overrideFullScreen: boolean = this.data.config.options
         .overrideFullScreen;
 
-      this.component.isFullScreen = !this.component.isFullScreen;
+      this.extensionHost.isFullScreen = !this.extensionHost.isFullScreen;
 
       if (!overrideFullScreen) {
         $("#top").focus();
 
-        if (this.component.isFullScreen) {
+        if (this.extensionHost.isFullScreen) {
           this.$element.addClass("fullscreen");
         } else {
           this.$element.removeClass("fullscreen");
@@ -424,7 +424,7 @@ export class BaseExtension implements IExtension {
       }
 
       this.fire(BaseEvents.TOGGLE_FULLSCREEN, {
-        isFullScreen: this.component.isFullScreen,
+        isFullScreen: this.extensionHost.isFullScreen,
         overrideFullScreen: overrideFullScreen
       });
     });
@@ -433,11 +433,11 @@ export class BaseExtension implements IExtension {
     this.shell = new Shell(this.$element);
 
     this.createModules();
-    this.component.publish(BaseEvents.RESIZE); // initial sizing
+    this.extensionHost.publish(BaseEvents.RESIZE); // initial sizing
 
     setTimeout(() => {
       this.render();
-      this.component.publish(BaseEvents.CREATED);
+      this.extensionHost.publish(BaseEvents.CREATED);
       this._setDefaultFocus();
     }, 1);
   }
@@ -499,11 +499,11 @@ export class BaseExtension implements IExtension {
   }
 
   exitFullScreen(): void {
-    this.component.publish(BaseEvents.EXIT_FULLSCREEN);
+    this.extensionHost.publish(BaseEvents.EXIT_FULLSCREEN);
   }
 
   fire(name: string, ...args: any[]): void {
-    this.component.fire(name, arguments[1]);
+    this.extensionHost.fire(name, arguments[1]);
   }
 
   redirect(uri: string): void {
@@ -519,7 +519,7 @@ export class BaseExtension implements IExtension {
       !this.isCreated ||
       this.data.collectionIndex !== this.helper.collectionIndex
     ) {
-      this.component.publish(
+      this.extensionHost.publish(
         BaseEvents.COLLECTION_INDEX_CHANGE,
         this.data.collectionIndex
       );
@@ -530,7 +530,7 @@ export class BaseExtension implements IExtension {
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
       if (this.data.manifest !== undefined) {
-        this.component.publish(
+        this.extensionHost.publish(
           BaseEvents.MANIFEST_INDEX_CHANGE,
           this.data.manifestIndex
         );
@@ -539,7 +539,7 @@ export class BaseExtension implements IExtension {
 
     if (!this.isCreated || this.data.canvasIndex !== this.helper.canvasIndex) {
       if (this.data.canvasIndex !== undefined) {
-        this.component.publish(
+        this.extensionHost.publish(
           BaseEvents.CANVAS_INDEX_CHANGE,
           this.data.canvasIndex
         );
@@ -553,7 +553,7 @@ export class BaseExtension implements IExtension {
         const range: Range | null = this.helper.getRangeById(this.data.rangeId);
 
         if (range) {
-          this.component.publish(BaseEvents.RANGE_CHANGE, range);
+          this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
         } else {
           console.warn("range id not found:", this.data.rangeId);
         }
@@ -633,7 +633,7 @@ export class BaseExtension implements IExtension {
         if (width >= metric.minWidth) {
           if (this.metric !== metric.type) {
             this.metric = metric.type;
-            this.component.publish(BaseEvents.METRIC_CHANGE);
+            this.extensionHost.publish(BaseEvents.METRIC_CHANGE);
           }
           break;
         }
@@ -643,12 +643,12 @@ export class BaseExtension implements IExtension {
 
   resize(): void {
     this._updateMetric();
-    this.component.publish(BaseEvents.RESIZE);
+    this.extensionHost.publish(BaseEvents.RESIZE);
   }
 
   // re-bootstraps the application with new querystring params
   reload(data?: IUVData): void {
-    this.component.publish(BaseEvents.RELOAD, data);
+    this.extensionHost.publish(BaseEvents.RELOAD, data);
   }
 
   isSeeAlsoEnabled(): boolean {
@@ -924,7 +924,7 @@ export class BaseExtension implements IExtension {
       return;
     }
 
-    this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+    this.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
   }
 
   showMessage(
@@ -935,7 +935,7 @@ export class BaseExtension implements IExtension {
   ): void {
     this.closeActiveDialogue();
 
-    this.component.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, {
+    this.extensionHost.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, {
       message: message,
       acceptCallback: acceptCallback,
       buttonText: buttonText,
@@ -944,7 +944,7 @@ export class BaseExtension implements IExtension {
   }
 
   closeActiveDialogue(): void {
-    this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+    this.extensionHost.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
   }
 
   isOverlayActive(): boolean {
@@ -985,7 +985,7 @@ export class BaseExtension implements IExtension {
   }
 
   isFullScreen(): boolean {
-    return this.component.isFullScreen;
+    return this.extensionHost.isFullScreen;
   }
 
   isHeaderPanelEnabled(): boolean {

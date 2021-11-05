@@ -44,14 +44,14 @@ export default class Extension extends BaseExtension implements IAVExtension {
 
     //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.TREE_NODE_SELECTED,
       (node: TreeNode) => {
         this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
@@ -59,8 +59,8 @@ export default class Extension extends BaseExtension implements IAVExtension {
       }
     );
 
-    this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    this.extensionHost.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
+      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
   }
 
@@ -187,7 +187,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   viewRange(path: string): void {
     const range: Range | null = this.helper.getRangeByPath(path);
     if (!range) return;
-    this.component.publish(BaseEvents.RANGE_CHANGE, range);
+    this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
 
     // don't update the canvas index, only when thumbs are clicked
     // if (range.canvases && range.canvases.length) {

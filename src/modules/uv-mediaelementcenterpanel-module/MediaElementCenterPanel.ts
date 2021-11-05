@@ -36,12 +36,12 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
+    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
       that.player.setCurrentTime(target.t);
       that.player.play();
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
@@ -158,7 +158,7 @@ export class MediaElementCenterPanel extends CenterPanel {
           });
 
           mediaElement.addEventListener("play", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_PLAYED,
               Math.floor(mediaElement.currentTime)
             );
@@ -170,7 +170,7 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.currentTime) !=
               Math.floor(mediaElement.duration)
             ) {
-              that.component.publish(
+              that.extensionHost.publish(
                 Events.MEDIA_PAUSED,
                 Math.floor(mediaElement.currentTime)
               );
@@ -178,14 +178,14 @@ export class MediaElementCenterPanel extends CenterPanel {
           });
 
           mediaElement.addEventListener("ended", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_ENDED,
               Math.floor(mediaElement.duration)
             );
           });
 
           mediaElement.addEventListener("timeupdate", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
@@ -225,7 +225,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         success: function(mediaElement: any, originalNode: any) {
 
           mediaElement.addEventListener("play", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_PLAYED,
               Math.floor(mediaElement.currentTime)
             );
@@ -237,7 +237,7 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.currentTime) !=
               Math.floor(mediaElement.duration)
             ) {
-              that.component.publish(
+              that.extensionHost.publish(
                 Events.MEDIA_PAUSED,
                 Math.floor(mediaElement.currentTime)
               );
@@ -245,14 +245,14 @@ export class MediaElementCenterPanel extends CenterPanel {
           });
 
           mediaElement.addEventListener("ended", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_ENDED,
               Math.floor(mediaElement.duration)
             );
           });
 
           mediaElement.addEventListener("timeupdate", () => {
-            that.component.publish(
+            that.extensionHost.publish(
               Events.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
@@ -261,8 +261,8 @@ export class MediaElementCenterPanel extends CenterPanel {
       });
     }
 
-    this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.component.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(BaseEvents.LOAD);
   }
 
   isVideo(): boolean {
@@ -281,7 +281,7 @@ export class MediaElementCenterPanel extends CenterPanel {
     }
 
     if (this.player) {
-      if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
+      if (!this.isVideo() || (this.isVideo() && !this.extensionHost.isFullScreen)) {
         this.player.setPlayerSize();
         this.player.setControlsSize();
       }

@@ -23,7 +23,7 @@ export class SlideAtlasCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
@@ -115,8 +115,8 @@ export class SlideAtlasCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.component.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(BaseEvents.LOAD);
     });
   }
 

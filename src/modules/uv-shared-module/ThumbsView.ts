@@ -26,15 +26,15 @@ export class ThumbsView extends BaseView {
   create(): void {
     super.create();
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, (index: any) => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, (index: any) => {
       this.selectIndex(parseInt(index));
     });
 
-    this.component.subscribe(BaseEvents.LOGIN, () => {
+    this.extensionHost.subscribe(BaseEvents.LOGIN, () => {
       this.loadThumbs();
     });
 
-    this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
+    this.extensionHost.subscribe(BaseEvents.CLICKTHROUGH, () => {
       this.loadThumbs();
     });
 
@@ -171,7 +171,7 @@ export class ThumbsView extends BaseView {
       e.preventDefault();
       const data = $.view(this).data;
       that.lastThumbClickedIndex = data.index;
-      that.component.publish(BaseEvents.THUMB_SELECTED, data);
+      that.extensionHost.publish(BaseEvents.THUMB_SELECTED, data);
       return false;
     });
 
@@ -186,7 +186,7 @@ export class ThumbsView extends BaseView {
         e.preventDefault();
         const data = $.view(this).data;
         that.lastThumbClickedIndex = data.index;
-        that.component.publish(BaseEvents.THUMB_SELECTED, data);
+        that.extensionHost.publish(BaseEvents.THUMB_SELECTED, data);
       }
     });
 

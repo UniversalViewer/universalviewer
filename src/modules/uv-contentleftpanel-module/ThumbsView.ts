@@ -11,18 +11,18 @@ export class ThumbsView extends BaseThumbsView {
     super.create();
 
     // todo: this should be a setting
-    this.component.subscribe(Events.MODE_CHANGE, () => {
+    this.extensionHost.subscribe(Events.MODE_CHANGE, () => {
       this.setLabel();
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.SEARCH_PREVIEW_START,
       (canvasIndex: number) => {
         this.searchPreviewStart(canvasIndex);
       }
     );
 
-    this.component.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+    this.extensionHost.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
       this.searchPreviewFinish();
     });
 

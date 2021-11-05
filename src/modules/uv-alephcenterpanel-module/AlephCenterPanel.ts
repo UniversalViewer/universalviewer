@@ -64,7 +64,7 @@ export class AlephCenterPanel extends CenterPanel {
     this._alViewer.addEventListener(
       "loaded",
       (e: any) => {
-        this.component.publish(Events.LOADED, {
+        this.extensionHost.publish(Events.LOADED, {
           stackhelper:
             this._state.displayMode !== DisplayMode.MESH ? e.detail : null
         });
@@ -72,107 +72,107 @@ export class AlephCenterPanel extends CenterPanel {
       false
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.CONTROLS_TYPE_CHANGE,
       (controlsType: ControlsType) => {
         this._alViewer.setControlsType(controlsType);
       }
     );
 
-    this.component.subscribe(Events.CLEAR_GRAPH, () => {
+    this.extensionHost.subscribe(Events.CLEAR_GRAPH, () => {
       this._alViewer.clearGraph();
     });
 
-    this.component.subscribe(Events.DELETE_ANGLE, (id: string) => {
+    this.extensionHost.subscribe(Events.DELETE_ANGLE, (id: string) => {
       this._alViewer.deleteAngle(id);
     });
 
-    this.component.subscribe(Events.DELETE_EDGE, (id: string) => {
+    this.extensionHost.subscribe(Events.DELETE_EDGE, (id: string) => {
       this._alViewer.deleteEdge(id);
     });
 
-    this.component.subscribe(Events.DELETE_NODE, (id: string) => {
+    this.extensionHost.subscribe(Events.DELETE_NODE, (id: string) => {
       this._alViewer.deleteNode(id);
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.DISPLAY_MODE_CHANGE,
       (displayMode: DisplayMode) => {
         this._alViewer.setDisplayMode(displayMode);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.GRAPH_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setGraphEnabled(enabled);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.BOUNDING_BOX_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setBoundingBoxEnabled(enabled);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.ORIENTATION_CHANGE,
       (orientation: Orientation) => {
         this._alViewer.setOrientation(orientation);
       }
     );
 
-    this.component.subscribe(Events.RECENTER, () => {
+    this.extensionHost.subscribe(Events.RECENTER, () => {
       this._alViewer.recenter();
     });
 
-    this.component.subscribe(Events.SET_GRAPH, (graph: any) => {
+    this.extensionHost.subscribe(Events.SET_GRAPH, (graph: any) => {
       this._alViewer.setGraph(graph);
     });
 
-    this.component.subscribe(Events.SET_NODE, (node: any) => {
+    this.extensionHost.subscribe(Events.SET_NODE, (node: any) => {
       this._alViewer.setNode(node);
     });
 
-    this.component.subscribe(Events.SELECT_NODE, (id: string) => {
+    this.extensionHost.subscribe(Events.SELECT_NODE, (id: string) => {
       this._alViewer.selectNode(id);
     });
 
-    this.component.subscribe(Events.SLICES_INDEX_CHANGE, (index: number) => {
+    this.extensionHost.subscribe(Events.SLICES_INDEX_CHANGE, (index: number) => {
       this._alViewer.setSlicesIndex(index);
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.SLICES_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.SLICES_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
       }
     );
 
-    this.component.subscribe(Events.UNITS_CHANGE, (units: Units) => {
+    this.extensionHost.subscribe(Events.UNITS_CHANGE, (units: Units) => {
       this._alViewer.setUnits(units);
     });
 
-    this.component.subscribe(Events.VOLUME_STEPS_CHANGE, (steps: number) => {
+    this.extensionHost.subscribe(Events.VOLUME_STEPS_CHANGE, (steps: number) => {
       this._alViewer.setVolumeSteps(steps);
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.VOLUME_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       Events.VOLUME_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
@@ -193,7 +193,7 @@ export class AlephCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
@@ -234,8 +234,8 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      this.component.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.component.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(BaseEvents.LOAD);
     });
   }
 
@@ -253,7 +253,7 @@ export class AlephCenterPanel extends CenterPanel {
       );
     }
 
-    this.component.publish(Events.VIEWER_CHANGE, this._state);
+    this.extensionHost.publish(Events.VIEWER_CHANGE, this._state);
 
     this._prevState = Object.assign({}, this._state);
   }

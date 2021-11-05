@@ -41,29 +41,29 @@ export default class Extension extends BaseExtension implements IPDFExtension {
   create(): void {
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    this.extensionHost.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
+      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.shell.$centerPanel.hide();
       this.shell.$rightPanel.hide();
     });
 
-    this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
       this.shell.$centerPanel.show();
       this.shell.$rightPanel.show();
       this.resize();
     });
 
-    this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
       setTimeout(() => {
         this.resize();
       }, 10); // allow time to exit full screen, then resize

@@ -39,17 +39,17 @@ export default class Extension extends BaseExtension
   create(): void {
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
       }
     );
   }

@@ -47,27 +47,27 @@ export class FooterPanel extends BaseFooterPanel {
 
     super.create();
 
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
       this.canvasIndexChanged();
       this.setCurrentSearchResultPlacemarker();
       this.updatePrevButton();
       this.updateNextButton();
     });
 
-    this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+    this.extensionHost.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
       this.clearSearchResults();
     });
 
     // todo: this should be a setting
-    this.component.subscribe(Events.MODE_CHANGE, () => {
+    this.extensionHost.subscribe(Events.MODE_CHANGE, () => {
       this.settingsChanged();
     });
 
-    this.component.subscribe(Events.SEARCH, (terms: string) => {
+    this.extensionHost.subscribe(Events.SEARCH, (terms: string) => {
       this.terms = terms;
     });
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.ANNOTATIONS,
       (annotationResults: AnnotationResults) => {
         this.displaySearchResults(
@@ -80,11 +80,11 @@ export class FooterPanel extends BaseFooterPanel {
       }
     );
 
-    this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
       this.hideSearchSpinner();
     });
 
-    this.component.subscribe(BaseEvents.ANNOTATION_CHANGE, () => {
+    this.extensionHost.subscribe(BaseEvents.ANNOTATION_CHANGE, () => {
       this.updatePrevButton();
       this.updateNextButton();
     });
@@ -199,7 +199,7 @@ export class FooterPanel extends BaseFooterPanel {
     });
 
     this.$placemarkerDetails.on("mouseover", () => {
-      that.component.publish(
+      that.extensionHost.publish(
         Events.SEARCH_PREVIEW_START,
         this.currentPlacemarkerIndex
       );
@@ -208,7 +208,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$placemarkerDetails.on("mouseleave", function() {
       $(this).hide();
 
-      that.component.publish(Events.SEARCH_PREVIEW_FINISH);
+      that.extensionHost.publish(Events.SEARCH_PREVIEW_FINISH);
 
       // reset all placemarkers.
       var placemarkers = that.getSearchResultPlacemarkers();
@@ -216,7 +216,7 @@ export class FooterPanel extends BaseFooterPanel {
     });
 
     this.onAccessibleClick(this.$placemarkerDetails, () => {
-      that.component.publish(
+      that.extensionHost.publish(
         BaseEvents.CANVAS_INDEX_CHANGE,
         this.currentPlacemarkerIndex
       );
@@ -225,20 +225,20 @@ export class FooterPanel extends BaseFooterPanel {
     this.$previousResultButton.on("click", (e: any) => {
       e.preventDefault();
       if (this.isPreviousButtonEnabled()) {
-        that.component.publish(Events.PREV_SEARCH_RESULT);
+        that.extensionHost.publish(Events.PREV_SEARCH_RESULT);
       }
     });
 
     this.$nextResultButton.on("click", (e: any) => {
       e.preventDefault();
       if (this.isNextButtonEnabled()) {
-        that.component.publish(Events.NEXT_SEARCH_RESULT);
+        that.extensionHost.publish(Events.NEXT_SEARCH_RESULT);
       }
     });
 
     this.$clearSearchResultsButton.on("click", (e: any) => {
       e.preventDefault();
-      that.component.publish(BaseEvents.CLEAR_ANNOTATIONS);
+      that.extensionHost.publish(BaseEvents.CLEAR_ANNOTATIONS);
     });
 
     // hide search options if not enabled/supported.
@@ -289,7 +289,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     this.$printButton.onPressed(() => {
-      that.component.publish(Events.PRINT);
+      that.extensionHost.publish(Events.PRINT);
     });
 
     this.updatePrintButton();
@@ -455,7 +455,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     this.showSearchSpinner();
 
-    this.component.publish(Events.SEARCH, this.terms);
+    this.extensionHost.publish(Events.SEARCH, this.terms);
   }
 
   getSearchResultPlacemarkers(): JQuery {
@@ -517,7 +517,7 @@ export class FooterPanel extends BaseFooterPanel {
       this.onAccessibleClick(
         $placemarker,
         e => {
-          that.component.publish(
+          that.extensionHost.publish(
             BaseEvents.CANVAS_INDEX_CHANGE,
             this.currentPlacemarkerIndex
           );

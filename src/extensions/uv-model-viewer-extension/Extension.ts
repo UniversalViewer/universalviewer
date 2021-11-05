@@ -51,21 +51,21 @@ export default class Extension extends BaseExtension
   create(): void {
     super.create();
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.component.subscribe(
+    this.extensionHost.subscribe(
       BaseEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
       }
     );
 
-    this.component.subscribe(Events.CAMERA_CHANGE, (orbit: Orbit) => {
+    this.extensionHost.subscribe(Events.CAMERA_CHANGE, (orbit: Orbit) => {
       const canvas: Canvas = this.helper.getCurrentCanvas();
       if (canvas) {
         this.data.target = canvas.id + "#" + `orbit=${orbit.toString()}`;
@@ -155,12 +155,12 @@ export default class Extension extends BaseExtension
       const index: number | null = this.helper.getCanvasIndexById(canvasId);
 
       if (index !== null && this.helper.canvasIndex !== index) {
-        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
       }
 
       // trigger SET_TARGET which sets the camera-orbit attribute in ModelViewerCenterPanel
       const selector: string = components[1];
-      this.component.publish(BaseEvents.SET_TARGET, Orbit.fromString(selector));
+      this.extensionHost.publish(BaseEvents.SET_TARGET, Orbit.fromString(selector));
     }
   }
 

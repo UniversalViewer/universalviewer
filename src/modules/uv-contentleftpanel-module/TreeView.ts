@@ -33,7 +33,7 @@ export class TreeView extends BaseView {
     this.treeComponent.on(
       "treeNodeSelected",
       function(node: TreeNode) {
-        that.component.publish(BaseEvents.TREE_NODE_SELECTED, node);
+        that.extensionHost.publish(BaseEvents.TREE_NODE_SELECTED, node);
       },
       false
     );
@@ -41,7 +41,7 @@ export class TreeView extends BaseView {
     this.treeComponent.on(
       "treeNodeMultiSelected",
       function(node: TreeNode) {
-        that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
+        that.extensionHost.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
       },
       false
     );

@@ -27,7 +27,7 @@ export class LoginDialogue extends Dialogue {
     this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
     this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
 
-    this.component.subscribe(this.openCommand, (e: any) => {
+    this.extensionHost.subscribe(this.openCommand, (e: any) => {
       this.loginCallback = e.loginCallback;
       this.logoutCallback = e.logoutCallback;
       this.options = e.options;
@@ -35,7 +35,7 @@ export class LoginDialogue extends Dialogue {
       this.open();
     });
 
-    this.component.subscribe(this.closeCommand, () => {
+    this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
     });
 

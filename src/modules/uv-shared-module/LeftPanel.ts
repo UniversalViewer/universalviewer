@@ -12,7 +12,7 @@ export class LeftPanel extends BaseExpandPanel {
 
     this.$element.width(this.options.panelCollapsedWidth);
 
-    this.component.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -50,9 +50,9 @@ export class LeftPanel extends BaseExpandPanel {
     super.toggleFinish();
 
     if (this.isExpanded) {
-      this.component.publish(BaseEvents.OPEN_LEFT_PANEL);
+      this.extensionHost.publish(BaseEvents.OPEN_LEFT_PANEL);
     } else {
-      this.component.publish(BaseEvents.CLOSE_LEFT_PANEL);
+      this.extensionHost.publish(BaseEvents.CLOSE_LEFT_PANEL);
     }
     this.extension.updateSettings({ leftPanelOpen: this.isExpanded });
   }

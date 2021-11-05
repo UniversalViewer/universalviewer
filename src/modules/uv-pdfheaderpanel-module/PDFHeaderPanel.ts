@@ -33,12 +33,12 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     super.create();
 
-    this.component.subscribe(Events.PAGE_INDEX_CHANGE, (pageIndex: number) => {
+    this.extensionHost.subscribe(Events.PAGE_INDEX_CHANGE, (pageIndex: number) => {
       this._pageIndex = pageIndex;
       this.render();
     });
 
-    this.component.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
+    this.extensionHost.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
       this._pdfDoc = pdfDoc;
     });
 
@@ -105,19 +105,19 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     // ui event handlers.
     this.$firstButton.onPressed(() => {
-      this.component.publish(BaseEvents.FIRST);
+      this.extensionHost.publish(BaseEvents.FIRST);
     });
 
     this.$prevButton.onPressed(() => {
-      this.component.publish(BaseEvents.PREV);
+      this.extensionHost.publish(BaseEvents.PREV);
     });
 
     this.$nextButton.onPressed(() => {
-      this.component.publish(BaseEvents.NEXT);
+      this.extensionHost.publish(BaseEvents.NEXT);
     });
 
     this.$lastButton.onPressed(() => {
-      this.component.publish(BaseEvents.LAST);
+      this.extensionHost.publish(BaseEvents.LAST);
     });
 
     this.$searchText.onEnter(() => {
@@ -181,7 +181,7 @@ export class PDFHeaderPanel extends HeaderPanel {
       return;
     }
 
-    this.component.publish(Events.SEARCH, index);
+    this.extensionHost.publish(Events.SEARCH, index);
   }
 
   resize(): void {
