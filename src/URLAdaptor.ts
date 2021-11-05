@@ -38,7 +38,7 @@ export class URLAdaptor extends UVAdaptor {
     }
   }
 
-  public getInitialData(defaults?: IUVData) {
+  public getInitialData(overrides?: IUVData) {
     const formattedLocales: Array<{ label?: string; name: string }> = [];
     const locales = this.get("locales", "");
     if (locales) {
@@ -67,7 +67,7 @@ export class URLAdaptor extends UVAdaptor {
       target: this.get("target", ""),
       cfi: this.get("cfi", ""),
       locales: formattedLocales.length ? formattedLocales : undefined,
-      ...defaults
+      ...overrides
     }
   }
 
