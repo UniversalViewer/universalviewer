@@ -252,12 +252,9 @@ export class BaseExtension implements IExtension {
       '<iframe id="commsFrame" style="display:none"></iframe>'
     );
 
-    //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
-
-    // subscribe to all UV events except those handled below with their own fire() call
     this.extensionHost.subscribeAll((event, args) => {
+      // subscribe to all UV events except those handled below with their own fire() calls
       const exceptions = [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED];
-      console.log(event, args)
 
       if (!exceptions.includes(event)) {
         this.fire(event, args);
@@ -506,6 +503,9 @@ export class BaseExtension implements IExtension {
   }
 
   fire(name: string, ...args: any[]): void {
+    if (this.data.debug) {
+      console.log(name, arguments[1]);
+    }
     this.extensionHost.fire(name, arguments[1]);
   }
 

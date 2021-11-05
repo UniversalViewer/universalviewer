@@ -170,7 +170,8 @@
 
         function setupUV() {
           const data = urlAdaptor.getInitialData({
-            manifest: manifest
+            manifest: manifest,
+            debug: false
           });
 
           uv = UV.init("uv", data);

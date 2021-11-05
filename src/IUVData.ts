@@ -5,6 +5,7 @@ export interface IUVData {
   canvasIndex?: number;
   collectionIndex?: number;
   config?: any; // do not pass this on initialisation, internal use only
+  debug?: boolean;
   embedded?: boolean;
   isReload?: boolean;
   locales?: ILocale[];

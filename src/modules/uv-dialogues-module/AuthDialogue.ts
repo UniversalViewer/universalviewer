@@ -94,7 +94,7 @@ export class AuthDialogue extends Dialogue {
 
       this.$message.find("a").on("click", function() {
         const url: string = $(this).attr("href");
-        this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+        this.extensionHost.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
       });
     }
 

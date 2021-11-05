@@ -554,7 +554,7 @@ export class FooterPanel extends BaseFooterPanel {
     //const $placemarker: JQuery = $(this);
     //const index: number = parseInt($placemarker.attr('data-index'));
 
-    //this.component.publish(Events.VIEW_PAGE, [index]);
+    //this.extensionHost.publish(Events.VIEW_PAGE, [index]);
   }
 
   onPlacemarkerClick(that: any): void {
@@ -565,7 +565,7 @@ export class FooterPanel extends BaseFooterPanel {
     //const $placemarker: JQuery = $(this);
     //const index: number = parseInt($placemarker.attr('data-index'));
 
-    //this.component.publish(Events.VIEW_PAGE, [index]);
+    //this.extensionHost.publish(Events.VIEW_PAGE, [index]);
   }
 
   onPlacemarkerMouseEnter(that: any): void {
@@ -577,7 +577,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     const canvasIndex: number = parseInt($placemarker.attr("data-index"));
 
-    that.component.publish(Events.SEARCH_PREVIEW_START, canvasIndex);
+    that.extensionHost.publish(Events.SEARCH_PREVIEW_START, canvasIndex);
 
     const $placemarkers: JQuery = that.getSearchResultPlacemarkers();
     const elemIndex: number = $placemarkers.index($placemarker[0]);
@@ -668,7 +668,7 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   onPlacemarkerMouseLeave(e: any, that: any): void {
-    that.component.publish(Events.SEARCH_PREVIEW_FINISH);
+    that.extensionHost.publish(Events.SEARCH_PREVIEW_FINISH);
 
     const $placemarker: JQuery = $(this);
     const newElement: Element = e.toElement || e.relatedTarget;

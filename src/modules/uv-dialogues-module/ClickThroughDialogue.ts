@@ -74,7 +74,7 @@ export class ClickThroughDialogue extends Dialogue {
 
     this.$message.find("a").on("click", function() {
       var url: string = $(this).attr("href");
-      this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+      this.extensionHost.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
     });
 
     this.resize();
