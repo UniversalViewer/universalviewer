@@ -638,6 +638,7 @@ export class BaseExtension implements IExtension {
   }
 
   resize(): void {
+    console.log("resize");
     this._updateMetric();
     this.component.publish(BaseEvents.RESIZE);
   }
