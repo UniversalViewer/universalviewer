@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { Panel } from "./Panel";
 import { IExtension } from "./IExtension";
-import { IUniversalViewer } from "../../IUniversalViewer";
+import { IExtensionHost } from "../../IExtensionHost";
 
 export class BaseView extends Panel {
   config: any;
@@ -23,7 +23,7 @@ export class BaseView extends Panel {
 
     super.create();
 
-    this.extension = <IExtension>(<IUniversalViewer>this.component).extension;
+    this.extension = <IExtension>(<IExtensionHost>this.component).extension;
 
     this.config = {};
     this.config.content = {};

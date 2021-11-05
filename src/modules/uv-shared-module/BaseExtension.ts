@@ -7,7 +7,7 @@ import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogu
 import { ExtensionLoader, IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";
-import { IUniversalViewer } from "../../IUniversalViewer";
+import { IExtensionHost } from "../../IExtensionHost";
 import { IUVData } from "../../IUVData";
 import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
 import { Metric } from "../../modules/uv-shared-module/Metric";
@@ -50,7 +50,7 @@ export class BaseExtension implements IExtension {
   $restrictedDialogue: JQuery;
   authDialogue: AuthDialogue;
   clickThroughDialogue: ClickThroughDialogue;
-  component: IUniversalViewer;
+  component: IExtensionHost;
   data: IUVData;
   extensions: any;
   helper: Helper;

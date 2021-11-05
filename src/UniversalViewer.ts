@@ -5,9 +5,9 @@ jQueryPlugins($);
 const merge = require('lodash/merge');
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { ExtensionLoader, IExtension } from "./modules/uv-shared-module/IExtension";
-import { IUniversalViewer } from "./IUniversalViewer";
+import { IExtensionHost } from "./IExtensionHost";
 import { IUVData } from "./IUVData";
-import { IUVAdaptor } from "./IUVAdaptor";
+import { IExtensionHostAdaptor } from "./IExtensionHostAdaptor";
 import { EventHandler, PubSub } from "./PubSub";
 import {
   RenderingFormat,
@@ -37,12 +37,12 @@ const Extension = {
   SLIDEATLAS: {name: "uv-slideatlas-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-slideatlas-extension/Extension')},
 }
 
-export class UniversalViewer extends BaseComponent implements IUniversalViewer {
+export class UniversalViewer extends BaseComponent implements IExtensionHost {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
-  public adaptor: IUVAdaptor;
+  public adaptor: IExtensionHostAdaptor;
   public disposed = false;
 
   constructor(options: IBaseComponentOptions) {

@@ -1,6 +1,6 @@
-import { IUVAdaptor } from "./IUVAdaptor";
+import { IExtensionHostAdaptor } from "./IExtensionHostAdaptor";
 
-export class UVAdaptor implements IUVAdaptor {
+export class UVAdaptor implements IExtensionHostAdaptor {
   public readonly: boolean = false;
 
   constructor(readonly: boolean) {
