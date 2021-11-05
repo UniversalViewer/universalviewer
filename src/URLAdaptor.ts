@@ -2,6 +2,7 @@ import { UVAdaptor } from "./UVAdaptor";
 import { Urls } from "@edsilv/utils";
 import { UniversalViewer } from "./UniversalViewer";
 import { IUVData } from "./IUVData";
+import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 
 export class URLAdaptor extends UVAdaptor {
 
@@ -83,7 +84,7 @@ export class URLAdaptor extends UVAdaptor {
     );
 
     uv.on(
-      "collectionIndexChange",
+      BaseEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex) => {
         this.set("c", collectionIndex);
       },
@@ -91,7 +92,7 @@ export class URLAdaptor extends UVAdaptor {
     );
 
     uv.on(
-      "manifestIndexChange",
+      BaseEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex) => {
         this.set("m", manifestIndex);
       },
@@ -99,7 +100,7 @@ export class URLAdaptor extends UVAdaptor {
     );
 
     uv.on(
-      "canvasIndexChange",
+      BaseEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex) => {
         this.set("cv", canvasIndex);
       },
@@ -107,7 +108,7 @@ export class URLAdaptor extends UVAdaptor {
     );
 
     uv.on(
-      "rangeChange",
+      BaseEvents.RANGE_CHANGE,
       (rangeId) => {
         this.set("rid", rangeId);
       },
@@ -115,7 +116,7 @@ export class URLAdaptor extends UVAdaptor {
     );
 
     uv.on(
-      "targetChange",
+      BaseEvents.TARGET_CHANGE,
       (target) => {
         this.set("xywh", this.getFragment("xywh", target));
       },

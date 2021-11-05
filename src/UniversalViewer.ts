@@ -8,7 +8,7 @@ import { ExtensionLoader, IExtension } from "./modules/uv-shared-module/IExtensi
 import { IExtensionHost } from "./IExtensionHost";
 import { IUVData } from "./IUVData";
 import { IExtensionHostAdaptor } from "./IExtensionHostAdaptor";
-import { EventHandler, PubSub } from "./PubSub";
+import { EventHandlerWithName, PubSub } from "./PubSub";
 import {
   RenderingFormat,
   MediaType,
@@ -170,11 +170,11 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
     }
   }
 
-  public subscribeAll(handler: EventHandler, exceptions: string[] = []) {
-    this._pubsub.subscribeAll(handler, exceptions);
+  public subscribeAll(handler: EventHandlerWithName) {
+    this._pubsub.subscribeAll(handler);
 
     return () => {
-      this._pubsub.unsubscribeAll(handler, exceptions);
+      this._pubsub.unsubscribeAll();
     }
   }
 

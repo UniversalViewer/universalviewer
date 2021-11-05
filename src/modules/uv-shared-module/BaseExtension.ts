@@ -255,11 +255,14 @@ export class BaseExtension implements IExtension {
     //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
 
     // subscribe to all UV events except those handled below with their own fire() call
-    this.extensionHost.subscribeAll((args) => {
-      console.log(args)
-      //this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
-    },
-    [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED]);
+    this.extensionHost.subscribeAll((event, args) => {
+      const exceptions = [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED];
+      console.log(event, args)
+
+      if (!exceptions.includes(event)) {
+        this.fire(event, args);
+      }
+    });
 
     this.extensionHost.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
       this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);

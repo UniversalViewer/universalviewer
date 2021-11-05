@@ -1,7 +1,9 @@
-export type EventHandler = (e: any) => void;
+export type EventHandler = (args: any) => void;
+export type EventHandlerWithName = (event: string, args: any) => void;
 
 export class PubSub {
   events: { [key: string]: EventHandler[] } = {};
+  onPublishHandler: EventHandlerWithName = () => {};
 
   constructor() {}
 
@@ -11,6 +13,7 @@ export class PubSub {
     handlers.forEach((handler) => {
       handler.call(this, args);
     });
+    this.onPublishHandler.call(this, name, args);
   }
 
   public subscribe(name: string, handler: EventHandler) {
@@ -21,12 +24,8 @@ export class PubSub {
     handlers.push(handler);
   }
 
-  public subscribeAll(handler: EventHandler, exceptions: string[] = []) {
-    Object.keys(this.events).forEach((name) => {
-      if (!exceptions.includes(name)) {
-        this.subscribe(name, handler);
-      }
-    });
+  public subscribeAll(handler: EventHandlerWithName) {
+    this.onPublishHandler = handler;
   }
 
   public unsubscribe(name: string, handler: EventHandler) {
@@ -37,12 +36,8 @@ export class PubSub {
     handlers.splice(handlerIdx);
   }
 
-  public unsubscribeAll(handler: EventHandler, exceptions: string[] = []) {
-    Object.keys(this.events).forEach((name) => {
-      if (!exceptions.includes(name)) {
-        this.unsubscribe(name, handler);
-      }
-    });
+  public unsubscribeAll() {
+    this.onPublishHandler = () => {};
   }
 
   public dispose() {
