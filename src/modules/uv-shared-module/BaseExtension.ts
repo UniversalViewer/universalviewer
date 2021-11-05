@@ -7,7 +7,7 @@ import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogu
 import { ExtensionLoader, IExtension } from "./IExtension";
 import { ILocale } from "../../ILocale";
 import { ISharePreview } from "./ISharePreview";
-import { IUVComponent } from "../../IUVComponent";
+import { IUniversalViewer } from "../../IUniversalViewer";
 import { IUVData } from "../../IUVData";
 import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
 import { Metric } from "../../modules/uv-shared-module/Metric";
@@ -27,7 +27,6 @@ import {
   IManifestoOptions,
   Manifest,
   Range,
-  Thumb
 } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "@edsilv/key-codes";
@@ -51,7 +50,7 @@ export class BaseExtension implements IExtension {
   $restrictedDialogue: JQuery;
   authDialogue: AuthDialogue;
   clickThroughDialogue: ClickThroughDialogue;
-  component: IUVComponent;
+  component: IUniversalViewer;
   data: IUVData;
   extensions: any;
   helper: Helper;
@@ -255,32 +254,27 @@ export class BaseExtension implements IExtension {
 
     //this.$element.append('<div id="debug"><span id="sm">sm</span><span id="md">md</span><span id="lg">lg</span><span id="xl">xl</span></div>');
 
-    this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
-      this.fire(BaseEvents.ACCEPT_TERMS);
-    });
+    // subscribe to all UV events except those handled below with their own fire() call
+    // this.component.subscribeAll((args) => {
+    //   console.log(args)
+    //   // this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
+    // },
+    // [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN]);
 
     this.component.subscribe(BaseEvents.LOGIN_FAILED, () => {
-      this.fire(BaseEvents.LOGIN_FAILED);
       this.showMessage(this.data.config.content.authorisationFailedMessage);
     });
 
     this.component.subscribe(BaseEvents.LOGIN, () => {
       this.isLoggedIn = true;
-      this.fire(BaseEvents.LOGIN);
     });
 
     this.component.subscribe(BaseEvents.LOGOUT, () => {
       this.isLoggedIn = false;
-      this.fire(BaseEvents.LOGOUT);
     });
 
     this.component.subscribe(BaseEvents.BOOKMARK, () => {
       this.bookmark();
-      this.fire(BaseEvents.BOOKMARK);
-    });
-
-    this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
-      this.fire(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
     });
 
     this.component.subscribe(
@@ -289,25 +283,14 @@ export class BaseExtension implements IExtension {
         this.data.canvasIndex = canvasIndex;
         this.lastCanvasIndex = this.helper.canvasIndex;
         this.helper.canvasIndex = canvasIndex;
-        this.fire(BaseEvents.CANVAS_INDEX_CHANGE, this.data.canvasIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
-      this.fire(BaseEvents.CLICKTHROUGH);
-    });
-
-    this.component.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
-      this.fire(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
-    });
-
     this.component.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
-      this.fire(BaseEvents.CLOSE_LEFT_PANEL);
       this.resize();
     });
 
     this.component.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
-      this.fire(BaseEvents.CLOSE_RIGHT_PANEL);
       this.resize();
     });
 
@@ -315,44 +298,18 @@ export class BaseExtension implements IExtension {
       BaseEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
         this.data.collectionIndex = collectionIndex;
-        this.fire(
-          BaseEvents.COLLECTION_INDEX_CHANGE,
-          this.data.collectionIndex
-        );
       }
     );
 
     this.component.subscribe(BaseEvents.CREATED, () => {
       this.isCreated = true;
-      this.fire(BaseEvents.CREATED);
-    });
-
-    this.component.subscribe(BaseEvents.DOWN_ARROW, () => {
-      this.fire(BaseEvents.DOWN_ARROW);
-    });
-
-    this.component.subscribe(BaseEvents.DOWNLOAD, (obj: any) => {
-      this.fire(BaseEvents.DOWNLOAD, obj);
-    });
-
-    this.component.subscribe(BaseEvents.END, () => {
-      this.fire(BaseEvents.END);
     });
 
     this.component.subscribe(BaseEvents.ESCAPE, () => {
-      this.fire(BaseEvents.ESCAPE);
-
       if (this.isFullScreen() && !this.isOverlayActive()) {
         this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
       }
     });
-
-    this.component.subscribe(
-      BaseEvents.EXTERNAL_LINK_CLICKED,
-      (url: string) => {
-        this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
-      }
-    );
 
     this.component.subscribe(BaseEvents.LOAD, () => {
       setTimeout(() => {
@@ -367,77 +324,10 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(BaseEvents.FORBIDDEN, () => {
-      this.fire(BaseEvents.FORBIDDEN);
       this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
-    this.component.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_EMBED_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_GENERIC_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_HELP_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_INFORMATION, () => {
-      this.fire(BaseEvents.HIDE_INFORMATION);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_LOGIN_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
-      this.fire(BaseEvents.HIDE_OVERLAY);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
-      this.fire(BaseEvents.HIDE_SETTINGS_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.HOME, () => {
-      this.fire(BaseEvents.HOME);
-    });
-
-    this.component.subscribe(BaseEvents.LEFT_ARROW, () => {
-      this.fire(BaseEvents.LEFT_ARROW);
-    });
-
-    this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-      this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
-    });
-
-    this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-      this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
-    });
-
-    this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
-      this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
-    });
-
-    this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-      this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
-    });
-
     this.component.subscribe(BaseEvents.LOAD_FAILED, () => {
-      this.fire(BaseEvents.LOAD_FAILED);
-
       if (
         !that.lastCanvasIndex == null &&
         that.lastCanvasIndex !== that.helper.canvasIndex
@@ -453,16 +343,10 @@ export class BaseExtension implements IExtension {
       BaseEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex: number) => {
         this.data.manifestIndex = manifestIndex;
-        this.fire(BaseEvents.MANIFEST_INDEX_CHANGE, this.data.manifestIndex);
       }
     );
 
-    this.component.subscribe(BaseEvents.NOT_FOUND, () => {
-      this.fire(BaseEvents.NOT_FOUND);
-    });
-
     this.component.subscribe(BaseEvents.OPEN, () => {
-      this.fire(BaseEvents.OPEN);
       const openUri: string = Strings.format(
         this.data.config.options.openTemplate,
         this.helper.manifestUri
@@ -471,136 +355,39 @@ export class BaseExtension implements IExtension {
     });
 
     this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
-      this.fire(BaseEvents.OPEN_LEFT_PANEL);
-      // todo: use global state
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
-    });
-
-    this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
-      this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
-    });
-
-    this.component.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
-      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
     });
 
     this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
-      this.fire(BaseEvents.OPEN_RIGHT_PANEL);
-      // todo: use global state
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
-    });
-
-    this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
-      this.fire(BaseEvents.PAGE_DOWN);
-    });
-
-    this.component.subscribe(BaseEvents.PAGE_UP, () => {
-      this.fire(BaseEvents.PAGE_UP);
     });
 
     this.component.subscribe(BaseEvents.RANGE_CHANGE, (range: Range | null) => {
       if (range) {
         this.data.rangeId = range.id;
         this.helper.rangeId = range.id;
-        this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
       } else {
         this.data.rangeId = undefined;
         this.helper.rangeId = undefined;
-        this.fire(BaseEvents.RANGE_CHANGE, null);
       }
     });
 
     this.component.subscribe(
       BaseEvents.RESOURCE_DEGRADED,
       (resource: IExternalResource) => {
-        this.fire(BaseEvents.RESOURCE_DEGRADED);
         Auth09.handleDegraded(resource);
       }
     );
-
-    this.component.subscribe(BaseEvents.RETURN, () => {
-      this.fire(BaseEvents.RETURN);
-    });
-
-    this.component.subscribe(BaseEvents.RIGHT_ARROW, () => {
-      this.fire(BaseEvents.RIGHT_ARROW);
-    });
-
-    this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
-      this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
-    });
-
-    this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
-      this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
-    });
-
-    this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
-      this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
-    });
-
-    this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
-      this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
-    });
-
-    this.component.subscribe(BaseEvents.SETTINGS_CHANGE, (args: any) => {
-      this.fire(BaseEvents.SETTINGS_CHANGE, args);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_EMBED_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_GENERIC_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_HELP_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_INFORMATION, () => {
-      this.fire(BaseEvents.SHOW_INFORMATION);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_LOGIN_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
-    });
 
     this.component.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
       this.showMessage(message);
     });
 
-    this.component.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
-      this.fire(BaseEvents.SHOW_OVERLAY);
-    });
-
-    this.component.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
-      this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
-    });
-
     this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
-      this.fire(BaseEvents.SHOW_TERMS_OF_USE);
-
       let terms: string | null = this.helper.getLicense();
 
       if (!terms) {
@@ -614,10 +401,6 @@ export class BaseExtension implements IExtension {
       if (terms) {
         this.showMessage(terms);
       }
-    });
-
-    this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.fire(BaseEvents.THUMB_SELECTED, thumb.index);
     });
 
     this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
@@ -640,22 +423,6 @@ export class BaseExtension implements IExtension {
         isFullScreen: this.component.isFullScreen,
         overrideFullScreen: overrideFullScreen
       });
-    });
-
-    this.component.subscribe(BaseEvents.UP_ARROW, () => {
-      this.fire(BaseEvents.UP_ARROW);
-    });
-
-    this.component.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
-      this.fire(BaseEvents.UPDATE_SETTINGS);
-    });
-
-    this.component.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
-      this.fire(BaseEvents.VIEW_FULL_TERMS);
-    });
-
-    this.component.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
-      this.fire(BaseEvents.WINDOW_UNLOAD);
     });
 
     // create shell and shared views.

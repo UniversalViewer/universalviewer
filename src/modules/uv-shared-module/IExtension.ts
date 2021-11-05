@@ -1,6 +1,6 @@
 import { AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, Range, Manifest } from 'manifesto.js';
 import { ILocale } from "../../ILocale";
-import { IUVComponent } from "../../IUVComponent";
+import { IUniversalViewer } from "../../IUniversalViewer";
 import { IUVData } from "../../IUVData";
 import { Shell } from "./Shell";
 import { Helper } from "@iiif/manifold";
@@ -16,7 +16,7 @@ export interface IExtension {
   $element: JQuery;
   addTimestamp(uri: string): string;
   changeLocale(locale: string): void;
-  component: IUVComponent;
+  component: IUniversalViewer;
   create(): void;
   createModules(): void;
   data: IUVData;

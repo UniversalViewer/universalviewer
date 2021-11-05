@@ -25,7 +25,7 @@ export class SlideAtlasCenterPanel extends CenterPanel {
 
     this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
-      (e: any, resources: IExternalResource[]) => {
+      (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );

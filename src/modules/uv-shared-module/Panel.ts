@@ -1,9 +1,9 @@
 import { BaseEvents } from "./BaseEvents";
-import { IUVComponent } from "../../IUVComponent";
+import { IUniversalViewer } from "../../IUniversalViewer";
 import { Async } from "@edsilv/utils";
 
 export class Panel {
-  component: IUVComponent;
+  component: IUniversalViewer;
   $element: JQuery;
   fitToParentWidth: boolean;
   fitToParentHeight: boolean;

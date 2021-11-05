@@ -5,10 +5,10 @@ jQueryPlugins($);
 const merge = require('lodash/merge');
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { ExtensionLoader, IExtension } from "./modules/uv-shared-module/IExtension";
-import { IUVComponent } from "./IUVComponent";
+import { IUniversalViewer } from "./IUniversalViewer";
 import { IUVData } from "./IUVData";
 import { IUVAdaptor } from "./IUVAdaptor";
-import { PubSub } from "./PubSub";
+import { EventHandler, PubSub } from "./PubSub";
 import {
   RenderingFormat,
   MediaType,
@@ -37,7 +37,7 @@ const Extension = {
   SLIDEATLAS: {name: "uv-slideatlas-extension", loader: () => /* webpackMode: "lazy" */ import('./extensions/uv-slideatlas-extension/Extension')},
 }
 
-export class UniversalViewer extends BaseComponent implements IUVComponent {
+export class UniversalViewer extends BaseComponent implements IUniversalViewer {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
@@ -162,11 +162,19 @@ export class UniversalViewer extends BaseComponent implements IUVComponent {
     this._pubsub.publish(event, args);
   }
 
-  public subscribe(event: string, cb: any) {
-    this._pubsub.subscribe(event, cb);
+  public subscribe(event: string, handler: any) {
+    this._pubsub.subscribe(event, handler);
 
     return () => {
-      this._pubsub.unsubscribe(event, cb);
+      this._pubsub.unsubscribe(event, handler);
+    }
+  }
+
+  public subscribeAll(handler: EventHandler, exceptions: string[] = []) {
+    this._pubsub.subscribeAll(handler, exceptions);
+
+    return () => {
+      this._pubsub.unsubscribeAll(handler, exceptions);
     }
   }
 

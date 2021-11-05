@@ -39,7 +39,7 @@ export default class Extension extends BaseExtension
 
     this.component.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,
-      (e: any, canvasIndex: number) => {
+      (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
