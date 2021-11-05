@@ -259,7 +259,11 @@ export class BaseExtension implements IExtension {
     //   console.log(args)
     //   // this.fire(BaseEvents.RANGE_CHANGE, this.data.rangeId);
     // },
-    // [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN]);
+    // [BaseEvents.LOAD, BaseEvents.CREATE, BaseEvents.DROP, BaseEvents.TOGGLE_FULLSCREEN, BaseEvents.EXTERNAL_RESOURCE_OPENED]);
+
+    this.component.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
+      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    });
 
     this.component.subscribe(BaseEvents.LOGIN_FAILED, () => {
       this.showMessage(this.data.config.content.authorisationFailedMessage);
@@ -638,7 +642,6 @@ export class BaseExtension implements IExtension {
   }
 
   resize(): void {
-    console.log("resize");
     this._updateMetric();
     this.component.publish(BaseEvents.RESIZE);
   }

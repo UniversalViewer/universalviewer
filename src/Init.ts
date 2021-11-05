@@ -1,3 +1,4 @@
+import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
@@ -44,7 +45,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   });
 
   uv.on(
-    "set",
+    BaseEvents.SET,
     function(_obj) {
       // remove loaded class to show spinner
       uv.el.parentElement!.parentElement!.classList.remove("loaded");
@@ -53,7 +54,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "created",
+    BaseEvents.CREATED,
     function(_obj) {
       // add loaded class to hide spinner
       uv.el.parentElement!.parentElement!.classList.add("loaded");
@@ -63,7 +64,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "externalResourceOpened",
+    BaseEvents.EXTERNAL_RESOURCE_OPENED,
     function(_obj) {
       setTimeout(function() {
         resize();
@@ -73,7 +74,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "reload",
+    BaseEvents.RELOAD,
     function(data) {
       data.isReload = true;
       uv.set(data);
@@ -82,7 +83,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
   
   uv.on(
-    "toggleFullScreen",
+    BaseEvents.TOGGLE_FULLSCREEN,
     function(data) {
       isFullScreen = data.isFullScreen;
 
@@ -114,7 +115,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    "error",
+    BaseEvents.ERROR,
     function(message) {
       console.error(message);
     },
