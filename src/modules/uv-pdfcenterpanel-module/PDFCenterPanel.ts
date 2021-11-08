@@ -18,6 +18,7 @@ export class PDFCenterPanel extends CenterPanel {
     private _ctx: any;
     private _maxScale = 5;
     private _minScale = 0.7;
+    private _fitToHeight = true;
     private _nextButtonEnabled: boolean = false;
     private _pageIndex: number = 1;
     private _pageIndexPending: number | null = null;
@@ -87,7 +88,7 @@ export class PDFCenterPanel extends CenterPanel {
             if (this._pageIndex <= 1) {
                 return;
             }
-            
+
             this._pageIndex--;
 
             this._queueRenderPage(this._pageIndex);
@@ -166,7 +167,7 @@ export class PDFCenterPanel extends CenterPanel {
         this.disableNextButton();
 
         this._$zoomInButton.onPressed((e: any) => {
-            e.preventDefault(); 
+            e.preventDefault();
 
             const newScale: number = this._scale + 0.5;
 
@@ -175,6 +176,8 @@ export class PDFCenterPanel extends CenterPanel {
             } else {
                 this._scale = this._maxScale;
             }
+
+            this._fitToHeight = false;
 
             this._render(this._pageIndex);
         });
@@ -190,10 +193,12 @@ export class PDFCenterPanel extends CenterPanel {
                 this._scale = this._minScale;
             }
 
+            this._fitToHeight = false;
+
             this._render(this._pageIndex);
         });
     }
-    
+
     disablePrevButton(): void {
         this._prevButtonEnabled = false;
         this._$prevButton.addClass('disabled');
@@ -237,7 +242,7 @@ export class PDFCenterPanel extends CenterPanel {
     openMedia(resources: IExternalResource[]) {
 
         this._$spinner.show();
-        
+
         this.extension.getExternalResources(resources).then(() => {
 
             let mediaUri: string | null = null;
@@ -259,7 +264,7 @@ export class PDFCenterPanel extends CenterPanel {
                 var parameter = {
                     url: mediaUri,
                     withCredentials: canvas.externalResource.isAccessControlled()
-                  } 
+                  }
 
                 PDFJS.getDocument(parameter).then((pdfDoc: any) => {
                     this._pdfDoc = pdfDoc;
@@ -277,7 +282,7 @@ export class PDFCenterPanel extends CenterPanel {
         if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
             return;
         }
-        
+
         this._pageRendering = true;
         this._$zoomOutButton.enable();
         this._$zoomInButton.enable();
@@ -299,40 +304,17 @@ export class PDFCenterPanel extends CenterPanel {
                 this._renderTask.cancel();
             }
 
-            // how to fit to the available space
-            // const height: number = this.$content.height();
-            // this._canvas.height = height;
-            // this._viewport = page.getViewport(this._canvas.height / page.getViewport(1.0).height);
-            // const width: number = this._viewport.width;
-            // this._canvas.width = width;
-
-            // this._$canvas.css({
-            //     left: (this.$content.width() / 2) - (width / 2)
-            // });
+            // calculate correct scale to fit to available height
+            if (this._fitToHeight) {
+                this._scale = Math.floor(
+                    this.$content.height() * 100.0 / page.getViewport(1).height
+                ) / 100;
+            }
 
             // scale viewport
             this._viewport = page.getViewport(this._scale);
             this._canvas.height = this._viewport.height;
             this._canvas.width = this._viewport.width;
-
-
-            // get divisible number between canvas height and content height
-            const divisible_amount = this._canvas.height / this.$content.height()
-            // create a variable for the new canvas height.
-            // (canvas height divided by our divisible_amount) multiply by the viewport scale
-            var canvas_height = (this._canvas.height / divisible_amount) * this._viewport.scale;
-
-            // if canvas height is smaller than our content height
-            // use the content hight instead
-            if(canvas_height < this.$content.height()) {
-                canvas_height = this.$content.height();
-            }
-
-            // set the canvas height with CSS
-            this._$canvas.css({
-                height: canvas_height
-            });
-
 
             // Render PDF page into canvas context
             const renderContext = {
@@ -360,13 +342,13 @@ export class PDFCenterPanel extends CenterPanel {
                 } else {
                     this.enablePrevButton();
                 }
-        
+
                 if (this._pageIndex === this._pdfDoc.numPages) {
                     this.disableNextButton();
                 } else {
                     this.enableNextButton();
                 }
-                
+
             }).catch((err: any) => {
                 //console.log(err);
             });
