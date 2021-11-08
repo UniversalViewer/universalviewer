@@ -1,4 +1,5 @@
 var _ = require('lodash'),
+fs = require('fs'),
 glob = require('glob'),
 globArray = require('glob-array'),
 //jsonSchemaGenerator = require('json-schema-generator'),
@@ -121,10 +122,77 @@ module.exports = function (grunt) {
             config.localisation.locales.push(locale);
         });
 
+        // validate localizations
+        validatel10nFiles(jsonFiles);
+
         return config;
     }
 
     function getL10nFiles(dir){
         return globArray.sync([path.join(dir, '*.json'), '!' + path.join(dir, 'xx-XX.json')]);
+    }
+
+    function validatel10nFiles(jsonFiles)
+    {
+        // loop through each language file
+        for ( i = 0; i < jsonFiles.length; i++) {
+            for ( k = 0; k < jsonFiles.length; k++) {
+                if(jsonFiles[i] != jsonFiles[k]) {
+
+                    // read in first language file
+                    var object1Data = fs.readFileSync(path.join(__dirname, '../', jsonFiles[i]));
+                    var object1 = JSON.parse(object1Data);
+        
+                    // read in second language file
+                    var object2Data = fs.readFileSync(path.join(__dirname, '../', jsonFiles[k]));
+                    var object2 = JSON.parse(object2Data);
+        
+                    // compare array keys
+                    const result = compareObjects(object1, object2);
+                    
+                    // display message if there are missing keys
+                    if(Object.keys(result).length > 0) {
+                        var message = 'The following localizations are missing from ' + jsonFiles[k] + ' that are present in ' + jsonFiles[i];
+                        grunt.log.writeln(message['yellow'].bold)
+                        console.log(result)
+                    }
+                }            
+            }
+        }
+    }
+
+    /* https://stackoverflow.com/a/45716550/2075215 */
+    const compareObjects = (obj1, obj2)  => {
+
+        function getAllKeyNames(o, arr, str){
+            Object.keys(o).forEach(function(k){
+                if (Object.prototype.toString.call(o[k]) === "[object Object]") {
+                    getAllKeyNames(o[k], arr, (str + '.' + k));
+                } else if (Array.isArray(o[k])) {
+                    o[k].forEach(function(v){
+                        getAllKeyNames(v, arr, (str + '.' + k));
+                    });
+                }
+                arr.push(str + '.' + k);
+            });
+        }
+    
+        function diff(arr1, arr2) {
+            for(let i = 0; i < arr2.length; i++) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+            return arr1;
+        }
+    
+        const o1Keys = [];
+        const o2Keys = [];
+        getAllKeyNames(obj1, o1Keys, ''); // get the keys from schema
+        getAllKeyNames(obj2, o2Keys, ''); // get the keys from uploaded file
+    
+        const missingProps = diff(o1Keys, o2Keys); // calculate differences
+        for(let i = 0; i < missingProps.length; i++) {
+            missingProps[i] = missingProps[i].replace('.', '');
+        }
+        return missingProps;
     }
 };
