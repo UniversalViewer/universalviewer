@@ -23,8 +23,10 @@ A community-developed open source project on a mission<br/> to help you share yo
 
     npm install universalviewer --save
     
+    
 > Please note that UV v4 is designed to work on [evergreen browsers](https://www.w3.org/2001/tag/doc/evergreen-web/). If you need IE11 support, please use [UV v3](https://github.com/UniversalViewer/universalviewer/tree/v3).
 > Microsoft no longer supports IE11, and it's [reaching end-of-life on June 15 2022](https://docs.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge).
+
 
 - [**Website**](#-website)
 - [**Scope**](#-scope)
