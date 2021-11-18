@@ -324,6 +324,8 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
       config = merge(config, mergedConfigs);
     }
 
+    console.log(config)
+
     return config;
   }
 
@@ -338,7 +340,6 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
       this.extension.data = data;
       this.extension.helper = helper;
       this.extension.create();
-      this.el.classList.add(extension.name)
     }
   }
 

@@ -94,6 +94,7 @@ export class BaseExtension implements IExtension {
     this._initLocales();
 
     // add/remove classes.
+    console.log("add classes")
     this.$element.empty();
     this.$element.removeClass();
     this.$element.addClass("uv-extension-host");
@@ -636,6 +637,11 @@ export class BaseExtension implements IExtension {
         if (width >= metric.minWidth) {
           if (this.metric !== metric.type) {
             this.metric = metric.type;
+            // remove current metric class
+            for (var j = 0; j < this.metrics.length; j++) {
+              this.$element.removeClass(this.metrics[j].type);
+            }
+            this.$element.addClass(metric.type);
             this.extensionHost.publish(BaseEvents.METRIC_CHANGE);
           }
           break;
