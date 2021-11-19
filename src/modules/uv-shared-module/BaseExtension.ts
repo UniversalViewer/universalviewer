@@ -94,7 +94,6 @@ export class BaseExtension implements IExtension {
     this._initLocales();
 
     // add/remove classes.
-    console.log("add classes")
     this.$element.empty();
     this.$element.removeClass();
     this.$element.addClass("uv-extension-host");
@@ -409,6 +408,9 @@ export class BaseExtension implements IExtension {
     });
 
     this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+
+      console.log("toggle fullscreen")
+
       const overrideFullScreen: boolean = this.data.config.options
         .overrideFullScreen;
 

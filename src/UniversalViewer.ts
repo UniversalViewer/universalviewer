@@ -324,8 +324,6 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
       config = merge(config, mergedConfigs);
     }
 
-    console.log(config)
-
     return config;
   }
 
