@@ -19,14 +19,13 @@ export const init = (el: string | HTMLDivElement, data) => {
 
   const resize = () => {
     if (uv) {
-      if (!overrideFullScreen) {
-        if (isFullScreen) {
-          parent.style.width = window.innerWidth + "px";
-          parent.style.height = window.innerHeight + "px";
-        } else {
-          parent.style.width = container.offsetWidth + "px";
-          parent.style.height = container.offsetHeight + "px";
-        }
+      if (isFullScreen && !overrideFullScreen) {
+        parent.style.width = window.innerWidth + "px";
+        parent.style.height = window.innerHeight + "px";
+      } else {
+        // either we're not full screen or scaling to the window size is overridden
+        parent.style.width = container.offsetWidth + "px";
+        parent.style.height = container.offsetHeight + "px";
       }
       uv.resize();
     }
