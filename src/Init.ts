@@ -4,6 +4,7 @@ import { UniversalViewer } from "./UniversalViewer";
 export const init = (el: string | HTMLDivElement, data) => {
   let uv;
   let isFullScreen = false;
+  let overrideFullScreen = false;
   const container = typeof el === "string" ? document.getElementById(el) : el;
 
   if (!container) {
@@ -18,12 +19,14 @@ export const init = (el: string | HTMLDivElement, data) => {
 
   const resize = () => {
     if (uv) {
-      if (isFullScreen) {
-        parent.style.width = window.innerWidth + "px";
-        parent.style.height = window.innerHeight + "px";
-      } else {
-        parent.style.width = container.offsetWidth + "px";
-        parent.style.height = container.offsetHeight + "px";
+      if (!overrideFullScreen) {
+        if (isFullScreen) {
+          parent.style.width = window.innerWidth + "px";
+          parent.style.height = window.innerHeight + "px";
+        } else {
+          parent.style.width = container.offsetWidth + "px";
+          parent.style.height = container.offsetHeight + "px";
+        }
       }
       uv.resize();
     }
@@ -86,30 +89,30 @@ export const init = (el: string | HTMLDivElement, data) => {
     BaseEvents.TOGGLE_FULLSCREEN,
     function(data) {
       isFullScreen = data.isFullScreen;
+      overrideFullScreen = data.overrideFullScreen;
 
-      if (data.overrideFullScreen) {
-        return;
-      }
-
-      if (isFullScreen) {
-        const requestFullScreen = getRequestFullScreen(parent);
-        if (requestFullScreen) {
-          requestFullScreen.call(parent);
-          resize();
-        }
-      } else {
-        const exitFullScreen = getExitFullScreen();
-        if (exitFullScreen) {
-          exitFullScreen.call(document);
-          setTimeout(function() {
-            resize();
-          }, 100);
-          // firefox needs extra time when exiting a full screen embed
-          setTimeout(function() {
-            resize();
-          }, 1000);
+      if (!data.overrideFullScreen) {
+        if (isFullScreen) {
+          const requestFullScreen = getRequestFullScreen(parent);
+          if (requestFullScreen) {
+            requestFullScreen.call(parent);
+            // resize();
+          }
+        } else {
+          const exitFullScreen = getExitFullScreen();
+          if (exitFullScreen) {
+            exitFullScreen.call(document);
+            // firefox needs extra time when exiting a full screen embed
+            // setTimeout(function() {
+            //   resize();
+            // }, 100);
+          }
         }
       }
+
+      setTimeout(function() {
+        resize();
+      }, 100);
     },
     false
   );
