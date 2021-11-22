@@ -20,6 +20,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   const resize = () => {
     if (uv) {
       if (isFullScreen && !overrideFullScreen) {
+        // is full screen and not overridden.
         parent.style.width = window.innerWidth + "px";
         parent.style.height = window.innerHeight + "px";
       } else {
