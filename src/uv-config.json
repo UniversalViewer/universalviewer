@@ -22,7 +22,8 @@
     },
     "openSeadragonCenterPanel": {
       "options": {
-        "autoHideControls": false
+        "autoHideControls": false,
+        "clickToZoomEnabled": false
       }
     },
     "footerPanel": {

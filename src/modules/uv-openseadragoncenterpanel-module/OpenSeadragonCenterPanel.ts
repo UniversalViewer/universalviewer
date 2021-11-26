@@ -227,7 +227,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
-          this.extension.data.config.options.clickToZoomEnabled,
+          this.config.options.clickToZoomEnabled,
           true
         )
       },
