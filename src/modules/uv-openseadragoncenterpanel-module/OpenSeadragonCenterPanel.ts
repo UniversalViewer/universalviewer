@@ -334,9 +334,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$canvas = $(this.viewer.canvas);
 
     // disable right click on canvas
-    this.$canvas.on("contextmenu", () => {
-      return false;
-    });
+    // this.$canvas.on("contextmenu", () => {
+    //   return false;
+    // });
 
     this.$navigator = this.$viewer.find(".navigator");
     this.setNavigatorVisible();
@@ -714,18 +714,24 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       for (let k = 0; k < rects.length; k++) {
         const rect = rects[k];
 
-        const div: HTMLElement = document.createElement("div");
+        const div: HTMLElement = document.createElement("DIV");
         div.id =
           "annotation-" +
           rect.canvasIndex +
           "-" +
           rect.resultIndex;
-        div.className = "annotationOverlay";
+        
         div.title = sanitize(rect.chars);
 
-        // if the rect is 1 x 1, use a pin graphic
+        // if it's a pin
         if (rect.width === 1 && rect.height === 1) {
-          div.classList.add("pin");
+          div.className = "annotationPin";
+          const span: HTMLSpanElement = document.createElement("SPAN");
+          span.innerText = String(k + 1);
+          div.appendChild(span);
+        } else {
+          // it's a rect
+          div.className = "annotationRect";
         }
 
         this.viewer.addOverlay(div, rect);
@@ -1110,7 +1116,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       "#annotation-" + annotationRect.canvasIndex + "-" + annotationRect.index
     );
     $rect.addClass("current");
-    $(".annotationOverlay")
+    $(".annotationRect")
       .not($rect)
       .removeClass("current");
   }

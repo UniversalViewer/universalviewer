@@ -177,7 +177,7 @@
                 .loading(@loader-black-bg);
             }
 
-            .annotationOverlay{
+            .annotationRect{
                 background-color: desaturate(@search-result, 40%);
                 .opacity(.5);
                 &.current {
@@ -187,15 +187,23 @@
                 }
             }
 
-            .annotationOverlay.pin{
-                background-color: "red" !important;
-                width: 10px !important;
-                height: 10px !important;
-                // &.current {
-                //     //border: 3px solid #fff;
-                //     @col: lighten(@search-result, 20%);
-                //     background-color: saturate(@col, 100%);
-                // }
+            .annotationPin{
+                // background-color: white;
+                background-image: data-uri('../img/pin.svg') !important;
+                width: 28px !important;
+                height: 37px !important;
+                background-position-x: 1px;
+                transform: translate(-45%, -90%);
+
+                span {
+                    color: #2a2a2a;
+                    user-select: none;
+                    display: block;
+                    width: 90%;
+                    text-align: center;
+                    margin-top: 8px;
+                    font-size: 11px;
+                }
             }
         }
     }
