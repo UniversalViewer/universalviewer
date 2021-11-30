@@ -38,6 +38,24 @@
       #uv-controls button {
         width: 100px;
       }
+
+      #uv-controls textarea {
+        width: 600px;
+      }
+
+      #annotations {
+        float: left;
+        margin-right: 5px;
+      }
+
+      #setAnnotationsButton {
+        float: left;
+        margin-right: 5px;
+      }
+
+      #clearAnnotationsButton {
+        float: left;
+      }
     </style>
   </head>
   <body>
@@ -63,7 +81,16 @@
           Set Rotation
         </button>
       </div>
-    </div>
+
+      <div class="group">
+        <textarea id="annotations" rows="5"></textarea>
+        <button id="setAnnotationsButton" class="button">
+          Set Annotations
+        </button>
+        <button id="clearAnnotationsButton" class="button">
+          Clear Annotations
+        </button>
+      </div>
 
     <script type="text/javascript">
       function createOptGroup(label) {
@@ -88,6 +115,11 @@
         var $setManifestButton = document.getElementById("setManifestButton");
         var $setTargetButton = document.getElementById("setTargetButton");
         var $setRotationButton = document.getElementById("setRotationButton");
+        var $annotations = document.getElementById("annotations");
+        var $setAnnotationsButton = document.getElementById("setAnnotationsButton");
+        var $clearAnnotationsButton = document.getElementById("clearAnnotationsButton");
+
+        var annotations = [];
 
         var urlAdaptor = new UV.URLAdaptor();
 
@@ -138,6 +170,13 @@
           $manifest.value = manifest;
         }
 
+        function setAnnotations() {
+          annotations = JSON.parse($annotations.value);
+          uv.set({
+            annotations: annotations,
+          });
+        }
+
         $manifestSelect.onchange = function() {
           var $selectedOption = document.querySelector(
             "#manifestSelect option:checked"
@@ -166,6 +205,16 @@
           uv.set({
             rotation: rotation,
           });
+        };
+
+        $setAnnotationsButton.onclick = function() {
+          setAnnotations();
+        };
+
+        $clearAnnotationsButton.onclick = function() {
+          annotations = [];
+          $annotations.value = JSON.stringify(annotations);
+          setAnnotations();
         };
 
         function setupUV() {
@@ -199,6 +248,24 @@
 
           uv.on("targetChange", function(target) {
             $target.value = target;
+          });
+
+          uv.on("openseadragonExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1)
+            });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
+          });
+
+          uv.on("modelviewerExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1)
+            });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
           });
 
           // uv.on("load", function() {

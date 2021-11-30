@@ -9,10 +9,11 @@ export class PubSub {
 
   public publish(name: string, args?: any) {
     const handlers: EventHandler[] = this.events[name];
-    if (handlers === undefined) return;
-    handlers.forEach((handler) => {
-      handler.call(this, args);
-    });
+    if (handlers) {
+      handlers.forEach((handler) => {
+        handler.call(this, args);
+      });
+    }
     this.onPublishHandler.call(this, name, args);
   }
 

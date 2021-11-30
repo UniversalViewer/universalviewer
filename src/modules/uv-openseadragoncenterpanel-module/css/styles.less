@@ -177,7 +177,7 @@
                 .loading(@loader-black-bg);
             }
 
-            .searchOverlay{
+            .annotationOverlay{
                 background-color: desaturate(@search-result, 40%);
                 .opacity(.5);
                 &.current {
@@ -185,6 +185,17 @@
                     @col: lighten(@search-result, 20%);
                     background-color: saturate(@col, 100%);
                 }
+            }
+
+            .annotationOverlay.pin{
+                background-color: "red" !important;
+                width: 10px !important;
+                height: 10px !important;
+                // &.current {
+                //     //border: 3px solid #fff;
+                //     @col: lighten(@search-result, 20%);
+                //     background-color: saturate(@col, 100%);
+                // }
             }
         }
     }

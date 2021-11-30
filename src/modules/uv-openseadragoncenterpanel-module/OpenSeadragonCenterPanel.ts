@@ -7,7 +7,7 @@ import {
   IExternalImageResourceData,
   IExternalResourceData
 } from "manifesto.js";
-import { sanitize } from "../../Utils";
+import { debounce, sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { XYWHFragment } from "../../extensions/uv-openseadragon-extension/XYWHFragment";
@@ -17,6 +17,7 @@ import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
+import '@openseadragon-imaging/openseadragon-viewerinputhook';
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
@@ -31,7 +32,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   items: any[];
   navigatedFromSearch: boolean = false;
   nextButtonEnabled: boolean = false;
-  pages: IExternalResource[];
+  // pages: IExternalResource[];
   prevButtonEnabled: boolean = false;
   previousAnnotationRect: AnnotationRect;
   userData: any;
@@ -66,7 +67,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     this.extensionHost.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
-      this.zoomToInitialAnnotation();
+      // this.zoomToInitialAnnotation();
     });
 
     this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
@@ -139,7 +140,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    // todo
     this.extensionHost.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
       this.whenLoaded(() => {
         this.viewer.viewport.setRotation(rotation);
@@ -227,7 +227,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
-          this.config.options.clickToZoomEnabled,
+          this.extension.data.config.options.clickToZoomEnabled,
           true
         )
       },
@@ -276,6 +276,26 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         }
       }
     });
+
+    const that = this;
+
+    const debouncedDoubleClick = debounce((e: any) => {
+      const canvas: Canvas = that.extension.helper.getCurrentCanvas();
+      var viewportPoint = that.viewer.viewport.pointFromPixel(e.position);
+      var imagePoint = that.viewer.viewport.viewportToImageCoordinates(viewportPoint.x, viewportPoint.y);
+      this.extensionHost.publish(Events.DOUBLECLICK, {
+        target: `${canvas.id}#xywh=${Math.round(imagePoint.x)},${Math.round(imagePoint.y)},1,1`
+      });
+    }, 100);
+
+    this.viewer.addViewerInputHook({hooks: [
+      {tracker: "viewer", handler: "dblClickHandler", hookHandler: (e) => {
+        const settings: ISettings = this.extension.getSettings();
+        if (!settings.pagingEnabled) {
+          debouncedDoubleClick(e)
+        }
+      }}
+    ]});
 
     this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
     this.$zoomInButton.attr("tabindex", 0);
@@ -488,6 +508,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   async openMedia(resources?: IExternalResource[]): Promise<void> {
+
     // uv may have been unloaded
     if (!this.viewer) {
       return;
@@ -669,6 +690,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   zoomToInitialAnnotation(): void {
+    console.log("zoomToInitialAnnotation");
     let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
 
     (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
@@ -682,23 +704,31 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   overlayAnnotations(): void {
     const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
 
+    // clear existing annotations
+    this.clearAnnotations();
+
     for (let i = 0; i < annotations.length; i++) {
       const annotation: AnnotationGroup = annotations[i];
-      const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
+      const rects: any[] = this.getAnnotationOverlayRects(annotation);
 
-      for (let k = 0; k < overlayRects.length; k++) {
-        const overlayRect = overlayRects[k];
+      for (let k = 0; k < rects.length; k++) {
+        const rect = rects[k];
 
         const div: HTMLElement = document.createElement("div");
         div.id =
-          "searchResult-" +
-          overlayRect.canvasIndex +
+          "annotation-" +
+          rect.canvasIndex +
           "-" +
-          overlayRect.resultIndex;
-        div.className = "searchOverlay";
-        div.title = sanitize(overlayRect.chars);
+          rect.resultIndex;
+        div.className = "annotationOverlay";
+        div.title = sanitize(rect.chars);
 
-        this.viewer.addOverlay(div, overlayRect);
+        // if the rect is 1 x 1, use a pin graphic
+        if (rect.width === 1 && rect.height === 1) {
+          div.classList.add("pin");
+        }
+
+        this.viewer.addOverlay(div, rect);
       }
     }
   }
@@ -837,7 +867,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   clearAnnotations(): void {
-    this.$canvas.find(".searchOverlay").hide();
+    this.viewer.clearOverlays();
   }
 
   getAnnotationsForCurrentImages(): AnnotationGroup[] {
@@ -1077,10 +1107,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   highlightAnnotationRect(annotationRect: AnnotationRect): void {
     const $rect = $(
-      "#searchResult-" + annotationRect.canvasIndex + "-" + annotationRect.index
+      "#annotation-" + annotationRect.canvasIndex + "-" + annotationRect.index
     );
     $rect.addClass("current");
-    $(".searchOverlay")
+    $(".annotationOverlay")
       .not($rect)
       .removeClass("current");
   }

@@ -7,7 +7,8 @@
     "limitLocales": false,
     "overrideFullScreen": false,
     "pagingEnabled": true,
-    "rightPanelEnabled": true
+    "rightPanelEnabled": true,
+    "clickToZoomEnabled": false
   },
   "modules": {
     "headerPanel": {
@@ -22,8 +23,7 @@
     },
     "openSeadragonCenterPanel": {
       "options": {
-        "autoHideControls": false,
-        "clickToZoomEnabled": false
+        "autoHideControls": false
       }
     },
     "footerPanel": {

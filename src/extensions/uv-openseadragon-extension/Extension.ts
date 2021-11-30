@@ -559,11 +559,28 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   checkForAnnotations(): void {
     if (this.data.annotations) {
-      const annotations: AnnotationGroup[] = this.parseAnnotationList(
-        this.data.annotations
-      );
-      this.extensionHost.publish(BaseEvents.CLEAR_ANNOTATIONS);
-      this.annotate(annotations);
+
+      // it's useful to group annotations by their target canvas
+      let groupedAnnotations: AnnotationGroup[] = [];
+
+      const annotations: any = this.data.annotations;
+
+      if (Array.isArray(annotations)) {
+        // using the Web Annotation Data Model
+        groupedAnnotations = this.groupWebAnnotationsByTarget(
+          this.data.annotations
+        );
+      } else if (annotations.resources.length) {
+        // using Open Annotations
+        groupedAnnotations = this.groupOpenAnnotationsByTarget(
+          this.data.annotations
+        );
+
+        // clear annotations as they're from a search
+        this.extensionHost.publish(BaseEvents.CLEAR_ANNOTATIONS);
+      }
+      
+      this.annotate(groupedAnnotations);
     }
   }
 
@@ -1249,7 +1266,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       .then(response => response.json())
       .then(results => {
         if (results.resources && results.resources.length) {
-          searchResults = searchResults.concat(this.parseAnnotationList(results));
+          searchResults = searchResults.concat(this.groupOpenAnnotationsByTarget(results));
         }
   
         if (results.next) {
@@ -1260,36 +1277,62 @@ export default class OpenSeadragonExtension extends BaseExtension {
       })
   }
 
-  parseAnnotationList(annotations: any): AnnotationGroup[] {
-    const parsed: AnnotationGroup[] = [];
+  groupWebAnnotationsByTarget(annotations: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
+
+    for (let i = 0; i < annotations.length; i++) {
+      const annotation = annotations[i];
+      const canvasId: string = annotation.target.match(/(.*)#/)[1];
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
+      annotationGroup.canvasIndex = canvasIndex as number;
+
+      const match: AnnotationGroup = groupedAnnotations.filter(
+        x => x.canvasId === annotationGroup.canvasId
+      )[0];
+
+      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
+      if (match) {
+        match.addRect(annotation);
+      } else {
+        annotationGroup.addRect(annotation);
+        groupedAnnotations.push(annotationGroup);
+      }
+    }
+
+    return groupedAnnotations;
+  }
+
+  groupOpenAnnotationsByTarget(annotations: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
 
     for (let i = 0; i < annotations.resources.length; i++) {
       const resource: any = annotations.resources[i];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(
-        resource.on.match(/(.*)#/)[1]
-      );
-      const annotationGroup: AnnotationGroup = new AnnotationGroup(
-        resource,
-        <number>canvasIndex
-      );
-      const match: AnnotationGroup = parsed.filter(
-        x => x.canvasIndex === annotationGroup.canvasIndex
+      const canvasId: string = resource.on.match(/(.*)#/)[1];
+      // console.log(canvasId)
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
+      annotationGroup.canvasIndex = canvasIndex as number;
+
+      const match: AnnotationGroup = groupedAnnotations.filter(
+        x => x.canvasId === annotationGroup.canvasId
       )[0];
 
-      // if there's already an annotation for the canvas index, add a rect to it, otherwise create a new AnnotationGroup
+      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
       if (match) {
         match.addRect(resource);
       } else {
-        parsed.push(annotationGroup);
+        annotationGroup.addRect(resource);
+        groupedAnnotations.push(annotationGroup);
       }
     }
 
     // sort by canvasIndex
-    parsed.sort((a, b) => {
+    groupedAnnotations.sort((a, b) => {
       return a.canvasIndex - b.canvasIndex;
     });
 
-    return parsed;
+    return groupedAnnotations;
   }
 
   getAnnotationRects(): AnnotationRect[] {

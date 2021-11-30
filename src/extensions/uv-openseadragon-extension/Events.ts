@@ -2,6 +2,7 @@ export class Events {
   static namespace: string = "openseadragonExtension.";
 
   static CURRENT_VIEW_URI: string = Events.namespace + "currentViewUri";
+  static DOUBLECLICK: string = Events.namespace + "doubleClick";
   static IMAGE_SEARCH: string = Events.namespace + "imageSearch";
   static MODE_CHANGE: string = Events.namespace + "modeChange";
   static NEXT_SEARCH_RESULT: string = Events.namespace + "nextSearchResult";
