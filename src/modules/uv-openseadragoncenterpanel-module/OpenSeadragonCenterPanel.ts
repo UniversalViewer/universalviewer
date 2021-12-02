@@ -291,7 +291,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.viewer.addViewerInputHook({hooks: [
       {tracker: "viewer", handler: "dblClickHandler", hookHandler: (e) => {
         const settings: ISettings = this.extension.getSettings();
-        if (!settings.pagingEnabled) {
+        if (!settings.pagingEnabled && this.config.options.doubleClickAnnotationEnabled) {
           debouncedDoubleClick(e)
         }
       }}

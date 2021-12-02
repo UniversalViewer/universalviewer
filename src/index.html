@@ -242,6 +242,24 @@
             );
           });
 
+          // enable doubleclick annotation
+          uv.on("configure", function({ config, cb }) {
+            cb({ 
+              modules: { 
+                modelViewerCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true
+                  }
+                },
+                openSeadragonCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true
+                  }
+                } 
+              }
+            });
+          });
+
           // uv.on("configure", function({ config, cb }) {
           //   cb((async () => {
           //     await fetch("uv-config.json");
@@ -251,6 +269,7 @@
           // uv.on("configure", function({ config, cb }) {
           //   cb({ options: { overrideFullScreen: true } });
           // });
+
 
           uv.on("targetChange", function(target) {
             $target.value = target;

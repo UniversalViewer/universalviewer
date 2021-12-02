@@ -88,11 +88,13 @@ export class ModelViewerCenterPanel extends CenterPanel {
     );
 
     this.$modelviewer[0].addEventListener('dblclick', (e: any) => {
-      const point = (this.$modelviewer[0] as any).positionAndNormalFromPoint(e.clientX, e.clientY);
-      const canvas: Canvas = that.extension.helper.getCurrentCanvas();
-      this.extensionHost.publish(Events.DOUBLECLICK, {
-        target: `${canvas.id}#xyz=${point.position.x},${point.position.y},${point.position.z}&nxyz=${point.normal.x},${point.normal.y},${point.normal.z}`
-      });
+      if (this.config.options.doubleClickAnnotationEnabled) {
+        const point = (this.$modelviewer[0] as any).positionAndNormalFromPoint(e.clientX, e.clientY);
+        const canvas: Canvas = that.extension.helper.getCurrentCanvas();
+        this.extensionHost.publish(Events.DOUBLECLICK, {
+          target: `${canvas.id}#xyz=${point.position.x},${point.position.y},${point.position.z}&nxyz=${point.normal.x},${point.normal.y},${point.normal.z}`
+        });
+      }
     });
   }
 

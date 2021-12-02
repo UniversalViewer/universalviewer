@@ -8,6 +8,7 @@
     "headerPanelEnabled": true,
     "leftPanelEnabled": false,
     "limitLocales": false,
+    "doubleClickAnnotationEnabled": false,
     "metrics": [
       {
         "type": "sm",
