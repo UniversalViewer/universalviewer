@@ -70,13 +70,15 @@ export class FooterPanel extends BaseFooterPanel {
     this.extensionHost.subscribe(
       BaseEvents.ANNOTATIONS,
       (annotationResults: AnnotationResults) => {
-        this.displaySearchResults(
-          annotationResults.annotations,
-          annotationResults.terms
-        );
-        this.setCurrentSearchResultPlacemarker();
-        this.updatePrevButton();
-        this.updateNextButton();
+        if (annotationResults.annotations.length) {
+          this.displaySearchResults(
+            annotationResults.annotations,
+            annotationResults.terms
+          );
+          this.setCurrentSearchResultPlacemarker();
+          this.updatePrevButton();
+          this.updateNextButton();
+        }
       }
     );
 
@@ -114,7 +116,7 @@ export class FooterPanel extends BaseFooterPanel {
     this.$searchOptions.append(this.$searchTextContainer);
 
     this.$searchText = $(
-      '<input class="searchText" id="searchWithinInput" type="text" maxlength="100" value="' +
+      '<input class="searchText" id="searchWithinInput" autocomplete="off" type="text" maxlength="100" value="' +
         this.content.enterKeyword +
         '" aria-label="' +
         this.content.searchWithin +
@@ -366,7 +368,7 @@ export class FooterPanel extends BaseFooterPanel {
     return currentCanvasIndex < lastSearchResultCanvasIndex;
   }
 
-  getSearchResults(): AnnotationGroup[] | null {
+  getSearchResults(): AnnotationGroup[] {
     return (<OpenSeadragonExtension>this.extension).annotations;
   }
 
@@ -378,14 +380,14 @@ export class FooterPanel extends BaseFooterPanel {
 
   getFirstSearchResultCanvasIndex(): number {
     const searchResults: AnnotationGroup[] | null = this.getSearchResults();
-    if (!searchResults) return -1;
+    if (!searchResults || !searchResults.length) return -1;
     let firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
     return firstSearchResultCanvasIndex;
   }
 
   getLastSearchResultCanvasIndex(): number {
     const searchResults: AnnotationGroup[] | null = this.getSearchResults();
-    if (!searchResults) return -1;
+    if (!searchResults || !searchResults.length) return -1;
     let lastSearchResultCanvasIndex: number =
       searchResults[searchResults.length - 1].canvasIndex;
     return lastSearchResultCanvasIndex;
@@ -511,9 +513,10 @@ export class FooterPanel extends BaseFooterPanel {
       $placemarker.mouseenter(function(e: any) {
         that.onPlacemarkerMouseEnter.call(this, that);
       });
-      $placemarker.focus(function(e: any) {
-        that.onPlacemarkerMouseEnter.call(this, that);
-      });
+      // todo: this causes the placemarker to appear after a search
+      // $placemarker.focus(function(e: any) {
+      //   that.onPlacemarkerMouseEnter.call(this, that);
+      // });
       this.onAccessibleClick(
         $placemarker,
         e => {
@@ -569,6 +572,7 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   onPlacemarkerMouseEnter(that: any): void {
+
     if (that.placemarkerTouched) return;
 
     const $placemarker: JQuery = $(this);
@@ -811,6 +815,7 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   displaySearchResults(results: AnnotationGroup[], terms?: string): void {
+
     if (!this.isSearchEnabled()) {
       return;
     }

@@ -334,9 +334,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     this.$canvas = $(this.viewer.canvas);
 
     // disable right click on canvas
-    // this.$canvas.on("contextmenu", () => {
-    //   return false;
-    // });
+    this.$canvas.on("contextmenu", () => {
+      return false;
+    });
 
     this.$navigator = this.$viewer.find(".navigator");
     this.setNavigatorVisible();
@@ -690,7 +690,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   zoomToInitialAnnotation(): void {
-    console.log("zoomToInitialAnnotation");
     let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
 
     (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;

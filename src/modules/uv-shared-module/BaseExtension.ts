@@ -14,7 +14,7 @@ import { Metric } from "../../modules/uv-shared-module/Metric";
 import { MetricType } from "../../modules/uv-shared-module/Metric";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
-import { ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
+import { AnnotationGroup, ExternalResource, Helper, ILabelValuePair } from "@iiif/manifold";
 import {
   Annotation,
   AnnotationBody,
@@ -49,6 +49,7 @@ export class BaseExtension implements IExtension {
   $loginDialogue: JQuery;
   $restrictedDialogue: JQuery;
   authDialogue: AuthDialogue;
+  annotations: AnnotationGroup[] = [];
   clickThroughDialogue: ClickThroughDialogue;
   extensionHost: IExtensionHost;
   data: IUVData;

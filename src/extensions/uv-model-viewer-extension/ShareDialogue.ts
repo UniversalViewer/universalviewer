@@ -1,5 +1,5 @@
 import { ShareDialogue as BaseShareDialogue } from "../../modules/uv-dialogues-module/ShareDialogue";
-import { IModelViewerExtension } from "./IModelViewerExtension";
+import ModelViewerExtension from "./Extension";
 
 export class ShareDialogue extends BaseShareDialogue {
   constructor($element: JQuery) {
@@ -15,7 +15,7 @@ export class ShareDialogue extends BaseShareDialogue {
   update(): void {
     super.update();
 
-    this.code = (<IModelViewerExtension>this.extension).getEmbedScript(
+    this.code = (<ModelViewerExtension>this.extension).getEmbedScript(
       this.options.embedTemplate,
       this.currentWidth,
       this.currentHeight

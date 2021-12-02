@@ -83,10 +83,10 @@ export class AutoComplete {
       }
     });
 
-    this._$element.on("blur", () => {
-      that._clearResults();
-      that._hideResults();
-    });
+    // this._$element.on("blur", () => {
+    //   that._clearResults();
+    //   that._hideResults();
+    // });
 
     // auto complete
     this._$element.on("keyup", function(e) {
@@ -266,10 +266,14 @@ export class AutoComplete {
 
     const that = this;
 
-    this._$searchResultsList.find("li").on("click", function(e: any) {
-      e.preventDefault();
-      that._searchForItem($(this));
-    });
+    const $listItems = this._$searchResultsList.find("li");
+    
+    $listItems.each((_idx, item) => {
+      $(item).on("click", function(e: any) {
+        e.preventDefault();
+        that._searchForItem($(this));
+      });
+    })
   }
 
   private _searchForItem($item: JQuery): void {

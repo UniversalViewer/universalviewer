@@ -1,4 +1,3 @@
-import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
@@ -45,6 +44,7 @@ import {
 } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
+import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -54,7 +54,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
-  annotations: AnnotationGroup[] | null = [];
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
@@ -604,6 +603,64 @@ export default class OpenSeadragonExtension extends BaseExtension {
     //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [this.helper.canvasIndex]);
   }
 
+  groupWebAnnotationsByTarget(annotations: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
+
+    for (let i = 0; i < annotations.length; i++) {
+      const annotation = annotations[i];
+      const canvasId: string = annotation.target.match(/(.*)#/)[1];
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
+      annotationGroup.canvasIndex = canvasIndex as number;
+
+      const match: AnnotationGroup = groupedAnnotations.filter(
+        x => x.canvasId === annotationGroup.canvasId
+      )[0];
+
+      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
+      if (match) {
+        match.addRect(annotation);
+      } else {
+        annotationGroup.addRect(annotation);
+        groupedAnnotations.push(annotationGroup);
+      }
+    }
+
+    return groupedAnnotations;
+  }
+
+  groupOpenAnnotationsByTarget(annotations: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
+
+    for (let i = 0; i < annotations.resources.length; i++) {
+      const resource: any = annotations.resources[i];
+      const canvasId: string = resource.on.match(/(.*)#/)[1];
+      // console.log(canvasId)
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
+      annotationGroup.canvasIndex = canvasIndex as number;
+
+      const match: AnnotationGroup = groupedAnnotations.filter(
+        x => x.canvasId === annotationGroup.canvasId
+      )[0];
+
+      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
+      if (match) {
+        match.addRect(resource);
+      } else {
+        annotationGroup.addRect(resource);
+        groupedAnnotations.push(annotationGroup);
+      }
+    }
+
+    // sort by canvasIndex
+    groupedAnnotations.sort((a, b) => {
+      return a.canvasIndex - b.canvasIndex;
+    });
+
+    return groupedAnnotations;
+  }
+
   checkForSearchParam(): void {
     // if a highlight param is set, use it to search.
     const highlight: string | null = (<IOpenSeadragonExtensionData>this.data)
@@ -736,7 +793,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   }
 
   clearAnnotations(): void {
-    this.annotations = null;
+    this.annotations = [];
 
     // reload current index as it may contain results.
     this.extensionHost.publish(
@@ -1277,66 +1334,8 @@ export default class OpenSeadragonExtension extends BaseExtension {
       })
   }
 
-  groupWebAnnotationsByTarget(annotations: any): AnnotationGroup[] {
-    const groupedAnnotations: AnnotationGroup[] = [];
-
-    for (let i = 0; i < annotations.length; i++) {
-      const annotation = annotations[i];
-      const canvasId: string = annotation.target.match(/(.*)#/)[1];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
-      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
-      annotationGroup.canvasIndex = canvasIndex as number;
-
-      const match: AnnotationGroup = groupedAnnotations.filter(
-        x => x.canvasId === annotationGroup.canvasId
-      )[0];
-
-      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
-      if (match) {
-        match.addRect(annotation);
-      } else {
-        annotationGroup.addRect(annotation);
-        groupedAnnotations.push(annotationGroup);
-      }
-    }
-
-    return groupedAnnotations;
-  }
-
-  groupOpenAnnotationsByTarget(annotations: any): AnnotationGroup[] {
-    const groupedAnnotations: AnnotationGroup[] = [];
-
-    for (let i = 0; i < annotations.resources.length; i++) {
-      const resource: any = annotations.resources[i];
-      const canvasId: string = resource.on.match(/(.*)#/)[1];
-      // console.log(canvasId)
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
-      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
-      annotationGroup.canvasIndex = canvasIndex as number;
-
-      const match: AnnotationGroup = groupedAnnotations.filter(
-        x => x.canvasId === annotationGroup.canvasId
-      )[0];
-
-      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
-      if (match) {
-        match.addRect(resource);
-      } else {
-        annotationGroup.addRect(resource);
-        groupedAnnotations.push(annotationGroup);
-      }
-    }
-
-    // sort by canvasIndex
-    groupedAnnotations.sort((a, b) => {
-      return a.canvasIndex - b.canvasIndex;
-    });
-
-    return groupedAnnotations;
-  }
-
   getAnnotationRects(): AnnotationRect[] {
-    if (this.annotations) {
+    if (this.annotations.length) {
       return this.annotations
         .map(x => {
           return x.rects;

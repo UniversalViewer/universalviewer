@@ -7,7 +7,6 @@ import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-modelviewermobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-import { IModelViewerExtension } from "./IModelViewerExtension";
 import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
@@ -20,9 +19,10 @@ import { Events } from "./Events";
 import { Orbit } from "./Orbit";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
+import { AnnotationGroup } from "@iiif/manifold";
+import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 
-export default class Extension extends BaseExtension
-  implements IModelViewerExtension {
+export default class ModelViewerExtension extends BaseExtension {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
@@ -143,6 +143,7 @@ export default class Extension extends BaseExtension
     super.render();
 
     this.checkForTarget();
+    this.checkForAnnotations();
   }
 
   checkForTarget(): void {
@@ -162,6 +163,71 @@ export default class Extension extends BaseExtension
       const selector: string = components[1];
       this.extensionHost.publish(BaseEvents.SET_TARGET, Orbit.fromString(selector));
     }
+  }
+
+  checkForAnnotations(): void {
+    if (this.data.annotations) {
+
+      // it's useful to group annotations by their target canvas
+      let groupedAnnotations: AnnotationGroup[] = [];
+
+      const annotations: any = this.data.annotations;
+
+      if (Array.isArray(annotations)) {
+        // using the Web Annotation Data Model
+        groupedAnnotations = this.groupWebAnnotationsByTarget(
+          this.data.annotations
+        );
+      }
+      
+      this.annotate(groupedAnnotations);
+    }
+  }
+
+  annotate(annotations: AnnotationGroup[], terms?: string): void {
+    this.annotations = annotations;
+
+    // sort the annotations by canvasIndex
+    this.annotations = annotations.sort(
+      (a: AnnotationGroup, b: AnnotationGroup) => {
+        return a.canvasIndex - b.canvasIndex;
+      }
+    );
+
+    const annotationResults: AnnotationResults = new AnnotationResults();
+    annotationResults.terms = terms;
+    annotationResults.annotations = <AnnotationGroup[]>this.annotations;
+
+    this.extensionHost.publish(BaseEvents.ANNOTATIONS, annotationResults);
+
+    // reload current index as it may contain annotations.
+    //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [this.helper.canvasIndex]);
+  }
+
+  groupWebAnnotationsByTarget(annotations: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
+
+    for (let i = 0; i < annotations.length; i++) {
+      const annotation = annotations[i];
+      const canvasId: string = annotation.target.match(/(.*)#/)[1];
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
+      annotationGroup.canvasIndex = canvasIndex as number;
+
+      const match: AnnotationGroup = groupedAnnotations.filter(
+        x => x.canvasId === annotationGroup.canvasId
+      )[0];
+
+      // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
+      if (match) {
+        match.addPoint3D(annotation);
+      } else {
+        annotationGroup.addPoint3D(annotation);
+        groupedAnnotations.push(annotationGroup);
+      }
+    }
+
+    return groupedAnnotations;
   }
 
   isLeftPanelEnabled(): boolean {

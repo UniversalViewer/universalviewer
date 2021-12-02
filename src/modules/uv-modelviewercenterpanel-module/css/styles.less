@@ -16,6 +16,26 @@
         border-radius: 27px;
         .loading(@loader-black-bg);
       }
+
+      .annotationPin{
+        // background-color: white;
+        background-image: data-uri('../img/pin.svg') !important;
+        width: 28px !important;
+        height: 37px !important;
+        background-position-x: 1px;
+        transform: translate(0, -50%);
+        overflow: hidden;
+
+        span {
+          color: #2a2a2a;
+          user-select: none;
+          display: block;
+          width: 90%;
+          text-align: center;
+          margin-top: 8px;
+          font-size: 11px;
+        }
+    }
     }
   }
 }

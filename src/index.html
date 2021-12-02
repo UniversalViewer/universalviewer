@@ -187,9 +187,11 @@
 
         $setManifestButton.onclick = function() {
           manifest = $manifest.value;
+          clearAnnotations();
           uv.set({
             manifest: manifest,
             canvasIndex: 0,
+            annotations: [],
           });
         };
 
@@ -212,10 +214,14 @@
         };
 
         $clearAnnotationsButton.onclick = function() {
+          clearAnnotations();
+        };
+
+        function clearAnnotations() {
           annotations = [];
           $annotations.value = JSON.stringify(annotations);
           setAnnotations();
-        };
+        }
 
         function setupUV() {
           const data = urlAdaptor.getInitialData({
@@ -267,6 +273,10 @@
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
+
+          uv.on("clearAnnotations", function(e) {
+            clearAnnotations();
+          }); 
 
           // uv.on("load", function() {
           //   uv.set({
