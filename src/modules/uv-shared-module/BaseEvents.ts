@@ -76,6 +76,7 @@ export class BaseEvents {
   static PAGE_DOWN: string = "pageDown";
   static PAGE_UP: string = "pageUp";
   static PAUSE: string = 'pause';
+  static PINPOINT_ANNOTATION_CLICKED: string = "pinpointAnnotationClicked";
   static PLUS: string = "plus";
   static PREV: string = "prev";
   static RANGE_CHANGE: string = "rangeChange";

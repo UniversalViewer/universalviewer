@@ -728,6 +728,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         // if it's a pin
         if (rect.width === 1 && rect.height === 1) {
           div.className = "annotationPin";
+          div.onclick = (e: any) => { 
+            e.preventDefault();
+            this.extensionHost.publish(BaseEvents.PINPOINT_ANNOTATION_CLICKED, k);
+          };
           const span: HTMLSpanElement = document.createElement("SPAN");
           span.innerText = String(k + 1);
           div.appendChild(span);

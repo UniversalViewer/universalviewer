@@ -270,7 +270,6 @@
           //   cb({ options: { overrideFullScreen: true } });
           // });
 
-
           uv.on("targetChange", function(target) {
             $target.value = target;
           });
@@ -291,6 +290,10 @@
             });
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
+          });
+
+          uv.on("pinpointAnnotationClicked", function(index) {
+            console.log("pinpointAnnotationClicked", index);
           });
 
           uv.on("clearAnnotations", function(e) {

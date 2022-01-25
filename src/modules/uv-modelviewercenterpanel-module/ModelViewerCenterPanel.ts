@@ -125,6 +125,10 @@ export class ModelViewerCenterPanel extends CenterPanel {
         div.setAttribute("slot", `hotspot-${index}`);
         div.setAttribute("data-position", `${point.x} ${point.y} ${point.z}`);
         div.setAttribute("data-normal", `${point.nx} ${point.ny} ${point.nz}`);
+        div.onclick = (e: any) => { 
+          e.preventDefault();
+          this.extensionHost.publish(BaseEvents.PINPOINT_ANNOTATION_CLICKED, index);
+        };
         const span: HTMLSpanElement = document.createElement("SPAN");
         span.innerText = String(index + 1);
         div.appendChild(span);
