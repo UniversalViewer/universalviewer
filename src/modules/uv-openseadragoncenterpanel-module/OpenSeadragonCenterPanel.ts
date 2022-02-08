@@ -5,7 +5,10 @@ import {
   Canvas,
   IExternalResource,
   IExternalImageResourceData,
-  IExternalResourceData
+  IExternalResourceData,
+  Annotation,
+  AnnotationBody,
+  Service,
 } from "manifesto.js";
 import { debounce, sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
@@ -17,7 +20,8 @@ import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
-import '@openseadragon-imaging/openseadragon-viewerinputhook';
+import "@openseadragon-imaging/openseadragon-viewerinputhook";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
@@ -70,9 +74,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       // this.zoomToInitialAnnotation();
     });
 
-    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
-      this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.SETTINGS_CHANGE,
+      (args: ISettings) => {
+        this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
+      }
+    );
 
     this.extensionHost.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
@@ -134,17 +141,23 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       });
     });
 
-    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: XYWHFragment) => {
-      this.whenLoaded(() => {
-        this.fitToBounds(target, false);
-      });
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.SET_TARGET,
+      (target: XYWHFragment) => {
+        this.whenLoaded(() => {
+          this.fitToBounds(target, false);
+        });
+      }
+    );
 
-    this.extensionHost.subscribe(BaseEvents.SET_ROTATION, (rotation: number) => {
-      this.whenLoaded(() => {
-        this.viewer.viewport.setRotation(rotation);
-      });
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.SET_ROTATION,
+      (rotation: number) => {
+        this.whenLoaded(() => {
+          this.viewer.viewport.setRotation(rotation);
+        });
+      }
+    );
   }
 
   whenCreated(cb: () => void): void {
@@ -229,52 +242,52 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         clickToZoom: Bools.getBool(
           this.extension.data.config.options.clickToZoomEnabled,
           true
-        )
+        ),
       },
       navImages: {
         zoomIn: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         zoomOut: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         home: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         rotateright: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         rotateleft: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         next: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
+          DOWN: pixel,
         },
         previous: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
-          DOWN: pixel
-        }
-      }
+          DOWN: pixel,
+        },
+      },
     });
 
     const that = this;
@@ -282,23 +295,37 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const debouncedDoubleClick = debounce((e: any) => {
       const canvas: Canvas = that.extension.helper.getCurrentCanvas();
       var viewportPoint = that.viewer.viewport.pointFromPixel(e.position);
-      var imagePoint = that.viewer.viewport.viewportToImageCoordinates(viewportPoint.x, viewportPoint.y);
+      var imagePoint = that.viewer.viewport.viewportToImageCoordinates(
+        viewportPoint.x,
+        viewportPoint.y
+      );
       this.extensionHost.publish(Events.DOUBLECLICK, {
-        target: `${canvas.id}#xywh=${Math.round(imagePoint.x)},${Math.round(imagePoint.y)},1,1`
+        target: `${canvas.id}#xywh=${Math.round(imagePoint.x)},${Math.round(
+          imagePoint.y
+        )},1,1`,
       });
     }, 100);
 
-    this.viewer.addViewerInputHook({hooks: [
-      {tracker: "viewer", handler: "dblClickHandler", hookHandler: (e) => {
-        const settings: ISettings = this.extension.getSettings();
-        const pagingAvailable: boolean = this.extension.helper.isPagingAvailable();
-        if((pagingAvailable && !settings.pagingEnabled) || !pagingAvailable) {
-          if (this.config.options.doubleClickAnnotationEnabled) {
-            debouncedDoubleClick(e)
-          }
-        }
-      }}
-    ]});
+    this.viewer.addViewerInputHook({
+      hooks: [
+        {
+          tracker: "viewer",
+          handler: "dblClickHandler",
+          hookHandler: (e) => {
+            const settings: ISettings = this.extension.getSettings();
+            const pagingAvailable: boolean = this.extension.helper.isPagingAvailable();
+            if (
+              (pagingAvailable && !settings.pagingEnabled) ||
+              !pagingAvailable
+            ) {
+              if (this.config.options.doubleClickAnnotationEnabled) {
+                debouncedDoubleClick(e);
+              }
+            }
+          },
+        },
+      ],
+    });
 
     this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
     this.$zoomInButton.attr("tabindex", 0);
@@ -444,10 +471,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     }
 
     this.viewer.addControl(this.$prevButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_LEFT
+      anchor: OpenSeadragon.ControlAnchor.TOP_LEFT,
     });
     this.viewer.addControl(this.$nextButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT
+      anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT,
     });
 
     switch (viewingDirection) {
@@ -510,8 +537,65 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     });
   }
 
-  async openMedia(resources?: IExternalResource[]): Promise<void> {
+  async getGirderTileSource(): Promise<any> {
+    return new Promise<any>((resolve) => {
+      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+      const annotations: Annotation[] = canvas.getContent();
 
+      if (annotations.length) {
+        const annotation: Annotation = annotations[0];
+        const body: AnnotationBody[] = annotation.getBody();
+
+        if (body.length) {
+          const services: Service[] = body[0].getServices();
+
+          if (services.length) {
+            let id: string = services[0].id;
+            let tileDescriptor = id;
+            if (!tileDescriptor.endsWith("/")) {
+              tileDescriptor += "/";
+            }
+            tileDescriptor += "tiles";
+
+            if (id.endsWith("/")) {
+              id = id.substr(0, id.length - 1);
+            }
+            fetch(tileDescriptor)
+              .then((response) => response.json())
+              .then((info) => {
+                const tileSource = {
+                  height: info.sizeY,
+                  width: info.sizeX,
+                  tileWidth: info.tileWidth,
+                  tileHeight: info.tileHeight,
+                  minLevel: 0,
+                  maxLevel: info.levels - 1,
+                  units: "mm",
+                  spacing: [info.mm_x, info.mm_y],
+                  getTileUrl: function(level, x, y, query) {
+                    var url =
+                      tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
+                    if (query) {
+                      url += "?" + $.param(query);
+                    }
+                    return url;
+                  },
+                };
+
+                if (!info.mm_x) {
+                  tileSource.units = "pixels";
+                  tileSource.spacing = [1, 1];
+                }
+
+                resolve(tileSource);
+              });
+          }
+        }
+      }
+    });
+  }
+
+  async openMedia(resources?: IExternalResource[]): Promise<void> {
     // uv may have been unloaded
     if (!this.viewer) {
       return;
@@ -524,6 +608,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       resources
     );
 
+    const isGirder: boolean = this.extension.format === MediaType.GIRDER;
+
     try {
       this.viewer.close();
 
@@ -535,12 +621,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         let tileSource: any;
 
         if (data.hasServiceDescriptor) {
+          // use the info.json descriptor
           tileSource = data;
+        } else if (isGirder) {
+          // load girder image
+          tileSource = await this.getGirderTileSource();
         } else {
+          // load image
           tileSource = {
             type: "image",
             url: data.id,
-            buildPyramid: false
+            buildPyramid: false,
           };
         }
 
@@ -556,7 +647,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
             }
             this.resize();
             this.goHome();
-          }
+          },
         });
       }
     } catch {
@@ -717,20 +808,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         const rect = rects[k];
 
         const div: HTMLElement = document.createElement("DIV");
-        div.id =
-          "annotation-" +
-          rect.canvasIndex +
-          "-" +
-          rect.resultIndex;
-        
+        div.id = "annotation-" + rect.canvasIndex + "-" + rect.resultIndex;
+
         div.title = sanitize(rect.chars);
 
         // if it's a pin
         if (rect.width === 1 && rect.height === 1) {
           div.className = "annotationPin";
-          div.onclick = (e: any) => { 
+          div.onclick = (e: any) => {
             e.preventDefault();
-            this.extensionHost.publish(BaseEvents.PINPOINT_ANNOTATION_CLICKED, k);
+            this.extensionHost.publish(
+              BaseEvents.PINPOINT_ANNOTATION_CLICKED,
+              k
+            );
           };
           const span: HTMLSpanElement = document.createElement("SPAN");
           span.innerText = String(k + 1);
@@ -909,7 +999,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
     if (annotations.length) {
       return annotations
-        .map(x => {
+        .map((x) => {
           return x.rects;
         })
         .reduce((a, b) => {
@@ -983,7 +1073,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
         this.extensionHost.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
-          foundRect
+          foundRect,
         ]);
       } else {
         this.zoomToAnnotation(foundRect);
@@ -1030,7 +1120,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
         this.navigatedFromSearch = true;
         this.extensionHost.publish(BaseEvents.ANNOTATION_CANVAS_CHANGE, [
-          foundRect
+          foundRect,
         ]);
       } else {
         this.zoomToAnnotation(foundRect);
@@ -1063,14 +1153,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (!previousAnnotationRect) {
       if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
         const result = annotationRects.filter(
-          x => x.canvasIndex === this.extension.helper.canvasIndex
+          (x) => x.canvasIndex === this.extension.helper.canvasIndex
         );
         return result[result.length - 1];
       }
     }
 
     return annotationRects.filter(
-      x => x.canvasIndex === this.extension.helper.canvasIndex
+      (x) => x.canvasIndex === this.extension.helper.canvasIndex
     )[0];
   }
 
@@ -1135,7 +1225,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     }
 
     let resource: any = this.extension.resources.filter(
-      x => x.index === annotationGroup.canvasIndex
+      (x) => x.index === annotationGroup.canvasIndex
     )[0];
     let index: number = this.extension.resources.indexOf(resource);
     let offsetX: number = 0;

@@ -17,6 +17,7 @@
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
     "lint": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
+    "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build": "webpack -c webpack.config.js",
     "build-es": "node ./esbuild.mjs",

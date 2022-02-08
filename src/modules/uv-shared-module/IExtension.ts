@@ -1,4 +1,12 @@
-import { AnnotationBody, Canvas, Collection, IExternalResource, IExternalResourceData, Range, Manifest } from 'manifesto.js';
+import {
+  AnnotationBody,
+  Canvas,
+  Collection,
+  IExternalResource,
+  IExternalResourceData,
+  Range,
+  Manifest,
+} from "manifesto.js";
 import { ILocale } from "../../ILocale";
 import { IExtensionHost } from "../../IExtensionHost";
 import { IUVData } from "../../IUVData";
@@ -6,10 +14,10 @@ import { Shell } from "./Shell";
 import { Helper } from "@iiif/manifold";
 import { MetricType } from "./Metric";
 
-export type ExtensionLoader = { name: string; loader: () => Promise<any> }
+export type ExtensionLoader = { name: string; loader: () => Promise<any> };
 
 export type LocaleRegistry = {
-  [key: string]: any
+  [key: string]: any;
 };
 
 export interface IExtension {
@@ -23,6 +31,7 @@ export interface IExtension {
   defaultConfig: any;
   exitFullScreen(): void;
   fire(name: string, ...args: any[]): void;
+  format?: string | undefined;
   getAlternateLocale(): ILocale | null;
   getAppUri(): string;
   getCanvasLabels(label: string): string;

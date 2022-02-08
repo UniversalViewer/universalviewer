@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "allowSyntheticDefaultImports": true,
     "incremental": true,
     "lib": ["ES2015", "DOM"],
@@ -18,19 +22,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",
-    "types": [
-      "@iiif/base-component",
-      "jest",
-      "jquery",
-      "node"
-    ]
+    "types": ["@iiif/base-component", "jest", "jquery", "node"]
   },
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "src/**/*.test.ts", "src/**/*.spec.ts"],
+  "include": ["src"]
 }
