@@ -13,7 +13,7 @@ import {
 import { debounce, sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
-import { XYWHFragment } from "../../extensions/uv-openseadragon-extension/XYWHFragment";
+import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";

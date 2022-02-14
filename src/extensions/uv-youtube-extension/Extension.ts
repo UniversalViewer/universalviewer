@@ -6,7 +6,7 @@ import { Events } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-import { IMediaElementExtension } from "./IMediaElementExtension";
+import { IYouTubeExtension } from "./IYouTubeExtension";
 import { MediaElementCenterPanel } from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
@@ -29,7 +29,7 @@ import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension
-  implements IMediaElementExtension {
+  implements IYouTubeExtension {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
@@ -54,15 +54,6 @@ export default class Extension extends BaseExtension
 
   create(): void {
     super.create();
-
-    // listen for mediaelement enter/exit fullscreen events.
-    $(window).bind("enterfullscreen", () => {
-      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
-    });
-
-    $(window).bind("exitfullscreen", () => {
-      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
-    });
 
     this.extensionHost.subscribe(
       BaseEvents.CANVAS_INDEX_CHANGE,

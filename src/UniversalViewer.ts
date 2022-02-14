@@ -10,7 +10,7 @@ import {
 } from "./modules/uv-shared-module/IExtension";
 import { IExtensionHost } from "./IExtensionHost";
 import { IUVData } from "./IUVData";
-import { IExtensionHostAdaptor } from "./IExtensionHostAdaptor";
+import { IExtensionHostAdapter } from "./IExtensionHostAdapter";
 import { EventHandlerWithName, PubSub } from "./PubSub";
 import {
   RenderingFormat,
@@ -99,7 +99,7 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
   private _pubsub: PubSub;
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
-  public adaptor: IExtensionHostAdaptor;
+  public adapter: IExtensionHostAdapter;
   public disposed = false;
 
   constructor(options: IBaseComponentOptions) {

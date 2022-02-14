@@ -121,7 +121,7 @@
 
         var annotations = [];
 
-        var urlAdaptor = new UV.URLAdaptor();
+        var urlAdapter = new UV.URLAdapter();
 
         function loadManifests(cb) {
           // load manifests
@@ -153,7 +153,7 @@
         }
 
         function setSelectedManifest() {
-          manifest = urlAdaptor.get("manifest");
+          manifest = urlAdapter.get("manifest");
 
           if (manifest) {
             $manifestSelect.value = manifest;
@@ -182,7 +182,7 @@
             "#manifestSelect option:checked"
           );
           $manifest.value = $selectedOption.value;
-          urlAdaptor.set("manifest", $selectedOption.value);
+          urlAdapter.set("manifest", $selectedOption.value);
         };
 
         $setManifestButton.onclick = function() {
@@ -224,13 +224,13 @@
         }
 
         function setupUV() {
-          const data = urlAdaptor.getInitialData({
+          const data = urlAdapter.getInitialData({
             manifest: manifest,
             debug: false
           });
 
           uv = UV.init("uv", data);
-          urlAdaptor.bindTo(uv);
+          urlAdapter.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
             cb(

@@ -1,14 +1,11 @@
-import { UVAdaptor } from "./UVAdaptor";
+import { UVAdapter } from "./UVAdapter";
 import { Urls } from "@edsilv/utils";
 import { UniversalViewer } from "./UniversalViewer";
 import { IUVData } from "./IUVData";
 import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
 
-export class URLAdaptor extends UVAdaptor {
-
-  constructor(
-    readonly: boolean = false
-  ) {
+export class URLAdapter extends UVAdapter {
+  constructor(readonly: boolean = false) {
     super(readonly);
   }
 
@@ -57,9 +54,7 @@ export class URLAdaptor extends UVAdaptor {
     return {
       manifest: this.get("manifest"),
       collectionIndex:
-        this.get("c") !== undefined
-          ? Number(this.get("c"))
-          : undefined,
+        this.get("c") !== undefined ? Number(this.get("c")) : undefined,
       manifestIndex: Number(this.get("m", 0)),
       canvasIndex: Number(this.get("cv", 0)),
       rotation: Number(this.get("r", 0)),
@@ -68,8 +63,8 @@ export class URLAdaptor extends UVAdaptor {
       target: this.get("target", ""),
       cfi: this.get("cfi", ""),
       locales: formattedLocales.length ? formattedLocales : undefined,
-      ...overrides
-    }
+      ...overrides,
+    };
   }
 
   public bindTo(uv: UniversalViewer) {

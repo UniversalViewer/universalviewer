@@ -1,7 +1,7 @@
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
-import { XYWHFragment } from "./XYWHFragment";
+import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import { DownloadDialogue } from "./DownloadDialogue";
@@ -25,7 +25,7 @@ import { Bools, Maths, Strings } from "@edsilv/utils";
 import {
   IIIFResourceType,
   ExternalResourceType,
-  ServiceProfile
+  ServiceProfile,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
@@ -40,7 +40,7 @@ import {
   LanguageMap,
   Service,
   Size,
-  Utils
+  Utils,
 } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
@@ -175,16 +175,22 @@ export default class OpenSeadragonExtension extends BaseExtension {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-      if (this.isDesktopMetric()) {
-        this.shell.$rightPanel.show();
+    this.extensionHost.subscribe(
+      BaseEvents.LEFTPANEL_COLLAPSE_FULL_START,
+      () => {
+        if (this.isDesktopMetric()) {
+          this.shell.$rightPanel.show();
+        }
       }
-    });
+    );
 
-    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-      this.shell.$centerPanel.show();
-      this.resize();
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH,
+      () => {
+        this.shell.$centerPanel.show();
+        this.resize();
+      }
+    );
 
     this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.shell.$centerPanel.hide();
@@ -334,7 +340,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
         this.fire(Events.CURRENT_VIEW_URI, {
           cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
-          fullUri: this.getConfinedImageUri(canvas, canvas.getWidth())
+          fullUri: this.getConfinedImageUri(canvas, canvas.getWidth()),
         });
       }
     );
@@ -558,7 +564,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   checkForAnnotations(): void {
     if (this.data.annotations) {
-
       // it's useful to group annotations by their target canvas
       let groupedAnnotations: AnnotationGroup[] = [];
 
@@ -578,7 +583,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
         // clear annotations as they're from a search
         this.extensionHost.publish(BaseEvents.CLEAR_ANNOTATIONS);
       }
-      
+
       this.annotate(groupedAnnotations);
     }
   }
@@ -609,12 +614,14 @@ export default class OpenSeadragonExtension extends BaseExtension {
     for (let i = 0; i < annotations.length; i++) {
       const annotation = annotations[i];
       const canvasId: string = annotation.target.match(/(.*)#/)[1];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(
+        canvasId
+      );
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 
       const match: AnnotationGroup = groupedAnnotations.filter(
-        x => x.canvasId === annotationGroup.canvasId
+        (x) => x.canvasId === annotationGroup.canvasId
       )[0];
 
       // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
@@ -636,12 +643,14 @@ export default class OpenSeadragonExtension extends BaseExtension {
       const resource: any = annotations.resources[i];
       const canvasId: string = resource.on.match(/(.*)#/)[1];
       // console.log(canvasId)
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(canvasId);
+      const canvasIndex: number | null = this.helper.getCanvasIndexById(
+        canvasId
+      );
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 
       const match: AnnotationGroup = groupedAnnotations.filter(
-        x => x.canvasId === annotationGroup.canvasId
+        (x) => x.canvasId === annotationGroup.canvasId
       )[0];
 
       // if there's already an annotation for that target, add a rect to it, otherwise create a new AnnotationGroup
@@ -1318,26 +1327,27 @@ export default class OpenSeadragonExtension extends BaseExtension {
     searchResults: AnnotationGroup[],
     cb: (results: AnnotationGroup[]) => void
   ): void {
-
     fetch(searchUri)
-      .then(response => response.json())
-      .then(results => {
+      .then((response) => response.json())
+      .then((results) => {
         if (results.resources && results.resources.length) {
-          searchResults = searchResults.concat(this.groupOpenAnnotationsByTarget(results));
+          searchResults = searchResults.concat(
+            this.groupOpenAnnotationsByTarget(results)
+          );
         }
-  
+
         if (results.next) {
           this.getSearchResults(results.next, terms, searchResults, cb);
         } else {
           cb(searchResults);
         }
-      })
+      });
   }
 
   getAnnotationRects(): AnnotationRect[] {
     if (this.annotations.length) {
       return this.annotations
-        .map(x => {
+        .map((x) => {
           return x.rects;
         })
         .reduce((a, b) => {
