@@ -1,7 +1,7 @@
-import { IUVData } from "../../IUVData";
+import { IIIFData } from "@/IUVData";
 
-export interface IOpenSeadragonExtensionData extends IUVData {
-  highlight: string | null;
-  rotation: number | null;
-  xywh: string | null;
+export interface IOpenSeadragonExtensionData extends IIIFData {
+  highlight: string | undefined;
+  rotation: number | undefined;
+  xywh: string | undefined;
 }

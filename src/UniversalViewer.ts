@@ -186,6 +186,10 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
   }
 
   public set(data: IUVData): void {
+    // if (data.manifestId) {
+    //   data.manifest = data.manifestId;
+    // }
+
     this.fire(BaseEvents.SET, data);
 
     // if this is the first set

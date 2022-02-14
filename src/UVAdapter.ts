@@ -7,8 +7,11 @@ export class UVAdapter implements IExtensionHostAdapter {
     this.readonly = readonly;
   }
 
-  public get(_key: string, _defaultValue: string | null): string | null {
-    return null;
+  public get(
+    _key: string,
+    _defaultValue: string | undefined
+  ): string | undefined {
+    return undefined;
   }
 
   public set(_key: string, _value: string): void {}

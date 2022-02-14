@@ -71,6 +71,13 @@
       </div>
 
       <div class="group">
+        <input id="videoId" type="text" value="" />
+        <button id="setVideoIdButton" class="button" href="#">
+          Set Video Id
+        </button>
+      </div>
+
+      <div class="group">
         <input id="target" type="text" value="" />
         <button id="setTargetButton" class="button" href="#">Set Target</button>
       </div>
@@ -107,7 +114,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
-        var uv, manifest;
+        var uv, manifest, videoId;
         var $manifest = document.getElementById("manifest");
         var $manifestSelect = document.getElementById("manifestSelect");
         var $target = document.getElementById("target");
@@ -118,6 +125,7 @@
         var $annotations = document.getElementById("annotations");
         var $setAnnotationsButton = document.getElementById("setAnnotationsButton");
         var $clearAnnotationsButton = document.getElementById("clearAnnotationsButton");
+        var $setVideoIdButton = document.getElementById("setVideoIdButton");
 
         var annotations = [];
 
@@ -191,6 +199,15 @@
           uv.set({
             manifest: manifest,
             canvasIndex: 0,
+            annotations: [],
+          });
+        };
+
+        $setVideoIdButton.onclick = function() {
+          videoId = $videoId.value;
+          clearAnnotations();
+          uv.set({
+            videoId: videoId,
             annotations: [],
           });
         };

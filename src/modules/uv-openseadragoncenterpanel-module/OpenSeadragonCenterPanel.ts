@@ -848,7 +848,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
         this.viewer.viewport.setRotation(parseInt(this.initialRotation));
       }
 
-      const xywh: string | null = (this.extension
+      const xywh: string | undefined = (this.extension
         .data as IOpenSeadragonExtensionData).xywh;
 
       if (xywh) {

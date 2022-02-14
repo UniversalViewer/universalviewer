@@ -672,8 +672,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   checkForSearchParam(): void {
     // if a highlight param is set, use it to search.
-    const highlight: string | null = (<IOpenSeadragonExtensionData>this.data)
-      .highlight;
+    const highlight: string | undefined = (<IOpenSeadragonExtensionData>(
+      this.data
+    )).highlight;
 
     if (highlight) {
       highlight.replace(/\+/g, " ").replace(/"/g, "");
@@ -683,8 +684,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   checkForRotationParam(): void {
     // if a rotation value is passed, set rotation
-    const rotation: number | null = (<IOpenSeadragonExtensionData>this.data)
-      .rotation;
+    const rotation: number | undefined = (<IOpenSeadragonExtensionData>(
+      this.data
+    )).rotation;
 
     if (rotation) {
       this.extensionHost.publish(BaseEvents.SET_ROTATION, rotation);

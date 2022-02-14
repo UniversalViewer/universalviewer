@@ -11,12 +11,12 @@ export class URLAdapter extends UVAdapter {
 
   public get(
     key: string,
-    defaultValue?: string | number | null
-  ): string | null {
+    defaultValue?: string | number | null | undefined
+  ): string | undefined {
     return (
       Urls.getHashParameter(key, document) ||
       (defaultValue || "").toString() ||
-      null
+      undefined
     );
   }
 
@@ -36,7 +36,7 @@ export class URLAdapter extends UVAdapter {
     }
   }
 
-  public getInitialData(overrides?: IUVData) {
+  public getInitialData(overrides?: IUVData): IUVData {
     const formattedLocales: Array<{ label?: string; name: string }> = [];
     const locales = this.get("locales", "");
     if (locales) {
