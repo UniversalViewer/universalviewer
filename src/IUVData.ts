@@ -25,5 +25,5 @@ export interface EPubData {
 }
 
 export interface YouTubeData {
-  videoId?: string;
+  youTubeVideoId?: string;
 }

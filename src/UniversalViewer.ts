@@ -171,25 +171,21 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
 
   public data(): IUVData {
     return {
-      canvasIndex: 0,
+      // canvasIndex: 0,
       embedded: false,
       isReload: false,
       limitLocales: false,
-      manifest: "",
+      // manifest: "",
       locales: [
         {
           name: "en-GB",
         },
       ],
-      target: "",
+      // target: "",
     } as IUVData;
   }
 
   public set(data: IUVData): void {
-    // if (data.manifestId) {
-    //   data.manifest = data.manifestId;
-    // }
-
     this.fire(BaseEvents.SET, data);
 
     // if this is the first set

@@ -71,8 +71,8 @@
       </div>
 
       <div class="group">
-        <input id="videoId" type="text" value="" />
-        <button id="setVideoIdButton" class="button" href="#">
+        <input id="youTubeVideoId" type="text" value="" />
+        <button id="setYouTubeVideoIdButton" class="button" href="#">
           Set Video Id
         </button>
       </div>
@@ -114,7 +114,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
-        var uv, manifest, videoId;
+        var uv, manifest, youTubeVideoId;
         var $manifest = document.getElementById("manifest");
         var $manifestSelect = document.getElementById("manifestSelect");
         var $target = document.getElementById("target");
@@ -125,7 +125,8 @@
         var $annotations = document.getElementById("annotations");
         var $setAnnotationsButton = document.getElementById("setAnnotationsButton");
         var $clearAnnotationsButton = document.getElementById("clearAnnotationsButton");
-        var $setVideoIdButton = document.getElementById("setVideoIdButton");
+        var $setYouTubeVideoIdButton = document.getElementById("setYouTubeVideoIdButton");
+        var $youTubeVideoId = document.getElementById("youTubeVideoId");
 
         var annotations = [];
 
@@ -203,11 +204,11 @@
           });
         };
 
-        $setVideoIdButton.onclick = function() {
-          videoId = $videoId.value;
+        $setYouTubeVideoIdButton.onclick = function() {
+          youTubeVideoId = $youTubeVideoId.value;
           clearAnnotations();
           uv.set({
-            videoId: videoId,
+            youTubeVideoId: youTubeVideoId,
             annotations: [],
           });
         };

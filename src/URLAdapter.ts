@@ -9,15 +9,14 @@ export class URLAdapter extends UVAdapter {
     super(readonly);
   }
 
-  public get(
-    key: string,
-    defaultValue?: string | number | null | undefined
-  ): string | undefined {
-    return (
-      Urls.getHashParameter(key, document) ||
-      (defaultValue || "").toString() ||
-      undefined
-    );
+  public get<T>(key: string, defaultValue?: T | undefined): T | undefined {
+    const hashParameter: string | null = Urls.getHashParameter(key, document);
+
+    if (hashParameter === null) {
+      return defaultValue;
+    }
+
+    return (hashParameter as unknown) as T;
   }
 
   public getFragment(key: string, url: string): string | null {
@@ -38,7 +37,7 @@ export class URLAdapter extends UVAdapter {
 
   public getInitialData(overrides?: IUVData): IUVData {
     const formattedLocales: Array<{ label?: string; name: string }> = [];
-    const locales = this.get("locales", "");
+    const locales = this.get<string>("locales", "");
     if (locales) {
       const names = locales.split(",");
       for (let i in names) {
@@ -51,17 +50,18 @@ export class URLAdapter extends UVAdapter {
       });
     }
 
+    console.log("getInitialData");
+
     return {
-      manifest: this.get("manifest"),
-      collectionIndex:
-        this.get("c") !== undefined ? Number(this.get("c")) : undefined,
-      manifestIndex: Number(this.get("m", 0)),
-      canvasIndex: Number(this.get("cv", 0)),
-      rotation: Number(this.get("r", 0)),
-      rangeId: this.get("rid", ""),
-      xywh: this.get("xywh", ""),
-      target: this.get("target", ""),
-      cfi: this.get("cfi", ""),
+      manifest: this.get<string>("manifest"),
+      collectionIndex: this.get<number>("c"),
+      manifestIndex: this.get<number>("m", 0),
+      canvasIndex: this.get<number>("cv", 0),
+      rotation: this.get<number>("r", 0),
+      rangeId: this.get<string>("rid", ""),
+      xywh: this.get<string>("xywh", ""),
+      target: this.get<string>("target", ""),
+      cfi: this.get<string>("cfi", ""),
       locales: formattedLocales.length ? formattedLocales : undefined,
       ...overrides,
     };
