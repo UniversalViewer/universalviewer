@@ -25,10 +25,10 @@ export class URLAdapter extends UVAdapter {
     return match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null;
   }
 
-  public set(key: string, value: string | number | null): void {
+  public set<T>(key: string, value: T): void {
     if (!this.readonly) {
       if (value) {
-        Urls.setHashParameter(key, value.toString(), document);
+        Urls.setHashParameter(key, value, document);
       } else {
         Urls.setHashParameter(key, "", document);
       }
@@ -50,8 +50,6 @@ export class URLAdapter extends UVAdapter {
       });
     }
 
-    console.log("getInitialData");
-
     return {
       manifest: this.get<string>("manifest"),
       collectionIndex: this.get<number>("c"),
@@ -62,6 +60,7 @@ export class URLAdapter extends UVAdapter {
       xywh: this.get<string>("xywh", ""),
       target: this.get<string>("target", ""),
       cfi: this.get<string>("cfi", ""),
+      youTubeVideoId: this.get<string>("youTubeVideoId", ""),
       locales: formattedLocales.length ? formattedLocales : undefined,
       ...overrides,
     };
@@ -69,7 +68,7 @@ export class URLAdapter extends UVAdapter {
 
   public bindTo(uv: UniversalViewer) {
     uv.on(
-      "pause",
+      BaseEvents.PAUSE,
       (currentTime) => {
         if (currentTime > 0) {
           this.set("t", currentTime);

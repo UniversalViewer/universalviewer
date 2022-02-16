@@ -94,7 +94,14 @@ const Extension = {
   },
 };
 
+export enum ContentType {
+  IIIF = "iiif",
+  YOUTUBE = "youtube",
+  UNKNOWN = "unknown",
+}
+
 export class UniversalViewer extends BaseComponent implements IExtensionHost {
+  private _contentType: ContentType = ContentType.UNKNOWN;
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
@@ -185,34 +192,36 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
     } as IUVData;
   }
 
+  getContentType(data: IUVData): ContentType {
+    if (data.manifest) {
+      return ContentType.IIIF;
+    } else if (data.youTubeVideoId) {
+      return ContentType.YOUTUBE;
+    } else if (this._contentType) {
+      return this._contentType;
+    }
+    return ContentType.UNKNOWN;
+  }
+
   public set(data: IUVData): void {
     this.fire(BaseEvents.SET, data);
 
-    // if this is the first set
-    if (!this.extension) {
-      if (!data.manifest) {
-        console.warn(`manifest is required.`);
-        return;
-      }
+    // determine content type
+    // if there's already a handler in use for this content type, use that
+    // if not, create a new handler and dispose the existing handler if there is one
+    // get the content type handler to check if it needs to reload based on the new data
 
-      this._reload(data);
-    } else {
-      // changing any of these data properties forces the UV to reload.
-      const newData: IUVData = Object.assign({}, this.extension.data, data);
-      if (
-        newData.isReload ||
-        newData.manifest !== this.extension.data.manifest ||
-        newData.manifestIndex !== this.extension.data.manifestIndex ||
-        newData.collectionIndex !== this.extension.data.collectionIndex
-      ) {
-        this.extension.data = newData;
-        this._reload(this.extension.data);
-      } else {
-        // no need to reload, just update.
-        this.extension.data = newData;
-        this.extension.render();
-      }
+    this._contentType = this.getContentType(data);
+
+    if (this._contentType === ContentType.UNKNOWN) {
+      console.error("unknown content type");
+      return;
     }
+
+    console.log("contentType", this._contentType);
+
+    // if content type has changed
+    // if (this.contentTypeHandler)
   }
 
   public get(key: string): any {
@@ -248,9 +257,10 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
     $elem.empty();
   }
 
-  private async _reload(data: IUVData): Promise<void> {
+  public async reload(data: IUVData): Promise<void> {
     this._pubsub.dispose(); // remove any existing event listeners
 
+    // todo, remove
     data.target = ""; // clear target
 
     this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
@@ -418,3 +428,41 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
     }
   }
 }
+
+// class IIIFContentTypeHandler {
+
+//   constructor(private data: IUVData) { }
+
+//   public handle() {
+//                     // if this is the first set
+//                     if (!this.viewer.extension) {
+//                       // if (!this.data.manifest) {
+//                       //   console.warn(`manifest is required.`);
+//                       //   return;
+//                       // }
+//                       this.viewer.reload(this.data);
+//                     } else {
+//                       // changing any of these data properties forces the UV to reload.
+//                       const newData: IUVData = Object.assign(
+//                         {},
+//                         this.viewer.extension.data,
+//                         this.data
+//                       );
+//                       if (
+//                         newData.isReload ||
+//                         newData.manifest !== this.viewer.extension.data.manifest ||
+//                         newData.manifestIndex !==
+//                           this.viewer.extension.data.manifestIndex ||
+//                         newData.collectionIndex !==
+//                           this.viewer.extension.data.collectionIndex
+//                       ) {
+//                         this.viewer.extension.data = newData;
+//                         this.viewer.reload(this.viewer.extension.data);
+//                       } else {
+//                         // no need to reload, just update.
+//                         this.viewer.extension.data = newData;
+//                         this.viewer.extension.render();
+//                       }
+//                     }
+//                   }
+// }
