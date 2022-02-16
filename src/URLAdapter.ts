@@ -36,6 +36,7 @@ export class URLAdapter extends UVAdapter {
   }
 
   public getInitialData(overrides?: IUVData): IUVData {
+    console.log("getInitialData");
     const formattedLocales: Array<{ label?: string; name: string }> = [];
     const locales = this.get<string>("locales", "");
     if (locales) {

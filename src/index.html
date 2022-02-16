@@ -208,6 +208,7 @@
           youTubeVideoId = $youTubeVideoId.value;
           clearAnnotations();
           uv.set({
+            manifest: undefined,
             youTubeVideoId: youTubeVideoId,
             annotations: [],
           });
@@ -233,19 +234,24 @@
 
         $clearAnnotationsButton.onclick = function() {
           clearAnnotations();
+          setAnnotations();
         };
 
         function clearAnnotations() {
           annotations = [];
           $annotations.value = JSON.stringify(annotations);
-          setAnnotations();
         }
 
         function setupUV() {
-          const data = urlAdapter.getInitialData({
+          // const data = urlAdapter.getInitialData({
+          //   manifest: manifest,
+          //   debug: false
+          // });
+
+          const data = {
             manifest: manifest,
             debug: false
-          });
+          };
 
           uv = UV.init("uv", data);
           urlAdapter.bindTo(uv);

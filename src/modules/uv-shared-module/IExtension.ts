@@ -22,7 +22,7 @@ export type LocaleRegistry = {
 
 export interface IExtension {
   $element: JQuery;
-  addTimestamp(uri: string): string;
+  // addTimestamp(uri: string): string;
   changeLocale(locale: string): void;
   extensionHost: IExtensionHost;
   create(): void;

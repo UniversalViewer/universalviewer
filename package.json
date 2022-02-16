@@ -102,7 +102,7 @@
     "jquery": "3.5.0",
     "jsviews": "0.9.83",
     "less-plugin-clean-css": "^1.5.1",
-    "lodash.debounce": "^4.0.8",
+    "lodash.merge": "^4.6.2",
     "manifesto.js": "4.2.4",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "2.5.1",

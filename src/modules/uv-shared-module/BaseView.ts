@@ -19,7 +19,10 @@ export class BaseView extends Panel {
   }
 
   create(): void {
-    this.extensionHost = this.$element.closest(".uv-extension-host").data("component");
+    console.log("create BaseView");
+    this.extensionHost = this.$element
+      .closest(".uv-extension-host")
+      .data("component");
 
     super.create();
 

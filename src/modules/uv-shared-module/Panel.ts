@@ -39,11 +39,11 @@ export class Panel {
     withClick = true
   ) {
     if (withClick) {
-      el.on("click", e => {
+      el.on("click", (e) => {
         callback(e);
       });
     }
-    el.on("keyup", e => {
+    el.on("keyup", (e) => {
       if (e.keyCode === 32) {
         callback(e);
       }
