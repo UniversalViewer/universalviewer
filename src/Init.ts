@@ -44,7 +44,7 @@ export const init = (el: string | HTMLDivElement, data) => {
 
   uv = new UniversalViewer({
     target: uvDiv,
-    data: data
+    data: data,
   });
 
   uv.on(
@@ -84,7 +84,7 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-  
+
   uv.on(
     BaseEvents.TOGGLE_FULLSCREEN,
     function(data) {
@@ -143,6 +143,10 @@ export const init = (el: string | HTMLDivElement, data) => {
   //   },
   //   false
   // );
+
+  // window.addEventListener("uvready", () => {
+
+  // });
 
   function fullScreenChange(e) {
     if (

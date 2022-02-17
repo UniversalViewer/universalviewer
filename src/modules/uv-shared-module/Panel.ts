@@ -22,7 +22,7 @@ export class Panel {
   }
 
   create(): void {
-    this.extensionHost.subscribe(BaseEvents.RESIZE, () => {
+    this.extensionHost?.subscribe(BaseEvents.RESIZE, () => {
       this.resize();
     });
   }

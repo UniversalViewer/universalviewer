@@ -3,7 +3,8 @@ import { YouTubeData } from "./IUVData";
 import { IUVOptions } from "./UniversalViewer";
 import { merge } from "lodash";
 
-export class YouTubeContentHandler implements IContentHandler<YouTubeData> {
+export default class YouTubeContentHandler
+  implements IContentHandler<YouTubeData> {
   public el: HTMLElement;
   private _e: any;
 

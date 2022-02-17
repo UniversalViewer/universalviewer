@@ -19,18 +19,19 @@ import {
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
-import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
+import { BaseComponent } from "@iiif/base-component";
 import "./uv.css";
 import "./themes/theme.less";
 import { IContentHandler } from "./IContentHandler";
 import { merge } from "lodash";
+import { IUVOptions } from "./UniversalViewer";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
 }
 
 // use static paths (not based on variable) so webpack can use publicPath: "auto"
-const Extension = {
+const Extension: IExtensionRegistry = {
   AV: {
     name: "uv-av-extension",
     loader: () =>
@@ -96,7 +97,7 @@ const Extension = {
   },
 };
 
-export class IIIFContentHandler extends BaseComponent
+export default class IIIFContentHandler extends BaseComponent
   implements IExtensionHost, IContentHandler<IIIFData> {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
@@ -114,7 +115,7 @@ export class IIIFContentHandler extends BaseComponent
     ],
   };
 
-  constructor(options: IBaseComponentOptions) {
+  constructor(options: IUVOptions) {
     super(options);
     this.mergeDefaults(this.options.data);
 

@@ -68,54 +68,30 @@ export class URLAdapter extends UVAdapter {
   }
 
   public bindTo(uv: UniversalViewer) {
-    uv.on(
-      BaseEvents.PAUSE,
-      (currentTime) => {
-        if (currentTime > 0) {
-          this.set("t", currentTime);
-        }
-      },
-      false
-    );
+    uv.on(BaseEvents.PAUSE, (currentTime) => {
+      if (currentTime > 0) {
+        this.set("t", currentTime);
+      }
+    });
 
-    uv.on(
-      BaseEvents.COLLECTION_INDEX_CHANGE,
-      (collectionIndex) => {
-        this.set("c", collectionIndex);
-      },
-      false
-    );
+    uv.on(BaseEvents.COLLECTION_INDEX_CHANGE, (collectionIndex) => {
+      this.set("c", collectionIndex);
+    });
 
-    uv.on(
-      BaseEvents.MANIFEST_INDEX_CHANGE,
-      (manifestIndex) => {
-        this.set("m", manifestIndex);
-      },
-      false
-    );
+    uv.on(BaseEvents.MANIFEST_INDEX_CHANGE, (manifestIndex) => {
+      this.set("m", manifestIndex);
+    });
 
-    uv.on(
-      BaseEvents.CANVAS_INDEX_CHANGE,
-      (canvasIndex) => {
-        this.set("cv", canvasIndex);
-      },
-      false
-    );
+    uv.on(BaseEvents.CANVAS_INDEX_CHANGE, (canvasIndex) => {
+      this.set("cv", canvasIndex);
+    });
 
-    uv.on(
-      BaseEvents.RANGE_CHANGE,
-      (rangeId) => {
-        this.set("rid", rangeId);
-      },
-      false
-    );
+    uv.on(BaseEvents.RANGE_CHANGE, (rangeId) => {
+      this.set("rid", rangeId);
+    });
 
-    uv.on(
-      BaseEvents.TARGET_CHANGE,
-      (target) => {
-        this.set("xywh", this.getFragment("xywh", target));
-      },
-      false
-    );
+    uv.on(BaseEvents.TARGET_CHANGE, (target) => {
+      this.set("xywh", this.getFragment("xywh", target));
+    });
   }
 }
