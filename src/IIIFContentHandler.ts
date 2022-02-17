@@ -23,7 +23,7 @@ import { BaseComponent } from "@iiif/base-component";
 import "./uv.css";
 import "./themes/theme.less";
 import { IContentHandler } from "./IContentHandler";
-import { merge } from "lodash";
+// import { merge } from "lodash";
 import { IUVOptions } from "./UniversalViewer";
 
 interface IExtensionRegistry {
@@ -106,18 +106,19 @@ export default class IIIFContentHandler extends BaseComponent
   public adapter: IExtensionHostAdapter;
   public disposed = false;
 
-  private _defaultData = {
-    canvasIndex: 0,
-    locales: [
-      {
-        name: "en-GB",
-      },
-    ],
-  };
+  // private _defaultData = {
+  //   canvasIndex: 0,
+  //   locales: [
+  //     {
+  //       name: "en-GB",
+  //     },
+  //   ],
+  // };
 
   constructor(options: IUVOptions) {
     super(options);
-    this.mergeDefaults(this.options.data);
+    // this.mergeDefaults(this.options.data);
+    console.log("create IIIFContentHandler");
 
     this._pubsub = new PubSub();
 
@@ -125,9 +126,9 @@ export default class IIIFContentHandler extends BaseComponent
     this._resize();
   }
 
-  private mergeDefaults(data: IIIFData): void {
-    merge(data, this._defaultData);
-  }
+  // private mergeDefaults(data: IIIFData): void {
+  //   merge(data, this._defaultData);
+  // }
 
   protected _init(): boolean {
     super._init();
@@ -206,7 +207,7 @@ export default class IIIFContentHandler extends BaseComponent
   public set(data: IUVData): void {
     this.fire(BaseEvents.SET, data);
 
-    this.mergeDefaults(data);
+    // this.mergeDefaults(data);
 
     // if this is the first set
     if (!this.extension) {

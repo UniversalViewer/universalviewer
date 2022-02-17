@@ -1,7 +1,5 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
-// import { EventHandler, PubSub } from "./PubSub";
-// import { Async } from "@edsilv/utils";
 
 export interface IUVOptions {
   target: HTMLElement;
@@ -25,42 +23,22 @@ const ContentHandler: IContentHandlerRegistry = {
     /* webpackMode: "lazy" */ import("./YouTubeContentHandler"),
 };
 
-export type EventListener = {
-  [key: string]: { fn: Function; ctx: any }[];
-};
-
 export class UniversalViewer {
   private _contentType: ContentType = ContentType.UNKNOWN;
   private _contentHandler: IContentHandler<IUVData>;
   public el: HTMLElement;
-  // private _pubsub: PubSub = new PubSub();
-  // private _eventListener: EventListener;
-  private _uvReadyEvent;
-  private _isUVReady: boolean = false;
+  private _eventListeners: { name: string; callback: Function }[] = [];
 
   constructor(public options: IUVOptions) {
     this.el = options.target;
     this._assignContentHandler(this.options.data);
-    this._uvReadyEvent = new CustomEvent("uvready");
   }
 
-  // public on(name: string, callback: EventHandler): void {
-  //   console.log("on", name);
-  //   // this._pubsub.subscribe(name, callback);
-  //   // var e = this._eventListener || (this._eventListener = {});
-
-  //   // (e[name] || (e[name] = [])).push({
-  //   //   fn: callback,
-  //   //   ctx: ctx,
-  //   // });
-  // }
-
   public on(name: string, callback: Function, ctx: any): void {
-    if (this._isUVReady) {
-      this._contentHandler.on(name, callback, ctx);
-    } else {
-      console.warn("UV is not ready yet");
-    }
+    this._eventListeners.push({
+      name,
+      callback,
+    });
   }
 
   private async _assignContentHandler(data: IUVData): Promise<void> {
@@ -70,6 +48,8 @@ export class UniversalViewer {
       contentType = ContentType.IIIF;
     } else if (data[ContentType.YOUTUBE]) {
       contentType = ContentType.YOUTUBE;
+    } else if (this._contentType) {
+      contentType = this._contentType;
     } else {
       contentType = ContentType.UNKNOWN;
     }
@@ -77,29 +57,27 @@ export class UniversalViewer {
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
     } else if (this._contentType !== contentType) {
-      this._isUVReady = false;
-      this._contentHandler?.dispose(); // dispose previous content handler
-      // this._pubsub.dispose(); // clear event listeners
-      this._contentType = contentType; // set content type
       console.log("create content handler", contentType);
+      this._contentHandler?.dispose(); // dispose previous content handler
+      this._contentType = contentType; // set content type
       const m = await ContentHandler[contentType](); // import content handler
       this._contentHandler = new m.default(this.options); // create content handler
-      this._isUVReady = true;
-      window.dispatchEvent(this._uvReadyEvent);
+
+      // add event listeners
+      this._eventListeners.forEach(({ name, callback }) => {
+        this._contentHandler.on(name, callback);
+      });
     }
   }
 
   public set(data: IUVData): void {
+    // content type may have changed
     this._assignContentHandler(data).then(() => {
       this._contentHandler.set(data);
     });
   }
 
   public resize(): void {
-    if (this._isUVReady) {
-      this._contentHandler.resize();
-    } else {
-      console.warn("UV is not ready yet");
-    }
+    this._contentHandler?.resize();
   }
 }
