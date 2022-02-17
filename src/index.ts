@@ -1,7 +1,8 @@
-import "./shim-jquery";
+// todo: can this be removed?
+// import "./shim-jquery";
 
-export { URLAdapter } from "./URLAdapter";
-export { URLAdapter as URLAdaptor } from "./URLAdapter";
+export { URLAdapter as IIIFURLAdapter } from "./content-handlers/iiif/URLAdapter";
+export { URLAdapter as IIIFURLAdaptor } from "./content-handlers/iiif/URLAdapter";
 export { UniversalViewer as Viewer } from "./UniversalViewer";
-export { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+export { BaseEvents as IIIFEvents } from "./content-handlers/iiif/modules/uv-shared-module/BaseEvents";
 export { init } from "./Init";

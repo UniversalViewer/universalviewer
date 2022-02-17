@@ -1,3 +1,6 @@
+import { EPubData } from "./content-handlers/iiif/EPubData";
+import { IIIFData } from "./content-handlers/iiif/IIIFData";
+import { YouTubeData } from "./content-handlers/youtube/YouTubeData";
 import { ILocale } from "./ILocale";
 
 export interface IUVData extends IIIFData, EPubData, YouTubeData {
@@ -7,23 +10,4 @@ export interface IUVData extends IIIFData, EPubData, YouTubeData {
   isReload?: boolean;
   locales?: ILocale[];
   target?: string;
-}
-
-export interface IIIFData {
-  annotations?: string;
-  canvasIndex?: number;
-  collectionIndex?: number;
-  manifest?: string;
-  rotation?: number;
-  manifestIndex?: number;
-  rangeId?: string;
-  xywh?: string;
-}
-
-export interface EPubData {
-  cfi?: string;
-}
-
-export interface YouTubeData {
-  youTubeVideoId?: string;
 }

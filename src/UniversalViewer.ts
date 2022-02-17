@@ -18,9 +18,13 @@ interface IContentHandlerRegistry {
 
 const ContentHandler: IContentHandlerRegistry = {
   [ContentType.IIIF]: () =>
-    /* webpackMode: "lazy" */ import("./IIIFContentHandler"),
+    /* webpackMode: "lazy" */ import(
+      "./content-handlers/iiif/IIIFContentHandler"
+    ),
   [ContentType.YOUTUBE]: () =>
-    /* webpackMode: "lazy" */ import("./YouTubeContentHandler"),
+    /* webpackMode: "lazy" */ import(
+      "./content-handlers/youtube/YouTubeContentHandler"
+    ),
 };
 
 export class UniversalViewer {
@@ -34,7 +38,7 @@ export class UniversalViewer {
     this._assignContentHandler(this.options.data);
   }
 
-  public on(name: string, callback: Function, ctx: any): void {
+  public on(name: string, callback: Function, ctx?: any): void {
     this._eventListeners.push({
       name,
       callback,
@@ -57,7 +61,6 @@ export class UniversalViewer {
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
     } else if (this._contentType !== contentType) {
-      console.log("create content handler", contentType);
       this._contentHandler?.dispose(); // dispose previous content handler
       this._contentType = contentType; // set content type
       const m = await ContentHandler[contentType](); // import content handler

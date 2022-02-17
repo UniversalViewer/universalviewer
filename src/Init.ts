@@ -1,4 +1,4 @@
-import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "./content-handlers/iiif/modules/uv-shared-module/BaseEvents";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {

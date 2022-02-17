@@ -1,4 +1,4 @@
-import { IExtensionHostAdapter } from "./IExtensionHostAdapter";
+import { IExtensionHostAdapter } from "./content-handlers/iiif/IExtensionHostAdapter";
 
 export class UVAdapter implements IExtensionHostAdapter {
   public readonly: boolean = false;
