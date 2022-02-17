@@ -47,106 +47,104 @@ export const init = (el: string | HTMLDivElement, data) => {
     data: data,
   });
 
-  uv.on(
-    BaseEvents.SET,
-    function(_obj) {
-      // remove loaded class to show spinner
-      uv.el.parentElement!.parentElement!.classList.remove("loaded");
-    },
-    false
-  );
+  window.addEventListener("uvready", () => {
+    uv.on(
+      BaseEvents.SET,
+      function(_obj) {
+        // remove loaded class to show spinner
+        uv.el.parentElement!.parentElement!.classList.remove("loaded");
+      },
+      false
+    );
 
-  uv.on(
-    BaseEvents.CREATED,
-    function(_obj) {
-      // add loaded class to hide spinner
-      uv.el.parentElement!.parentElement!.classList.add("loaded");
-      resize();
-    },
-    false
-  );
-
-  uv.on(
-    BaseEvents.EXTERNAL_RESOURCE_OPENED,
-    function(_obj) {
-      setTimeout(function() {
+    uv.on(
+      BaseEvents.CREATED,
+      function(_obj) {
+        // add loaded class to hide spinner
+        uv.el.parentElement!.parentElement!.classList.add("loaded");
         resize();
-      }, 100);
-    },
-    false
-  );
+      },
+      false
+    );
 
-  uv.on(
-    BaseEvents.RELOAD,
-    function(data) {
-      data.isReload = true;
-      uv.set(data);
-    },
-    false
-  );
+    uv.on(
+      BaseEvents.EXTERNAL_RESOURCE_OPENED,
+      function(_obj) {
+        setTimeout(function() {
+          resize();
+        }, 100);
+      },
+      false
+    );
 
-  uv.on(
-    BaseEvents.TOGGLE_FULLSCREEN,
-    function(data) {
-      isFullScreen = data.isFullScreen;
-      overrideFullScreen = data.overrideFullScreen;
+    uv.on(
+      BaseEvents.RELOAD,
+      function(data) {
+        data.isReload = true;
+        uv.set(data);
+      },
+      false
+    );
 
-      if (!data.overrideFullScreen) {
-        if (isFullScreen) {
-          const requestFullScreen = getRequestFullScreen(parent);
-          if (requestFullScreen) {
-            requestFullScreen.call(parent);
-            // resize();
-          }
-        } else {
-          const exitFullScreen = getExitFullScreen();
-          if (exitFullScreen) {
-            exitFullScreen.call(document);
-            // firefox needs extra time when exiting a full screen embed
-            // setTimeout(function() {
-            //   resize();
-            // }, 100);
+    uv.on(
+      BaseEvents.TOGGLE_FULLSCREEN,
+      function(data) {
+        isFullScreen = data.isFullScreen;
+        overrideFullScreen = data.overrideFullScreen;
+
+        if (!data.overrideFullScreen) {
+          if (isFullScreen) {
+            const requestFullScreen = getRequestFullScreen(parent);
+            if (requestFullScreen) {
+              requestFullScreen.call(parent);
+              // resize();
+            }
+          } else {
+            const exitFullScreen = getExitFullScreen();
+            if (exitFullScreen) {
+              exitFullScreen.call(document);
+              // firefox needs extra time when exiting a full screen embed
+              // setTimeout(function() {
+              //   resize();
+              // }, 100);
+            }
           }
         }
-      }
 
-      setTimeout(function() {
-        resize();
-      }, 100);
-    },
-    false
-  );
+        setTimeout(function() {
+          resize();
+        }, 100);
+      },
+      false
+    );
 
-  uv.on(
-    BaseEvents.ERROR,
-    function(message) {
-      console.error(message);
-    },
-    false
-  );
+    uv.on(
+      BaseEvents.ERROR,
+      function(message) {
+        console.error(message);
+      },
+      false
+    );
 
-  // uv.on(
-  //   "bookmark",
-  //   function(data) {
-  //     const absUri = parent!.ownerDocument!.URL;
-  //     const parts = Urls.getUrlParts(absUri);
-  //     let relUri =
-  //       parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
+    // uv.on(
+    //   "bookmark",
+    //   function(data) {
+    //     const absUri = parent!.ownerDocument!.URL;
+    //     const parts = Urls.getUrlParts(absUri);
+    //     let relUri =
+    //       parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
 
-  //     if (!relUri.startsWith("/")) {
-  //       relUri = "/" + relUri;
-  //     }
+    //     if (!relUri.startsWith("/")) {
+    //       relUri = "/" + relUri;
+    //     }
 
-  //     data.path = relUri;
+    //     data.path = relUri;
 
-  //     console.log("bookmark", data);
-  //   },
-  //   false
-  // );
-
-  // window.addEventListener("uvready", () => {
-
-  // });
+    //     console.log("bookmark", data);
+    //   },
+    //   false
+    // );
+  });
 
   function fullScreenChange(e) {
     if (

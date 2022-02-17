@@ -255,89 +255,93 @@
           };
 
           uv = UV.init("uv", data);
-          urlAdapter.bindTo(uv);
 
-          uv.on("configure", function({ config, cb }) {
-            cb(
-              new Promise(function(resolve) {
-                fetch("uv-config.json").then(function(response) {
-                  resolve(response.json());
-                });
-              })
-            );
-          });
+          window.addEventListener("uvready", function() {
+            console.log("uvready");
+            urlAdapter.bindTo(uv);
 
-          // enable doubleclick annotation
-          uv.on("configure", function({ config, cb }) {
-            cb({ 
-              modules: { 
-                modelViewerCenterPanel: {
-                  options: {
-                    doubleClickAnnotationEnabled: true
-                  }
-                },
-                openSeadragonCenterPanel: {
-                  options: {
-                    doubleClickAnnotationEnabled: true
-                  }
-                } 
-              }
+            uv.on("configure", function({ config, cb }) {
+              cb(
+                new Promise(function(resolve) {
+                  fetch("uv-config.json").then(function(response) {
+                    resolve(response.json());
+                  });
+                })
+              );
             });
-          });
 
-          // uv.on("configure", function({ config, cb }) {
-          //   cb((async () => {
-          //     await fetch("uv-config.json");
-          //   })());
-          // });
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb({ options: { overrideFullScreen: true } });
-          // });
-
-          uv.on("targetChange", function(target) {
-            $target.value = target;
-          });
-
-          uv.on("openseadragonExtension.doubleClick", function(e) {
-            annotations.push({
-              target: e.target,
-              bodyValue: String(annotations.length + 1)
+            // enable doubleclick annotation
+            uv.on("configure", function({ config, cb }) {
+              cb({ 
+                modules: { 
+                  modelViewerCenterPanel: {
+                    options: {
+                      doubleClickAnnotationEnabled: true
+                    }
+                  },
+                  openSeadragonCenterPanel: {
+                    options: {
+                      doubleClickAnnotationEnabled: true
+                    }
+                  } 
+                }
+              });
             });
-            $annotations.value = JSON.stringify(annotations);
-            setAnnotations();
-          });
 
-          uv.on("modelviewerExtension.doubleClick", function(e) {
-            annotations.push({
-              target: e.target,
-              bodyValue: String(annotations.length + 1)
+            // uv.on("configure", function({ config, cb }) {
+            //   cb((async () => {
+            //     await fetch("uv-config.json");
+            //   })());
+            // });
+
+            // uv.on("configure", function({ config, cb }) {
+            //   cb({ options: { overrideFullScreen: true } });
+            // });
+
+            uv.on("targetChange", function(target) {
+              $target.value = target;
             });
-            $annotations.value = JSON.stringify(annotations);
-            setAnnotations();
+
+            uv.on("openseadragonExtension.doubleClick", function(e) {
+              annotations.push({
+                target: e.target,
+                bodyValue: String(annotations.length + 1)
+              });
+              $annotations.value = JSON.stringify(annotations);
+              setAnnotations();
+            });
+
+            uv.on("modelviewerExtension.doubleClick", function(e) {
+              annotations.push({
+                target: e.target,
+                bodyValue: String(annotations.length + 1)
+              });
+              $annotations.value = JSON.stringify(annotations);
+              setAnnotations();
+            });
+
+            uv.on("pinpointAnnotationClicked", function(index) {
+              console.log("pinpointAnnotationClicked", index);
+            });
+
+            uv.on("clearAnnotations", function(e) {
+              clearAnnotations();
+            }); 
+
+            // uv.on("load", function() {
+            //   uv.set({
+            //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+            //   });
+            // });
+
+            // uv.on("openseadragonExtension.rotationChange", function(rotation) {
+            //   $rotation.value = rotation;
+            // });
+
+            // uv.on("toggleFullScreen", function(e) {
+            //   console.log("toggleFullScreen", e);
+            // });
           });
-
-          uv.on("pinpointAnnotationClicked", function(index) {
-            console.log("pinpointAnnotationClicked", index);
-          });
-
-          uv.on("clearAnnotations", function(e) {
-            clearAnnotations();
-          }); 
-
-          // uv.on("load", function() {
-          //   uv.set({
-          //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
-          //   });
-          // });
-
-          // uv.on("openseadragonExtension.rotationChange", function(rotation) {
-          //   $rotation.value = rotation;
-          // });
-
-          // uv.on("toggleFullScreen", function(e) {
-          //   console.log("toggleFullScreen", e);
-          // });
         }
 
         loadManifests(function() {
