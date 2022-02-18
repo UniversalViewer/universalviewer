@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 
@@ -62,7 +62,7 @@ export class RightPanel extends BaseExpandPanel {
     this.$element.css({
       left: Math.floor(
         this.$element.parent().width() - this.$element.outerWidth()
-      )
+      ),
     });
   }
 }

@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { AutoComplete } from "../uv-shared-module/AutoComplete";
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";

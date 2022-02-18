@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ExternalContentDialogue extends Dialogue {

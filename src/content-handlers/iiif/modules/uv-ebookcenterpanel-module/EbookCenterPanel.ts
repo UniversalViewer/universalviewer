@@ -1,5 +1,5 @@
 import { Async } from "@edsilv/utils";
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
 import { Position } from "../uv-shared-module/Position";

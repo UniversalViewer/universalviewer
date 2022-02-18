@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Information } from "./Information";
 import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
@@ -37,9 +37,10 @@ export class InformationFactory {
         loginAction.action = () => {
           resource.authHoldingPage = window.open("", "_blank");
           this.extension.extensionHost.publish(BaseEvents.HIDE_INFORMATION);
-          this.extension.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [
-            [resource]
-          ]);
+          this.extension.extensionHost.publish(
+            BaseEvents.OPEN_EXTERNAL_RESOURCE,
+            [[resource]]
+          );
         };
 
         actions.push(loginAction);

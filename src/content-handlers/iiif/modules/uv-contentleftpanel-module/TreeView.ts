@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
 import { TreeComponent } from "@iiif/iiif-tree-component";
@@ -27,7 +27,7 @@ export class TreeView extends BaseView {
 
     this.treeComponent = new TreeComponent({
       target: <HTMLElement>this.$tree[0],
-      data: this.treeData
+      data: this.treeData,
     });
 
     this.treeComponent.on(

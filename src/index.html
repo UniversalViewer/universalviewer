@@ -146,37 +146,37 @@
 
         function parseIIIFCollection(manifests) {
           for (var i = 0; i < manifests.collections.length; i++) {
-                var collection = manifests.collections[i];
+            var collection = manifests.collections[i];
 
-                if (collection.visible === false) {
-                  continue;
-                }
+            if (collection.visible === false) {
+              continue;
+            }
 
-                var optGroup = createOptGroup(collection.label);
-                $manifestSelect.appendChild(optGroup);
+            var optGroup = createOptGroup(collection.label);
+            $manifestSelect.appendChild(optGroup);
 
-                for (var j = 0; j < collection.manifests.length; j++) {
-                  var manifest = collection.manifests[j];
+            for (var j = 0; j < collection.manifests.length; j++) {
+              var manifest = collection.manifests[j];
 
-                  if (manifest.visible !== false) {
-                    var option = createOption(manifest.label, manifest["@id"]);
-                    optGroup.appendChild(option);
-                  }
-                }
+              if (manifest.visible !== false) {
+                var option = createOption(manifest.label, manifest["@id"]);
+                optGroup.appendChild(option);
               }
+            }
+          }
         }
 
         function parseYouTubeCollection(collection) {
           for (var i = 0; i < collection.length; i++) {
-                var item = collection[i];
+            var item = collection[i];
 
-                if (item.visible === false) {
-                  continue;
-                }
+            if (item.visible === false) {
+              continue;
+            }
 
-                var option = createOption(item.label, item.id);
-                $youTubeVideoIdSelect.appendChild(option);
-              }
+            var option = createOption(item.label, item.id);
+            $youTubeVideoIdSelect.appendChild(option);
+          }
         }
 
         function loadCollections(cb) {
@@ -298,7 +298,6 @@
         }
 
         function setupUV() {
-          // todo, use this
           const data = urlAdapter.getInitialData({
             manifest: manifest,
             debug: false
@@ -311,91 +310,88 @@
 
           uv = UV.init("uv", data);
 
-          // window.addEventListener("uvready", function() {
-            // console.log("uvready");
-            urlAdapter.bindTo(uv);
+          urlAdapter.bindTo(uv);
 
-            uv.on("configure", function({ config, cb }) {
-              cb(
-                new Promise(function(resolve) {
-                  fetch("uv-config.json").then(function(response) {
-                    resolve(response.json());
-                  });
-                })
-              );
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function(resolve) {
+                fetch("uv-config.json").then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
+          });
+
+          // enable doubleclick annotation
+          uv.on("configure", function({ config, cb }) {
+            cb({ 
+              modules: { 
+                modelViewerCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true
+                  }
+                },
+                openSeadragonCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true
+                  }
+                } 
+              }
             });
+          });
 
-            // enable doubleclick annotation
-            uv.on("configure", function({ config, cb }) {
-              cb({ 
-                modules: { 
-                  modelViewerCenterPanel: {
-                    options: {
-                      doubleClickAnnotationEnabled: true
-                    }
-                  },
-                  openSeadragonCenterPanel: {
-                    options: {
-                      doubleClickAnnotationEnabled: true
-                    }
-                  } 
-                }
-              });
+          // uv.on("configure", function({ config, cb }) {
+          //   cb((async () => {
+          //     await fetch("uv-config.json");
+          //   })());
+          // });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb({ options: { overrideFullScreen: true } });
+          // });
+
+          uv.on("targetChange", function(target) {
+            $target.value = target;
+          });
+
+          uv.on("openseadragonExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1)
             });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
+          });
 
-            // uv.on("configure", function({ config, cb }) {
-            //   cb((async () => {
-            //     await fetch("uv-config.json");
-            //   })());
-            // });
-
-            // uv.on("configure", function({ config, cb }) {
-            //   cb({ options: { overrideFullScreen: true } });
-            // });
-
-            uv.on("targetChange", function(target) {
-              $target.value = target;
+          uv.on("modelviewerExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1)
             });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
+          });
 
-            uv.on("openseadragonExtension.doubleClick", function(e) {
-              annotations.push({
-                target: e.target,
-                bodyValue: String(annotations.length + 1)
-              });
-              $annotations.value = JSON.stringify(annotations);
-              setAnnotations();
-            });
+          uv.on("pinpointAnnotationClicked", function(index) {
+            console.log("pinpointAnnotationClicked", index);
+          });
 
-            uv.on("modelviewerExtension.doubleClick", function(e) {
-              annotations.push({
-                target: e.target,
-                bodyValue: String(annotations.length + 1)
-              });
-              $annotations.value = JSON.stringify(annotations);
-              setAnnotations();
-            });
+          uv.on("clearAnnotations", function(e) {
+            clearAnnotations();
+          }); 
 
-            uv.on("pinpointAnnotationClicked", function(index) {
-              console.log("pinpointAnnotationClicked", index);
-            });
+          // uv.on("load", function() {
+          //   uv.set({
+          //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
+          //   });
+          // });
 
-            uv.on("clearAnnotations", function(e) {
-              clearAnnotations();
-            }); 
+          // uv.on("openseadragonExtension.rotationChange", function(rotation) {
+          //   $rotation.value = rotation;
+          // });
 
-            // uv.on("load", function() {
-            //   uv.set({
-            //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
-            //   });
-            // });
-
-            // uv.on("openseadragonExtension.rotationChange", function(rotation) {
-            //   $rotation.value = rotation;
-            // });
-
-            // uv.on("toggleFullScreen", function(e) {
-            //   console.log("toggleFullScreen", e);
-            // });
+          // uv.on("toggleFullScreen", function(e) {
+          //   console.log("toggleFullScreen", e);
           // });
         }
 

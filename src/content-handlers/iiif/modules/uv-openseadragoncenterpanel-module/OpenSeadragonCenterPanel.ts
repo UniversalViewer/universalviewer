@@ -12,7 +12,7 @@ import {
 } from "manifesto.js";
 import { debounce, sanitize } from "../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";

@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
@@ -60,7 +60,7 @@ export class RestrictedDialogue extends Dialogue {
 
     this.$element.hide();
 
-    this.$cancelButton.on("click", e => {
+    this.$cancelButton.on("click", (e) => {
       e.preventDefault();
       this.close();
     });

@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";
 import { ILoginDialogueOptions } from "./ILoginDialogueOptions";
@@ -8,7 +8,7 @@ import {
   IAccessToken,
   IExternalResource,
   StatusCode,
-  Utils
+  Utils,
 } from "manifesto.js";
 import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
@@ -20,7 +20,7 @@ export class Auth09 {
     resourcesToLoad: IExternalResource[],
     storageStrategy: string
   ): Promise<IExternalResource[]> {
-    return new Promise<IExternalResource[]>(resolve => {
+    return new Promise<IExternalResource[]>((resolve) => {
       Utils.loadExternalResourcesAuth09(
         resourcesToLoad,
         storageStrategy,
@@ -54,7 +54,7 @@ export class Auth09 {
   }
 
   static clickThrough(resource: IExternalResource): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       Auth09.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [
         {
           resource: resource,
@@ -72,8 +72,8 @@ export class Auth09 {
                 }
               }, 500);
             }
-          }
-        }
+          },
+        },
       ]);
     });
   }
@@ -86,14 +86,14 @@ export class Auth09 {
           acceptCallback: () => {
             Auth09.publish(BaseEvents.LOAD_FAILED);
             reject(resource);
-          }
-        }
+          },
+        },
       ]);
     });
   }
 
   static login(resource: IExternalResource): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       const options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
 
       if (resource.status === HTTPStatusCode.FORBIDDEN) {
@@ -132,8 +132,8 @@ export class Auth09 {
               }, 500);
             }
           },
-          options: options
-        }
+          options: options,
+        },
       ]);
     });
   }

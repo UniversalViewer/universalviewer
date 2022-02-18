@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
-import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Strings } from "@edsilv/utils";
 import { Canvas, Range, Annotation } from "manifesto.js";

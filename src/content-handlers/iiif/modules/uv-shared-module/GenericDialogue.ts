@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "./Dialogue";
 
 export class GenericDialogue extends Dialogue {

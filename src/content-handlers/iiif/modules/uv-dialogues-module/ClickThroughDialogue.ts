@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
@@ -53,7 +53,7 @@ export class ClickThroughDialogue extends Dialogue {
 
     this.$element.hide();
 
-    this.$acceptTermsButton.on("click", e => {
+    this.$acceptTermsButton.on("click", (e) => {
       e.preventDefault();
       this.close();
       this.extensionHost.publish(BaseEvents.ACCEPT_TERMS);

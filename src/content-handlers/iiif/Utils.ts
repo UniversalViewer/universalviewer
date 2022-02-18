@@ -98,3 +98,7 @@ export const isVisible = (el: JQuery) => {
   // return el.css("visibility") !== "hidden"
   return el.is(":visible");
 };
+
+export const defaultLocale = {
+  name: "en-GB",
+};

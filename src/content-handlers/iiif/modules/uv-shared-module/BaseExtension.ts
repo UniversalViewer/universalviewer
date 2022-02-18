@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
 import { ExtensionLoader, IExtension } from "./IExtension";
 import { ILocale } from "../../../../ILocale";
@@ -321,7 +321,6 @@ export class BaseExtension implements IExtension {
     });
 
     this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
-      console.log("escape");
       if (this.isFullScreen() && !this.isOverlayActive()) {
         this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       }
@@ -556,14 +555,14 @@ export class BaseExtension implements IExtension {
     }
 
     if (!this.isCreated || this.data.canvasIndex !== this.helper.canvasIndex) {
-      if (this.data.canvasIndex !== undefined) {
-        this.extensionHost.publish(
-          BaseEvents.CANVAS_INDEX_CHANGE,
-          this.data.canvasIndex
-        );
-      } else {
-        console.error("canvasIndex is undefined");
+      if (this.data.canvasIndex === undefined) {
+        this.data.canvasIndex = 0;
       }
+
+      this.extensionHost.publish(
+        BaseEvents.CANVAS_INDEX_CHANGE,
+        this.data.canvasIndex
+      );
     }
 
     if (!this.isCreated || this.data.rangeId !== this.helper.rangeId) {

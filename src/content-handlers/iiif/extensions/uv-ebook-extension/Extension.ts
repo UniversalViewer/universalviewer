@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { EbookLeftPanel } from "../../modules/uv-ebookleftpanel-module/EbookLeftPanel";
 import { Events } from "./Events";

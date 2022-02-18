@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";
 
@@ -123,11 +123,17 @@ export class FooterPanel extends BaseView {
     });
 
     this.$shareButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.SHOW_SHARE_DIALOGUE, this.$shareButton);
+      this.extensionHost.publish(
+        BaseEvents.SHOW_SHARE_DIALOGUE,
+        this.$shareButton
+      );
     });
 
     this.$embedButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.SHOW_EMBED_DIALOGUE, this.$embedButton);
+      this.extensionHost.publish(
+        BaseEvents.SHOW_EMBED_DIALOGUE,
+        this.$embedButton
+      );
     });
 
     this.$downloadButton.onPressed(() => {
@@ -146,7 +152,7 @@ export class FooterPanel extends BaseView {
 
     this.onAccessibleClick(
       this.$fullScreenBtn,
-      e => {
+      (e) => {
         e.preventDefault();
         this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       },

@@ -1,9 +1,9 @@
 const $ = require("jquery");
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseView } from "./BaseView";
 import {
   ExternalResourceType,
-  ViewingDirection
+  ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
 import * as KeyCodes from "@edsilv/key-codes";
@@ -26,9 +26,12 @@ export class ThumbsView extends BaseView {
   create(): void {
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, (index: any) => {
-      this.selectIndex(parseInt(index));
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.CANVAS_INDEX_CHANGE,
+      (index: any) => {
+        this.selectIndex(parseInt(index));
+      }
+    );
 
     this.extensionHost.subscribe(BaseEvents.LOGIN, () => {
       this.loadThumbs();
@@ -61,7 +64,7 @@ export class ThumbsView extends BaseView {
                              </a>\
                              {{if ~separator()}} \
                                  <div class="separator"></div> \
-                             {{/if}}'
+                             {{/if}}',
     });
 
     const extraHeight: number = this.options.thumbsExtraHeight;
@@ -118,7 +121,7 @@ export class ThumbsView extends BaseView {
         }
 
         return "";
-      }
+      },
     });
 
     // use unevent to detect scroll stop.
@@ -237,7 +240,7 @@ export class ThumbsView extends BaseView {
       end:
         thumbRangeMid < this.thumbs.length - 1 - thumbLoadRange
           ? thumbRangeMid + thumbLoadRange
-          : this.thumbs.length - 1
+          : this.thumbs.length - 1,
     };
 
     const fadeDuration: number = this.options.thumbsImageFadeInDuration;

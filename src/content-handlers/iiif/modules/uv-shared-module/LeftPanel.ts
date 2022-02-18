@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 

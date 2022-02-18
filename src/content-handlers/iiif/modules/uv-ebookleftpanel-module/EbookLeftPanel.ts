@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Events } from "../../extensions/uv-ebook-extension/Events";
 import { Async } from "@edsilv/utils";

@@ -1,4 +1,4 @@
-import { BaseEvents } from "./content-handlers/iiif/modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "./BaseEvents";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
@@ -125,26 +125,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-
-  // uv.on(
-  //   "bookmark",
-  //   function(data) {
-  //     const absUri = parent!.ownerDocument!.URL;
-  //     const parts = Urls.getUrlParts(absUri);
-  //     let relUri =
-  //       parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
-
-  //     if (!relUri.startsWith("/")) {
-  //       relUri = "/" + relUri;
-  //     }
-
-  //     data.path = relUri;
-
-  //     console.log("bookmark", data);
-  //   },
-  //   false
-  // );
-  //});
 
   function fullScreenChange(e) {
     if (

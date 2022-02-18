@@ -2,7 +2,8 @@ import { UVAdapter } from "../../UVAdapter";
 import { Urls } from "@edsilv/utils";
 import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
-import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../BaseEvents";
+import { defaultLocale } from "./Utils";
 
 export class URLAdapter extends UVAdapter {
   constructor(readonly: boolean = false) {
@@ -46,9 +47,7 @@ export class URLAdapter extends UVAdapter {
         formattedLocales[i] = { name: parts[0], label: parts[1] };
       }
     } else {
-      formattedLocales.push({
-        name: "en-GB",
-      });
+      formattedLocales.push(defaultLocale);
     }
 
     return {

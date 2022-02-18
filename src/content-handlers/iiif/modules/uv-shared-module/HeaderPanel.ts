@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseView } from "./BaseView";
 import { ILocale } from "../../../../ILocale";
 import { Information } from "./Information";

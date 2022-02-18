@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { Bools, Numbers } from "@edsilv/utils";
 import { ILabelValuePair } from "@iiif/manifold";
@@ -52,16 +52,19 @@ export class ShareDialogue extends Dialogue {
     this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
 
     let lastElement: HTMLElement;
-    this.extensionHost.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
-      lastElement = triggerButton;
-      this.open(triggerButton);
+    this.extensionHost.subscribe(
+      this.openCommand,
+      (triggerButton: HTMLElement) => {
+        lastElement = triggerButton;
+        this.open(triggerButton);
 
-      if (this.isShareAvailable()) {
-        this.openShareView();
-      } else {
-        this.openEmbedView();
+        if (this.isShareAvailable()) {
+          this.openShareView();
+        } else {
+          this.openEmbedView();
+        }
       }
-    });
+    );
 
     this.extensionHost.subscribe(this.closeCommand, () => {
       if (lastElement) {
@@ -191,11 +194,11 @@ export class ShareDialogue extends Dialogue {
     );
     this.$footer.append(this.$termsOfUseButton);
 
-    this.$widthInput.on("keydown", e => {
+    this.$widthInput.on("keydown", (e) => {
       return Numbers.numericalInput(e);
     });
 
-    this.$heightInput.on("keydown", e => {
+    this.$heightInput.on("keydown", (e) => {
       return Numbers.numericalInput(e);
     });
 

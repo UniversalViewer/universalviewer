@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
@@ -10,7 +10,7 @@ import {
   Canvas,
   LanguageMap,
   ManifestResource,
-  Rendering
+  Rendering,
 } from "manifesto.js";
 import { RenderingFormat, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import { ILabelValuePair } from "@iiif/manifold";
@@ -42,10 +42,13 @@ export class DownloadDialogue extends Dialogue {
     this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
     let lastButton: HTMLElement;
-    this.extensionHost.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
-      lastButton = triggerButton;
-      this.open(triggerButton);
-    });
+    this.extensionHost.subscribe(
+      this.openCommand,
+      (triggerButton: HTMLElement) => {
+        lastButton = triggerButton;
+        this.open(triggerButton);
+      }
+    );
 
     this.extensionHost.subscribe(this.closeCommand, () => {
       if (lastButton) {
@@ -224,7 +227,7 @@ export class DownloadDialogue extends Dialogue {
 
         downloadOptions.push({
           type: type,
-          button: $button
+          button: $button,
         });
       }
     }

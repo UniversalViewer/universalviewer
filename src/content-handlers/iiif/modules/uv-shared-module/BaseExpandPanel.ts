@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class BaseExpandPanel extends BaseView {
   isExpanded: boolean = false;
@@ -94,9 +94,12 @@ export class BaseExpandPanel extends BaseView {
     this.$main.hide();
 
     // Subscribe to settings change.
-    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, (args: ISettings) => {
-      this.reducedAnimation = args.reducedAnimation || false;
-    });
+    this.extensionHost.subscribe(
+      BaseEvents.SETTINGS_CHANGE,
+      (args: ISettings) => {
+        this.reducedAnimation = args.reducedAnimation || false;
+      }
+    );
   }
 
   init(): void {
@@ -131,7 +134,7 @@ export class BaseExpandPanel extends BaseView {
       this.$element.stop().animate(
         {
           width: this.getTargetWidth(),
-          left: this.getTargetLeft()
+          left: this.getTargetLeft(),
         },
         this.options.panelAnimationDuration,
         () => {
@@ -174,7 +177,7 @@ export class BaseExpandPanel extends BaseView {
     this.$element.stop().animate(
       {
         width: targetWidth,
-        left: targetLeft
+        left: targetLeft,
       },
       this.options.panelAnimationDuration,
       () => {
@@ -192,7 +195,7 @@ export class BaseExpandPanel extends BaseView {
     this.$element.stop().animate(
       {
         width: targetWidth,
-        left: targetLeft
+        left: targetLeft,
       },
       this.options.panelAnimationDuration,
       () => {

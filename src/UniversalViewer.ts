@@ -31,7 +31,7 @@ export class UniversalViewer implements IContentHandler<IUVData> {
   private _contentType: ContentType = ContentType.UNKNOWN;
   private _assignedContentHandler: IContentHandler<IUVData>;
   public el: HTMLElement;
-  private _eventListeners: { name: string; callback: Function }[] = [];
+  private _externalEventListeners: { name: string; callback: Function }[] = [];
 
   constructor(public options: IUVOptions) {
     this.el = options.target;
@@ -39,7 +39,7 @@ export class UniversalViewer implements IContentHandler<IUVData> {
   }
 
   public on(name: string, callback: Function, ctx?: any): void {
-    this._eventListeners.push({
+    this._externalEventListeners.push({
       name,
       callback,
     });
@@ -63,11 +63,12 @@ export class UniversalViewer implements IContentHandler<IUVData> {
     } else if (this._contentType !== contentType) {
       this._assignedContentHandler?.dispose(); // dispose previous content handler
       this._contentType = contentType; // set content type
+      this.el.classList.add("loading");
       const m = await ContentHandler[contentType](); // import content handler
       this._assignedContentHandler = new m.default(this.options); // create content handler
 
       // add event listeners
-      this._eventListeners.forEach(({ name, callback }) => {
+      this._externalEventListeners.forEach(({ name, callback }) => {
         this._assignedContentHandler.on(name, callback);
       });
     }

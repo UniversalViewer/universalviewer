@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";

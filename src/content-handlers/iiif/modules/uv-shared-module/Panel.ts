@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { IExtensionHost } from "../../IExtensionHost";
 import { Async } from "@edsilv/utils";
 

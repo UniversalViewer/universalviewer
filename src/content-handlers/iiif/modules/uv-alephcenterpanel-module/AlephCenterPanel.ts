@@ -1,4 +1,4 @@
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { DisplayMode } from "./DisplayMode";
 import { Events } from "../../extensions/uv-aleph-extension/Events";

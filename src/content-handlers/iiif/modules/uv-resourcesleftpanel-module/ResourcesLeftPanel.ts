@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { ThumbsView } from "./ThumbsView";
 import { ViewingDirection, MediaType } from "@iiif/vocabulary/dist-commonjs/";

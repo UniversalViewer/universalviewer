@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
-import { BaseEvents } from "./BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { Maths } from "@edsilv/utils";
 
 export class Dialogue extends BaseView {
@@ -72,7 +72,7 @@ export class Dialogue extends BaseView {
       this.$buttons.append(this.$closeButton);
     }
 
-    this.$closeButton.on("click", e => {
+    this.$closeButton.on("click", (e) => {
       e.preventDefault();
 
       this.close();
@@ -130,7 +130,7 @@ export class Dialogue extends BaseView {
 
     this.$element.css({
       top: top,
-      left: left
+      left: left,
     });
   }
 
@@ -192,7 +192,7 @@ export class Dialogue extends BaseView {
 
     this.$element.css({
       top: Math.floor(this.extension.height() / 2 - this.$element.height() / 2),
-      left: Math.floor(this.extension.width() / 2 - this.$element.width() / 2)
+      left: Math.floor(this.extension.width() / 2 - this.$element.width() / 2),
     });
   }
 }

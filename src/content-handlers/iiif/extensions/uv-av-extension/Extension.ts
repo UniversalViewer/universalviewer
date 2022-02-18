@@ -1,5 +1,5 @@
 import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
-import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../../../BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";

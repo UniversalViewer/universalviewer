@@ -3,7 +3,7 @@ require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
 const merge = require("lodash/merge");
-import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "../../BaseEvents";
 import {
   ExtensionLoader,
   IExtension,
@@ -19,13 +19,14 @@ import {
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import { BaseComponent } from "@iiif/base-component";
-import "./uv.css";
+import "../../uv.css";
 import "./themes/theme.less";
 import { IContentHandler } from "@/IContentHandler";
 // import { merge } from "lodash";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
 import { UVAdapter } from "@/UVAdapter";
+import { defaultLocale } from "./Utils";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
@@ -270,6 +271,8 @@ export default class IIIFContentHandler extends BaseComponent
     this.disposed = true;
     const $elem: JQuery = $(this.options.target);
     $elem.empty();
+    // remove all classes except uv
+    $elem.attr("class", "uv");
   }
 
   private async _reload(data: IUVData): Promise<void> {
@@ -389,7 +392,8 @@ export default class IIIFContentHandler extends BaseComponent
 
   private async _configure(data: IUVData, extension: any): Promise<any> {
     if (!data.locales) {
-      throw new Error("locales required.");
+      data.locales = [];
+      data.locales.push(defaultLocale);
     }
 
     // import the config file
