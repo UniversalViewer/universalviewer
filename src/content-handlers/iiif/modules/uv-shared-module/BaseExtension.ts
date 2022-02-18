@@ -321,6 +321,7 @@ export class BaseExtension implements IExtension {
     });
 
     this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
+      console.log("escape");
       if (this.isFullScreen() && !this.isOverlayActive()) {
         this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       }

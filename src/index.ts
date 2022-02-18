@@ -1,6 +1,3 @@
-// todo: can this be removed?
-// import "./shim-jquery";
-
 export { URLAdapter as IIIFURLAdapter } from "./content-handlers/iiif/URLAdapter";
 export { URLAdapter as IIIFURLAdaptor } from "./content-handlers/iiif/URLAdapter";
 export { UniversalViewer as Viewer } from "./UniversalViewer";

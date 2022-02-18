@@ -1,8 +1,8 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const express = require('express')
-const webpack = require('webpack');
-const pkg = require('./package.json');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const express = require("express");
+const webpack = require("webpack");
+const pkg = require("./package.json");
 
 const config = {
   entry: {
@@ -14,14 +14,14 @@ const config = {
     library: "UV",
     umdNamedDefine: true,
     chunkFilename: "[name].[contenthash].js",
-    globalObject: 'this'
+    globalObject: "this",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
-      "zlib": false,
-      "stream": false,
-    }
+      zlib: false,
+      stream: false,
+    },
   },
   module: {
     rules: [
@@ -43,7 +43,7 @@ const config = {
             loader: "css-loader",
             options: {
               sourceMap: true,
-            }
+            },
           },
           {
             loader: "less-loader",
@@ -60,7 +60,7 @@ const config = {
         test: /\.(png|jpg|gif|svg)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
               limit: 8192,
             },
@@ -75,30 +75,40 @@ const config = {
     compress: true,
     port: 8080,
     onListening(devServer) {
-      devServer.app.use('/collection.json',
-          express.static(path.join(__dirname, 'src', 'collection.json')));
-      devServer.app.use('/uv-config.json',
-          express.static(path.join(__dirname, 'src', 'uv-config.json')));
-      devServer.app.use('/uv.css',
-          express.static(path.join(__dirname, 'src', 'uv.css')));
-    }
+      devServer.app.use(
+        "/iiif-collection.json",
+        express.static(path.join(__dirname, "src", "iiif-collection.json"))
+      );
+      devServer.app.use(
+        "/youtube-collection.json",
+        express.static(path.join(__dirname, "src", "youtube-collection.json"))
+      );
+      devServer.app.use(
+        "/uv-config.json",
+        express.static(path.join(__dirname, "src", "uv-config.json"))
+      );
+      devServer.app.use(
+        "/uv.css",
+        express.static(path.join(__dirname, "src", "uv.css"))
+      );
+    },
   },
   plugins: [
     new webpack.EnvironmentPlugin({
       PACKAGE_VERSION: `${pkg.version} (development)`,
     }),
     new HtmlWebpackPlugin({
-      title: 'UV Examples',
-      template: './src/index.html',
+      title: "UV Examples",
+      template: "./src/index.html",
       minify: false,
-      inject: 'head',
+      inject: "head",
     }),
     new webpack.ProvidePlugin({
-      "$":"jquery",
-      "jQuery":"jquery",
-      "window.jQuery":"jquery",
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
     }),
-  ]
+  ],
 };
 
 module.exports = config;

@@ -27,9 +27,9 @@ const ContentHandler: IContentHandlerRegistry = {
     ),
 };
 
-export class UniversalViewer {
+export class UniversalViewer implements IContentHandler<IUVData> {
   private _contentType: ContentType = ContentType.UNKNOWN;
-  private _contentHandler: IContentHandler<IUVData>;
+  private _assignedContentHandler: IContentHandler<IUVData>;
   public el: HTMLElement;
   private _eventListeners: { name: string; callback: Function }[] = [];
 
@@ -61,14 +61,14 @@ export class UniversalViewer {
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
     } else if (this._contentType !== contentType) {
-      this._contentHandler?.dispose(); // dispose previous content handler
+      this._assignedContentHandler?.dispose(); // dispose previous content handler
       this._contentType = contentType; // set content type
       const m = await ContentHandler[contentType](); // import content handler
-      this._contentHandler = new m.default(this.options); // create content handler
+      this._assignedContentHandler = new m.default(this.options); // create content handler
 
       // add event listeners
       this._eventListeners.forEach(({ name, callback }) => {
-        this._contentHandler.on(name, callback);
+        this._assignedContentHandler.on(name, callback);
       });
     }
   }
@@ -76,11 +76,19 @@ export class UniversalViewer {
   public set(data: IUVData): void {
     // content type may have changed
     this._assignContentHandler(data).then(() => {
-      this._contentHandler.set(data);
+      this._assignedContentHandler.set(data);
     });
   }
 
+  public exitFullScreen(): void {
+    this._assignedContentHandler?.exitFullScreen();
+  }
+
   public resize(): void {
-    this._contentHandler?.resize();
+    this._assignedContentHandler?.resize();
+  }
+
+  public dispose(): void {
+    this._assignedContentHandler?.dispose();
   }
 }

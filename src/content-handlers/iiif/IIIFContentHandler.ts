@@ -10,7 +10,6 @@ import {
 } from "./modules/uv-shared-module/IExtension";
 import { IExtensionHost } from "./IExtensionHost";
 import { IUVData } from "@/IUVData";
-import { IExtensionHostAdapter } from "./IExtensionHostAdapter";
 import { EventHandlerWithName, PubSub } from "./PubSub";
 import {
   RenderingFormat,
@@ -26,6 +25,7 @@ import { IContentHandler } from "@/IContentHandler";
 // import { merge } from "lodash";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
+import { UVAdapter } from "@/UVAdapter";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
@@ -104,7 +104,7 @@ export default class IIIFContentHandler extends BaseComponent
   private _pubsub: PubSub;
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
-  public adapter: IExtensionHostAdapter;
+  public adapter: UVAdapter;
   public disposed = false;
 
   // private _defaultData = {
@@ -237,12 +237,12 @@ export default class IIIFContentHandler extends BaseComponent
     }
   }
 
-  public get<T>(key: string): T | undefined {
-    if (this.extension) {
-      return this.extension.data[key];
-    }
-    return undefined;
-  }
+  // public get<T>(key: string): T | undefined {
+  //   if (this.extension) {
+  //     return this.extension.data[key];
+  //   }
+  //   return undefined;
+  // }
 
   public publish(event: string, args?: any): void {
     this._pubsub.publish(event, args);

@@ -23,9 +23,9 @@ export default class YouTubeContentHandler
     // this.mergeDefaults(data);
   }
 
-  public get<T>(key: string): T | undefined {
-    return undefined;
-  }
+  // public get<T>(key: string): T | undefined {
+  //   return undefined;
+  // }
 
   public on(name: string, callback: Function): void {
     // var e = this._e || (this._e = {});
@@ -34,6 +34,8 @@ export default class YouTubeContentHandler
     //   ctx: ctx,
     // });
   }
+
+  public exitFullScreen(): void {}
 
   public resize(): void {}
 

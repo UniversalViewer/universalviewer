@@ -25,10 +25,15 @@
 
       #uv-controls .group {
         padding: 20px 0 0 0;
+        overflow: hidden;
+      }
+
+      #uv-controls h2 {
+        font-size: medium;
       }
 
       #uv-controls select {
-        width: 200px;
+        width: 150px;
       }
 
       #uv-controls input {
@@ -36,7 +41,7 @@
       }
 
       #uv-controls button {
-        width: 100px;
+        width: 150px;
       }
 
       #uv-controls textarea {
@@ -63,26 +68,31 @@
 
     <div id="uv-controls">
       <div class="group">
+        <h2>IIIF</h2>
         <select id="manifestSelect"></select>
         <input id="manifest" type="text" value="" />
         <button id="setManifestButton" class="button" href="#">
-          Set Manifest
+          Set IIIF Manifest Id
         </button>
       </div>
 
       <div class="group">
+        <h2>YouTube</h2>
+        <select id="youTubeVideoIdSelect"></select>
         <input id="youTubeVideoId" type="text" value="" />
         <button id="setYouTubeVideoIdButton" class="button" href="#">
-          Set Video Id
+          Set YouTube Video Id
         </button>
       </div>
 
       <div class="group">
+        <h2>Target</h2>
         <input id="target" type="text" value="" />
         <button id="setTargetButton" class="button" href="#">Set Target</button>
       </div>
 
       <div class="group">
+        <h2>Rotation</h2>
         <input id="rotation" type="text" value="" />
         <button id="setRotationButton" class="button" href="#">
           Set Rotation
@@ -90,6 +100,7 @@
       </div>
 
       <div class="group">
+        <h2>Annotations</h2>
         <textarea id="annotations" rows="5"></textarea>
         <button id="setAnnotationsButton" class="button">
           Set Annotations
@@ -127,17 +138,14 @@
         var $clearAnnotationsButton = document.getElementById("clearAnnotationsButton");
         var $setYouTubeVideoIdButton = document.getElementById("setYouTubeVideoIdButton");
         var $youTubeVideoId = document.getElementById("youTubeVideoId");
+        var $youTubeVideoIdSelect = document.getElementById("youTubeVideoIdSelect");
 
         var annotations = [];
 
         var urlAdapter = new UV.IIIFURLAdapter();
 
-        function loadManifests(cb) {
-          // load manifests
-          fetch("collection.json")
-            .then((response) => response.json())
-            .then((manifests) => {
-              for (var i = 0; i < manifests.collections.length; i++) {
+        function parseIIIFCollection(manifests) {
+          for (var i = 0; i < manifests.collections.length; i++) {
                 var collection = manifests.collections[i];
 
                 if (collection.visible === false) {
@@ -156,12 +164,41 @@
                   }
                 }
               }
-
-              cb();
-            });
         }
 
-        function setSelectedManifest() {
+        function parseYouTubeCollection(collection) {
+          for (var i = 0; i < collection.length; i++) {
+                var item = collection[i];
+
+                if (item.visible === false) {
+                  continue;
+                }
+
+                var option = createOption(item.label, item.id);
+                $youTubeVideoIdSelect.appendChild(option);
+              }
+        }
+
+        function loadCollections(cb) {
+          Promise.all([
+            fetch('iiif-collection.json'),
+            fetch('youtube-collection.json')
+          ]).then(function (responses) {
+            // Get a JSON object from each of the responses
+            return Promise.all(responses.map(function (response) {
+              return response.json();
+            }));
+          }).then(function (data) {
+            parseIIIFCollection(data[0]);
+            parseYouTubeCollection(data[1]);
+            cb();
+          }).catch(function (error) {
+            // if there's an error, log it
+            console.log(error);
+          });
+        }
+
+        function setSelectedIIIFManifest() {
           manifest = urlAdapter.get("manifest");
 
           if (manifest) {
@@ -177,6 +214,24 @@
           }
 
           $manifest.value = manifest;
+        }
+
+        function setSelectedYouTubeVideoId() {
+          youTubeVideoId = urlAdapter.get("youTubeVideoId");
+
+          if (youTubeVideoId) {
+            $youTubeVideoIdSelect.value = youTubeVideoId;
+          } else {
+            var options = document.querySelectorAll(
+              "#youTubeVideoIdSelect option"
+            );
+
+            if (options.length) {
+              youTubeVideoId = options[0].value;
+            }
+          }
+
+          $youTubeVideoId.value = youTubeVideoId;
         }
 
         function setAnnotations() {
@@ -344,8 +399,9 @@
           // });
         }
 
-        loadManifests(function() {
-          setSelectedManifest();
+        loadCollections(function() {
+          setSelectedIIIFManifest();
+          setSelectedYouTubeVideoId();
           setupUV();
         });
       });
