@@ -7,7 +7,7 @@ import {
   Range,
   Manifest,
 } from "manifesto.js";
-import { ILocale } from "../../../../ILocale";
+import { ILocale } from "./ILocale";
 import { IExtensionHost } from "../../IExtensionHost";
 import { IUVData } from "../../../../IUVData";
 import { Shell } from "./Shell";

@@ -108,15 +108,6 @@ export default class IIIFContentHandler extends BaseComponent
   public adapter: UVAdapter;
   public disposed = false;
 
-  // private _defaultData = {
-  //   canvasIndex: 0,
-  //   locales: [
-  //     {
-  //       name: "en-GB",
-  //     },
-  //   ],
-  // };
-
   constructor(options: IUVOptions) {
     super(options);
     // this.mergeDefaults(this.options.data);
@@ -190,22 +181,6 @@ export default class IIIFContentHandler extends BaseComponent
     return this._getExtensionByType(this._extensionRegistry[format], format);
   }
 
-  // public data(): IUVData {
-  //   return {
-  //     // canvasIndex: 0,
-  //     embedded: false,
-  //     isReload: false,
-  //     limitLocales: false,
-  //     // manifest: "",
-  //     locales: [
-  //       {
-  //         name: "en-GB",
-  //       },
-  //     ],
-  //     // target: "",
-  //   } as IUVData;
-  // }
-
   public set(data: IUVData): void {
     this.fire(BaseEvents.SET, data);
 
@@ -213,8 +188,8 @@ export default class IIIFContentHandler extends BaseComponent
 
     // if this is the first set
     if (!this.extension) {
-      if (!data.manifest) {
-        console.warn(`manifest is required.`);
+      if (!data.iiifManifestId) {
+        console.warn(`iiifManifestId is required.`);
         return;
       }
 
@@ -224,7 +199,7 @@ export default class IIIFContentHandler extends BaseComponent
       const newData: IUVData = Object.assign({}, this.extension.data, data);
       if (
         newData.isReload ||
-        newData.manifest !== this.extension.data.manifest ||
+        newData.iiifManifestId !== this.extension.data.iiifManifestId ||
         newData.manifestIndex !== this.extension.data.manifestIndex ||
         newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
@@ -278,7 +253,6 @@ export default class IIIFContentHandler extends BaseComponent
   private async _reload(data: IUVData): Promise<void> {
     this._pubsub.dispose(); // remove any existing event listeners
 
-    // todo: remove?
     data.target = ""; // clear target
 
     this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
@@ -293,7 +267,7 @@ export default class IIIFContentHandler extends BaseComponent
     const that = this;
 
     const helper: Helper = await loadManifest({
-      manifestUri: data.manifest,
+      manifestUri: data.iiifManifestId,
       collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
       manifestIndex: data.manifestIndex || 0,
       canvasIndex: data.canvasIndex || 0,

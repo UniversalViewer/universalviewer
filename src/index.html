@@ -69,9 +69,9 @@
     <div id="uv-controls">
       <div class="group">
         <h2>IIIF</h2>
-        <select id="manifestSelect"></select>
-        <input id="manifest" type="text" value="" />
-        <button id="setManifestButton" class="button" href="#">
+        <select id="iiifManifestIdSelect"></select>
+        <input id="iiifManifestId" type="text" value="" />
+        <button id="setIIIFManifestIdButton" class="button" href="#">
           Set IIIF Manifest Id
         </button>
       </div>
@@ -125,12 +125,12 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
-        var uv, manifest, youTubeVideoId;
-        var $manifest = document.getElementById("manifest");
-        var $manifestSelect = document.getElementById("manifestSelect");
+        var uv, iiifManifestId, youTubeVideoId;
+        var $iiifManifestId = document.getElementById("iiifManifestId");
+        var $iiifManifestIdSelect = document.getElementById("iiifManifestIdSelect");
         var $target = document.getElementById("target");
         var $rotation = document.getElementById("rotation");
-        var $setManifestButton = document.getElementById("setManifestButton");
+        var $setIIIFManifestIdButton = document.getElementById("setIIIFManifestIdButton");
         var $setTargetButton = document.getElementById("setTargetButton");
         var $setRotationButton = document.getElementById("setRotationButton");
         var $annotations = document.getElementById("annotations");
@@ -153,7 +153,7 @@
             }
 
             var optGroup = createOptGroup(collection.label);
-            $manifestSelect.appendChild(optGroup);
+            $iiifManifestIdSelect.appendChild(optGroup);
 
             for (var j = 0; j < collection.manifests.length; j++) {
               var manifest = collection.manifests[j];
@@ -199,21 +199,21 @@
         }
 
         function setSelectedIIIFManifest() {
-          manifest = urlAdapter.get("manifest");
+          iiifManifestId = urlAdapter.get("iiifManifestId");
 
-          if (manifest) {
-            $manifestSelect.value = manifest;
+          if (iiifManifestId) {
+            $iiifManifestIdSelect.value = iiifManifestId;
           } else {
             var options = document.querySelectorAll(
-              "#manifestSelect optgroup option"
+              "#iiifManifestIdSelect optgroup option"
             );
 
             if (options.length) {
-              manifest = options[0].value;
+              iiifManifestId = options[0].value;
             }
           }
 
-          $manifest.value = manifest;
+          $iiifManifestId.value = iiifManifestId;
         }
 
         function setSelectedYouTubeVideoId() {
@@ -241,19 +241,20 @@
           });
         }
 
-        $manifestSelect.onchange = function() {
+        $iiifManifestIdSelect.onchange = function() {
           var $selectedOption = document.querySelector(
-            "#manifestSelect option:checked"
+            "#iiifManifestIdSelect option:checked"
           );
-          $manifest.value = $selectedOption.value;
-          urlAdapter.set("manifest", $selectedOption.value);
+          $iiifManifestId.value = $selectedOption.value;
+          urlAdapter.set("iiifManifestId", $selectedOption.value);
         };
 
-        $setManifestButton.onclick = function() {
-          manifest = $manifest.value;
+        $setIIIFManifestIdButton.onclick = function() {
+          iiifManifestId = $iiifManifestId.value;
           clearAnnotations();
           uv.set({
-            manifest: manifest,
+            iiifManifestId: iiifManifestId,
+            youTubeVideoId: undefined,
             canvasIndex: 0,
             annotations: [],
           });
@@ -263,7 +264,7 @@
           youTubeVideoId = $youTubeVideoId.value;
           clearAnnotations();
           uv.set({
-            manifest: undefined,
+            iiifManifestId: undefined,
             youTubeVideoId: youTubeVideoId,
             annotations: [],
           });
@@ -299,12 +300,13 @@
 
         function setupUV() {
           const data = urlAdapter.getInitialData({
-            manifest: manifest,
+            iiifManifestId: iiifManifestId,
             debug: false
           });
 
+          // test without getInitialData
           // const data = {
-          //   manifest: manifest,
+          //   iiifManifestId: iiifManifestId,
           //   debug: false
           // };
 

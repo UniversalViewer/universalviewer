@@ -7,7 +7,8 @@ export interface IUVOptions {
 }
 
 enum ContentType {
-  IIIF = "manifest",
+  IIIFLEGACY = "manifest",
+  IIIF = "iiifManifestId",
   YOUTUBE = "youTubeVideoId",
   UNKNOWN = "unknown",
 }
@@ -48,7 +49,12 @@ export class UniversalViewer implements IContentHandler<IUVData> {
   private async _assignContentHandler(data: IUVData): Promise<void> {
     let contentType: ContentType;
 
-    if (data[ContentType.IIIF]) {
+    if (data[ContentType.IIIFLEGACY]) {
+      // if using "manifest" not "iiifManifestId"
+      data.iiifManifestId = data[ContentType.IIIFLEGACY];
+      delete data[ContentType.IIIFLEGACY];
+      contentType = ContentType.IIIF;
+    } else if (data[ContentType.IIIF]) {
       contentType = ContentType.IIIF;
     } else if (data[ContentType.YOUTUBE]) {
       contentType = ContentType.YOUTUBE;

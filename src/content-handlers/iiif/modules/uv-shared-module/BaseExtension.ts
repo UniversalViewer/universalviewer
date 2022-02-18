@@ -2,16 +2,14 @@ const $ = require("jquery");
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../uv-dialogues-module/AuthDialogue";
-import { BaseEvents } from "../../../../BaseEvents";
 import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogue";
 import { ExtensionLoader, IExtension } from "./IExtension";
-import { ILocale } from "../../../../ILocale";
+import { ILocale } from "./ILocale";
 import { ISharePreview } from "./ISharePreview";
 import { IExtensionHost } from "../../IExtensionHost";
-import { IUVData } from "../../../../IUVData";
+import { IUVData } from "@/IUVData";
 import { LoginDialogue } from "../uv-dialogues-module/LoginDialogue";
-import { Metric } from "./Metric";
-import { MetricType } from "./Metric";
+import { Metric, MetricType } from "./Metric";
 import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
@@ -45,6 +43,7 @@ import {
   Strings,
 } from "@edsilv/utils";
 import { isVisible } from "../../Utils";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -173,7 +172,7 @@ export class BaseExtension implements IExtension {
           if (manifestUri) {
             this.fire(BaseEvents.DROP, manifestUri);
             const data: IUVData = <IUVData>{};
-            data.manifest = manifestUri;
+            data.iiifManifestId = manifestUri;
             this.reload(data);
           }
         });
@@ -457,14 +456,18 @@ export class BaseExtension implements IExtension {
   }
 
   public async loadConfig(locale: string): Promise<any> {
-    let config = this.locales[locale]; // || this.defaultConfig;
-    // if (config !== this.defaultConfig) {
-    //   config = await config();
-    // }
+    let config = this.locales[locale];
+
     if (!config) {
       throw new Error("Unable to load config");
     }
-    config = JSON.parse(JSON.stringify(config));
+    if (typeof config === "object") {
+      config = JSON.parse(JSON.stringify(config));
+    } else if (typeof config === "function") {
+      config = await config();
+      config = JSON.parse(JSON.stringify(config));
+    }
+
     return config;
   }
 
@@ -546,7 +549,7 @@ export class BaseExtension implements IExtension {
       !this.isCreated ||
       this.data.manifestIndex !== this.helper.manifestIndex
     ) {
-      if (this.data.manifest !== undefined) {
+      if (this.data.iiifManifestId !== undefined) {
         this.extensionHost.publish(
           BaseEvents.MANIFEST_INDEX_CHANGE,
           this.data.manifestIndex
@@ -984,7 +987,7 @@ export class BaseExtension implements IExtension {
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData = <IUVData>{};
-    data.manifest = this.helper.manifestUri;
+    data.iiifManifestId = this.helper.manifestUri;
     data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
     data.manifestIndex = <number>manifest.index;
     data.canvasIndex = 0;
@@ -996,7 +999,7 @@ export class BaseExtension implements IExtension {
   viewCollection(collection: Collection): void {
     const data: IUVData = <IUVData>{};
     //data.manifestUri = this.helper.manifestUri;
-    data.manifest = collection.parentCollection
+    data.iiifManifestId = collection.parentCollection
       ? collection.parentCollection.id
       : this.helper.manifestUri;
     data.collectionIndex = collection.index;

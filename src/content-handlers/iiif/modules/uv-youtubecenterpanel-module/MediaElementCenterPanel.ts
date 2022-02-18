@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { BaseEvents } from "@/BaseEvents";
 import { Events } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
