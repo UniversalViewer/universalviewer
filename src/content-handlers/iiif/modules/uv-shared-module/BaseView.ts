@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { Panel } from "./Panel";
 import { IExtension } from "./IExtension";
-import { IExtensionHost } from "../../IExtensionHost";
+import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 
 export class BaseView extends Panel {
   config: any;
@@ -27,7 +27,9 @@ export class BaseView extends Panel {
 
     super.create();
 
-    this.extension = <IExtension>(<IExtensionHost>this.extensionHost).extension;
+    this.extension = <IExtension>(
+      (<IIIFExtensionHost>this.extensionHost).extension
+    );
 
     this.config = {};
     this.config.content = {};

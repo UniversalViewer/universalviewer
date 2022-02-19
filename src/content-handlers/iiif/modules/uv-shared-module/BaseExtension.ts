@@ -6,7 +6,7 @@ import { ClickThroughDialogue } from "../uv-dialogues-module/ClickThroughDialogu
 import { ExtensionLoader, IExtension } from "./IExtension";
 import { ILocale } from "./ILocale";
 import { ISharePreview } from "./ISharePreview";
-import { IExtensionHost } from "../../IExtensionHost";
+import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { IUVData } from "@/IUVData";
 import { LoginDialogue } from "../uv-dialogues-module/LoginDialogue";
 import { Metric, MetricType } from "./Metric";
@@ -54,7 +54,7 @@ export class BaseExtension implements IExtension {
   authDialogue: AuthDialogue;
   annotations: AnnotationGroup[] = [];
   clickThroughDialogue: ClickThroughDialogue;
-  extensionHost: IExtensionHost;
+  extensionHost: IIIFExtensionHost;
   data: IUVData;
   extensions: any;
   helper: Helper;

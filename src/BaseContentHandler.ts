@@ -6,7 +6,7 @@ export default class BaseContentHandler<IUVData>
   protected _el: HTMLElement;
   private _eventListeners: any;
 
-  constructor(protected options: IUVOptions) {
+  constructor(public options: IUVOptions) {
     console.log("create YouTubeContentHandler");
     this._el = this.options.target;
   }
@@ -22,7 +22,7 @@ export default class BaseContentHandler<IUVData>
     });
   }
 
-  protected fire(name: string, ...args: any[]): void {
+  public fire(name: string, ...args: any[]): void {
     var data = [].slice.call(arguments, 1);
     var evtArr = (
       (this._eventListeners || (this._eventListeners = {}))[name] || []

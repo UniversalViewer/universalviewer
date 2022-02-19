@@ -8,7 +8,7 @@ import {
   Manifest,
 } from "manifesto.js";
 import { ILocale } from "./ILocale";
-import { IExtensionHost } from "../../IExtensionHost";
+import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { IUVData } from "../../../../IUVData";
 import { Shell } from "./Shell";
 import { Helper } from "@iiif/manifold";
@@ -24,7 +24,7 @@ export interface IExtension {
   $element: JQuery;
   // addTimestamp(uri: string): string;
   changeLocale(locale: string): void;
-  extensionHost: IExtensionHost;
+  extensionHost: IIIFExtensionHost;
   create(): void;
   createModules(): void;
   data: IUVData;

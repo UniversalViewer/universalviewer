@@ -1,9 +1,9 @@
 import { BaseEvents } from "../../../../BaseEvents";
-import { IExtensionHost } from "../../IExtensionHost";
+import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { Async } from "@edsilv/utils";
 
 export class Panel {
-  extensionHost: IExtensionHost;
+  extensionHost: IIIFExtensionHost;
   $element: JQuery;
   fitToParentWidth: boolean;
   fitToParentHeight: boolean;

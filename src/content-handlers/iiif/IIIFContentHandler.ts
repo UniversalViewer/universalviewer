@@ -8,7 +8,7 @@ import {
   ExtensionLoader,
   IExtension,
 } from "./modules/uv-shared-module/IExtension";
-import { IExtensionHost } from "./IExtensionHost";
+import { IIIFExtensionHost } from "./IIIFExtensionHost";
 import { IUVData } from "@/IUVData";
 import { EventHandlerWithName, PubSub } from "./PubSub";
 import {
@@ -18,15 +18,14 @@ import {
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
-import { BaseComponent } from "@iiif/base-component";
 import "../../uv.css";
 import "./themes/theme.less";
 import { IContentHandler } from "@/IContentHandler";
-// import { merge } from "lodash";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
 import { UVAdapter } from "@/UVAdapter";
 import { defaultLocale } from "./Utils";
+import BaseContentHandler from "../../BaseContentHandler";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
@@ -99,8 +98,8 @@ const Extension: IExtensionRegistry = {
   },
 };
 
-export default class IIIFContentHandler extends BaseComponent
-  implements IExtensionHost, IContentHandler<IIIFData> {
+export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
+  implements IIIFExtensionHost, IContentHandler<IIIFData> {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
@@ -110,22 +109,15 @@ export default class IIIFContentHandler extends BaseComponent
 
   constructor(options: IUVOptions) {
     super(options);
-    // this.mergeDefaults(this.options.data);
     console.log("create IIIFContentHandler");
 
     this._pubsub = new PubSub();
 
     this._init();
-    this._resize();
+    this.resize();
   }
 
-  // private mergeDefaults(data: IIIFData): void {
-  //   merge(data, this._defaultData);
-  // }
-
   protected _init(): boolean {
-    super._init();
-
     this._extensionRegistry = {};
     this._extensionRegistry[ExternalResourceType.CANVAS] = Extension.OSD;
     this._extensionRegistry[ExternalResourceType.DOCUMENT] = Extension.PDF;
