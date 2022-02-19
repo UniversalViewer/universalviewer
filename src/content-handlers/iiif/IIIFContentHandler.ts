@@ -246,8 +246,8 @@ export default class IIIFContentHandler extends BaseComponent
     this.disposed = true;
     const $elem: JQuery = $(this.options.target);
     $elem.empty();
-    // remove all classes except uv
-    $elem.attr("class", "uv");
+    // remove all classes
+    $elem.attr("class", "");
   }
 
   private async _reload(data: IUVData): Promise<void> {

@@ -1353,7 +1353,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
   }
 
   setFocus(): void {
-    if (!this.$canvas.is(":focus")) {
+    if (this.$canvas && !this.$canvas.is(":focus")) {
       if (this.extension.data.config.options.allowStealFocus) {
         this.$canvas.focus();
       }
