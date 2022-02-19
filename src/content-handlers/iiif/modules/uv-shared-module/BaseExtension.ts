@@ -100,7 +100,7 @@ export class BaseExtension implements IExtension {
     // add/remove classes.
     this.$element.empty();
     this.$element.removeClass();
-    this.$element.addClass("uv-extension-host");
+    this.$element.addClass("uv-iiif-extension-host");
     this.$element.addClass("loading");
     if (this.data.locales) {
       this.$element.addClass(this.data.locales[0].name.toLowerCase());
