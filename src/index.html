@@ -260,8 +260,16 @@
           });
         };
 
+        $youTubeVideoIdSelect.onchange = function() {
+          var $selectedOption = document.querySelector(
+            "#youTubeVideoIdSelect option:checked"
+          );
+          $youTubeVideoId.value = $selectedOption.value;
+          urlAdapter.set("youTubeVideoId", $selectedOption.value);
+        };
+
         $setYouTubeVideoIdButton.onclick = function() {
-          youTubeVideoId = $youTubeVideoId.value;
+          youTubeVideoId = $youTubeVideoId.value.split('v=')[1];
           clearAnnotations();
           uv.set({
             iiifManifestId: undefined,

@@ -357,6 +357,8 @@ export default class IIIFContentHandler extends BaseComponent
 
     data.config = await that._configure(data, extension);
 
+    console.log("reload");
+
     that._createExtension(extension, data, helper);
   }
 

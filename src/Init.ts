@@ -47,16 +47,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     data: data,
   });
 
-  //window.addEventListener("uvready", () => {
-  uv.on(
-    BaseEvents.SET,
-    function(_obj) {
-      // remove loaded class to show spinner
-      uv.el.parentElement!.parentElement!.classList.remove("loaded");
-    },
-    false
-  );
-
   uv.on(
     BaseEvents.CREATED,
     function(_obj) {

@@ -46,7 +46,7 @@ export class UniversalViewer implements IContentHandler<IUVData> {
     });
   }
 
-  private async _assignContentHandler(data: IUVData): Promise<void> {
+  private async _assignContentHandler(data: IUVData): Promise<boolean> {
     let contentType: ContentType;
 
     if (data[ContentType.IIIFLEGACY]) {
@@ -64,26 +64,43 @@ export class UniversalViewer implements IContentHandler<IUVData> {
       contentType = ContentType.UNKNOWN;
     }
 
+    const handlerChanged: boolean = this._contentType !== contentType;
+
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
-    } else if (this._contentType !== contentType) {
-      this._assignedContentHandler?.dispose(); // dispose previous content handler
+    } else if (handlerChanged) {
       this._contentType = contentType; // set content type
-      this.el.classList.add("loading");
+      this._assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
-      this._assignedContentHandler = new m.default(this.options); // create content handler
+      this._showSpinner(); // show spinner
+      this._assignedContentHandler = new m.default({
+        target: this.el,
+        data: data,
+      }); // create content handler
 
       // add event listeners
       this._externalEventListeners.forEach(({ name, callback }) => {
         this._assignedContentHandler.on(name, callback);
       });
     }
+
+    return handlerChanged;
+  }
+
+  private _showSpinner(): void {
+    this.el.parentElement!.parentElement!.classList.remove("loaded");
   }
 
   public set(data: IUVData): void {
     // content type may have changed
-    this._assignContentHandler(data).then(() => {
-      this._assignedContentHandler.set(data);
+    console.log("assign content handler");
+    this._assignContentHandler(data).then((handlerChanged: boolean) => {
+      // if the handler didn't change, the handler's initial set didn't run
+      // so we need to call set
+      if (!handlerChanged) {
+        this._showSpinner();
+        this._assignedContentHandler.set(data);
+      }
     });
   }
 

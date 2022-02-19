@@ -104,4 +104,5 @@ declare var YT: any;
 
 interface Window {
   onYouTubeIframeAPIReady: any;
+  youTubePlayer: any;
 }
