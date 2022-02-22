@@ -16,6 +16,13 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     this._init();
   }
 
+  private _getYouTubeVideoId(id: string): string {
+    if (id.indexOf("v=")) {
+      id = id.split("v=")[1];
+    }
+    return id;
+  }
+
   private _init(): void {
     this._playerDiv = document.createElement("div");
     this._playerDiv.id = "player";
@@ -34,7 +41,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
         window.youTubePlayer = new YT.Player("player", {
           height: "100%",
           width: "100%",
-          videoId: window.youTubeData.youTubeVideoId, // must be specified on init
+          videoId: this._getYouTubeVideoId(window.youTubeData.youTubeVideoId), // must be specified on init
           playerVars: {
             playsinline: 1,
           },
@@ -60,10 +67,21 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public set(data: YouTubeData): void {
-    if (data.autoPlay) {
-      window.youTubePlayer.loadVideoById(data.youTubeVideoId);
-    } else {
-      window.youTubePlayer.cueVideoById(data.youTubeVideoId);
+    console.log(window.youTubePlayer);
+    if (data.youTubeVideoId) {
+      const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
+      // const currentVideoId: string = window.youTubePlayer.getVideoData().video_id;
+      // if (videoId !== currentVideoId) {
+      if (data.autoPlay) {
+        window.youTubePlayer.loadVideoById(videoId);
+      } else {
+        window.youTubePlayer.cueVideoById(videoId);
+      }
+      // }
+    }
+
+    if (data.currentTime) {
+      window.youTubePlayer.seekTo(data.currentTime, true);
     }
   }
 

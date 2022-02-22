@@ -23,29 +23,46 @@
             height: 576px; */
       }
 
+      #uv-controls {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+
       #uv-controls .group {
         padding: 20px 0 0 0;
         overflow: hidden;
       }
 
+      #uv-controls .group:first-of-type {
+        padding: 0 0 0 0;
+      }
+
       #uv-controls h2 {
-        font-size: medium;
+        font-size: small;
+        font-weight: 600;
       }
 
       #uv-controls select {
         width: 150px;
+        padding: 0.25rem;
       }
 
       #uv-controls input {
-        width: 600px;
+        width: 500px;
+        padding: 0.25rem;
       }
 
       #uv-controls button {
         width: 150px;
+        border-radius: 0;
+        border: none;
+        color: #fff;
+        background: #000;
+        padding: 0.33rem;
       }
 
       #uv-controls textarea {
-        width: 600px;
+        width: 500px;
       }
 
       #annotations {
@@ -61,54 +78,96 @@
       #clearAnnotationsButton {
         float: left;
       }
+
+      .hidden {
+        display: none;
+      }
+
+      #uv-controls .tab {
+        background: none;
+        padding: 1rem;
+        font-weight: bold;
+        font-size: medium;
+        border: none;
+        color: black;
+      }
+
+      #uv-controls .tab.active {
+        background: #f1f1f1;
+      }
+
+      #uv-controls .tabContent {
+        box-sizing: border-box;
+        padding: 2rem;
+        max-width: 924px;
+        background: #f1f1f1;
+      }
     </style>
   </head>
   <body>
     <div id="uv" class="uv"></div>
 
     <div id="uv-controls">
-      <div class="group">
-        <h2>IIIF</h2>
-        <select id="iiifManifestIdSelect"></select>
-        <input id="iiifManifestId" type="text" value="" />
-        <button id="setIIIFManifestIdButton" class="button" href="#">
-          Set IIIF Manifest Id
-        </button>
+      <button id="iiifTabButton" class="tab active">IIIF</button>
+      <button id="youTubeTabButton" class="tab">YouTube</button>
+
+      <div id="iiifTab" class="tabContent">
+        <div class="group">
+          <h2>Manifest Id</h2>
+          <select id="iiifManifestIdSelect"></select>
+          <input id="iiifManifestId" type="text" value="" />
+          <button id="setIIIFManifestIdButton" class="button" href="#">
+            Set IIIF Manifest Id
+          </button>
+        </div>
+
+        <div class="group">
+          <h2>Target</h2>
+          <input id="target" type="text" value="" />
+          <button id="setTargetButton" class="button" href="#">
+            Set Target
+          </button>
+        </div>
+
+        <div class="group">
+          <h2>Rotation</h2>
+          <input id="rotation" type="text" value="" />
+          <button id="setRotationButton" class="button" href="#">
+            Set Rotation
+          </button>
+        </div>
+
+        <div class="group">
+          <h2>Annotations</h2>
+          <textarea id="annotations" rows="5"></textarea>
+          <button id="setAnnotationsButton" class="button">
+            Set Annotations
+          </button>
+          <button id="clearAnnotationsButton" class="button">
+            Clear Annotations
+          </button>
+        </div>
       </div>
 
-      <div class="group">
-        <h2>YouTube</h2>
-        <select id="youTubeVideoIdSelect"></select>
-        <input id="youTubeVideoId" type="text" value="" />
-        <button id="setYouTubeVideoIdButton" class="button" href="#">
-          Set YouTube Video Id
-        </button>
-      </div>
+      <div id="youTubeTab" class="hidden tabContent">
+        <div class="group">
+          <h2>Video Id</h2>
+          <select id="youTubeVideoIdSelect"></select>
+          <input id="youTubeVideoId" type="text" value="" />
+          <button id="setYouTubeVideoIdButton" class="button" href="#">
+            Set YouTube Video Id
+          </button>
+        </div>
 
-      <div class="group">
-        <h2>Target</h2>
-        <input id="target" type="text" value="" />
-        <button id="setTargetButton" class="button" href="#">Set Target</button>
+        <div class="group">
+          <h2>Current Time</h2>
+          <input id="currentTime" type="text" value="" />
+          <button id="setCurrentTimeButton" class="button" href="#">
+            Set Current Time
+          </button>
+        </div>
       </div>
-
-      <div class="group">
-        <h2>Rotation</h2>
-        <input id="rotation" type="text" value="" />
-        <button id="setRotationButton" class="button" href="#">
-          Set Rotation
-        </button>
-      </div>
-
-      <div class="group">
-        <h2>Annotations</h2>
-        <textarea id="annotations" rows="5"></textarea>
-        <button id="setAnnotationsButton" class="button">
-          Set Annotations
-        </button>
-        <button id="clearAnnotationsButton" class="button">
-          Clear Annotations
-        </button>
-      </div>
+    </div>
 
     <script type="text/javascript">
       function createOptGroup(label) {
@@ -125,20 +184,69 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
+        var iiifTabButton = document.getElementById("iiifTabButton");
+        var iiifTab = document.getElementById("iiifTab");
+        var youTubeTabButton = document.getElementById("youTubeTabButton");
+        var youTubeTab = document.getElementById("youTubeTab");
+
+        iiifTabButton.addEventListener("click", function(e) {
+          e.preventDefault();
+          iiifTabButton.classList.add("active");
+          youTubeTabButton.classList.remove("active");
+          iiifTab.classList.remove("hidden");
+          youTubeTab.classList.add("hidden");
+
+          uv.set({
+            iiifManifestId: iiifManifestId,
+            youTubeVideoId: undefined,
+          });
+        });
+
+        youTubeTabButton.addEventListener("click", function(e) {
+          e.preventDefault();
+          youTubeTabButton.classList.add("active");
+          iiifTabButton.classList.remove("active");
+          youTubeTab.classList.remove("hidden");
+          iiifTab.classList.add("hidden");
+
+          console.log(youTubeVideoId);
+
+          uv.set({
+            iiifManifestId: undefined,
+            youTubeVideoId: youTubeVideoId,
+          });
+        });
+
         var uv, iiifManifestId, youTubeVideoId;
         var $iiifManifestId = document.getElementById("iiifManifestId");
-        var $iiifManifestIdSelect = document.getElementById("iiifManifestIdSelect");
+        var $iiifManifestIdSelect = document.getElementById(
+          "iiifManifestIdSelect"
+        );
         var $target = document.getElementById("target");
         var $rotation = document.getElementById("rotation");
-        var $setIIIFManifestIdButton = document.getElementById("setIIIFManifestIdButton");
+        var $setIIIFManifestIdButton = document.getElementById(
+          "setIIIFManifestIdButton"
+        );
         var $setTargetButton = document.getElementById("setTargetButton");
         var $setRotationButton = document.getElementById("setRotationButton");
         var $annotations = document.getElementById("annotations");
-        var $setAnnotationsButton = document.getElementById("setAnnotationsButton");
-        var $clearAnnotationsButton = document.getElementById("clearAnnotationsButton");
-        var $setYouTubeVideoIdButton = document.getElementById("setYouTubeVideoIdButton");
+        var $setAnnotationsButton = document.getElementById(
+          "setAnnotationsButton"
+        );
+        var $clearAnnotationsButton = document.getElementById(
+          "clearAnnotationsButton"
+        );
+        var $setYouTubeVideoIdButton = document.getElementById(
+          "setYouTubeVideoIdButton"
+        );
         var $youTubeVideoId = document.getElementById("youTubeVideoId");
-        var $youTubeVideoIdSelect = document.getElementById("youTubeVideoIdSelect");
+        var $youTubeVideoIdSelect = document.getElementById(
+          "youTubeVideoIdSelect"
+        );
+        var $currentTime = document.getElementById("currentTime");
+        var $setCurrentTimeButton = document.getElementById(
+          "setCurrentTimeButton"
+        );
 
         var annotations = [];
 
@@ -181,21 +289,26 @@
 
         function loadCollections(cb) {
           Promise.all([
-            fetch('iiif-collection.json'),
-            fetch('youtube-collection.json')
-          ]).then(function (responses) {
-            // Get a JSON object from each of the responses
-            return Promise.all(responses.map(function (response) {
-              return response.json();
-            }));
-          }).then(function (data) {
-            parseIIIFCollection(data[0]);
-            parseYouTubeCollection(data[1]);
-            cb();
-          }).catch(function (error) {
-            // if there's an error, log it
-            console.log(error);
-          });
+            fetch("iiif-collection.json"),
+            fetch("youtube-collection.json"),
+          ])
+            .then(function(responses) {
+              // Get a JSON object from each of the responses
+              return Promise.all(
+                responses.map(function(response) {
+                  return response.json();
+                })
+              );
+            })
+            .then(function(data) {
+              parseIIIFCollection(data[0]);
+              parseYouTubeCollection(data[1]);
+              cb();
+            })
+            .catch(function(error) {
+              // if there's an error, log it
+              console.log(error);
+            });
         }
 
         function setSelectedIIIFManifest() {
@@ -245,8 +358,9 @@
           var $selectedOption = document.querySelector(
             "#iiifManifestIdSelect option:checked"
           );
-          $iiifManifestId.value = $selectedOption.value;
-          urlAdapter.set("iiifManifestId", $selectedOption.value);
+          iiifManifestId = $selectedOption.value;
+          $iiifManifestId.value = iiifManifestId;
+          urlAdapter.set("iiifManifestId", iiifManifestId);
         };
 
         $setIIIFManifestIdButton.onclick = function() {
@@ -264,12 +378,12 @@
           var $selectedOption = document.querySelector(
             "#youTubeVideoIdSelect option:checked"
           );
-          $youTubeVideoId.value = $selectedOption.value;
-          urlAdapter.set("youTubeVideoId", $selectedOption.value);
+          youTubeVideoId = $selectedOption.value;
+          $youTubeVideoId.value = youTubeVideoId;
+          urlAdapter.set("youTubeVideoId", youTubeVideoId);
         };
 
         $setYouTubeVideoIdButton.onclick = function() {
-          youTubeVideoId = $youTubeVideoId.value.split('v=')[1];
           clearAnnotations();
           uv.set({
             iiifManifestId: undefined,
@@ -302,6 +416,13 @@
           setAnnotations();
         };
 
+        $setCurrentTimeButton.onclick = function() {
+          var currentTime = $currentTime.value;
+          uv.set({
+            currentTime: currentTime,
+          });
+        };
+
         function clearAnnotations() {
           annotations = [];
           $annotations.value = JSON.stringify(annotations);
@@ -310,7 +431,7 @@
         function setupUV() {
           const data = urlAdapter.getInitialData({
             iiifManifestId: iiifManifestId,
-            debug: false
+            debug: false,
           });
 
           // test without getInitialData
@@ -335,19 +456,19 @@
 
           // enable doubleclick annotation
           uv.on("configure", function({ config, cb }) {
-            cb({ 
-              modules: { 
+            cb({
+              modules: {
                 modelViewerCenterPanel: {
                   options: {
-                    doubleClickAnnotationEnabled: true
-                  }
+                    doubleClickAnnotationEnabled: true,
+                  },
                 },
                 openSeadragonCenterPanel: {
                   options: {
-                    doubleClickAnnotationEnabled: true
-                  }
-                } 
-              }
+                    doubleClickAnnotationEnabled: true,
+                  },
+                },
+              },
             });
           });
 
@@ -368,7 +489,7 @@
           uv.on("openseadragonExtension.doubleClick", function(e) {
             annotations.push({
               target: e.target,
-              bodyValue: String(annotations.length + 1)
+              bodyValue: String(annotations.length + 1),
             });
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
@@ -377,7 +498,7 @@
           uv.on("modelviewerExtension.doubleClick", function(e) {
             annotations.push({
               target: e.target,
-              bodyValue: String(annotations.length + 1)
+              bodyValue: String(annotations.length + 1),
             });
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
@@ -393,7 +514,7 @@
 
           uv.on("load", function(e) {
             console.log(e);
-          }); 
+          });
 
           // uv.on("load", function() {
           //   uv.set({
