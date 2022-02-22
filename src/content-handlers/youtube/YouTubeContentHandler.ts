@@ -12,6 +12,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   constructor(options: IUVOptions) {
     super(options);
     console.log("create YouTubeContentHandler");
+    window.youTubeData = this.options.data; // necessary unfortunately due to the way the YouTube API works
     this._init();
   }
 
@@ -26,8 +27,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     const firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode!.insertBefore(this._scriptTag, firstScriptTag);
 
-    window.youTubeData = this.options.data;
-
     if (window.onYouTubeIframeAPIReady) {
       window.onYouTubeIframeAPIReady();
     } else {
@@ -35,7 +34,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
         window.youTubePlayer = new YT.Player("player", {
           height: "100%",
           width: "100%",
-          videoId: this.options.data.youTubeVideoId, // equivalent of calling set() - must be specified on init
+          videoId: window.youTubeData.youTubeVideoId, // must be specified on init
           playerVars: {
             playsinline: 1,
           },
@@ -48,19 +47,19 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     }
   }
 
-  private _onPlayerReady(_event) {
-    this.fire(BaseEvents.CREATED);
+  private _onPlayerReady(event) {
+    const player = event.target;
+    this.fire(BaseEvents.LOAD, { duration: player.getDuration() });
     this.set(window.youTubeData);
   }
 
   private _onPlayerStateChange(_event) {
-    // onst currentTime = this._player.getCurrentTime();
+    // const currentTime = this._player.getCurrentTime();
     // console.log(currentTime);
     // currentTimeInput.value = currentTime;
   }
 
   public set(data: YouTubeData): void {
-    console.log("youtube set");
     if (data.autoPlay) {
       window.youTubePlayer.loadVideoById(data.youTubeVideoId);
     } else {

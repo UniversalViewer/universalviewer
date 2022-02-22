@@ -389,6 +389,10 @@
 
           uv.on("clearAnnotations", function(e) {
             clearAnnotations();
+          });
+
+          uv.on("load", function(e) {
+            console.log(e);
           }); 
 
           // uv.on("load", function() {

@@ -349,8 +349,6 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
     data.config = await that._configure(data, extension);
 
-    console.log("reload");
-
     that._createExtension(extension, data, helper);
   }
 
