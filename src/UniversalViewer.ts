@@ -93,12 +93,16 @@ export class UniversalViewer implements IContentHandler<IUVData> {
 
   public set(data: IUVData): void {
     // content type may have changed
-    console.log("assign content handler");
+    console.log("set");
     this._assignContentHandler(data).then((handlerChanged: boolean) => {
-      // if the handler didn't change, the handler's initial set didn't run
-      // so we need to call set
-      if (!handlerChanged) {
+      console.log("handlerChanged", handlerChanged);
+
+      if (handlerChanged) {
+        // the handler has changed, show a spinner until it's created
         this._showSpinner();
+      } else {
+        // the handler didn't change, therefore handler's initial set didn't run
+        // so we need to call set
         this._assignedContentHandler.set(data);
       }
     });

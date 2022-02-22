@@ -105,4 +105,5 @@ declare var YT: any;
 interface Window {
   onYouTubeIframeAPIReady: any;
   youTubePlayer: any;
+  youTubeData: any; // has to be any, otherwise typescript complains
 }

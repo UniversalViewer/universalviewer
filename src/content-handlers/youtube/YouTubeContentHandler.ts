@@ -22,9 +22,11 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 
     // todo: use loadScript util
     this._scriptTag = document.createElement("script");
-    this._scriptTag.src = "https://www.youtube.com/iframe_api?controls=0";
+    this._scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
     const firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode!.insertBefore(this._scriptTag, firstScriptTag);
+
+    window.youTubeData = this.options.data;
 
     if (window.onYouTubeIframeAPIReady) {
       window.onYouTubeIframeAPIReady();
@@ -48,7 +50,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 
   private _onPlayerReady(_event) {
     this.fire(BaseEvents.CREATED);
-    window.youTubePlayer.playVideo();
+    this.set(window.youTubeData);
   }
 
   private _onPlayerStateChange(_event) {
@@ -58,8 +60,12 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public set(data: YouTubeData): void {
-    // this.mergeDefaults(data);
-    window.youTubePlayer.loadVideoById(data.youTubeVideoId);
+    console.log("youtube set");
+    if (data.autoPlay) {
+      window.youTubePlayer.loadVideoById(data.youTubeVideoId);
+    } else {
+      window.youTubePlayer.cueVideoById(data.youTubeVideoId);
+    }
   }
 
   public exitFullScreen(): void {}
@@ -72,11 +78,5 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public dispose(): void {
     console.log("dispose YouTubeContentHandler");
     this._el.innerHTML = "";
-    // window.youTubePlayer = undefined;
-    // @ts-ignore
-    // window.onYouTubeIframeAPIReady = undefined;
-    // const scriptTag = document.getElementById("www-widgetapi-script");
-    // scriptTag!.parentNode!.removeChild(scriptTag!);
-    // this._scriptTag.parentNode!.removeChild(this._scriptTag);
   }
 }
