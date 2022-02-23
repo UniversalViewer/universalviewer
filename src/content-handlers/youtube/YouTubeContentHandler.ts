@@ -1,13 +1,12 @@
-import { getUUID } from "../../Utils";
 import BaseContentHandler from "../../BaseContentHandler";
 import { BaseEvents } from "../../BaseEvents";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
 
 interface Player {
-  videoId: string;
-  hostId: string;
-  duration?: number;
+  id: string;
+  // videoId: string;
+  // duration?: number;
   data: YouTubeData;
 }
 
@@ -31,32 +30,16 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   private _init(data: YouTubeData): void {
-    console.log("init");
-
     if (!window.youTubePlayers) {
       window.youTubePlayers = [];
     }
 
-    this._id = "YTPlayer-" + getUUID();
+    this._id = "YTPlayer-" + window.youTubePlayers.length;
 
-    const videoId = this._getYouTubeVideoId(data.youTubeVideoId!);
-    let player = this._getPlayerById(videoId);
-
-    if (!player) {
-      player = {
-        videoId: videoId,
-        hostId: this._id,
-        data: {
-          ...data,
-        },
-      };
-      window.youTubePlayers.push(player);
-    }
-
-    // mark as the current player in use
-    // window.youTubePlayers.forEach((p: Player) => {
-    //   p.current = p.videoId === videoId;
-    // });
+    window.youTubePlayers.push({
+      id: this._id,
+      data: data,
+    });
 
     if (!this._playerDiv) {
       this._playerDiv = document.createElement("div");
@@ -64,8 +47,9 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       this._el.append(this._playerDiv);
     }
 
-    const existingScriptTab = document.getElementById("youtube-iframe-api");
-    if (!existingScriptTab) {
+    const existingScriptTag = document.getElementById("youtube-iframe-api");
+
+    if (!existingScriptTag) {
       const scriptTag = document.createElement("script");
       scriptTag.id = "youtube-iframe-api";
       scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
@@ -78,11 +62,11 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     } else {
       window.onYouTubeIframeAPIReady = () => {
         for (const player of window.youTubePlayers as Player[]) {
-          if (player.hostId === this._id) {
+          if (player.id === this._id) {
             window[this._id] = new YT.Player(this._id, {
               height: "100%",
               width: "100%",
-              videoId: player.videoId,
+              videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
               playerVars: {
                 playsinline: 1,
               },
@@ -92,7 +76,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                   const duration = YTPlayer.getDuration();
                   this.set(player.data);
                   this.fire(BaseEvents.LOAD, {
-                    youTubeVideoId: player.data.youTubeVideoId,
                     duration: duration,
                   });
                 },
@@ -121,9 +104,9 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   // currentTimeInput.value = currentTime;
   // }
 
-  private _getPlayerById(videoId: string): Player {
-    return window.youTubePlayers.find((p) => p.id === videoId);
-  }
+  // private _getPlayerById(videoId: string): Player {
+  //   return window.youTubePlayers.find((p) => p === this._id);
+  // }
 
   // private _getCurrentPlayer(): Player {
   //   return window.youTubePlayers.find((p) => p.current);
@@ -134,8 +117,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 
     if (data.youTubeVideoId) {
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
-      // this._init(data);
-      // const player = this._getCurrentPlayer();
 
       if (data.autoPlay) {
         player.loadVideoById(videoId);
@@ -159,6 +140,9 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public dispose(): void {
     console.log("dispose YouTubeContentHandler");
     this._el.innerHTML = "";
-    // todo: remove from window.youTubePlayers where hostId === this._uuid
+    // remove from window.youTubePlayers where hostId === this._id
+    window.youTubePlayers = window.youTubePlayers.filter(
+      (p) => p.id !== this._id
+    );
   }
 }
