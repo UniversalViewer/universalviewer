@@ -162,10 +162,6 @@ export class UniversalViewer extends BaseComponent implements IExtensionHost {
   }
 
   private _getExtensionByFormat(format: string): any {
-    if (format.startsWith('image/')) {
-      format = 'image';
-    }
-
     if (!this._extensionRegistry[format]) {
       return this._getExtensionByType(Extension.DEFAULT, format);
     }
