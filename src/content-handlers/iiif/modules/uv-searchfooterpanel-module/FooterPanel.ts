@@ -6,7 +6,7 @@ import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel"
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { Bools, Strings } from "@edsilv/utils";
 import * as KeyCodes from "@edsilv/key-codes";
 import { AnnotationGroup } from "@iiif/manifold";

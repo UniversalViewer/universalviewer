@@ -3,7 +3,7 @@ const $ = require("jquery");
 // import "@google/model-viewer/dist/model-viewer-legacy";
 import "@google/model-viewer/dist/model-viewer";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
-import { sanitize, debounce } from "../../Utils";
+import { sanitize, debounce } from "../../../../Utils";
 import { BaseEvents } from "../../../../BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Events } from "../../extensions/uv-model-viewer-extension/Events";

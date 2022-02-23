@@ -19,7 +19,7 @@ import {
   Range,
 } from "manifesto.js";
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
-import { isVisible } from "../../Utils";
+import { isVisible } from "../../../../Utils";
 
 export class ContentLeftPanel extends LeftPanel {
   $bottomOptions: JQuery;

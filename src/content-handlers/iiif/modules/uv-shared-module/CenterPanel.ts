@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
-import { sanitize, isVisible } from "../../Utils";
+import { sanitize, isVisible } from "../../../../Utils";
 import { ILabelValuePair } from "@iiif/manifold";
 import { Bools } from "@edsilv/utils";
 

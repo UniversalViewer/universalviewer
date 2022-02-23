@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { isVisible } from "../../Utils";
+import { isVisible } from "../../../../Utils";
 import { BaseEvents } from "../../../../BaseEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";

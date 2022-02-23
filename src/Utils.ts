@@ -1,4 +1,4 @@
-import { IUVData } from "../../IUVData";
+import { IUVData } from "./IUVData";
 const filterXSS = require("xss");
 
 export const sanitize = (html: string) => {
@@ -101,4 +101,8 @@ export const isVisible = (el: JQuery) => {
 
 export const defaultLocale = {
   name: "en-GB",
+};
+
+export const getUUID = () => {
+  return URL.createObjectURL(new Blob()).substr(-36);
 };

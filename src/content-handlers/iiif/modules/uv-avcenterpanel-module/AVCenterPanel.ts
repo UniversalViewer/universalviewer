@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { BaseEvents } from "../../../../BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import {
   Canvas,
   IExternalResource,

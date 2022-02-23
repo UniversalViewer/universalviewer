@@ -42,7 +42,7 @@ import {
   Urls,
   Strings,
 } from "@edsilv/utils";
-import { isVisible } from "../../Utils";
+import { isVisible } from "../../../../Utils";
 import { BaseEvents } from "../../../../BaseEvents";
 
 export class BaseExtension implements IExtension {

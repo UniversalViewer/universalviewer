@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseEvents } from "../../../../BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import {
   Annotation,
   AnnotationBody,

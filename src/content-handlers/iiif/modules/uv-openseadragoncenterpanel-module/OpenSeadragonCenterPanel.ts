@@ -10,7 +10,7 @@ import {
   AnnotationBody,
   Service,
 } from "manifesto.js";
-import { debounce, sanitize } from "../../Utils";
+import { debounce, sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { BaseEvents } from "../../../../BaseEvents";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";

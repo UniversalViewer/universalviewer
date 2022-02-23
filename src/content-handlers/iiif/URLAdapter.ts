@@ -3,7 +3,7 @@ import { Urls } from "@edsilv/utils";
 import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
 import { BaseEvents } from "../../BaseEvents";
-import { defaultLocale } from "./Utils";
+import { defaultLocale } from "../../Utils";
 
 export class URLAdapter extends UVAdapter {
   constructor(readonly: boolean = false) {

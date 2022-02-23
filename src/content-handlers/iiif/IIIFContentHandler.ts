@@ -24,7 +24,7 @@ import { IContentHandler } from "@/IContentHandler";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
 import { UVAdapter } from "@/UVAdapter";
-import { defaultLocale } from "./Utils";
+import { defaultLocale } from "../../Utils";
 import BaseContentHandler from "../../BaseContentHandler";
 
 interface IExtensionRegistry {

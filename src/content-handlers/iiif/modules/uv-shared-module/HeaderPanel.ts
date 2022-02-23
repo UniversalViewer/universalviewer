@@ -7,7 +7,7 @@ import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
 import { InformationFactory } from "./InformationFactory";
 import { Bools } from "@edsilv/utils";
-import { isVisible } from "../../Utils";
+import { isVisible } from "../../../../Utils";
 
 export class HeaderPanel extends BaseView {
   $centerOptions: JQuery;

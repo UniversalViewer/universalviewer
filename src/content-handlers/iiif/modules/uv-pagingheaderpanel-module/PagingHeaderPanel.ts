@@ -5,7 +5,7 @@ import { Events } from "../../extensions/uv-openseadragon-extension/Events";
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";

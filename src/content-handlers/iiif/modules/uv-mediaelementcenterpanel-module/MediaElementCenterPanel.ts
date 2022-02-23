@@ -3,7 +3,7 @@ import { BaseEvents } from "../../../../BaseEvents";
 import { Events } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,

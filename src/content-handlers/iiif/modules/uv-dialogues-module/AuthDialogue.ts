@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseEvents } from "../../../../BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { Service } from "manifesto.js";
 
 export class AuthDialogue extends Dialogue {

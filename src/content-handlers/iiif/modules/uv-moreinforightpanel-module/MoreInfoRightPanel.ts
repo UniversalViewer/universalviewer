@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseEvents } from "../../../../BaseEvents";
 import { RightPanel } from "../uv-shared-module/RightPanel";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { Bools, Urls } from "@edsilv/utils";
 import { Range } from "manifesto.js";
 import { UriLabeller } from "@iiif/manifold";

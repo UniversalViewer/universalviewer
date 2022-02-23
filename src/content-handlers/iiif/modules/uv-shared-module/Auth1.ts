@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { BaseEvents } from "../../../../BaseEvents";
-import { sanitize } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";
 import {
