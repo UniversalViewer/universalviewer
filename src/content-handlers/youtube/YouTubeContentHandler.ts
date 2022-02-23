@@ -52,7 +52,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     if (!existingScriptTag) {
       const scriptTag = document.createElement("script");
       scriptTag.id = "youtube-iframe-api";
-      scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
+      scriptTag.src = "//www.youtube.com/iframe_api";
       const firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode!.insertBefore(scriptTag, firstScriptTag);
     }
@@ -69,6 +69,13 @@ export default class YouTubeContentHandler extends BaseContentHandler<
               videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
               playerVars: {
                 playsinline: 1,
+                enablejsapi: 1,
+                controls: player.data.controls ? 1 : 0,
+                showInfo: 0,
+                // iv_load_policy: 3,
+                modestbranding: 1,
+                // start: 10,
+                // end: 20,
               },
               events: {
                 onReady: (event) => {
