@@ -1,5 +1,6 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
+import { UVAdapter } from "./UVAdapter";
 
 export interface IUVOptions {
   target: HTMLElement;
@@ -33,6 +34,7 @@ export class UniversalViewer implements IContentHandler<IUVData> {
   private _assignedContentHandler: IContentHandler<IUVData>;
   public el: HTMLElement;
   private _externalEventListeners: { name: string; callback: Function }[] = [];
+  public adapter: UVAdapter;
 
   constructor(public options: IUVOptions) {
     this.el = options.target;
@@ -77,6 +79,7 @@ export class UniversalViewer implements IContentHandler<IUVData> {
         target: this.el,
         data: data,
       }); // create content handler
+      this._assignedContentHandler.adapter = this.adapter; // set adapter
 
       // add event listeners
       this._externalEventListeners.forEach(({ name, callback }) => {

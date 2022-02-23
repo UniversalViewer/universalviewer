@@ -23,7 +23,6 @@ import "./themes/theme.less";
 import { IContentHandler } from "@/IContentHandler";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
-import { UVAdapter } from "@/UVAdapter";
 import { defaultLocale } from "../../Utils";
 import BaseContentHandler from "../../BaseContentHandler";
 
@@ -104,12 +103,11 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   private _pubsub: PubSub;
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
-  public adapter: UVAdapter;
   public disposed = false;
 
   constructor(options: IUVOptions) {
     super(options);
-    console.log("create IIIFContentHandler");
+    // console.log("create IIIFContentHandler");
 
     this._pubsub = new PubSub();
 
@@ -233,8 +231,9 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   public dispose() {
-    console.log("dispose IIIFContentHandler");
+    // console.log("dispose IIIFContentHandler");
     this._pubsub.dispose();
+    this.adapter?.dispose();
     this.disposed = true;
     const $elem: JQuery = $(this.options.target);
     $elem.empty();

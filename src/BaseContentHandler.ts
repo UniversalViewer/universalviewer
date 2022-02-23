@@ -1,10 +1,12 @@
 import { IContentHandler } from "./IContentHandler";
 import { IUVOptions } from "./UniversalViewer";
+import { UVAdapter } from "./UVAdapter";
 
 export default class BaseContentHandler<IUVData>
   implements IContentHandler<IUVData> {
   protected _el: HTMLElement;
   private _eventListeners: any;
+  public adapter: UVAdapter | undefined;
 
   constructor(public options: IUVOptions) {
     console.log("create YouTubeContentHandler");

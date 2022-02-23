@@ -5,8 +5,6 @@ import { YouTubeData } from "./YouTubeData";
 
 interface Player {
   id: string;
-  // videoId: string;
-  // duration?: number;
   data: YouTubeData;
 }
 
@@ -18,7 +16,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 
   constructor(options: IUVOptions) {
     super(options);
-    console.log("create YouTubeContentHandler");
+    // console.log("create YouTubeContentHandler");
     this._init(this.options.data);
   }
 
@@ -145,11 +143,14 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public dispose(): void {
-    console.log("dispose YouTubeContentHandler");
+    // console.log("dispose YouTubeContentHandler");
     this._el.innerHTML = "";
     // remove from window.youTubePlayers where hostId === this._id
     window.youTubePlayers = window.youTubePlayers.filter(
       (p) => p.id !== this._id
     );
+    // remove classes
+    this._el.className = "";
+    this.adapter?.dispose();
   }
 }

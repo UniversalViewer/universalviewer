@@ -10,4 +10,6 @@ export class UVAdapter {
   }
 
   public set<T>(_key: string, _value: T): void {}
+
+  public dispose(): void {}
 }

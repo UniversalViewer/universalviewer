@@ -66,7 +66,17 @@ export class URLAdapter extends UVAdapter {
     };
   }
 
+  public dispose(): void {
+    history.pushState(
+      "",
+      document.title,
+      window.location.pathname + window.location.search
+    );
+  }
+
   public bindTo(uv: UniversalViewer) {
+    uv.adapter = this;
+
     uv.on(
       BaseEvents.PAUSE,
       (currentTime) => {
