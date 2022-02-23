@@ -7,7 +7,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   YouTubeData
 > {
   private _playerDiv: HTMLDivElement;
-  private _scriptTag: HTMLScriptElement;
 
   constructor(options: IUVOptions) {
     super(options);
@@ -28,10 +27,14 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     this._playerDiv.id = "player";
     this._el.append(this._playerDiv);
 
-    this._scriptTag = document.createElement("script");
-    this._scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
-    const firstScriptTag = document.getElementsByTagName("script")[0];
-    firstScriptTag.parentNode!.insertBefore(this._scriptTag, firstScriptTag);
+    const existingScriptTab = document.getElementById("youtube-iframe-api");
+    if (!existingScriptTab) {
+      const scriptTag = document.createElement("script");
+      scriptTag.id = "youtube-iframe-api";
+      scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode!.insertBefore(scriptTag, firstScriptTag);
+    }
 
     if (window.onYouTubeIframeAPIReady) {
       window.onYouTubeIframeAPIReady();
