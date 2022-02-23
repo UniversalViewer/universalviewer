@@ -28,7 +28,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     this._playerDiv.id = "player";
     this._el.append(this._playerDiv);
 
-    // todo: use loadScript util
     this._scriptTag = document.createElement("script");
     this._scriptTag.src = "//www.youtube.com/iframe_api?controls=0";
     const firstScriptTag = document.getElementsByTagName("script")[0];
@@ -67,17 +66,13 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public set(data: YouTubeData): void {
-    console.log(window.youTubePlayer);
     if (data.youTubeVideoId) {
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
-      // const currentVideoId: string = window.youTubePlayer.getVideoData().video_id;
-      // if (videoId !== currentVideoId) {
       if (data.autoPlay) {
         window.youTubePlayer.loadVideoById(videoId);
       } else {
         window.youTubePlayer.cueVideoById(videoId);
       }
-      // }
     }
 
     if (data.currentTime) {
