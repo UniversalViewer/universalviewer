@@ -1,18 +1,26 @@
+import { getUUID } from "../../Utils";
 import BaseContentHandler from "../../BaseContentHandler";
 import { BaseEvents } from "../../BaseEvents";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
 
+interface Player {
+  videoId: string;
+  hostId: string;
+  duration?: number;
+  data: YouTubeData;
+}
+
 export default class YouTubeContentHandler extends BaseContentHandler<
   YouTubeData
 > {
   private _playerDiv: HTMLDivElement;
+  private _id: string;
 
   constructor(options: IUVOptions) {
     super(options);
     console.log("create YouTubeContentHandler");
-    window.youTubeData = this.options.data; // necessary unfortunately due to the way the YouTube API works
-    this._init();
+    this._init(this.options.data);
   }
 
   private _getYouTubeVideoId(id: string): string {
@@ -22,10 +30,39 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     return id;
   }
 
-  private _init(): void {
-    this._playerDiv = document.createElement("div");
-    this._playerDiv.id = "player";
-    this._el.append(this._playerDiv);
+  private _init(data: YouTubeData): void {
+    console.log("init");
+
+    if (!window.youTubePlayers) {
+      window.youTubePlayers = [];
+    }
+
+    this._id = "YTPlayer-" + getUUID();
+
+    const videoId = this._getYouTubeVideoId(data.youTubeVideoId!);
+    let player = this._getPlayerById(videoId);
+
+    if (!player) {
+      player = {
+        videoId: videoId,
+        hostId: this._id,
+        data: {
+          ...data,
+        },
+      };
+      window.youTubePlayers.push(player);
+    }
+
+    // mark as the current player in use
+    // window.youTubePlayers.forEach((p: Player) => {
+    //   p.current = p.videoId === videoId;
+    // });
+
+    if (!this._playerDiv) {
+      this._playerDiv = document.createElement("div");
+      this._playerDiv.id = this._id;
+      this._el.append(this._playerDiv);
+    }
 
     const existingScriptTab = document.getElementById("youtube-iframe-api");
     if (!existingScriptTab) {
@@ -40,46 +77,75 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       window.onYouTubeIframeAPIReady();
     } else {
       window.onYouTubeIframeAPIReady = () => {
-        window.youTubePlayer = new YT.Player("player", {
-          height: "100%",
-          width: "100%",
-          videoId: this._getYouTubeVideoId(window.youTubeData.youTubeVideoId), // must be specified on init
-          playerVars: {
-            playsinline: 1,
-          },
-          events: {
-            onReady: this._onPlayerReady.bind(this),
-            onStateChange: this._onPlayerStateChange.bind(this),
-          },
-        });
+        for (const player of window.youTubePlayers as Player[]) {
+          if (player.hostId === this._id) {
+            window[this._id] = new YT.Player(this._id, {
+              height: "100%",
+              width: "100%",
+              videoId: player.videoId,
+              playerVars: {
+                playsinline: 1,
+              },
+              events: {
+                onReady: (event) => {
+                  const YTPlayer = event.target;
+                  const duration = YTPlayer.getDuration();
+                  this.set(player.data);
+                  this.fire(BaseEvents.LOAD, {
+                    youTubeVideoId: player.data.youTubeVideoId,
+                    duration: duration,
+                  });
+                },
+                onStateChange: (_event) => {
+                  // const currentTime = this._player.getCurrentTime();
+                  // console.log(currentTime);
+                  // currentTimeInput.value = currentTime;
+                },
+              },
+            });
+          }
+        }
       };
     }
   }
 
-  private _onPlayerReady(event) {
-    const player = event.target;
-    this.fire(BaseEvents.LOAD, { duration: player.getDuration() });
-    this.set(window.youTubeData);
+  // private _onPlayerReady(event) {
+  //   const player = event.target;
+  //   this.fire(BaseEvents.LOAD, { duration: player.getDuration() });
+  //   this.set(window.youTubeData);
+  // }
+
+  // private _onPlayerStateChange(_event) {
+  // const currentTime = this._player.getCurrentTime();
+  // console.log(currentTime);
+  // currentTimeInput.value = currentTime;
+  // }
+
+  private _getPlayerById(videoId: string): Player {
+    return window.youTubePlayers.find((p) => p.id === videoId);
   }
 
-  private _onPlayerStateChange(_event) {
-    // const currentTime = this._player.getCurrentTime();
-    // console.log(currentTime);
-    // currentTimeInput.value = currentTime;
-  }
+  // private _getCurrentPlayer(): Player {
+  //   return window.youTubePlayers.find((p) => p.current);
+  // }
 
   public set(data: YouTubeData): void {
+    const player = window[this._id];
+
     if (data.youTubeVideoId) {
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
+      // this._init(data);
+      // const player = this._getCurrentPlayer();
+
       if (data.autoPlay) {
-        window.youTubePlayer.loadVideoById(videoId);
+        player.loadVideoById(videoId);
       } else {
-        window.youTubePlayer.cueVideoById(videoId);
+        player.cueVideoById(videoId);
       }
     }
 
     if (data.currentTime) {
-      window.youTubePlayer.seekTo(data.currentTime, true);
+      player.seekTo(data.currentTime, true);
     }
   }
 
@@ -93,5 +159,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public dispose(): void {
     console.log("dispose YouTubeContentHandler");
     this._el.innerHTML = "";
+    // todo: remove from window.youTubePlayers where hostId === this._uuid
   }
 }
