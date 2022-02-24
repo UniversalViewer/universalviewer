@@ -1,0 +1,157 @@
+@import "@iiif/iiif-gallery-component/dist-css/styles.less";
+@import "@iiif/iiif-tree-component/dist-css/styles.less";
+@import "../../uv-shared-module/css/thumbs-view.less";
+
+.uv {
+  .leftPanel {
+    .top {
+      .title {
+        text-transform: uppercase;
+      }
+    }
+
+    .tabs {
+      height: 25px;
+      border-bottom: 1px solid @panel-border-color;
+
+      .tab {
+        color: @text-color;
+        background-color: @panel-dark-bg;
+        display: inline-block;
+        text-align: center;
+        line-height: 22px;
+        height: 22px;
+        overflow: hidden;
+        width: 75px;
+        margin: 0;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &.first {
+          margin: 0 0 0 @margin-medium-horizontal;
+        }
+
+        &.on {
+          border: 1px solid @panel-border-color;
+          border-bottom: 1px solid @panel-dark-bg;
+          color: @brand-secondary;
+          margin-bottom: -1px;
+          height: 25px;
+          line-height: 25px;
+        }
+      }
+    }
+
+    .tabsContent {
+      padding: @padding-medium;
+
+      .options {
+        padding: 0 0 @padding-medium-vertical 0;
+
+        .top {
+          overflow: hidden;
+          height: auto;
+        }
+
+        .bottom {
+          overflow: hidden;
+
+          .left {
+            float: left;
+
+            .treeView {
+              padding: @padding-small-vertical 0 0 0;
+
+              span {
+                display: block;
+                float: left;
+                color: @text-color;
+                padding: 5px 4px 0 0;
+                font-size: @font-size-small;
+              }
+
+              select {
+                float: left;
+                font-size: @font-size-small;
+              }
+            }
+          }
+
+          .right {
+            float: right;
+            overflow: hidden;
+
+            .multiSelect {
+              .multiSelectAll {
+                float: left;
+              }
+
+              .btn {
+                margin-left: @margin-medium-horizontal;
+              }
+            }
+          }
+        }
+      }
+
+      .btn-group {
+        .btn {
+          padding: 0 @margin-small-horizontal 0 @margin-small-horizontal;
+          background: @gray;
+          color: @gray-light;
+          width: 55px;
+
+          &.on {
+            background: #ddd;
+            color: #000;
+          }
+        }
+      }
+    }
+
+    .views {
+      .treeView {
+        font-weight: normal;
+        overflow: auto;
+
+        .iiif-tree-component ul li a.selected {
+          color: @brand-primary !important;
+        }
+      }
+
+      //.galleryView{
+      // iiif-gallery-component (shared-module)
+      //}
+    }
+  }
+}
+
+.uv.browser-Explorer {
+  .leftPanel {
+    .views {
+      .galleryView {
+        .header {
+          input[type="range"] {
+            margin-top: -11px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.uv.browser-Firefox {
+  .leftPanel {
+    .views {
+      .galleryView {
+        .header {
+          input[type="range"] {
+            margin-top: 9px;
+            overflow: hidden;
+          }
+        }
+      }
+    }
+  }
+}

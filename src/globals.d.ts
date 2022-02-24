@@ -1,3 +1,12 @@
+interface Document {
+  mozFullScreen: boolean;
+  msFullscreenElement: any;
+  webkitExitFullscreen: any;
+  msExitFullscreen: any;
+  mozCancelFullScreen: any;
+  webkitIsFullScreen: any;
+}
+
 interface Element {
   scrollIntoViewIfNeeded: any;
 }
@@ -73,15 +82,6 @@ interface Window {
   opera: any;
 }
 
-interface Document {
-  mozFullScreen: boolean;
-  msFullscreenElement: any;
-  webkitExitFullscreen: any;
-  msExitFullscreen: any;
-  mozCancelFullScreen: any;
-  webkitIsFullScreen: any;
-}
-
 // had to copy this from lib.es2016.array.include.d.ts as no combination of compiler options would work :-(
 interface Array<T> {
   /**
@@ -99,3 +99,12 @@ declare function trackEvent(
   label: string,
   value?: any
 ): void;
+
+declare var YT: any;
+
+interface Window {
+  onYouTubeIframeAPIReady: any;
+  youTubePlayers: any[];
+  currentYouTubePlayer: any;
+  //youTubeData: any; // has to be any, otherwise typescript complains
+}

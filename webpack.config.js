@@ -88,11 +88,25 @@ const config = [
             from: resolvePath("./src/index.html"),
             to: resolvePath("./dist"),
             transform(content) {
-              return Promise.resolve(Buffer.from(content.toString().replace('<%= htmlWebpackPlugin.tags.headTags %>', '<script type="text/javascript" src="umd/UV.js"></script>'), 'utf8'))
+              return Promise.resolve(
+                Buffer.from(
+                  content
+                    .toString()
+                    .replace(
+                      "<%= htmlWebpackPlugin.tags.headTags %>",
+                      '<script type="text/javascript" src="umd/UV.js"></script>'
+                    ),
+                  "utf8"
+                )
+              );
             },
           },
           {
-            from: resolvePath("./src/collection.json"),
+            from: resolvePath("./src/iiif-collection.json"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/youtube-collection.json"),
             to: resolvePath("./dist"),
           },
           {

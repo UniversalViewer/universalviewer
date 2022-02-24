@@ -1,0 +1,68 @@
+﻿@import "@iiif/iiif-metadata-component/dist-css/styles.less";
+
+.uv {
+  .rightPanel {
+    .top {
+      .title {
+        text-transform: uppercase;
+      }
+    }
+
+    .content {
+      padding: @padding-medium;
+    }
+
+    .main {
+      overflow: auto;
+      color: @text-color;
+
+      &.loading {
+        .loading(@loader-black-bg);
+      }
+
+      .noData {
+        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2)
+          @padding-medium-horizontal;
+      }
+
+      .groups {
+        padding: @padding-medium-vertical @padding-medium-horizontal
+          (@padding-medium-vertical * 2) @padding-medium-horizontal;
+
+        .group {
+          .header {
+            text-transform: uppercase;
+          }
+        }
+
+        .items {
+          .header {
+            font-size: @font-size-small;
+            text-transform: uppercase;
+          }
+
+          .item {
+            .header {
+              font-size: @font-size-small;
+              text-transform: uppercase;
+            }
+
+            .value {
+              color: @text-color;
+            }
+          }
+        }
+
+        [data-uv-navigate] {
+          color: @link-secondary-color;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+            color: @link-secondary-hover-color;
+          }
+        }
+      }
+    }
+  }
+}

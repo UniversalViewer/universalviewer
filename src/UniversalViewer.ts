@@ -1,420 +1,122 @@
-const $ = require("jquery");
-require("jsviews")($);
-import jQueryPlugins from "./JQueryPlugins";
-jQueryPlugins($);
-const merge = require("lodash/merge");
-import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
-import {
-  ExtensionLoader,
-  IExtension,
-} from "./modules/uv-shared-module/IExtension";
-import { IExtensionHost } from "./IExtensionHost";
 import { IUVData } from "./IUVData";
-import { IExtensionHostAdaptor } from "./IExtensionHostAdaptor";
-import { EventHandlerWithName, PubSub } from "./PubSub";
-import {
-  RenderingFormat,
-  MediaType,
-  ExternalResourceType,
-} from "@iiif/vocabulary/dist-commonjs/";
-import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
-import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
-import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
-import "./uv.css";
-import "./themes/theme.less";
+import { IContentHandler } from "./IContentHandler";
+import { UVAdapter } from "./UVAdapter";
 
-interface IExtensionRegistry {
-  [key: string]: ExtensionLoader;
+export interface IUVOptions {
+  target: HTMLElement;
+  data: IUVData;
 }
 
-// use static paths (not based on variable) so webpack can use publicPath: "auto"
-const Extension = {
-  AV: {
-    name: "uv-av-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-av-extension/Extension"
-      ),
-  },
-  ALEPH: {
-    name: "uv-aleph-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-aleph-extension/Extension"
-      ),
-  },
-  DEFAULT: {
-    name: "uv-default-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-default-extension/Extension"
-      ),
-  },
-  EBOOK: {
-    name: "uv-ebook-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-ebook-extension/Extension"
-      ),
-  },
-  MEDIAELEMENT: {
-    name: "uv-mediaelement-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-mediaelement-extension/Extension"
-      ),
-  },
-  MODELVIEWER: {
-    name: "uv-model-viewer-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-model-viewer-extension/Extension"
-      ),
-  },
-  OSD: {
-    name: "uv-openseadragon-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
-  },
-  PDF: {
-    name: "uv-pdf-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-pdf-extension/Extension"
-      ),
-  },
-  SLIDEATLAS: {
-    name: "uv-openseadragon-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
-  },
+enum ContentType {
+  IIIFLEGACY = "manifest",
+  IIIF = "iiifManifestId",
+  YOUTUBE = "youTubeVideoId",
+  UNKNOWN = "unknown",
+}
+
+interface IContentHandlerRegistry {
+  [key: string]: () => Promise<any>;
+}
+
+const ContentHandler: IContentHandlerRegistry = {
+  [ContentType.IIIF]: () =>
+    /* webpackMode: "lazy" */ import(
+      "./content-handlers/iiif/IIIFContentHandler"
+    ),
+  [ContentType.YOUTUBE]: () =>
+    /* webpackMode: "lazy" */ import(
+      "./content-handlers/youtube/YouTubeContentHandler"
+    ),
 };
 
-export class UniversalViewer extends BaseComponent implements IExtensionHost {
-  private _extensionRegistry: IExtensionRegistry;
-  private _pubsub: PubSub;
-  public extension: IExtension | null;
-  public isFullScreen: boolean = false;
-  public adaptor: IExtensionHostAdaptor;
-  public disposed = false;
+export class UniversalViewer implements IContentHandler<IUVData> {
+  private _contentType: ContentType = ContentType.UNKNOWN;
+  private _assignedContentHandler: IContentHandler<IUVData>;
+  public el: HTMLElement;
+  private _externalEventListeners: { name: string; callback: Function }[] = [];
+  public adapter: UVAdapter;
 
-  constructor(options: IBaseComponentOptions) {
-    super(options);
-
-    this._pubsub = new PubSub();
-
-    this._init();
-    this._resize();
+  constructor(public options: IUVOptions) {
+    this.el = options.target;
+    this._assignContentHandler(this.options.data);
   }
 
-  protected _init(): boolean {
-    super._init();
-
-    this._extensionRegistry = {};
-    this._extensionRegistry[ExternalResourceType.CANVAS] = Extension.OSD;
-    this._extensionRegistry[ExternalResourceType.DOCUMENT] = Extension.PDF;
-    this._extensionRegistry[ExternalResourceType.IMAGE] = Extension.OSD;
-    this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] =
-      Extension.MEDIAELEMENT;
-    this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
-      Extension.MODELVIEWER;
-    this._extensionRegistry[ExternalResourceType.SOUND] =
-      Extension.MEDIAELEMENT;
-    this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
-    this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
-    this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
-    this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
-    this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.JPG] = Extension.OSD;
-    this._extensionRegistry[MediaType.MP3] = Extension.AV;
-    this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
-    this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
-    this._extensionRegistry[MediaType.PDF] = Extension.PDF;
-    this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
-    this._extensionRegistry[MediaType.WEBM] = Extension.AV;
-    this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
-
-    this.set(this.options.data);
-
-    return true;
+  public on(name: string, callback: Function, ctx?: any): void {
+    this._externalEventListeners.push({
+      name,
+      callback,
+    });
   }
 
-  private async _getExtensionByType(
-    type: ExtensionLoader,
-    format?: string
-  ): Promise<any> {
-    // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
-    // const m = (await import(
-    //   /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
-    // )) as any;
-    const m = await type.loader();
-    const extension: IExtension = new m.default();
-    extension.format = format;
-    extension.type = type;
-    return extension;
-  }
+  private async _assignContentHandler(data: IUVData): Promise<boolean> {
+    let contentType: ContentType;
 
-  private _getExtensionByFormat(format: string): any {
-    if (!this._extensionRegistry[format]) {
-      return this._getExtensionByType(Extension.DEFAULT, format);
+    if (data[ContentType.IIIFLEGACY]) {
+      // if using "manifest" not "iiifManifestId"
+      data.iiifManifestId = data[ContentType.IIIFLEGACY];
+      delete data[ContentType.IIIFLEGACY];
+      contentType = ContentType.IIIF;
+    } else if (data[ContentType.IIIF]) {
+      contentType = ContentType.IIIF;
+    } else if (data[ContentType.YOUTUBE]) {
+      contentType = ContentType.YOUTUBE;
+    } else if (this._contentType) {
+      contentType = this._contentType;
+    } else {
+      contentType = ContentType.UNKNOWN;
     }
 
-    return this._getExtensionByType(this._extensionRegistry[format], format);
+    const handlerChanged: boolean = this._contentType !== contentType;
+
+    if (contentType === ContentType.UNKNOWN) {
+      console.error("Unknown content type");
+    } else if (handlerChanged) {
+      this._contentType = contentType; // set content type
+      this._assignedContentHandler?.dispose(); // dispose previous content handler
+      const m = await ContentHandler[contentType](); // import content handler
+      this._showSpinner(); // show spinner
+      this._assignedContentHandler = new m.default({
+        target: this.el,
+        data: data,
+      }); // create content handler
+      this._assignedContentHandler.adapter = this.adapter; // set adapter
+
+      // add event listeners
+      this._externalEventListeners.forEach(({ name, callback }) => {
+        this._assignedContentHandler.on(name, callback);
+      });
+    }
+
+    return handlerChanged;
   }
 
-  public data(): IUVData {
-    return {
-      canvasIndex: 0,
-      embedded: false,
-      isReload: false,
-      limitLocales: false,
-      manifest: "",
-      locales: [
-        {
-          name: "en-GB",
-        },
-      ],
-      target: "",
-    } as IUVData;
+  private _showSpinner(): void {
+    this.el.parentElement!.parentElement!.classList.remove("loaded");
   }
 
   public set(data: IUVData): void {
-    this.fire(BaseEvents.SET, data);
-
-    // if this is the first set
-    if (!this.extension) {
-      if (!data.manifest) {
-        console.warn(`manifest is required.`);
-        return;
-      }
-
-      this._reload(data);
-    } else {
-      // changing any of these data properties forces the UV to reload.
-      const newData: IUVData = Object.assign({}, this.extension.data, data);
-      if (
-        newData.isReload ||
-        newData.manifest !== this.extension.data.manifest ||
-        newData.manifestIndex !== this.extension.data.manifestIndex ||
-        newData.collectionIndex !== this.extension.data.collectionIndex
-      ) {
-        this.extension.data = newData;
-        this._reload(this.extension.data);
+    // content type may have changed
+    this._assignContentHandler(data).then((handlerChanged: boolean) => {
+      if (handlerChanged) {
+        // the handler has changed, show a spinner until it's created
+        this._showSpinner();
       } else {
-        // no need to reload, just update.
-        this.extension.data = newData;
-        this.extension.render();
+        // the handler didn't change, therefore handler's initial set didn't run
+        // so we need to call set
+        this._assignedContentHandler.set(data);
       }
-    }
-  }
-
-  public get(key: string): any {
-    if (this.extension) {
-      return this.extension.data[key];
-    }
-  }
-
-  public publish(event: string, args?: any): void {
-    this._pubsub.publish(event, args);
-  }
-
-  public subscribe(event: string, handler: any) {
-    this._pubsub.subscribe(event, handler);
-
-    return () => {
-      this._pubsub.unsubscribe(event, handler);
-    };
-  }
-
-  public subscribeAll(handler: EventHandlerWithName) {
-    this._pubsub.subscribeAll(handler);
-
-    return () => {
-      this._pubsub.unsubscribeAll();
-    };
-  }
-
-  public dispose() {
-    this._pubsub.dispose();
-    this.disposed = true;
-    const $elem: JQuery = $(this.options.target);
-    $elem.empty();
-  }
-
-  private async _reload(data: IUVData): Promise<void> {
-    this._pubsub.dispose(); // remove any existing event listeners
-
-    data.target = ""; // clear target
-
-    this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
-      this.fire(BaseEvents.RELOAD, data);
     });
-
-    const $elem: JQuery = $(this.options.target);
-
-    // empty the containing element
-    $elem.empty();
-
-    const that = this;
-
-    const helper: Helper = await loadManifest({
-      manifestUri: data.manifest,
-      collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
-      manifestIndex: data.manifestIndex || 0,
-      canvasIndex: data.canvasIndex || 0,
-      rangeId: data.rangeId,
-      locale: data.locales ? data.locales[0].name : undefined,
-    } as IManifoldOptions);
-
-    let trackingLabel: string | null = helper.getTrackingLabel();
-
-    if (trackingLabel) {
-      trackingLabel +=
-        ", URI: " + (window.location !== window.parent.location)
-          ? document.referrer
-          : document.location;
-      window.trackingLabel = trackingLabel;
-    }
-
-    let canvas: Canvas | undefined;
-
-    canvas = helper.getCurrentCanvas();
-
-    if (!canvas) {
-      that._error(`Canvas ${data.canvasIndex} not found.`);
-      return;
-    }
-
-    let extension: IExtension | undefined;
-
-    const content: Annotation[] = canvas.getContent();
-    let format: string | undefined;
-
-    if (content.length) {
-      const annotation: Annotation = content[0];
-      const body: AnnotationBody[] = annotation.getBody();
-
-      if (body && body.length) {
-        format = body[0].getFormat() as string;
-
-        if (format) {
-          extension = await that._getExtensionByFormat(format);
-
-          if (!extension) {
-            // try type
-            const type: ExternalResourceType | null = body[0].getType();
-
-            if (type) {
-              extension = await that._getExtensionByFormat(type);
-            }
-          }
-        } else {
-          const type: ExternalResourceType | null = body[0].getType();
-
-          if (type) {
-            extension = await that._getExtensionByFormat(type);
-          }
-        }
-      }
-    } else {
-      const canvasType: ExternalResourceType | null = canvas.getType();
-
-      if (canvasType) {
-        // try using canvasType
-        extension = await that._getExtensionByFormat(canvasType);
-      }
-
-      // if there isn't an extension for the canvasType, try the format
-      if (!extension) {
-        const format: any = canvas.getProperty("format");
-        extension = await that._getExtensionByFormat(format);
-      }
-    }
-
-    // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
-    const hasRanges: boolean = helper.getRanges().length > 0;
-
-    if (extension!.type === Extension.AV && !hasRanges) {
-      extension = await that._getExtensionByType(
-        Extension.MEDIAELEMENT,
-        format
-      );
-    }
-
-    // if there still isn't a matching extension, use the default extension.
-    if (!extension) {
-      extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
-    }
-
-    data.config = await that._configure(data, extension);
-
-    that._createExtension(extension, data, helper);
-  }
-
-  private _error(message: string): void {
-    this.fire(BaseEvents.ERROR, message);
-  }
-
-  private async _configure(data: IUVData, extension: any): Promise<any> {
-    if (!data.locales) {
-      throw new Error("locales required.");
-    }
-
-    // import the config file
-    let config = await extension.loadConfig(data.locales[0].name);
-
-    let promises: Promise<any>[] = [] as any;
-
-    this.fire(BaseEvents.CONFIGURE, {
-      config,
-      cb: (promise) => {
-        promises.push(promise);
-      },
-    });
-
-    if (promises.length) {
-      const configs = await Promise.all(promises);
-
-      const mergedConfigs = configs.reduce((previous, current) => {
-        return merge(previous, current);
-      });
-
-      config = merge(config, mergedConfigs);
-    }
-
-    return config;
-  }
-
-  private _createExtension(
-    extension: any,
-    data: IUVData,
-    helper: Helper
-  ): void {
-    this.extension = extension;
-    if (this.extension) {
-      this.extension.extensionHost = this;
-      this.extension.data = data;
-      this.extension.helper = helper;
-      this.extension.create();
-    }
   }
 
   public exitFullScreen(): void {
-    if (this.extension) {
-      this.extension.exitFullScreen();
-    }
+    this._assignedContentHandler?.exitFullScreen();
   }
 
   public resize(): void {
-    if (this.extension && !this.disposed) {
-      this.extension.resize();
-    }
+    this._assignedContentHandler?.resize();
+  }
+
+  public dispose(): void {
+    this._assignedContentHandler?.dispose();
   }
 }

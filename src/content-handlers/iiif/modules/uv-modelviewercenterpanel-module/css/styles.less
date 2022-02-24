@@ -1,0 +1,42 @@
+.uv-iiif-extension-host.uv-model-viewer-extension {
+  .centerPanel {
+    .content {
+      position: relative;
+
+      model-viewer {
+        --progress-bar-color: #000;
+        --progress-bar-height: 1px;
+        --poster-color: transparent;
+      }
+
+      .spinner {
+        position: absolute;
+        width: 27px;
+        height: 27px;
+        border-radius: 27px;
+        .loading(@loader-black-bg);
+      }
+
+      .annotationPin {
+        // background-color: white;
+        background-image: data-uri("../img/pin.svg") !important;
+        width: 28px !important;
+        height: 37px !important;
+        background-position-x: 1px;
+        transform: translate(0, -50%);
+        overflow: hidden;
+        cursor: pointer;
+
+        span {
+          color: #2a2a2a;
+          user-select: none;
+          display: block;
+          width: 95%;
+          text-align: center;
+          margin-top: 8px;
+          font-size: 11px;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+import { BaseEvents } from "./BaseEvents";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
@@ -44,17 +44,8 @@ export const init = (el: string | HTMLDivElement, data) => {
 
   uv = new UniversalViewer({
     target: uvDiv,
-    data: data
+    data: data,
   });
-
-  uv.on(
-    BaseEvents.SET,
-    function(_obj) {
-      // remove loaded class to show spinner
-      uv.el.parentElement!.parentElement!.classList.remove("loaded");
-    },
-    false
-  );
 
   uv.on(
     BaseEvents.CREATED,
@@ -84,7 +75,7 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-  
+
   uv.on(
     BaseEvents.TOGGLE_FULLSCREEN,
     function(data) {
@@ -124,25 +115,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     },
     false
   );
-
-  // uv.on(
-  //   "bookmark",
-  //   function(data) {
-  //     const absUri = parent!.ownerDocument!.URL;
-  //     const parts = Urls.getUrlParts(absUri);
-  //     let relUri =
-  //       parts.pathname + parts.search + parent!.ownerDocument!.location.hash;
-
-  //     if (!relUri.startsWith("/")) {
-  //       relUri = "/" + relUri;
-  //     }
-
-  //     data.path = relUri;
-
-  //     console.log("bookmark", data);
-  //   },
-  //   false
-  // );
 
   function fullScreenChange(e) {
     if (

@@ -1,6 +1,5 @@
-import './shim-jquery';
-
-export { URLAdaptor } from "./URLAdaptor";
+export { URLAdapter as IIIFURLAdapter } from "./content-handlers/iiif/URLAdapter";
+export { URLAdapter as IIIFURLAdaptor } from "./content-handlers/iiif/URLAdapter";
 export { UniversalViewer as Viewer } from "./UniversalViewer";
-export { BaseEvents } from "./modules/uv-shared-module/BaseEvents";
+export { BaseEvents as IIIFEvents } from "./BaseEvents";
 export { init } from "./Init";

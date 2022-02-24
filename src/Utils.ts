@@ -14,8 +14,8 @@ export const sanitize = (html: string) => {
       span: [],
       strong: [],
       sub: [],
-      sup: []
-    }
+      sup: [],
+    },
   });
 };
 
@@ -27,7 +27,7 @@ export const isValidUrl = (value: string): boolean => {
 
 export const debounce = (callback: (args: any) => void, wait: number) => {
   let timeout;
-  return function (...args) {
+  return function(...args) {
     const context = this;
     clearTimeout(timeout);
     timeout = setTimeout(() => callback.apply(context, args), wait);
@@ -60,7 +60,7 @@ export const propertyChanged = (
 };
 
 function appendScript(src: string) {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const script = document.createElement("script");
     script.src = src;
     script.onload = () => resolve();
@@ -69,7 +69,7 @@ function appendScript(src: string) {
 }
 
 function appendCSS(src: string) {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = src;
@@ -97,4 +97,12 @@ export const loadCSS = async (sources: string[]) => {
 export const isVisible = (el: JQuery) => {
   // return el.css("visibility") !== "hidden"
   return el.is(":visible");
+};
+
+export const defaultLocale = {
+  name: "en-GB",
+};
+
+export const getUUID = () => {
+  return URL.createObjectURL(new Blob()).substr(-36);
 };
