@@ -264,6 +264,7 @@ export class BaseExtension implements IExtension {
         BaseEvents.DROP,
         BaseEvents.TOGGLE_FULLSCREEN,
         BaseEvents.EXTERNAL_RESOURCE_OPENED,
+        BaseEvents.RELOAD,
       ];
 
       if (!exceptions.includes(event)) {

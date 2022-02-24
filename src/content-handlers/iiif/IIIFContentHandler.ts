@@ -242,6 +242,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   private async _reload(data: IUVData): Promise<void> {
+    console.log("_reload");
+
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target
