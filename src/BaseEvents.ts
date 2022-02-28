@@ -1,4 +1,4 @@
-export class Events {
+export class BaseEvents {
   static CONFIGURE: string = "configure";
   static CREATED: string = "created";
   static DROP: string = "drop";

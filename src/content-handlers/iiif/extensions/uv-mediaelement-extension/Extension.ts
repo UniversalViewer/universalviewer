@@ -27,7 +27,7 @@ import {
 import { TFragment } from "../../modules/uv-shared-module/TFragment";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export default class Extension extends BaseExtension
   implements IMediaElementExtension {
@@ -58,11 +58,11 @@ export default class Extension extends BaseExtension
 
     // listen for mediaelement enter/exit fullscreen events.
     $(window).bind("enterfullscreen", () => {
-      this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
     });
 
     $(window).bind("exitfullscreen", () => {
-      this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
     });
 
     this.extensionHost.subscribe(

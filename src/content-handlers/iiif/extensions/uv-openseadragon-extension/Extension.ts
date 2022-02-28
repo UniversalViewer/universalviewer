@@ -45,7 +45,7 @@ import {
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -323,7 +323,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.print();
     });
 
-    this.extensionHost.subscribe(Events.RELOAD, () => {
+    this.extensionHost.subscribe(BaseEvents.RELOAD, () => {
       this.extensionHost.publish(IIIFEvents.CLEAR_ANNOTATIONS);
     });
 

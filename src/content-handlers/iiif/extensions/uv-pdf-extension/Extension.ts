@@ -15,7 +15,7 @@ import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export default class Extension extends BaseExtension implements IPDFExtension {
   $downloadDialogue: JQuery;
@@ -67,7 +67,7 @@ export default class Extension extends BaseExtension implements IPDFExtension {
       }
     );
 
-    this.extensionHost.subscribe(Events.EXIT_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
       setTimeout(() => {
         this.resize();
       }, 10); // allow time to exit full screen, then resize

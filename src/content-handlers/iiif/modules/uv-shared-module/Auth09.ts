@@ -12,7 +12,7 @@ import {
 } from "manifesto.js";
 import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class Auth09 {
   static publish: (event: string, args?: any) => void;
@@ -85,7 +85,7 @@ export class Auth09 {
         {
           resource: resource,
           acceptCallback: () => {
-            Auth09.publish(Events.LOAD_FAILED);
+            Auth09.publish(BaseEvents.LOAD_FAILED);
             reject(resource);
           },
         },

@@ -14,7 +14,7 @@ import {
   applyPolyfills,
   defineCustomElements,
 } from "@universalviewer/uv-ebook-components/loader";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class EbookCenterPanel extends CenterPanel {
   private _cfi: string;
@@ -133,8 +133,8 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
-      this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
-      this.extensionHost.publish(Events.LOAD);
+      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(BaseEvents.LOAD);
     });
   }
 

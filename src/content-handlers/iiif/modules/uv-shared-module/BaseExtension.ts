@@ -44,7 +44,7 @@ import {
 } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -172,7 +172,7 @@ export class BaseExtension implements IExtension {
           //var canvasUri = Urls.getQuerystringParameterFromString('canvas', url.search);
 
           if (manifestUri) {
-            this.fire(Events.DROP, manifestUri);
+            this.fire(BaseEvents.DROP, manifestUri);
             const data: IUVData = <IUVData>{};
             data.iiifManifestId = manifestUri;
             this.reload(data);
@@ -245,12 +245,12 @@ export class BaseExtension implements IExtension {
       });
     }
 
-    this.extensionHost.subscribe(Events.EXIT_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
       if (this.isOverlayActive()) {
         this.extensionHost.publish(IIIFEvents.ESCAPE);
       }
       this.extensionHost.publish(IIIFEvents.ESCAPE);
-      this.extensionHost.publish(Events.RESIZE);
+      this.extensionHost.publish(BaseEvents.RESIZE);
     });
 
     // this.$element.append('<a href="/" id="top"></a>');
@@ -261,12 +261,12 @@ export class BaseExtension implements IExtension {
     this.extensionHost.subscribeAll((event, args) => {
       // subscribe to all UV events except those handled below with their own fire() calls
       const exceptions = [
-        Events.LOAD,
+        BaseEvents.LOAD,
         // IIIFEvents.CREATE,
-        Events.DROP,
-        Events.TOGGLE_FULLSCREEN,
-        Events.EXTERNAL_RESOURCE_OPENED,
-        Events.RELOAD,
+        BaseEvents.DROP,
+        BaseEvents.TOGGLE_FULLSCREEN,
+        BaseEvents.EXTERNAL_RESOURCE_OPENED,
+        BaseEvents.RELOAD,
       ];
 
       if (!exceptions.includes(event)) {
@@ -274,8 +274,8 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.extensionHost.subscribe(Events.EXTERNAL_RESOURCE_OPENED, () => {
-      this.fire(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
+      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
     });
 
     this.extensionHost.subscribe(IIIFEvents.LOGIN_FAILED, () => {
@@ -318,20 +318,20 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.extensionHost.subscribe(Events.CREATED, () => {
+    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
       this.isCreated = true;
     });
 
     this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
       if (this.isFullScreen() && !this.isOverlayActive()) {
-        this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
       }
     });
 
-    this.extensionHost.subscribe(Events.LOAD, () => {
+    this.extensionHost.subscribe(BaseEvents.LOAD, () => {
       setTimeout(() => {
-        this.extensionHost.publish(Events.RESIZE);
-        this.fire(Events.LOAD, this.helper.getCurrentCanvas().id);
+        this.extensionHost.publish(BaseEvents.RESIZE);
+        this.fire(BaseEvents.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
@@ -344,7 +344,7 @@ export class BaseExtension implements IExtension {
       this.extensionHost.publish(IIIFEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
-    this.extensionHost.subscribe(Events.LOAD_FAILED, () => {
+    this.extensionHost.subscribe(BaseEvents.LOAD_FAILED, () => {
       if (
         !that.lastCanvasIndex == null &&
         that.lastCanvasIndex !== that.helper.canvasIndex
@@ -423,7 +423,7 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
       const overrideFullScreen: boolean = this.data.config.options
         .overrideFullScreen;
 
@@ -439,7 +439,7 @@ export class BaseExtension implements IExtension {
         }
       }
 
-      this.fire(Events.TOGGLE_FULLSCREEN, {
+      this.fire(BaseEvents.TOGGLE_FULLSCREEN, {
         isFullScreen: this.extensionHost.isFullScreen,
         overrideFullScreen: overrideFullScreen,
       });
@@ -449,11 +449,11 @@ export class BaseExtension implements IExtension {
     this.shell = new Shell(this.$element);
 
     this.createModules();
-    this.extensionHost.publish(Events.RESIZE); // initial sizing
+    this.extensionHost.publish(BaseEvents.RESIZE); // initial sizing
 
     setTimeout(() => {
       this.render();
-      this.extensionHost.publish(Events.CREATED);
+      this.extensionHost.publish(BaseEvents.CREATED);
       this._setDefaultFocus();
     }, 1);
   }
@@ -519,7 +519,7 @@ export class BaseExtension implements IExtension {
   }
 
   exitFullScreen(): void {
-    this.extensionHost.publish(Events.EXIT_FULLSCREEN);
+    this.extensionHost.publish(BaseEvents.EXIT_FULLSCREEN);
   }
 
   fire(name: string, ...args: any[]): void {
@@ -671,12 +671,12 @@ export class BaseExtension implements IExtension {
 
   resize(): void {
     this._updateMetric();
-    this.extensionHost.publish(Events.RESIZE);
+    this.extensionHost.publish(BaseEvents.RESIZE);
   }
 
   // re-bootstraps the application with new querystring params
   reload(data?: IUVData): void {
-    this.extensionHost.publish(Events.RELOAD, data);
+    this.extensionHost.publish(BaseEvents.RELOAD, data);
   }
 
   isSeeAlsoEnabled(): boolean {

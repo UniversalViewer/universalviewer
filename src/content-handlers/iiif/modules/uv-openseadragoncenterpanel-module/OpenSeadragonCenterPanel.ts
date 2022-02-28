@@ -22,7 +22,7 @@ import OpenSeadragon from "openseadragon";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import "@openseadragon-imaging/openseadragon-viewerinputhook";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class OpenSeadragonCenterPanel extends CenterPanel {
   controlsVisible: boolean = false;
@@ -93,8 +93,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           this.isLoaded = false;
           await this.openMedia(resources);
           this.isLoaded = true;
-          this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
-          this.extensionHost.publish(Events.LOAD);
+          this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+          this.extensionHost.publish(BaseEvents.LOAD);
         });
       }
     );

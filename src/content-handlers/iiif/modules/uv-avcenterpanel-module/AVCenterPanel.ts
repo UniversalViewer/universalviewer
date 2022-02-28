@@ -13,7 +13,7 @@ import {
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component";
 import { Bools } from "@edsilv/utils";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class AVCenterPanel extends CenterPanel {
   $avcomponent: JQuery;
@@ -86,7 +86,7 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.extensionHost.subscribe(Events.CREATED, () => {
+    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
       this._setTitle();
     });
 
@@ -312,7 +312,7 @@ export class AVCenterPanel extends CenterPanel {
         //     this.resize();
         // }, false);
 
-        this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+        this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
       }
     });
   }

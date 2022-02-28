@@ -11,7 +11,7 @@ import { Orbit } from "../../extensions/uv-model-viewer-extension/Orbit";
 import { Async } from "@edsilv/utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Extension";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelviewer: JQuery;
@@ -71,7 +71,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.isLoaded = true;
       this.$content.removeClass("loading");
       this.$spinner.hide();
-      this.extensionHost.publish(Events.LOAD);
+      this.extensionHost.publish(BaseEvents.LOAD);
       this.extensionHost.publish(
         ModelViewerExtensionEvents.CAMERA_CHANGE,
         this.getCameraOrbit()
@@ -184,7 +184,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelviewer.attr("ios-src", mediaUri);
-    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
   }
 
   resize() {

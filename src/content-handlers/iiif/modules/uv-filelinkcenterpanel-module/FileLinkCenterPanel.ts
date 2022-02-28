@@ -9,7 +9,7 @@ import {
   IExternalResource,
   LanguageMap,
 } from "manifesto.js";
-import { Events } from "../../../../Events";
+import { BaseEvents } from "../../../../BaseEvents";
 
 export class FileLinkCenterPanel extends CenterPanel {
   $scroll: JQuery;
@@ -106,8 +106,8 @@ export class FileLinkCenterPanel extends CenterPanel {
       this.$downloadItems.append($item);
     }
 
-    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(Events.LOAD);
+    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(BaseEvents.LOAD);
   }
 
   resize() {
