@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
-import { Events } from "../../extensions/uv-openseadragon-extension/Events";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 
 export class FooterPanel extends BaseFooterPanel {
   $rotateButton: JQuery;
@@ -42,15 +42,15 @@ export class FooterPanel extends BaseFooterPanel {
     this.$options.prepend(this.$zoomInButton);
 
     this.$zoomInButton.onPressed(() => {
-      this.extensionHost.publish(Events.ZOOM_IN);
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_IN);
     });
 
     this.$zoomOutButton.onPressed(() => {
-      this.extensionHost.publish(Events.ZOOM_OUT);
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_OUT);
     });
 
     this.$rotateButton.onPressed(() => {
-      this.extensionHost.publish(Events.ROTATE);
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE);
     });
   }
 

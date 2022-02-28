@@ -4,7 +4,7 @@ const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { GalleryView } from "./GalleryView";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
@@ -59,15 +59,15 @@ export class ContentLeftPanel extends LeftPanel {
 
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
       this.databind();
     });
 
-    this.extensionHost.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+    this.extensionHost.subscribe(IIIFEvents.GALLERY_THUMB_SELECTED, () => {
       this.collapseFull();
     });
 
-    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       if (!this.extension.isDesktopMetric()) {
         if (this.isFullyExpanded) {
           this.collapseFull();
@@ -75,22 +75,22 @@ export class ContentLeftPanel extends LeftPanel {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS, () => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_CLEARED, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_EMPTY, () => {
       this.databindThumbsView();
       this.databindGalleryView();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }
@@ -99,7 +99,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.updateTreeTabBySelection();
     });
 
-    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.RANGE_CHANGE, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       }
@@ -589,7 +589,7 @@ export class ContentLeftPanel extends LeftPanel {
 
   expandFullStart(): void {
     super.expandFullStart();
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_EXPAND_FULL_START);
   }
 
   expandFullFinish(): void {
@@ -601,13 +601,13 @@ export class ContentLeftPanel extends LeftPanel {
       this.openThumbsView();
     }
 
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_EXPAND_FULL_FINISH);
   }
 
   collapseFullStart(): void {
     super.collapseFullStart();
 
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_COLLAPSE_FULL_START);
   }
 
   collapseFullFinish(): void {
@@ -620,7 +620,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.openThumbsView();
     }
 
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
   }
 
   openTreeView(): void {
@@ -646,7 +646,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.resize();
     this.treeView.resize();
 
-    this.extensionHost.publish(BaseEvents.OPEN_TREE_VIEW);
+    this.extensionHost.publish(IIIFEvents.OPEN_TREE_VIEW);
   }
 
   openThumbsView(): void {
@@ -681,7 +681,7 @@ export class ContentLeftPanel extends LeftPanel {
       this.thumbsView.resize();
     }
 
-    this.extensionHost.publish(BaseEvents.OPEN_THUMBS_VIEW);
+    this.extensionHost.publish(IIIFEvents.OPEN_THUMBS_VIEW);
   }
 
   selectTopRangeIndex(index: number): void {

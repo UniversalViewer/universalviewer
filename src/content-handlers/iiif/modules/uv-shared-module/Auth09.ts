@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";
 import { ILoginDialogueOptions } from "./ILoginDialogueOptions";
@@ -12,6 +12,7 @@ import {
 } from "manifesto.js";
 import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import { Events } from "../../../../Events";
 
 export class Auth09 {
   static publish: (event: string, args?: any) => void;
@@ -38,16 +39,16 @@ export class Auth09 {
         ["catch"]((error: any) => {
           switch (error.name) {
             case StatusCode.AUTHORIZATION_FAILED.toString():
-              Auth09.publish(BaseEvents.LOGIN_FAILED);
+              Auth09.publish(IIIFEvents.LOGIN_FAILED);
               break;
             case StatusCode.FORBIDDEN.toString():
-              Auth09.publish(BaseEvents.FORBIDDEN);
+              Auth09.publish(IIIFEvents.FORBIDDEN);
               break;
             case StatusCode.RESTRICTED.toString():
               // do nothing
               break;
             default:
-              Auth09.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+              Auth09.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
           }
         });
     });
@@ -55,7 +56,7 @@ export class Auth09 {
 
   static clickThrough(resource: IExternalResource): Promise<void> {
     return new Promise<void>((resolve) => {
-      Auth09.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [
+      Auth09.publish(IIIFEvents.SHOW_CLICKTHROUGH_DIALOGUE, [
         {
           resource: resource,
           acceptCallback: () => {
@@ -67,7 +68,7 @@ export class Auth09 {
               const pollTimer: number = window.setInterval(() => {
                 if (win && win.closed) {
                   window.clearInterval(pollTimer);
-                  Auth09.publish(BaseEvents.CLICKTHROUGH);
+                  Auth09.publish(IIIFEvents.CLICKTHROUGH);
                   resolve();
                 }
               }, 500);
@@ -80,11 +81,11 @@ export class Auth09 {
 
   static restricted(resource: IExternalResource): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      Auth09.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [
+      Auth09.publish(IIIFEvents.SHOW_RESTRICTED_DIALOGUE, [
         {
           resource: resource,
           acceptCallback: () => {
-            Auth09.publish(BaseEvents.LOAD_FAILED);
+            Auth09.publish(Events.LOAD_FAILED);
             reject(resource);
           },
         },
@@ -101,7 +102,7 @@ export class Auth09 {
         options.showCancelButton = true;
       }
 
-      Auth09.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [
+      Auth09.publish(IIIFEvents.SHOW_LOGIN_DIALOGUE, [
         {
           resource: resource,
           loginCallback: () => {
@@ -112,7 +113,7 @@ export class Auth09 {
               const pollTimer: number = window.setInterval(function() {
                 if (win && win.closed) {
                   window.clearInterval(pollTimer);
-                  Auth09.publish(BaseEvents.LOGIN);
+                  Auth09.publish(IIIFEvents.LOGIN);
                   resolve();
                 }
               }, 500);
@@ -126,7 +127,7 @@ export class Auth09 {
               const pollTimer: number = window.setInterval(function() {
                 if (win && win.closed) {
                   window.clearInterval(pollTimer);
-                  Auth09.publish(BaseEvents.LOGOUT);
+                  Auth09.publish(IIIFEvents.LOGOUT);
                   resolve();
                 }
               }, 500);
@@ -249,7 +250,7 @@ export class Auth09 {
         resolve(resource);
       } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
         resolve(resource);
-        Auth09.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
+        Auth09.publish(IIIFEvents.RESOURCE_DEGRADED, [resource]);
       } else {
         if (
           resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
@@ -281,6 +282,6 @@ export class Auth09 {
       InformationType.DEGRADED_RESOURCE,
       resource
     );
-    Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+    Auth09.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
   }
 }

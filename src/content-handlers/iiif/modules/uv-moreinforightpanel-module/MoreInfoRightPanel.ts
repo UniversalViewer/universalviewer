@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { RightPanel } from "../uv-shared-module/RightPanel";
 import { sanitize } from "../../../../Utils";
 import { Bools, Urls } from "@edsilv/utils";
@@ -22,11 +22,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
       this.databind();
     });
 
-    this.extensionHost.subscribe(BaseEvents.RANGE_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.RANGE_CHANGE, () => {
       this.databind();
     });
 
@@ -55,7 +55,7 @@ export class MoreInfoRightPanel extends RightPanel {
           );
 
           if (range) {
-            this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
+            this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
           }
         }
       },

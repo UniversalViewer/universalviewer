@@ -4,13 +4,14 @@ const $ = require("jquery");
 import "@google/model-viewer/dist/model-viewer";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { sanitize, debounce } from "../../../../Utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Events } from "../../extensions/uv-model-viewer-extension/Events";
+import { ModelViewerExtensionEvents } from "../../extensions/uv-model-viewer-extension/Events";
 import { Orbit } from "../../extensions/uv-model-viewer-extension/Orbit";
 import { Async } from "@edsilv/utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Extension";
+import { Events } from "../../../../Events";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelviewer: JQuery;
@@ -30,19 +31,19 @@ export class ModelViewerCenterPanel extends CenterPanel {
     const that = this;
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: Orbit) => {
+    this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: Orbit) => {
       this.whenLoaded(() => {
         (that.$modelviewer[0] as any).cameraOrbit = target.toAttributeString();
       });
     });
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
       // this.zoomToInitialAnnotation();
     });
@@ -70,14 +71,20 @@ export class ModelViewerCenterPanel extends CenterPanel {
       this.isLoaded = true;
       this.$content.removeClass("loading");
       this.$spinner.hide();
-      this.extensionHost.publish(BaseEvents.LOAD);
-      this.extensionHost.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
+      this.extensionHost.publish(Events.LOAD);
+      this.extensionHost.publish(
+        ModelViewerExtensionEvents.CAMERA_CHANGE,
+        this.getCameraOrbit()
+      );
     });
 
     const debouncedCameraChange = debounce((obj: any) => {
       if (this.isLoaded) {
         //if (obj.detail.source === "user-interaction") {
-        this.extensionHost.publish(Events.CAMERA_CHANGE, this.getCameraOrbit());
+        this.extensionHost.publish(
+          ModelViewerExtensionEvents.CAMERA_CHANGE,
+          this.getCameraOrbit()
+        );
         //}
       }
     }, this.config.options.cameraChangeDelay);
@@ -94,7 +101,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
           e.clientY
         );
         const canvas: Canvas = that.extension.helper.getCurrentCanvas();
-        this.extensionHost.publish(Events.DOUBLECLICK, {
+        this.extensionHost.publish(ModelViewerExtensionEvents.DOUBLECLICK, {
           target: `${canvas.id}#xyz=${point.position.x},${point.position.y},${point.position.z}&nxyz=${point.normal.x},${point.normal.y},${point.normal.z}`,
         });
       }
@@ -127,7 +134,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
         div.onclick = (e: any) => {
           e.preventDefault();
           this.extensionHost.publish(
-            BaseEvents.PINPOINT_ANNOTATION_CLICKED,
+            IIIFEvents.PINPOINT_ANNOTATION_CLICKED,
             index
           );
         };
@@ -177,7 +184,7 @@ export class ModelViewerCenterPanel extends CenterPanel {
     // use choice for this? https://github.com/edsilv/biiif/issues/13#issuecomment-383504734
     // mediaUri = mediaUri.substr(0, mediaUri.lastIndexOf(".")) + ".usdz";
     // this.$modelviewer.attr("ios-src", mediaUri);
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
   }
 
   resize() {

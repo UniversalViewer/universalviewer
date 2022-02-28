@@ -1,32 +1,38 @@
-export class Events {
+export class AlephExtensionEvents {
   static namespace: string = "alephExtension.";
 
   static BOUNDING_BOX_ENABLED_CHANGE: string =
-    Events.namespace + "boundingBoxEnabledChange";
-  static CLEAR_GRAPH: string = Events.namespace + "clearGraph";
-  static CONTROLS_TYPE_CHANGE: string = Events.namespace + "controlsTypeChange";
-  static DELETE_ANGLE: string = Events.namespace + "deleteAngle";
-  static DELETE_EDGE: string = Events.namespace + "deleteEdge";
-  static DELETE_NODE: string = Events.namespace + "deleteNode";
-  static DISPLAY_MODE_CHANGE: string = Events.namespace + "displayModeChange";
+    AlephExtensionEvents.namespace + "boundingBoxEnabledChange";
+  static CLEAR_GRAPH: string = AlephExtensionEvents.namespace + "clearGraph";
+  static CONTROLS_TYPE_CHANGE: string =
+    AlephExtensionEvents.namespace + "controlsTypeChange";
+  static DELETE_ANGLE: string = AlephExtensionEvents.namespace + "deleteAngle";
+  static DELETE_EDGE: string = AlephExtensionEvents.namespace + "deleteEdge";
+  static DELETE_NODE: string = AlephExtensionEvents.namespace + "deleteNode";
+  static DISPLAY_MODE_CHANGE: string =
+    AlephExtensionEvents.namespace + "displayModeChange";
   static GRAPH_ENABLED_CHANGE: string =
-    Events.namespace + "graphEnabledChangedChange";
-  static LOADED: string = Events.namespace + "loaded";
-  static ORIENTATION_CHANGE: string = Events.namespace + "orientationChange";
-  static RECENTER: string = Events.namespace + "recenter";
-  static SELECT_NODE: string = Events.namespace + "selectNode";
-  static SET_GRAPH: string = Events.namespace + "setGraph";
-  static SET_NODE: string = Events.namespace + "setNode";
-  static SLICES_INDEX_CHANGE: string = Events.namespace + "slicesIndexChange";
+    AlephExtensionEvents.namespace + "graphEnabledChangedChange";
+  static LOADED: string = AlephExtensionEvents.namespace + "loaded";
+  static ORIENTATION_CHANGE: string =
+    AlephExtensionEvents.namespace + "orientationChange";
+  static RECENTER: string = AlephExtensionEvents.namespace + "recenter";
+  static SELECT_NODE: string = AlephExtensionEvents.namespace + "selectNode";
+  static SET_GRAPH: string = AlephExtensionEvents.namespace + "setGraph";
+  static SET_NODE: string = AlephExtensionEvents.namespace + "setNode";
+  static SLICES_INDEX_CHANGE: string =
+    AlephExtensionEvents.namespace + "slicesIndexChange";
   static SLICES_BRIGHTNESS_CHANGE: string =
-    Events.namespace + "slicesBrightnessChange";
+    AlephExtensionEvents.namespace + "slicesBrightnessChange";
   static SLICES_CONTRAST_CHANGE: string =
-    Events.namespace + "slicesWindowWidthChange";
-  static UNITS_CHANGE: string = Events.namespace + "unitsChange";
-  static VIEWER_CHANGE: string = Events.namespace + "viewerChange";
-  static VOLUME_STEPS_CHANGE: string = Events.namespace + "volumeStepsChange";
+    AlephExtensionEvents.namespace + "slicesWindowWidthChange";
+  static UNITS_CHANGE: string = AlephExtensionEvents.namespace + "unitsChange";
+  static VIEWER_CHANGE: string =
+    AlephExtensionEvents.namespace + "viewerChange";
+  static VOLUME_STEPS_CHANGE: string =
+    AlephExtensionEvents.namespace + "volumeStepsChange";
   static VOLUME_BRIGHTNESS_CHANGE: string =
-    Events.namespace + "volumeBrightnessChange";
+    AlephExtensionEvents.namespace + "volumeBrightnessChange";
   static VOLUME_CONTRAST_CHANGE: string =
-    Events.namespace + "volumeContrastChange";
+    AlephExtensionEvents.namespace + "volumeContrastChange";
 }

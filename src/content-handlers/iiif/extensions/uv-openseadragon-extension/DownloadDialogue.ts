@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
@@ -192,7 +192,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
               },
               () => {
                 this.extensionHost.publish(
-                  BaseEvents.SHOW_MULTISELECT_DIALOGUE
+                  IIIFEvents.SHOW_MULTISELECT_DIALOGUE
                 );
               }
             );
@@ -228,7 +228,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
       }
 
-      this.extensionHost.publish(BaseEvents.DOWNLOAD, {
+      this.extensionHost.publish(IIIFEvents.DOWNLOAD, {
         type: type,
         label: label,
       });
@@ -237,8 +237,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     });
 
     this.$settingsButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
-      this.extensionHost.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+      this.extensionHost.publish(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE);
+      this.extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE);
     });
   }
 

@@ -1,5 +1,7 @@
-export class Events {
+export class ModelViewerExtensionEvents {
   static namespace: string = "modelviewerExtension.";
-  static CAMERA_CHANGE: string = Events.namespace + "cameraChange";
-  static DOUBLECLICK: string = Events.namespace + "doubleClick";
+  static CAMERA_CHANGE: string =
+    ModelViewerExtensionEvents.namespace + "cameraChange";
+  static DOUBLECLICK: string =
+    ModelViewerExtensionEvents.namespace + "doubleClick";
 }

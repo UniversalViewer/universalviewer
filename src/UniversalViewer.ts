@@ -1,6 +1,7 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
 import { UVAdapter } from "./UVAdapter";
+import BaseContentHandler from "./BaseContentHandler";
 
 export interface IUVOptions {
   target: HTMLElement;
@@ -29,15 +30,18 @@ const ContentHandler: IContentHandlerRegistry = {
     ),
 };
 
-export class UniversalViewer implements IContentHandler<IUVData> {
+export class UniversalViewer extends BaseContentHandler<IUVData> {
   private _contentType: ContentType = ContentType.UNKNOWN;
   private _assignedContentHandler: IContentHandler<IUVData>;
-  public el: HTMLElement;
-  private _externalEventListeners: { name: string; callback: Function }[] = [];
+  private _externalEventListeners: {
+    name: string;
+    callback: Function;
+  }[] = [];
   public adapter: UVAdapter;
 
   constructor(public options: IUVOptions) {
-    this.el = options.target;
+    super(options);
+    // this.el = options.target;
     this._assignContentHandler(this.options.data);
   }
 
@@ -74,9 +78,9 @@ export class UniversalViewer implements IContentHandler<IUVData> {
       this._contentType = contentType; // set content type
       this._assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
-      this._showSpinner(); // show spinner
+      this.showSpinner(); // show spinner
       this._assignedContentHandler = new m.default({
-        target: this.el,
+        target: this._el,
         data: data,
       }); // create content handler
       this._assignedContentHandler.adapter = this.adapter; // set adapter
@@ -90,16 +94,12 @@ export class UniversalViewer implements IContentHandler<IUVData> {
     return handlerChanged;
   }
 
-  private _showSpinner(): void {
-    this.el.parentElement!.parentElement!.classList.remove("loaded");
-  }
-
   public set(data: IUVData): void {
     // content type may have changed
     this._assignContentHandler(data).then((handlerChanged: boolean) => {
       if (handlerChanged) {
         // the handler has changed, show a spinner until it's created
-        this._showSpinner();
+        this.showSpinner();
       } else {
         // the handler didn't change, therefore handler's initial set didn't run
         // so we need to call set

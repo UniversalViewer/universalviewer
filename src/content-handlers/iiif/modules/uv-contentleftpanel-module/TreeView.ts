@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
 import { TreeComponent } from "@iiif/iiif-tree-component";
@@ -33,7 +33,7 @@ export class TreeView extends BaseView {
     this.treeComponent.on(
       "treeNodeSelected",
       function(node: TreeNode) {
-        that.extensionHost.publish(BaseEvents.TREE_NODE_SELECTED, node);
+        that.extensionHost.publish(IIIFEvents.TREE_NODE_SELECTED, node);
       },
       false
     );
@@ -41,7 +41,7 @@ export class TreeView extends BaseView {
     this.treeComponent.on(
       "treeNodeMultiSelected",
       function(node: TreeNode) {
-        that.extensionHost.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
+        that.extensionHost.publish(IIIFEvents.TREE_NODE_MULTISELECTED, node);
       },
       false
     );

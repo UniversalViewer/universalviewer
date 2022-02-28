@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { isVisible } from "../../../../Utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
 
@@ -23,11 +23,11 @@ export class Shell extends BaseView {
   create(): void {
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+    this.extensionHost.subscribe(IIIFEvents.SHOW_OVERLAY, () => {
       this.$overlays.show();
     });
 
-    this.extensionHost.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+    this.extensionHost.subscribe(IIIFEvents.HIDE_OVERLAY, () => {
       this.$overlays.hide();
     });
 
@@ -76,7 +76,7 @@ export class Shell extends BaseView {
     this.$overlays.on("click", (e) => {
       if ($(e.target).hasClass("overlays")) {
         e.preventDefault();
-        this.extensionHost.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+        this.extensionHost.publish(IIIFEvents.CLOSE_ACTIVE_DIALOGUE);
       }
     });
 

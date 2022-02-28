@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILocale } from "../uv-shared-module/ILocale";
 
@@ -26,8 +26,8 @@ export class SettingsDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_SETTINGS_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_SETTINGS_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_SETTINGS_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_SETTINGS_DIALOGUE;
 
     let lastElement: HTMLElement;
     this.extensionHost.subscribe(this.openCommand, (element: HTMLElement) => {
@@ -85,7 +85,7 @@ export class SettingsDialogue extends Dialogue {
   updateSettings(settings: ISettings): void {
     this.extension.updateSettings(settings);
 
-    this.extensionHost.publish(BaseEvents.UPDATE_SETTINGS, settings);
+    this.extensionHost.publish(IIIFEvents.UPDATE_SETTINGS, settings);
   }
 
   open(): void {

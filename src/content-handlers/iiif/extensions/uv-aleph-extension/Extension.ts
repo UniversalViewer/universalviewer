@@ -1,5 +1,5 @@
 import { AlephCenterPanel } from "../../modules/uv-alephcenterpanel-module/AlephCenterPanel";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
@@ -38,7 +38,7 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }

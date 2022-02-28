@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 
 export class BaseExpandPanel extends BaseView {
   isExpanded: boolean = false;
@@ -95,7 +95,7 @@ export class BaseExpandPanel extends BaseView {
 
     // Subscribe to settings change.
     this.extensionHost.subscribe(
-      BaseEvents.SETTINGS_CHANGE,
+      IIIFEvents.SETTINGS_CHANGE,
       (args: ISettings) => {
         this.reducedAnimation = args.reducedAnimation || false;
       }

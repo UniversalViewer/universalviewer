@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 import { Strings } from "@edsilv/utils";
 import { Canvas, Range, Annotation } from "manifesto.js";
@@ -73,7 +73,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         window.open(id);
       }
 
-      this.extensionHost.publish(BaseEvents.DOWNLOAD, {
+      this.extensionHost.publish(IIIFEvents.DOWNLOAD, {
         type: type,
         label: label,
       });

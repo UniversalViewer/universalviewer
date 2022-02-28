@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
@@ -24,8 +24,8 @@ export class MultiSelectDialogue extends Dialogue {
 
     const that = this;
 
-    this.openCommand = BaseEvents.SHOW_MULTISELECT_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_MULTISELECT_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_MULTISELECT_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_MULTISELECT_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, () => {
       this.open();
@@ -76,7 +76,7 @@ export class MultiSelectDialogue extends Dialogue {
     this.galleryComponent.on(
       "multiSelectionMade",
       (ids: string[]) => {
-        this.extensionHost.publish(BaseEvents.MULTISELECTION_MADE, ids);
+        this.extensionHost.publish(IIIFEvents.MULTISELECTION_MADE, ids);
         that.close();
       },
       false

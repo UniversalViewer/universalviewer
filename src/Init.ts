@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { Events } from "./Events";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
@@ -48,17 +48,15 @@ export const init = (el: string | HTMLDivElement, data) => {
   });
 
   uv.on(
-    BaseEvents.CREATED,
+    Events.CREATED,
     function(_obj) {
-      // add loaded class to hide spinner
-      uv.el.parentElement!.parentElement!.classList.add("loaded");
       resize();
     },
     false
   );
 
   uv.on(
-    BaseEvents.EXTERNAL_RESOURCE_OPENED,
+    Events.EXTERNAL_RESOURCE_OPENED,
     function(_obj) {
       setTimeout(function() {
         resize();
@@ -68,7 +66,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.RELOAD,
+    Events.RELOAD,
     function(data) {
       data.isReload = true;
       uv.set(data);
@@ -77,7 +75,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.TOGGLE_FULLSCREEN,
+    Events.TOGGLE_FULLSCREEN,
     function(data) {
       isFullScreen = data.isFullScreen;
       overrideFullScreen = data.overrideFullScreen;
@@ -109,7 +107,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.ERROR,
+    Events.ERROR,
     function(message) {
       console.error(message);
     },

@@ -9,7 +9,7 @@ export default class BaseContentHandler<IUVData>
   public adapter: UVAdapter | undefined;
 
   constructor(public options: IUVOptions) {
-    console.log("create YouTubeContentHandler");
+    // console.log("create YouTubeContentHandler");
     this._el = this.options.target;
   }
 
@@ -35,6 +35,14 @@ export default class BaseContentHandler<IUVData>
     for (i; i < len; i++) {
       evtArr[i].fn.apply(evtArr[i].ctx, data);
     }
+  }
+
+  public showSpinner(): void {
+    this._el.parentElement!.parentElement!.classList.remove("loaded");
+  }
+
+  public hideSpinner(): void {
+    this._el.parentElement!.parentElement!.classList.add("loaded");
   }
 
   public exitFullScreen(): void {}

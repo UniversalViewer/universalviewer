@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { ILocale } from "./ILocale";
 import { Information } from "./Information";
@@ -29,13 +29,13 @@ export class HeaderPanel extends BaseView {
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.SHOW_INFORMATION,
+      IIIFEvents.SHOW_INFORMATION,
       (args: InformationArgs) => {
         this.showInformation(args);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+    this.extensionHost.subscribe(IIIFEvents.HIDE_INFORMATION, () => {
       this.hideInformation();
     });
 
@@ -78,7 +78,7 @@ export class HeaderPanel extends BaseView {
     this.$informationBox.find(".close").attr("title", this.content.close);
     this.$informationBox.find(".close").on("click", (e) => {
       e.preventDefault();
-      this.extensionHost.publish(BaseEvents.HIDE_INFORMATION);
+      this.extensionHost.publish(IIIFEvents.HIDE_INFORMATION);
     });
 
     this.$localeToggleButton.on("click", () => {
@@ -89,7 +89,7 @@ export class HeaderPanel extends BaseView {
 
     this.$settingsButton.onPressed(() => {
       this.extensionHost.publish(
-        BaseEvents.SHOW_SETTINGS_DIALOGUE,
+        IIIFEvents.SHOW_SETTINGS_DIALOGUE,
         this.$settingsButton
       );
     });
@@ -182,7 +182,7 @@ export class HeaderPanel extends BaseView {
 
   updateSettings(settings: ISettings): void {
     this.extension.updateSettings(settings);
-    this.extensionHost.publish(BaseEvents.UPDATE_SETTINGS, settings);
+    this.extensionHost.publish(IIIFEvents.UPDATE_SETTINGS, settings);
   }
 
   resize(): void {

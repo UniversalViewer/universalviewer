@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
@@ -15,7 +15,7 @@ import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
-import { Events } from "./Events";
+import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
@@ -52,26 +52,29 @@ export default class ModelViewerExtension extends BaseExtension {
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.THUMB_SELECTED,
+      IIIFEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, canvasIndex);
       }
     );
 
-    this.extensionHost.subscribe(Events.CAMERA_CHANGE, (orbit: Orbit) => {
-      const canvas: Canvas = this.helper.getCurrentCanvas();
-      if (canvas) {
-        this.data.target = canvas.id + "#" + `orbit=${orbit.toString()}`;
-        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+    this.extensionHost.subscribe(
+      ModelViewerExtensionEvents.CAMERA_CHANGE,
+      (orbit: Orbit) => {
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        if (canvas) {
+          this.data.target = canvas.id + "#" + `orbit=${orbit.toString()}`;
+          this.fire(IIIFEvents.TARGET_CHANGE, this.data.target);
+        }
       }
-    });
+    );
   }
 
   createModules(): void {
@@ -156,13 +159,13 @@ export default class ModelViewerExtension extends BaseExtension {
       const index: number | null = this.helper.getCanvasIndexById(canvasId);
 
       if (index !== null && this.helper.canvasIndex !== index) {
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index);
       }
 
       // trigger SET_TARGET which sets the camera-orbit attribute in ModelViewerCenterPanel
       const selector: string = components[1];
       this.extensionHost.publish(
-        BaseEvents.SET_TARGET,
+        IIIFEvents.SET_TARGET,
         Orbit.fromString(selector)
       );
     }
@@ -200,7 +203,7 @@ export default class ModelViewerExtension extends BaseExtension {
     annotationResults.terms = terms;
     annotationResults.annotations = <AnnotationGroup[]>this.annotations;
 
-    this.extensionHost.publish(BaseEvents.ANNOTATIONS, annotationResults);
+    this.extensionHost.publish(IIIFEvents.ANNOTATIONS, annotationResults);
 
     // reload current index as it may contain annotations.
     //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [this.helper.canvasIndex]);
@@ -255,7 +258,7 @@ export default class ModelViewerExtension extends BaseExtension {
     bookmark.trackingLabel = window.trackingLabel;
     bookmark.type = ExternalResourceType.PHYSICAL_OBJECT;
 
-    this.fire(BaseEvents.BOOKMARK, bookmark);
+    this.fire(IIIFEvents.BOOKMARK, bookmark);
   }
 
   getEmbedScript(template: string, width: number, height: number): string {

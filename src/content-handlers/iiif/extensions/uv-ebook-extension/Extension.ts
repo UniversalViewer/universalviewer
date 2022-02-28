@@ -1,7 +1,7 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { EbookLeftPanel } from "../../modules/uv-ebookleftpanel-module/EbookLeftPanel";
-import { Events } from "./Events";
+import { EbookExtensionEvents } from "./Events";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { EbookCenterPanel } from "../../modules/uv-ebookcenterpanel-module/EbookCenterPanel";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
@@ -48,16 +48,19 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.extensionHost.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
-      this.cfiFragement = cfi;
-      this.fire(Events.CFI_FRAGMENT_CHANGE, this.cfiFragement);
-    });
+    this.extensionHost.subscribe(
+      EbookExtensionEvents.CFI_FRAGMENT_CHANGE,
+      (cfi: string) => {
+        this.cfiFragement = cfi;
+        this.fire(EbookExtensionEvents.CFI_FRAGMENT_CHANGE, this.cfiFragement);
+      }
+    );
   }
 
   createModules(): void {
@@ -158,7 +161,7 @@ export default class Extension extends BaseExtension
     const cfi: string | null = (<IEbookExtensionData>this.data).cfi;
 
     if (cfi) {
-      this.extensionHost.publish(Events.CFI_FRAGMENT_CHANGE, cfi);
+      this.extensionHost.publish(EbookExtensionEvents.CFI_FRAGMENT_CHANGE, cfi);
     }
   }
 }

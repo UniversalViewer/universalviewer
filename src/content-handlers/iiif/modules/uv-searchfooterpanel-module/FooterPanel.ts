@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { AutoComplete } from "../uv-shared-module/AutoComplete";
-import { BaseEvents } from "../../../../BaseEvents";
-import { Events } from "../../extensions/uv-openseadragon-extension/Events";
+import { IIIFEvents } from "../../IIIFEvents";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
@@ -47,28 +47,34 @@ export class FooterPanel extends BaseFooterPanel {
 
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
       this.canvasIndexChanged();
       this.setCurrentSearchResultPlacemarker();
       this.updatePrevButton();
       this.updateNextButton();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+    this.extensionHost.subscribe(IIIFEvents.CLEAR_ANNOTATIONS, () => {
       this.clearSearchResults();
     });
 
     // todo: this should be a setting
-    this.extensionHost.subscribe(Events.MODE_CHANGE, () => {
-      this.settingsChanged();
-    });
-
-    this.extensionHost.subscribe(Events.SEARCH, (terms: string) => {
-      this.terms = terms;
-    });
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.MODE_CHANGE,
+      () => {
+        this.settingsChanged();
+      }
+    );
 
     this.extensionHost.subscribe(
-      BaseEvents.ANNOTATIONS,
+      OpenSeadragonExtensionEvents.SEARCH,
+      (terms: string) => {
+        this.terms = terms;
+      }
+    );
+
+    this.extensionHost.subscribe(
+      IIIFEvents.ANNOTATIONS,
       (annotationResults: AnnotationResults) => {
         if (annotationResults.annotations.length) {
           this.displaySearchResults(
@@ -82,11 +88,11 @@ export class FooterPanel extends BaseFooterPanel {
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_EMPTY, () => {
       this.hideSearchSpinner();
     });
 
-    this.extensionHost.subscribe(BaseEvents.ANNOTATION_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.ANNOTATION_CHANGE, () => {
       this.updatePrevButton();
       this.updateNextButton();
     });
@@ -202,7 +208,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     this.$placemarkerDetails.on("mouseover", () => {
       that.extensionHost.publish(
-        Events.SEARCH_PREVIEW_START,
+        OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
         this.currentPlacemarkerIndex
       );
     });
@@ -210,7 +216,9 @@ export class FooterPanel extends BaseFooterPanel {
     this.$placemarkerDetails.on("mouseleave", function() {
       $(this).hide();
 
-      that.extensionHost.publish(Events.SEARCH_PREVIEW_FINISH);
+      that.extensionHost.publish(
+        OpenSeadragonExtensionEvents.SEARCH_PREVIEW_FINISH
+      );
 
       // reset all placemarkers.
       var placemarkers = that.getSearchResultPlacemarkers();
@@ -219,7 +227,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     this.onAccessibleClick(this.$placemarkerDetails, () => {
       that.extensionHost.publish(
-        BaseEvents.CANVAS_INDEX_CHANGE,
+        IIIFEvents.CANVAS_INDEX_CHANGE,
         this.currentPlacemarkerIndex
       );
     });
@@ -227,20 +235,24 @@ export class FooterPanel extends BaseFooterPanel {
     this.$previousResultButton.on("click", (e: any) => {
       e.preventDefault();
       if (this.isPreviousButtonEnabled()) {
-        that.extensionHost.publish(Events.PREV_SEARCH_RESULT);
+        that.extensionHost.publish(
+          OpenSeadragonExtensionEvents.PREV_SEARCH_RESULT
+        );
       }
     });
 
     this.$nextResultButton.on("click", (e: any) => {
       e.preventDefault();
       if (this.isNextButtonEnabled()) {
-        that.extensionHost.publish(Events.NEXT_SEARCH_RESULT);
+        that.extensionHost.publish(
+          OpenSeadragonExtensionEvents.NEXT_SEARCH_RESULT
+        );
       }
     });
 
     this.$clearSearchResultsButton.on("click", (e: any) => {
       e.preventDefault();
-      that.extensionHost.publish(BaseEvents.CLEAR_ANNOTATIONS);
+      that.extensionHost.publish(IIIFEvents.CLEAR_ANNOTATIONS);
     });
 
     // hide search options if not enabled/supported.
@@ -291,7 +303,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     this.$printButton.onPressed(() => {
-      that.extensionHost.publish(Events.PRINT);
+      that.extensionHost.publish(OpenSeadragonExtensionEvents.PRINT);
     });
 
     this.updatePrintButton();
@@ -457,7 +469,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     this.showSearchSpinner();
 
-    this.extensionHost.publish(Events.SEARCH, this.terms);
+    this.extensionHost.publish(OpenSeadragonExtensionEvents.SEARCH, this.terms);
   }
 
   getSearchResultPlacemarkers(): JQuery {
@@ -521,7 +533,7 @@ export class FooterPanel extends BaseFooterPanel {
         $placemarker,
         (e) => {
           that.extensionHost.publish(
-            BaseEvents.CANVAS_INDEX_CHANGE,
+            IIIFEvents.CANVAS_INDEX_CHANGE,
             this.currentPlacemarkerIndex
           );
           that.onPlacemarkerMouseLeave.call(this, e, that);
@@ -580,7 +592,10 @@ export class FooterPanel extends BaseFooterPanel {
 
     const canvasIndex: number = parseInt($placemarker.attr("data-index"));
 
-    that.extensionHost.publish(Events.SEARCH_PREVIEW_START, canvasIndex);
+    that.extensionHost.publish(
+      OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
+      canvasIndex
+    );
 
     const $placemarkers: JQuery = that.getSearchResultPlacemarkers();
     const elemIndex: number = $placemarkers.index($placemarker[0]);
@@ -671,7 +686,9 @@ export class FooterPanel extends BaseFooterPanel {
   }
 
   onPlacemarkerMouseLeave(e: any, that: any): void {
-    that.extensionHost.publish(Events.SEARCH_PREVIEW_FINISH);
+    that.extensionHost.publish(
+      OpenSeadragonExtensionEvents.SEARCH_PREVIEW_FINISH
+    );
 
     const $placemarker: JQuery = $(this);
     const newElement: Element = e.toElement || e.relatedTarget;

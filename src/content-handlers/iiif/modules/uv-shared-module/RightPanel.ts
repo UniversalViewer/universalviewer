@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 
@@ -24,7 +24,7 @@ export class RightPanel extends BaseExpandPanel {
       this.toggle(true);
     }
 
-    this.extensionHost.subscribe(BaseEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -49,9 +49,9 @@ export class RightPanel extends BaseExpandPanel {
     super.toggleFinish();
 
     if (this.isExpanded) {
-      this.extensionHost.publish(BaseEvents.OPEN_RIGHT_PANEL);
+      this.extensionHost.publish(IIIFEvents.OPEN_RIGHT_PANEL);
     } else {
-      this.extensionHost.publish(BaseEvents.CLOSE_RIGHT_PANEL);
+      this.extensionHost.publish(IIIFEvents.CLOSE_RIGHT_PANEL);
     }
     this.extension.updateSettings({ rightPanelOpen: this.isExpanded });
   }

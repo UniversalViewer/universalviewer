@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
@@ -19,8 +19,8 @@ export class ClickThroughDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_CLICKTHROUGH_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_CLICKTHROUGH_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_CLICKTHROUGH_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, (params: any) => {
       this.acceptCallback = params.acceptCallback;
@@ -56,7 +56,7 @@ export class ClickThroughDialogue extends Dialogue {
     this.$acceptTermsButton.on("click", (e) => {
       e.preventDefault();
       this.close();
-      this.extensionHost.publish(BaseEvents.ACCEPT_TERMS);
+      this.extensionHost.publish(IIIFEvents.ACCEPT_TERMS);
       if (this.acceptCallback) this.acceptCallback();
     });
   }
@@ -74,7 +74,7 @@ export class ClickThroughDialogue extends Dialogue {
 
     this.$message.find("a").on("click", function() {
       var url: string = $(this).attr("href");
-      this.extensionHost.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+      this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
     });
 
     this.resize();

@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Maths } from "@edsilv/utils";
 
 export class Dialogue extends BaseView {
@@ -29,7 +29,7 @@ export class Dialogue extends BaseView {
     super.create();
 
     // events.
-    this.extensionHost.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       if (this.isActive) {
         if (this.allowClose) {
           this.close();
@@ -37,7 +37,7 @@ export class Dialogue extends BaseView {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
+    this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
       if (this.isActive) {
         if (this.allowClose) {
           this.close();
@@ -165,7 +165,7 @@ export class Dialogue extends BaseView {
       }
     }, 1);
 
-    this.extensionHost.publish(BaseEvents.SHOW_OVERLAY);
+    this.extensionHost.publish(IIIFEvents.SHOW_OVERLAY);
 
     if (this.isUnopened) {
       this.isUnopened = false;
@@ -184,7 +184,7 @@ export class Dialogue extends BaseView {
     this.isActive = false;
 
     this.extensionHost.publish(this.closeCommand);
-    this.extensionHost.publish(BaseEvents.HIDE_OVERLAY);
+    this.extensionHost.publish(IIIFEvents.HIDE_OVERLAY);
   }
 
   resize(): void {

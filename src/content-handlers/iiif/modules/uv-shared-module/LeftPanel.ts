@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 
@@ -12,7 +12,7 @@ export class LeftPanel extends BaseExpandPanel {
 
     this.$element.width(this.options.panelCollapsedWidth);
 
-    this.extensionHost.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
       } else {
@@ -50,9 +50,9 @@ export class LeftPanel extends BaseExpandPanel {
     super.toggleFinish();
 
     if (this.isExpanded) {
-      this.extensionHost.publish(BaseEvents.OPEN_LEFT_PANEL);
+      this.extensionHost.publish(IIIFEvents.OPEN_LEFT_PANEL);
     } else {
-      this.extensionHost.publish(BaseEvents.CLOSE_LEFT_PANEL);
+      this.extensionHost.publish(IIIFEvents.CLOSE_LEFT_PANEL);
     }
     this.extension.updateSettings({ leftPanelOpen: this.isExpanded });
   }

@@ -1,7 +1,7 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { DisplayMode } from "./DisplayMode";
-import { Events } from "../../extensions/uv-aleph-extension/Events";
+import { AlephExtensionEvents } from "../../extensions/uv-aleph-extension/Events";
 import { Orientation } from "./Orientation";
 import { Position } from "../uv-shared-module/Position";
 import { Units } from "./Units";
@@ -19,6 +19,7 @@ import {
   defineCustomElements,
 } from "@universalviewer/aleph/loader";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
+import { Events } from "../../../../Events";
 
 export class AlephCenterPanel extends CenterPanel {
   private _alViewer: any;
@@ -64,7 +65,7 @@ export class AlephCenterPanel extends CenterPanel {
     this._alViewer.addEventListener(
       "loaded",
       (e: any) => {
-        this.extensionHost.publish(Events.LOADED, {
+        this.extensionHost.publish(AlephExtensionEvents.LOADED, {
           stackhelper:
             this._state.displayMode !== DisplayMode.MESH ? e.detail : null,
         });
@@ -73,113 +74,131 @@ export class AlephCenterPanel extends CenterPanel {
     );
 
     this.extensionHost.subscribe(
-      Events.CONTROLS_TYPE_CHANGE,
+      AlephExtensionEvents.CONTROLS_TYPE_CHANGE,
       (controlsType: ControlsType) => {
         this._alViewer.setControlsType(controlsType);
       }
     );
 
-    this.extensionHost.subscribe(Events.CLEAR_GRAPH, () => {
+    this.extensionHost.subscribe(AlephExtensionEvents.CLEAR_GRAPH, () => {
       this._alViewer.clearGraph();
     });
 
-    this.extensionHost.subscribe(Events.DELETE_ANGLE, (id: string) => {
-      this._alViewer.deleteAngle(id);
-    });
-
-    this.extensionHost.subscribe(Events.DELETE_EDGE, (id: string) => {
-      this._alViewer.deleteEdge(id);
-    });
-
-    this.extensionHost.subscribe(Events.DELETE_NODE, (id: string) => {
-      this._alViewer.deleteNode(id);
-    });
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.DELETE_ANGLE,
+      (id: string) => {
+        this._alViewer.deleteAngle(id);
+      }
+    );
 
     this.extensionHost.subscribe(
-      Events.DISPLAY_MODE_CHANGE,
+      AlephExtensionEvents.DELETE_EDGE,
+      (id: string) => {
+        this._alViewer.deleteEdge(id);
+      }
+    );
+
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.DELETE_NODE,
+      (id: string) => {
+        this._alViewer.deleteNode(id);
+      }
+    );
+
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.DISPLAY_MODE_CHANGE,
       (displayMode: DisplayMode) => {
         this._alViewer.setDisplayMode(displayMode);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.GRAPH_ENABLED_CHANGE,
+      AlephExtensionEvents.GRAPH_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setGraphEnabled(enabled);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.BOUNDING_BOX_ENABLED_CHANGE,
+      AlephExtensionEvents.BOUNDING_BOX_ENABLED_CHANGE,
       (enabled: boolean) => {
         this._alViewer.setBoundingBoxEnabled(enabled);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.ORIENTATION_CHANGE,
+      AlephExtensionEvents.ORIENTATION_CHANGE,
       (orientation: Orientation) => {
         this._alViewer.setOrientation(orientation);
       }
     );
 
-    this.extensionHost.subscribe(Events.RECENTER, () => {
+    this.extensionHost.subscribe(AlephExtensionEvents.RECENTER, () => {
       this._alViewer.recenter();
     });
 
-    this.extensionHost.subscribe(Events.SET_GRAPH, (graph: any) => {
-      this._alViewer.setGraph(graph);
-    });
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.SET_GRAPH,
+      (graph: any) => {
+        this._alViewer.setGraph(graph);
+      }
+    );
 
-    this.extensionHost.subscribe(Events.SET_NODE, (node: any) => {
+    this.extensionHost.subscribe(AlephExtensionEvents.SET_NODE, (node: any) => {
       this._alViewer.setNode(node);
     });
 
-    this.extensionHost.subscribe(Events.SELECT_NODE, (id: string) => {
-      this._alViewer.selectNode(id);
-    });
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.SELECT_NODE,
+      (id: string) => {
+        this._alViewer.selectNode(id);
+      }
+    );
 
     this.extensionHost.subscribe(
-      Events.SLICES_INDEX_CHANGE,
+      AlephExtensionEvents.SLICES_INDEX_CHANGE,
       (index: number) => {
         this._alViewer.setSlicesIndex(index);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.SLICES_BRIGHTNESS_CHANGE,
+      AlephExtensionEvents.SLICES_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.SLICES_CONTRAST_CHANGE,
+      AlephExtensionEvents.SLICES_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
       }
     );
 
-    this.extensionHost.subscribe(Events.UNITS_CHANGE, (units: Units) => {
-      this._alViewer.setUnits(units);
-    });
+    this.extensionHost.subscribe(
+      AlephExtensionEvents.UNITS_CHANGE,
+      (units: Units) => {
+        this._alViewer.setUnits(units);
+      }
+    );
 
     this.extensionHost.subscribe(
-      Events.VOLUME_STEPS_CHANGE,
+      AlephExtensionEvents.VOLUME_STEPS_CHANGE,
       (steps: number) => {
         this._alViewer.setVolumeSteps(steps);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.VOLUME_BRIGHTNESS_CHANGE,
+      AlephExtensionEvents.VOLUME_BRIGHTNESS_CHANGE,
       (brightness: number) => {
         this._alViewer.setVolumeBrightness(brightness);
       }
     );
 
     this.extensionHost.subscribe(
-      Events.VOLUME_CONTRAST_CHANGE,
+      AlephExtensionEvents.VOLUME_CONTRAST_CHANGE,
       (contrast: number) => {
         this._alViewer.setVolumeContrast(contrast);
       }
@@ -200,7 +219,7 @@ export class AlephCenterPanel extends CenterPanel {
     const that = this;
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
@@ -240,8 +259,8 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.extensionHost.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(Events.LOAD);
     });
   }
 
@@ -259,7 +278,7 @@ export class AlephCenterPanel extends CenterPanel {
       );
     }
 
-    this.extensionHost.publish(Events.VIEWER_CHANGE, this._state);
+    this.extensionHost.publish(AlephExtensionEvents.VIEWER_CHANGE, this._state);
 
     this._prevState = Object.assign({}, this._state);
   }

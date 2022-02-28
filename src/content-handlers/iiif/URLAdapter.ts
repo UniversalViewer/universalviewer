@@ -2,7 +2,7 @@ import { UVAdapter } from "../../UVAdapter";
 import { Urls } from "@edsilv/utils";
 import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
-import { BaseEvents } from "../../BaseEvents";
+import { IIIFEvents } from "./IIIFEvents";
 import { defaultLocale } from "../../Utils";
 
 export class URLAdapter extends UVAdapter {
@@ -78,7 +78,7 @@ export class URLAdapter extends UVAdapter {
     uv.adapter = this;
 
     uv.on(
-      BaseEvents.PAUSE,
+      IIIFEvents.PAUSE,
       (currentTime) => {
         if (currentTime > 0) {
           this.set("t", currentTime);
@@ -88,7 +88,7 @@ export class URLAdapter extends UVAdapter {
     );
 
     uv.on(
-      BaseEvents.COLLECTION_INDEX_CHANGE,
+      IIIFEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex) => {
         this.set("c", collectionIndex);
       },
@@ -96,7 +96,7 @@ export class URLAdapter extends UVAdapter {
     );
 
     uv.on(
-      BaseEvents.MANIFEST_INDEX_CHANGE,
+      IIIFEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex) => {
         this.set("m", manifestIndex);
       },
@@ -104,7 +104,7 @@ export class URLAdapter extends UVAdapter {
     );
 
     uv.on(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex) => {
         this.set("cv", canvasIndex);
       },
@@ -112,7 +112,7 @@ export class URLAdapter extends UVAdapter {
     );
 
     uv.on(
-      BaseEvents.RANGE_CHANGE,
+      IIIFEvents.RANGE_CHANGE,
       (rangeId) => {
         this.set("rid", rangeId);
       },
@@ -120,7 +120,7 @@ export class URLAdapter extends UVAdapter {
     );
 
     uv.on(
-      BaseEvents.TARGET_CHANGE,
+      IIIFEvents.TARGET_CHANGE,
       (target) => {
         this.set("xywh", this.getFragment("xywh", target));
       },

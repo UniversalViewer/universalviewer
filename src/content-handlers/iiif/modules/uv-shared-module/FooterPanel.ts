@@ -1,7 +1,8 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";
+import { Events } from "../../../../Events";
 
 export class FooterPanel extends BaseView {
   $feedbackButton: JQuery;
@@ -23,7 +24,7 @@ export class FooterPanel extends BaseView {
 
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
       this.updateFullScreenButton();
 
       // hack for firefox when exiting full screen
@@ -34,12 +35,12 @@ export class FooterPanel extends BaseView {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       this.updateMinimisedButtons();
       this.updateMoreInfoButton();
     });
 
-    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
       this.updateDownloadButton();
     });
 
@@ -111,41 +112,41 @@ export class FooterPanel extends BaseView {
     this.$options.append(this.$fullScreenBtn);
 
     this.$openButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.OPEN);
+      this.extensionHost.publish(IIIFEvents.OPEN);
     });
 
     this.$feedbackButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.FEEDBACK);
+      this.extensionHost.publish(IIIFEvents.FEEDBACK);
     });
 
     this.$bookmarkButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.BOOKMARK);
+      this.extensionHost.publish(IIIFEvents.BOOKMARK);
     });
 
     this.$shareButton.onPressed(() => {
       this.extensionHost.publish(
-        BaseEvents.SHOW_SHARE_DIALOGUE,
+        IIIFEvents.SHOW_SHARE_DIALOGUE,
         this.$shareButton
       );
     });
 
     this.$embedButton.onPressed(() => {
       this.extensionHost.publish(
-        BaseEvents.SHOW_EMBED_DIALOGUE,
+        IIIFEvents.SHOW_EMBED_DIALOGUE,
         this.$embedButton
       );
     });
 
     this.$downloadButton.onPressed(() => {
       this.extensionHost.publish(
-        BaseEvents.SHOW_DOWNLOAD_DIALOGUE,
+        IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
         this.$downloadButton
       );
     });
 
     this.$moreInfoButton.onPressed(() => {
       this.extensionHost.publish(
-        BaseEvents.SHOW_MOREINFO_DIALOGUE,
+        IIIFEvents.SHOW_MOREINFO_DIALOGUE,
         this.$moreInfoButton
       );
     });
@@ -154,7 +155,7 @@ export class FooterPanel extends BaseView {
       this.$fullScreenBtn,
       (e) => {
         e.preventDefault();
-        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
       },
       true
     );

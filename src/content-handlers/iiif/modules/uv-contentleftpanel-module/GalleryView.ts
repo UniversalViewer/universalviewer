@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
 
@@ -31,8 +31,8 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "thumbSelected",
       function(thumb: any) {
-        that.extensionHost.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
-        that.extensionHost.publish(BaseEvents.THUMB_SELECTED, thumb);
+        that.extensionHost.publish(IIIFEvents.GALLERY_THUMB_SELECTED, thumb);
+        that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
       },
       false
     );
@@ -40,7 +40,7 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "decreaseSize",
       function() {
-        that.extensionHost.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+        that.extensionHost.publish(IIIFEvents.GALLERY_DECREASE_SIZE);
       },
       false
     );
@@ -48,7 +48,7 @@ export class GalleryView extends BaseView {
     this.galleryComponent.on(
       "increaseSize",
       function() {
-        that.extensionHost.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+        that.extensionHost.publish(IIIFEvents.GALLERY_INCREASE_SIZE);
       },
       false
     );

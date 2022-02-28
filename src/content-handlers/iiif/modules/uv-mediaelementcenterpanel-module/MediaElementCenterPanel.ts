@@ -1,6 +1,6 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
-import { Events } from "../../extensions/uv-mediaelement-extension/Events";
+import { IIIFEvents } from "../../IIIFEvents";
+import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../../../Utils";
@@ -15,6 +15,7 @@ import "mediaelement/build/mediaelement-and-player";
 import "mediaelement-plugins/dist/source-chooser/source-chooser";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
+import { Events } from "../../../../Events";
 
 export class MediaElementCenterPanel extends CenterPanel {
   $wrapper: JQuery;
@@ -36,13 +37,13 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     const that = this;
 
-    this.extensionHost.subscribe(BaseEvents.SET_TARGET, (target: TFragment) => {
+    this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
       that.player.setCurrentTime(target.t);
       that.player.play();
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
@@ -158,7 +159,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
-              Events.MEDIA_PLAYED,
+              MediaElementExtensionEvents.MEDIA_PLAYED,
               Math.floor(mediaElement.currentTime)
             );
           });
@@ -170,7 +171,7 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.duration)
             ) {
               that.extensionHost.publish(
-                Events.MEDIA_PAUSED,
+                MediaElementExtensionEvents.MEDIA_PAUSED,
                 Math.floor(mediaElement.currentTime)
               );
             }
@@ -178,14 +179,14 @@ export class MediaElementCenterPanel extends CenterPanel {
 
           mediaElement.addEventListener("ended", () => {
             that.extensionHost.publish(
-              Events.MEDIA_ENDED,
+              MediaElementExtensionEvents.MEDIA_ENDED,
               Math.floor(mediaElement.duration)
             );
           });
 
           mediaElement.addEventListener("timeupdate", () => {
             that.extensionHost.publish(
-              Events.MEDIA_TIME_UPDATE,
+              MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
           });
@@ -226,7 +227,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
-              Events.MEDIA_PLAYED,
+              MediaElementExtensionEvents.MEDIA_PLAYED,
               Math.floor(mediaElement.currentTime)
             );
           });
@@ -238,7 +239,7 @@ export class MediaElementCenterPanel extends CenterPanel {
               Math.floor(mediaElement.duration)
             ) {
               that.extensionHost.publish(
-                Events.MEDIA_PAUSED,
+                MediaElementExtensionEvents.MEDIA_PAUSED,
                 Math.floor(mediaElement.currentTime)
               );
             }
@@ -246,14 +247,14 @@ export class MediaElementCenterPanel extends CenterPanel {
 
           mediaElement.addEventListener("ended", () => {
             that.extensionHost.publish(
-              Events.MEDIA_ENDED,
+              MediaElementExtensionEvents.MEDIA_ENDED,
               Math.floor(mediaElement.duration)
             );
           });
 
           mediaElement.addEventListener("timeupdate", () => {
             that.extensionHost.publish(
-              Events.MEDIA_TIME_UPDATE,
+              MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
           });
@@ -261,8 +262,8 @@ export class MediaElementCenterPanel extends CenterPanel {
       });
     }
 
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   isVideo(): boolean {

@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "./Dialogue";
 
 export class GenericDialogue extends Dialogue {
@@ -16,8 +16,8 @@ export class GenericDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_GENERIC_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_GENERIC_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_GENERIC_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_GENERIC_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, (params: any) => {
       this.acceptCallback = params.acceptCallback;
@@ -54,7 +54,7 @@ export class GenericDialogue extends Dialogue {
   }
 
   accept(): void {
-    this.extensionHost.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+    this.extensionHost.publish(IIIFEvents.CLOSE_ACTIVE_DIALOGUE);
     if (this.acceptCallback) this.acceptCallback();
   }
 

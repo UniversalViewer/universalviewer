@@ -1,7 +1,7 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
-import { Events } from "../../extensions/uv-ebook-extension/Events";
+import { EbookExtensionEvents } from "../../extensions/uv-ebook-extension/Events";
 import { Async } from "@edsilv/utils";
 import {
   applyPolyfills,
@@ -36,21 +36,24 @@ export class EbookLeftPanel extends LeftPanel {
     this.setTitle(this.content.title);
 
     this.extensionHost.subscribe(
-      Events.LOADED_NAVIGATION,
+      EbookExtensionEvents.LOADED_NAVIGATION,
       (navigation: any) => {
         this.$main.removeClass("disabled");
         this._ebookTOC.toc = navigation.toc;
       }
     );
 
-    this.extensionHost.subscribe(Events.RELOCATED, (location: any) => {
-      this._ebookTOC.selected = location.start.href;
-    });
+    this.extensionHost.subscribe(
+      EbookExtensionEvents.RELOCATED,
+      (location: any) => {
+        this._ebookTOC.selected = location.start.href;
+      }
+    );
 
     this._ebookTOC.addEventListener(
       "itemClicked",
       (e: any) => {
-        this.extensionHost.publish(Events.ITEM_CLICKED, e.detail);
+        this.extensionHost.publish(EbookExtensionEvents.ITEM_CLICKED, e.detail);
       },
       false
     );
@@ -61,7 +64,7 @@ export class EbookLeftPanel extends LeftPanel {
       },
       () => {
         customElements.whenDefined("uv-ebook-toc").then(() => {
-          this.extensionHost.publish(Events.TOC_READY);
+          this.extensionHost.publish(EbookExtensionEvents.TOC_READY);
         });
       }
     );
@@ -69,22 +72,22 @@ export class EbookLeftPanel extends LeftPanel {
 
   expandFullStart(): void {
     super.expandFullStart();
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_EXPAND_FULL_START);
   }
 
   expandFullFinish(): void {
     super.expandFullFinish();
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_EXPAND_FULL_FINISH);
   }
 
   collapseFullStart(): void {
     super.collapseFullStart();
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_COLLAPSE_FULL_START);
   }
 
   collapseFullFinish(): void {
     super.collapseFullFinish();
-    this.extensionHost.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+    this.extensionHost.publish(IIIFEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
   }
 
   resize(): void {

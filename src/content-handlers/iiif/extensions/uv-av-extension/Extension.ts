@@ -1,5 +1,5 @@
 import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
@@ -45,22 +45,22 @@ export default class Extension extends BaseExtension implements IAVExtension {
     //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.TREE_NODE_SELECTED,
+      IIIFEvents.TREE_NODE_SELECTED,
       (node: TreeNode) => {
-        this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
+        this.fire(IIIFEvents.TREE_NODE_SELECTED, node.data.path);
         this.treeNodeSelected(node);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, (thumb: Thumb) => {
+      this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
   }
 
@@ -187,7 +187,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   viewRange(path: string): void {
     const range: Range | null = this.helper.getRangeByPath(path);
     if (!range) return;
-    this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
+    this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
 
     // don't update the canvas index, only when thumbs are clicked
     // if (range.canvases && range.canvases.length) {

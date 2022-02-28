@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { sanitize } from "../../../../Utils";
 import { Bools } from "@edsilv/utils";
@@ -19,8 +19,8 @@ export class MoreInfoDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_MOREINFO_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_MOREINFO_DIALOGUE;
 
     this.extensionHost.subscribe(
       this.openCommand,
@@ -33,7 +33,7 @@ export class MoreInfoDialogue extends Dialogue {
       this.close();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
       this.metadataComponent.set(this._getData());
     });
 

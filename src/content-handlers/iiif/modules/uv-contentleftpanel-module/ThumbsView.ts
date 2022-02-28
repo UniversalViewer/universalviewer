@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { ThumbsView as BaseThumbsView } from "../uv-shared-module/ThumbsView";
-import { Events } from "../../extensions/uv-openseadragon-extension/Events";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 
@@ -11,20 +11,26 @@ export class ThumbsView extends BaseThumbsView {
     super.create();
 
     // todo: this should be a setting
-    this.extensionHost.subscribe(Events.MODE_CHANGE, () => {
-      this.setLabel();
-    });
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.MODE_CHANGE,
+      () => {
+        this.setLabel();
+      }
+    );
 
     this.extensionHost.subscribe(
-      Events.SEARCH_PREVIEW_START,
+      OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
       (canvasIndex: number) => {
         this.searchPreviewStart(canvasIndex);
       }
     );
 
-    this.extensionHost.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
-      this.searchPreviewFinish();
-    });
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.SEARCH_PREVIEW_FINISH,
+      () => {
+        this.searchPreviewFinish();
+      }
+    );
 
     if (this.extension.helper.isPaged()) {
       this.$thumbs.addClass("paged");

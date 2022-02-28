@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
@@ -38,8 +38,8 @@ export class DownloadDialogue extends Dialogue {
     this.$element.attr("role", "region");
     this.$element.attr("aria-label", this.content.title);
 
-    this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_DOWNLOAD_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_DOWNLOAD_DIALOGUE;
 
     let lastButton: HTMLElement;
     this.extensionHost.subscribe(
@@ -80,7 +80,7 @@ export class DownloadDialogue extends Dialogue {
     this.$footer.append(this.$termsOfUseButton);
 
     this.$termsOfUseButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.SHOW_TERMS_OF_USE);
+      this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
     });
 
     // hide

@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
 import { sanitize } from "../../../../Utils";
@@ -13,6 +13,7 @@ import {
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component";
 import { Bools } from "@edsilv/utils";
+import { Events } from "../../../../Events";
 
 export class AVCenterPanel extends CenterPanel {
   $avcomponent: JQuery;
@@ -34,14 +35,14 @@ export class AVCenterPanel extends CenterPanel {
     const that = this;
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         if (this._lastCanvasIndex !== canvasIndex) {
           this._viewCanvas(canvasIndex);
@@ -50,7 +51,7 @@ export class AVCenterPanel extends CenterPanel {
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.CURRENT_TIME_CHANGE,
+      IIIFEvents.CURRENT_TIME_CHANGE,
       (currentTime: number) => {
         this._whenMediaReady(() => {
           if (this.avcomponent) {
@@ -61,7 +62,7 @@ export class AVCenterPanel extends CenterPanel {
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.RANGE_CHANGE,
+      IIIFEvents.RANGE_CHANGE,
       (range: Range | null) => {
         if (!this._observeRangeChanges()) {
           return;
@@ -74,7 +75,7 @@ export class AVCenterPanel extends CenterPanel {
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.METRIC_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
@@ -85,11 +86,11 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
+    this.extensionHost.subscribe(Events.CREATED, () => {
       this._setTitle();
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_THUMBS_VIEW, () => {
       this._isThumbsViewOpen = true;
 
       this._whenMediaReady(() => {
@@ -107,7 +108,7 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_TREE_VIEW, () => {
       this._isThumbsViewOpen = false;
 
       this._whenMediaReady(() => {
@@ -119,11 +120,11 @@ export class AVCenterPanel extends CenterPanel {
       });
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_LEFT_PANEL, () => {
       this.resize();
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_RIGHT_PANEL, () => {
       this.resize();
     });
 
@@ -164,7 +165,7 @@ export class AVCenterPanel extends CenterPanel {
 
     this.avcomponent.on("pause", () => {
       this.extensionHost.publish(
-        BaseEvents.PAUSE,
+        IIIFEvents.PAUSE,
         this.avcomponent.getCurrentTime()
       );
     });
@@ -181,13 +182,13 @@ export class AVCenterPanel extends CenterPanel {
             const currentRange: Range | null = this.extension.helper.getCurrentRange();
 
             if (range !== currentRange) {
-              this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
+              this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
             }
           } else {
-            this.extensionHost.publish(BaseEvents.RANGE_CHANGE, null);
+            this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, null);
           }
         } else {
-          this.extensionHost.publish(BaseEvents.RANGE_CHANGE, null);
+          this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, null);
         }
 
         this._setTitle();
@@ -311,7 +312,7 @@ export class AVCenterPanel extends CenterPanel {
         //     this.resize();
         // }, false);
 
-        this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+        this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
       }
     });
   }

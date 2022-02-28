@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class HelpDialogue extends Dialogue {
@@ -16,8 +16,8 @@ export class HelpDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_HELP_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_HELP_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_HELP_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_HELP_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, () => {
       this.open();

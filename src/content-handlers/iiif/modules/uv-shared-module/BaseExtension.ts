@@ -43,7 +43,8 @@ import {
   Strings,
 } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
+import { Events } from "../../../../Events";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -88,11 +89,12 @@ export class BaseExtension implements IExtension {
     this.$element = $(this.extensionHost.options.target);
     this.$element.data("component", this.extensionHost);
 
-    this.fire(BaseEvents.CREATE, {
-      data: this.data,
-      settings: this.getSettings(),
-      preview: this.getSharePreview(),
-    });
+    // todo: check this is ok to remove
+    // this.fire(IIIFEvents.CREATE, {
+    //   data: this.data,
+    //   settings: this.getSettings(),
+    //   preview: this.getSharePreview(),
+    // });
 
     this._parseMetrics();
     this._initLocales();
@@ -170,7 +172,7 @@ export class BaseExtension implements IExtension {
           //var canvasUri = Urls.getQuerystringParameterFromString('canvas', url.search);
 
           if (manifestUri) {
-            this.fire(BaseEvents.DROP, manifestUri);
+            this.fire(Events.DROP, manifestUri);
             const data: IUVData = <IUVData>{};
             data.iiifManifestId = manifestUri;
             this.reload(data);
@@ -196,21 +198,21 @@ export class BaseExtension implements IExtension {
 
         if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
           if (e.keyCode === KeyCodes.KeyDown.Enter) {
-            event = BaseEvents.RETURN;
+            event = IIIFEvents.RETURN;
             preventDefault = false;
           }
-          if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseEvents.ESCAPE;
-          if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseEvents.PAGE_UP;
+          if (e.keyCode === KeyCodes.KeyDown.Escape) event = IIIFEvents.ESCAPE;
+          if (e.keyCode === KeyCodes.KeyDown.PageUp) event = IIIFEvents.PAGE_UP;
           if (e.keyCode === KeyCodes.KeyDown.PageDown)
-            event = BaseEvents.PAGE_DOWN;
-          if (e.keyCode === KeyCodes.KeyDown.End) event = BaseEvents.END;
-          if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseEvents.HOME;
+            event = IIIFEvents.PAGE_DOWN;
+          if (e.keyCode === KeyCodes.KeyDown.End) event = IIIFEvents.END;
+          if (e.keyCode === KeyCodes.KeyDown.Home) event = IIIFEvents.HOME;
           if (
             e.keyCode === KeyCodes.KeyDown.NumpadPlus ||
             e.keyCode === 171 ||
             e.keyCode === KeyCodes.KeyDown.Equals
           ) {
-            event = BaseEvents.PLUS;
+            event = IIIFEvents.PLUS;
             preventDefault = false;
           }
           if (
@@ -218,19 +220,19 @@ export class BaseExtension implements IExtension {
             e.keyCode === 173 ||
             e.keyCode === KeyCodes.KeyDown.Dash
           ) {
-            event = BaseEvents.MINUS;
+            event = IIIFEvents.MINUS;
             preventDefault = false;
           }
 
           if (that.useArrowKeysToNavigate()) {
             if (e.keyCode === KeyCodes.KeyDown.LeftArrow)
-              event = BaseEvents.LEFT_ARROW;
+              event = IIIFEvents.LEFT_ARROW;
             if (e.keyCode === KeyCodes.KeyDown.UpArrow)
-              event = BaseEvents.UP_ARROW;
+              event = IIIFEvents.UP_ARROW;
             if (e.keyCode === KeyCodes.KeyDown.RightArrow)
-              event = BaseEvents.RIGHT_ARROW;
+              event = IIIFEvents.RIGHT_ARROW;
             if (e.keyCode === KeyCodes.KeyDown.DownArrow)
-              event = BaseEvents.DOWN_ARROW;
+              event = IIIFEvents.DOWN_ARROW;
           }
         }
 
@@ -243,12 +245,12 @@ export class BaseExtension implements IExtension {
       });
     }
 
-    this.extensionHost.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+    this.extensionHost.subscribe(Events.EXIT_FULLSCREEN, () => {
       if (this.isOverlayActive()) {
-        this.extensionHost.publish(BaseEvents.ESCAPE);
+        this.extensionHost.publish(IIIFEvents.ESCAPE);
       }
-      this.extensionHost.publish(BaseEvents.ESCAPE);
-      this.extensionHost.publish(BaseEvents.RESIZE);
+      this.extensionHost.publish(IIIFEvents.ESCAPE);
+      this.extensionHost.publish(Events.RESIZE);
     });
 
     // this.$element.append('<a href="/" id="top"></a>');
@@ -259,12 +261,12 @@ export class BaseExtension implements IExtension {
     this.extensionHost.subscribeAll((event, args) => {
       // subscribe to all UV events except those handled below with their own fire() calls
       const exceptions = [
-        BaseEvents.LOAD,
-        BaseEvents.CREATE,
-        BaseEvents.DROP,
-        BaseEvents.TOGGLE_FULLSCREEN,
-        BaseEvents.EXTERNAL_RESOURCE_OPENED,
-        BaseEvents.RELOAD,
+        Events.LOAD,
+        // IIIFEvents.CREATE,
+        Events.DROP,
+        Events.TOGGLE_FULLSCREEN,
+        Events.EXTERNAL_RESOURCE_OPENED,
+        Events.RELOAD,
       ];
 
       if (!exceptions.includes(event)) {
@@ -272,28 +274,28 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.EXTERNAL_RESOURCE_OPENED, () => {
-      this.fire(BaseEvents.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.subscribe(Events.EXTERNAL_RESOURCE_OPENED, () => {
+      this.fire(Events.EXTERNAL_RESOURCE_OPENED);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LOGIN_FAILED, () => {
+    this.extensionHost.subscribe(IIIFEvents.LOGIN_FAILED, () => {
       this.showMessage(this.data.config.content.authorisationFailedMessage);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LOGIN, () => {
+    this.extensionHost.subscribe(IIIFEvents.LOGIN, () => {
       this.isLoggedIn = true;
     });
 
-    this.extensionHost.subscribe(BaseEvents.LOGOUT, () => {
+    this.extensionHost.subscribe(IIIFEvents.LOGOUT, () => {
       this.isLoggedIn = false;
     });
 
-    this.extensionHost.subscribe(BaseEvents.BOOKMARK, () => {
+    this.extensionHost.subscribe(IIIFEvents.BOOKMARK, () => {
       this.bookmark();
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.data.canvasIndex = canvasIndex;
         this.lastCanvasIndex = this.helper.canvasIndex;
@@ -301,67 +303,67 @@ export class BaseExtension implements IExtension {
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_LEFT_PANEL, () => {
       this.resize();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_RIGHT_PANEL, () => {
       this.resize();
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.COLLECTION_INDEX_CHANGE,
+      IIIFEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
         this.data.collectionIndex = collectionIndex;
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.CREATED, () => {
+    this.extensionHost.subscribe(Events.CREATED, () => {
       this.isCreated = true;
     });
 
-    this.extensionHost.subscribe(BaseEvents.ESCAPE, () => {
+    this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
       if (this.isFullScreen() && !this.isOverlayActive()) {
-        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.LOAD, () => {
+    this.extensionHost.subscribe(Events.LOAD, () => {
       setTimeout(() => {
-        this.extensionHost.publish(BaseEvents.RESIZE);
-        this.fire(BaseEvents.LOAD, this.helper.getCurrentCanvas().id);
+        this.extensionHost.publish(Events.RESIZE);
+        this.fire(Events.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
       }, 100); // firefox needs this :-(
     });
 
-    this.extensionHost.subscribe(BaseEvents.FEEDBACK, () => {
+    this.extensionHost.subscribe(IIIFEvents.FEEDBACK, () => {
       this.feedback();
     });
 
-    this.extensionHost.subscribe(BaseEvents.FORBIDDEN, () => {
-      this.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+    this.extensionHost.subscribe(IIIFEvents.FORBIDDEN, () => {
+      this.extensionHost.publish(IIIFEvents.OPEN_EXTERNAL_RESOURCE);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LOAD_FAILED, () => {
+    this.extensionHost.subscribe(Events.LOAD_FAILED, () => {
       if (
         !that.lastCanvasIndex == null &&
         that.lastCanvasIndex !== that.helper.canvasIndex
       ) {
         this.extensionHost.publish(
-          BaseEvents.CANVAS_INDEX_CHANGE,
+          IIIFEvents.CANVAS_INDEX_CHANGE,
           that.lastCanvasIndex
         );
       }
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.MANIFEST_INDEX_CHANGE,
+      IIIFEvents.MANIFEST_INDEX_CHANGE,
       (manifestIndex: number) => {
         this.data.manifestIndex = manifestIndex;
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.OPEN, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN, () => {
       const openUri: string = Strings.format(
         this.data.config.options.openTemplate,
         this.helper.manifestUri
@@ -369,20 +371,20 @@ export class BaseExtension implements IExtension {
       window.open(openUri);
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_LEFT_PANEL, () => {
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.OPEN_RIGHT_PANEL, () => {
       if (!this.$element.hasClass("loading")) {
         this.resize();
       }
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.RANGE_CHANGE,
+      IIIFEvents.RANGE_CHANGE,
       (range: Range | null) => {
         if (range) {
           this.data.rangeId = range.id;
@@ -395,17 +397,17 @@ export class BaseExtension implements IExtension {
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.RESOURCE_DEGRADED,
+      IIIFEvents.RESOURCE_DEGRADED,
       (resource: IExternalResource) => {
         Auth09.handleDegraded(resource);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
+    this.extensionHost.subscribe(IIIFEvents.SHOW_MESSAGE, (message: string) => {
       this.showMessage(message);
     });
 
-    this.extensionHost.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
+    this.extensionHost.subscribe(IIIFEvents.SHOW_TERMS_OF_USE, () => {
       let terms: string | null = this.helper.getLicense();
 
       if (!terms) {
@@ -421,7 +423,7 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
       const overrideFullScreen: boolean = this.data.config.options
         .overrideFullScreen;
 
@@ -437,7 +439,7 @@ export class BaseExtension implements IExtension {
         }
       }
 
-      this.fire(BaseEvents.TOGGLE_FULLSCREEN, {
+      this.fire(Events.TOGGLE_FULLSCREEN, {
         isFullScreen: this.extensionHost.isFullScreen,
         overrideFullScreen: overrideFullScreen,
       });
@@ -447,11 +449,11 @@ export class BaseExtension implements IExtension {
     this.shell = new Shell(this.$element);
 
     this.createModules();
-    this.extensionHost.publish(BaseEvents.RESIZE); // initial sizing
+    this.extensionHost.publish(Events.RESIZE); // initial sizing
 
     setTimeout(() => {
       this.render();
-      this.extensionHost.publish(BaseEvents.CREATED);
+      this.extensionHost.publish(Events.CREATED);
       this._setDefaultFocus();
     }, 1);
   }
@@ -517,7 +519,7 @@ export class BaseExtension implements IExtension {
   }
 
   exitFullScreen(): void {
-    this.extensionHost.publish(BaseEvents.EXIT_FULLSCREEN);
+    this.extensionHost.publish(Events.EXIT_FULLSCREEN);
   }
 
   fire(name: string, ...args: any[]): void {
@@ -528,11 +530,11 @@ export class BaseExtension implements IExtension {
   }
 
   redirect(uri: string): void {
-    this.fire(BaseEvents.REDIRECT, uri);
+    this.fire(IIIFEvents.REDIRECT, uri);
   }
 
   refresh(): void {
-    this.fire(BaseEvents.REFRESH, null);
+    this.fire(IIIFEvents.REFRESH, null);
   }
 
   render(): void {
@@ -541,7 +543,7 @@ export class BaseExtension implements IExtension {
       this.data.collectionIndex !== this.helper.collectionIndex
     ) {
       this.extensionHost.publish(
-        BaseEvents.COLLECTION_INDEX_CHANGE,
+        IIIFEvents.COLLECTION_INDEX_CHANGE,
         this.data.collectionIndex
       );
     }
@@ -552,7 +554,7 @@ export class BaseExtension implements IExtension {
     ) {
       if (this.data.iiifManifestId !== undefined) {
         this.extensionHost.publish(
-          BaseEvents.MANIFEST_INDEX_CHANGE,
+          IIIFEvents.MANIFEST_INDEX_CHANGE,
           this.data.manifestIndex
         );
       }
@@ -564,7 +566,7 @@ export class BaseExtension implements IExtension {
       }
 
       this.extensionHost.publish(
-        BaseEvents.CANVAS_INDEX_CHANGE,
+        IIIFEvents.CANVAS_INDEX_CHANGE,
         this.data.canvasIndex
       );
     }
@@ -574,7 +576,7 @@ export class BaseExtension implements IExtension {
         const range: Range | null = this.helper.getRangeById(this.data.rangeId);
 
         if (range) {
-          this.extensionHost.publish(BaseEvents.RANGE_CHANGE, range);
+          this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
         } else {
           console.warn("range id not found:", this.data.rangeId);
         }
@@ -659,7 +661,7 @@ export class BaseExtension implements IExtension {
               this.$element.removeClass(this.metrics[j].type);
             }
             this.$element.addClass(metric.type);
-            this.extensionHost.publish(BaseEvents.METRIC_CHANGE);
+            this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
           }
           break;
         }
@@ -669,12 +671,12 @@ export class BaseExtension implements IExtension {
 
   resize(): void {
     this._updateMetric();
-    this.extensionHost.publish(BaseEvents.RESIZE);
+    this.extensionHost.publish(Events.RESIZE);
   }
 
   // re-bootstraps the application with new querystring params
   reload(data?: IUVData): void {
-    this.extensionHost.publish(BaseEvents.RELOAD, data);
+    this.extensionHost.publish(Events.RELOAD, data);
   }
 
   isSeeAlsoEnabled(): boolean {
@@ -950,7 +952,7 @@ export class BaseExtension implements IExtension {
       return;
     }
 
-    this.extensionHost.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+    this.extensionHost.publish(IIIFEvents.OPEN_EXTERNAL_RESOURCE);
   }
 
   showMessage(
@@ -961,7 +963,7 @@ export class BaseExtension implements IExtension {
   ): void {
     this.closeActiveDialogue();
 
-    this.extensionHost.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, {
+    this.extensionHost.publish(IIIFEvents.SHOW_GENERIC_DIALOGUE, {
       message: message,
       acceptCallback: acceptCallback,
       buttonText: buttonText,
@@ -970,7 +972,7 @@ export class BaseExtension implements IExtension {
   }
 
   closeActiveDialogue(): void {
-    this.extensionHost.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+    this.extensionHost.publish(IIIFEvents.CLOSE_ACTIVE_DIALOGUE);
   }
 
   isOverlayActive(): boolean {
@@ -1075,7 +1077,7 @@ export class BaseExtension implements IExtension {
   }
 
   feedback(): void {
-    this.fire(BaseEvents.FEEDBACK, this.data);
+    this.fire(IIIFEvents.FEEDBACK, this.data);
   }
 
   getAlternateLocale(): ILocale | null {

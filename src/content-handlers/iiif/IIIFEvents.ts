@@ -1,4 +1,4 @@
-export class BaseEvents {
+export class IIIFEvents {
   static ACCEPT_TERMS: string = "acceptTerms";
   static ANNOTATION_CANVAS_CHANGE: string = "annotationCanvasChange";
   static ANNOTATION_CHANGE: string = "annotationChange";
@@ -14,19 +14,13 @@ export class BaseEvents {
   static CLOSE_LEFT_PANEL: string = "closeLeftPanel";
   static CLOSE_RIGHT_PANEL: string = "closeRightPanel";
   static COLLECTION_INDEX_CHANGE: string = "collectionIndexChange";
-  static CONFIGURE: string = "configure";
   static CREATE: string = "create";
-  static CREATED: string = "created";
-  static CURRENT_TIME_CHANGE: string = 'currentTimeChanged';
+  static CURRENT_TIME_CHANGE: string = "currentTimeChanged";
   static DOWN_ARROW: string = "downArrow";
   static DOWNLOAD: string = "download";
-  static DROP: string = "drop";
   static END: string = "end";
-  static ERROR: string = "error";
   static ESCAPE: string = "escape";
-  static EXIT_FULLSCREEN: string = "exitFullScreen";
   static EXTERNAL_LINK_CLICKED: string = "externalLinkClicked";
-  static EXTERNAL_RESOURCE_OPENED: string = "externalResourceOpened";
   static FEEDBACK: string = "feedback";
   static FIRST: string = "first";
   static FORBIDDEN: string = "forbidden";
@@ -55,8 +49,6 @@ export class BaseEvents {
   static LEFTPANEL_COLLAPSE_FULL_START: string = "leftPanelCollapseFullStart";
   static LEFTPANEL_EXPAND_FULL_FINISH: string = "leftPanelExpandFullFinish";
   static LEFTPANEL_EXPAND_FULL_START: string = "leftPanelExpandFullStart";
-  static LOAD: string = "load";
-  static LOAD_FAILED: string = "loadFailed";
   static LOGIN_FAILED: string = "loginFailed";
   static LOGIN: string = "login";
   static LOGOUT: string = "logout";
@@ -75,15 +67,13 @@ export class BaseEvents {
   static OPEN: string = "open";
   static PAGE_DOWN: string = "pageDown";
   static PAGE_UP: string = "pageUp";
-  static PAUSE: string = 'pause';
+  static PAUSE: string = "pause";
   static PINPOINT_ANNOTATION_CLICKED: string = "pinpointAnnotationClicked";
   static PLUS: string = "plus";
   static PREV: string = "prev";
   static RANGE_CHANGE: string = "rangeChange";
   static REDIRECT: string = "redirect";
   static REFRESH: string = "refresh";
-  static RELOAD: string = "reload";
-  static RESIZE: string = "resize";
   static RESOURCE_DEGRADED: string = "resourceDegraded";
   static RETRY: string = "retry";
   static RETURN: string = "return";
@@ -119,7 +109,6 @@ export class BaseEvents {
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";
   static TOGGLE_EXPAND_RIGHT_PANEL: string = "toggleExpandRightPanel";
-  static TOGGLE_FULLSCREEN: string = "toggleFullScreen";
   static TREE_NODE_MULTISELECTED: string = "treeNodeMultiSelected";
   static TREE_NODE_SELECTED: string = "treeNodeSelected";
   static UP_ARROW: string = "upArrow";

@@ -1,8 +1,8 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { DownloadDialogue } from "./DownloadDialogue";
-import { Events } from "./Events";
+import { MediaElementExtensionEvents } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
@@ -27,6 +27,7 @@ import {
 import { TFragment } from "../../modules/uv-shared-module/TFragment";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
+import { Events } from "../../../../Events";
 
 export default class Extension extends BaseExtension
   implements IMediaElementExtension {
@@ -57,31 +58,31 @@ export default class Extension extends BaseExtension
 
     // listen for mediaelement enter/exit fullscreen events.
     $(window).bind("enterfullscreen", () => {
-      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
     });
 
     $(window).bind("exitfullscreen", () => {
-      this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
+      this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, (thumb: Thumb) => {
+      this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, thumb.index);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+    this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.shell.$centerPanel.hide();
       this.shell.$rightPanel.hide();
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH,
+      IIIFEvents.LEFTPANEL_COLLAPSE_FULL_FINISH,
       () => {
         this.shell.$centerPanel.show();
         this.shell.$rightPanel.show();
@@ -89,25 +90,37 @@ export default class Extension extends BaseExtension
       }
     );
 
-    this.extensionHost.subscribe(Events.MEDIA_ENDED, () => {
-      this.fire(Events.MEDIA_ENDED);
-    });
-
-    this.extensionHost.subscribe(Events.MEDIA_PAUSED, () => {
-      this.fire(Events.MEDIA_PAUSED);
-    });
-
-    this.extensionHost.subscribe(Events.MEDIA_PLAYED, () => {
-      this.fire(Events.MEDIA_PLAYED);
-    });
-
-    this.extensionHost.subscribe(Events.MEDIA_TIME_UPDATE, (t: number) => {
-      const canvas: Canvas = this.helper.getCurrentCanvas();
-      if (canvas) {
-        this.data.target = canvas.id + "#" + `t=${t}`;
-        this.fire(BaseEvents.TARGET_CHANGE, this.data.target);
+    this.extensionHost.subscribe(
+      MediaElementExtensionEvents.MEDIA_ENDED,
+      () => {
+        this.fire(MediaElementExtensionEvents.MEDIA_ENDED);
       }
-    });
+    );
+
+    this.extensionHost.subscribe(
+      MediaElementExtensionEvents.MEDIA_PAUSED,
+      () => {
+        this.fire(MediaElementExtensionEvents.MEDIA_PAUSED);
+      }
+    );
+
+    this.extensionHost.subscribe(
+      MediaElementExtensionEvents.MEDIA_PLAYED,
+      () => {
+        this.fire(MediaElementExtensionEvents.MEDIA_PLAYED);
+      }
+    );
+
+    this.extensionHost.subscribe(
+      MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
+      (t: number) => {
+        const canvas: Canvas = this.helper.getCurrentCanvas();
+        if (canvas) {
+          this.data.target = canvas.id + "#" + `t=${t}`;
+          this.fire(IIIFEvents.TARGET_CHANGE, this.data.target);
+        }
+      }
+    );
   }
 
   createModules(): void {
@@ -184,13 +197,13 @@ export default class Extension extends BaseExtension
       const index: number | null = this.helper.getCanvasIndexById(canvasId);
 
       if (index !== null && this.helper.canvasIndex !== index) {
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, index);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index);
       }
 
       // trigger SET_TARGET which calls fitToBounds(xywh) in OpenSeadragonCenterPanel
       const selector: string = components[1];
       this.extensionHost.publish(
-        BaseEvents.SET_TARGET,
+        IIIFEvents.SET_TARGET,
         TFragment.fromString(selector)
       );
     }
@@ -223,7 +236,7 @@ export default class Extension extends BaseExtension
       bookmark.type = ExternalResourceType.SOUND;
     }
 
-    this.fire(BaseEvents.BOOKMARK, bookmark);
+    this.fire(IIIFEvents.BOOKMARK, bookmark);
   }
 
   getEmbedScript(template: string, width: number, height: number): string {

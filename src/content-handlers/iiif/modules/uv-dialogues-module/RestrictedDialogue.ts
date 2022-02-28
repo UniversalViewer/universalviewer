@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
@@ -21,8 +21,8 @@ export class RestrictedDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_RESTRICTED_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_RESTRICTED_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_RESTRICTED_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_RESTRICTED_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, (e: any) => {
       this.acceptCallback = e.acceptCallback;
@@ -83,7 +83,7 @@ export class RestrictedDialogue extends Dialogue {
 
     this.$message.find("a").on("click", function() {
       var url: string = $(this).attr("href");
-      this.extensionHost.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+      this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
     });
 
     this.resize();

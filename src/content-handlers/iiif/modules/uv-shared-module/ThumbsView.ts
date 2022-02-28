@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import {
   ExternalResourceType,
@@ -27,17 +27,17 @@ export class ThumbsView extends BaseView {
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (index: any) => {
         this.selectIndex(parseInt(index));
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.LOGIN, () => {
+    this.extensionHost.subscribe(IIIFEvents.LOGIN, () => {
       this.loadThumbs();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CLICKTHROUGH, () => {
+    this.extensionHost.subscribe(IIIFEvents.CLICKTHROUGH, () => {
       this.loadThumbs();
     });
 
@@ -174,7 +174,7 @@ export class ThumbsView extends BaseView {
       e.preventDefault();
       const data = $.view(this).data;
       that.lastThumbClickedIndex = data.index;
-      that.extensionHost.publish(BaseEvents.THUMB_SELECTED, data);
+      that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, data);
       return false;
     });
 
@@ -189,7 +189,7 @@ export class ThumbsView extends BaseView {
         e.preventDefault();
         const data = $.view(this).data;
         that.lastThumbClickedIndex = data.index;
-        that.extensionHost.publish(BaseEvents.THUMB_SELECTED, data);
+        that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, data);
       }
     });
 

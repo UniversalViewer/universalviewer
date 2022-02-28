@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { Bools, Numbers } from "@edsilv/utils";
 import { ILabelValuePair } from "@iiif/manifold";
@@ -47,8 +47,8 @@ export class ShareDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_SHARE_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_SHARE_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_SHARE_DIALOGUE;
     this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
 
     let lastElement: HTMLElement;
@@ -74,7 +74,7 @@ export class ShareDialogue extends Dialogue {
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.SHOW_EMBED_DIALOGUE,
+      IIIFEvents.SHOW_EMBED_DIALOGUE,
       (triggerButton: HTMLElement) => {
         this.open(triggerButton);
         this.openEmbedView();
@@ -233,7 +233,7 @@ export class ShareDialogue extends Dialogue {
     });
 
     this.onAccessibleClick(this.$termsOfUseButton, () => {
-      this.extensionHost.publish(BaseEvents.SHOW_TERMS_OF_USE);
+      this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
     });
 
     this.$element.hide();

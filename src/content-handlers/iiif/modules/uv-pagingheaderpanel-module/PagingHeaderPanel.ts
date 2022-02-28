@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { AutoComplete } from "../uv-shared-module/AutoComplete";
-import { BaseEvents } from "../../../../BaseEvents";
-import { Events } from "../../extensions/uv-openseadragon-extension/Events";
+import { IIIFEvents } from "../../IIIFEvents";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
@@ -49,27 +49,27 @@ export class PagingHeaderPanel extends HeaderPanel {
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.canvasIndexChanged(canvasIndex);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.SETTINGS_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
       this.modeChanged();
       this.updatePagingToggle();
     });
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
       this.setSearchFieldValue(this.extension.helper.canvasIndex);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+    this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.openGallery();
     });
 
     this.extensionHost.subscribe(
-      BaseEvents.LEFTPANEL_COLLAPSE_FULL_START,
+      IIIFEvents.LEFTPANEL_COLLAPSE_FULL_START,
       () => {
         this.closeGallery();
       }
@@ -203,7 +203,10 @@ export class PagingHeaderPanel extends HeaderPanel {
 
       this.$imageSelectionBox.change(() => {
         const imageIndex: number = parseInt(this.$imageSelectionBox.val());
-        this.extensionHost.publish(Events.IMAGE_SEARCH, imageIndex);
+        this.extensionHost.publish(
+          OpenSeadragonExtensionEvents.IMAGE_SEARCH,
+          imageIndex
+        );
       });
     }
 
@@ -283,17 +286,23 @@ export class PagingHeaderPanel extends HeaderPanel {
     this.$oneUpButton.onPressed(() => {
       const enabled: boolean = false;
       this.updateSettings({ pagingEnabled: enabled });
-      this.extensionHost.publish(Events.PAGING_TOGGLED, enabled);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        enabled
+      );
     });
 
     this.$twoUpButton.onPressed(() => {
       const enabled: boolean = true;
       this.updateSettings({ pagingEnabled: enabled });
-      this.extensionHost.publish(Events.PAGING_TOGGLED, enabled);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        enabled
+      );
     });
 
     this.$galleryButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
+      this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
     });
 
     this.setNavigationTitles();
@@ -314,10 +323,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.TOP_TO_BOTTOM:
         case ViewingDirection.BOTTOM_TO_TOP:
-          this.extensionHost.publish(BaseEvents.FIRST);
+          this.extensionHost.publish(IIIFEvents.FIRST);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(BaseEvents.LAST);
+          this.extensionHost.publish(IIIFEvents.LAST);
           break;
       }
     });
@@ -327,10 +336,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.extensionHost.publish(BaseEvents.PREV);
+          this.extensionHost.publish(IIIFEvents.PREV);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(IIIFEvents.NEXT);
           break;
       }
     });
@@ -340,10 +349,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.BOTTOM_TO_TOP:
         case ViewingDirection.TOP_TO_BOTTOM:
-          this.extensionHost.publish(BaseEvents.NEXT);
+          this.extensionHost.publish(IIIFEvents.NEXT);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(BaseEvents.PREV);
+          this.extensionHost.publish(IIIFEvents.PREV);
           break;
       }
     });
@@ -353,10 +362,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         case ViewingDirection.LEFT_TO_RIGHT:
         case ViewingDirection.TOP_TO_BOTTOM:
         case ViewingDirection.BOTTOM_TO_TOP:
-          this.extensionHost.publish(BaseEvents.LAST);
+          this.extensionHost.publish(IIIFEvents.LAST);
           break;
         case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(BaseEvents.FIRST);
+          this.extensionHost.publish(IIIFEvents.FIRST);
           break;
       }
     });
@@ -372,11 +381,17 @@ export class PagingHeaderPanel extends HeaderPanel {
       // visible, since otherwise, clicking on the "Image" label can
       // trigger unexpected/undesired side effects.
       this.$imageModeOption.on("click", () => {
-        this.extensionHost.publish(Events.MODE_CHANGE, Mode.image.toString());
+        this.extensionHost.publish(
+          OpenSeadragonExtensionEvents.MODE_CHANGE,
+          Mode.image.toString()
+        );
       });
 
       this.$pageModeOption.on("click", () => {
-        this.extensionHost.publish(Events.MODE_CHANGE, Mode.page.toString());
+        this.extensionHost.publish(
+          OpenSeadragonExtensionEvents.MODE_CHANGE,
+          Mode.page.toString()
+        );
       });
     }
 
@@ -581,13 +596,16 @@ export class PagingHeaderPanel extends HeaderPanel {
   search(value: string): void {
     if (!value) {
       this.extension.showMessage(this.content.emptyValue);
-      this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+      this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
 
       return;
     }
 
     if (this.isPageModeEnabled()) {
-      this.extensionHost.publish(Events.PAGE_SEARCH, value);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGE_SEARCH,
+        value
+      );
     } else {
       let index: number;
 
@@ -604,7 +622,7 @@ export class PagingHeaderPanel extends HeaderPanel {
           this.extension.data.config.modules.genericDialogue.content
             .invalidNumber
         );
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
         return;
       }
 
@@ -615,11 +633,14 @@ export class PagingHeaderPanel extends HeaderPanel {
           this.extension.data.config.modules.genericDialogue.content
             .pageNotFound
         );
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
         return;
       }
 
-      this.extensionHost.publish(Events.IMAGE_SEARCH, index);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.IMAGE_SEARCH,
+        index
+      );
     }
   }
 

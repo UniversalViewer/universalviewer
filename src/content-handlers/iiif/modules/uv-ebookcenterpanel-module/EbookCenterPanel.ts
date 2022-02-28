@@ -1,7 +1,7 @@
 import { Async } from "@edsilv/utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Events } from "../../extensions/uv-ebook-extension/Events";
+import { EbookExtensionEvents } from "../../extensions/uv-ebook-extension/Events";
 import { Position } from "../uv-shared-module/Position";
 import {
   IExternalResource,
@@ -14,6 +14,7 @@ import {
   applyPolyfills,
   defineCustomElements,
 } from "@universalviewer/uv-ebook-components/loader";
+import { Events } from "../../../../Events";
 
 export class EbookCenterPanel extends CenterPanel {
   private _cfi: string;
@@ -43,7 +44,10 @@ export class EbookCenterPanel extends CenterPanel {
     this._ebookReader.addEventListener(
       "loadedNavigation",
       (e: any) => {
-        this.extensionHost.publish(Events.LOADED_NAVIGATION, e.detail);
+        this.extensionHost.publish(
+          EbookExtensionEvents.LOADED_NAVIGATION,
+          e.detail
+        );
       },
       false
     );
@@ -51,9 +55,12 @@ export class EbookCenterPanel extends CenterPanel {
     this._ebookReader.addEventListener(
       "relocated",
       (e: any) => {
-        this.extensionHost.publish(Events.RELOCATED, e.detail);
+        this.extensionHost.publish(EbookExtensionEvents.RELOCATED, e.detail);
         this._cfi = e.detail.start.cfi;
-        this.extensionHost.publish(Events.CFI_FRAGMENT_CHANGE, this._cfi);
+        this.extensionHost.publish(
+          EbookExtensionEvents.CFI_FRAGMENT_CHANGE,
+          this._cfi
+        );
       },
       false
     );
@@ -72,32 +79,38 @@ export class EbookCenterPanel extends CenterPanel {
     const that = this;
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         that.openMedia(resources);
       }
     );
 
-    this.extensionHost.subscribe(Events.ITEM_CLICKED, (href: string) => {
-      this._nextState({
-        cfi: href,
-      });
-    });
+    this.extensionHost.subscribe(
+      EbookExtensionEvents.ITEM_CLICKED,
+      (href: string) => {
+        this._nextState({
+          cfi: href,
+        });
+      }
+    );
 
-    this.extensionHost.subscribe(Events.CFI_FRAGMENT_CHANGE, (cfi: string) => {
-      Async.waitFor(
-        () => {
-          return this._ebookReaderReady;
-        },
-        () => {
-          if (cfi !== this._cfi) {
-            this._nextState({
-              cfi: cfi,
-            });
+    this.extensionHost.subscribe(
+      EbookExtensionEvents.CFI_FRAGMENT_CHANGE,
+      (cfi: string) => {
+        Async.waitFor(
+          () => {
+            return this._ebookReaderReady;
+          },
+          () => {
+            if (cfi !== this._cfi) {
+              this._nextState({
+                cfi: cfi,
+              });
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
   }
 
   openMedia(resources: IExternalResource[]) {
@@ -120,8 +133,8 @@ export class EbookCenterPanel extends CenterPanel {
         }
       }
 
-      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.extensionHost.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(Events.LOAD);
     });
   }
 

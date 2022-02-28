@@ -1,4 +1,4 @@
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { FileLinkCenterPanel } from "../../modules/uv-filelinkcenterpanel-module/FileLinkCenterPanel";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
@@ -40,16 +40,16 @@ export default class Extension extends BaseExtension
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.CANVAS_INDEX_CHANGE,
+      IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         this.viewCanvas(canvasIndex);
       }
     );
 
     this.extensionHost.subscribe(
-      BaseEvents.THUMB_SELECTED,
+      IIIFEvents.THUMB_SELECTED,
       (canvasIndex: number) => {
-        this.extensionHost.publish(BaseEvents.CANVAS_INDEX_CHANGE, canvasIndex);
+        this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, canvasIndex);
       }
     );
   }

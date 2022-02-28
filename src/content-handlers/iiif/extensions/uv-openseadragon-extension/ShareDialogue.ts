@@ -1,4 +1,4 @@
-import { Events } from "./Events";
+import { OpenSeadragonExtensionEvents } from "./Events";
 import OpenSeadragonExtension from "./Extension";
 import { ShareDialogue as BaseShareDialogue } from "../../modules/uv-dialogues-module/ShareDialogue";
 
@@ -6,13 +6,19 @@ export class ShareDialogue extends BaseShareDialogue {
   constructor($element: JQuery) {
     super($element);
 
-    this.extensionHost.subscribe(Events.OPENSEADRAGON_OPEN, () => {
-      this.update();
-    });
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
+      () => {
+        this.update();
+      }
+    );
 
-    this.extensionHost.subscribe(Events.OPENSEADRAGON_ANIMATION_FINISH, () => {
-      this.update();
-    });
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION_FINISH,
+      () => {
+        this.update();
+      }
+    );
   }
 
   create(): void {

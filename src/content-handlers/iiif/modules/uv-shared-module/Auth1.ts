@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { sanitize } from "../../../../Utils";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";
@@ -50,16 +50,16 @@ export class Auth1 {
         ["catch"]((error: any) => {
           switch (error.name) {
             case StatusCode.AUTHORIZATION_FAILED.toString():
-              Auth1.publish(BaseEvents.LOGIN_FAILED);
+              Auth1.publish(IIIFEvents.LOGIN_FAILED);
               break;
             case StatusCode.FORBIDDEN.toString():
-              Auth1.publish(BaseEvents.FORBIDDEN);
+              Auth1.publish(IIIFEvents.FORBIDDEN);
               break;
             case StatusCode.RESTRICTED.toString():
               // do nothing
               break;
             default:
-              Auth1.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+              Auth1.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
           }
         });
     });
@@ -118,7 +118,7 @@ export class Auth1 {
       InformationType.DEGRADED_RESOURCE,
       resource
     );
-    Auth1.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+    Auth1.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
   }
 
   static storeAccessToken(
@@ -200,7 +200,7 @@ export class Auth1 {
         );
         resolve(resource.authHoldingPage);
       } else {
-        Auth1.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [
+        Auth1.publish(IIIFEvents.SHOW_AUTH_DIALOGUE, [
           {
             service: service,
             closeCallback: () => {
@@ -302,6 +302,6 @@ export class Auth1 {
       errorMessage += service.getFailureDescription();
     }
 
-    Auth1.publish(BaseEvents.SHOW_MESSAGE, [sanitize(errorMessage)]);
+    Auth1.publish(IIIFEvents.SHOW_MESSAGE, [sanitize(errorMessage)]);
   }
 }

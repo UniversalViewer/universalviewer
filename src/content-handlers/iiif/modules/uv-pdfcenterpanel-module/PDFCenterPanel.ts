@@ -1,9 +1,10 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Events } from "../../extensions/uv-pdf-extension/Events";
+import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { Bools } from "@edsilv/utils";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
+import { Events } from "../../../../Events";
 
 declare var PDFJS: any;
 
@@ -64,13 +65,13 @@ export class PDFCenterPanel extends CenterPanel {
     this.$content.prepend(this._$pdfContainer);
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.openMedia(resources);
       }
     );
 
-    this.extensionHost.subscribe(BaseEvents.FIRST, () => {
+    this.extensionHost.subscribe(IIIFEvents.FIRST, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -80,7 +81,7 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.extensionHost.subscribe(BaseEvents.PREV, () => {
+    this.extensionHost.subscribe(IIIFEvents.PREV, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -94,7 +95,7 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.extensionHost.subscribe(BaseEvents.NEXT, () => {
+    this.extensionHost.subscribe(IIIFEvents.NEXT, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -108,7 +109,7 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.extensionHost.subscribe(BaseEvents.LAST, () => {
+    this.extensionHost.subscribe(IIIFEvents.LAST, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -118,7 +119,7 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.extensionHost.subscribe(BaseEvents.CANVAS_INDEX_CHANGE, () => {
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
       if (!this._pdfDoc) {
         return;
       }
@@ -128,26 +129,29 @@ export class PDFCenterPanel extends CenterPanel {
       this._queueRenderPage(this._pageIndex);
     });
 
-    this.extensionHost.subscribe(Events.SEARCH, (pageIndex: number) => {
-      if (!this._pdfDoc) {
-        return;
+    this.extensionHost.subscribe(
+      PDFExtensionEvents.SEARCH,
+      (pageIndex: number) => {
+        if (!this._pdfDoc) {
+          return;
+        }
+
+        if (pageIndex < 1 || pageIndex > this._pdfDoc.numPages) {
+          return;
+        }
+
+        this._pageIndex = pageIndex;
+
+        this._queueRenderPage(this._pageIndex);
       }
-
-      if (pageIndex < 1 || pageIndex > this._pdfDoc.numPages) {
-        return;
-      }
-
-      this._pageIndex = pageIndex;
-
-      this._queueRenderPage(this._pageIndex);
-    });
+    );
 
     this._$prevButton.onPressed((e: any) => {
       e.preventDefault();
 
       if (!this._prevButtonEnabled) return;
 
-      this.extensionHost.publish(BaseEvents.PREV);
+      this.extensionHost.publish(IIIFEvents.PREV);
     });
 
     this.disablePrevButton();
@@ -157,7 +161,7 @@ export class PDFCenterPanel extends CenterPanel {
 
       if (!this._nextButtonEnabled) return;
 
-      this.extensionHost.publish(BaseEvents.NEXT);
+      this.extensionHost.publish(IIIFEvents.NEXT);
     });
 
     this.disableNextButton();
@@ -269,12 +273,12 @@ export class PDFCenterPanel extends CenterPanel {
       const pdfDoc = await PDFJS.getDocument(parameter);
       this._pdfDoc = pdfDoc;
       this._render(this._pageIndex);
-      this.extensionHost.publish(Events.PDF_LOADED, pdfDoc);
+      this.extensionHost.publish(PDFExtensionEvents.PDF_LOADED, pdfDoc);
       this._$spinner.hide();
     }
 
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   private _render(num: number): void {
@@ -329,7 +333,10 @@ export class PDFCenterPanel extends CenterPanel {
       // Wait for rendering to finish
       this._renderTask.promise
         .then(() => {
-          this.extensionHost.publish(Events.PAGE_INDEX_CHANGE, this._pageIndex);
+          this.extensionHost.publish(
+            PDFExtensionEvents.PAGE_INDEX_CHANGE,
+            this._pageIndex
+          );
 
           this._pageRendering = false;
 

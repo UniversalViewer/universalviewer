@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILoginDialogueOptions } from "../uv-shared-module/ILoginDialogueOptions";
 import { IExternalResource } from "manifesto.js";
@@ -24,8 +24,8 @@ export class LoginDialogue extends Dialogue {
 
     super.create();
 
-    this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
-    this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
+    this.openCommand = IIIFEvents.SHOW_LOGIN_DIALOGUE;
+    this.closeCommand = IIIFEvents.HIDE_LOGIN_DIALOGUE;
 
     this.extensionHost.subscribe(this.openCommand, (e: any) => {
       this.loginCallback = e.loginCallback;
@@ -113,7 +113,7 @@ export class LoginDialogue extends Dialogue {
 
     this.$message.find("a").on("click", function() {
       var url: string = $(this).attr("href");
-      this.extensionHost.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+      this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
     });
 
     if (this.options.showCancelButton) {

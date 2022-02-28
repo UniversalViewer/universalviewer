@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
+import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { sanitize } from "../../../../Utils";
 import {
@@ -9,6 +9,7 @@ import {
   IExternalResource,
   LanguageMap,
 } from "manifesto.js";
+import { Events } from "../../../../Events";
 
 export class FileLinkCenterPanel extends CenterPanel {
   $scroll: JQuery;
@@ -25,7 +26,7 @@ export class FileLinkCenterPanel extends CenterPanel {
     super.create();
 
     this.extensionHost.subscribe(
-      BaseEvents.OPEN_EXTERNAL_RESOURCE,
+      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
       (resources: IExternalResource[]) => {
         this.openMedia(resources);
       }
@@ -105,8 +106,8 @@ export class FileLinkCenterPanel extends CenterPanel {
       this.$downloadItems.append($item);
     }
 
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   resize() {

@@ -1,6 +1,6 @@
 const $ = require("jquery");
-import { BaseEvents } from "../../../../BaseEvents";
-import { Events } from "../../extensions/uv-pdf-extension/Events";
+import { IIIFEvents } from "../../IIIFEvents";
+import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
 import { Strings } from "@edsilv/utils";
 
@@ -34,16 +34,19 @@ export class PDFHeaderPanel extends HeaderPanel {
     super.create();
 
     this.extensionHost.subscribe(
-      Events.PAGE_INDEX_CHANGE,
+      PDFExtensionEvents.PAGE_INDEX_CHANGE,
       (pageIndex: number) => {
         this._pageIndex = pageIndex;
         this.render();
       }
     );
 
-    this.extensionHost.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
-      this._pdfDoc = pdfDoc;
-    });
+    this.extensionHost.subscribe(
+      PDFExtensionEvents.PDF_LOADED,
+      (pdfDoc: any) => {
+        this._pdfDoc = pdfDoc;
+      }
+    );
 
     this.$prevOptions = $('<div class="prevOptions"></div>');
     this.$centerOptions.append(this.$prevOptions);
@@ -108,19 +111,19 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     // ui event handlers.
     this.$firstButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.FIRST);
+      this.extensionHost.publish(IIIFEvents.FIRST);
     });
 
     this.$prevButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.PREV);
+      this.extensionHost.publish(IIIFEvents.PREV);
     });
 
     this.$nextButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.NEXT);
+      this.extensionHost.publish(IIIFEvents.NEXT);
     });
 
     this.$lastButton.onPressed(() => {
-      this.extensionHost.publish(BaseEvents.LAST);
+      this.extensionHost.publish(IIIFEvents.LAST);
     });
 
     this.$searchText.onEnter(() => {
@@ -184,7 +187,7 @@ export class PDFHeaderPanel extends HeaderPanel {
       return;
     }
 
-    this.extensionHost.publish(Events.SEARCH, index);
+    this.extensionHost.publish(PDFExtensionEvents.SEARCH, index);
   }
 
   resize(): void {
