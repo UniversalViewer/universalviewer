@@ -47,6 +47,8 @@ export const init = (el: string | HTMLDivElement, data) => {
     data: data,
   });
 
+  // todo: can we remove the following two event listeners
+  // by using css to scale the parent div?
   uv.on(
     Events.CREATED,
     function(_obj) {
