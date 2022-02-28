@@ -144,6 +144,23 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 
+    this.on(
+      Events.CREATED,
+      (_obj) => {
+        this.hideSpinner();
+      },
+      false
+    );
+
+    this.on(
+      Events.RELOAD,
+      (data) => {
+        data.isReload = true;
+        this.set(data);
+      },
+      false
+    );
+
     this.set(this.options.data);
 
     return true;
@@ -175,8 +192,6 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   public set(data: IUVData): void {
     this.fire(IIIFEvents.SET, data);
 
-    // this.mergeDefaults(data);
-
     // if this is the first set
     if (!this.extension) {
       if (!data.iiifManifestId) {
@@ -195,6 +210,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
         newData.collectionIndex !== this.extension.data.collectionIndex
       ) {
         this.extension.data = newData;
+        this.showSpinner();
         this._reload(this.extension.data);
       } else {
         // no need to reload, just update.
@@ -243,8 +259,6 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   private async _reload(data: IUVData): Promise<void> {
-    console.log("_reload");
-
     this._pubsub.dispose(); // remove any existing event listeners
 
     data.target = ""; // clear target

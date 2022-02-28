@@ -66,15 +66,6 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    Events.RELOAD,
-    function(data) {
-      data.isReload = true;
-      uv.set(data);
-    },
-    false
-  );
-
-  uv.on(
     Events.TOGGLE_FULLSCREEN,
     function(data) {
       isFullScreen = data.isFullScreen;
