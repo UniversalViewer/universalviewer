@@ -4,7 +4,7 @@ import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { Bools } from "@edsilv/utils";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
-import { BaseEvents } from "../../../../BaseEvents";
+import { Events } from "../../../../Events";
 
 declare var PDFJS: any;
 
@@ -277,8 +277,8 @@ export class PDFCenterPanel extends CenterPanel {
       this._$spinner.hide();
     }
 
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   private _render(num: number): void {

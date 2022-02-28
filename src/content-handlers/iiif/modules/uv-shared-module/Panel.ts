@@ -1,6 +1,6 @@
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { Async } from "@edsilv/utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { Events } from "../../../../Events";
 
 export class Panel {
   extensionHost: IIIFExtensionHost;
@@ -22,7 +22,7 @@ export class Panel {
   }
 
   create(): void {
-    this.extensionHost?.subscribe(BaseEvents.RESIZE, () => {
+    this.extensionHost?.subscribe(Events.RESIZE, () => {
       this.resize();
     });
   }

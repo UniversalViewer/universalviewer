@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";
-import { BaseEvents } from "../../../../BaseEvents";
+import { Events } from "../../../../Events";
 
 export class FooterPanel extends BaseView {
   $feedbackButton: JQuery;
@@ -24,7 +24,7 @@ export class FooterPanel extends BaseView {
 
     super.create();
 
-    this.extensionHost.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+    this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
       this.updateFullScreenButton();
 
       // hack for firefox when exiting full screen
@@ -155,7 +155,7 @@ export class FooterPanel extends BaseView {
       this.$fullScreenBtn,
       (e) => {
         e.preventDefault();
-        this.extensionHost.publish(BaseEvents.TOGGLE_FULLSCREEN);
+        this.extensionHost.publish(Events.TOGGLE_FULLSCREEN);
       },
       true
     );

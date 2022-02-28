@@ -1,4 +1,4 @@
-import { BaseEvents } from "./BaseEvents";
+import { Events } from "./Events";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
@@ -50,7 +50,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   // todo: can we remove the following two event listeners
   // by using css to scale the parent div?
   uv.on(
-    BaseEvents.CREATED,
+    Events.CREATED,
     function(_obj) {
       resize();
     },
@@ -58,7 +58,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.EXTERNAL_RESOURCE_OPENED,
+    Events.EXTERNAL_RESOURCE_OPENED,
     function(_obj) {
       setTimeout(function() {
         resize();
@@ -68,7 +68,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.TOGGLE_FULLSCREEN,
+    Events.TOGGLE_FULLSCREEN,
     function(data) {
       isFullScreen = data.isFullScreen;
       overrideFullScreen = data.overrideFullScreen;
@@ -100,7 +100,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   );
 
   uv.on(
-    BaseEvents.ERROR,
+    Events.ERROR,
     function(message) {
       console.error(message);
     },

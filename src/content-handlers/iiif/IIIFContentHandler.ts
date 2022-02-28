@@ -25,7 +25,7 @@ import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
 import { defaultLocale } from "../../Utils";
 import BaseContentHandler from "../../BaseContentHandler";
-import { BaseEvents } from "../../BaseEvents";
+import { Events } from "../../Events";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
@@ -145,7 +145,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 
     this.on(
-      BaseEvents.CREATED,
+      Events.CREATED,
       (_obj) => {
         this.hideSpinner();
       },
@@ -153,7 +153,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     );
 
     this.on(
-      BaseEvents.RELOAD,
+      Events.RELOAD,
       (data) => {
         data.isReload = true;
         this.set(data);
@@ -263,8 +263,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
     data.target = ""; // clear target
 
-    this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
-      this.fire(BaseEvents.RELOAD, data);
+    this.subscribe(Events.RELOAD, (data?: IUVData) => {
+      this.fire(Events.RELOAD, data);
     });
 
     const $elem: JQuery = $(this.options.target);
@@ -369,7 +369,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   private _error(message: string): void {
-    this.fire(BaseEvents.ERROR, message);
+    this.fire(Events.ERROR, message);
   }
 
   private async _configure(data: IUVData, extension: any): Promise<any> {
@@ -383,7 +383,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
     let promises: Promise<any>[] = [] as any;
 
-    this.fire(BaseEvents.CONFIGURE, {
+    this.fire(Events.CONFIGURE, {
       config,
       cb: (promise) => {
         promises.push(promise);

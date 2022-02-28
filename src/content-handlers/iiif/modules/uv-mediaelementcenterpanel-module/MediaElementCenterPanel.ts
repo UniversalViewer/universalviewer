@@ -15,7 +15,7 @@ import "mediaelement/build/mediaelement-and-player";
 import "mediaelement-plugins/dist/source-chooser/source-chooser";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
-import { BaseEvents } from "../../../../BaseEvents";
+import { Events } from "../../../../Events";
 
 export class MediaElementCenterPanel extends CenterPanel {
   $wrapper: JQuery;
@@ -262,8 +262,8 @@ export class MediaElementCenterPanel extends CenterPanel {
       });
     }
 
-    this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-    this.extensionHost.publish(BaseEvents.LOAD);
+    this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   isVideo(): boolean {

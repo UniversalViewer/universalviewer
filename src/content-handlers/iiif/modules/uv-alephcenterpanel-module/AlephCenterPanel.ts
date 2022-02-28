@@ -19,7 +19,7 @@ import {
   defineCustomElements,
 } from "@universalviewer/aleph/loader";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
-import { BaseEvents } from "../../../../BaseEvents";
+import { Events } from "../../../../Events";
 
 export class AlephCenterPanel extends CenterPanel {
   private _alViewer: any;
@@ -259,8 +259,8 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      this.extensionHost.publish(BaseEvents.EXTERNAL_RESOURCE_OPENED);
-      this.extensionHost.publish(BaseEvents.LOAD);
+      this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+      this.extensionHost.publish(Events.LOAD);
     });
   }
 

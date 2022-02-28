@@ -1,7 +1,7 @@
 import BaseContentHandler from "../../BaseContentHandler";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
-import { BaseEvents } from "../../BaseEvents";
+import { Events } from "../../Events";
 
 interface Player {
   id: string;
@@ -81,7 +81,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                   const duration = YTPlayer.getDuration();
                   this.set(player.data);
                   this.hideSpinner();
-                  this.fire(BaseEvents.LOAD, {
+                  this.fire(Events.LOAD, {
                     duration: duration,
                   });
                 },
