@@ -81,6 +81,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                   const duration = YTPlayer.getDuration();
                   this.set(player.data);
                   this.hideSpinner();
+                  this.fire(Events.CREATED);
                   this.fire(Events.LOAD, {
                     duration: duration,
                   });
@@ -97,26 +98,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       };
     }
   }
-
-  // private _onPlayerReady(event) {
-  //   const player = event.target;
-  //   this.fire(BaseEvents.LOAD, { duration: player.getDuration() });
-  //   this.set(window.youTubeData);
-  // }
-
-  // private _onPlayerStateChange(_event) {
-  // const currentTime = this._player.getCurrentTime();
-  // console.log(currentTime);
-  // currentTimeInput.value = currentTime;
-  // }
-
-  // private _getPlayerById(videoId: string): Player {
-  //   return window.youTubePlayers.find((p) => p === this._id);
-  // }
-
-  // private _getCurrentPlayer(): Player {
-  //   return window.youTubePlayers.find((p) => p.current);
-  // }
 
   public set(data: YouTubeData): void {
     const player = window[this._id];
@@ -139,8 +120,8 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public exitFullScreen(): void {}
 
   public resize(): void {
-    // this._playerDiv.style.width = this._el.clientWidth + "px";
-    // this._playerDiv.style.height = this._el.clientHeight + "px";
+    this._playerDiv.style.width = this._el.clientWidth + "px";
+    this._playerDiv.style.height = this._el.clientHeight + "px";
   }
 
   public dispose(): void {
