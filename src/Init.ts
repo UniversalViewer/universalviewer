@@ -14,8 +14,6 @@ export const init = (el: string | HTMLDivElement, data) => {
   container.innerHTML = "";
   const parent = document.createElement("div");
   container.appendChild(parent);
-  const uvDiv = document.createElement("div");
-  parent.appendChild(uvDiv);
 
   const resize = () => {
     if (uv) {
@@ -43,7 +41,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   });
 
   uv = new UniversalViewer({
-    target: uvDiv,
+    target: parent,
     data: data,
   });
 

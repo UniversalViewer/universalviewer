@@ -120,8 +120,10 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public exitFullScreen(): void {}
 
   public resize(): void {
-    this._playerDiv.style.width = this._el.clientWidth + "px";
-    this._playerDiv.style.height = this._el.clientHeight + "px";
+    const width = this._el.clientWidth + "px";
+    const height = this._el.clientHeight + "px";
+    this._playerDiv.style.width = width;
+    this._playerDiv.style.height = height;
   }
 
   public dispose(): void {
