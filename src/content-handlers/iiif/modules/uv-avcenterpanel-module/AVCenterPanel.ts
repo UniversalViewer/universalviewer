@@ -8,7 +8,7 @@ import {
   IExternalResource,
   LabelValuePair,
   LanguageMap,
-  Range,
+  Range
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component";
@@ -80,7 +80,7 @@ export class AVCenterPanel extends CenterPanel {
         if (this.avcomponent) {
           this.avcomponent.set({
             limitToRange: this._limitToRange(),
-            constrainNavigationToRange: this._limitToRange(),
+            constrainNavigationToRange: this._limitToRange()
           });
         }
       });
@@ -96,7 +96,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: false,
+            virtualCanvasEnabled: false
           });
 
           const canvas: Canvas | null = this.extension.helper.getCurrentCanvas();
@@ -114,7 +114,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: true,
+            virtualCanvasEnabled: true
           });
         }
       });
@@ -146,7 +146,7 @@ export class AVCenterPanel extends CenterPanel {
 
     // @ts-ignore
     this.avcomponent = new AVComponent({
-      target: <HTMLElement>this.$avcomponent[0],
+      target: <HTMLElement>this.$avcomponent[0]
       // @ts-ignore
       // data: {
       //   posterImageExpanded: this.options.posterImageExpanded,
@@ -171,7 +171,7 @@ export class AVCenterPanel extends CenterPanel {
     });
 
     this.avcomponent.on(
-      "rangechange",
+      "rangechanged",
       (rangeId: string | null) => {
         if (rangeId) {
           const range: Range | null = this.extension.helper.getRangeById(
@@ -243,7 +243,7 @@ export class AVCenterPanel extends CenterPanel {
     const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
       MetadataOptions
     >{
-      range: currentRange,
+      range: currentRange
     });
 
     for (let i = 0; i < groups.length; i++) {
@@ -304,7 +304,7 @@ export class AVCenterPanel extends CenterPanel {
           defaultAspectRatio: 0.56,
           doubleClickMS: 350,
           limitToRange: this._limitToRange(),
-          posterImageRatio: this.config.options.posterImageRatio,
+          posterImageRatio: this.config.options.posterImageRatio
         });
 
         // console.log("set up")
