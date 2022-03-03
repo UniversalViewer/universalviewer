@@ -1,5 +1,5 @@
 import {UniversalViewer} from "./UniversalViewer";
-import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
+import {IIIFEvents} from "@/content-handlers/iiif/IIIFEvents";
 
 export class DevTools {
   element: HTMLElement;
@@ -53,8 +53,8 @@ export class DevTools {
       this.originalLogger(...input)
     }
 
-    for (const ev of Object.keys(BaseEvents)) {
-      const event = BaseEvents[ev];
+    for (const ev of Object.keys(IIIFEvents)) {
+      const event = IIIFEvents[ev];
       this.uv.on(event, (e, ...rest) => {
         this.log.value = this.log.value += e ? `\n${ev}(${jsonStringify(e)})` : `\n${ev}`;
         this.log.scrollTop = this.log.scrollHeight;
@@ -63,7 +63,7 @@ export class DevTools {
         }
       }, {})
     }
-    this.uv.on(BaseEvents.CANVAS_INDEX_CHANGE, (ev) => {
+    this.uv.on(IIIFEvents.CANVAS_INDEX_CHANGE, (ev) => {
       console.log(ev);
     }, {})
 
