@@ -59,8 +59,8 @@ export class URLAdapter extends UVAdapter {
       rangeId: this.get<string>("rid", ""),
       xywh: this.get<string>("xywh", ""),
       target: this.get<string>("target", ""),
-      cfi: this.get<string>("cfi", ""),
-      youTubeVideoId: this.get<string>("youTubeVideoId", ""),
+      // cfi: this.get<string>("cfi", ""),
+      // youTubeVideoId: this.get<string>("youTubeVideoId", ""),
       locales: formattedLocales.length ? formattedLocales : undefined,
       ...overrides,
     };

@@ -44,7 +44,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     if (!this._playerDiv) {
       this._playerDiv = document.createElement("div");
       this._playerDiv.id = this._id;
-      this._el.id = "test_" + this._id;
       this._el.append(this._playerDiv);
     }
 
