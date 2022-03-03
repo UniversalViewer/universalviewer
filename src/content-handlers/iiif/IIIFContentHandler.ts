@@ -249,13 +249,13 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
   public dispose() {
     // console.log("dispose IIIFContentHandler");
+    super.dispose();
     this._pubsub.dispose();
-    this.adapter?.dispose();
     this.disposed = true;
-    const $elem: JQuery = $(this.options.target);
-    $elem.empty();
+    // const $elem: JQuery = $(this.options.target);
+    // $elem.empty();
     // remove all classes
-    $elem.attr("class", "");
+    // $elem.attr("class", "");
   }
 
   private async _reload(data: IUVData): Promise<void> {

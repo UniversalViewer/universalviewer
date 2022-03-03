@@ -51,5 +51,7 @@ export default class BaseContentHandler<IUVData>
 
   public dispose(): void {
     this._el.innerHTML = "";
+    this._el.className = "";
+    this.adapter?.dispose();
   }
 }

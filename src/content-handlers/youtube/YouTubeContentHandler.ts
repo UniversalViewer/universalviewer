@@ -6,6 +6,7 @@ import { Events } from "../../Events";
 interface Player {
   id: string;
   data: YouTubeData;
+  ref: any;
 }
 
 export default class YouTubeContentHandler extends BaseContentHandler<
@@ -32,16 +33,18 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       window.youTubePlayers = [];
     }
 
-    this._id = "YTPlayer-" + window.youTubePlayers.length;
+    this._id = "YTPlayer-" + new Date().getTime();
 
     window.youTubePlayers.push({
       id: this._id,
       data: data,
+      ref: this,
     });
 
     if (!this._playerDiv) {
       this._playerDiv = document.createElement("div");
       this._playerDiv.id = this._id;
+      this._el.id = "test_" + this._id;
       this._el.append(this._playerDiv);
     }
 
@@ -60,40 +63,46 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     } else {
       window.onYouTubeIframeAPIReady = () => {
         for (const player of window.youTubePlayers as Player[]) {
-          if (player.id === this._id) {
-            window[this._id] = new YT.Player(this._id, {
-              height: "100%",
-              width: "100%",
-              videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
-              playerVars: {
-                playsinline: 1,
-                enablejsapi: 1,
-                controls: player.data.controls ? 1 : 0,
-                showInfo: 0,
-                // iv_load_policy: 3,
-                modestbranding: 1,
-                // start: 10,
-                // end: 20,
-              },
-              events: {
-                onReady: (event) => {
-                  const YTPlayer = event.target;
-                  const duration = YTPlayer.getDuration();
-                  this.set(player.data);
-                  this.hideSpinner();
-                  this.fire(Events.CREATED);
-                  this.fire(Events.LOAD, {
+          window[player.id] = new YT.Player(player.id, {
+            height: "100%",
+            width: "100%",
+            videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
+            playerVars: {
+              playsinline: 1,
+              enablejsapi: 1,
+              controls: player.data.controls ? 1 : 0,
+              showInfo: 0,
+              // iv_load_policy: 3,
+              modestbranding: 1,
+              // start: 10,
+              // end: 20,
+            },
+            events: {
+              onReady: (event) => {
+                const YTPlayer = event.target;
+                const id = YTPlayer.getIframe().id;
+                const duration = YTPlayer.getDuration();
+
+                // get the ref to the associated content handler
+                const handler: Player = window.youTubePlayers.find(
+                  (p) => p.id === id
+                );
+
+                if (handler) {
+                  handler.ref.set(player.data);
+                  handler.ref.fire(Events.CREATED);
+                  handler.ref.fire(Events.LOAD, {
                     duration: duration,
                   });
-                },
-                onStateChange: (_event) => {
-                  // const currentTime = this._player.getCurrentTime();
-                  // console.log(currentTime);
-                  // currentTimeInput.value = currentTime;
-                },
+                }
               },
-            });
-          }
+              onStateChange: (_event) => {
+                // const currentTime = this._player.getCurrentTime();
+                // console.log(currentTime);
+                // currentTimeInput.value = currentTime;
+              },
+            },
+          });
         }
       };
     }
@@ -128,13 +137,10 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 
   public dispose(): void {
     // console.log("dispose YouTubeContentHandler");
-    this._el.innerHTML = "";
+    super.dispose();
     // remove from window.youTubePlayers where hostId === this._id
     window.youTubePlayers = window.youTubePlayers.filter(
       (p) => p.id !== this._id
     );
-    // remove classes
-    this._el.className = "";
-    this.adapter?.dispose();
   }
 }
