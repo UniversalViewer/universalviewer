@@ -519,6 +519,10 @@
             console.log(e);
           });
 
+          uv.on("error", function(e) {
+            console.log("error", e);
+          });
+
           // uv.on("load", function() {
           //   uv.set({
           //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"

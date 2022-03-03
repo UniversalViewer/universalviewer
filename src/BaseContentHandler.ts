@@ -38,11 +38,11 @@ export default class BaseContentHandler<IUVData>
   }
 
   public showSpinner(): void {
-    this._el.parentElement!.parentElement!.classList.remove("loaded");
+    this._el.parentElement!.classList.remove("loaded");
   }
 
   public hideSpinner(): void {
-    this._el.parentElement!.parentElement!.classList.add("loaded");
+    this._el.parentElement!.classList.add("loaded");
   }
 
   public exitFullScreen(): void {}
