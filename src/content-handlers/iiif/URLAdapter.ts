@@ -51,7 +51,8 @@ export class URLAdapter extends UVAdapter {
     }
 
     return {
-      iiifManifestId: this.get<string>("iiifManifestId"),
+      iiifManifestId:
+        this.get<string>("iiifManifestId") || this.get<string>("manifest"),
       collectionIndex: this.get<number>("c"),
       manifestIndex: this.get<number>("m", 0),
       canvasIndex: this.get<number>("cv", 0),
