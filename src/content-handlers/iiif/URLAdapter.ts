@@ -37,7 +37,6 @@ export class URLAdapter extends UVAdapter {
   }
 
   public getInitialData(overrides?: IUVData): IUVData {
-    // console.log("getInitialData");
     const formattedLocales: Array<{ label?: string; name: string }> = [];
     const locales = this.get<string>("locales", "");
     if (locales) {
@@ -53,10 +52,10 @@ export class URLAdapter extends UVAdapter {
     return {
       iiifManifestId:
         this.get<string>("iiifManifestId") || this.get<string>("manifest"),
-      collectionIndex: this.get<number>("c"),
-      manifestIndex: this.get<number>("m", 0),
-      canvasIndex: this.get<number>("cv", 0),
-      rotation: this.get<number>("r", 0),
+      collectionIndex: Number(this.get<number>("c")),
+      manifestIndex: Number(this.get<number>("m", 0)),
+      canvasIndex: Number(this.get<number>("cv", 0)),
+      rotation: Number(this.get<number>("r", 0)),
       rangeId: this.get<string>("rid", ""),
       xywh: this.get<string>("xywh", ""),
       target: this.get<string>("target", ""),

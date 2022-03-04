@@ -78,9 +78,11 @@ export class MoreInfoRightPanel extends RightPanel {
   }
 
   private _getData() {
+    const canvases = this.extension.getCurrentCanvases();
+
     return {
       canvasDisplayOrder: this.config.options.canvasDisplayOrder,
-      canvases: this.extension.getCurrentCanvases(),
+      canvases: canvases,
       canvasExclude: this.config.options.canvasExclude,
       canvasLabels: this.extension.getCanvasLabels(this.content.page),
       content: this.config.content,
