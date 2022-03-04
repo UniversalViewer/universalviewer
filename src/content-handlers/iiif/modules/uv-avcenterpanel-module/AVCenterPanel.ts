@@ -146,12 +146,13 @@ export class AVCenterPanel extends CenterPanel {
 
     // @ts-ignore
     this.avcomponent = new AVComponent({
-      target: <HTMLElement>this.$avcomponent[0]
+      target: <HTMLElement>this.$avcomponent[0],
       // @ts-ignore
-      // data: {
-      //   posterImageExpanded: this.options.posterImageExpanded,
-      //   enableFastForward: true,
-      // }
+      data: {
+        posterImageExpanded: this.options.posterImageExpanded,
+        enableFastForward: true,
+        enableFastRewind: true
+      }
     });
 
     this.avcomponent.on(
