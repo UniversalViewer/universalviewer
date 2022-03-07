@@ -201,6 +201,7 @@
           uv = UV.init("uv", {
             iiifManifestId: iiifManifestId,
           });
+          addConfigurationHandlers();
 
           // uv.set({
           //   iiifManifestId: iiifManifestId,
@@ -219,6 +220,7 @@
           uv = UV.init("uv", {
             youTubeVideoId: youTubeVideoId,
           });
+          addConfigurationHandlers();
 
           // uv.set({
           //   iiifManifestId: undefined,
@@ -437,31 +439,8 @@
           $annotations.value = JSON.stringify(annotations);
         }
 
-        function setupUV() {
-          // const data = urlAdapter.getInitialData({
-          //   iiifManifestId: iiifManifestId,
-          //   debug: false,
-          // });
-
-          const data = urlAdapter.getInitialData({
-            youTubeVideoId: youTubeVideoId,
-            debug: false,
-          });
-
-          // test without getInitialData
-          // const data = {
-          //   iiifManifestId: iiifManifestId,
-          //   debug: false
-          // };
-
-          uv = UV.init("uv", data);
-
-          //console.log(UV.init, UV.IIIFURLAdapter, UV.BaseEvents);
-
-          urlAdapter.bindTo(uv);
-
+        function addConfigurationHandlers() {
           uv.on("configure", function({ config, cb }) {
-            console.log("configure");
             cb(
               new Promise(function(resolve) {
                 fetch("uv-config.json").then(function(response) {
@@ -488,6 +467,32 @@
               },
             });
           });
+        }
+
+        function setupUV() {
+          const data = urlAdapter.getInitialData({
+            iiifManifestId: iiifManifestId,
+            debug: false,
+          });
+
+          // const data = urlAdapter.getInitialData({
+          //   youTubeVideoId: youTubeVideoId,
+          //   debug: false,
+          // });
+
+          // test without getInitialData
+          // const data = {
+          //   iiifManifestId: iiifManifestId,
+          //   debug: false
+          // };
+
+          uv = UV.init("uv", data);
+
+          //console.log(UV.init, UV.IIIFURLAdapter, UV.BaseEvents);
+
+          urlAdapter.bindTo(uv);
+
+          addConfigurationHandlers();
 
           // uv.on("configure", function({ config, cb }) {
           //   cb((async () => {

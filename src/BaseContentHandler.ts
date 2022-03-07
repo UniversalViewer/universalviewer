@@ -25,7 +25,6 @@ export default class BaseContentHandler<IUVData>
   }
 
   public fire(name: string, ...args: any[]): void {
-    console.log(this._eventListeners);
     var data = [].slice.call(arguments, 1);
     var evtArr = (
       (this._eventListeners || (this._eventListeners = {}))[name] || []
