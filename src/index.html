@@ -438,15 +438,15 @@
         }
 
         function setupUV() {
-          const data = urlAdapter.getInitialData({
-            iiifManifestId: iiifManifestId,
-            debug: false,
-          });
-
           // const data = urlAdapter.getInitialData({
-          //   youTubeVideoId: youTubeVideoId,
+          //   iiifManifestId: iiifManifestId,
           //   debug: false,
           // });
+
+          const data = urlAdapter.getInitialData({
+            youTubeVideoId: youTubeVideoId,
+            debug: false,
+          });
 
           // test without getInitialData
           // const data = {
@@ -461,6 +461,7 @@
           urlAdapter.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
+            console.log("configure");
             cb(
               new Promise(function(resolve) {
                 fetch("uv-config.json").then(function(response) {

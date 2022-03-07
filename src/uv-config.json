@@ -8,7 +8,10 @@
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "rightPanelEnabled": true,
-    "clickToZoomEnabled": false
+    "clickToZoomEnabled": false,
+    "youtube": {
+      "controls": true
+    }
   },
   "modules": {
     "headerPanel": {
