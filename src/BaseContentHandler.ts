@@ -1,6 +1,8 @@
 import { IContentHandler } from "./IContentHandler";
 import { IUVOptions } from "./UniversalViewer";
 import { UVAdapter } from "./UVAdapter";
+import { Events } from "./Events";
+const merge = require("lodash/merge");
 
 export default class BaseContentHandler<IUVData>
   implements IContentHandler<IUVData> {
@@ -43,6 +45,29 @@ export default class BaseContentHandler<IUVData>
 
   public hideSpinner(): void {
     this._el.parentElement!.classList.add("loaded");
+  }
+
+  public async configure(config: any): Promise<any> {
+    let promises: Promise<any>[] = [] as any;
+
+    this.fire(Events.CONFIGURE, {
+      config,
+      cb: (promise) => {
+        promises.push(promise);
+      },
+    });
+
+    if (promises.length) {
+      const configs = await Promise.all(promises);
+
+      const mergedConfigs = configs.reduce((previous, current) => {
+        return merge(previous, current);
+      });
+
+      config = merge(config, mergedConfigs);
+    }
+
+    return config;
   }
 
   public exitFullScreen(): void {}

@@ -2,7 +2,6 @@ const $ = require("jquery");
 require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
-const merge = require("lodash/merge");
 import { IIIFEvents } from "./IIIFEvents";
 import {
   ExtensionLoader,
@@ -363,44 +362,21 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
     }
 
-    data.config = await that._configure(data, extension);
-
-    that._createExtension(extension, data, helper);
-  }
-
-  private _error(message: string): void {
-    this.fire(Events.ERROR, message);
-  }
-
-  private async _configure(data: IUVData, extension: any): Promise<any> {
     if (!data.locales) {
       data.locales = [];
       data.locales.push(defaultLocale);
     }
 
     // import the config file
-    let config = await extension.loadConfig(data.locales[0].name);
+    let config = await (extension as any).loadConfig(data.locales[0].name);
 
-    let promises: Promise<any>[] = [] as any;
+    data.config = await that.configure(config);
 
-    this.fire(Events.CONFIGURE, {
-      config,
-      cb: (promise) => {
-        promises.push(promise);
-      },
-    });
+    that._createExtension(extension, data, helper);
+  }
 
-    if (promises.length) {
-      const configs = await Promise.all(promises);
-
-      const mergedConfigs = configs.reduce((previous, current) => {
-        return merge(previous, current);
-      });
-
-      config = merge(config, mergedConfigs);
-    }
-
-    return config;
+  private _error(message: string): void {
+    this.fire(Events.ERROR, message);
   }
 
   private _createExtension(

@@ -2,7 +2,6 @@ import BaseContentHandler from "../../BaseContentHandler";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
 import { Events } from "../../Events";
-const merge = require("lodash/merge");
 
 interface Player {
   id: string;
@@ -63,84 +62,60 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     } else {
       window.onYouTubeIframeAPIReady = () => {
         for (const player of window.youTubePlayers as Player[]) {
-          player.ref.configure(player.data).then((config) => {
-            window[player.id] = new YT.Player(player.id, {
-              height: "100%",
-              width: "100%",
-              videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
-              playerVars: {
-                playsinline: 1,
-                enablejsapi: 1,
-                controls: config.options?.youtube?.controls ? 1 : 0,
-                showInfo: 0,
-                // iv_load_policy: 3,
-                modestbranding: 1,
-                // start: 10,
-                // end: 20,
-              },
-              events: {
-                onReady: (event) => {
-                  const YTPlayer = event.target;
-                  const id = YTPlayer.getIframe().id;
-                  const duration = YTPlayer.getDuration();
-
-                  // get the ref to the associated content handler
-                  const handler: Player = window.youTubePlayers.find(
-                    (p) => p.id === id
-                  );
-
-                  if (handler) {
-                    // handler.ref.configure(player.data);
-                    handler.ref.set(player.data);
-                    handler.ref.fire(Events.CREATED);
-                    handler.ref.fire(Events.LOAD, {
-                      duration: duration,
-                    });
-                  }
-                },
-                onStateChange: (_event) => {
-                  // const currentTime = this._player.getCurrentTime();
-                  // console.log(currentTime);
-                  // currentTimeInput.value = currentTime;
+          player.ref
+            .configure({
+              options: {
+                youtube: {
+                  controls: true,
                 },
               },
+            })
+            .then((config) => {
+              window[player.id] = new YT.Player(player.id, {
+                height: "100%",
+                width: "100%",
+                videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
+                playerVars: {
+                  playsinline: 1,
+                  enablejsapi: 1,
+                  controls: config.options?.youtube?.controls ? 1 : 0,
+                  showInfo: 0,
+                  // iv_load_policy: 3,
+                  modestbranding: 1,
+                  // start: 10,
+                  // end: 20,
+                },
+                events: {
+                  onReady: (event) => {
+                    const YTPlayer = event.target;
+                    const id = YTPlayer.getIframe().id;
+                    const duration = YTPlayer.getDuration();
+
+                    // get the ref to the associated content handler
+                    const handler: Player = window.youTubePlayers.find(
+                      (p) => p.id === id
+                    );
+
+                    if (handler) {
+                      // handler.ref.configure(player.data);
+                      handler.ref.set(player.data);
+                      handler.ref.fire(Events.CREATED);
+                      handler.ref.fire(Events.LOAD, {
+                        duration: duration,
+                      });
+                    }
+                  },
+                  onStateChange: (_event) => {
+                    // const currentTime = this._player.getCurrentTime();
+                    // console.log(currentTime);
+                    // currentTimeInput.value = currentTime;
+                  },
+                },
+              });
             });
-          });
         }
       };
     }
-  }
-
-  public async configure(data: any): Promise<any> {
-    let promises: Promise<any>[] = [] as any;
-
-    // default config
-    let config = {
-      options: {
-        youtube: {
-          controls: true,
-        },
-      },
-    };
-
-    this.fire(Events.CONFIGURE, {
-      config,
-      cb: (promise) => {
-        promises.push(promise);
-      },
-    });
-
-    if (promises.length) {
-      const configs = await Promise.all(promises);
-
-      const mergedConfigs = configs.reduce((previous, current) => {
-        return merge(previous, current);
-      });
-
-      config = merge(config, mergedConfigs);
-    }
-
-    return config;
   }
 
   public set(data: YouTubeData): void {
