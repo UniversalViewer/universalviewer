@@ -64,10 +64,8 @@ export default class YouTubeContentHandler extends BaseContentHandler<
         for (const player of window.youTubePlayers as Player[]) {
           player.ref
             .configure({
-              options: {
-                youtube: {
-                  controls: true,
-                },
+              youtube: {
+                controls: true,
               },
             })
             .then((config) => {
@@ -78,7 +76,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                 playerVars: {
                   playsinline: 1,
                   enablejsapi: 1,
-                  controls: config.options?.youtube?.controls ? 1 : 0,
+                  controls: config.youtube?.controls ? 1 : 0,
                   showInfo: 0,
                   // iv_load_policy: 3,
                   modestbranding: 1,

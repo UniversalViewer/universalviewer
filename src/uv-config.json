@@ -1,4 +1,7 @@
 {
+  "youtube": {
+    "controls": true
+  },
   "options": {
     "dropEnabled": true,
     "footerPanelEnabled": true,
@@ -8,10 +11,7 @@
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "rightPanelEnabled": true,
-    "clickToZoomEnabled": false,
-    "youtube": {
-      "controls": true
-    }
+    "clickToZoomEnabled": false
   },
   "modules": {
     "headerPanel": {
