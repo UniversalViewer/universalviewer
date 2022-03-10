@@ -2,7 +2,6 @@ const $ = require("jquery");
 require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);
-import { IIIFEvents } from "./IIIFEvents";
 import {
   ExtensionLoader,
   IExtension,
@@ -189,7 +188,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   public set(data: IUVData): void {
-    this.fire(IIIFEvents.SET, data);
+    // this.fire(IIIFEvents.SET, data);
 
     // if this is the first set
     if (!this.extension) {

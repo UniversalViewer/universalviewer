@@ -49,10 +49,18 @@ export class URLAdapter extends UVAdapter {
       formattedLocales.push(defaultLocale);
     }
 
+    function numberOrUndefined(num) {
+      if (num === undefined) {
+        return undefined;
+      }
+
+      return Number(num);
+    }
+
     return {
       iiifManifestId:
         this.get<string>("iiifManifestId") || this.get<string>("manifest"),
-      collectionIndex: Number(this.get<number>("c")),
+      collectionIndex: numberOrUndefined(this.get<number>("c")),
       manifestIndex: Number(this.get<number>("m", 0)),
       canvasIndex: Number(this.get<number>("cv", 0)),
       rotation: Number(this.get<number>("r", 0)),

@@ -38,7 +38,11 @@ export class MediaElementCenterPanel extends CenterPanel {
     const that = this;
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-      that.player.setCurrentTime(target.t);
+      let t = target.t;
+      if (Array.isArray(t)) {
+        t = t[0];
+      }
+      that.player.setCurrentTime(t);
       that.player.play();
     });
 

@@ -1,7 +1,4 @@
 {
-  "youtube": {
-    "controls": true
-  },
   "options": {
     "dropEnabled": true,
     "footerPanelEnabled": true,

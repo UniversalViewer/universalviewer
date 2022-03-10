@@ -84,8 +84,12 @@ const config = {
         express.static(path.join(__dirname, "src", "youtube-collection.json"))
       );
       devServer.app.use(
-        "/uv-config.json",
-        express.static(path.join(__dirname, "src", "uv-config.json"))
+        "/uv-iiif-config.json",
+        express.static(path.join(__dirname, "src", "uv-iiif-config.json"))
+      );
+      devServer.app.use(
+        "/uv-youtube-config.json",
+        express.static(path.join(__dirname, "src", "uv-youtube-config.json"))
       );
       devServer.app.use(
         "/uv.css",

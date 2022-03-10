@@ -201,40 +201,12 @@
 
         iiifTabButton.addEventListener("click", function(e) {
           e.preventDefault();
-          iiifTabButton.classList.add("active");
-          youTubeTabButton.classList.remove("active");
-          iiifTab.classList.remove("hidden");
-          youTubeTab.classList.add("hidden");
-
-          uv.dispose();
-          uv = UV.init("uv", {
-            iiifManifestId: iiifManifestId,
-          });
-          addUVEventHandlers();
-
-          // uv.set({
-          //   iiifManifestId: iiifManifestId,
-          //   youTubeVideoId: undefined,
-          // });
+          activateIIIFTab();
         });
 
         youTubeTabButton.addEventListener("click", function(e) {
           e.preventDefault();
-          youTubeTabButton.classList.add("active");
-          iiifTabButton.classList.remove("active");
-          youTubeTab.classList.remove("hidden");
-          iiifTab.classList.add("hidden");
-
-          uv.dispose();
-          uv = UV.init("uv", {
-            youTubeVideoId: youTubeVideoId,
-          });
-          addUVEventHandlers();
-
-          // uv.set({
-          //   iiifManifestId: undefined,
-          //   youTubeVideoId: youTubeVideoId,
-          // });
+          activateYouTubeTab();
         });
 
         var uv, iiifManifestId, youTubeVideoId;
@@ -272,8 +244,7 @@
         var $setTrimButton = document.getElementById("setTrimButton");
 
         var annotations = [];
-
-        var urlAdapter = new UV.IIIFURLAdapter();
+        var urlAdapter;
 
         function parseIIIFCollection(manifests) {
           for (var i = 0; i < manifests.collections.length; i++) {
@@ -461,18 +432,45 @@
           $annotations.value = JSON.stringify(annotations);
         }
 
-        function addUVEventHandlers() {
+        function activateIIIFTab() {
+          iiifTabButton.classList.add("active");
+          youTubeTabButton.classList.remove("active");
+          iiifTab.classList.remove("hidden");
+          youTubeTab.classList.add("hidden");
+
+          // uv.dispose();
+          // uv = UV.init("uv", {
+          //   iiifManifestId: iiifManifestId,
+          // });
+          // addUVEventHandlers();
+
+          urlAdapter = new UV.IIIFURLAdapter();
+
+          setSelectedIIIFManifest();
+
+          const data = urlAdapter.getInitialData({
+            iiifManifestId: iiifManifestId,
+            debug: false,
+          });
+
+          if (uv) {
+            uv.dispose();
+          }
+
+          uv = UV.init("uv", data);
+          urlAdapter.bindTo(uv);
+
           uv.on("configure", function({ config, cb }) {
             cb(
               new Promise(function(resolve) {
-                fetch("uv-config.json").then(function(response) {
+                fetch("uv-iiif-config.json").then(function(response) {
                   resolve(response.json());
                 });
               })
             );
           });
 
-          // enable doubleclick annotation
+          // test inline config, enable doubleclick annotation
           uv.on("configure", function({ config, cb }) {
             cb({
               modules: {
@@ -520,9 +518,48 @@
             clearAnnotations();
           });
 
-          uv.on("load", function(e) {
-            console.log(e);
+          // uv.on("load", function(e) {
+          //   console.log(e);
+          // });
+
+          // uv.set({
+          //   iiifManifestId: iiifManifestId,
+          //   youTubeVideoId: undefined,
+          // });
+        }
+
+        function activateYouTubeTab() {
+          youTubeTabButton.classList.add("active");
+          iiifTabButton.classList.remove("active");
+          youTubeTab.classList.remove("hidden");
+          iiifTab.classList.add("hidden");
+
+          // todo: implement youtube url adapter
+          urlAdapter = new UV.IIIFURLAdapter();
+
+          setSelectedYouTubeVideoId();
+
+          if (uv) {
+            uv.dispose();
+          }
+
+          uv = UV.init("uv", {
+            youTubeVideoId: youTubeVideoId,
           });
+
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function(resolve) {
+                fetch("uv-youtube-config.json").then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
+          });
+
+          // uv.on("load", function(e) {
+          //   console.log(e);
+          // });
 
           uv.on("ended", function() {
             console.log("ended");
@@ -539,62 +576,15 @@
           uv.on("error", function(e) {
             console.log("error", e);
           });
-        }
 
-        function setupUV() {
-          const data = urlAdapter.getInitialData({
-            iiifManifestId: iiifManifestId,
-            debug: false,
-          });
-
-          // const data = urlAdapter.getInitialData({
+          // uv.set({
+          //   iiifManifestId: undefined,
           //   youTubeVideoId: youTubeVideoId,
-          //   debug: false,
-          // });
-
-          // test without getInitialData
-          // const data = {
-          //   iiifManifestId: iiifManifestId,
-          //   debug: false
-          // };
-
-          uv = UV.init("uv", data);
-
-          //console.log(UV.init, UV.IIIFURLAdapter, UV.BaseEvents);
-
-          urlAdapter.bindTo(uv);
-
-          addUVEventHandlers();
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb((async () => {
-          //     await fetch("uv-config.json");
-          //   })());
-          // });
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb({ options: { overrideFullScreen: true } });
-          // });
-
-          // uv.on("load", function() {
-          //   uv.set({
-          //     target: "https://wellcomelibrary.org/iiif/b18035723/canvas/c2#xywh=728,768,1049,788"
-          //   });
-          // });
-
-          // uv.on("openseadragonExtension.rotationChange", function(rotation) {
-          //   $rotation.value = rotation;
-          // });
-
-          // uv.on("toggleFullScreen", function(e) {
-          //   console.log("toggleFullScreen", e);
           // });
         }
 
         loadCollections(function() {
-          setSelectedIIIFManifest();
-          setSelectedYouTubeVideoId();
-          setupUV();
+          activateIIIFTab();
         });
       });
     </script>

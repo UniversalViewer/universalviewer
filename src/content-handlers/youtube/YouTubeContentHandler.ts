@@ -77,7 +77,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                 playerVars: {
                   playsinline: 1,
                   enablejsapi: 1,
-                  controls: config.youtube?.controls ? 1 : 0,
+                  controls: config.controls ? 1 : 0,
                   showInfo: 0,
                   // iv_load_policy: 3,
                   modestbranding: 1,
