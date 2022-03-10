@@ -3,4 +3,5 @@ export interface YouTubeData {
   autoPlay?: boolean;
   currentTime?: number;
   controls?: boolean;
+  trim?: [number, number];
 }

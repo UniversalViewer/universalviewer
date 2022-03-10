@@ -167,6 +167,15 @@
             Set Current Time
           </button>
         </div>
+
+        <div class="group">
+          <h2>Trim</h2>
+          <input id="trimStart" type="number" value="0" />
+          <input id="trimEnd" type="number" value="0" />
+          <button id="setTrimButton" class="button" href="#">
+            Set Trim
+          </button>
+        </div>
       </div>
     </div>
 
@@ -201,7 +210,7 @@
           uv = UV.init("uv", {
             iiifManifestId: iiifManifestId,
           });
-          addConfigurationHandlers();
+          addUVEventHandlers();
 
           // uv.set({
           //   iiifManifestId: iiifManifestId,
@@ -220,7 +229,7 @@
           uv = UV.init("uv", {
             youTubeVideoId: youTubeVideoId,
           });
-          addConfigurationHandlers();
+          addUVEventHandlers();
 
           // uv.set({
           //   iiifManifestId: undefined,
@@ -258,6 +267,9 @@
         var $setCurrentTimeButton = document.getElementById(
           "setCurrentTimeButton"
         );
+        var $trimStart = document.getElementById("trimStart");
+        var $trimEnd = document.getElementById("trimEnd");
+        var $setTrimButton = document.getElementById("setTrimButton");
 
         var annotations = [];
 
@@ -434,12 +446,22 @@
           });
         };
 
+        $setTrimButton.onclick = function() {
+          var trimStart = $trimStart.value;
+          var trimEnd = $trimEnd.value;
+          uv.set({
+            youTubeVideoId: youTubeVideoId,
+            autoPlay: true,
+            trim: [trimStart, trimEnd],
+          });
+        };
+
         function clearAnnotations() {
           annotations = [];
           $annotations.value = JSON.stringify(annotations);
         }
 
-        function addConfigurationHandlers() {
+        function addUVEventHandlers() {
           uv.on("configure", function({ config, cb }) {
             cb(
               new Promise(function(resolve) {
@@ -467,42 +489,6 @@
               },
             });
           });
-        }
-
-        function setupUV() {
-          const data = urlAdapter.getInitialData({
-            iiifManifestId: iiifManifestId,
-            debug: false,
-          });
-
-          // const data = urlAdapter.getInitialData({
-          //   youTubeVideoId: youTubeVideoId,
-          //   debug: false,
-          // });
-
-          // test without getInitialData
-          // const data = {
-          //   iiifManifestId: iiifManifestId,
-          //   debug: false
-          // };
-
-          uv = UV.init("uv", data);
-
-          //console.log(UV.init, UV.IIIFURLAdapter, UV.BaseEvents);
-
-          urlAdapter.bindTo(uv);
-
-          addConfigurationHandlers();
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb((async () => {
-          //     await fetch("uv-config.json");
-          //   })());
-          // });
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb({ options: { overrideFullScreen: true } });
-          // });
 
           uv.on("targetChange", function(target) {
             $target.value = target;
@@ -538,9 +524,57 @@
             console.log(e);
           });
 
+          uv.on("ended", function() {
+            console.log("ended");
+          });
+
+          uv.on("playing", function() {
+            console.log("playing");
+          });
+
+          uv.on("paused", function() {
+            console.log("paused");
+          });
+
           uv.on("error", function(e) {
             console.log("error", e);
           });
+        }
+
+        function setupUV() {
+          const data = urlAdapter.getInitialData({
+            iiifManifestId: iiifManifestId,
+            debug: false,
+          });
+
+          // const data = urlAdapter.getInitialData({
+          //   youTubeVideoId: youTubeVideoId,
+          //   debug: false,
+          // });
+
+          // test without getInitialData
+          // const data = {
+          //   iiifManifestId: iiifManifestId,
+          //   debug: false
+          // };
+
+          uv = UV.init("uv", data);
+
+          //console.log(UV.init, UV.IIIFURLAdapter, UV.BaseEvents);
+
+          urlAdapter.bindTo(uv);
+
+          addUVEventHandlers();
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb((async () => {
+          //     await fetch("uv-config.json");
+          //   })());
+          // });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb({ options: { overrideFullScreen: true } });
+          // });
 
           // uv.on("load", function() {
           //   uv.set({

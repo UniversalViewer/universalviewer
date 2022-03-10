@@ -2,6 +2,7 @@ import BaseContentHandler from "../../BaseContentHandler";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
 import { Events } from "../../Events";
+import { YouTubeEvents } from "./YouTubeEvents";
 
 interface Player {
   id: string;
@@ -103,7 +104,37 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                       });
                     }
                   },
-                  onStateChange: (_event) => {
+                  onStateChange: (event) => {
+                    const YTPlayer = event.target;
+                    const id = YTPlayer.getIframe().id;
+
+                    // get the ref to the associated content handler
+                    const handler: Player = window.youTubePlayers.find(
+                      (p) => p.id === id
+                    );
+
+                    if (handler) {
+                      switch (event.data) {
+                        case -1:
+                          handler.ref.fire(YouTubeEvents.UNSTARTED);
+                          break;
+                        case 0:
+                          handler.ref.fire(YouTubeEvents.ENDED);
+                          break;
+                        case 1:
+                          handler.ref.fire(YouTubeEvents.PLAYING);
+                          break;
+                        case 2:
+                          handler.ref.fire(YouTubeEvents.PAUSED);
+                          break;
+                        case 3:
+                          handler.ref.fire(YouTubeEvents.BUFFERING);
+                          break;
+                        case 5:
+                          handler.ref.fire(YouTubeEvents.CUED);
+                          break;
+                      }
+                    }
                     // const currentTime = this._player.getCurrentTime();
                     // console.log(currentTime);
                     // currentTimeInput.value = currentTime;
@@ -123,9 +154,25 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
 
       if (data.autoPlay) {
-        player.loadVideoById(videoId);
+        if (data.trim) {
+          player.loadVideoById({
+            videoId: videoId,
+            startSeconds: data.trim[0],
+            endSeconds: data.trim[1],
+          });
+        } else {
+          player.loadVideoById(videoId);
+        }
       } else {
-        player.cueVideoById(videoId);
+        if (data.trim) {
+          player.cueVideoById({
+            videoId: videoId,
+            startSeconds: data.trim[0],
+            endSeconds: data.trim[1],
+          });
+        } else {
+          player.cueVideoById(videoId);
+        }
       }
     }
 
