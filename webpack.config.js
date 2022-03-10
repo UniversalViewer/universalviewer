@@ -114,7 +114,11 @@ const config = [
             to: resolvePath("./dist"),
           },
           {
-            from: resolvePath("./src/uv-config.json"),
+            from: resolvePath("./src/uv-iiif-config.json"),
+            to: resolvePath("./dist"),
+          },
+          {
+            from: resolvePath("./src/uv-youtube-config.json"),
             to: resolvePath("./dist"),
           },
           {
