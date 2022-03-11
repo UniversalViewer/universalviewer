@@ -7,7 +7,11 @@ import { YouTubeEvents } from "./YouTubeEvents";
 interface Player {
   id: string;
   data: YouTubeData;
-  ref: any;
+  ref: YouTubeContentHandler;
+}
+
+interface YouTubeConfig {
+  controls?: boolean;
 }
 
 export default class YouTubeContentHandler extends BaseContentHandler<
@@ -15,6 +19,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
 > {
   private _playerDiv: HTMLDivElement;
   private _id: string;
+  public config: YouTubeConfig;
 
   constructor(options: IUVOptions) {
     super(options);
@@ -65,11 +70,10 @@ export default class YouTubeContentHandler extends BaseContentHandler<
         for (const player of window.youTubePlayers as Player[]) {
           player.ref
             .configure({
-              youtube: {
-                controls: true,
-              },
+              // default config
+              controls: true,
             })
-            .then((config) => {
+            .then((config: YouTubeConfig) => {
               window[player.id] = new YT.Player(player.id, {
                 height: "100%",
                 width: "100%",
@@ -96,7 +100,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                     );
 
                     if (handler) {
-                      // handler.ref.configure(player.data);
+                      handler.ref.config = config;
                       handler.ref.set(player.data);
                       handler.ref.fire(Events.CREATED);
                       handler.ref.fire(Events.LOAD, {
@@ -148,6 +152,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public set(data: YouTubeData): void {
+    console.log("YT set");
     const player = window[this._id];
 
     if (data.youTubeVideoId) {

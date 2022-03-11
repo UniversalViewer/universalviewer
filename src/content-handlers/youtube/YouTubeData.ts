@@ -1,7 +1,6 @@
 export interface YouTubeData {
-  youTubeVideoId?: string;
   autoPlay?: boolean;
+  youTubeVideoId?: string;
   currentTime?: number;
-  controls?: boolean;
   trim?: [number, number];
 }
