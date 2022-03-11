@@ -92,7 +92,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                   onReady: (event) => {
                     const YTPlayer = event.target;
                     const id = YTPlayer.getIframe().id;
-                    const duration = YTPlayer.getDuration();
+                    // const duration = YTPlayer.getDuration();
 
                     // get the ref to the associated content handler
                     const handler: Player = window.youTubePlayers.find(
@@ -103,14 +103,15 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                       handler.ref.config = config;
                       handler.ref.set(player.data);
                       handler.ref.fire(Events.CREATED);
-                      handler.ref.fire(Events.LOAD, {
-                        duration: duration,
-                      });
+                      // handler.ref.fire(Events.LOAD, {
+                      //   duration: duration,
+                      // });
                     }
                   },
                   onStateChange: (event) => {
                     const YTPlayer = event.target;
                     const id = YTPlayer.getIframe().id;
+                    const duration = YTPlayer.getDuration();
 
                     // get the ref to the associated content handler
                     const handler: Player = window.youTubePlayers.find(
@@ -121,6 +122,9 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                       switch (event.data) {
                         case -1:
                           handler.ref.fire(YouTubeEvents.UNSTARTED);
+                          handler.ref.fire(Events.LOAD, {
+                            duration: duration,
+                          });
                           break;
                         case 0:
                           handler.ref.fire(YouTubeEvents.ENDED);
@@ -152,7 +156,6 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   }
 
   public set(data: YouTubeData): void {
-    console.log("YT set");
     const player = window[this._id];
 
     if (data.youTubeVideoId) {
