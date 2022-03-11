@@ -628,52 +628,29 @@
         }
 
         function initStory() {
-          storyAnnotations.forEach((anno) => {
-            const li = document.createElement("li");
-            const a = document.createElement("a");
-            a.dataset.annoId = anno.id;
-            a.href = `#${anno.id}`;
-            a.innerHTML = anno.bodyValue;
-            a.onclick = handleAnnotationClick;
-            li.appendChild(a);
-            annotationList.appendChild(li);
+          fetch(annotationsJson).then((res) => {
+            const data = res.json().then((data) => {
+              storyAnnotations = data.annotations.filter(
+                (anno) => anno.motivation === "framing"
+              );
+              storyAnnotations.forEach((anno) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.dataset.annoId = anno.id;
+                a.href = `#${anno.id}`;
+                a.innerHTML = anno.bodyValue;
+                a.onclick = handleAnnotationClick;
+                li.appendChild(a);
+                annotationList.appendChild(li);
+              });
+
+              partOf = storyAnnotations[0].partOf;
+              target = storyAnnotations[0].target;
+            });
           });
-
-          partOf = storyAnnotations[0].partOf;
-          target = storyAnnotations[0].target;
-
-          // uv = UV.init("uv", {
-          //   manifest: manifest,
-          //   target: target,
-          //   embedded: true, // needed for codesandbox frame
-          // });
-
-          // uv.on("load", () => {
-          //   uv.set({
-          //     manifest: manifest,
-          //     target: target,
-          //   });
-          // });
-
-          // uv.on("configure", function ({ config, cb }) {
-          //   cb(
-          //     new Promise(function (resolve) {
-          //       fetch("uv-config.json").then(function (response) {
-          //         resolve(response.json());
-          //       });
-          //     })
-          //   );
-          // });
         }
 
-        fetch(annotationsJson).then((res) => {
-          const data = res.json().then((data) => {
-            storyAnnotations = data.annotations.filter(
-              (anno) => anno.motivation === "framing"
-            );
-            initStory();
-          });
-        });
+        // initStory();
       });
     </script>
   </body>
