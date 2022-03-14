@@ -67,92 +67,90 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       window.onYouTubeIframeAPIReady();
     } else {
       window.onYouTubeIframeAPIReady = () => {
-        setTimeout(() => {
-          for (const player of window.youTubePlayers as Player[]) {
-            player.ref
-              .configure({
-                // default config
-                controls: true,
-              })
-              .then((config: YouTubeConfig) => {
-                window[player.id] = new YT.Player(player.id, {
-                  height: "100%",
-                  width: "100%",
-                  videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
-                  playerVars: {
-                    playsinline: 1,
-                    enablejsapi: 1,
-                    controls: config.controls ? 1 : 0,
-                    showInfo: 0,
-                    // iv_load_policy: 3,
-                    modestbranding: 1,
-                    // start: 10,
-                    // end: 20,
+        for (const player of window.youTubePlayers as Player[]) {
+          player.ref
+            .configure({
+              // default config
+              controls: true,
+            })
+            .then((config: YouTubeConfig) => {
+              window[player.id] = new YT.Player(player.id, {
+                height: "100%",
+                width: "100%",
+                videoId: this._getYouTubeVideoId(player.data.youTubeVideoId!),
+                playerVars: {
+                  playsinline: 1,
+                  enablejsapi: 1,
+                  controls: config.controls ? 1 : 0,
+                  showInfo: 0,
+                  // iv_load_policy: 3,
+                  modestbranding: 1,
+                  // start: 10,
+                  // end: 20,
+                },
+                events: {
+                  onReady: (event) => {
+                    const YTPlayer = event.target;
+                    const id = YTPlayer.getIframe().id;
+                    // const duration = YTPlayer.getDuration();
+
+                    // get the ref to the associated content handler
+                    const handler: Player = window.youTubePlayers.find(
+                      (p) => p.id === id
+                    );
+
+                    if (handler) {
+                      handler.ref.config = config;
+                      handler.ref.set(player.data);
+                      handler.ref.fire(Events.CREATED);
+                      // handler.ref.fire(Events.LOAD, {
+                      //   duration: duration,
+                      // });
+                    }
                   },
-                  events: {
-                    onReady: (event) => {
-                      const YTPlayer = event.target;
-                      const id = YTPlayer.getIframe().id;
-                      // const duration = YTPlayer.getDuration();
+                  onStateChange: (event) => {
+                    const YTPlayer = event.target;
+                    const id = YTPlayer.getIframe().id;
+                    const duration = YTPlayer.getDuration();
 
-                      // get the ref to the associated content handler
-                      const handler: Player = window.youTubePlayers.find(
-                        (p) => p.id === id
-                      );
+                    // get the ref to the associated content handler
+                    const handler: Player = window.youTubePlayers.find(
+                      (p) => p.id === id
+                    );
 
-                      if (handler) {
-                        handler.ref.config = config;
-                        handler.ref.set(player.data);
-                        handler.ref.fire(Events.CREATED);
-                        // handler.ref.fire(Events.LOAD, {
-                        //   duration: duration,
-                        // });
+                    if (handler) {
+                      switch (event.data) {
+                        case -1:
+                          handler.ref.fire(YouTubeEvents.UNSTARTED);
+                          handler.ref.fire(Events.LOAD, {
+                            duration: duration,
+                          });
+                          break;
+                        case 0:
+                          handler.ref.fire(YouTubeEvents.ENDED);
+                          break;
+                        case 1:
+                          handler.ref.fire(YouTubeEvents.PLAYING);
+                          break;
+                        case 2:
+                          handler.ref.fire(YouTubeEvents.PAUSED);
+                          break;
+                        case 3:
+                          handler.ref.fire(YouTubeEvents.BUFFERING);
+                          break;
+                        case 5:
+                          handler.ref.fire(YouTubeEvents.CUED);
+                          break;
                       }
-                    },
-                    onStateChange: (event) => {
-                      const YTPlayer = event.target;
-                      const id = YTPlayer.getIframe().id;
-                      const duration = YTPlayer.getDuration();
-
-                      // get the ref to the associated content handler
-                      const handler: Player = window.youTubePlayers.find(
-                        (p) => p.id === id
-                      );
-
-                      if (handler) {
-                        switch (event.data) {
-                          case -1:
-                            handler.ref.fire(YouTubeEvents.UNSTARTED);
-                            handler.ref.fire(Events.LOAD, {
-                              duration: duration,
-                            });
-                            break;
-                          case 0:
-                            handler.ref.fire(YouTubeEvents.ENDED);
-                            break;
-                          case 1:
-                            handler.ref.fire(YouTubeEvents.PLAYING);
-                            break;
-                          case 2:
-                            handler.ref.fire(YouTubeEvents.PAUSED);
-                            break;
-                          case 3:
-                            handler.ref.fire(YouTubeEvents.BUFFERING);
-                            break;
-                          case 5:
-                            handler.ref.fire(YouTubeEvents.CUED);
-                            break;
-                        }
-                      }
-                      // const currentTime = this._player.getCurrentTime();
-                      // console.log(currentTime);
-                      // currentTimeInput.value = currentTime;
-                    },
+                    }
+                    // const currentTime = this._player.getCurrentTime();
+                    // console.log(currentTime);
+                    // currentTimeInput.value = currentTime;
                   },
-                });
+                },
               });
-          }
-        }, 1000);
+            });
+        }
       };
     }
   }
