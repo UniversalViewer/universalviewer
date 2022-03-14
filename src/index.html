@@ -614,17 +614,38 @@
           target = anno.target;
           trim = anno.trim;
 
-          console.log("trim", trim);
-
           const type = partOf.includes("youtube") ? "youtube" : "iiif";
 
-          uv.set({
+          if (uv) {
+            uv.dispose();
+          }
+
+          uv = UV.init("uv", {
             autoPlay: true,
             iiifManifestId: type === "iiif" ? partOf : undefined,
             youTubeVideoId: type === "youtube" ? partOf : undefined,
             trim: trim,
             target: target,
           });
+
+          uv.on("configure", function({ config, cb }) {
+            console.log("configure", type);
+            cb(
+              new Promise(function(resolve) {
+                fetch(`uv-${type}-config.json`).then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
+          });
+
+          // uv.set({
+          //   autoPlay: true,
+          //   iiifManifestId: type === "iiif" ? partOf : undefined,
+          //   youTubeVideoId: type === "youtube" ? partOf : undefined,
+          //   trim: trim,
+          //   target: target,
+          // });
         }
 
         function initStory() {
@@ -650,7 +671,7 @@
           });
         }
 
-        // initStory();
+        initStory();
       });
     </script>
   </body>
