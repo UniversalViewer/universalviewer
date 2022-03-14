@@ -4,25 +4,46 @@ import { UVAdapter } from "./UVAdapter";
 import { Events } from "./Events";
 const merge = require("lodash/merge");
 
+export type EventListener = {
+  name: string;
+  cb: Function;
+  ctx?: any;
+};
+
+type EventListenerDictionaryItem = Pick<EventListener, "cb" | "ctx">;
+
 export default class BaseContentHandler<IUVData>
   implements IContentHandler<IUVData> {
   protected _el: HTMLElement;
-  private _eventListeners: any;
-  public adapter: UVAdapter | undefined;
+  private _eventListeners: {
+    [key: string]: EventListenerDictionaryItem[];
+  };
 
-  constructor(public options: IUVOptions) {
+  constructor(
+    public options: IUVOptions,
+    public adapter?: UVAdapter,
+    eventListeners?: EventListener[]
+  ) {
     // console.log("create YouTubeContentHandler");
     this._el = this.options.target;
+    // this._assignedContentHandler.adapter = this.adapter; // set adapter
+
+    // add event listeners
+    if (eventListeners) {
+      eventListeners.forEach(({ name, cb }) => {
+        this.on(name, cb);
+      });
+    }
   }
 
   public set(data: IUVData): void {}
 
-  public on(name: string, callback: Function, ctx: any): void {
+  public on(name: string, cb: Function, ctx?: any): void {
     var e = this._eventListeners || (this._eventListeners = {});
 
     (e[name] || (e[name] = [])).push({
-      fn: callback,
-      ctx: ctx,
+      cb,
+      ctx,
     });
   }
 
@@ -35,7 +56,7 @@ export default class BaseContentHandler<IUVData>
     var len = evtArr.length;
 
     for (i; i < len; i++) {
-      evtArr[i].fn.apply(evtArr[i].ctx, data);
+      evtArr[i].cb.apply(evtArr[i].ctx, data);
     }
   }
 
@@ -48,7 +69,6 @@ export default class BaseContentHandler<IUVData>
   }
 
   public async configure(config: any): Promise<any> {
-    console.log("super configure");
     let promises: Promise<any>[] = [] as any;
 
     this.fire(Events.CONFIGURE, {

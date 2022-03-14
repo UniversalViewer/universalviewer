@@ -22,8 +22,9 @@ import { IContentHandler } from "@/IContentHandler";
 import { IUVOptions } from "@/UniversalViewer";
 import { IIIFData } from "./IIIFData";
 import { defaultLocale } from "../../Utils";
-import BaseContentHandler from "../../BaseContentHandler";
+import BaseContentHandler, { EventListener } from "../../BaseContentHandler";
 import { Events } from "../../Events";
+import { UVAdapter } from "@/UVAdapter";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
@@ -104,8 +105,12 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   public isFullScreen: boolean = false;
   public disposed = false;
 
-  constructor(options: IUVOptions) {
-    super(options);
+  constructor(
+    public options: IUVOptions,
+    public adapter?: UVAdapter,
+    eventListeners?: EventListener[]
+  ) {
+    super(options, adapter, eventListeners);
     // console.log("create IIIFContentHandler");
 
     this._pubsub = new PubSub();

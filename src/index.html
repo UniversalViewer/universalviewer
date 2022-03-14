@@ -629,7 +629,6 @@
           });
 
           uv.on("configure", function({ config, cb }) {
-            console.log("configure", type);
             cb(
               new Promise(function(resolve) {
                 fetch(`uv-${type}-config.json`).then(function(response) {
@@ -671,7 +670,7 @@
           });
         }
 
-        initStory();
+        // initStory();
       });
     </script>
   </body>
