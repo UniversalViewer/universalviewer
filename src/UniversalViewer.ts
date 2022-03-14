@@ -1,6 +1,5 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
-import { UVAdapter } from "./UVAdapter";
 import BaseContentHandler, { EventListener } from "./BaseContentHandler";
 
 export interface IUVOptions {
@@ -35,12 +34,8 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
   private _assignedContentHandler: IContentHandler<IUVData>;
   private _externalEventListeners: EventListener[] = [];
 
-  constructor(
-    public options: IUVOptions,
-    public adapter?: UVAdapter,
-    eventListeners?: EventListener[]
-  ) {
-    super(options, adapter, eventListeners);
+  constructor(public options: IUVOptions) {
+    super(options);
     this._assignContentHandler(this.options.data);
   }
 
