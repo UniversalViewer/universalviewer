@@ -1,7 +1,7 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
 import { UVAdapter } from "./UVAdapter";
-import BaseContentHandler from "./BaseContentHandler";
+import BaseContentHandler, { EventListener } from "./BaseContentHandler";
 
 export interface IUVOptions {
   target: HTMLElement;
@@ -33,21 +33,22 @@ const ContentHandler: IContentHandlerRegistry = {
 export class UniversalViewer extends BaseContentHandler<IUVData> {
   private _contentType: ContentType = ContentType.UNKNOWN;
   private _assignedContentHandler: IContentHandler<IUVData>;
-  private _externalEventListeners: {
-    name: string;
-    callback: Function;
-  }[] = [];
-  public adapter: UVAdapter;
+  private _externalEventListeners: EventListener[] = [];
 
-  constructor(public options: IUVOptions) {
-    super(options);
+  constructor(
+    public options: IUVOptions,
+    public adapter?: UVAdapter,
+    eventListeners?: EventListener[]
+  ) {
+    super(options, adapter, eventListeners);
     this._assignContentHandler(this.options.data);
   }
 
-  public on(name: string, callback: Function, ctx?: any): void {
+  public on(name: string, cb: Function, ctx?: any): void {
     this._externalEventListeners.push({
       name,
-      callback,
+      cb,
+      ctx,
     });
   }
 
@@ -78,16 +79,14 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
       this._assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
       this.showSpinner(); // show spinner
-      this._assignedContentHandler = new m.default({
-        target: this._el,
-        data: data,
-      }); // create content handler
-      this._assignedContentHandler.adapter = this.adapter; // set adapter
-
-      // add event listeners
-      this._externalEventListeners.forEach(({ name, callback }) => {
-        this._assignedContentHandler.on(name, callback);
-      });
+      this._assignedContentHandler = new m.default(
+        {
+          target: this._el,
+          data: data,
+        },
+        this.adapter,
+        this._externalEventListeners
+      ); // create content handler
     }
 
     return handlerChanged;

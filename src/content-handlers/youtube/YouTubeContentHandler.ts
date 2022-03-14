@@ -1,8 +1,9 @@
-import BaseContentHandler from "../../BaseContentHandler";
+import BaseContentHandler, { EventListener } from "../../BaseContentHandler";
 import { IUVOptions } from "../../UniversalViewer";
 import { YouTubeData } from "./YouTubeData";
 import { Events } from "../../Events";
 import { YouTubeEvents } from "./YouTubeEvents";
+import { UVAdapter } from "@/UVAdapter";
 
 interface Player {
   id: string;
@@ -21,8 +22,12 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   private _id: string;
   public config: YouTubeConfig;
 
-  constructor(options: IUVOptions) {
-    super(options);
+  constructor(
+    public options: IUVOptions,
+    public adapter?: UVAdapter,
+    eventListeners?: EventListener[]
+  ) {
+    super(options, adapter, eventListeners);
     // console.log("create YouTubeContentHandler");
     this._init(this.options.data);
   }
