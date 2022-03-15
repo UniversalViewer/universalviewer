@@ -311,7 +311,9 @@
         }
 
         function setSelectedIIIFManifest() {
-          iiifManifestId = urlAdapter.get("iiifManifestId");
+          console.log("setSelectedIIIFManifest");
+          iiifManifestId =
+            urlAdapter.get("iiifManifestId") || urlAdapter.get("manifest");
 
           if (iiifManifestId) {
             $iiifManifestIdSelect.value = iiifManifestId;
