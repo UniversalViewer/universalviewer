@@ -128,6 +128,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                         case -1:
                           handler.ref.fire(YouTubeEvents.UNSTARTED);
                           handler.ref.fire(Events.LOAD, {
+                            player: YTPlayer,
                             duration: duration,
                           });
                           break;

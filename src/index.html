@@ -647,6 +647,11 @@
             muted: muted,
           });
 
+          uv.on("load", function(args) {
+            // console.log("load", args);
+            // args.player.mute();
+          });
+
           uv.on("configure", function({ config, cb }) {
             cb(
               new Promise(function(resolve) {
