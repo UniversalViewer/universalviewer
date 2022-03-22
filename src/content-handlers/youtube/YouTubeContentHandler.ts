@@ -168,6 +168,12 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public set(data: YouTubeData): void {
     const player = window[this._id];
 
+    if (data.muted) {
+      player.mute();
+    } else {
+      player.unMute();
+    }
+
     if (data.youTubeVideoId) {
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
 

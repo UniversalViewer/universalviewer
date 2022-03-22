@@ -430,6 +430,7 @@
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
             trim: [trimStart, trimEnd],
+            muted: true,
           });
         };
 
@@ -601,8 +602,11 @@
         let storyAnnotations, partOf, target, trim;
 
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
+        // const annotationsJson =
+        //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+
         const annotationsJson =
-          "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+          "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
 
         const annotationList = document.getElementById("annotation-list");
 
@@ -621,31 +625,31 @@
             uv.dispose();
           }
 
-          uv = UV.init("uv", {
-            autoPlay: true,
-            iiifManifestId: type === "iiif" ? partOf : undefined,
-            youTubeVideoId: type === "youtube" ? partOf : undefined,
-            trim: trim,
-            target: target,
-          });
-
-          uv.on("configure", function({ config, cb }) {
-            cb(
-              new Promise(function(resolve) {
-                fetch(`uv-${type}-config.json`).then(function(response) {
-                  resolve(response.json());
-                });
-              })
-            );
-          });
-
-          // uv.set({
+          // uv = UV.init("uv", {
           //   autoPlay: true,
           //   iiifManifestId: type === "iiif" ? partOf : undefined,
           //   youTubeVideoId: type === "youtube" ? partOf : undefined,
           //   trim: trim,
           //   target: target,
           // });
+
+          // uv.on("configure", function({ config, cb }) {
+          //   cb(
+          //     new Promise(function(resolve) {
+          //       fetch(`uv-${type}-config.json`).then(function(response) {
+          //         resolve(response.json());
+          //       });
+          //     })
+          //   );
+          // });
+
+          uv.set({
+            autoPlay: true,
+            iiifManifestId: type === "iiif" ? partOf : undefined,
+            youTubeVideoId: type === "youtube" ? partOf : undefined,
+            trim: trim,
+            target: target,
+          });
         }
 
         function initStory() {
@@ -671,7 +675,7 @@
           });
         }
 
-        // initStory();
+        initStory();
       });
     </script>
   </body>
