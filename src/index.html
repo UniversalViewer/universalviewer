@@ -47,7 +47,7 @@
         padding: 0.25rem;
       }
 
-      #uv-controls input {
+      #uv-controls input[type="text"] {
         width: 500px;
         padding: 0.25rem;
       }
@@ -165,6 +165,11 @@
         </div>
 
         <div class="group">
+          <h2>Muted</h2>
+          <input type="checkbox" id="mutedCheckbox" />
+        </div>
+
+        <div class="group">
           <h2>Current Time</h2>
           <input id="currentTime" type="text" value="" />
           <button id="setCurrentTimeButton" class="button" href="#">
@@ -244,6 +249,7 @@
         var $setCurrentTimeButton = document.getElementById(
           "setCurrentTimeButton"
         );
+        var $mutedCheckbox = document.getElementById("mutedCheckbox");
         var $trimStart = document.getElementById("trimStart");
         var $trimEnd = document.getElementById("trimEnd");
         var $setTrimButton = document.getElementById("setTrimButton");
@@ -416,6 +422,13 @@
           setAnnotations();
         };
 
+        $mutedCheckbox.onclick = function(e) {
+          muted = e.target.checked;
+          uv.set({
+            muted: muted,
+          });
+        };
+
         $setCurrentTimeButton.onclick = function() {
           var currentTime = $currentTime.value;
           uv.set({
@@ -430,7 +443,6 @@
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
             trim: [trimStart, trimEnd],
-            muted: true,
           });
         };
 
@@ -565,7 +577,7 @@
           });
 
           uv.on("load", function(e) {
-            console.log(e);
+            console.log("load", e);
           });
 
           uv.on("unstarted", function() {
@@ -600,6 +612,7 @@
 
         // test stories
         let storyAnnotations, partOf, target, trim;
+        let muted = false;
 
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
         // const annotationsJson =
@@ -625,31 +638,33 @@
             uv.dispose();
           }
 
-          // uv = UV.init("uv", {
-          //   autoPlay: true,
-          //   iiifManifestId: type === "iiif" ? partOf : undefined,
-          //   youTubeVideoId: type === "youtube" ? partOf : undefined,
-          //   trim: trim,
-          //   target: target,
-          // });
-
-          // uv.on("configure", function({ config, cb }) {
-          //   cb(
-          //     new Promise(function(resolve) {
-          //       fetch(`uv-${type}-config.json`).then(function(response) {
-          //         resolve(response.json());
-          //       });
-          //     })
-          //   );
-          // });
-
-          uv.set({
+          uv = UV.init("uv", {
             autoPlay: true,
             iiifManifestId: type === "iiif" ? partOf : undefined,
             youTubeVideoId: type === "youtube" ? partOf : undefined,
             trim: trim,
             target: target,
+            muted: muted,
           });
+
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function(resolve) {
+                fetch(`uv-${type}-config.json`).then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
+          });
+
+          // uv.set({
+          //   autoPlay: true,
+          //   iiifManifestId: type === "iiif" ? partOf : undefined,
+          //   youTubeVideoId: type === "youtube" ? partOf : undefined,
+          //   trim: trim,
+          //   target: target,
+          //   muted: muted,
+          // });
         }
 
         function initStory() {
