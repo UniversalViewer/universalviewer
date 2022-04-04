@@ -84,7 +84,7 @@
     "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^1.9.2",
     "@iiif/base-component": "2.0.1",
-    "@iiif/iiif-av-component": "^1.1.8",
+    "@iiif/iiif-av-component": "^1.1.9",
     "@iiif/iiif-gallery-component": "1.1.19",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
