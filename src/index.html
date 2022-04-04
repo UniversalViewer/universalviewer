@@ -480,12 +480,49 @@
           urlAdapter.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
+            const manifest = urlAdapter.get('iiifManifestId');
+            if (manifest === 'https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json') {
+              // Example of custom, inline config.
+              cb({
+                options: {
+                  dropEnabled: true,
+                  footerPanelEnabled: false,
+                  headerPanelEnabled: true,
+                  leftPanelEnabled: false,
+                  limitLocales: false,
+                  overrideFullScreen: false,
+                  pagingEnabled: true,
+                  limitToRange: true,
+                  manifestExclude: true,
+                  rightPanelEnabled: true
+                },
+                modules: {
+                  headerPanel: {
+                    options: {
+                      localeToggleEnabled: false
+                    }
+                  },
+                  avCenterPanel: {
+                    options: {
+                      limitToRange: true,
+                      enableFastRewind: true,
+                      enableFastForward: true
+                    }
+                  },
+                  contentLeftPanel: {
+                    options: {
+                      defaultToTreeEnabled: true
+                    }
+                  }
+                }
+              });
+              return;
+            }
+
             cb(
-              new Promise(function(resolve) {
-                fetch("uv-iiif-config.json").then(function(response) {
-                  resolve(response.json());
-                });
-              })
+                fetch("uv-iiif-config.json").then(function (resp) {
+                  return resp.json();
+                })
             );
           });
 

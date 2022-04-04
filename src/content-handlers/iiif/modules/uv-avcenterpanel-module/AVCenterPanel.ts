@@ -319,6 +319,10 @@ export class AVCenterPanel extends CenterPanel {
   }
 
   private _limitToRange(): boolean {
+    if (Bools.getBool(this.config.options.limitToRange, false)) {
+      return true;
+    }
+
     return !this.extension.isDesktopMetric();
   }
 

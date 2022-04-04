@@ -36,7 +36,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     "cy-GB": () => import("./config/cy-GB.json"),
     "fr-FR": () => import("./config/fr-FR.json"),
     "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
+    "sv-SE": () => import("./config/sv-SE.json")
   };
 
   create(): void {
@@ -143,8 +143,8 @@ export default class Extension extends BaseExtension implements IAVExtension {
     let isEnabled: boolean = super.isLeftPanelEnabled();
     const tree: TreeNode | null = this.helper.getTree();
 
-    if (tree && tree.nodes.length) {
-      isEnabled = true;
+    if (!tree || !tree.nodes.length) {
+      isEnabled = false;
     }
 
     return isEnabled;
