@@ -88,6 +88,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
                   enablejsapi: 1,
                   controls: config.controls ? 1 : 0,
                   showInfo: 0,
+                  rel: 0,
                   // iv_load_policy: 3,
                   modestbranding: 1,
                   // start: 10,
