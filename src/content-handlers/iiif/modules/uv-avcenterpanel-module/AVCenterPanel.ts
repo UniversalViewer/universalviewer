@@ -8,7 +8,7 @@ import {
   IExternalResource,
   LabelValuePair,
   LanguageMap,
-  Range
+  Range,
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component";
@@ -80,7 +80,7 @@ export class AVCenterPanel extends CenterPanel {
         if (this.avcomponent) {
           this.avcomponent.set({
             limitToRange: this._limitToRange(),
-            constrainNavigationToRange: this._limitToRange()
+            constrainNavigationToRange: this._limitToRange(),
           });
         }
       });
@@ -96,7 +96,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: false
+            virtualCanvasEnabled: false,
           });
 
           const canvas: Canvas | null = this.extension.helper.getCurrentCanvas();
@@ -114,7 +114,7 @@ export class AVCenterPanel extends CenterPanel {
       this._whenMediaReady(() => {
         if (this.avcomponent) {
           this.avcomponent.set({
-            virtualCanvasEnabled: true
+            virtualCanvasEnabled: true,
           });
         }
       });
@@ -151,7 +151,7 @@ export class AVCenterPanel extends CenterPanel {
       data: {
         posterImageExpanded: this.options.posterImageExpanded,
         enableFastForward: true,
-        enableFastRewind: true
+        enableFastRewind: true,
       }
     });
 
@@ -305,7 +305,7 @@ export class AVCenterPanel extends CenterPanel {
           defaultAspectRatio: 0.56,
           doubleClickMS: 350,
           limitToRange: this._limitToRange(),
-          posterImageRatio: this.config.options.posterImageRatio
+          posterImageRatio: this.config.options.posterImageRatio,
         });
 
         // console.log("set up")

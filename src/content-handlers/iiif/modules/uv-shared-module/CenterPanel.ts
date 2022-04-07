@@ -229,7 +229,7 @@ export class CenterPanel extends BaseView {
 
     this.$element.css({
       left: leftPanelWidth,
-      width: width
+      width: width,
     });
 
     let titleHeight: number;

@@ -36,7 +36,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     "cy-GB": () => import("./config/cy-GB.json"),
     "fr-FR": () => import("./config/fr-FR.json"),
     "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json")
+    "sv-SE": () => import("./config/sv-SE.json"),
   };
 
   create(): void {
