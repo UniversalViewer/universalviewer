@@ -178,11 +178,11 @@
         </div>
 
         <div class="group">
-          <h2>Trim</h2>
-          <input id="trimStart" type="number" value="0" />
-          <input id="trimEnd" type="number" value="0" />
-          <button id="setTrimButton" class="button" href="#">
-            Set Trim
+          <h2>Duration</h2>
+          <input id="durationStart" type="number" value="0" />
+          <input id="durationEnd" type="number" value="0" />
+          <button id="setDurationButton" class="button" href="#">
+            Set Duration
           </button>
         </div>
       </div>
@@ -250,9 +250,9 @@
           "setCurrentTimeButton"
         );
         var $mutedCheckbox = document.getElementById("mutedCheckbox");
-        var $trimStart = document.getElementById("trimStart");
-        var $trimEnd = document.getElementById("trimEnd");
-        var $setTrimButton = document.getElementById("setTrimButton");
+        var $durationStart = document.getElementById("durationStart");
+        var $durationEnd = document.getElementById("durationEnd");
+        var $setDurationButton = document.getElementById("setDurationButton");
 
         var annotations = [];
         var urlAdapter;
@@ -436,13 +436,13 @@
           });
         };
 
-        $setTrimButton.onclick = function() {
-          var trimStart = $trimStart.value;
-          var trimEnd = $trimEnd.value;
+        $setDurationButton.onclick = function() {
+          var durationStart = $durationStart.value;
+          var durationEnd = $durationEnd.value;
           uv.set({
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
-            trim: [trimStart, trimEnd],
+            duration: [durationStart, durationEnd],
           });
         };
 
@@ -611,7 +611,7 @@
         });
 
         // test stories
-        let storyAnnotations, partOf, target, trim;
+        let storyAnnotations, partOf, target, duration;
         let muted = false;
 
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
@@ -630,7 +630,7 @@
           );
           partOf = anno.partOf;
           target = anno.target;
-          trim = anno.trim;
+          duration = anno.duration;
 
           const type = partOf.includes("youtube") ? "youtube" : "iiif";
 
@@ -642,7 +642,7 @@
             autoPlay: true,
             iiifManifestId: type === "iiif" ? partOf : undefined,
             youTubeVideoId: type === "youtube" ? partOf : undefined,
-            trim: trim,
+            duration: duration,
             target: target,
             muted: muted,
           });
@@ -666,7 +666,7 @@
           //   autoPlay: true,
           //   iiifManifestId: type === "iiif" ? partOf : undefined,
           //   youTubeVideoId: type === "youtube" ? partOf : undefined,
-          //   trim: trim,
+          //   duration: duration,
           //   target: target,
           //   muted: muted,
           // });

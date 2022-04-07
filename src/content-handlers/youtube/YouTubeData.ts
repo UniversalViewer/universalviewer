@@ -2,6 +2,6 @@ export interface YouTubeData {
   autoPlay?: boolean;
   currentTime?: number;
   muted?: boolean;
-  trim?: [number, number];
+  duration?: [number, number];
   youTubeVideoId?: string;
 }

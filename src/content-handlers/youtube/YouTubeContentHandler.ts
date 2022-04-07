@@ -180,21 +180,21 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       const videoId: string = this._getYouTubeVideoId(data.youTubeVideoId);
 
       if (data.autoPlay) {
-        if (data.trim) {
+        if (data.duration) {
           player.loadVideoById({
             videoId: videoId,
-            startSeconds: data.trim[0],
-            endSeconds: data.trim[1],
+            startSeconds: data.duration[0],
+            endSeconds: data.duration[1],
           });
         } else {
           player.loadVideoById(videoId);
         }
       } else {
-        if (data.trim) {
+        if (data.duration) {
           player.cueVideoById({
             videoId: videoId,
-            startSeconds: data.trim[0],
-            endSeconds: data.trim[1],
+            startSeconds: data.duration[0],
+            endSeconds: data.duration[1],
           });
         } else {
           player.cueVideoById(videoId);
