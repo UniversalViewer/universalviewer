@@ -143,8 +143,8 @@ export default class Extension extends BaseExtension implements IAVExtension {
     let isEnabled: boolean = super.isLeftPanelEnabled();
     const tree: TreeNode | null = this.helper.getTree();
 
-    if (tree && tree.nodes.length) {
-      isEnabled = true;
+    if (!tree || !tree.nodes.length) {
+      isEnabled = false;
     }
 
     return isEnabled;

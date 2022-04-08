@@ -1,8 +1,9 @@
+import { IIIFEvents } from "../../IIIFEvents";
+
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../../../Utils";
-import { ILabelValuePair } from "@iiif/manifold";
 import { Bools } from "@edsilv/utils";
 
 export class CenterPanel extends BaseView {
@@ -19,6 +20,7 @@ export class CenterPanel extends BaseView {
   $subtitleText: JQuery;
   isAttributionOpen: boolean = false;
   attributionPosition: Position = Position.BOTTOM_LEFT;
+  isAttributionLoaded: boolean = false;
 
   constructor($element: JQuery) {
     super($element, false, true);
@@ -68,12 +70,12 @@ export class CenterPanel extends BaseView {
     this.closeAttribution();
 
     this.$closeAttributionButton = this.$attribution.find(".header .close");
-    this.$closeAttributionButton.on("click", (e) => {
+    this.$closeAttributionButton.on("click", e => {
       e.preventDefault();
       this.closeAttribution();
     });
 
-    this.$subtitleExpand.on("click", (e) => {
+    this.$subtitleExpand.on("click", e => {
       e.preventDefault();
 
       this.subtitleExpanded = !this.subtitleExpanded;
@@ -104,6 +106,16 @@ export class CenterPanel extends BaseView {
     this.whenResized(() => {
       this.updateRequiredStatement();
     });
+
+    this.extensionHost.subscribe(IIIFEvents.RANGE_CHANGE, () => {
+      this.updateRequiredStatement();
+    });
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
+      this.updateRequiredStatement();
+    });
+    this.extensionHost.subscribe(IIIFEvents.MANIFEST_INDEX_CHANGE, () => {
+      this.updateRequiredStatement();
+    });
   }
 
   openAttribution(): void {
@@ -117,7 +129,20 @@ export class CenterPanel extends BaseView {
   }
 
   updateRequiredStatement(): void {
-    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    if (this.isAttributionLoaded) {
+      return;
+    }
+
+    const mostSpecific = Bools.getBool(
+      this.config.options.mostSpecificRequiredStatement,
+      false
+    );
+    const requiredStatement = mostSpecific
+      ? this.extension.helper.getMostSpecificRequiredStatement()
+      : this.extension.helper.getRequiredStatement();
+
+    // isAttributionLoaded
+
     //var license = this.provider.getLicense();
     //var logo = this.provider.getLogo();
 
@@ -180,6 +205,11 @@ export class CenterPanel extends BaseView {
     //}
 
     this.resize();
+
+    // We mark it as loaded if mostSpecific=false to prevent it reloading
+    if (!mostSpecific) {
+      this.isAttributionLoaded = true;
+    }
   }
 
   resize(): void {

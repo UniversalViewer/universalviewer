@@ -148,10 +148,11 @@ export class AVCenterPanel extends CenterPanel {
     this.avcomponent = new AVComponent({
       target: <HTMLElement>this.$avcomponent[0],
       // @ts-ignore
-      // data: {
-      //   posterImageExpanded: this.options.posterImageExpanded,
-      //   enableFastForward: true,
-      // }
+      data: {
+        posterImageExpanded: this.options.posterImageExpanded,
+        enableFastForward: true,
+        enableFastRewind: true,
+      }
     });
 
     this.avcomponent.on(
@@ -171,7 +172,7 @@ export class AVCenterPanel extends CenterPanel {
     });
 
     this.avcomponent.on(
-      "rangechange",
+      "rangechanged",
       (rangeId: string | null) => {
         if (rangeId) {
           const range: Range | null = this.extension.helper.getRangeById(
@@ -243,7 +244,7 @@ export class AVCenterPanel extends CenterPanel {
     const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
       MetadataOptions
     >{
-      range: currentRange,
+      range: currentRange
     });
 
     for (let i = 0; i < groups.length; i++) {
@@ -318,6 +319,10 @@ export class AVCenterPanel extends CenterPanel {
   }
 
   private _limitToRange(): boolean {
+    if (Bools.getBool(this.config.options.limitToRange, false)) {
+      return true;
+    }
+
     return !this.extension.isDesktopMetric();
   }
 

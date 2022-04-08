@@ -11,6 +11,11 @@
     "clickToZoomEnabled": false
   },
   "modules": {
+    "avCenterPanel": {
+      "options": {
+        "mostSpecificRequiredStatement": true
+      }
+    },
     "headerPanel": {
       "options": {
         "localeToggleEnabled": false
