@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.0.0-pre.101",
+  "version": "4.0.0-pre.102",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=14.18.1",
@@ -105,7 +105,7 @@
     "jquery": "3.5.0",
     "jsviews": "0.9.83",
     "less-plugin-clean-css": "^1.5.1",
-    "manifesto.js": "4.2.6",
+    "manifesto.js": "4.2.7",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "2.5.1",
     "openseadragon": "2.4.2",
