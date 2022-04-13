@@ -1,4 +1,7 @@
 const $ = require("jquery");
+import { createElement } from "react";
+import { createRoot } from "react-dom/client";
+import ThumbsViewReact from "./ThumbsViewReact";
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
@@ -171,8 +174,19 @@ export class ContentLeftPanel extends LeftPanel {
     this.$treeView = $('<div class="treeView"></div>');
     this.$views.append(this.$treeView);
 
-    this.$thumbsView = $('<div class="thumbsView" tabindex="-1"></div>');
-    this.$views.append(this.$thumbsView);
+    const thumbsRoot = createRoot(this.$views[0]);
+    thumbsRoot.render(
+      createElement(ThumbsViewReact, {
+        manifestId: "test",
+        paged: this.extension.helper.isPaged(),
+      })
+    );
+    // this.$thumbsView = $('<div class="thumbsView" tabindex="-1"></div>');
+    // this.$views.append(this.$thumbsView);
+
+    // this.$thumbsView = createRoot(document.createElement("div"));
+    // this.$views.append(this.$thumbsView);
+    // this.$thumbsView.render(createElement(ThumbsViewReact));
 
     this.$galleryView = $('<div class="galleryView"></div>');
     this.$views.append(this.$galleryView);
