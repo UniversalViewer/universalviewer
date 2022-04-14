@@ -64,7 +64,11 @@ export class ContentLeftPanel extends LeftPanel {
     super.create();
 
     this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
-      this.databind();
+      this.render();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
+      this.render();
     });
 
     this.extensionHost.subscribe(IIIFEvents.GALLERY_THUMB_SELECTED, () => {
@@ -268,7 +272,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.updateTreeViewOptions();
   }
 
-  databind(): void {
+  render(): void {
     this.renderThumbs();
     this.renderTree();
     this.renderGallery();
@@ -429,7 +433,6 @@ export class ContentLeftPanel extends LeftPanel {
   }
 
   renderThumbs(): void {
-    console.log("renderThumbs");
     if (!this.thumbsRoot) return;
 
     let width: number;
@@ -494,6 +497,12 @@ export class ContentLeftPanel extends LeftPanel {
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
+        selected: this.extension.getPagedIndices(
+          this.extension.helper.canvasIndex
+        ),
+        onClick: (thumb: Thumb) => {
+          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        },
       })
     );
   }
