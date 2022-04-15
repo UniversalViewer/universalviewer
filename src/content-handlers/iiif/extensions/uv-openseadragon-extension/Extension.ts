@@ -26,6 +26,7 @@ import {
   IIIFResourceType,
   ExternalResourceType,
   ServiceProfile,
+  ViewingHint,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
@@ -1250,24 +1251,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return script;
   }
 
-  getPrevPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
-    let index: number;
-
-    if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
-
-      if (this.helper.isRightToLeft()) {
-        index = indices[indices.length - 1] - 1;
-      } else {
-        index = indices[0] - 1;
-      }
-    } else {
-      index = canvasIndex - 1;
-    }
-
-    return index;
-  }
-
   isSearchEnabled(): boolean {
     if (!Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
       return false;
@@ -1286,28 +1269,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
     }
 
     return false;
-  }
-
-  getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
-    let index: number;
-
-    if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
-
-      if (this.helper.isRightToLeft()) {
-        index = indices[0] + 1;
-      } else {
-        index = indices[indices.length - 1] + 1;
-      }
-    } else {
-      index = canvasIndex + 1;
-    }
-
-    if (index > this.helper.getTotalCanvases() - 1) {
-      return -1;
-    }
-
-    return index;
   }
 
   getAutoCompleteService(): Service | null {
@@ -1432,28 +1393,95 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return this.getTotalAnnotationRects() - 1;
   }
 
+  getPrevPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
+    let index: number;
+
+    if (this.isPagingSettingEnabled()) {
+      let indices: number[] = this.getPagedIndices(canvasIndex);
+
+      if (this.helper.isRightToLeft()) {
+        index = indices[indices.length - 1] - 1;
+      } else {
+        index = indices[0] - 1;
+      }
+    } else {
+      index = canvasIndex - 1;
+    }
+
+    return index;
+  }
+
+  getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
+    let index: number;
+
+    // const canvas: Canvas | null = this.helper.getCanvasByIndex(canvasIndex);
+
+    if (this.isPagingSettingEnabled()) {
+      let indices: number[] = this.getPagedIndices(canvasIndex);
+
+      if (this.helper.isRightToLeft()) {
+        index = indices[0] + 1;
+      } else {
+        index = indices[indices.length - 1] + 1;
+      }
+    } else {
+      index = canvasIndex + 1;
+    }
+
+    if (index > this.helper.getTotalCanvases() - 1) {
+      return -1;
+    }
+
+    return index;
+  }
+
   getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
     let indices: number[] | undefined = [];
 
     // if it's a continuous manifest, get all resources.
     if (this.helper.isContinuous()) {
-      indices = $.map(this.helper.getCanvases(), (c: Canvas, index: number) => {
-        return index;
-      });
+      // get all canvases to be displayed inline
+      indices = this.helper
+        .getCanvases()
+        .map((_canvas: Canvas, index: number) => {
+          return index;
+        });
     } else {
-      if (!this.isPagingSettingEnabled()) {
+      const prevCanvas: Canvas | null = this.helper.getCanvasByIndex(
+        canvasIndex - 1
+      );
+
+      const nextCanvas: Canvas | null = this.helper.getCanvasByIndex(
+        canvasIndex + 1
+      );
+
+      const canvasHasPrevOrNextNonPagedCanvas: boolean =
+        prevCanvas?.getViewingHint() === ViewingHint.NON_PAGED ||
+        nextCanvas?.getViewingHint() === ViewingHint.NON_PAGED;
+
+      // console.log(canvas?.getViewingHint());
+
+      if (!this.isPagingSettingEnabled() || canvasHasPrevOrNextNonPagedCanvas) {
+        // one-up
+        // if the current canvas index is for a non-paged canvas, only return that canvas index
+        // don't pair it with another in two-up
         indices.push(this.helper.canvasIndex);
       } else {
+        // two-up
         if (
           this.helper.isFirstCanvas(canvasIndex) ||
           (this.helper.isLastCanvas(canvasIndex) &&
             this.helper.isTotalCanvasesEven())
         ) {
           indices = <number[]>[canvasIndex];
-        } else if (canvasIndex % 2) {
-          indices = <number[]>[canvasIndex, canvasIndex + 1];
-        } else {
+        } else if (canvasIndex % 2 === 0) {
+          // the current canvas index is even
+          // therefore it appears on the right
           indices = <number[]>[canvasIndex - 1, canvasIndex];
+        } else {
+          // the current canvas index is odd
+          // therefore it appears on the left
+          indices = <number[]>[canvasIndex, canvasIndex + 1];
         }
 
         if (this.helper.isRightToLeft()) {

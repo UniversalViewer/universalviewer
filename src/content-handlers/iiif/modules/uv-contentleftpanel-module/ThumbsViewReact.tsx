@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { Thumb } from "manifesto.js";
-import { ViewingDirection } from "@iiif/vocabulary";
+import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
 import cx from "classnames";
 
 const ThumbImage = ({
-  index,
+  first,
   onClick,
   paged,
   selected,
   thumb,
   viewingDirection,
 }: {
-  index: number;
+  first: boolean;
   onClick: (thumb: Thumb) => void;
   paged: boolean;
   selected: boolean;
@@ -30,7 +30,7 @@ const ThumbImage = ({
       // id={`thumb-${index}`}
       onClick={() => onClick(thumb)}
       className={cx("thumb", {
-        first: index === 0,
+        first: first,
         placeholder: !thumb.uri,
         twoCol:
           paged &&
@@ -89,7 +89,15 @@ const ThumbsViewReact = ({
     });
   }, [selected]);
 
-  function showSeparator(paged: boolean, index: number) {
+  function showSeparator(
+    paged: boolean,
+    viewingHint: ViewingHint | null,
+    index: number
+  ) {
+    if (viewingHint === ViewingHint.NON_PAGED) {
+      return true;
+    }
+
     if (paged) {
       // if paged, show separator after every 2 thumbs
       return !((index - 1) % 2 === 0);
@@ -99,6 +107,10 @@ const ThumbsViewReact = ({
   }
 
   const ref = useRef<HTMLDivElement | null>(null);
+
+  const firstNonPagedIndex: number = thumbs.findIndex((t) => {
+    return t.viewingHint !== ViewingHint.NON_PAGED;
+  });
 
   return (
     <div
@@ -110,21 +122,23 @@ const ThumbsViewReact = ({
       })}
     >
       {thumbs
-        .filter((thumb) => {
-          // don't display thumb if paged and thumb has non-paged viewingHint
-          return !(paged && thumb.viewingHint === "non-paged");
-        })
+        // .filter((thumb) => {
+        //   // don't display thumb if paged and thumb has non-paged viewingHint
+        //   return !(paged && thumb.viewingHint === "non-paged");
+        // })
         .map((thumb, index) => (
           <span key={`thumb-${index}`} id={`thumb-${index}`}>
             <ThumbImage
-              index={index}
+              first={index === firstNonPagedIndex}
               onClick={onClick}
               paged={paged}
               selected={selected.includes(index)}
               thumb={thumb}
               viewingDirection={viewingDirection}
             />
-            {showSeparator(paged, index) && <div className="separator"></div>}
+            {showSeparator(paged, thumb.viewingHint, index) && (
+              <div className="separator"></div>
+            )}
           </span>
         ))}
     </div>

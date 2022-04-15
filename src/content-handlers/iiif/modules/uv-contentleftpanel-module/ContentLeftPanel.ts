@@ -492,14 +492,18 @@ export class ContentLeftPanel extends LeftPanel {
 
     const paged = !!this.extension.getSettings().pagingEnabled;
 
+    const selectedIndices: number[] = this.extension.getPagedIndices(
+      this.extension.helper.canvasIndex
+    );
+
+    // console.log("selectedIndeces", selectedIndices);
+
     this.thumbsRoot.render(
       createElement(ThumbsViewReact, {
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
-        selected: this.extension.getPagedIndices(
-          this.extension.helper.canvasIndex
-        ),
+        selected: selectedIndices,
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
