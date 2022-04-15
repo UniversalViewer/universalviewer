@@ -21,7 +21,7 @@ import {
   TreeNodeType,
   Range,
 } from "manifesto.js";
-import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
+import { TreeSortType } from "@iiif/manifold";
 import { isVisible } from "../../../../Utils";
 
 export class ContentLeftPanel extends LeftPanel {
@@ -468,27 +468,27 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     // add a search result icon for pages with results
-    const searchResults: AnnotationGroup[] | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).annotations;
+    // const searchResults: AnnotationGroup[] | null = (<OpenSeadragonExtension>(
+    //   this.extension
+    // )).annotations;
 
-    if (searchResults && searchResults.length) {
-      for (let i = 0; i < searchResults.length; i++) {
-        const searchResult: AnnotationGroup = searchResults[i];
+    // if (searchResults && searchResults.length) {
+    //   for (let i = 0; i < searchResults.length; i++) {
+    //     const searchResult: AnnotationGroup = searchResults[i];
 
-        // find the thumb with the same canvasIndex and add the searchResult
-        let thumb: Thumb = thumbs.filter(
-          (t) => t.index === searchResult.canvasIndex
-        )[0];
+    //     // find the thumb with the same canvasIndex and add the searchResult
+    //     let thumb: Thumb = thumbs.filter(
+    //       (t) => t.index === searchResult.canvasIndex
+    //     )[0];
 
-        if (thumb) {
-          // clone the data so searchResults isn't persisted on the canvas.
-          let data = $.extend(true, {}, thumb.data);
-          data.searchResults = searchResult.rects.length;
-          thumb.data = data;
-        }
-      }
-    }
+    //     if (thumb) {
+    //       // clone the data so searchResults isn't persisted on the canvas.
+    //       let data = $.extend(true, {}, thumb.data);
+    //       data.searchResults = searchResult.rects.length;
+    //       thumb.data = data;
+    //     }
+    //   }
+    // }
 
     const paged = !!this.extension.getSettings().pagingEnabled;
 
