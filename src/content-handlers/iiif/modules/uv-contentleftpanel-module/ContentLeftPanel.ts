@@ -428,7 +428,9 @@ export class ContentLeftPanel extends LeftPanel {
   }
 
   createThumbsRoot(): void {
-    this.thumbsRoot = createRoot(this.$thumbsView[0]);
+    if (!this.thumbsRoot) {
+      this.thumbsRoot = createRoot(this.$thumbsView[0]);
+    }
     this.renderThumbs();
   }
 
