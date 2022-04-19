@@ -54,7 +54,7 @@ const ThumbImage = ({
         {/* <span className="index">
           {thumb.index}
         </span> */}
-        <span>{thumb.viewingHint}</span>
+        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
@@ -121,26 +121,21 @@ const ThumbsViewReact = ({
         paged: paged,
       })}
     >
-      {thumbs
-        // .filter((thumb) => {
-        //   // don't display thumb if paged and thumb has non-paged viewingHint
-        //   return !(paged && thumb.viewingHint === "non-paged");
-        // })
-        .map((thumb, index) => (
-          <span key={`thumb-${index}`} id={`thumb-${index}`}>
-            <ThumbImage
-              first={index === firstNonPagedIndex}
-              onClick={onClick}
-              paged={paged}
-              selected={selected.includes(index)}
-              thumb={thumb}
-              viewingDirection={viewingDirection}
-            />
-            {showSeparator(paged, thumb.viewingHint, index) && (
-              <div className="separator"></div>
-            )}
-          </span>
-        ))}
+      {thumbs.map((thumb, index) => (
+        <span key={`thumb-${index}`} id={`thumb-${index}`}>
+          <ThumbImage
+            first={index === firstNonPagedIndex}
+            onClick={onClick}
+            paged={paged}
+            selected={selected.includes(index)}
+            thumb={thumb}
+            viewingDirection={viewingDirection}
+          />
+          {showSeparator(paged, thumb.viewingHint, index) && (
+            <div className="separator"></div>
+          )}
+        </span>
+      ))}
     </div>
   );
 };

@@ -710,6 +710,12 @@
           "visible": true
         },
         {
+          "@id": "https://sessionpapers.is.ed.ac.uk/whiiif/resources/manifests/ADV-CampbellsColl_Vol_99-paged",
+          "@type": "sc:Manifest",
+          "label": "Non-paged",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/test-manifests/top-level-ranges.json",
           "@type": "sc:Manifest",
           "label": "Multiple Top Ranges",
