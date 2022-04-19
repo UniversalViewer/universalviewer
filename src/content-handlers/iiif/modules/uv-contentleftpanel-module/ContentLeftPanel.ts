@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
-import ThumbsViewReact from "./ThumbsViewReact";
+import ThumbsView from "./ThumbsView";
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
@@ -12,7 +12,6 @@ import { GalleryView } from "./GalleryView";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-// import { ThumbsView } from "./ThumbsView";
 import { TreeView } from "./TreeView";
 import {
   LanguageMap,
@@ -48,7 +47,6 @@ export class ContentLeftPanel extends LeftPanel {
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
-  // thumbsView: ThumbsView;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -501,7 +499,7 @@ export class ContentLeftPanel extends LeftPanel {
     // console.log("selectedIndeces", selectedIndices);
 
     this.thumbsRoot.render(
-      createElement(ThumbsViewReact, {
+      createElement(ThumbsView, {
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,

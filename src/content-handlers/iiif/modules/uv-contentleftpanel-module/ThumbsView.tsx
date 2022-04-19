@@ -61,7 +61,7 @@ const ThumbImage = ({
   );
 };
 
-const ThumbsViewReact = ({
+const ThumbsView = ({
   onClick,
   paged,
   selected,
@@ -134,4 +134,4 @@ const ThumbsViewReact = ({
   );
 };
 
-export default ThumbsViewReact;
+export default ThumbsView;
