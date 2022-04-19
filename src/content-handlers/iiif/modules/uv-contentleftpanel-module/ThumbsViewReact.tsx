@@ -27,7 +27,6 @@ const ThumbImage = ({
 
   return (
     <a
-      // id={`thumb-${index}`}
       onClick={() => onClick(thumb)}
       className={cx("thumb", {
         first: first,
@@ -51,17 +50,12 @@ const ThumbImage = ({
         {inView && <img src={thumb.uri} alt={thumb.label} />}
       </div>
       <div className="info">
-        {/* <span className="index">
-          {thumb.index}
-        </span> */}
-        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
-        {/* <span
-          className="searchResults"
-          title="{{:~searchResultsTitle()}}"
-        >{`todo`}</span> */}
+        {thumb.data.searchResults && (
+          <span className="searchResults">{thumb.data.searchResults}</span>
+        )}
       </div>
     </a>
   );
