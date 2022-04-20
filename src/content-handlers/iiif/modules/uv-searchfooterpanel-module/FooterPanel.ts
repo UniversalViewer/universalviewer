@@ -612,8 +612,8 @@ export class FooterPanel extends BaseFooterPanel {
       );
       let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
-      if (!label && this.extension.helper.manifest) {
-        label = this.extension.helper.manifest.options.defaultLabel;
+      if (!label && that.extension.helper.manifest) {
+        label = that.extension.helper.manifest.options.defaultLabel;
       }
 
       if (label) {
