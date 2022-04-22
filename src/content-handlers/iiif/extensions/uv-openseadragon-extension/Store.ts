@@ -8,8 +8,11 @@ const store = create<OpenSeadragonExtensionState>((set) => ({
   dialogueTriggerButton: null,
   openDownloadDialogue: (triggerButton: HTMLElement) =>
     set({ downloadDialogueOpen: true, dialogueTriggerButton: triggerButton }),
-  closeDownloadDialogue: () =>
-    set({ downloadDialogueOpen: false, dialogueTriggerButton: null }),
+  closeDialogue: () =>
+    set({
+      downloadDialogueOpen: false,
+      dialogueTriggerButton: null,
+    }),
 }));
 
 export default store;

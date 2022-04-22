@@ -495,7 +495,15 @@ export default class OpenSeadragonExtension extends BaseExtension {
     );
 
     this.extensionHost.subscribe(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
-      this.store.getState().closeDownloadDialogue();
+      this.store.getState().closeDialogue();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+      this.store.getState().closeDialogue();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
+      this.store.getState().closeDialogue();
     });
 
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
@@ -562,12 +570,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.shell.$overlays.append(this.$shareDialogue);
     this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-    this.$downloadDialogue = $(
-      '<div class="overlay download" aria-hidden="true"></div>'
-    );
+    this.$downloadDialogue = $("<div></div>");
     this.shell.$overlays.append(this.$downloadDialogue);
     this.downloadDialogueRoot = createRoot(this.$downloadDialogue[0]);
-    // this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
     this.$settingsDialogue = $(
       '<div class="overlay settings" aria-hidden="true"></div>'
