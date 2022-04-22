@@ -4,7 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
-import { DownloadDialogue } from "./DownloadDialogue";
+import DownloadDialogue from "./DownloadDialogueReact";
 import { OpenSeadragonExtensionEvents } from "./Events";
 import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
@@ -47,6 +47,9 @@ import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Events } from "../../../../Events";
+import { createRoot, Root } from "react-dom/client";
+import { createElement } from "react";
+import store, { OpenSeadragonExtensionState } from "./Store";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -59,7 +62,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
-  downloadDialogue: DownloadDialogue;
+  downloadDialogueRoot: Root;
   externalContentDialogue: ExternalContentDialogue;
   footerPanel: FooterPanel;
   headerPanel: PagingHeaderPanel;
@@ -85,6 +88,12 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   create(): void {
     super.create();
+
+    this.store = store;
+
+    this.store.subscribe((_state) => {
+      this.renderDownloadDialogue();
+    });
 
     this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       if (!this.isDesktopMetric()) {
@@ -478,6 +487,17 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
+    this.extensionHost.subscribe(
+      IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
+      (triggerButton) => {
+        this.store.getState().openDownloadDialogue(triggerButton[0]);
+      }
+    );
+
+    this.extensionHost.subscribe(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
+      this.store.getState().closeDownloadDialogue();
+    });
+
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
     //     this.fire(Events.VIEW_PAGE, index);
     //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [index]);
@@ -546,7 +566,8 @@ export default class OpenSeadragonExtension extends BaseExtension {
       '<div class="overlay download" aria-hidden="true"></div>'
     );
     this.shell.$overlays.append(this.$downloadDialogue);
-    this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
+    this.downloadDialogueRoot = createRoot(this.$downloadDialogue[0]);
+    // this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
     this.$settingsDialogue = $(
       '<div class="overlay settings" aria-hidden="true"></div>'
@@ -582,10 +603,42 @@ export default class OpenSeadragonExtension extends BaseExtension {
   render(): void {
     super.render();
 
+    // this.renderDownloadDialogue();
     this.checkForTarget();
     this.checkForAnnotations();
     this.checkForSearchParam();
     this.checkForRotationParam();
+  }
+
+  renderDownloadDialogue(): void {
+    // todo: can this be added to store?
+    const paged = !!this.getSettings().pagingEnabled;
+
+    const {
+      downloadDialogueOpen,
+      dialogueTriggerButton,
+    } = this.store.getState() as OpenSeadragonExtensionState;
+
+    // todo: can this be more generic?
+    if (downloadDialogueOpen) {
+      this.extensionHost.publish(IIIFEvents.SHOW_OVERLAY);
+    } else {
+      this.extensionHost.publish(IIIFEvents.HIDE_OVERLAY);
+    }
+
+    this.downloadDialogueRoot.render(
+      createElement(DownloadDialogue, {
+        open: downloadDialogueOpen,
+        triggerButton: dialogueTriggerButton as HTMLElement,
+        parent: this.shell.$overlays[0] as HTMLElement,
+        paged,
+        onClose: () => {
+          this.store.setState({
+            downloadDialogueOpen: false,
+          });
+        },
+      })
+    );
   }
 
   checkForTarget(): void {

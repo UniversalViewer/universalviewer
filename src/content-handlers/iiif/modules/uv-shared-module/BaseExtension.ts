@@ -45,6 +45,8 @@ import {
 import { isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
+import { StoreApi } from "zustand/vanilla";
+import { ExtensionState } from "./ExtensionState";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -72,6 +74,7 @@ export class BaseExtension implements IExtension {
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
+  store: StoreApi<ExtensionState>;
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
@@ -1129,6 +1132,10 @@ export class BaseExtension implements IExtension {
 
       this.reload(data);
     }
+  }
+
+  dispose(): void {
+    this.store?.destroy();
   }
 }
 

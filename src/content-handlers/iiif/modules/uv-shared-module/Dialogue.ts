@@ -135,6 +135,7 @@ export class Dialogue extends BaseView {
   }
 
   open(triggerButton?: HTMLElement): void {
+    console.log("open");
     this.$element.attr("aria-hidden", "false");
     this.$element.show();
 
