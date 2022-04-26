@@ -608,7 +608,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
   render(): void {
     super.render();
 
-    // this.renderDownloadDialogue();
     this.checkForTarget();
     this.checkForAnnotations();
     this.checkForSearchParam();
@@ -617,31 +616,43 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   renderDownloadDialogue(): void {
     // todo: can this be added to store?
-    const paged = !!this.getSettings().pagingEnabled;
+    // const paged = !!this.getSettings().pagingEnabled;
+    const paged = this.isPagingSettingEnabled();
 
     const {
       downloadDialogueOpen,
       dialogueTriggerButton,
     } = this.store.getState() as OpenSeadragonExtensionState;
 
-    // todo: can this be more generic?
+    // todo: can the overlay visibility be based off of the store?
     if (downloadDialogueOpen) {
       this.extensionHost.publish(IIIFEvents.SHOW_OVERLAY);
     } else {
       this.extensionHost.publish(IIIFEvents.HIDE_OVERLAY);
     }
 
+    const pagedIndices: number[] = this.getPagedIndices();
+
+    const canvases: Canvas[] = this.helper
+      .getCanvases()
+      .filter((_canvas: Canvas, index: number) => {
+        return pagedIndices.includes(index);
+      });
+
     this.downloadDialogueRoot.render(
       createElement(DownloadDialogue, {
+        config: this.data.config.modules.downloadDialogue,
         open: downloadDialogueOpen,
         triggerButton: dialogueTriggerButton as HTMLElement,
         parent: this.shell.$overlays[0] as HTMLElement,
-        paged,
+        canvases: canvases,
+        paged: paged,
         onClose: () => {
           this.store.setState({
             downloadDialogueOpen: false,
           });
         },
+        resources: this.resources,
       })
     );
   }
