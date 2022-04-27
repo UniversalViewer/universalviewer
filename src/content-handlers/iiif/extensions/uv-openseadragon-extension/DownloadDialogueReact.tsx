@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Maths } from "@edsilv/utils";
+import { Files, Maths, Strings } from "@edsilv/utils";
 import {
   Canvas,
   Size,
@@ -8,16 +8,21 @@ import {
   IExternalResourceData,
   Utils,
   IExternalImageResourceData,
+  Resource,
+  Annotation,
 } from "manifesto.js";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
+import { MediaType } from "@iiif/vocabulary";
 
 const DownloadDialogue = ({
   config,
   onClose,
+  onDownloadCurrentView,
   open,
   canvases,
   paged,
   parent,
+  rotation,
   triggerButton,
   resources,
 }: {
@@ -26,10 +31,12 @@ const DownloadDialogue = ({
     content: { [key: string]: string };
   };
   onClose: () => void;
+  onDownloadCurrentView: (canvas: Canvas) => void;
   open: boolean;
   canvases: Canvas[];
   paged: boolean;
   parent: HTMLElement;
+  rotation: number;
   triggerButton: HTMLElement;
   resources: IExternalResourceData[] | null;
 }) => {
@@ -37,6 +44,8 @@ const DownloadDialogue = ({
 
   const [position, setPosition] = useState({ top: "0px", left: "0px" });
   const [arrowPosition, setArrowPosition] = useState("0px 0px");
+
+  const hasNormalDimensions: boolean = rotation % 180 == 0;
 
   useEffect(() => {
     if (open) {
@@ -122,12 +131,30 @@ const DownloadDialogue = ({
     return Utils.isLevel0ImageProfile(profile[0]);
   }
 
+  function getSelectedCanvas(): Canvas {
+    return canvases[selectedPage === "left" ? 0 : 1];
+  }
+
+  function getSelectedResource(): IExternalResourceData | null {
+    if (resources && resources.length) {
+      if (resources.length > 1) {
+        return resources[selectedPage === "left" ? 0 : 1];
+      } else {
+        return resources[0];
+      }
+    }
+
+    return null;
+  }
+
   function isDownloadOptionAvailable(option: DownloadOption) {
-    if (!resources) {
+    const selectedResource: IExternalResourceData | null = getSelectedResource();
+
+    if (!selectedResource) {
       return false;
     }
 
-    const canvas: Canvas = canvases[selectedPage === "left" ? 0 : 1];
+    const canvas: Canvas = getSelectedCanvas();
 
     // if the external resource doesn't have a service descriptor or is level 0
     // only allow wholeImageHighRes
@@ -137,7 +164,7 @@ const DownloadDialogue = ({
     ) {
       if (option === DownloadOption.WHOLE_IMAGE_HIGH_RES) {
         // if in one-up mode, or in two-up mode with a single page being shown
-        if (!(paged || (paged && resources && resources.length === 1))) {
+        if (!(paged || (paged && selectedResource))) {
           return true;
         }
       }
@@ -146,28 +173,20 @@ const DownloadDialogue = ({
 
     switch (option) {
       case DownloadOption.CURRENT_VIEW:
+        return !paged;
       case DownloadOption.CANVAS_RENDERINGS:
       case DownloadOption.IMAGE_RENDERINGS:
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
-        // if in one-up mode, or in two-up mode with a single page being shown
-        if (!(paged || (paged && resources && resources.length === 1))) {
-          const maxDimensions: Size | null = canvas.getMaxDimensions();
+        const maxDimensions: Size | null = canvas.getMaxDimensions();
 
-          if (maxDimensions) {
-            if (maxDimensions.width <= config.options.maxImageWidth) {
-              return true;
-            } else {
-              return false;
-            }
+        if (maxDimensions) {
+          if (maxDimensions.width <= config.options.maxImageWidth) {
+            return true;
+          } else {
+            return false;
           }
-          return true;
         }
-        return false;
-      case DownloadOption.WHOLE_IMAGES_HIGH_RES:
-        if (paged && resources && resources.length > 1) {
-          return true;
-        }
-        return false;
+        return true;
       case DownloadOption.WHOLE_IMAGE_LOW_RES:
         // hide low-res option if hi-res width is smaller than constraint
         const size: Size | null = getCanvasComputedDimensions(canvas);
@@ -186,6 +205,103 @@ const DownloadDialogue = ({
       default:
         return false; // super.isDownloadOptionAvailable(option);
     }
+  }
+
+  function getCanvasImageResource(canvas: Canvas): Resource | null {
+    const images: Annotation[] = canvas.getImages();
+    if (images[0]) {
+      return images[0].getResource();
+    }
+    return null;
+  }
+
+  function getCanvasMimeType(canvas: Canvas): string | null {
+    const resource: Resource | null = getCanvasImageResource(canvas);
+
+    if (resource) {
+      const format: MediaType | null = resource.getFormat();
+
+      if (format) {
+        return format.toString();
+      }
+    }
+
+    return null;
+  }
+
+  function getCanvasHighResImageUri(canvas: Canvas): string {
+    const size: Size | null = getCanvasComputedDimensions(canvas);
+
+    if (size) {
+      const width: number = size.width;
+      let uri: string = canvas.getCanonicalImageUri(width);
+
+      if (
+        canvas.externalResource &&
+        canvas.externalResource.hasServiceDescriptor()
+      ) {
+        const uriParts: string[] = uri.split("/");
+        uriParts[uriParts.length - 2] = String(rotation);
+        uri = uriParts.join("/");
+      }
+
+      return uri;
+    } else if (
+      canvas.externalResource &&
+      !canvas.externalResource.hasServiceDescriptor()
+    ) {
+      // if there is no image service, return the dataUri.
+      return canvas.externalResource.dataUri as string;
+    }
+
+    return "";
+  }
+
+  function getWholeImageHighResLabel(): string {
+    let label: string = "";
+    const canvas: Canvas = getSelectedCanvas();
+
+    let mime: string | null = getCanvasMimeType(canvas);
+
+    if (mime) {
+      mime = Files.simplifyMimeType(mime);
+    } else {
+      mime = "?";
+    }
+
+    // dimensions
+    const size: Size | null = getCanvasComputedDimensions(canvas);
+
+    if (!size) {
+      // if there is no image service, allow the image to be downloaded directly.
+      if (
+        canvas.externalResource &&
+        !canvas.externalResource.hasServiceDescriptor()
+      ) {
+        label = Strings.format(
+          config.content.wholeImageHighRes,
+          "?",
+          "?",
+          mime
+        );
+      }
+    } else {
+      label = hasNormalDimensions
+        ? Strings.format(
+            config.content.wholeImageHighRes,
+            size.width.toString(),
+            size.height.toString(),
+            mime
+          )
+        : Strings.format(
+            config.content.wholeImageHighRes,
+            size.height.toString(),
+            size.width.toString(),
+            mime
+          );
+    }
+
+    return label;
   }
 
   return (
@@ -226,17 +342,37 @@ const DownloadDialogue = ({
             <li className="group image">
               <ul>
                 {isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) && (
-                  <li className="option single">
-                    <a>{config.content.currentViewAsJpg}</a>
+                  <li
+                    className="option single"
+                    onClick={() => {
+                      onDownloadCurrentView(getSelectedCanvas());
+                    }}
+                  >
+                    <button>{config.content.currentViewAsJpg}</button>
                   </li>
                 )}
-
-                <li className="option single">
-                  <a>{config.content.wholeImageHighRes}</a>
-                </li>
-                <li className="option single">
-                  <a>{config.content.wholeImageLowRes}</a>
-                </li>
+                {isDownloadOptionAvailable(
+                  DownloadOption.WHOLE_IMAGE_HIGH_RES
+                ) && (
+                  <li className="option single">
+                    <button
+                      onClick={() => {
+                        window.open(
+                          getCanvasHighResImageUri(getSelectedCanvas())
+                        );
+                      }}
+                    >
+                      {getWholeImageHighResLabel()}
+                    </button>
+                  </li>
+                )}
+                {isDownloadOptionAvailable(
+                  DownloadOption.WHOLE_IMAGE_LOW_RES
+                ) && (
+                  <li className="option single">
+                    <button>{config.content.wholeImageLowRes}</button>
+                  </li>
+                )}
               </ul>
             </li>
             <li className="group canvas">

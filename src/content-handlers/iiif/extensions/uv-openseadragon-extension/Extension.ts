@@ -49,7 +49,7 @@ import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResu
 import { Events } from "../../../../Events";
 import { createRoot, Root } from "react-dom/client";
 import { createElement } from "react";
-import store, { OpenSeadragonExtensionState } from "./Store";
+import { createStore, OpenSeadragonExtensionState } from "./Store";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -89,7 +89,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   create(): void {
     super.create();
 
-    this.store = store;
+    this.store = createStore();
 
     this.store.subscribe((_state) => {
       this.renderDownloadDialogue();
@@ -647,10 +647,15 @@ export default class OpenSeadragonExtension extends BaseExtension {
         parent: this.shell.$overlays[0] as HTMLElement,
         canvases: canvases,
         paged: paged,
+        rotation: this.getViewerRotation() as number,
         onClose: () => {
           this.store.setState({
             downloadDialogueOpen: false,
           });
+        },
+        onDownloadCurrentView: (canvas: Canvas) => {
+          const viewer: any = this.getViewer();
+          window.open(<string>this.getCroppedImageUri(canvas, viewer));
         },
         resources: this.resources,
       })
