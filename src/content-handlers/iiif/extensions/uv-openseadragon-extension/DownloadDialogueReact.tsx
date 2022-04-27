@@ -376,7 +376,9 @@ const DownloadDialogue = ({
                   selected: selectedPage === "left",
                 })}
               >
-                {canvases[0].getLabel().getValue()}
+                <span className="label">
+                  {canvases[0].getLabel().getValue()}
+                </span>
               </div>
               <div
                 onClick={() => {
@@ -386,7 +388,9 @@ const DownloadDialogue = ({
                   selected: selectedPage === "right",
                 })}
               >
-                {canvases[1].getLabel().getValue()}
+                <span className="label">
+                  {canvases[1].getLabel().getValue()}
+                </span>
               </div>
             </div>
           )}
