@@ -13,6 +13,7 @@ import {
 } from "manifesto.js";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import { MediaType } from "@iiif/vocabulary";
+import { CroppedImageDimensions } from "./CroppedImageDimensions";
 
 const DownloadDialogue = ({
   config,
@@ -20,6 +21,7 @@ const DownloadDialogue = ({
   onDownloadCurrentView,
   open,
   canvases,
+  getCroppedImageDimensions,
   paged,
   parent,
   rotation,
@@ -34,6 +36,7 @@ const DownloadDialogue = ({
   onDownloadCurrentView: (canvas: Canvas) => void;
   open: boolean;
   canvases: Canvas[];
+  getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
   paged: boolean;
   parent: HTMLElement;
   rotation: number;
@@ -304,6 +307,30 @@ const DownloadDialogue = ({
     return label;
   }
 
+  function getCurrentViewLabel() {
+    let label: string = config.content.currentViewAsJpg;
+    const dimensions: CroppedImageDimensions | null = getCroppedImageDimensions(
+      getSelectedCanvas()
+    );
+
+    // dimensions
+    if (dimensions) {
+      label = hasNormalDimensions
+        ? Strings.format(
+            label,
+            dimensions.size.width.toString(),
+            dimensions.size.height.toString()
+          )
+        : Strings.format(
+            label,
+            dimensions.size.height.toString(),
+            dimensions.size.width.toString()
+          );
+    }
+
+    return label;
+  }
+
   return (
     <div ref={ref} className={cx("overlay download")} style={position}>
       <div className="top"></div>
@@ -348,7 +375,7 @@ const DownloadDialogue = ({
                       onDownloadCurrentView(getSelectedCanvas());
                     }}
                   >
-                    <button>{config.content.currentViewAsJpg}</button>
+                    <button>{getCurrentViewLabel()}</button>
                   </li>
                 )}
                 {isDownloadOptionAvailable(

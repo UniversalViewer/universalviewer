@@ -642,6 +642,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.downloadDialogueRoot.render(
       createElement(DownloadDialogue, {
         config: this.data.config.modules.downloadDialogue,
+        getCroppedImageDimensions: (canvas: Canvas) => {
+          return this.getCroppedImageDimensions(canvas, this.getViewer());
+        },
         open: downloadDialogueOpen,
         triggerButton: dialogueTriggerButton as HTMLElement,
         parent: this.shell.$overlays[0] as HTMLElement,
