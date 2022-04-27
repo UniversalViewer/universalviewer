@@ -16,32 +16,39 @@ import { MediaType } from "@iiif/vocabulary";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 
 const DownloadDialogue = ({
-  config,
+  content,
   onClose,
   onDownloadCurrentView,
   open,
   canvases,
   getCroppedImageDimensions,
+  getConfinedImageDimensions,
+  getConfinedImageUri,
   paged,
   parent,
   rotation,
   triggerButton,
   resources,
+  maxImageWidth,
+  confinedImageSize,
+  selectionEnabled,
 }: {
-  config: {
-    options: { [key: string]: string | number | boolean };
-    content: { [key: string]: string };
-  };
+  content: { [key: string]: string };
   onClose: () => void;
   onDownloadCurrentView: (canvas: Canvas) => void;
   open: boolean;
   canvases: Canvas[];
   getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
+  getConfinedImageDimensions: (canvas: Canvas) => Size | null;
+  getConfinedImageUri: (canvas: Canvas) => string | null;
   paged: boolean;
   parent: HTMLElement;
   rotation: number;
   triggerButton: HTMLElement;
   resources: IExternalResourceData[] | null;
+  maxImageWidth: number;
+  confinedImageSize: number;
+  selectionEnabled: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -183,7 +190,7 @@ const DownloadDialogue = ({
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
-          if (maxDimensions.width <= config.options.maxImageWidth) {
+          if (maxDimensions.width <= maxImageWidth) {
             return true;
           } else {
             return false;
@@ -196,9 +203,9 @@ const DownloadDialogue = ({
         if (!size) {
           return false;
         }
-        return !paged && size.width > config.options.confinedImageSize;
+        return size.width > confinedImageSize;
       case DownloadOption.SELECTION:
-        return config.options.selectionEnabled;
+        return selectionEnabled;
       case DownloadOption.RANGE_RENDERINGS:
         if (canvas.ranges && canvas.ranges.length) {
           const range: Range = canvas.ranges[0];
@@ -281,23 +288,18 @@ const DownloadDialogue = ({
         canvas.externalResource &&
         !canvas.externalResource.hasServiceDescriptor()
       ) {
-        label = Strings.format(
-          config.content.wholeImageHighRes,
-          "?",
-          "?",
-          mime
-        );
+        label = Strings.format(content.wholeImageHighRes, "?", "?", mime);
       }
     } else {
       label = hasNormalDimensions
         ? Strings.format(
-            config.content.wholeImageHighRes,
+            content.wholeImageHighRes,
             size.width.toString(),
             size.height.toString(),
             mime
           )
         : Strings.format(
-            config.content.wholeImageHighRes,
+            content.wholeImageHighRes,
             size.height.toString(),
             size.width.toString(),
             mime
@@ -307,8 +309,31 @@ const DownloadDialogue = ({
     return label;
   }
 
+  function getWholeImageLowResLabel() {
+    const canvas: Canvas = getSelectedCanvas();
+    const size: Size | null = getConfinedImageDimensions(canvas);
+
+    let label = "";
+
+    if (size) {
+      label = hasNormalDimensions
+        ? Strings.format(
+            content.wholeImageLowResAsJpg,
+            size.width.toString(),
+            size.height.toString()
+          )
+        : Strings.format(
+            content.wholeImageLowResAsJpg,
+            size.height.toString(),
+            size.width.toString()
+          );
+    }
+
+    return label;
+  }
+
   function getCurrentViewLabel() {
-    let label: string = config.content.currentViewAsJpg;
+    let label: string = content.currentViewAsJpg;
     const dimensions: CroppedImageDimensions | null = getCroppedImageDimensions(
       getSelectedCanvas()
     );
@@ -337,7 +362,7 @@ const DownloadDialogue = ({
       <div className="middle">
         <div className="content">
           <div role="heading" className="heading">
-            {config.content.download}
+            {content.download}
           </div>
           {/* <div className="nonAvailable">No download options are available</div> */}
           {/* if in two-up, show two pages next to each other to choose from */}
@@ -397,7 +422,19 @@ const DownloadDialogue = ({
                   DownloadOption.WHOLE_IMAGE_LOW_RES
                 ) && (
                   <li className="option single">
-                    <button>{config.content.wholeImageLowRes}</button>
+                    <button
+                      onClick={() => {
+                        const imageUri: string | null = getConfinedImageUri(
+                          getSelectedCanvas()
+                        );
+
+                        if (imageUri) {
+                          window.open(imageUri);
+                        }
+                      }}
+                    >
+                      {getWholeImageLowResLabel()}
+                    </button>
                   </li>
                 )}
               </ul>

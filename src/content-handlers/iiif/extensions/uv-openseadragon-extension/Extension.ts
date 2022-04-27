@@ -639,12 +639,29 @@ export default class OpenSeadragonExtension extends BaseExtension {
         return pagedIndices.includes(index);
       });
 
+    const config = this.data.config.modules.downloadDialogue;
+
     this.downloadDialogueRoot.render(
       createElement(DownloadDialogue, {
-        config: this.data.config.modules.downloadDialogue,
+        content: config.content,
         getCroppedImageDimensions: (canvas: Canvas) => {
           return this.getCroppedImageDimensions(canvas, this.getViewer());
         },
+        getConfinedImageDimensions: (canvas: Canvas) => {
+          return this.getConfinedImageDimensions(
+            canvas,
+            config.options.confinedImageSize
+          );
+        },
+        getConfinedImageUri: (canvas: Canvas) => {
+          return this.getConfinedImageUri(
+            canvas,
+            config.options.confinedImageSize
+          );
+        },
+        maxImageWidth: config.options.maxImageWidth,
+        confinedImageSize: config.options.confinedImageSize,
+        selectionEnabled: config.options.selectionEnabled,
         open: downloadDialogueOpen,
         triggerButton: dialogueTriggerButton as HTMLElement,
         parent: this.shell.$overlays[0] as HTMLElement,
