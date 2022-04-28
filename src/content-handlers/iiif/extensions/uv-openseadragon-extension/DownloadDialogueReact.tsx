@@ -73,7 +73,7 @@ const DownloadDialogue = ({
 
   const [position, setPosition] = useState({ top: "0px", left: "0px" });
   const [arrowPosition, setArrowPosition] = useState("0px 0px");
-
+  const [selectedPage, setSelectedPage] = useState<"left" | "right">("left");
   const hasNormalDimensions: boolean = rotation % 180 == 0;
 
   useEffect(() => {
@@ -107,8 +107,6 @@ const DownloadDialogue = ({
   if (!open) {
     return null;
   }
-
-  const [selectedPage, setSelectedPage] = useState<"left" | "right">("left");
 
   function getCanvasDimensions(canvas: Canvas): Size | null {
     // externalResource may not have loaded yet

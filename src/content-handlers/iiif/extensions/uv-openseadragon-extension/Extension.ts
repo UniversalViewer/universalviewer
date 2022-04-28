@@ -617,7 +617,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   renderDownloadDialogue(): void {
     // todo: can this be added to store?
-    // const paged = !!this.getSettings().pagingEnabled;
     const paged = this.isPagingSettingEnabled();
 
     const {
@@ -625,7 +624,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       dialogueTriggerButton,
     } = this.store.getState() as OpenSeadragonExtensionState;
 
-    // todo: can the overlay visibility be based off of the store?
+    // todo: can the overlay visibility be added to the store?
     if (downloadDialogueOpen) {
       this.extensionHost.publish(IIIFEvents.SHOW_OVERLAY);
     } else {
