@@ -171,76 +171,72 @@
 
             .middle{
 
-                .noneAvailable{
-                    padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
-                }
+                .content {
 
-                .pagingNote{
-                    padding: @padding-medium-vertical 0 0 0;
-                }
+                    .heading {
+                        padding: 0;
+                    }
 
-                .pages {
-                    display: flex;
-                    justify-content: center;
-                    .page {
-                        width: 50px;
-                        height: 70px;
-                        background: @gray-lighter;
-                        position: relative;
-                        cursor: pointer;
-                        &.left {
-                            margin-right: 6px;
-                        }
-                        &.selected {
-                            background: @gray-light;
-                            box-shadow: inset 0 0 10px #5a5a5a;
+                    .noneAvailable{
+                        padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+                    }
+
+                    .pagingNote{
+                        padding: @padding-medium-vertical 0 0 0;
+                    }
+
+                    h2 {
+                        margin: 0;
+                        padding: @padding-medium-vertical 0 @padding-medium-vertical 0
+                    }
+
+                    .pages {
+                        margin: 0.5rem 0 1rem 0;
+                        display: flex;
+                        justify-content: center;
+                        .page {
+                            width: 50px;
+                            height: 70px;
+                            background: @gray-lighter;
+                            position: relative;
+                            cursor: pointer;
+                            &.left {
+                                margin-right: 6px;
+                            }
+                            &.selected {
+                                background: @gray-light;
+                                box-shadow: inset 0 0 10px #5a5a5a;
+                                .label {
+                                    color: #fff;
+                                }
+                            }
                             .label {
-                                color: #fff;
+                                position: absolute;
+                                bottom: 0;
+                                right: 0;
+                                padding-right: 4px;
                             }
                         }
-                        .label {
-                            position: absolute;
-                            bottom: 0;
-                            right: 0;
-                            padding-right: 4px;
-                        }
                     }
-                }
 
-                ol.options {
+                    ol.options {
 
-                    padding: 0;
+                        padding: 0;
 
-                    li.group {
-                        border-bottom: 1px solid @gray-lighter;
-
-                        &.lastVisible{
-                            border-bottom: none;
-                        }
-
-                        ul {
-                            list-style-type: none;
+                        li {
                             margin: 0;
-                            padding: 0;
-
-                            li {
-                                overflow: hidden;
-
-                                input {
-                                    float: left;
-                                    display: block;
-                                }
-
-                                label {
-                                    float: left;
-                                    width: 190px;
-                                    line-height: 1.2em;
-                                    span.explanatory { // explanatory text
-                                        display: block;
-                                        font-size: 11px;
-                                        margin: 4px 0 4px 0;
-                                        color: @text-tertiary-color;
-                                    }
+                            padding: 2px 0 2px 0;
+                            button {
+                                width: 100%;
+                                height: 100%;
+                                padding: 0;
+                                border: none;
+                                background: none;
+                                text-align: left;
+                                color: @brand-primary;
+                                cursor: pointer;
+                                &:hover {
+                                    text-decoration: underline;
                                 }
                             }
                         }
@@ -248,10 +244,19 @@
                 }
 
                 .footer {
-                    a {
-                        margin-top: @margin-small-vertical;
-                        font-size: @font-size-small;
-                        display: block;
+                    padding: @padding-large-vertical 0 0 0;
+                    button {
+                        width: 100%;
+                        height: 100%;
+                        padding: 0;
+                        border: none;
+                        background: none;
+                        text-align: left;
+                        color: @brand-primary;
+                        cursor: pointer;
+                        &:hover {
+                            text-decoration: underline;
+                        }
                     }
                 }
             }

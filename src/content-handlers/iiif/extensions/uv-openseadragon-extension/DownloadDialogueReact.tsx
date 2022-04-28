@@ -499,6 +499,7 @@ const DownloadDialogue = ({
           </div>
           {/* <div className="nonAvailable">No download options are available</div> */}
           {/* if in two-up, show two pages next to each other to choose from */}
+          <h2>{content.individualPages}</h2>
           {canvases.length === 2 && (
             <div className="pages">
               <div
@@ -527,7 +528,6 @@ const DownloadDialogue = ({
               </div>
             </div>
           )}
-          <h2>{content.individualPages}</h2>
           <ol className="options">
             {isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) && (
               <li className="option single">
