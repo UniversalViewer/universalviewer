@@ -10,45 +10,58 @@ import {
   IExternalImageResourceData,
   Resource,
   Annotation,
+  ManifestResource,
+  Rendering,
+  LanguageMap,
+  Sequence,
+  Manifest,
 } from "manifesto.js";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import { MediaType } from "@iiif/vocabulary";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 
 const DownloadDialogue = ({
+  canvases,
+  confinedImageSize,
   content,
+  getConfinedImageDimensions,
+  getConfinedImageUri,
+  getCroppedImageDimensions,
+  locale,
+  manifest,
+  maxImageWidth,
+  mediaDownloadEnabled,
   onClose,
   onDownloadCurrentView,
   open,
-  canvases,
-  getCroppedImageDimensions,
-  getConfinedImageDimensions,
-  getConfinedImageUri,
   paged,
   parent,
-  rotation,
-  triggerButton,
   resources,
-  maxImageWidth,
-  confinedImageSize,
+  rotation,
   selectionEnabled,
+  sequence,
+  triggerButton,
 }: {
+  canvases: Canvas[];
+  confinedImageSize: number;
   content: { [key: string]: string };
+  getConfinedImageDimensions: (canvas: Canvas) => Size | null;
+  getConfinedImageUri: (canvas: Canvas) => string | null;
+  getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
+  locale: string;
+  manifest: Manifest;
+  maxImageWidth: number;
+  mediaDownloadEnabled: boolean;
   onClose: () => void;
   onDownloadCurrentView: (canvas: Canvas) => void;
   open: boolean;
-  canvases: Canvas[];
-  getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
-  getConfinedImageDimensions: (canvas: Canvas) => Size | null;
-  getConfinedImageUri: (canvas: Canvas) => string | null;
   paged: boolean;
   parent: HTMLElement;
-  rotation: number;
-  triggerButton: HTMLElement;
   resources: IExternalResourceData[] | null;
-  maxImageWidth: number;
-  confinedImageSize: number;
+  rotation: number;
   selectionEnabled: boolean;
+  sequence: Sequence;
+  triggerButton: HTMLElement;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -212,8 +225,10 @@ const DownloadDialogue = ({
           return range.getRenderings().length > 0;
         }
         return false;
+      case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
+        return mediaDownloadEnabled;
       default:
-        return false; // super.isDownloadOptionAvailable(option);
+        return true;
     }
   }
 
@@ -356,6 +371,108 @@ const DownloadDialogue = ({
     return label;
   }
 
+  function Renderings({
+    resource,
+    defaultLabel,
+  }: {
+    resource: ManifestResource;
+    defaultLabel: string;
+  }) {
+    const renderings: Rendering[] = resource.getRenderings();
+
+    return (
+      <>
+        {renderings.map((rendering: Rendering) => {
+          let label: string | null = LanguageMap.getValue(
+            rendering.getLabel(),
+            locale
+          );
+
+          if (label) {
+            label += " ({0})";
+          } else {
+            label = defaultLabel;
+          }
+
+          const mime: string = Files.simplifyMimeType(
+            rendering.getFormat().toString()
+          );
+
+          label = Strings.format(label!, mime);
+
+          return (
+            <li>
+              <button
+                onClick={() => {
+                  window.open(rendering.id, "_blank");
+                }}
+              >
+                {label}
+              </button>
+            </li>
+          );
+        })}
+      </>
+    );
+  }
+
+  function RangeRenderings() {
+    const canvas: Canvas = getSelectedCanvas();
+
+    return (
+      <>
+        {canvas.ranges?.map((range: Range) => {
+          <Renderings
+            resource={range}
+            defaultLabel={content.entireFileAsOriginal}
+          />;
+        })}
+      </>
+    );
+  }
+
+  function ImageRenderings() {
+    const canvas: Canvas = getSelectedCanvas();
+    const images: Annotation[] = canvas.getImages();
+
+    return (
+      <>
+        {images.map((image: Annotation) => {
+          <Renderings
+            resource={image.getResource()}
+            defaultLabel={content.entireFileAsOriginal}
+          />;
+        })}
+      </>
+    );
+  }
+
+  function CanvasRenderings() {
+    const canvas: Canvas = getSelectedCanvas();
+
+    return (
+      <Renderings
+        resource={canvas}
+        defaultLabel={content.entireFileAsOriginal}
+      />
+    );
+  }
+
+  function ManifestRenderings() {
+    return (
+      <>
+        <Renderings
+          resource={sequence}
+          defaultLabel={content.entireFileAsOriginal}
+        />
+        <Renderings
+          resource={manifest}
+          defaultLabel={content.entireFileAsOriginal}
+        />
+      </>
+    );
+  }
+
   return (
     <div ref={ref} className={cx("overlay download")} style={position}>
       <div className="top"></div>
@@ -441,19 +558,39 @@ const DownloadDialogue = ({
                     </button>
                   </li>
                 )}
+                {isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS) && (
+                  <RangeRenderings />
+                )}
+                {isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS) && (
+                  <ImageRenderings />
+                )}
+                {isDownloadOptionAvailable(
+                  DownloadOption.CANVAS_RENDERINGS
+                ) && <CanvasRenderings />}
               </ul>
             </li>
-            <li className="group canvas">
-              <ul>
-                <li className="option dynamic">Original source file</li>
-                <li className="option dynamic">Raw OCR Data</li>
-                <li className="option dynamic">Technical Metadata (xml)</li>
-              </ul>
-            </li>
+
+            {/* <li className="option dynamic">Original source file</li>
+            <li className="option dynamic">Raw OCR Data</li>
+            <li className="option dynamic">Technical Metadata (xml)</li> */}
+
             <li className="group manifest">
               <ul>
-                <li className="option">selection</li>
-                <li className="option dynamic">pdf</li>
+                {isDownloadOptionAvailable(
+                  DownloadOption.MANIFEST_RENDERINGS
+                ) && <ManifestRenderings />}
+                {/* {isDownloadOptionAvailable(DownloadOption.SELECTION) && (
+                  <li className="option single">selection available</li>
+                )}
+                {isDownloadOptionAvailable(
+                  DownloadOption.ENTIRE_DOCUMENT_AS_PDF
+                ) && <li className="option single">pdf available</li>}
+                {isDownloadOptionAvailable(
+                  DownloadOption.ENTIRE_DOCUMENT_AS_TEXT
+                ) && <li className="option single">text available</li>}
+                {isDownloadOptionAvailable(
+                  DownloadOption.ENTIRE_FILE_AS_ORIGINAL
+                ) && <li className="option single">original available</li>} */}
               </ul>
             </li>
           </ol>

@@ -42,6 +42,7 @@ import {
   Service,
   Size,
   Utils,
+  Manifest,
 } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
@@ -643,7 +644,21 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
     this.downloadDialogueRoot.render(
       createElement(DownloadDialogue, {
+        canvases: canvases,
+        confinedImageSize: config.options.confinedImageSize,
         content: config.content,
+        locale: this.getLocale(),
+        manifest: this.helper.manifest as Manifest,
+        maxImageWidth: config.options.maxImageWidth,
+        mediaDownloadEnabled: this.helper.isUIEnabled("mediaDownload"),
+        open: downloadDialogueOpen,
+        paged: paged,
+        parent: this.shell.$overlays[0] as HTMLElement,
+        resources: this.resources,
+        rotation: this.getViewerRotation() as number,
+        selectionEnabled: config.options.selectionEnabled,
+        sequence: this.helper.getCurrentSequence(),
+        triggerButton: dialogueTriggerButton as HTMLElement,
         getCroppedImageDimensions: (canvas: Canvas) => {
           return this.getCroppedImageDimensions(canvas, this.getViewer());
         },
@@ -659,15 +674,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
             config.options.confinedImageSize
           );
         },
-        maxImageWidth: config.options.maxImageWidth,
-        confinedImageSize: config.options.confinedImageSize,
-        selectionEnabled: config.options.selectionEnabled,
-        open: downloadDialogueOpen,
-        triggerButton: dialogueTriggerButton as HTMLElement,
-        parent: this.shell.$overlays[0] as HTMLElement,
-        canvases: canvases,
-        paged: paged,
-        rotation: this.getViewerRotation() as number,
         onClose: () => {
           this.store.setState({
             downloadDialogueOpen: false,
@@ -677,7 +683,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
           const viewer: any = this.getViewer();
           window.open(<string>this.getCroppedImageUri(canvas, viewer));
         },
-        resources: this.resources,
       })
     );
   }
