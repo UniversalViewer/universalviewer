@@ -112,6 +112,7 @@
         "selectionEnabled": false
       },
       "content": {
+        "allPages": "Alla sidor",
         "currentViewAsJpg": "Aktuell vy {0} x {1}px (jpg)",
         "currentViewAsJpgExplanation": "Öppnas i nytt fönster",
         "download": "Ladda ner",
@@ -120,16 +121,18 @@
         "editSettings": "Ändra inställningar",
         "entireDocument": "Hela dokumentet ({0})",
         "entireFileAsOriginal": "Hela filen",
+        "individualPages": "Enskilda sidor",
         "noneAvailable": "Inga nedladdningsalternativ är tillgängliga.",
         "pagingNote": "Stäng dubbelsidig vy för fler alternativ",
         "preview": "Förhandsgranska",
+        "termsOfUse": "Användningsvillkor",
         "title": "Ladda ner",
         "wholeImageHighRes": "Hela bilden {0} x {1}px ({2})",
         "wholeImageHighResExplanation": "Öppnas i nytt fönster.",
-        "wholeImagesHighRes": "Hela bilder ({0})",
-        "wholeImagesHighResExplanation": "Öppnas i två nya fönster.",
         "wholeImageLowResAsJpg": "Hela bilden {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Öppnas i nytt fönster."
+        "wholeImageLowResAsJpgExplanation": "Öppnas i nytt fönster.",
+        "wholeImagesHighRes": "Hela bilder ({0})",
+        "wholeImagesHighResExplanation": "Öppnas i två nya fönster."
       }
     },
     "footerPanel": {

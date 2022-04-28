@@ -2,8 +2,7 @@
   "localisation": {
     "label": "Polski"
   },
-  "options": {
-  },
+  "options": {},
   "content": {
     "authCORSError": "Twoja przeglądarka nie obsługuje CORS. Zaktualizuj ją, aby wyświetlić tę zawartość.",
     "authorisationFailedMessage": "Twoja próba logowania nie powidła się. Proszę spróbuj ponownie.",
@@ -60,6 +59,7 @@
         "noneAvailable": "Brak dostępnych opcji pobierania.",
         "pagingNote": "Wyłącz widok dwóch stron, aby uzyskać dodatkowe opcje.",
         "preview": "Podgląd",
+        "termsOfUse": "Warunki korzystania",
         "title": "Pobieranie",
         "wholeImageHighRes": "Pełny obraz {0} x {1}px ({2})",
         "wholeImageHighResExplanation": "Otwiera się w nowym oknie.",
@@ -188,10 +188,8 @@
         "cancel": "Anuluj"
       }
     },
-    "searchFooterPanel":
-    {
-      "content":
-      {
+    "searchFooterPanel": {
+      "content": {
         "clearSearch": "Wyczyść",
         "defaultLabel": "-",
         "displaying": "{0} {1} z {2}",

@@ -33,13 +33,16 @@ const DownloadDialogue = ({
   mediaDownloadEnabled,
   onClose,
   onDownloadCurrentView,
+  onShowTermsOfUse,
   open,
   paged,
   parent,
   resources,
+  requiredStatement,
   rotation,
   selectionEnabled,
   sequence,
+  termsOfUseEnabled,
   triggerButton,
 }: {
   canvases: Canvas[];
@@ -54,13 +57,16 @@ const DownloadDialogue = ({
   mediaDownloadEnabled: boolean;
   onClose: () => void;
   onDownloadCurrentView: (canvas: Canvas) => void;
+  onShowTermsOfUse: () => void;
   open: boolean;
   paged: boolean;
   parent: HTMLElement;
   resources: IExternalResourceData[] | null;
+  requiredStatement: string | null | undefined;
   rotation: number;
   selectionEnabled: boolean;
   sequence: Sequence;
+  termsOfUseEnabled: boolean;
   triggerButton: HTMLElement;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -382,7 +388,7 @@ const DownloadDialogue = ({
 
     return (
       <>
-        {renderings.map((rendering: Rendering) => {
+        {renderings.map((rendering: Rendering, index: number) => {
           let label: string | null = LanguageMap.getValue(
             rendering.getLabel(),
             locale
@@ -401,7 +407,7 @@ const DownloadDialogue = ({
           label = Strings.format(label!, mime);
 
           return (
-            <li>
+            <li key={index}>
               <button
                 onClick={() => {
                   window.open(rendering.id, "_blank");
@@ -473,6 +479,18 @@ const DownloadDialogue = ({
     );
   }
 
+  function TermsOfUse() {
+    return termsOfUseEnabled && requiredStatement ? (
+      <button
+        onClick={() => {
+          onShowTermsOfUse();
+        }}
+      >
+        {content.termsOfUse}
+      </button>
+    ) : null;
+  }
+
   return (
     <div ref={ref} className={cx("overlay download")} style={position}>
       <div className="top"></div>
@@ -511,91 +529,68 @@ const DownloadDialogue = ({
               </div>
             </div>
           )}
+          <h2>{content.individualPages}</h2>
           <ol className="options">
-            <li className="group image">
-              <ul>
-                {isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) && (
-                  <li
-                    className="option single"
-                    onClick={() => {
-                      onDownloadCurrentView(getSelectedCanvas());
-                    }}
-                  >
-                    <button>{getCurrentViewLabel()}</button>
-                  </li>
-                )}
-                {isDownloadOptionAvailable(
-                  DownloadOption.WHOLE_IMAGE_HIGH_RES
-                ) && (
-                  <li className="option single">
-                    <button
-                      onClick={() => {
-                        window.open(
-                          getCanvasHighResImageUri(getSelectedCanvas())
-                        );
-                      }}
-                    >
-                      {getWholeImageHighResLabel()}
-                    </button>
-                  </li>
-                )}
-                {isDownloadOptionAvailable(
-                  DownloadOption.WHOLE_IMAGE_LOW_RES
-                ) && (
-                  <li className="option single">
-                    <button
-                      onClick={() => {
-                        const imageUri: string | null = getConfinedImageUri(
-                          getSelectedCanvas()
-                        );
+            {isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) && (
+              <li className="option single">
+                <button
+                  onClick={() => {
+                    onDownloadCurrentView(getSelectedCanvas());
+                  }}
+                >
+                  {getCurrentViewLabel()}
+                </button>
+              </li>
+            )}
+            {isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_HIGH_RES) && (
+              <li className="option single">
+                <button
+                  onClick={() => {
+                    window.open(getCanvasHighResImageUri(getSelectedCanvas()));
+                  }}
+                >
+                  {getWholeImageHighResLabel()}
+                </button>
+              </li>
+            )}
+            {isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_LOW_RES) && (
+              <li className="option single">
+                <button
+                  onClick={() => {
+                    const imageUri: string | null = getConfinedImageUri(
+                      getSelectedCanvas()
+                    );
 
-                        if (imageUri) {
-                          window.open(imageUri);
-                        }
-                      }}
-                    >
-                      {getWholeImageLowResLabel()}
-                    </button>
-                  </li>
-                )}
-                {isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS) && (
-                  <RangeRenderings />
-                )}
-                {isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS) && (
-                  <ImageRenderings />
-                )}
-                {isDownloadOptionAvailable(
-                  DownloadOption.CANVAS_RENDERINGS
-                ) && <CanvasRenderings />}
-              </ul>
-            </li>
-
-            {/* <li className="option dynamic">Original source file</li>
-            <li className="option dynamic">Raw OCR Data</li>
-            <li className="option dynamic">Technical Metadata (xml)</li> */}
-
-            <li className="group manifest">
-              <ul>
-                {isDownloadOptionAvailable(
-                  DownloadOption.MANIFEST_RENDERINGS
-                ) && <ManifestRenderings />}
-                {/* {isDownloadOptionAvailable(DownloadOption.SELECTION) && (
+                    if (imageUri) {
+                      window.open(imageUri);
+                    }
+                  }}
+                >
+                  {getWholeImageLowResLabel()}
+                </button>
+              </li>
+            )}
+            {isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS) && (
+              <RangeRenderings />
+            )}
+            {isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS) && (
+              <ImageRenderings />
+            )}
+            {isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS) && (
+              <CanvasRenderings />
+            )}
+          </ol>
+          <h2>{content.allPages}</h2>
+          <ol className="options">
+            {isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && (
+              <ManifestRenderings />
+            )}
+            {/* {isDownloadOptionAvailable(DownloadOption.SELECTION) && (
                   <li className="option single">selection available</li>
-                )}
-                {isDownloadOptionAvailable(
-                  DownloadOption.ENTIRE_DOCUMENT_AS_PDF
-                ) && <li className="option single">pdf available</li>}
-                {isDownloadOptionAvailable(
-                  DownloadOption.ENTIRE_DOCUMENT_AS_TEXT
-                ) && <li className="option single">text available</li>}
-                {isDownloadOptionAvailable(
-                  DownloadOption.ENTIRE_FILE_AS_ORIGINAL
-                ) && <li className="option single">original available</li>} */}
-              </ul>
-            </li>
+                )} */}
           </ol>
           <div className="footer">
-            <a href="#">Terms of Use</a>
+            <TermsOfUse />
           </div>
         </div>
         <div className="buttons">

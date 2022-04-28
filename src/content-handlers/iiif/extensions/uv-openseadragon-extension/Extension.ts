@@ -655,6 +655,8 @@ export default class OpenSeadragonExtension extends BaseExtension {
         paged: paged,
         parent: this.shell.$overlays[0] as HTMLElement,
         resources: this.resources,
+        requiredStatement: this.helper.getRequiredStatement()?.value,
+        termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
         rotation: this.getViewerRotation() as number,
         selectionEnabled: config.options.selectionEnabled,
         sequence: this.helper.getCurrentSequence(),
@@ -675,13 +677,15 @@ export default class OpenSeadragonExtension extends BaseExtension {
           );
         },
         onClose: () => {
-          this.store.setState({
-            downloadDialogueOpen: false,
-          });
+          this.store.getState().closeDialogue();
         },
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
           window.open(<string>this.getCroppedImageUri(canvas, viewer));
+        },
+        onShowTermsOfUse: () => {
+          this.store.getState().closeDialogue();
+          this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
         },
       })
     );

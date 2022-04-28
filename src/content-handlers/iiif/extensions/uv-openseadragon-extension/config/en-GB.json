@@ -113,6 +113,7 @@
         "selectionEnabled": false
       },
       "content": {
+        "allPages": "All Pages",
         "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
         "currentViewAsJpgExplanation": "Opens in a new window",
         "download": "Download",
@@ -121,16 +122,18 @@
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file",
+        "individualPages": "Individual Pages",
         "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",
+        "termsOfUse": "Terms of Use",
         "title": "Download",
         "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
         "wholeImageHighResExplanation": "Opens in a new window.",
-        "wholeImagesHighRes": "Whole images ({0})",
-        "wholeImagesHighResExplanation": "Opens in two new windows.",
         "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
+        "wholeImageLowResAsJpgExplanation": "Opens in a new window.",
+        "wholeImagesHighRes": "Whole images ({0})",
+        "wholeImagesHighResExplanation": "Opens in two new windows."
       }
     },
     "footerPanel": {
