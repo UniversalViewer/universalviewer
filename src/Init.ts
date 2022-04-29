@@ -14,6 +14,9 @@ export const init = (el: string | HTMLDivElement, data) => {
   container.innerHTML = "";
   const parent = document.createElement("div");
   container.appendChild(parent);
+  // extra div is needed for safari full screen
+  const uvDiv = document.createElement("div");
+  parent.appendChild(uvDiv);
 
   const resize = () => {
     if (uv) {
@@ -41,7 +44,7 @@ export const init = (el: string | HTMLDivElement, data) => {
   });
 
   uv = new UniversalViewer({
-    target: parent,
+    target: uvDiv,
     data: data,
   });
 

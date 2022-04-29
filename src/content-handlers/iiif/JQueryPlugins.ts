@@ -316,7 +316,7 @@ export default function jqueryPlugins($) {
       const $this: JQuery = $(this);
 
       $this.on(
-        "touchstart click",
+        "click",
         function(e) {
           e.preventDefault();
           cb(e);
