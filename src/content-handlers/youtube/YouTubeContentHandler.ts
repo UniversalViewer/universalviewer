@@ -18,7 +18,6 @@ interface YouTubeConfig {
 export default class YouTubeContentHandler extends BaseContentHandler<
   YouTubeData
 > {
-  private _playerDiv: HTMLDivElement;
   private _id: string;
   public config: YouTubeConfig;
 
@@ -52,11 +51,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
       ref: this,
     });
 
-    if (!this._playerDiv) {
-      this._playerDiv = document.createElement("div");
-      this._playerDiv.id = this._id;
-      this._el.append(this._playerDiv);
-    }
+    this._el.id = this._id;
 
     const existingScriptTag = document.getElementById("youtube-iframe-api");
 
@@ -212,8 +207,8 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public resize(): void {
     const width = this._el.clientWidth + "px";
     const height = this._el.clientHeight + "px";
-    this._playerDiv.style.width = width;
-    this._playerDiv.style.height = height;
+    this._el.style.width = width;
+    this._el.style.height = height;
   }
 
   public dispose(): void {
