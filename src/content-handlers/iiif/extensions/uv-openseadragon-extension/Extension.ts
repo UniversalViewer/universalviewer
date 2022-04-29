@@ -27,6 +27,7 @@ import {
   ExternalResourceType,
   ServiceProfile,
   ViewingHint,
+  ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
@@ -1537,56 +1538,68 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return index;
   }
 
+  // https://codesandbox.io/s/iiif-thumbnails-p7ipi7?file=/src/App.tsx
   getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
-    let indices: number[] | undefined = [];
+    // todo: get these from the store (inc canvasIndex)
+    const sequence = this.helper.manifest!.getSequences()[0];
+    const canvases = sequence.getCanvases();
+    const paged = !!this.getSettings().pagingEnabled;
+    const viewingDirection = this.helper.getViewingDirection();
+
+    let indices: number[] = [];
 
     // if it's a continuous manifest, get all resources.
-    if (this.helper.isContinuous()) {
+    if (sequence.getViewingHint() === ViewingHint.CONTINUOUS) {
       // get all canvases to be displayed inline
-      indices = this.helper
-        .getCanvases()
-        .map((_canvas: Canvas, index: number) => {
-          return index;
-        });
+      indices = canvases.map((_canvas: Canvas, index: number) => {
+        return index;
+      });
     } else {
-      const prevCanvas: Canvas | null = this.helper.getCanvasByIndex(
-        canvasIndex - 1
-      );
-
-      const nextCanvas: Canvas | null = this.helper.getCanvasByIndex(
-        canvasIndex + 1
-      );
-
-      const canvasHasPrevOrNextNonPagedCanvas: boolean =
-        prevCanvas?.getViewingHint() === ViewingHint.NON_PAGED ||
-        nextCanvas?.getViewingHint() === ViewingHint.NON_PAGED;
-
-      // console.log(canvas?.getViewingHint());
-
-      if (!this.isPagingSettingEnabled() || canvasHasPrevOrNextNonPagedCanvas) {
+      if (!paged) {
         // one-up
         // if the current canvas index is for a non-paged canvas, only return that canvas index
         // don't pair it with another in two-up
-        indices.push(this.helper.canvasIndex);
+        indices.push(canvasIndex);
       } else {
         // two-up
         if (
-          this.helper.isFirstCanvas(canvasIndex) ||
-          (this.helper.isLastCanvas(canvasIndex) &&
-            this.helper.isTotalCanvasesEven())
+          canvasIndex === 0 ||
+          (canvasIndex === canvases.length && canvases.length % 2 === 0)
         ) {
-          indices = <number[]>[canvasIndex];
+          indices = [canvasIndex];
         } else if (canvasIndex % 2 === 0) {
           // the current canvas index is even
           // therefore it appears on the right
-          indices = <number[]>[canvasIndex - 1, canvasIndex];
+
+          // only include prev canvas if it's not non-paged and the current canvas isn't non-paged
+          const currentCanvas: Canvas | null = canvases[canvasIndex];
+          const prevCanvas: Canvas | null = canvases[canvasIndex - 1];
+          if (
+            currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
+            prevCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
+          ) {
+            indices = [canvasIndex - 1, canvasIndex];
+          } else {
+            indices = [canvasIndex];
+          }
         } else {
           // the current canvas index is odd
           // therefore it appears on the left
-          indices = <number[]>[canvasIndex, canvasIndex + 1];
+
+          // only include next canvas if it's not non-paged and the current canvas isn't non-paged
+          const currentCanvas: Canvas | null = canvases[canvasIndex];
+          const nextCanvas: Canvas | null = canvases[canvasIndex + 1];
+          if (
+            currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
+            nextCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
+          ) {
+            indices = [canvasIndex, canvasIndex + 1];
+          } else {
+            indices = [canvasIndex];
+          }
         }
 
-        if (this.helper.isRightToLeft()) {
+        if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
           indices = indices.reverse();
         }
       }

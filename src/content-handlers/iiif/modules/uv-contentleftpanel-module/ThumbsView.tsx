@@ -26,7 +26,7 @@ const ThumbImage = ({
   });
 
   return (
-    <a
+    <div
       onClick={() => onClick(thumb)}
       className={cx("thumb", {
         first: first,
@@ -50,6 +50,7 @@ const ThumbImage = ({
         {inView && <img src={thumb.uri} alt={thumb.label} />}
       </div>
       <div className="info">
+        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
@@ -57,11 +58,11 @@ const ThumbImage = ({
           <span className="searchResults">{thumb.data.searchResults}</span>
         )}
       </div>
-    </a>
+    </div>
   );
 };
 
-const ThumbsView = ({
+const Thumbnails = ({
   onClick,
   paged,
   selected,
@@ -74,6 +75,8 @@ const ThumbsView = ({
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
 }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const thumb = ref.current?.querySelector(`#thumb-${selected[0]}`);
     thumb?.scrollIntoView({
@@ -99,8 +102,6 @@ const ThumbsView = ({
 
     return true;
   }
-
-  const ref = useRef<HTMLDivElement | null>(null);
 
   const firstNonPagedIndex: number = thumbs.findIndex((t) => {
     return t.viewingHint !== ViewingHint.NON_PAGED;
@@ -134,4 +135,4 @@ const ThumbsView = ({
   );
 };
 
-export default ThumbsView;
+export default Thumbnails;
