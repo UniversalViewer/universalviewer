@@ -16,6 +16,11 @@
         "mostSpecificRequiredStatement": true
       }
     },
+    "downloadDialogue": {
+      "options": {
+        "selectionEnabled": true
+      }
+    },
     "headerPanel": {
       "options": {
         "localeToggleEnabled": false

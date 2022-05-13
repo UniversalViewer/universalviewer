@@ -480,8 +480,11 @@
           urlAdapter.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
-            const manifest = urlAdapter.get('iiifManifestId');
-            if (manifest === 'https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json') {
+            const manifest = urlAdapter.get("iiifManifestId");
+            if (
+              manifest ===
+              "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
+            ) {
               // Example of custom, inline config.
               cb({
                 options: {
@@ -494,35 +497,35 @@
                   pagingEnabled: true,
                   limitToRange: true,
                   manifestExclude: true,
-                  rightPanelEnabled: false
+                  rightPanelEnabled: false,
                 },
                 modules: {
                   headerPanel: {
                     options: {
-                      localeToggleEnabled: false
-                    }
+                      localeToggleEnabled: false,
+                    },
                   },
                   avCenterPanel: {
                     options: {
                       limitToRange: true,
                       enableFastRewind: true,
-                      enableFastForward: true
-                    }
+                      enableFastForward: true,
+                    },
                   },
                   contentLeftPanel: {
                     options: {
-                      defaultToTreeEnabled: true
-                    }
-                  }
-                }
+                      defaultToTreeEnabled: true,
+                    },
+                  },
+                },
               });
               return;
             }
 
             cb(
-                fetch("uv-iiif-config.json").then(function (resp) {
-                  return resp.json();
-                })
+              fetch("uv-iiif-config.json").then(function(resp) {
+                return resp.json();
+              })
             );
           });
 
@@ -564,6 +567,10 @@
             });
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
+          });
+
+          uv.on("multiSelectionMade", function(e) {
+            console.log("multiSelectionMade", e);
           });
 
           uv.on("pinpointAnnotationClicked", function(index) {

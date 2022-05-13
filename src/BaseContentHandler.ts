@@ -2,7 +2,7 @@ import { IContentHandler } from "./IContentHandler";
 import { IUVOptions } from "./UniversalViewer";
 import { UVAdapter } from "./UVAdapter";
 import { Events } from "./Events";
-const merge = require("lodash/merge");
+import { merge } from "./Utils";
 
 export type EventListener = {
   name: string;

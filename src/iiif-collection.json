@@ -728,6 +728,18 @@
           "visible": false
         },
         {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-enabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Enabled",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-disabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Disabled",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/test-manifests/print.json",
           "@type": "sc:Manifest",
           "label": "Print Service",

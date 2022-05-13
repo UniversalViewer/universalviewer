@@ -52,6 +52,7 @@ import { Events } from "../../../../Events";
 import { createRoot, Root } from "react-dom/client";
 import { createElement } from "react";
 import { createStore, OpenSeadragonExtensionState } from "./Store";
+import { merge } from "../../../../Utils";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -640,7 +641,18 @@ export default class OpenSeadragonExtension extends BaseExtension {
         return pagedIndices.includes(index);
       });
 
-    const config = this.data.config.modules.downloadDialogue;
+    const config = merge(
+      this.data.config.modules.dialogue,
+      this.data.config.modules.downloadDialogue
+    );
+
+    const downloadService: Service | null = this.helper.manifest!.getService(
+      ServiceProfile.DOWNLOAD_EXTENSIONS
+    );
+
+    const selectionEnabled =
+      config.options.selectionEnabled &&
+      downloadService?.__jsonld.selectionEnabled;
 
     this.downloadDialogueRoot.render(
       createElement(DownloadDialogue, {
@@ -658,7 +670,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
         requiredStatement: this.helper.getRequiredStatement()?.value,
         termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
         rotation: this.getViewerRotation() as number,
-        selectionEnabled: config.options.selectionEnabled,
+        selectionEnabled: selectionEnabled,
         sequence: this.helper.getCurrentSequence(),
         triggerButton: dialogueTriggerButton as HTMLElement,
         getCroppedImageDimensions: (canvas: Canvas) => {
@@ -682,6 +694,10 @@ export default class OpenSeadragonExtension extends BaseExtension {
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
           window.open(<string>this.getCroppedImageUri(canvas, viewer));
+        },
+        onDownloadSelection: () => {
+          this.store.getState().closeDialogue();
+          this.extensionHost.publish(IIIFEvents.SHOW_MULTISELECT_DIALOGUE);
         },
         onShowTermsOfUse: () => {
           this.store.getState().closeDialogue();

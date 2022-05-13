@@ -33,6 +33,7 @@ const DownloadDialogue = ({
   mediaDownloadEnabled,
   onClose,
   onDownloadCurrentView,
+  onDownloadSelection,
   onShowTermsOfUse,
   open,
   paged,
@@ -57,6 +58,7 @@ const DownloadDialogue = ({
   mediaDownloadEnabled: boolean;
   onClose: () => void;
   onDownloadCurrentView: (canvas: Canvas) => void;
+  onDownloadSelection: () => void;
   onShowTermsOfUse: () => void;
   open: boolean;
   paged: boolean;
@@ -583,9 +585,17 @@ const DownloadDialogue = ({
             {isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && (
               <ManifestRenderings />
             )}
-            {/* {isDownloadOptionAvailable(DownloadOption.SELECTION) && (
-                  <li className="option single">selection available</li>
-                )} */}
+            {isDownloadOptionAvailable(DownloadOption.SELECTION) && (
+              <li className="option single">
+                <button
+                  onClick={() => {
+                    onDownloadSelection();
+                  }}
+                >
+                  {content.selection}
+                </button>
+              </li>
+            )}
           </ol>
           <div className="footer">
             <TermsOfUse />
@@ -600,7 +610,7 @@ const DownloadDialogue = ({
               onClose();
             }}
           >
-            Close
+            {content.close}
           </button>
         </div>
       </div>
