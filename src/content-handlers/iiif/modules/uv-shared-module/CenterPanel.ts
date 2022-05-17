@@ -70,12 +70,12 @@ export class CenterPanel extends BaseView {
     this.closeAttribution();
 
     this.$closeAttributionButton = this.$attribution.find(".header .close");
-    this.$closeAttributionButton.on("click", e => {
+    this.$closeAttributionButton.on("click", (e) => {
       e.preventDefault();
       this.closeAttribution();
     });
 
-    this.$subtitleExpand.on("click", e => {
+    this.$subtitleExpand.on("click", (e) => {
       e.preventDefault();
 
       this.subtitleExpanded = !this.subtitleExpanded;
@@ -182,7 +182,13 @@ export class CenterPanel extends BaseView {
           this.resize();
         })
         .each(function() {
-          if (this.complete) $(this).load();
+          if (this.complete) {
+            try {
+              $(this).trigger("load");
+            } finally {
+              // do nothing
+            }
+          }
         });
 
       $attributionText.targetBlank();
