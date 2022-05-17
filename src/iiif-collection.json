@@ -802,8 +802,8 @@
         {
           "@id": "https://purl.stanford.edu/bh502xm3351/iiif3/manifest",
           "@type": "sc:Manifest",
-          "label": "Presentation 3 PDF (Stanford)",
-          "visible": false
+          "label": "Presentation 3 PDF (Large)",
+          "visible": true
         },
         {
           "@id": "https://edsilv.github.io/test-manifests/pres3-video.json",

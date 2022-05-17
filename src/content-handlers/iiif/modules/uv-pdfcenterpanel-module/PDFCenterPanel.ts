@@ -5,15 +5,17 @@ import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { Bools } from "@edsilv/utils";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { Events } from "../../../../Events";
+import { loadScripts } from "../../../../Utils";
 
-declare var PDFJS: any;
+// declare var PDFJS: any;
 
 export class PDFCenterPanel extends CenterPanel {
   private _$canvas: JQuery;
   private _$nextButton: JQuery;
   private _$pdfContainer: JQuery;
   private _$prevButton: JQuery;
-  private _$spinner: JQuery;
+  // private _$spinner: JQuery;
+  private _$progress: JQuery;
   private _$zoomInButton: JQuery;
   private _$zoomOutButton: JQuery;
   private _canvas: HTMLCanvasElement;
@@ -41,7 +43,8 @@ export class PDFCenterPanel extends CenterPanel {
 
     this._$pdfContainer = $('<div class="pdfContainer"></div>');
     this._$canvas = $("<canvas></canvas>");
-    this._$spinner = $('<div class="spinner"></div>');
+    // this._$spinner = $('<div class="spinner"></div>');
+    this._$progress = $('<progress max="100" value="0"></progress>');
     this._canvas = <HTMLCanvasElement>this._$canvas[0];
     this._ctx = this._canvas.getContext("2d");
     this._$prevButton = $('<div class="btn prev" tabindex="0"></div>');
@@ -53,7 +56,8 @@ export class PDFCenterPanel extends CenterPanel {
     // PDFObject. However, we still create the objects above so that references
     // to them do not cause errors (simpler than putting usePdfJs checks all over):
     if (Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
-      this.$content.append(this._$spinner);
+      // this.$content.append(this._$spinner);
+      this.$content.append(this._$progress);
       this.$content.append(this._$prevButton);
       this.$content.append(this._$nextButton);
       this.$content.append(this._$zoomInButton);
@@ -236,7 +240,7 @@ export class PDFCenterPanel extends CenterPanel {
   }
 
   async openMedia(resources: IExternalResource[]) {
-    this._$spinner.show();
+    // this._$spinner.show();
 
     await this.extension.getExternalResources(resources);
 
@@ -259,22 +263,35 @@ export class PDFCenterPanel extends CenterPanel {
       );
       window.PDFObject.embed(pdfUri, ".pdfContainer", { id: "PDF" });
     } else {
-      PDFJS = await import(
-        /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
-      );
+      // PDFJS = await import(
+      //   /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
+      // );
 
-      PDFJS.disableWorker = true;
+      // PDFJS.disableWorker = true;
+
+      // use pdfjs cdn, it just isn't working with webpack
+      await loadScripts(["//mozilla.github.io/pdf.js/build/pdf.js"]);
+
+      const pdfjsLib = window["pdfjs-dist/build/pdf"];
 
       const parameter = {
         url: mediaUri,
         withCredentials: canvas.externalResource.isAccessControlled(),
       };
 
-      const pdfDoc = await PDFJS.getDocument(parameter);
-      this._pdfDoc = pdfDoc;
-      this._render(this._pageIndex);
-      this.extensionHost.publish(PDFExtensionEvents.PDF_LOADED, pdfDoc);
-      this._$spinner.hide();
+      const loadingTask = pdfjsLib.getDocument(parameter);
+      loadingTask.onProgress = (progress) => {
+        const percentLoaded = (progress.loaded / progress.total) * 100;
+        this._$progress[0].setAttribute("value", String(percentLoaded));
+        if (percentLoaded === 100) {
+          this._$progress.hide();
+        }
+      };
+      loadingTask.promise.then((pdf) => {
+        this._pdfDoc = pdf;
+        this._render(this._pageIndex);
+        this.extensionHost.publish(PDFExtensionEvents.PDF_LOADED, pdf);
+      });
     }
 
     this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
@@ -318,7 +335,7 @@ export class PDFCenterPanel extends CenterPanel {
       // });
 
       // scale viewport
-      this._viewport = page.getViewport(this._scale);
+      this._viewport = page.getViewport({ scale: this._scale });
       this._canvas.height = this._viewport.height;
       this._canvas.width = this._viewport.width;
 
@@ -358,7 +375,7 @@ export class PDFCenterPanel extends CenterPanel {
             this.enableNextButton();
           }
         })
-        .catch((err: any) => {
+        .catch((_err: any) => {
           //console.log(err);
         });
     });
@@ -378,13 +395,22 @@ export class PDFCenterPanel extends CenterPanel {
     this._$pdfContainer.width(this.$content.width());
     this._$pdfContainer.height(this.$content.height());
 
-    this._$spinner.css(
+    // this._$spinner.css(
+    //   "top",
+    //   this.$content.height() / 2 - this._$spinner.height() / 2
+    // );
+    // this._$spinner.css(
+    //   "left",
+    //   this.$content.width() / 2 - this._$spinner.width() / 2
+    // );
+
+    this._$progress.css(
       "top",
-      this.$content.height() / 2 - this._$spinner.height() / 2
+      this.$content.height() / 2 - this._$progress.height() / 2
     );
-    this._$spinner.css(
+    this._$progress.css(
       "left",
-      this.$content.width() / 2 - this._$spinner.width() / 2
+      this.$content.width() / 2 - this._$progress.width() / 2
     );
 
     this._$prevButton.css({
