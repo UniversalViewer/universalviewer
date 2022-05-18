@@ -807,7 +807,9 @@ export class BaseExtension implements IExtension {
     for (let i = 0; i < indices.length; i++) {
       const index: number = indices[i];
       const canvas: Canvas = this.helper.getCanvasByIndex(index);
-      canvases.push(canvas);
+      if (canvas) {
+        canvases.push(canvas);
+      }
     }
 
     return canvases;

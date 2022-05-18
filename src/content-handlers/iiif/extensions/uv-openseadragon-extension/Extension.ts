@@ -1594,7 +1594,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
             currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
             prevCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
           ) {
-            indices = [canvasIndex - 1, canvasIndex];
+            if (prevCanvas) {
+              indices = [canvasIndex - 1, canvasIndex];
+            } else {
+              indices = [canvasIndex];
+            }
           } else {
             indices = [canvasIndex];
           }
@@ -1609,7 +1613,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
             currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
             nextCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
           ) {
-            indices = [canvasIndex, canvasIndex + 1];
+            if (nextCanvas) {
+              indices = [canvasIndex, canvasIndex + 1];
+            } else {
+              indices = [canvasIndex];
+            }
           } else {
             indices = [canvasIndex];
           }
