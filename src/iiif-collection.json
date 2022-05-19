@@ -472,10 +472,10 @@
           "@id": "https://digital.library.villanova.edu/Item/vudl:30471/Manifest"
         },
         {
-          "label": "LeBlanc Bibliography, Binder 1",
+          "label": "LeBlanc Bibliography, Binder 1 (multi-page pdf)",
           "@type": "sc:Manifest",
           "@id": "https://digital.library.villanova.edu/Item/vudl:294631/Manifest",
-          "visible": false
+          "visible": true
         },
         {
           "label": "Augustine PDF",
