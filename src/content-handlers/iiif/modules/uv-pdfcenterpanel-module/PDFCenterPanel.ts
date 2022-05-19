@@ -10,11 +10,11 @@ import { loadScripts } from "../../../../Utils";
 // declare var PDFJS: any;
 
 export class PDFCenterPanel extends CenterPanel {
+  // private _$spinner: JQuery;
   private _$canvas: JQuery;
   private _$nextButton: JQuery;
   private _$pdfContainer: JQuery;
   private _$prevButton: JQuery;
-  // private _$spinner: JQuery;
   private _$progress: JQuery;
   private _$zoomInButton: JQuery;
   private _$zoomOutButton: JQuery;
@@ -27,6 +27,7 @@ export class PDFCenterPanel extends CenterPanel {
   private _pageIndexPending: number | null = null;
   private _pageRendering: boolean = false;
   private _pdfDoc: any = null;
+  private _pdfjsLib: any = null;
   private _prevButtonEnabled: boolean = false;
   private _renderTask: any;
   private _scale: number = 0.7;
@@ -270,21 +271,29 @@ export class PDFCenterPanel extends CenterPanel {
       // PDFJS.disableWorker = true;
 
       // use pdfjs cdn, it just isn't working with webpack
-      await loadScripts(["//mozilla.github.io/pdf.js/build/pdf.js"]);
-
-      const pdfjsLib = window["pdfjs-dist/build/pdf"];
+      if (!this._pdfjsLib) {
+        await loadScripts(["//mozilla.github.io/pdf.js/build/pdf.js"]);
+        this._pdfjsLib = window["pdfjs-dist/build/pdf"];
+        this._pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+      } else {
+        this._$progress[0].setAttribute("value", "0");
+        this._$progress.show();
+        this._$canvas.hide();
+      }
 
       const parameter = {
         url: mediaUri,
         withCredentials: canvas.externalResource.isAccessControlled(),
       };
 
-      const loadingTask = pdfjsLib.getDocument(parameter);
+      const loadingTask = this._pdfjsLib.getDocument(parameter);
       loadingTask.onProgress = (progress) => {
         const percentLoaded = (progress.loaded / progress.total) * 100;
         this._$progress[0].setAttribute("value", String(percentLoaded));
         if (percentLoaded === 100) {
           this._$progress.hide();
+          this._$canvas.show();
         }
       };
       loadingTask.promise.then((pdf) => {
