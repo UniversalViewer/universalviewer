@@ -20,6 +20,7 @@ export class PDFCenterPanel extends CenterPanel {
   private _$zoomOutButton: JQuery;
   private _canvas: HTMLCanvasElement;
   private _ctx: any;
+  private _lastMediaUri: string | null = null;
   private _maxScale = 5;
   private _minScale = 0.7;
   private _nextButtonEnabled: boolean = false;
@@ -257,6 +258,12 @@ export class PDFCenterPanel extends CenterPanel {
     } else {
       mediaUri = canvas.id;
     }
+
+    if (mediaUri === this._lastMediaUri) {
+      return;
+    }
+
+    this._lastMediaUri = mediaUri;
 
     if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
       window.PDFObject = await import(
