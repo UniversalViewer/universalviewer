@@ -107,6 +107,17 @@ export class BaseExtension implements IExtension {
     if (this.data.locales) {
       this.$element.addClass(this.data.locales[0].name.toLowerCase());
     }
+
+    if (this.isRightPanelEnabled()) {
+      this.$element.addClass("right-panel-enabled");
+    }
+    if (this.isLeftPanelEnabled()) {
+      this.$element.addClass("left-panel-enabled");
+    }
+    if (this.isFooterPanelEnabled()) {
+      this.$element.addClass("footer-panel-enabled");
+    }
+
     this.$element.addClass(this.type.name);
     this.$element.addClass("browser-" + this.browserDetect.browser);
     this.$element.addClass("browser-version-" + this.browserDetect.version);
