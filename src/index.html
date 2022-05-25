@@ -12,6 +12,16 @@
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
     <%= htmlWebpackPlugin.tags.headTags %>
+    <style>
+      /* todo: replace with dynamic viewport units when available: https://caniuse.com/?search=svh */
+      @media only screen and (max-width: 768px) {
+        .uv {
+          /* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
+          height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+          height: calc(var(--vh, 1vh) * 100);
+        }
+      }
+    </style>
     <style type="text/tailwindcss">
       @layer utilities {
         .controls-button {
@@ -34,14 +44,26 @@
         }
       }
     </style>
+    <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
+    <script>
+      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+      let vh = window.innerHeight * 0.01;
+      // Then we set the value in the --vh custom property to the root of the document
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      window.addEventListener('resize', () => {
+        // We execute the same script as before
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      });
+    </script>
   </head>
   <body>
     <div
       id="uv"
-      class="uv w-full h-screen md:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
+      class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
     ></div>
 
-    <div id="uv-controls" class="hidden md:!block w-[65vw] mx-auto my-8">
+    <div id="uv-controls" class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8">
       <div>
         <ul id="annotation-list"></ul>
       </div>
