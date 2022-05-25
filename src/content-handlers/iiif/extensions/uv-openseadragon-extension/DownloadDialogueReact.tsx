@@ -422,6 +422,10 @@ const DownloadDialogue = ({
     );
   }
 
+  // function getRangeRenderings(): boolean {
+  //   return resource.getRenderings().length > 0;
+  // }
+
   function RangeRenderings() {
     const canvas: Canvas = getSelectedCanvas();
 
@@ -461,6 +465,12 @@ const DownloadDialogue = ({
         resource={canvas}
         defaultLabel={content.entireFileAsOriginal}
       />
+    );
+  }
+
+  function hasManifestRenderings(): boolean {
+    return (
+      sequence.getRenderings().length > 0 || manifest.getRenderings.length > 0
     );
   }
 
@@ -580,7 +590,10 @@ const DownloadDialogue = ({
               <CanvasRenderings />
             )}
           </ol>
-          <h2>{content.allPages}</h2>
+          {(hasManifestRenderings() ||
+            isDownloadOptionAvailable(DownloadOption.SELECTION)) && (
+            <h2>{content.allPages}</h2>
+          )}
           <ol className="options">
             {isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && (
               <ManifestRenderings />
