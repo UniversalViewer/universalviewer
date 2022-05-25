@@ -488,18 +488,28 @@
                   dropEnabled: true,
                   footerPanelEnabled: true,
                   headerPanelEnabled: false,
-                  leftPanelEnabled: false,
+                  // leftPanelEnabled: false,
+                  // rightPanelEnabled: false,
                   limitLocales: false,
                   overrideFullScreen: false,
                   pagingEnabled: true,
                   limitToRange: true,
                   manifestExclude: true,
-                  rightPanelEnabled: false
                 },
                 modules: {
+                  footerPanel: {
+                    options: {
+                      fullscreenEnabled: false
+                    }
+                  },
                   headerPanel: {
                     options: {
                       localeToggleEnabled: false
+                    }
+                  },
+                  moreInfoRightPanel: {
+                    options: {
+                      limitToRange: true,
                     }
                   },
                   avCenterPanel: {

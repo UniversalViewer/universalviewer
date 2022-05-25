@@ -43,7 +43,7 @@ export class MoreInfoRightPanel extends RightPanel {
     this.metadataComponent.on(
       "iiifViewerLinkClicked",
       (href: string) => {
-        // get the hash param.
+        // Range change.
         const rangeId: string | null = Urls.getHashParameterFromString(
           "rid",
           href
@@ -56,6 +56,19 @@ export class MoreInfoRightPanel extends RightPanel {
 
           if (range) {
             this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
+          }
+        }
+
+        // Time change.
+        const time: string | null = Urls.getHashParameterFromString(
+          "t",
+          href
+        );
+
+        if (time !== null) {
+          const timeAsNumber = Number(time);
+          if (!Number.isNaN(timeAsNumber)) {
+            this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber);
           }
         }
       },
