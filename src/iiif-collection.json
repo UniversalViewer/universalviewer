@@ -712,7 +712,19 @@
         {
           "@id": "https://sessionpapers.is.ed.ac.uk/whiiif/resources/manifests/ADV-CampbellsColl_Vol_99-paged",
           "@type": "sc:Manifest",
-          "label": "Non-paged",
+          "label": "Non-paged (start)",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/non-paged.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (middle)",
+          "visible": true
+        },
+        {
+          "@id": "https://heaney0.ugent.be/custom_manifests/B_OB_MS685.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (end)",
           "visible": true
         },
         {
