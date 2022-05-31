@@ -4,6 +4,7 @@ import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
 import { IIIFEvents } from "./IIIFEvents";
 import { defaultLocale } from "../../Utils";
+import { parseContentStateParameter } from "./Helpers";
 
 export class URLAdapter extends UVAdapter {
   constructor(readonly: boolean = false) {
@@ -55,6 +56,63 @@ export class URLAdapter extends UVAdapter {
       }
 
       return Number(num);
+    }
+
+    // if there's a iiif_content param in the qs, parse out the components of it and use those
+    const iiifContent = this.get<string>("iiif-content", "");
+
+    if (iiifContent) {
+      let iiifManifestId: string = "";
+      let xywh: string = "";
+
+      const contentState = parseContentStateParameter(iiifContent) as any;
+      if (contentState.type === "remote-content-state") {
+        iiifManifestId = contentState.id;
+      } else if (contentState && contentState.target.length) {
+        const firstTarget = contentState.target[0];
+        if (
+          firstTarget.type === "SpecificResource" &&
+          firstTarget.source.type === "Canvas"
+        ) {
+          const manifestSource = (firstTarget.source.partOf || []).find(
+            (s) => s.type === "Manifest"
+          );
+
+          // get canvas selector
+          if (
+            firstTarget.selector &&
+            firstTarget.selector.type === "BoxSelector"
+          ) {
+            xywh =
+              firstTarget.selector.spatial.x +
+              "," +
+              firstTarget.selector.spatial.y +
+              "," +
+              firstTarget.selector.spatial.width +
+              "," +
+              firstTarget.selector.spatial.height;
+          }
+
+          if (manifestSource) {
+            iiifManifestId = manifestSource.id;
+          }
+        }
+      }
+
+      return {
+        iiifManifestId: iiifManifestId,
+        collectionIndex: undefined,
+        manifestIndex: 0,
+        canvasIndex: 0, // todo
+        rotation: 0,
+        rangeId: "",
+        xywh: xywh,
+        target: "",
+        // cfi: this.get<string>("cfi", ""),
+        // youTubeVideoId: this.get<string>("youTubeVideoId", ""),
+        locales: formattedLocales.length ? formattedLocales : undefined,
+        ...overrides,
+      };
     }
 
     return {

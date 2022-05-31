@@ -91,6 +91,7 @@
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
     "@iiif/manifold": "^2.0.14",
+    "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
     "@universalviewer/aleph": "0.0.15",
@@ -113,6 +114,7 @@
     "pdfobject": "2.1.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-iiif-vault": "^0.9.7",
     "react-intersection-observer": "^8.34.0",
     "xss": "1.0.3",
     "zustand": "^4.0.0-rc.0"
