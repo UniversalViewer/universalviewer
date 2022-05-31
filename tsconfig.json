@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "esModuleInterop": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",

@@ -80,18 +80,20 @@
 
                 background: @gray-dark; // ie8
                 background: fadeout(@gray-dark, 30%);
+                backdrop-filter: blur(5px);
                 position: absolute;
-                width: 190px;
+                width: 220px;
                 margin: @margin-medium-horizontal @margin-small-horizontal @margin-xlarge-vertical @margin-large-horizontal;
                 font-size: @font-size-small;
-
                 .header {
-
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+                    display: flex;
                     overflow: hidden;
+                    min-height: 38px;
+                    align-items: center;
 
                     .title {
-                        width: 158px;
-                        min-height: 38px;
+                        flex: 1 1 0px;
                         font-size: @font-size-small;
                         font-weight: bold;
                         line-height: 18px;
@@ -108,11 +110,7 @@
                       font-size: 1.2rem;
                       font-weight: 700;
                       opacity: 0.5;
-                      position: relative;
-                      float: right;
-                      right: 8px;
-                      top: 5px;
-                      padding: 4px 8px;
+                      padding: 4px  12px 6px 12px;
                       line-height: 1;
                       text-shadow: 0 1px 0 #fff;
                       &:hover, &:focus {
@@ -153,6 +151,10 @@
 
                     .attribution-text {
                         overflow: hidden;
+                        // Prevents Manifests trying to push around content in the attribution.
+                        br ~ br {
+                            display: none;
+                        }
                     }
                 }
             }

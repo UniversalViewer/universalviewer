@@ -144,6 +144,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.WAV] = Extension.AV;
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 

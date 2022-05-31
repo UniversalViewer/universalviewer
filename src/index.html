@@ -49,11 +49,11 @@
       // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
       let vh = window.innerHeight * 0.01;
       // Then we set the value in the --vh custom property to the root of the document
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-      window.addEventListener('resize', () => {
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      window.addEventListener("resize", () => {
         // We execute the same script as before
         let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
       });
     </script>
   </head>
@@ -63,7 +63,10 @@
       class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
     ></div>
 
-    <div id="uv-controls" class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8">
+    <div
+      id="uv-controls"
+      class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8"
+    >
       <div>
         <ul id="annotation-list"></ul>
       </div>
@@ -83,7 +86,7 @@
             ></select>
             <input id="iiifManifestId" type="text" value="" class="flex-1" />
           </div>
-          <div class="mt-2""">
+          <div class="mt-2">
             <button
               id="setIIIFManifestIdButton"
               class="controls-button"
@@ -111,7 +114,10 @@
           <h2 class="controls-title">Rotation</h2>
           <div class="flex">
             <input id="rotation" type="text" value="" class="flex-1" />
-            <button id="setRotationButton" class="controls-button flex-initial ml-2">
+            <button
+              id="setRotationButton"
+              class="controls-button flex-initial ml-2"
+            >
               Set Rotation
             </button>
           </div>
@@ -136,7 +142,12 @@
           <h2 class="controls-title">Video Id</h2>
           <div class="flex">
             <select id="youTubeVideoIdSelect" class="py-2 px-3 flex-1"></select>
-            <input id="youTubeVideoId" type="text" value="" class="flex-1 ml-2" />
+            <input
+              id="youTubeVideoId"
+              type="text"
+              value=""
+              class="flex-1 ml-2"
+            />
           </div>
           <div class="mt-2">
             <button id="setYouTubeVideoIdButton" class="controls-button">
@@ -154,7 +165,10 @@
           <h2 class="controls-title">Current Time</h2>
           <div class="flex">
             <input id="currentTime" type="text" value="" class="flex-1" />
-            <button id="setCurrentTimeButton" class="controls-button flex-initial ml-2">
+            <button
+              id="setCurrentTimeButton"
+              class="controls-button flex-initial ml-2"
+            >
               Set Current Time
             </button>
           </div>
@@ -164,8 +178,16 @@
           <h2 class="controls-title">Duration</h2>
           <div class="flex">
             <input id="durationStart" type="number" value="0" class="flex-1" />
-            <input id="durationEnd" type="number" value="0" class="flex-1 ml-2" />
-            <button id="setDurationButton" class="controls-button flex-initial ml-2">
+            <input
+              id="durationEnd"
+              type="number"
+              value="0"
+              class="flex-1 ml-2"
+            />
+            <button
+              id="setDurationButton"
+              class="controls-button flex-initial ml-2"
+            >
               Set Duration
             </button>
           </div>
@@ -476,18 +498,28 @@
                   dropEnabled: true,
                   footerPanelEnabled: true,
                   headerPanelEnabled: false,
-                  leftPanelEnabled: false,
+                  // leftPanelEnabled: false,
+                  // rightPanelEnabled: false,
                   limitLocales: false,
                   overrideFullScreen: false,
                   pagingEnabled: true,
                   limitToRange: true,
                   manifestExclude: true,
-                  rightPanelEnabled: false,
                 },
                 modules: {
+                  footerPanel: {
+                    options: {
+                      fullscreenEnabled: false,
+                    },
+                  },
                   headerPanel: {
                     options: {
                       localeToggleEnabled: false,
+                    },
+                  },
+                  moreInfoRightPanel: {
+                    options: {
+                      limitToRange: true,
                     },
                   },
                   avCenterPanel: {
