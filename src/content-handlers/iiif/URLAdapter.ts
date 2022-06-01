@@ -4,7 +4,7 @@ import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
 import { IIIFEvents } from "./IIIFEvents";
 import { defaultLocale } from "../../Utils";
-import { parseContentStateParameter } from "./Helpers";
+import { parseContentStateParameter } from "./helpers";
 
 export class URLAdapter extends UVAdapter {
   constructor(readonly: boolean = false) {

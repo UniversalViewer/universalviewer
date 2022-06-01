@@ -39,7 +39,7 @@ export function parseSelector(source: Selector | Selector[]): ParsedSelector {
   }
 
   if (typeof source === "string") {
-    const [id, fragment] = source.split("#");
+    const [_id, fragment] = source.split("#");
 
     if (!fragment) {
       // This is an unknown selector.
