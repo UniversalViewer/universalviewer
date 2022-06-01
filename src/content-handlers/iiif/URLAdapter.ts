@@ -63,6 +63,7 @@ export class URLAdapter extends UVAdapter {
 
     if (iiifContent) {
       let iiifManifestId: string = "";
+      let canvasId: string = "";
       let xywh: string = "";
 
       const contentState = parseContentStateParameter(iiifContent) as any;
@@ -83,6 +84,8 @@ export class URLAdapter extends UVAdapter {
             firstTarget.selector &&
             firstTarget.selector.type === "BoxSelector"
           ) {
+            canvasId = firstTarget.source.id;
+
             xywh =
               firstTarget.selector.spatial.x +
               "," +
@@ -103,7 +106,8 @@ export class URLAdapter extends UVAdapter {
         iiifManifestId: iiifManifestId,
         collectionIndex: undefined,
         manifestIndex: 0,
-        canvasIndex: 0, // todo
+        canvasId: canvasId,
+        canvasIndex: 0,
         rotation: 0,
         rangeId: "",
         xywh: xywh,

@@ -579,6 +579,10 @@ export class BaseExtension implements IExtension {
         this.data.canvasIndex = 0;
       }
 
+      if (this.data.canvasId) {
+        this.data.canvasIndex = this.helper.canvasIndex;
+      }
+
       this.extensionHost.publish(
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.data.canvasIndex

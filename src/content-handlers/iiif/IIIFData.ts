@@ -1,5 +1,6 @@
 export interface IIIFData {
   annotations?: string;
+  canvasId?: string;
   canvasIndex?: number;
   collectionIndex?: number;
   iiif_content?: string;

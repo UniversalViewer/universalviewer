@@ -324,12 +324,17 @@
         }
 
         function setSelectedIIIFManifest() {
-          iiifManifestId =
+          var iiifContent = urlAdapter.get("iiif-content");
+          var legacyIIIFManifestParam =
             urlAdapter.get("iiifManifestId") || urlAdapter.get("manifest");
 
-          if (iiifManifestId) {
-            $iiifManifestIdSelect.value = iiifManifestId;
+          if (iiifContent && iiifContent.indexOf("http") !== -1) {
+            // if it's a url, not an encoded annotation
+            iiifManifestId = iiifContent;
+          } else if (legacyIIIFManifestParam) {
+            iiifManifestId = legacyIIIFManifestParam;
           } else {
+            // use the first one in the drop down box
             var options = document.querySelectorAll(
               "#iiifManifestIdSelect optgroup option"
             );
@@ -339,6 +344,7 @@
             }
           }
 
+          $iiifManifestIdSelect.value = iiifManifestId;
           $iiifManifestId.value = iiifManifestId;
         }
 
