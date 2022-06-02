@@ -19,8 +19,24 @@
       #uv {
         width: 924px;
         height: 668px;
-        /* width: 1024px;
-            height: 576px; */
+
+        /** First override so that desktop always visible */
+        --uv-mobile-display: none;
+        --uv-mobile-visibility: hidden;
+        --uv-desktop-display: block;
+        --uv-desktop-visibility: visible;
+      }
+
+      /** Then set custom point to enable mobile / hide desktop */
+      @media (max-width: 340px) {
+        #uv {
+          --uv-mobile-display: block;
+          --uv-mobile-visibility: visible;
+          --uv-desktop-display: none;
+          --uv-desktop-visibility: hidden;
+
+          width: 100%;
+        }
       }
 
       #uv-controls {

@@ -1,7 +1,5 @@
 .uv {
-
     #debug {
-
         #xl {
             .xl-mediaquery({
                 display: block !important;
@@ -11,40 +9,24 @@
     }
 
     .headerPanel {
-        .md-mediaquery({
-            display: block;
-            visibility: visible;
-        });
+        .only-desktop();
     }
 
     .mainPanel {
-
         .leftPanel {
-            .md-mediaquery({
-                display: block;
-                visibility: visible;
-            });
+            .only-desktop();
         }
 
         .rightPanel {
-            .md-mediaquery({
-                display: block;
-                visibility: visible;
-            });
+            .only-desktop();
         }
     }
 
     .footerPanel {
-        .md-mediaquery({
-            display: block;
-            visibility: visible;
-        });
+        .only-desktop();
     }
 
     .mobileFooterPanel {
-        .md-mediaquery({
-            display: none;
-            visibility: hidden;
-        });
+        .only-mobile();
     }
 }
