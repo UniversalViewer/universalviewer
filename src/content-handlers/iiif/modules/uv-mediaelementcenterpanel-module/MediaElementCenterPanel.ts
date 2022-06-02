@@ -1,3 +1,5 @@
+import {Dimensions} from "@edsilv/utils";
+
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-extension/Events";
@@ -36,6 +38,10 @@ export class MediaElementCenterPanel extends CenterPanel {
     super.create();
 
     const that = this;
+
+    this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
+      this.resize();
+    });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
       let t = target.t;
@@ -153,8 +159,8 @@ export class MediaElementCenterPanel extends CenterPanel {
           "tracks",
           "volume",
           "sourcechooser",
+          "fullscreen"
         ],
-        stretching: "responsive",
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
@@ -285,14 +291,19 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.$title.text(sanitize(this.title));
     }
 
+    const size = Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+
+    this.$container.height(size.height);
+    this.$container.width(size.width);
+
     if (this.player) {
-      if (
-        !this.isVideo() ||
-        (this.isVideo() && !this.extensionHost.isFullScreen)
-      ) {
-        this.player.setPlayerSize();
-        this.player.setControlsSize();
-      }
+      this.$media.width(size.width);
+      this.$media.height(size.height);
+    }
+
+    if (this.player) {
+      this.player.setPlayerSize();
+      this.player.setControlsSize();
     }
   }
 }
