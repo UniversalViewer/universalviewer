@@ -6,29 +6,26 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Universal Viewer Examples</title>
+    <!-- https://tailwindcss.com/docs/installation/play-cdn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
     <%= htmlWebpackPlugin.tags.headTags %>
     <style>
-      body {
-        margin: 0px;
-        padding: 20px;
-        font-family: Arial, Helvetica, sans-serif;
-      }
-
-      #uv {
+      /** First override so that desktop always visible */
+      /* #uv {
         width: 924px;
         height: 668px;
 
-        /** First override so that desktop always visible */
         --uv-mobile-display: none;
         --uv-mobile-visibility: hidden;
         --uv-desktop-display: block;
         --uv-desktop-visibility: visible;
-      }
+      } */
 
       /** Then set custom point to enable mobile / hide desktop */
-      @media (max-width: 340px) {
+      /* @media (max-width: 340px) {
         #uv {
           --uv-mobile-display: block;
           --uv-mobile-visibility: visible;
@@ -37,169 +34,207 @@
 
           width: 100%;
         }
-      }
-
-      #uv-controls {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-      }
-
-      #uv-controls .group {
-        padding: 20px 0 0 0;
-        overflow: hidden;
-      }
-
-      #uv-controls .group:first-of-type {
-        padding: 0 0 0 0;
-      }
-
-      #uv-controls h2 {
-        font-size: small;
-        font-weight: 600;
-      }
-
-      #uv-controls select {
-        width: 150px;
-        padding: 0.25rem;
-      }
-
-      #uv-controls input[type="text"] {
-        width: 500px;
-        padding: 0.25rem;
-      }
-
-      #uv-controls button {
-        width: 150px;
-        border-radius: 0;
-        border: none;
-        color: #fff;
-        background: #000;
-        padding: 0.33rem;
-      }
-
-      #uv-controls textarea {
-        width: 500px;
-      }
-
-      #annotations {
-        float: left;
-        margin-right: 5px;
-      }
-
-      #setAnnotationsButton {
-        float: left;
-        margin-right: 5px;
-      }
-
-      #clearAnnotationsButton {
-        float: left;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      #uv-controls .tab {
-        background: none;
-        padding: 1rem;
-        font-weight: bold;
-        font-size: medium;
-        border: none;
-        color: black;
-        margin: 0;
-      }
-
-      #uv-controls .tab.active {
-        background: #f1f1f1;
-      }
-
-      #uv-controls .tabContent {
-        box-sizing: border-box;
-        padding: 2rem;
-        max-width: 924px;
-        background: #f1f1f1;
+      } */
+      /* todo: replace with dynamic viewport units when available: https://caniuse.com/?search=svh */
+      @media only screen and (max-width: 768px) {
+        .uv {
+          /* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
+          height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+          height: calc(var(--vh, 1vh) * 100);
+        }
       }
     </style>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .controls-button {
+          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
+        }
+        .controls-group {
+          @apply py-2;
+        }
+        .controls-title {
+          @apply text-lg font-semibold pb-3;
+        }
+        .controls-tab {
+          @apply bg-none px-6 py-3 font-medium text-xl;
+        }
+        .controls-tab.active {
+          @apply bg-gray-200;
+        }
+        .controls-tab-content {
+          @apply bg-gray-200 p-6;
+        }
+      }
+    </style>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .controls-button {
+          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
+        }
+        .controls-group {
+          @apply py-2;
+        }
+        .controls-title {
+          @apply text-lg font-semibold pb-3;
+        }
+        .controls-tab {
+          @apply bg-none px-6 py-3 font-medium text-xl;
+        }
+        .controls-tab.active {
+          @apply bg-gray-200;
+        }
+        .controls-tab-content {
+          @apply bg-gray-200 p-6;
+        }
+      }
+    </style>
+    <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
+    <script>
+      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+      let vh = window.innerHeight * 0.01;
+      // Then we set the value in the --vh custom property to the root of the document
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      window.addEventListener("resize", () => {
+        // We execute the same script as before
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+      });
+    </script>
   </head>
   <body>
-    <div id="uv" class="uv"></div>
+    <div
+      id="uv"
+      class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
+    ></div>
 
-    <div id="uv-controls">
+    <div
+      id="uv-controls"
+      class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8"
+    >
       <div>
         <ul id="annotation-list"></ul>
       </div>
 
-      <button id="iiifTabButton" class="tab active">IIIF</button>
-      <button id="youTubeTabButton" class="tab">YouTube</button>
+      <button id="iiifTabButton" class="controls-tab active">
+        IIIF
+      </button>
+      <button id="youTubeTabButton" class="controls-tab">YouTube</button>
 
-      <div id="iiifTab" class="tabContent">
-        <div class="group">
-          <h2>Manifest Id</h2>
-          <select id="iiifManifestIdSelect"></select>
-          <input id="iiifManifestId" type="text" value="" />
-          <button id="setIIIFManifestIdButton" class="button" href="#">
-            Set IIIF Manifest Id
-          </button>
+      <div id="iiifTab" class="controls-tab-content">
+        <div class="controls-group">
+          <h2 class="controls-title">Manifest Id</h2>
+          <div class="flex">
+            <select
+              id="iiifManifestIdSelect"
+              class="py-2 px-3 mr-2 flex-1"
+            ></select>
+            <input id="iiifManifestId" type="text" value="" class="flex-1" />
+          </div>
+          <div class="mt-2">
+            <button
+              id="setIIIFManifestIdButton"
+              class="controls-button"
+              href="#"
+            >
+              Set IIIF Manifest Id
+            </button>
+          </div>
         </div>
 
-        <div class="group">
-          <h2>Target</h2>
-          <input id="target" type="text" value="" />
-          <button id="setTargetButton" class="button" href="#">
-            Set Target
-          </button>
+        <div class="controls-group">
+          <h2 class="controls-title">Target</h2>
+          <div class="flex">
+            <input id="target" type="text" value="" class="flex-1" />
+            <button
+              id="setTargetButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Target
+            </button>
+          </div>
         </div>
 
-        <div class="group">
-          <h2>Rotation</h2>
-          <input id="rotation" type="text" value="" />
-          <button id="setRotationButton" class="button" href="#">
-            Set Rotation
-          </button>
+        <div class="controls-group">
+          <h2 class="controls-title">Rotation</h2>
+          <div class="flex">
+            <input id="rotation" type="text" value="" class="flex-1" />
+            <button
+              id="setRotationButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Rotation
+            </button>
+          </div>
         </div>
 
-        <div class="group">
-          <h2>Annotations</h2>
-          <textarea id="annotations" rows="5"></textarea>
-          <button id="setAnnotationsButton" class="button">
-            Set Annotations
-          </button>
-          <button id="clearAnnotationsButton" class="button">
-            Clear Annotations
-          </button>
+        <div class="controls-group">
+          <h2 class="controls-title">Annotations</h2>
+          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <div class="mt-2">
+            <button id="setAnnotationsButton" class="controls-button">
+              Set Annotations
+            </button>
+            <button id="clearAnnotationsButton" class="controls-button">
+              Clear Annotations
+            </button>
+          </div>
         </div>
       </div>
 
-      <div id="youTubeTab" class="hidden tabContent">
-        <div class="group">
-          <h2>Video Id</h2>
-          <select id="youTubeVideoIdSelect"></select>
-          <input id="youTubeVideoId" type="text" value="" />
-          <button id="setYouTubeVideoIdButton" class="button" href="#">
-            Set YouTube Video Id
-          </button>
+      <div id="youTubeTab" class="hidden controls-tab-content">
+        <div class="controls-group">
+          <h2 class="controls-title">Video Id</h2>
+          <div class="flex">
+            <select id="youTubeVideoIdSelect" class="py-2 px-3 flex-1"></select>
+            <input
+              id="youTubeVideoId"
+              type="text"
+              value=""
+              class="flex-1 ml-2"
+            />
+          </div>
+          <div class="mt-2">
+            <button id="setYouTubeVideoIdButton" class="controls-button">
+              Set YouTube Video Id
+            </button>
+          </div>
         </div>
 
-        <div class="group">
-          <h2>Muted</h2>
+        <div class="controls-group">
+          <h2 class="controls-title">Muted</h2>
           <input type="checkbox" id="mutedCheckbox" />
         </div>
 
-        <div class="group">
-          <h2>Current Time</h2>
-          <input id="currentTime" type="text" value="" />
-          <button id="setCurrentTimeButton" class="button" href="#">
-            Set Current Time
-          </button>
+        <div class="controls-group">
+          <h2 class="controls-title">Current Time</h2>
+          <div class="flex">
+            <input id="currentTime" type="text" value="" class="flex-1" />
+            <button
+              id="setCurrentTimeButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Current Time
+            </button>
+          </div>
         </div>
 
-        <div class="group">
-          <h2>Duration</h2>
-          <input id="durationStart" type="number" value="0" />
-          <input id="durationEnd" type="number" value="0" />
-          <button id="setDurationButton" class="button" href="#">
-            Set Duration
-          </button>
+        <div class="controls-group">
+          <h2 class="controls-title">Duration</h2>
+          <div class="flex">
+            <input id="durationStart" type="number" value="0" class="flex-1" />
+            <input
+              id="durationEnd"
+              type="number"
+              value="0"
+              class="flex-1 ml-2"
+            />
+            <button
+              id="setDurationButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Duration
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -333,12 +368,17 @@
         }
 
         function setSelectedIIIFManifest() {
-          iiifManifestId =
+          var iiifContent = urlAdapter.get("iiif-content");
+          var legacyIIIFManifestParam =
             urlAdapter.get("iiifManifestId") || urlAdapter.get("manifest");
 
-          if (iiifManifestId) {
-            $iiifManifestIdSelect.value = iiifManifestId;
+          if (iiifContent && iiifContent.indexOf("http") !== -1) {
+            // if it's a url, not an encoded annotation
+            iiifManifestId = iiifContent;
+          } else if (legacyIIIFManifestParam) {
+            iiifManifestId = legacyIIIFManifestParam;
           } else {
+            // use the first one in the drop down box
             var options = document.querySelectorAll(
               "#iiifManifestIdSelect optgroup option"
             );
@@ -348,6 +388,7 @@
             }
           }
 
+          $iiifManifestIdSelect.value = iiifManifestId;
           $iiifManifestId.value = iiifManifestId;
         }
 
@@ -496,8 +537,11 @@
           urlAdapter.bindTo(uv);
 
           uv.on("configure", function({ config, cb }) {
-            const manifest = urlAdapter.get('iiifManifestId');
-            if (manifest === 'https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json') {
+            const manifest = urlAdapter.get("iiifManifestId");
+            if (
+              manifest ===
+              "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
+            ) {
               // Example of custom, inline config.
               cb({
                 options: {
@@ -515,40 +559,40 @@
                 modules: {
                   footerPanel: {
                     options: {
-                      fullscreenEnabled: false
-                    }
+                      fullscreenEnabled: false,
+                    },
                   },
                   headerPanel: {
                     options: {
-                      localeToggleEnabled: false
-                    }
+                      localeToggleEnabled: false,
+                    },
                   },
                   moreInfoRightPanel: {
                     options: {
                       limitToRange: true,
-                    }
+                    },
                   },
                   avCenterPanel: {
                     options: {
                       limitToRange: true,
                       enableFastRewind: true,
-                      enableFastForward: true
-                    }
+                      enableFastForward: true,
+                    },
                   },
                   contentLeftPanel: {
                     options: {
-                      defaultToTreeEnabled: true
-                    }
-                  }
-                }
+                      defaultToTreeEnabled: true,
+                    },
+                  },
+                },
               });
               return;
             }
 
             cb(
-                fetch("uv-iiif-config.json").then(function (resp) {
-                  return resp.json();
-                })
+              fetch("uv-iiif-config.json").then(function(resp) {
+                return resp.json();
+              })
             );
           });
 
@@ -590,6 +634,10 @@
             });
             $annotations.value = JSON.stringify(annotations);
             setAnnotations();
+          });
+
+          uv.on("multiSelectionMade", function(e) {
+            console.log("multiSelectionMade", e);
           });
 
           uv.on("pinpointAnnotationClicked", function(index) {

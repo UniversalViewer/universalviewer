@@ -29,6 +29,7 @@ export interface IExtension {
   createModules(): void;
   data: IUVData;
   defaultConfig: any;
+  dispose(): void;
   exitFullScreen(): void;
   fire(name: string, ...args: any[]): void;
   format?: string | undefined;

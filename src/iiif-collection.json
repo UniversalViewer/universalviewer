@@ -60,7 +60,7 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b17502792/manifest",
           "@type": "sc:Manifest",
-          "label": "A Review of Science Communication and Public Attitudes to Science in Britain (PDF)",
+          "label": "Public Attitudes to Science in Britain (PDF)",
           "visible": true
         },
         {
@@ -472,10 +472,10 @@
           "@id": "https://digital.library.villanova.edu/Item/vudl:30471/Manifest"
         },
         {
-          "label": "LeBlanc Bibliography, Binder 1",
+          "label": "LeBlanc Bibliography, Binder 1 (multi-page pdf)",
           "@type": "sc:Manifest",
           "@id": "https://digital.library.villanova.edu/Item/vudl:294631/Manifest",
-          "visible": false
+          "visible": true
         },
         {
           "label": "Augustine PDF",
@@ -710,6 +710,24 @@
           "visible": true
         },
         {
+          "@id": "https://sessionpapers.is.ed.ac.uk/whiiif/resources/manifests/ADV-CampbellsColl_Vol_99-paged",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (start)",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/non-paged.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (middle)",
+          "visible": true
+        },
+        {
+          "@id": "https://heaney0.ugent.be/custom_manifests/B_OB_MS685.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (end)",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/test-manifests/top-level-ranges.json",
           "@type": "sc:Manifest",
           "label": "Multiple Top Ranges",
@@ -720,6 +738,18 @@
           "@type": "sc:Manifest",
           "label": "Multiple Top Ranges (small)",
           "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-enabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Enabled",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-disabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Disabled",
+          "visible": true
         },
         {
           "@id": "https://edsilv.github.io/test-manifests/print.json",
@@ -784,8 +814,8 @@
         {
           "@id": "https://purl.stanford.edu/bh502xm3351/iiif3/manifest",
           "@type": "sc:Manifest",
-          "label": "Presentation 3 PDF (Stanford)",
-          "visible": false
+          "label": "Presentation 3 PDF (Large)",
+          "visible": true
         },
         {
           "@id": "https://edsilv.github.io/test-manifests/pres3-video.json",

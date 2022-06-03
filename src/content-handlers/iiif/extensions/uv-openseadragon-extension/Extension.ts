@@ -4,7 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
-import { DownloadDialogue } from "./DownloadDialogue";
+import DownloadDialogue from "./DownloadDialogueReact";
 import { OpenSeadragonExtensionEvents } from "./Events";
 import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
@@ -26,6 +26,8 @@ import {
   IIIFResourceType,
   ExternalResourceType,
   ServiceProfile,
+  ViewingHint,
+  ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
@@ -41,11 +43,16 @@ import {
   Service,
   Size,
   Utils,
+  Manifest,
 } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Events } from "../../../../Events";
+import { createRoot, Root } from "react-dom/client";
+import { createElement } from "react";
+import { createStore, OpenSeadragonExtensionState } from "./Store";
+import { merge } from "../../../../Utils";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -58,7 +65,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
-  downloadDialogue: DownloadDialogue;
+  downloadDialogueRoot: Root;
   externalContentDialogue: ExternalContentDialogue;
   footerPanel: FooterPanel;
   headerPanel: PagingHeaderPanel;
@@ -84,6 +91,12 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   create(): void {
     super.create();
+
+    this.store = createStore();
+
+    this.store.subscribe((_state) => {
+      this.renderDownloadDialogue();
+    });
 
     this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       if (!this.isDesktopMetric()) {
@@ -477,6 +490,25 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
+    this.extensionHost.subscribe(
+      IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
+      (triggerButton) => {
+        this.store.getState().openDownloadDialogue(triggerButton[0]);
+      }
+    );
+
+    this.extensionHost.subscribe(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
+      this.store.getState().closeDialogue();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+      this.store.getState().closeDialogue();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
+      this.store.getState().closeDialogue();
+    });
+
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
     //     this.fire(Events.VIEW_PAGE, index);
     //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [index]);
@@ -541,11 +573,9 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.shell.$overlays.append(this.$shareDialogue);
     this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-    this.$downloadDialogue = $(
-      '<div class="overlay download" aria-hidden="true"></div>'
-    );
+    this.$downloadDialogue = $("<div></div>");
     this.shell.$overlays.append(this.$downloadDialogue);
-    this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
+    this.downloadDialogueRoot = createRoot(this.$downloadDialogue[0]);
 
     this.$settingsDialogue = $(
       '<div class="overlay settings" aria-hidden="true"></div>'
@@ -585,6 +615,96 @@ export default class OpenSeadragonExtension extends BaseExtension {
     this.checkForAnnotations();
     this.checkForSearchParam();
     this.checkForRotationParam();
+  }
+
+  renderDownloadDialogue(): void {
+    // todo: can this be added to store?
+    const paged = this.isPagingSettingEnabled();
+
+    const {
+      downloadDialogueOpen,
+      dialogueTriggerButton,
+    } = this.store.getState() as OpenSeadragonExtensionState;
+
+    // todo: can the overlay visibility be added to the store?
+    if (downloadDialogueOpen) {
+      this.extensionHost.publish(IIIFEvents.SHOW_OVERLAY);
+    } else {
+      this.extensionHost.publish(IIIFEvents.HIDE_OVERLAY);
+    }
+
+    const pagedIndices: number[] = this.getPagedIndices();
+
+    const canvases: Canvas[] = this.helper
+      .getCanvases()
+      .filter((_canvas: Canvas, index: number) => {
+        return pagedIndices.includes(index);
+      });
+
+    const config = merge(
+      this.data.config.modules.dialogue,
+      this.data.config.modules.downloadDialogue
+    );
+
+    const downloadService: Service | null = this.helper.manifest!.getService(
+      ServiceProfile.DOWNLOAD_EXTENSIONS
+    );
+
+    const selectionEnabled =
+      config.options.selectionEnabled &&
+      downloadService?.__jsonld.selectionEnabled;
+
+    this.downloadDialogueRoot.render(
+      createElement(DownloadDialogue, {
+        canvases: canvases,
+        confinedImageSize: config.options.confinedImageSize,
+        content: config.content,
+        locale: this.getLocale(),
+        manifest: this.helper.manifest as Manifest,
+        maxImageWidth: config.options.maxImageWidth,
+        mediaDownloadEnabled: this.helper.isUIEnabled("mediaDownload"),
+        open: downloadDialogueOpen,
+        paged: paged,
+        parent: this.shell.$overlays[0] as HTMLElement,
+        resources: this.resources,
+        requiredStatement: this.helper.getRequiredStatement()?.value,
+        termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
+        rotation: this.getViewerRotation() as number,
+        selectionEnabled: selectionEnabled,
+        sequence: this.helper.getCurrentSequence(),
+        triggerButton: dialogueTriggerButton as HTMLElement,
+        getCroppedImageDimensions: (canvas: Canvas) => {
+          return this.getCroppedImageDimensions(canvas, this.getViewer());
+        },
+        getConfinedImageDimensions: (canvas: Canvas) => {
+          return this.getConfinedImageDimensions(
+            canvas,
+            config.options.confinedImageSize
+          );
+        },
+        getConfinedImageUri: (canvas: Canvas) => {
+          return this.getConfinedImageUri(
+            canvas,
+            config.options.confinedImageSize
+          );
+        },
+        onClose: () => {
+          this.store.getState().closeDialogue();
+        },
+        onDownloadCurrentView: (canvas: Canvas) => {
+          const viewer: any = this.getViewer();
+          window.open(<string>this.getCroppedImageUri(canvas, viewer));
+        },
+        onDownloadSelection: () => {
+          this.store.getState().closeDialogue();
+          this.extensionHost.publish(IIIFEvents.SHOW_MULTISELECT_DIALOGUE);
+        },
+        onShowTermsOfUse: () => {
+          this.store.getState().closeDialogue();
+          this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
+        },
+      })
+    );
   }
 
   checkForTarget(): void {
@@ -1250,24 +1370,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return script;
   }
 
-  getPrevPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
-    let index: number;
-
-    if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
-
-      if (this.helper.isRightToLeft()) {
-        index = indices[indices.length - 1] - 1;
-      } else {
-        index = indices[0] - 1;
-      }
-    } else {
-      index = canvasIndex - 1;
-    }
-
-    return index;
-  }
-
   isSearchEnabled(): boolean {
     if (!Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
       return false;
@@ -1286,28 +1388,6 @@ export default class OpenSeadragonExtension extends BaseExtension {
     }
 
     return false;
-  }
-
-  getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
-    let index: number;
-
-    if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
-
-      if (this.helper.isRightToLeft()) {
-        index = indices[0] + 1;
-      } else {
-        index = indices[indices.length - 1] + 1;
-      }
-    } else {
-      index = canvasIndex + 1;
-    }
-
-    if (index > this.helper.getTotalCanvases() - 1) {
-      return -1;
-    }
-
-    return index;
   }
 
   getAutoCompleteService(): Service | null {
@@ -1432,31 +1512,118 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return this.getTotalAnnotationRects() - 1;
   }
 
+  getPrevPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
+    let index: number;
+
+    if (this.isPagingSettingEnabled()) {
+      let indices: number[] = this.getPagedIndices(canvasIndex);
+
+      if (this.helper.isRightToLeft()) {
+        index = indices[indices.length - 1] - 1;
+      } else {
+        index = indices[0] - 1;
+      }
+    } else {
+      index = canvasIndex - 1;
+    }
+
+    return index;
+  }
+
+  getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
+    let index: number;
+
+    // const canvas: Canvas | null = this.helper.getCanvasByIndex(canvasIndex);
+
+    if (this.isPagingSettingEnabled()) {
+      let indices: number[] = this.getPagedIndices(canvasIndex);
+
+      if (this.helper.isRightToLeft()) {
+        index = indices[0] + 1;
+      } else {
+        index = indices[indices.length - 1] + 1;
+      }
+    } else {
+      index = canvasIndex + 1;
+    }
+
+    if (index > this.helper.getTotalCanvases() - 1) {
+      return -1;
+    }
+
+    return index;
+  }
+
+  // https://codesandbox.io/s/iiif-thumbnails-p7ipi7?file=/src/App.tsx
   getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
-    let indices: number[] | undefined = [];
+    // todo: get these from the store (inc canvasIndex)
+    const sequence = this.helper.manifest!.getSequences()[0];
+    const canvases = sequence.getCanvases();
+    const paged = !!this.getSettings().pagingEnabled;
+    const viewingDirection = this.helper.getViewingDirection();
+
+    let indices: number[] = [];
 
     // if it's a continuous manifest, get all resources.
-    if (this.helper.isContinuous()) {
-      indices = $.map(this.helper.getCanvases(), (c: Canvas, index: number) => {
+    if (sequence.getViewingHint() === ViewingHint.CONTINUOUS) {
+      // get all canvases to be displayed inline
+      indices = canvases.map((_canvas: Canvas, index: number) => {
         return index;
       });
     } else {
-      if (!this.isPagingSettingEnabled()) {
-        indices.push(this.helper.canvasIndex);
+      if (!paged) {
+        // one-up
+        // if the current canvas index is for a non-paged canvas, only return that canvas index
+        // don't pair it with another in two-up
+        indices.push(canvasIndex);
       } else {
+        // two-up
         if (
-          this.helper.isFirstCanvas(canvasIndex) ||
-          (this.helper.isLastCanvas(canvasIndex) &&
-            this.helper.isTotalCanvasesEven())
+          canvasIndex === 0 ||
+          (canvasIndex === canvases.length && canvases.length % 2 === 0)
         ) {
-          indices = <number[]>[canvasIndex];
-        } else if (canvasIndex % 2) {
-          indices = <number[]>[canvasIndex, canvasIndex + 1];
+          indices = [canvasIndex];
+        } else if (canvasIndex % 2 === 0) {
+          // the current canvas index is even
+          // therefore it appears on the right
+
+          // only include prev canvas if it's not non-paged and the current canvas isn't non-paged
+          const currentCanvas: Canvas | null = canvases[canvasIndex];
+          const prevCanvas: Canvas | null = canvases[canvasIndex - 1];
+          if (
+            currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
+            prevCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
+          ) {
+            if (prevCanvas) {
+              indices = [canvasIndex - 1, canvasIndex];
+            } else {
+              indices = [canvasIndex];
+            }
+          } else {
+            indices = [canvasIndex];
+          }
         } else {
-          indices = <number[]>[canvasIndex - 1, canvasIndex];
+          // the current canvas index is odd
+          // therefore it appears on the left
+
+          // only include next canvas if it's not non-paged and the current canvas isn't non-paged
+          const currentCanvas: Canvas | null = canvases[canvasIndex];
+          const nextCanvas: Canvas | null = canvases[canvasIndex + 1];
+          if (
+            currentCanvas?.getViewingHint() !== ViewingHint.NON_PAGED &&
+            nextCanvas?.getViewingHint() !== ViewingHint.NON_PAGED
+          ) {
+            if (nextCanvas) {
+              indices = [canvasIndex, canvasIndex + 1];
+            } else {
+              indices = [canvasIndex];
+            }
+          } else {
+            indices = [canvasIndex];
+          }
         }
 
-        if (this.helper.isRightToLeft()) {
+        if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
           indices = indices.reverse();
         }
       }

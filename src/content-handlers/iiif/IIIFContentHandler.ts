@@ -194,8 +194,6 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   }
 
   public set(data: IUVData): void {
-    // this.fire(IIIFEvents.SET, data);
-
     // if this is the first set
     if (!this.extension) {
       if (!data.iiifManifestId) {
@@ -255,6 +253,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     // console.log("dispose IIIFContentHandler");
     super.dispose();
     this._pubsub.dispose();
+    this.extension?.dispose();
     this.disposed = true;
     // const $elem: JQuery = $(this.options.target);
     // $elem.empty();
@@ -282,6 +281,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       manifestUri: data.iiifManifestId,
       collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
       manifestIndex: data.manifestIndex || 0,
+      canvasId: data.canvasId,
       canvasIndex: data.canvasIndex || 0,
       rangeId: data.rangeId,
       locale: data.locales ? data.locales[0].name : undefined,

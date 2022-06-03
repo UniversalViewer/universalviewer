@@ -5,187 +5,317 @@
         .views {
 
             .thumbsView {
-
                 overflow: auto;
-
-                .thumbs {
-                    overflow: hidden;
-                    width: 210px;
-                    position: relative;
-
-                    .thumb {
-                        cursor: pointer;
-
-                        .wrap {
-                            border: 2px solid @panel-border-color;
-                            padding: 2px;
-                            overflow: hidden;
-                            text-align: center;
-                            background: @body-bg;
-
-                            &.loading {
-                                .loading(@loader-black-bg);
-                            }
-
-                            &.loadingFailed {
-                                background-image: data-uri('../img/error.png');
-                                background-repeat: no-repeat;
-                                background-position-x: 50%;
-                                background-position-y: 50%;
-                            }
-
-                            &.audio {
-                                background-image: data-uri('../img/audio.png');
-                            }
-
-                            &.video {
-                                background-image: data-uri('../img/video.png');
-                            }
-
-                            &.hidden {
-                                background-image: data-uri('../img/hidden_thumb.png');
-                                background-repeat: no-repeat;
-                                background-position-x: 50%;
-                                background-position-y: 50%;
-                            }
-
-                            img {
-                                display: block;
-                                max-width: 100%;
-                                max-height: 100%;
-                                //margin: 0 auto;
-                            }
-                        }
-
-                        &.selected {
-
-                            .wrap {
-                                border: 2px solid #fff;
-                            }
-                        }
-
-                        &.searchpreview {
-
-                            .wrap {
-                                border: 2px solid @link-color;
-                            }
-                        }
-
-                        .info {
-
-                            overflow: hidden;
-
-                            span {
-                                font-size: @font-size-small;
-                                color: #fff;
-                                display: block;
-                                padding: 2px 0 0 0;
-                            }
-
-                            .index {
-                                float: left;
-                            }
-
-                            .label {
-                                float: left;
-                                overflow-x: hidden;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                            }
-
-                            .searchResults {
-                                float: right;
-                                width: 35px;
-                                overflow-x: hidden;
-                                text-overflow: ellipsis;
-                                color: @brand-primary;
-                                padding-left: 14px;
-                                background-image: data-uri('../img/search_result.png');
-                                background-repeat: no-repeat;
-                                background-position-x: 0px;
-                                background-position-y: 3px;
-                            }
-                        }
-
-                        &.placeholder {
-                            .wrap {
-                                background-image: data-uri('../img/unavailable.png');
-                                background-repeat: no-repeat;
-                                background-position-x: 50%;
-                                background-position-y: 50%;
-                            }
-                        }
-
-                        &.oneCol {
-
-                            margin: 0 0 7px 0;
-
-                            .label {
-                                width: 178px;
-                            }
-
-                            .wrap {
-                                float: left;
-                                width: 90px;
-                                max-height: 90px;
-                                //width: 208px; // full width
-                                //max-height: 373px; // full height
-                            }
-
-                            .info {
-                                width: 113px;
-                                float: left;
-                                margin: 0 0 0 7px;
-
-                                .searchResults {
-                                    clear: left;
-                                    float: left;
-                                    margin: 7px 0 0 0;
-                                }
-                            }
-                        }
-
-                        &.twoCol {
-                            margin: 0 7px 7px 0;
-                            .label {
-                                width: 63px;
-                            }
-                            .wrap {
-                                width: 98px;
-                                max-height: 182px;
-                            }
-                        }
-                    }
-
-                    .separator {
-                        height: 1px;
-                        clear: both;
-                        border: none;
-                    }
-
-                    &.left-to-right {
-                        &.paged {
-                            .thumb {
-                                &.first {
-                                    float: right;
-                                }
-                            }
-                        }
-                        .thumb {
-                            float: left;
-                        }
-                    }
-
-                    &.right-to-left {
-                        .thumb {
-                            &.first {
-                                //float: left;
-                            }
-                            float: right;
-                        }
-                    }
-                }
+                height: 100%;
             }
+            .thumbsView .thumbs {
+                overflow: hidden;
+                position: relative;
+                width: 210px;
+            }
+            .thumbsView .thumbs .thumb {
+                cursor: pointer;
+                min-height: 100px;
+            }
+            .thumbsView .thumbs .thumb .wrap {
+                box-sizing: border-box;
+                border: 2px solid transparent;
+                padding: 2px;
+                overflow: hidden;
+                text-align: center;
+            }
+            .thumbsView .thumbs .thumb .wrap.loadingFailed {
+                /* background-image: data-uri("../img/error.png"); */
+                background-repeat: no-repeat;
+                background-position-x: 50%;
+                background-position-y: 50%;
+            }
+            /* .thumbsView .thumbs .thumb .wrap.audio {
+                background-image: data-uri("../img/audio.png");
+            }
+            .thumbsView .thumbs .thumb .wrap.video {
+                background-image: data-uri("../img/video.png");
+            } */
+            .thumbsView .thumbs .thumb .wrap.hidden {
+                /* background-image: data-uri("../img/hidden_thumb.png"); */
+                background-repeat: no-repeat;
+                background-position-x: 50%;
+                background-position-y: 50%;
+            }
+            .thumbsView .thumbs .thumb .wrap img {
+                display: block;
+                max-width: 100%;
+                max-height: 100%;
+            }
+            .thumbsView .thumbs .thumb.selected .wrap {
+                border: 2px solid white;
+            }
+            .thumbsView .thumbs .thumb.searchpreview .wrap {
+                border: 2px solid;
+            }
+            .thumbsView .thumbs .thumb .info {
+                overflow: hidden;
+            }
+            .thumbsView .thumbs .thumb .info span {
+                font-size: 0.75rem;
+                display: block;
+                padding: 2px 0 0 0;
+            }
+            .thumbsView .thumbs .thumb .info .index {
+                float: left;
+            }
+            .thumbsView .thumbs .thumb .info .label {
+                float: left;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .thumbsView .thumbs .thumb .info .searchResults {
+                float: right;
+                width: 35px;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
+                padding-left: 14px;
+                /* background-image: data-uri("../img/search_result.png"); */
+                background-repeat: no-repeat;
+                background-position-x: 0px;
+                background-position-y: 3px;
+            }
+            .thumbsView .thumbs .thumb.placeholder .wrap {
+                /* background-image: data-uri("../img/unavailable.png"); */
+                background-repeat: no-repeat;
+                background-position-x: 50%;
+                background-position-y: 50%;
+            }
+            .thumbsView .thumbs .thumb.oneCol {
+                margin: 0 0 7px 0;
+            }
+            .thumbsView .thumbs .thumb.oneCol .label {
+                width: 178px;
+            }
+            .thumbsView .thumbs .thumb.oneCol .wrap {
+                float: left;
+                width: 98px;
+                max-height: 182px;
+            }
+            .thumbsView .thumbs .thumb.oneCol .info {
+                width: 113px;
+                float: left;
+                margin: 0 0 0 7px;
+            }
+            .thumbsView .thumbs .thumb.oneCol .info .searchResults {
+                clear: left;
+                float: left;
+                margin: 7px 0 0 0;
+            }
+            .thumbsView .thumbs .thumb.twoCol {
+                margin: 0 7px 7px 0;
+            }
+            .thumbsView .thumbs .thumb.twoCol .label {
+                width: 63px;
+            }
+            .thumbsView .thumbs .thumb.twoCol .wrap {
+                width: 98px;
+                max-height: 182px;
+            }
+            .thumbsView .thumbs .separator {
+                height: 1px;
+                clear: both;
+                border: none;
+            }
+            .thumbsView .thumbs.left-to-right.paged .thumb.first {
+                float: right;
+            }
+            .thumbsView .thumbs.left-to-right .thumb {
+                float: left;
+            }
+            .thumbsView .thumbs.right-to-left .thumb {
+                float: right;
+            }
+
+            // .thumbsView {
+
+            //     overflow: auto;
+            //     height: 100%;
+
+            //     .thumbs {
+            //         overflow: hidden;
+            //         width: 210px;
+            //         position: relative;
+
+            //         .thumb {
+            //             cursor: pointer;
+
+            //             .wrap {
+            //                 border: 2px solid @panel-border-color;
+            //                 padding: 2px;
+            //                 overflow: hidden;
+            //                 text-align: center;
+            //                 background: @body-bg;
+
+            //                 &.loading {
+            //                     .loading(@loader-black-bg);
+            //                 }
+
+            //                 &.loadingFailed {
+            //                     background-image: data-uri('../img/error.png');
+            //                     background-repeat: no-repeat;
+            //                     background-position-x: 50%;
+            //                     background-position-y: 50%;
+            //                 }
+
+            //                 &.audio {
+            //                     background-image: data-uri('../img/audio.png');
+            //                 }
+
+            //                 &.video {
+            //                     background-image: data-uri('../img/video.png');
+            //                 }
+
+            //                 &.hidden {
+            //                     background-image: data-uri('../img/hidden_thumb.png');
+            //                     background-repeat: no-repeat;
+            //                     background-position-x: 50%;
+            //                     background-position-y: 50%;
+            //                 }
+
+            //                 img {
+            //                     display: block;
+            //                     max-width: 100%;
+            //                     max-height: 100%;
+            //                     //margin: 0 auto;
+            //                 }
+            //             }
+
+            //             &.selected {
+
+            //                 .wrap {
+            //                     border: 2px solid #fff;
+            //                 }
+            //             }
+
+            //             &.searchpreview {
+
+            //                 .wrap {
+            //                     border: 2px solid @link-color;
+            //                 }
+            //             }
+
+            //             .info {
+
+            //                 overflow: hidden;
+
+            //                 span {
+            //                     font-size: @font-size-small;
+            //                     color: #fff;
+            //                     display: block;
+            //                     padding: 2px 0 0 0;
+            //                 }
+
+            //                 .index {
+            //                     float: left;
+            //                 }
+
+            //                 .label {
+            //                     float: left;
+            //                     overflow-x: hidden;
+            //                     text-overflow: ellipsis;
+            //                     white-space: nowrap;
+            //                 }
+
+            //                 .searchResults {
+            //                     float: right;
+            //                     width: 35px;
+            //                     overflow-x: hidden;
+            //                     text-overflow: ellipsis;
+            //                     color: @brand-primary;
+            //                     padding-left: 14px;
+            //                     background-image: data-uri('../img/search_result.png');
+            //                     background-repeat: no-repeat;
+            //                     background-position-x: 0px;
+            //                     background-position-y: 3px;
+            //                 }
+            //             }
+
+            //             &.placeholder {
+            //                 .wrap {
+            //                     background-image: data-uri('../img/unavailable.png');
+            //                     background-repeat: no-repeat;
+            //                     background-position-x: 50%;
+            //                     background-position-y: 50%;
+            //                 }
+            //             }
+
+            //             &.oneCol {
+
+            //                 margin: 0 0 7px 0;
+
+            //                 .label {
+            //                     width: 178px;
+            //                 }
+
+            //                 .wrap {
+            //                     float: left;
+            //                     width: 90px;
+            //                     max-height: 90px;
+            //                     //width: 208px; // full width
+            //                     //max-height: 373px; // full height
+            //                 }
+
+            //                 .info {
+            //                     width: 113px;
+            //                     float: left;
+            //                     margin: 0 0 0 7px;
+
+            //                     .searchResults {
+            //                         clear: left;
+            //                         float: left;
+            //                         margin: 7px 0 0 0;
+            //                     }
+            //                 }
+            //             }
+
+            //             &.twoCol {
+            //                 margin: 0 7px 7px 0;
+            //                 .label {
+            //                     width: 63px;
+            //                 }
+            //                 .wrap {
+            //                     width: 98px;
+            //                     max-height: 182px;
+            //                 }
+            //             }
+            //         }
+
+            //         .separator {
+            //             height: 1px;
+            //             clear: both;
+            //             border: none;
+            //         }
+
+            //         &.left-to-right {
+            //             &.paged {
+            //                 .thumb {
+            //                     &.first {
+            //                         float: right;
+            //                     }
+            //                 }
+            //             }
+            //             .thumb {
+            //                 float: left;
+            //             }
+            //         }
+
+            //         &.right-to-left {
+            //             .thumb {
+            //                 &.first {
+            //                     //float: left;
+            //                 }
+            //                 float: right;
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 }

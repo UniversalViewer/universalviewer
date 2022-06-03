@@ -1,5 +1,6 @@
 import { IUVData } from "./IUVData";
 const filterXSS = require("xss");
+export const merge = require("lodash/merge");
 
 export const sanitize = (html: string) => {
   return filterXSS(html, {

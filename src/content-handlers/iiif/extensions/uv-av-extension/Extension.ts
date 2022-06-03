@@ -47,6 +47,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     this.extensionHost.subscribe(
       IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
+        console.log("canvas index changed", canvasIndex);
         this.viewCanvas(canvasIndex);
       }
     );

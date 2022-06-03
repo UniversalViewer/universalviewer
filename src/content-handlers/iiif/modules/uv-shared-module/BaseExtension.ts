@@ -45,6 +45,8 @@ import {
 import { isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
+import { StoreApi } from "zustand/vanilla";
+import { ExtensionState } from "./ExtensionState";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -72,6 +74,7 @@ export class BaseExtension implements IExtension {
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
+  store: StoreApi<ExtensionState>;
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
@@ -576,6 +579,10 @@ export class BaseExtension implements IExtension {
         this.data.canvasIndex = 0;
       }
 
+      if (this.data.canvasId) {
+        this.data.canvasIndex = this.helper.canvasIndex;
+      }
+
       this.extensionHost.publish(
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.data.canvasIndex
@@ -815,7 +822,9 @@ export class BaseExtension implements IExtension {
     for (let i = 0; i < indices.length; i++) {
       const index: number = indices[i];
       const canvas: Canvas = this.helper.getCanvasByIndex(index);
-      canvases.push(canvas);
+      if (canvas) {
+        canvases.push(canvas);
+      }
     }
 
     return canvases;
@@ -1140,6 +1149,10 @@ export class BaseExtension implements IExtension {
 
       this.reload(data);
     }
+  }
+
+  dispose(): void {
+    this.store?.destroy();
   }
 }
 

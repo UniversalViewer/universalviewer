@@ -1,4 +1,7 @@
 const $ = require("jquery");
+import { createElement } from "react";
+import { createRoot, Root } from "react-dom/client";
+import ThumbsView from "./ThumbsView";
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
@@ -9,7 +12,6 @@ import { GalleryView } from "./GalleryView";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { ThumbsView } from "./ThumbsView";
 import { TreeView } from "./TreeView";
 import {
   LanguageMap,
@@ -45,10 +47,10 @@ export class ContentLeftPanel extends LeftPanel {
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
-  thumbsView: ThumbsView;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
+  thumbsRoot: Root;
 
   constructor($element: JQuery) {
     super($element);
@@ -60,7 +62,11 @@ export class ContentLeftPanel extends LeftPanel {
     super.create();
 
     this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
-      this.databind();
+      this.render();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
+      this.render();
     });
 
     this.extensionHost.subscribe(IIIFEvents.GALLERY_THUMB_SELECTED, () => {
@@ -76,18 +82,18 @@ export class ContentLeftPanel extends LeftPanel {
     });
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, () => {
-      this.databindThumbsView();
-      this.databindGalleryView();
+      this.renderThumbs();
+      this.renderGallery();
     });
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_CLEARED, () => {
-      this.databindThumbsView();
-      this.databindGalleryView();
+      this.renderThumbs();
+      this.renderGallery();
     });
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_EMPTY, () => {
-      this.databindThumbsView();
-      this.databindGalleryView();
+      this.renderThumbs();
+      this.renderGallery();
     });
 
     this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, () => {
@@ -107,6 +113,13 @@ export class ContentLeftPanel extends LeftPanel {
       this.selectCurrentTreeNode();
       this.updateTreeTabBySelection();
     });
+
+    // this.extensionHost.subscribe(
+    //   OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+    //   (_paged: boolean) => {
+    //     this.renderThumbs();
+    //   }
+    // );
 
     this.$tabs = $('<div class="tabs"></div>');
     this.$main.append(this.$tabs);
@@ -180,7 +193,7 @@ export class ContentLeftPanel extends LeftPanel {
     this.$treeSelect.hide();
 
     this.$treeSelect.change(() => {
-      this.databindTreeView();
+      this.renderTree();
       this.selectCurrentTreeNode();
       this.updateTreeTabBySelection();
     });
@@ -224,11 +237,19 @@ export class ContentLeftPanel extends LeftPanel {
     }
   }
 
+  // renderThumbs({ paged }: { paged: boolean }): void {
+  //   this.thumbsRoot.render(
+  //     createElement(ThumbsViewReact, {
+  //       paged,
+  //     })
+  //   );
+  // }
+
   createTreeView(): void {
     this.treeView = new TreeView(this.$treeView);
     this.treeView.treeData = this.getTreeData();
     this.treeView.setup();
-    this.databindTreeView();
+    this.renderTree();
 
     // populate the tree select drop down when there are multiple top-level ranges
     const topRanges: Range[] = this.extension.helper.getTopRanges();
@@ -249,10 +270,10 @@ export class ContentLeftPanel extends LeftPanel {
     this.updateTreeViewOptions();
   }
 
-  databind(): void {
-    this.databindThumbsView();
-    this.databindTreeView();
-    this.databindGalleryView();
+  render(): void {
+    this.renderThumbs();
+    this.renderTree();
+    this.renderGallery();
   }
 
   updateTreeViewOptions(): void {
@@ -308,7 +329,7 @@ export class ContentLeftPanel extends LeftPanel {
     throw new Error("Tree not available");
   }
 
-  databindTreeView(): void {
+  renderTree(): void {
     if (!this.treeView) return;
     this.treeView.treeData = this.getTreeData();
     this.treeView.databind();
@@ -404,13 +425,15 @@ export class ContentLeftPanel extends LeftPanel {
     return this.extension.helper.getViewingDirection();
   }
 
-  createThumbsView(): void {
-    this.thumbsView = new ThumbsView(this.$thumbsView);
-    this.databindThumbsView();
+  createThumbsRoot(): void {
+    if (!this.thumbsRoot) {
+      this.thumbsRoot = createRoot(this.$thumbsView[0]);
+    }
+    this.renderThumbs();
   }
 
-  databindThumbsView(): void {
-    if (!this.thumbsView) return;
+  renderThumbs(): void {
+    if (!this.thumbsRoot) return;
 
     let width: number;
     let height: number;
@@ -460,26 +483,42 @@ export class ContentLeftPanel extends LeftPanel {
 
         if (thumb) {
           // clone the data so searchResults isn't persisted on the canvas.
-          let data = $.extend(true, {}, thumb.data);
+          let data = Object.assign({}, thumb.data);
           data.searchResults = searchResult.rects.length;
           thumb.data = data;
         }
       }
     }
 
-    this.thumbsView.thumbs = thumbs;
+    const paged = !!this.extension.getSettings().pagingEnabled;
 
-    this.thumbsView.databind();
+    const selectedIndices: number[] = this.extension.getPagedIndices(
+      this.extension.helper.canvasIndex
+    );
+
+    // console.log("selectedIndeces", selectedIndices);
+
+    this.thumbsRoot.render(
+      createElement(ThumbsView, {
+        thumbs,
+        paged,
+        viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
+        selected: selectedIndices,
+        onClick: (thumb: Thumb) => {
+          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        },
+      })
+    );
   }
 
   createGalleryView(): void {
     this.galleryView = new GalleryView(this.$galleryView);
     this.galleryView.galleryData = this.getGalleryData();
     this.galleryView.setup();
-    this.databindGalleryView();
+    this.renderGallery();
   }
 
-  databindGalleryView(): void {
+  renderGallery(): void {
     if (!this.galleryView) return;
     this.galleryView.galleryData = this.getGalleryData();
     this.galleryView.databind();
@@ -636,7 +675,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.treeView.show();
 
-    if (this.thumbsView) this.thumbsView.hide();
+    if (this.$thumbsView) this.$thumbsView.hide();
     if (this.galleryView) this.galleryView.hide();
 
     this.updateTreeViewOptions();
@@ -653,9 +692,9 @@ export class ContentLeftPanel extends LeftPanel {
     this.isTreeViewOpen = false;
     this.isThumbsViewOpen = true;
 
-    if (!this.thumbsView) {
-      this.createThumbsView();
-    }
+    // if (!this.$thumbsView) {
+    this.createThumbsRoot();
+    // }
 
     if (this.isFullyExpanded && !this.galleryView) {
       this.createGalleryView();
@@ -672,13 +711,13 @@ export class ContentLeftPanel extends LeftPanel {
     this.resize();
 
     if (this.isFullyExpanded) {
-      this.thumbsView.hide();
+      this.$thumbsView.hide();
       if (this.galleryView) this.galleryView.show();
       if (this.galleryView) this.galleryView.resize();
     } else {
       if (this.galleryView) this.galleryView.hide();
-      this.thumbsView.show();
-      this.thumbsView.resize();
+      this.$thumbsView.show();
+      this.$thumbsView.resize();
     }
 
     this.extensionHost.publish(IIIFEvents.OPEN_THUMBS_VIEW);

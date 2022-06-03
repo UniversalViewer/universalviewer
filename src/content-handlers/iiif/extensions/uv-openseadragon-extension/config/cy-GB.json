@@ -111,6 +111,7 @@
         "selectionEnabled": false
       },
       "content": {
+        "allPages": "Pob Tudalen",
         "currentViewAsJpg": "Delwedd ddethol {0} x {1}px (jpg)",
         "currentViewAsJpgExplanation": "Agor mewn dwy ffenest newydd.",
         "download": "Lawrlwytho",
@@ -119,16 +120,19 @@
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan",
+        "individualPages": "Tudalennau Unigol",
         "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
         "pagingNote": "Dad-ddewiswch 'Arddangos Dwy Dudalen' i weld dewisiadau pellach.",
         "preview": "Rhagolwg",
+        "selection": "Detholiad",
+        "termsOfUse": "Telerau Defnydd",
         "title": "Lawrlwytho",
         "wholeImageHighRes": "Delwedd gyfan {0} x {1}px ({2})",
         "wholeImageHighResExplanation": "Agor mewn ffenest newydd",
-        "wholeImagesHighRes": "Delweddau cyfan ({0})",
-        "wholeImagesHighResExplanation": "Agor mewn dwy ffenest newydd.",
         "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Agor mewn ffenest newydd"
+        "wholeImageLowResAsJpgExplanation": "Agor mewn ffenest newydd",
+        "wholeImagesHighRes": "Delweddau cyfan ({0})",
+        "wholeImagesHighResExplanation": "Agor mewn dwy ffenest newydd."
       }
     },
     "footerPanel": {

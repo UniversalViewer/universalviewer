@@ -6,6 +6,10 @@
       .pdfContainer {
         overflow: auto;
         text-align: center;
+
+        canvas {
+          display: inline;
+        }
       }
 
       .spinner {
@@ -14,6 +18,12 @@
         height: 27px;
         border-radius: 27px;
         .loading(@loader-black-bg);
+      }
+
+      progress {
+        position: absolute;
+        width: 100px;
+        height: 10px;
       }
 
       button {

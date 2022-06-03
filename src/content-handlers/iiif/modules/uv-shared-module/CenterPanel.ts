@@ -70,12 +70,12 @@ export class CenterPanel extends BaseView {
     this.closeAttribution();
 
     this.$closeAttributionButton = this.$attribution.find(".header .close");
-    this.$closeAttributionButton.on("click", e => {
+    this.$closeAttributionButton.on("click", (e) => {
       e.preventDefault();
       this.closeAttribution();
     });
 
-    this.$subtitleExpand.on("click", e => {
+    this.$subtitleExpand.on("click", (e) => {
       e.preventDefault();
 
       this.subtitleExpanded = !this.subtitleExpanded;
@@ -172,24 +172,26 @@ export class CenterPanel extends BaseView {
     }
 
     if (requiredStatement.value) {
-      try {
-        const sanitizedText: string = sanitize(requiredStatement.value);
+      const sanitizedText: string = sanitize(requiredStatement.value);
 
-        $attributionText.html(sanitizedText);
+      $attributionText.html(sanitizedText);
 
-        $attributionText
-          .find("img")
-          .one("load", () => {
-            this.resize();
-          })
-          .each(function () {
-            if (this.complete) $(this).load();
-          });
+      $attributionText
+        .find("img")
+        .one("load", () => {
+          this.resize();
+        })
+        .each(function() {
+          if (this.complete) {
+            try {
+              $(this).trigger("load");
+            } finally {
+              // do nothing
+            }
+          }
+        });
 
-        $attributionText.targetBlank();
-      } catch (e) {
-        // ignore error.
-      }
+      $attributionText.targetBlank();
     }
 
     // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
