@@ -23,25 +23,24 @@
   <body>
     <div id="uv" class="uv"></div>
 
-    <script type="text/javascript">
-      // todo: use UV.URLAdapter that looks at hash params to determine
-      // content type
-      // #?manifest=manifesturl
-      // #?type=iiifmanifest&url=manifesturl
-      // #?type=pdf&url=pdfurl
-      // #?type=iiifimage&url=imageurl
-
-      var urlAdapter = new UV.IIIFURLAdapter(true);
-
-      const data = urlAdapter.getInitialData({
-        embedded: true,
-      });
-
-      uv = UV.init("uv", data);
-    </script>
-
     <script>
       document.addEventListener("DOMContentLoaded", function() {
+        var urlAdapter = new UV.IIIFURLAdapter(true);
+
+        const data = urlAdapter.getInitialData({
+          embedded: true,
+        });
+
+        uv = UV.init("uv", data);
+
+
+        const configUrl = urlAdapter.get('config');
+        if (configUrl) {
+          uv.on("configure", function({ cb }) {
+            fetch(configUrl).then(r => r.json()).then(cb)
+          })
+        }
+
         var $UV = document.getElementById("uv");
 
         function resize() {

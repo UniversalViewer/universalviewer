@@ -172,20 +172,24 @@ export class CenterPanel extends BaseView {
     }
 
     if (requiredStatement.value) {
-      const sanitizedText: string = sanitize(requiredStatement.value);
+      try {
+        const sanitizedText: string = sanitize(requiredStatement.value);
 
-      $attributionText.html(sanitizedText);
+        $attributionText.html(sanitizedText);
 
-      $attributionText
-        .find("img")
-        .one("load", () => {
-          this.resize();
-        })
-        .each(function() {
-          if (this.complete) $(this).load();
-        });
+        $attributionText
+          .find("img")
+          .one("load", () => {
+            this.resize();
+          })
+          .each(function () {
+            if (this.complete) $(this).load();
+          });
 
-      $attributionText.targetBlank();
+        $attributionText.targetBlank();
+      } catch (e) {
+        // ignore error.
+      }
     }
 
     // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {

@@ -107,6 +107,13 @@ const config = {
       minify: false,
       inject: "head",
     }),
+    new HtmlWebpackPlugin({
+      title: "UV Examples",
+      template: "./src/uv.html",
+      filename: "uv.html",
+      minify: false,
+      inject: "head",
+    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
