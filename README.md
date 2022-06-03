@@ -39,7 +39,6 @@ A community-developed open source project on a mission<br/> to help you share yo
 - [**Accessibility Statement**](#-accessibility-statement)
 - [**Feedback**](#-feedback)
 
-
 ## 🌐 Website
 
 [Visit the UV demo page](https://uv.netlify.app) to try it out.
@@ -50,7 +49,7 @@ Read more [about the Universal Viewer](https://github.com/UniversalViewer/univer
 
 ## 💻 Getting Started
 
-See [uv-examples](https://github.com/UniversalViewer/uv-examples) for how to set up the UV with plain javascript, or using javascript frameworks.
+See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Examples) for how to use the UV in various scenarios.
 
 ## 💻 Contributing
 
