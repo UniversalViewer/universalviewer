@@ -26,7 +26,7 @@ A community-developed open source project on a mission<br/> to help you share yo
 <br/>
     
 > Please note that UV v4 is designed to work on [evergreen browsers](https://www.w3.org/2001/tag/doc/evergreen-web/). If you need IE11 support, please use [UV v3](https://github.com/UniversalViewer/universalviewer/tree/v3).
-> Microsoft no longer supports IE11, and [reached end-of-life on June 15 2022](https://blogs.windows.com/windowsexperience/2021/05/19/the-future-of-internet-explorer-on-windows-10-is-in-microsoft-edge/).
+> Microsoft no longer supports IE11, and it [reached end-of-life on June 15 2022](https://blogs.windows.com/windowsexperience/2021/05/19/the-future-of-internet-explorer-on-windows-10-is-in-microsoft-edge/).
 
 
 
