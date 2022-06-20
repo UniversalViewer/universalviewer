@@ -15,7 +15,6 @@ export default function jqueryPlugins($) {
           }
 
           const checked: boolean = $checkbox.is(":checked");
-
           onClick.call(this, checked);
         },
         0

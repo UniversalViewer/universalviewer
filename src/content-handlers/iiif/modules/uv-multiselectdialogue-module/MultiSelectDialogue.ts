@@ -5,6 +5,7 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { Bools } from "@edsilv/utils";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
+// import { GalleryComponent } from "../../GalleryComponent";
 import { MultiSelectState } from "@iiif/manifold";
 
 export class MultiSelectDialogue extends Dialogue {
