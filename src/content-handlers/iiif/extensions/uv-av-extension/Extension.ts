@@ -11,7 +11,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
+import {Bools, Strings} from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
@@ -38,6 +38,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
     "pl-PL": () => import("./config/pl-PL.json"),
     "sv-SE": () => import("./config/sv-SE.json"),
   };
+  lastAvCanvasIndex?: number;
 
   create(): void {
     super.create();
@@ -47,8 +48,10 @@ export default class Extension extends BaseExtension implements IAVExtension {
     this.extensionHost.subscribe(
       IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
-        console.log("canvas index changed", canvasIndex);
-        this.viewCanvas(canvasIndex);
+        if (canvasIndex !== this.lastAvCanvasIndex) {
+          this.viewCanvas(canvasIndex);
+        }
+        this.lastAvCanvasIndex = canvasIndex;
       }
     );
 
@@ -141,14 +144,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   }
 
   isLeftPanelEnabled(): boolean {
-    let isEnabled: boolean = super.isLeftPanelEnabled();
-    const tree: TreeNode | null = this.helper.getTree();
-
-    if (!tree || !tree.nodes.length) {
-      isEnabled = false;
-    }
-
-    return isEnabled;
+    return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
   }
 
   render(): void {

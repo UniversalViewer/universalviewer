@@ -81,6 +81,7 @@ export class AVCenterPanel extends CenterPanel {
           this.avcomponent.set({
             limitToRange: this._limitToRange(),
             constrainNavigationToRange: this._limitToRange(),
+            autoAdvanceRanges: this._autoAdvanceRanges(),
           });
         }
       });
@@ -301,6 +302,7 @@ export class AVCenterPanel extends CenterPanel {
           enableFastRewind: this.config.options.enableFastRewind,
           autoSelectRange: true,
           constrainNavigationToRange: this._limitToRange(),
+          autoAdvanceRanges: this._autoAdvanceRanges(),
           content: this.content,
           defaultAspectRatio: 0.56,
           doubleClickMS: 350,
@@ -324,6 +326,10 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     return !this.extension.isDesktopMetric();
+  }
+
+  private _autoAdvanceRanges(): boolean {
+    return Bools.getBool(this.config.options.autoAdvanceRanges, true);
   }
 
   private _whenMediaReady(cb: () => void): void {

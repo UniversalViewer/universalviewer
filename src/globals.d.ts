@@ -15,12 +15,6 @@ interface HTMLElement {
   ontouchstart: any;
 }
 
-interface JQuery {
-  // jsviews
-  link: any;
-  render: any;
-}
-
 interface JQueryStatic {
   // pubsub
   publish(event: string, eventObj?: any[]): void;
@@ -67,6 +61,7 @@ interface Window {
   trackVariable(slot: number, name: string, value: string, scope: number): void;
   trackingLabel: string;
   $: JQueryStatic;
+  jQuery: JQueryStatic;
   webViewerLoad: any; // pdfjs
   openSeadragonViewer: any; // for testing convenience (make this generic)
   PDFObject: any;
