@@ -5,14 +5,14 @@ export const merge = require("lodash/merge");
 export const sanitize = (html: string) => {
   return filterXSS(html, {
     whiteList: {
-      a: ["href", "title", "target", "class"],
+      a: ["href", "title", "target", "class", "data-uv-navigate"],
       b: [],
       br: [],
       i: [],
       img: ["src", "alt"],
       p: [],
       small: [],
-      span: [],
+      span: ["data-uv-navigate"],
       strong: [],
       sub: [],
       sup: [],

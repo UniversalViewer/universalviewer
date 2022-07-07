@@ -183,7 +183,8 @@ export class URLAdapter extends UVAdapter {
 
     uv.on(
       IIIFEvents.RANGE_CHANGE,
-      (rangeId) => {
+      (range) => {
+        const rangeId = !range || typeof range === 'string' ? range : range.id;
         this.set("rid", rangeId);
       },
       false

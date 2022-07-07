@@ -71,7 +71,7 @@ export class TreeView extends BaseView {
       )[0];
 
       if (link) {
-        link.scrollIntoView();
+        // link.scrollIntoView({ inline: 'center' });
       }
     }
 
