@@ -32,7 +32,10 @@ export class URLAdapter extends UVAdapter {
       if (value) {
         Urls.setHashParameter(key, value, document);
       } else {
-        Urls.setHashParameter(key, "", document);
+        const existing = Urls.getHashParameter(key);
+        if (existing !== null) {
+          Urls.setHashParameter(key, "", document);
+        }
       }
     }
   }
@@ -147,15 +150,17 @@ export class URLAdapter extends UVAdapter {
   public bindTo(uv: UniversalViewer) {
     uv.adapter = this;
 
-    uv.on(
-      IIIFEvents.PAUSE,
-      (currentTime) => {
-        if (currentTime > 0) {
-          this.set("t", currentTime);
-        }
-      },
-      false
-    );
+    // Removing this for now, as t={time} does not line up with what the
+    // user will see when they reload the page.
+    // uv.on(
+    //   IIIFEvents.PAUSE,
+    //   (currentTime) => {
+    //     if (currentTime > 0) {
+    //       this.set("t", currentTime);
+    //     }
+    //   },
+    //   false
+    // );
 
     uv.on(
       IIIFEvents.COLLECTION_INDEX_CHANGE,
