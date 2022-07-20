@@ -9,6 +9,7 @@ const config = {
     UV: ["./src/index.ts"],
   },
   mode: "development",
+  devtool: 'eval-source-map',
   output: {
     libraryTarget: "umd",
     library: "UV",
@@ -17,6 +18,9 @@ const config = {
     globalObject: "this",
   },
   resolve: {
+    alias: {
+      'jquery': require.resolve('jquery/dist/jquery.js'),
+    },
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
       zlib: false,
@@ -25,6 +29,7 @@ const config = {
   },
   module: {
     rules: [
+      { test: /\.js$/, loader: 'source-map-loader', enforce: 'pre' },
       {
         test: /\.ts$/,
         use: [{ loader: "ts-loader" }],
@@ -124,6 +129,7 @@ const config = {
       "window.jQuery": "jquery",
     }),
   ],
+  ignoreWarnings: [/Failed to parse source map/],
 };
 
 module.exports = config;
