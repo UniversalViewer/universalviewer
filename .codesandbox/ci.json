@@ -1,0 +1,10 @@
+{
+  "sandboxes": [
+    "new",
+    "uv-simple-example-s0czy",
+    "uv-simple-example-with-url-adapter-1p175",
+    "uv-config-example-7kh4s",
+    "uv-nextjs-example-uh9zi"
+  ],
+  "node": "14"
+}
