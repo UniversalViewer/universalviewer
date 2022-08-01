@@ -104,6 +104,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   public extension: IExtension | null;
   public isFullScreen: boolean = false;
   public disposed = false;
+  private extra = { initial: false };
 
   constructor(
     public options: IUVOptions,
@@ -112,11 +113,11 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   ) {
     super(options, adapter, eventListeners);
     // console.log("create IIIFContentHandler");
-
+    this.extra.initial = true;
     this._pubsub = new PubSub();
-
     this._init();
     this.resize();
+    this.extra.initial = false;
   }
 
   protected _init(): boolean {
@@ -165,7 +166,9 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       false
     );
 
+    this.extra.initial = true;
     this.set(this.options.data);
+    this.extra.initial = false;
 
     return true;
   }
@@ -193,7 +196,10 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     return this._getExtensionByType(this._extensionRegistry[format], format);
   }
 
-  public set(data: IUVData): void {
+  public set(data: IUVData, initial?: boolean): void {
+    if (initial) {
+      this.extra.initial = true;
+    }
     // if this is the first set
     if (!this.extension) {
       if (!data.iiifManifestId) {
@@ -220,6 +226,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
         this.extension.render();
       }
     }
+
+    this.extra.initial = false;
   }
 
   // public get<T>(key: string): T | undefined {
@@ -229,8 +237,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   //   return undefined;
   // }
 
-  public publish(event: string, args?: any): void {
-    this._pubsub.publish(event, args);
+  public publish(event: string, args?: any, extra?: any): void {
+    this._pubsub.publish(event, args, { ...this.extra, ...extra });
   }
 
   public subscribe(event: string, handler: any) {

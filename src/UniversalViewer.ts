@@ -87,7 +87,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
     return handlerChanged;
   }
 
-  public set(data: IUVData): void {
+  public set(data: IUVData, initial?: boolean): void {
     // content type may have changed
     this._assignContentHandler(data).then((handlerChanged: boolean) => {
       if (handlerChanged) {
@@ -96,7 +96,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
       } else {
         // the handler didn't change, therefore handler's initial set didn't run
         // so we need to call set
-        this._assignedContentHandler.set(data);
+        this._assignedContentHandler.set(data, initial);
       }
     });
   }

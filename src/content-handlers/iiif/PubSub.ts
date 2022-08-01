@@ -1,4 +1,4 @@
-export type EventHandler = (args: any) => void;
+export type EventHandler = (args: any, extra?: any) => void;
 export type EventHandlerWithName = (event: string, args: any) => void;
 
 export class PubSub {
@@ -7,11 +7,11 @@ export class PubSub {
 
   constructor() {}
 
-  public publish(name: string, args?: any) {
+  public publish(name: string, args?: any, extra?: any) {
     const handlers: EventHandler[] = this.events[name];
     if (handlers) {
       handlers.forEach((handler) => {
-        handler.call(this, args);
+        handler.call(this, args, extra);
       });
     }
     this.onPublishHandler.call(this, name, args);
