@@ -58,7 +58,7 @@ export function validateContentState(
     for (const anno of annotation) {
       const [valid, reason] = validateContentState(anno);
       if (!valid && reason) {
-        return [valid, reason] as const;
+        return [valid as false, reason] as const;
       }
     }
 

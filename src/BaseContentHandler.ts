@@ -36,7 +36,7 @@ export default class BaseContentHandler<IUVData>
     }
   }
 
-  public set(data: IUVData): void {}
+  public set(data: IUVData, initial?: boolean): void {}
 
   public on(name: string, cb: Function, ctx?: any): void {
     var e = this._eventListeners || (this._eventListeners = {});

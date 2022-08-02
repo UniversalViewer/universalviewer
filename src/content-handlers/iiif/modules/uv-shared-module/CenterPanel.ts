@@ -176,6 +176,8 @@ export class CenterPanel extends BaseView {
 
       $attributionText.html(sanitizedText);
 
+      const resize = () => this.resize();
+
       $attributionText
         .find("img")
         .one("load", () => {
@@ -183,13 +185,15 @@ export class CenterPanel extends BaseView {
         })
         .each(function() {
           if (this.complete) {
-            try {
-              $(this).trigger("load");
-            } finally {
-              // do nothing
-            }
+            resize();
           }
         });
+
+      $attributionText
+        .find("img")
+        .one('error', () => {
+          resize();
+        })
 
       $attributionText.targetBlank();
     }
