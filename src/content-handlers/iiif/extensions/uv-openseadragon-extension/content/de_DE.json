@@ -10,7 +10,7 @@
     "fallbackDegradedLabel": "Anmelden",
     "fallbackDegradedMessage": "Bitte anmelden, um den Inhalt in voller Auflösung zu sehen.",
     "forbiddenResourceMessage": "Ihre gegenwärtigen Zugriffsrechte reichen nicht aus, um das Bild anzusehen",
-    "mediaViewer": "Media Viewer",
+    "mediaViewer": "Medien Viewer",
     "skipToDownload": "Weiter zu den Downloads und den alternativen Formaten",
     "termsOfUse": "Nutzungsbedingungen"
   },
@@ -58,7 +58,7 @@
         "editSettings": "Einstellungen bearbeiten",
         "entireDocument": "Ganzes Dokument ({0})",
         "entireFileAsOriginal": "Ganze Datei",
-        "noneAvailable": "Es sind keine Download-Optionen.",
+        "noneAvailable": "Es sind keine Download-Optionen vorhanden.",
         "pagingNote": "Bitte schalten Sie die Zwei-Seiten-Ansicht aus um zusätzliche Optionen zu sehen.",
         "preview": "Vorschau",
         "termsOfUse": "Nutzungsbedingungen",
@@ -195,7 +195,7 @@
       "content": {
         "clearSearch": "Löschen",
         "defaultLabel": "-",
-        "displaying": "{0} {1} of {2}",
+        "displaying": "{0} {1} von {2}",
         "enterKeyword": "Stichwort eingeben",
         "image": "bild",
         "imageCaps": "Bild",
