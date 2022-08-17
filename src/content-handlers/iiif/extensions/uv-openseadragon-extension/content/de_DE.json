@@ -1,0 +1,240 @@
+{
+  "localisation": {
+    "label": "Deutsch (DE)"
+  },
+  "options": {},
+  "content": {
+    "authCORSError": "Ihr Browser unterstützt CORS nicht. Bitte machen Sie einen Upgrade um diese Inhalte anzusehen.",
+    "authorisationFailedMessage": "Anmeldung fehlgeschlagen. Versuchen Sie es bitte erneut.",
+    "canvasIndexOutOfRange": "Der Bildbereich liegt ausserhalb der gültigen Werte.",
+    "fallbackDegradedLabel": "Anmelden",
+    "fallbackDegradedMessage": "Bitte anmelden, um den Inhalt in voller Auflösung zu sehen.",
+    "forbiddenResourceMessage": "Ihre gegenwärtigen Zugriffsrechte reichen nicht aus, um das Bild anzusehen",
+    "mediaViewer": "Media Viewer",
+    "skipToDownload": "Weiter zu den Downloads und den alternativen Formaten",
+    "termsOfUse": "Nutzungsbedingungen"
+  },
+  "modules": {
+    "authDialogue": {
+      "content": {
+        "cancel": "Abbrechen",
+        "confirm": "Bestätigen"
+      }
+    },
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "Lesen Sie die Benutzungsbestimmungen"
+      }
+    },
+    "contentLeftPanel": {
+      "content": {
+        "collapse": "Inhalt verbergen",
+        "collapseFull": "Galerie verbergen",
+        "date": "Datum",
+        "expand": "Inhalt anzeigen",
+        "expandFull": "Galerie anzeigen",
+        "index": "Index",
+        "manifestRanges": "Manifestations-Bereiche",
+        "searchResult": "{0} Suchresultate",
+        "searchResults": "{0} Suchresultate",
+        "sortBy": "Sortieren nach:",
+        "thumbnails": "Miniaturbilder",
+        "title": "Inhalte",
+        "volume": "Band"
+      }
+    },
+    "dialogue": {
+      "content": {
+        "close": "Schliessen"
+      }
+    },
+    "downloadDialogue": {
+      "content": {
+        "currentViewAsJpg": "Aktuelle Ansicht {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Öffnet in einem neun Fenster",
+        "download": "Download",
+        "downloadSelection": "Download Auswahl",
+        "downloadSelectionExplanation": "Öffnet einen Dialog zur Auswahl der herunterzuladenden Seiten.",
+        "editSettings": "Einstellungen bearbeiten",
+        "entireDocument": "Ganzes Dokument ({0})",
+        "entireFileAsOriginal": "Ganze Datei",
+        "noneAvailable": "Es sind keine Download-Optionen.",
+        "pagingNote": "Bitte schalten Sie die Zwei-Seiten-Ansicht aus um zusätzliche Optionen zu sehen.",
+        "preview": "Vorschau",
+        "termsOfUse": "Nutzungsbedingungen",
+        "title": "Download",
+        "wholeImageHighRes": "Ganzes Bild {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Öffnet in einem neuen Fenster.",
+        "wholeImagesHighRes": "Ganze Bilder ({0})",
+        "wholeImagesHighResExplanation": "Öffnet in zwei neuen Fenstern.",
+        "wholeImageLowResAsJpg": "Ganzes Bild {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Öffnet in einem neuen Fenster."
+      }
+    },
+    "footerPanel": {
+      "content": {
+        "bookmark": "Zu den Lesezeichen hinzufügen",
+        "download": "Download",
+        "embed": "Einbetten",
+        "exitFullScreen": "Vollansicht verlassen",
+        "feedback": "Rückmeldung",
+        "fullScreen": "Vollansicht",
+        "moreInfo": "Weitere Informationen",
+        "open": "Öffnen",
+        "share": "Teilen"
+      }
+    },
+    "genericDialogue": {
+      "content": {
+        "emptyValue": "Bitte geben Sie einen Wert ein.",
+        "invalidNumber": "Bitte eine gültige Zahl eingeben.",
+        "noMatches": "Keine Treffer gefunden.",
+        "ok": "OK",
+        "pageNotFound": "Dieser Inhalt enthält keine Seite mit der von Ihnen eingegebenen Nummer. Versuchen Sie, den Nummerierungsmodus auf 'Bild' umzustellen.",
+        "refresh": "Aktualisieren"
+      }
+    },
+    "helpDialogue": {
+      "content": {
+        "text": "Platzhalter Text",
+        "title": "Hilfe"
+      }
+    },
+    "loginDialogue": {
+      "content": {
+        "login": "Anmelden",
+        "logout": "Abmelden",
+        "cancel": "Abbrechen"
+      }
+    },
+    "mobileFooterPanel": {
+      "content": {
+        "rotateRight": "Nach rechts rotieren",
+        "moreInfo": "Weitere Informationen",
+        "zoomIn": "Vergrössern",
+        "zoomOut": "Verkleinern"
+      }
+    },
+    "moreInfoRightPanel": {
+      "content": {
+        "attribution": "Zuschreibung",
+        "canvasHeader": "Über das Bild",
+        "collapse": "Informationen Verbergen",
+        "collapseFull": "Galerie verbergen",
+        "copiedToClipboard": "In die Zwischenablage kopiert",
+        "copyToClipboard": "In die Zwischenablage kopieren",
+        "description": "Beschreibung",
+        "expand": "Informationen anzeigen",
+        "expandFull": "Galerie anzeigen",
+        "holdingText": "Ihr Modul kommt hierher!",
+        "less": "weniger",
+        "license": "Lizenz",
+        "logo": "Logo",
+        "manifestHeader": "Über das Exemplar",
+        "more": "mehr",
+        "noData": "Es können keine Daten angezeigt werden",
+        "page": "Seite",
+        "rangeHeader": "Über diesen Bereich",
+        "title": "Weitere Informationen"
+      }
+    },
+    "multiSelectDialogue": {
+      "content": {
+        "select": "Download",
+        "selectAll": "Alle auswählen",
+        "title": "Seiten zum Download auswählen"
+      }
+    },
+    "pagingHeaderPanel": {
+      "content": {
+        "close": "Schliessen",
+        "emptyValue": "Geben Sie bitte einen Wert ein",
+        "first": "Anfang",
+        "firstImage": "Erstes Bild",
+        "firstPage": "Erste Seite",
+        "folio": "Folio",
+        "gallery": "Galerie",
+        "go": "Weiter",
+        "help": "Hilfe",
+        "image": "Bild",
+        "last": "Ende",
+        "lastImage": "Letztes Bild",
+        "lastPage": "Letzte Seite",
+        "next": "Weiter",
+        "nextImage": "Nächstes Bild",
+        "nextPage": "Nächste Seite",
+        "of": "von {0}",
+        "oneUp": "Einseitige Ansicht",
+        "page": "Seite",
+        "pageSearchLabel": "Nach Seitennummer suchen",
+        "previous": "Zurück",
+        "previousImage": "Vorheriges Bild",
+        "previousPage": "Vorherige Seite",
+        "settings": "Einstellungen",
+        "twoUp": "Zweiseitige Ansicht"
+      }
+    },
+    "openSeadragonCenterPanel": {
+      "content": {
+        "attribution": "Zuschreibung",
+        "goHome": "Zur Startseite",
+        "imageUnavailable": "Bild nicht verfügbar",
+        "next": "Weiter",
+        "previous": "Zurück",
+        "rotateRight": "Nach rechts rotieren",
+        "zoomIn": "Vergrössern",
+        "zoomOut": "Verkleinern"
+      }
+    },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "Abbrechen"
+      }
+    },
+    "searchFooterPanel": {
+      "content": {
+        "clearSearch": "Löschen",
+        "defaultLabel": "-",
+        "displaying": "{0} {1} of {2}",
+        "enterKeyword": "Stichwort eingeben",
+        "image": "bild",
+        "imageCaps": "Bild",
+        "instanceFound": "1 von '{0}' Instanzen gefunden",
+        "instancesFound": "{0} Instanzen von '{1}' gefunden",
+        "nextResult": "Nächstes Resultat",
+        "page": "seite",
+        "pageCaps": "Seite",
+        "previousResult": "Vorheriges Resultat",
+        "print": "Drucken",
+        "resultFoundFor": "Resultat gefunden für",
+        "resultsFoundFor": "Resultate gefunden für",
+        "searchWithin": "Innerhalb dieses Dokuments suchen:"
+      }
+    },
+    "settingsDialogue": {
+      "content": {
+        "locale": "Sprache",
+        "navigatorEnabled": "Navigator Aktiviert",
+        "clickToZoomEnabled": "Zum Vergrössern klicken",
+        "pagingEnabled": "Zweiseitige Ansicht",
+        "reducedMotion": "Bewegung reduzieren (schaltet Animationen aus)",
+        "preserveViewport": "Vergrösserung/Verkleinerung beibehalten",
+        "title": "Einstellungen",
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>weitere Informationen</a>"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "benutzerdefiniert",
+        "embed": "Einbetten",
+        "embedInstructions": "Um diesen Inhalt in Ihre eigene Website einzubinden, kopieren Sie den nachstehenden Code und fügen Sie ihn ein.",
+        "height": "Höhe",
+        "iiif": "IIIF Manifestation",
+        "share": "Teilen",
+        "shareInstructions": "Um diesen Inhalt zu teilen, kopieren Sie die folgende URL.",
+        "size": "Grösse:",
+        "width": "Breite"
+      }
+    }
+  }
+}
