@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import * as KeyCodes from "@edsilv/key-codes";
 import { Keyboard } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";

@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";

@@ -1,6 +1,6 @@
 import {Dimensions} from "@edsilv/utils";
 
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-extension/Events";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";

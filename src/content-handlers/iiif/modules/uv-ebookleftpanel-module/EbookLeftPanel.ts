@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { EbookExtensionEvents } from "../../extensions/uv-ebook-extension/Events";

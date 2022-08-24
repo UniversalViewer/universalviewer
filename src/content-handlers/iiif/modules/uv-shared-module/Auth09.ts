@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { InformationArgs } from "./InformationArgs";
 import { InformationType } from "./InformationType";

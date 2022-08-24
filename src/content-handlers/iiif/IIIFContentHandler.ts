@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 require("jsviews")($);
 import jQueryPlugins from "./JQueryPlugins";
 jQueryPlugins($);

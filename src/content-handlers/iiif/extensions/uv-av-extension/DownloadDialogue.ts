@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
 import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import { IIIFEvents } from "../../IIIFEvents";

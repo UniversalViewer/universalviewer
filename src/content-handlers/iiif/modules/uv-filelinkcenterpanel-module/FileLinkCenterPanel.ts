@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { sanitize } from "../../../../Utils";

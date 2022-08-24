@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { BaseView } from "./BaseView";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Maths } from "@edsilv/utils";

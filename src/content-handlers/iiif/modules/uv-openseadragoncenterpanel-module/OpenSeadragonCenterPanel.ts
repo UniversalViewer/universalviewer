@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import { Async, Bools, Dimensions } from "@edsilv/utils";
 import {

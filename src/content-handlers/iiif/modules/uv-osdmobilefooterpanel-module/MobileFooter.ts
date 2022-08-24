@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 

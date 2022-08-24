@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { IIIFEvents } from "../../IIIFEvents";
 import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";

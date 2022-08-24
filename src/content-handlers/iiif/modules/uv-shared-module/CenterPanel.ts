@@ -1,6 +1,6 @@
 import { IIIFEvents } from "../../IIIFEvents";
 
-const $ = require("jquery");
+const $ = window.$;
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../../../Utils";

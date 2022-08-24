@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 // import "@webcomponents/webcomponentsjs/webcomponents-bundle.js";
 // import "@google/model-viewer/dist/model-viewer-legacy";
 import "@google/model-viewer/dist/model-viewer";

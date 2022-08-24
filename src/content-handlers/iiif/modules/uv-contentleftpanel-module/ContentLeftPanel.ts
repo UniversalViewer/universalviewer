@@ -1,4 +1,4 @@
-const $ = require("jquery");
+const $ = window.$;
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import ThumbsView from "./ThumbsView";
