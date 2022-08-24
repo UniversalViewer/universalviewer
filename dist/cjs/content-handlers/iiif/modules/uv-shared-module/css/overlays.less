@@ -1,0 +1,145 @@
+.uv {
+
+    .overlays {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: @overlay-modal-bg;
+        background-image: data-uri('../img/modal_bg.gif');
+        z-index: 10;
+    }
+
+    .overlay {
+        position: absolute;
+
+        .top {
+            width: 100%;
+            overflow: auto;
+
+            .close {
+                .hide-text();
+                background-image: data-uri('../img/close.png');
+                width: 24px;
+                height: 24px;
+                float: right;
+                background-color: @brand-primary;
+            }
+        }
+
+        .middle {
+            width: 100%;
+            background: @overlay-bg;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+
+            .buttons {
+                padding: @padding-medium-vertical;
+                float: right;
+
+                .btn {
+                    margin: 0 0 0 @margin-medium-horizontal;
+                }
+            }
+
+            .content {
+                padding-right: @padding-medium-horizontal;
+                padding-bottom: @padding-medium-vertical;
+                padding-left: @padding-medium-horizontal;
+
+                overflow: auto;
+                text-overflow: ellipsis;
+
+                h1 {
+                    color: @headings-color;
+                    font-size: @headings-size-large;
+                    font-weight: @headings-font-weight;
+                    margin: @margin-large-vertical 0px 0px 0px;
+                    padding: 0 0 @padding-medium-vertical 0;
+                }
+
+                h2 {
+                    color: @headings-color;
+                    font-size: @headings-size-small;
+                    font-weight: @headings-font-weight;
+                    margin: 0;
+                    padding: @padding-large-vertical 0 @padding-medium-vertical 0;
+                }
+
+                p {
+                    margin: 0;
+                    padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    p {
+                        padding-top: 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                ol.options {
+                    list-style-image: none;
+                    list-style-position: inside;
+                    list-style-type: none;
+                    margin: 0;
+
+                    li {
+                        //background: @gray-lighter;
+                        margin: 2px 0 0 0;
+                        padding: 4px;
+
+                        input {
+                            margin: 0;
+                            padding: 0;
+                            width: auto;
+                            height: auto;
+                            display: inline;
+                        }
+
+                        label {
+                            display: inline;
+                            margin: 0 0 0 @margin-small-horizontal;
+                            padding: 0;
+                            float: none;
+                            clear: none;
+                            line-height: 0.9em;
+                            text-align: left;
+                            width: 200px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bottom {
+            height: 11px;
+            background-image: data-uri('../img/dialogue_arrow.png');
+            background-repeat: no-repeat;
+            margin-top: -1px;
+        }
+
+        &.genericDialogue {
+            width: 250px;
+
+            .bottom {
+                background: none;
+            }
+
+            .message {
+                color: #000;
+                padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+            }
+
+            .accept {
+                float: right;
+            }
+        }
+
+        .scroll {
+            margin: @margin-medium-vertical 0 0 0;
+            padding: 0 @padding-medium-horizontal 0 0;
+            overflow: auto;
+        }
+    }
+}

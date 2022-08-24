@@ -1,0 +1,40 @@
+// this is an example of extending a module's css in order for it to work with the current (pdf) extension,
+// without adding anything non-generic to the theme.
+
+.uv{
+
+    .leftPanel{
+
+        .thumbsView{
+
+            .thumb{
+
+                .wrap{
+                    border: none;
+
+                    img{
+                        display: block;
+                        width: 90px;
+                    }
+                }
+
+                &.selected{
+
+                    .wrap{
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .headerPanel {
+
+        .centerOptions {
+
+            .search {
+                width: 123px;
+            }
+        }
+    }
+}

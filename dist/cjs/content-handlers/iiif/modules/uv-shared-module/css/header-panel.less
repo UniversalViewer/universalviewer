@@ -1,0 +1,84 @@
+.uv {
+
+    .headerPanel {
+
+        color: @text-secondary-color;
+
+        button.imageBtn {
+            float: left;
+            i {
+                height: 30px;
+                width: 30px;
+            }
+        }
+
+        &.showInformation {
+            height: 80px;
+        }
+
+        .options {
+            height: 40px;
+            background-color: @panel-dark-bg;
+
+            .centerOptions {
+                position: absolute;
+            }
+
+            .rightOptions {
+                float: right;
+
+//              .help {
+//                  margin-left: 1em;
+//                  padding-right: 22px;
+//                  padding-bottom: 2px;
+//                  background: data-uri('@{img-path}sprite.png');
+//                  background-repeat: no-repeat;
+//                  background-position: 0 -2999px;
+//                  margin-top: 6px;
+//              }
+
+                .settings {
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .informationBox {
+            background: @brand-warning;
+            color: @gray-dark;
+            width: 100%;
+            position: absolute;
+            height: 40px;
+
+            .message {
+                float: left;
+                margin: 13px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .actions {
+                float: left;
+                margin: 6px 0 0 0;
+
+                .btn {
+                    margin: 0 6px 0 0;
+                }
+            }
+
+            .close {
+                background: 0 0;
+                border: 0;
+                color: @gray-dark;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-right: 6px;
+                &:focus,
+                &:hover {
+                  color: @gray-darker;
+                }
+            }
+        }
+    }
+}

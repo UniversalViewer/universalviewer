@@ -1,0 +1,77 @@
+.uv {
+
+    .headerPanel {
+        .hidden();
+    }
+
+    .mainPanel {
+
+        .leftPanel {
+            .hidden();
+        }
+
+        .rightPanel {
+            .hidden();
+        }
+    }
+
+    .footerPanel {
+        .hidden();
+    }
+
+    .mobileFooterPanel {
+
+        .visible();
+        position: relative;
+        height: 42px;
+
+        .options {
+
+            position: absolute;
+            /*width: 315px;*/
+            height: 42px;
+
+            .spacer {
+                float: left;
+                width: 30px;
+                height: 41px;
+            }
+
+            .btn {
+
+                margin-right: @margin-small-horizontal;
+
+                color: white;
+              	font-size: 0;
+
+                &.moreInfo {
+                    display: inline-block;
+                }
+
+                &.bookmark {
+                    display: none;
+                }
+
+                &.open {
+                    display: none;
+                }
+
+                &.feedback {
+                    display: none;
+                }
+
+                &.embed {
+                    display: none;
+                }
+                
+                &.fullScreen {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+
+.uv.loaded .uv-iiif-extension-host {
+    background-color: #000;
+}

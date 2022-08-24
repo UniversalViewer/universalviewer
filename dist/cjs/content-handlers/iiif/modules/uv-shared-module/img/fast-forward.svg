@@ -1,0 +1,10 @@
+<svg width="25" height="27" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#fff" d="M11.5 0l5 4-5 4z"/>
+        <path d="M12.5 4C6.701 4 2 8.701 2 14.5S6.701 25 12.5 25 23 20.299 23 14.5" stroke="#fff" stroke-width="3"/>
+        <text transform="translate(2 -1)" font-family="sans-serif" font-size="10"
+              font-weight="bold" fill="#fff">
+            <tspan x="5" y="19">20</tspan>
+        </text>
+    </g>
+</svg>

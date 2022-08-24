@@ -1,0 +1,103 @@
+.uv-iiif-extension-host.uv-pdf-extension {
+  .centerPanel {
+    .content {
+      position: relative;
+
+      .pdfContainer {
+        overflow: auto;
+        text-align: center;
+
+        canvas {
+          display: inline;
+        }
+      }
+
+      .spinner {
+        position: absolute;
+        width: 27px;
+        height: 27px;
+        border-radius: 27px;
+        .loading(@loader-black-bg);
+      }
+
+      progress {
+        position: absolute;
+        width: 100px;
+        height: 10px;
+      }
+
+      button {
+        color: #fff;
+      }
+
+      // canvas {
+      //     position: absolute;
+      // }
+
+      .container {
+        margin: 0 20px 0 20px;
+      }
+
+      .btn {
+        position: absolute !important;
+        width: 30px;
+        height: 90px;
+        background-repeat: no-repeat;
+        background-color: @body-bg;
+        background-position: 0px 50%;
+        cursor: pointer;
+        padding: 0px;
+        border: none;
+        border-radius: 0px;
+
+        &.zoomIn {
+          cursor: pointer !important;
+          background-image: data-uri("../img/zoom_in.png") !important;
+          width: 28px;
+          height: 28px;
+          margin: 3px !important;
+          top: 0px;
+          left: 0px;
+          img {
+            display: none;
+          }
+          &:focus {
+            .tab-focus();
+          }
+        }
+
+        &.zoomOut {
+          cursor: pointer !important;
+          background-image: data-uri("../img/zoom_out.png") !important;
+          width: 28px;
+          height: 28px;
+          margin: 3px !important;
+          top: 0px;
+          left: 32px;
+          img {
+            display: none;
+          }
+          &:focus {
+            .tab-focus();
+          }
+        }
+
+        &.prev {
+          margin-left: 5px;
+          background-image: data-uri("../img/left_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/left_arrow_disabled.png");
+          }
+        }
+
+        &.next {
+          margin-right: 20px;
+          background-image: data-uri("../img/right_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/right_arrow_disabled.png");
+          }
+        }
+      }
+    }
+  }
+}

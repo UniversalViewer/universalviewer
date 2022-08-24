@@ -1,0 +1,32 @@
+.uv {
+    #debug {
+        #xl {
+            .xl-mediaquery({
+                display: block !important;
+                visibility: visible !important;
+            });
+        }
+    }
+
+    .headerPanel {
+        .only-desktop();
+    }
+
+    .mainPanel {
+        .leftPanel {
+            .only-desktop();
+        }
+
+        .rightPanel {
+            .only-desktop();
+        }
+    }
+
+    .footerPanel {
+        .only-desktop();
+    }
+
+    .mobileFooterPanel {
+        .only-mobile();
+    }
+}

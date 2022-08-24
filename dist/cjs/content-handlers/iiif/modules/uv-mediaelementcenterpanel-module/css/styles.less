@@ -1,0 +1,33 @@
+@import "overrides.less";
+@import "mediaelementplayer.less";
+
+.uv-iiif-extension-host.uv-mediaelement-extension {
+  .mejs-container.mejs-uv {
+    background-color: @body-bg;
+  }
+
+  .centerPanel {
+    .content {
+      position: relative;
+
+      .attribution {
+        margin-bottom: 60px !important;
+      }
+
+      .wrapper {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        .container {
+
+          display: flex;
+          align-items: center;
+          margin: auto;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}

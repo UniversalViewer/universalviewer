@@ -1,0 +1,150 @@
+﻿@import 'variables';
+@import 'mixins';
+@import 'mixins-extended';
+@import 'icons';
+@import 'scaffolding';
+@import 'buttons';
+@import 'range';
+@import 'button-groups';
+@import 'header-panel';
+@import 'left-panel';
+@import 'right-panel';
+@import 'center-panel';
+@import 'footer-panel';
+@import 'overlays';
+@import 'catch-all';
+@import 'sm';
+@import 'md';
+@import 'lg';
+@import 'xl';
+
+
+.hidden {
+    .hidden();
+}
+
+.uv {
+
+    // background-color: @body-bg;
+    position: relative;
+
+    // Common styles
+    .btn-default,
+    .btn-primary,
+    .btn-success,
+    .btn-info,
+    .btn-warning,
+    .btn-danger {
+        .border-radius(0);
+    }
+
+    // A button that should not have the browser default characteristics
+    .imageBtn {
+        background: 0 0;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .action, a.action.black, input.action {
+        display: inline-block;
+        background-image: data-uri('../img/sprite.png');
+        background-position-x: 0;
+        background-position-y: -1000px;
+        background-repeat: no-repeat;
+        text-transform: none;
+        padding: 0 0 0 16px;
+        font-weight: bold;
+    }
+
+    #debug {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+
+        #sm {
+            display: none;
+        }
+
+        #md {
+            display: none;
+        }
+
+        #lg {
+            display: none;
+        }
+
+        #xl {
+            display: none;
+        }
+    }
+
+    #commsFrame {
+        width: 1px;
+        height: 1px;
+        border: none;
+    }
+
+    .headerPanel {
+        position: relative;
+        color: #fff;
+        height: 40px;
+    }
+
+    .mainPanel {
+        position: relative;
+        padding-top: @panel-margin;
+        margin-right: @panel-margin;
+        margin-bottom: 0px;
+        margin-left: @panel-margin;
+        background: @body-bg; // important, otherwise you see two spinners
+    }
+
+    .leftPanel {
+        position: absolute;
+        background: @panel-dark-bg;
+        border: @panel-border;
+    }
+
+    .centerPanel {
+        position: absolute;
+    }
+
+    .rightPanel {
+        position: absolute;
+        background: @panel-dark-bg;
+        border: @panel-border;
+    }
+
+    .footerPanel {
+        position: relative;
+        margin-top: 0;
+        margin-right: @panel-margin;
+        margin-bottom: 0px;
+        margin-left: @panel-margin;
+    }
+}
+
+@media print {
+   .uv {
+
+       .headerPanel {
+           display: none;
+       }
+
+       .leftPanel {
+           display: none;
+       }
+
+       .rightPanel {
+           display: none;
+       }
+
+       .footerPanel {
+           display: none;
+       }
+
+       .mobileFooterPanel {
+            display: none;
+        }
+   }
+}

@@ -1,0 +1,31 @@
+import { Canvas, Size, IExternalResourceData, Sequence, Manifest } from "manifesto.js";
+import { CroppedImageDimensions } from "./CroppedImageDimensions";
+declare const DownloadDialogue: ({ canvases, confinedImageSize, content, getConfinedImageDimensions, getConfinedImageUri, getCroppedImageDimensions, locale, manifest, maxImageWidth, mediaDownloadEnabled, onClose, onDownloadCurrentView, onDownloadSelection, onShowTermsOfUse, open, paged, parent, resources, requiredStatement, rotation, selectionEnabled, sequence, termsOfUseEnabled, triggerButton, }: {
+    canvases: Canvas[];
+    confinedImageSize: number;
+    content: {
+        [key: string]: string;
+    };
+    getConfinedImageDimensions: (canvas: Canvas) => Size | null;
+    getConfinedImageUri: (canvas: Canvas) => string | null;
+    getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
+    locale: string;
+    manifest: Manifest;
+    maxImageWidth: number;
+    mediaDownloadEnabled: boolean;
+    onClose: () => void;
+    onDownloadCurrentView: (canvas: Canvas) => void;
+    onDownloadSelection: () => void;
+    onShowTermsOfUse: () => void;
+    open: boolean;
+    paged: boolean;
+    parent: HTMLElement;
+    resources: IExternalResourceData[] | null;
+    requiredStatement: string | null | undefined;
+    rotation: number;
+    selectionEnabled: boolean;
+    sequence: Sequence;
+    termsOfUseEnabled: boolean;
+    triggerButton: HTMLElement;
+}) => JSX.Element | null;
+export default DownloadDialogue;

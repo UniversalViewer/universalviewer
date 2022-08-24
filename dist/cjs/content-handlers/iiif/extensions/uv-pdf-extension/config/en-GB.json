@@ -1,0 +1,214 @@
+{
+    "options": {
+        "authAPIVersion": 1,
+        "bookmarkThumbHeight": 150,
+        "bookmarkThumbWidth": 90,
+        "dropEnabled": true,
+        "footerPanelEnabled": true,
+        "headerPanelEnabled": true,
+        "limitLocales": false,
+        "openTemplate": "http://universalviewer.io?manifest={0}",
+        "pessimisticAccessControl": false,
+        "rightPanelEnabled": true,
+        "theme": "uv-en-GB-theme",
+        "usePdfJs": true
+    },
+    "modules": {
+        "shareDialogue": {
+            "options": {
+                "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
+            },
+            "content": {
+                "customSize": "custom",
+                "embed": "Embed",
+                "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
+                "height": "Height",
+                "iiif": "IIIF Manifest",
+                "share": "Share",
+                "shareInstructions": "To share this item, copy the URL below.",
+                "size": "Size:",
+                "width": "Width"
+            }
+        },
+        "footerPanel": {
+            "options": {
+                "bookmarkEnabled": false,
+                "embedEnabled": false,
+                "feedbackEnabled": false,
+                "minimiseButtons": true,
+                "openEnabled": false,
+                "shareEnabled": true
+            },
+            "content": {
+                "bookmark": "Add to bookmarks",
+                "download": "Download",
+                "embed": "Embed",
+                "exitFullScreen": "Exit Full Screen",
+                "feedback": "Feedback",
+                "fullScreen": "Full Screen",
+                "moreInfo": "More Information",
+                "open": "Open",
+                "share": "Share"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "ok": "OK"
+            }
+        },
+        "headerPanel": {
+            "content": {
+                "close": "Close",
+                "help": "Help"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "placeholder text",
+                "title": "Help"
+            }
+        },
+        "moreInfoRightPanel": {
+            "options": {
+                "canvasDisplayOrder": "",
+                "canvasExclude": "",
+                "copyToClipboardEnabled": false,
+                "manifestDisplayOrder": "",
+                "manifestExclude": "",
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": false,
+                "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+                "showAllLanguages": false,
+                "textLimit": 4,
+                "textLimitType": "lines"
+            },
+            "content": {
+                "attribution": "Attribution",
+                "collapse": "Collapse Information",
+                "collapseFull": "Collapse Gallery",
+                "description": "Description",
+                "expand": "Expand Information",
+                "expandFull": "Expand Gallery",
+                "holdingText": "Your module goes here!",
+                "less": "less",
+                "license": "License",
+                "logo": "Logo",
+                "more": "more",
+                "noData": "No data to display",
+                "page": "Page",
+                "title": "More Information",
+                "manifestHeader": "About the item",
+                "canvasHeader": "About the image",
+                "copyToClipboard": "Copy to clipboard",
+                "copiedToClipboard": "Copied to clipboard"
+            }
+        },
+        "pdfCenterPanel": {
+            "options": {
+                "titleEnabled": false
+            },
+            "content": {
+                "attribution": "Attribution"
+            }
+        },
+        "resourcesLeftPanel": {
+            "options": {
+                "elideCount": 40,
+                "galleryThumbHeight": 320,
+                "galleryThumbWidth": 200,
+                "oneColThumbHeight": 320,
+                "oneColThumbWidth": 200,
+                "pageModeEnabled": true,
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": true,
+                "thumbsEnabled": true,
+                "thumbsExtraHeight": 8,
+                "thumbsImageFadeInDuration": 300,
+                "thumbsLoadRange": 15,
+                "treeEnabled": true,
+                "twoColThumbHeight": 150,
+                "twoColThumbWidth": 90
+            }
+        },
+        "dialogue": {
+            "content": {
+                "close": "Close"
+            }
+        },
+        "downloadDialogue": {
+            "content": {
+                "download": "Download",
+                "entireFileAsOriginal": "Entire file",
+                "noneAvailable": "No download options are available.",
+                "preview": "Preview",
+                "title": "Download"
+            }
+        },
+        "pdfHeaderPanel": {
+            "content": {
+                "emptyValue": "Please enter a value",
+                "first": "First",
+                "go": "Go",
+                "last": "Last",
+                "next": "Next",
+                "of": "of {0}",
+                "previous": "Previous"
+            }
+        },
+        "loginDialogue": {
+            "content": {
+                "login": "Login",
+                "cancel": "Cancel"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Locale",
+                "pagingEnabled": "Two Page View",
+                "reducedMotion": "Reduce motion (disables animations)",
+                "preserveViewport": "Preserve Zoom",
+                "title": "Settings",
+                "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
+            }
+        },
+        "contentLeftPanel": {}
+    },
+    "localisation": {
+        "label": "English (GB)",
+        "locales": [
+            {
+                "name": "cy-GB",
+                "label": "Cymraeg"
+            },
+            {
+                "name": "en-GB",
+                "label": "English (GB)"
+            },
+            {
+                "name": "fr-FR",
+                "label": "Français (FR)"
+            },
+            {
+                "name": "pl-PL",
+                "label": "Polski"
+            },
+            {
+                "name": "sv-SE",
+                "label": "Svenska"
+            }
+        ]
+    },
+    "content": {
+        "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
+        "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
+        "degradedResourceMessage": "Please log in to view at full quality.",
+        "degradedResourceLogin": "log in",
+        "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
+        "mediaViewer": "Media Viewer",
+        "skipToDownload": "Skip to downloads and alternative formats"
+    }
+}

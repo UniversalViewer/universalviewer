@@ -1,0 +1,85 @@
+.uv {
+  .overlays {
+    > div.multiSelect {
+      width: 480px;
+
+      .content {
+        height: 350px;
+
+        .iiif-gallery-component {
+          .header {
+            .btn-primary {
+              width: auto;
+            }
+            .right {
+              .multiSelectOptions {
+                .multiSelectAll {
+                  padding-top: 6px;
+                  label {
+                    padding-left: 2px;
+                  }
+                }
+              }
+            }
+          }
+          .main {
+            .thumb {
+              .wrap {
+                &.loading {
+                  .loading(@loader-white-bg);
+                }
+              }
+
+              &.selected {
+                .wrap {
+                  border: 2px solid @brand-primary;
+                }
+              }
+
+              span {
+                color: @text-secondary-color;
+              }
+            }
+          }
+        }
+      }
+
+      .bottom {
+        background: none;
+      }
+    }
+  }
+}
+
+.uv-iiif-extension-host.browser-Explorer {
+  .overlays {
+    > div.multiSelect {
+      .content {
+        .iiif-gallery-component {
+          .header {
+            input[type="range"] {
+              margin-top: -11px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.uv-iiif-extension-host.browser-Firefox {
+  .overlays {
+    > div.multiSelect {
+      .content {
+        .iiif-gallery-component {
+          .header {
+            input[type="range"] {
+              margin-top: 9px;
+              overflow: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+}

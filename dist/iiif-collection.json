@@ -1,0 +1,1123 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://universalviewer.io/manifests.json",
+  "@type": "sc:Collection",
+  "collections": [
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Wellcome Library",
+      "manifests": [
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b18035723/manifest",
+          "@type": "sc:Manifest",
+          "label": "Wunder der Vererbung"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b23984958/manifest",
+          "@type": "sc:Manifest",
+          "label": "Greenfly Eye"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b18035978/manifest",
+          "@type": "sc:Manifest",
+          "label": "The Biocrats"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b19684915/manifest",
+          "@type": "sc:Manifest",
+          "label": "Wellcome Apocalypse"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b1948799x/manifest",
+          "@type": "sc:Manifest",
+          "label": "Crick's letter"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b16659090/manifest",
+          "@type": "sc:Manifest",
+          "label": "The story of the Wellcome Foundation Ltd (video)",
+          "visible": true
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b20605055/manifest",
+          "@type": "sc:Manifest",
+          "label": "English folding almanac in Latin (video)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b16748967/manifest",
+          "@type": "sc:Manifest",
+          "label": "Entebbe encounter (video with transcript)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b17307922/manifest",
+          "@type": "sc:Manifest",
+          "label": "Florence Nightingale (audio)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b17502792/manifest",
+          "@type": "sc:Manifest",
+          "label": "Public Attitudes to Science in Britain (PDF)",
+          "visible": true
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b17564980/manifest",
+          "@type": "sc:Manifest",
+          "label": "First Thursday Club (click through)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b19813508/manifest",
+          "@type": "sc:Manifest",
+          "label": "Kourilsky, Philippe (restricted content)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b1818893x/manifest",
+          "@type": "sc:Manifest",
+          "label": "Correspondence Concerning Publication (click through)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b17307703/manifest",
+          "@type": "sc:Manifest",
+          "label": "I Remember Sir Henry Dale (audio, click through)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b11599820/manifest",
+          "@type": "sc:Manifest",
+          "label": "Sixteen feet in profile (degraded image)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b21072061/manifest",
+          "@type": "sc:Manifest",
+          "label": "An Atlas of Clinical Microscopy (clinical login)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b19684538/manifest",
+          "@type": "sc:Manifest",
+          "label": "Pseudo-Albert the Great (folio)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/collection/b19974760",
+          "@type": "sc:Collection",
+          "label": "Chemist & Druggist (collection)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/collection/b18031511",
+          "@type": "sc:Collection",
+          "label": "Biological Basis of Medicine (collection)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b21274344/manifest",
+          "@type": "sc:Manifest",
+          "label": "Abnormalities and curiosities of medicine"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b13266330/manifest",
+          "@type": "sc:Manifest",
+          "label": "Spiegl de Artzny (manuscript)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b19646045/manifest",
+          "@type": "sc:Manifest",
+          "label": "Herbal (overlapping ranges)"
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b16625948/manifest",
+          "@type": "sc:Manifest",
+          "label": "Public perspectives (Embed disabled using UI Extension)",
+          "visible": false
+        },
+        {
+          "@id": "https://wellcomelibrary.org/iiif/b20641151/manifest",
+          "@type": "sc:Manifest",
+          "label": "Completed Schedules from the International Health Exhibition (large)"
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/wellcome/henry.json",
+          "@type": "sc:Manifest",
+          "label": "Henry Wellcome Life Mask (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://showcase.iiif.io/shims/chroniclingamerica/prezi/top.json",
+          "@type": "sc:Collection",
+          "label": "Chronicling America (collection)",
+          "visible": false
+        },
+        {
+          "@id": "http://showcase.iiif.io/shims/wales/potter/top.json",
+          "@type": "sc:Collection",
+          "label": "Potter's Electric News (collection)",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "V&A",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://iiif.vam.ac.uk/collections/MSL:1876:Forster:141:I/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Codex Forster I",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Internet Archive",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "https://iiif.archivelab.org/iiif/principleofrelat00eins/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "The principle of relativity; original papers",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Princeton",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "https://gist.githubusercontent.com/escowles/8ba9e9d3d9780993b4fd03fbe30b5008/raw/e600ac865187933a4db04e0af87773c850288bd4/f7623d04x.json",
+          "@type": "sc:Manifest",
+          "label": "Multiple top viewingHints",
+          "visible": true
+        },
+        {
+          "@id": "http://bluemountain.princeton.edu/exist/restxq/iiif/collection/top",
+          "@type": "sc:Manifest",
+          "label": "Action, Première Année, Numéro 1",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "British Library",
+      "manifests": [
+        {
+          "@id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100022545251.0x000002/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Anzac bulletin"
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/Add_11831.json",
+          "@type": "sc:Manifest",
+          "label": "Add_11831 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/Add_4709.json",
+          "@type": "sc:Manifest",
+          "label": "Add_4709 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/Or_1087.json",
+          "@type": "sc:Manifest",
+          "label": "Or_1087 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/Or_13027.json",
+          "@type": "sc:Manifest",
+          "label": "Or_13027 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/or_7694_1580.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1580 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/or_7694_1595.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1595 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/or_7694_1655_1672.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1655_1672 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/or_7694_1988_part1.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1988_part1 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/adiks/or_7694_1988_part2.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1988_part2 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Add_11831.json",
+          "@type": "sc:Manifest",
+          "label": "Add_11831 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Add_4709.json",
+          "@type": "sc:Manifest",
+          "label": "Add_4709 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_1087.json",
+          "@type": "sc:Manifest",
+          "label": "Or_1087 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/Or_13027.json",
+          "@type": "sc:Manifest",
+          "label": "Or_13027 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1580.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1580 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1595.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1595 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1655_1672.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1655_1672 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part1.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1988_part1 (3D)",
+          "visible": false
+        },
+        {
+          "@id": "https://ipfs.io/ipfs/QmPXKbC96wb6zuUhd8m2HDoovZUqi3gFHbbL9W8vAEQX8a/or_7694_1988_part2.json",
+          "@type": "sc:Manifest",
+          "label": "or_7694_1988_part2 (3D)",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "National Library of Wales",
+      "manifests": [
+        {
+          "@id": "https://damsssl.llgc.org.uk/iiif/2.0/2373813/manifest.json",
+          "@type": "sc:Collection",
+          "label": "Yr ardd"
+        },
+        {
+          "@id": "http://dams.llgc.org.uk/iiif/2.0/4389767/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Cardiganshire Constabulary"
+        },
+        {
+          "@id": "http://dams.llgc.org.uk/iiif/2.0/1123257/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Tankerey's house, Llangollen"
+        },
+        {
+          "@id": "http://dams.llgc.org.uk/iiif/archive/3975658/fonds.json",
+          "@type": "sc:Collection",
+          "label": "Cardiganshire Great War Tribunal (Appeals) Records"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Bodleian",
+      "manifests": [
+        {
+          "@id": "http://iiif.bodleian.ox.ac.uk/examples/mushaf4.json",
+          "@type": "sc:Manifest",
+          "label": "Mixed"
+        },
+        {
+          "@id": "http://iiif.bodleian.ox.ac.uk/iiif/manifest/60834383-7146-41ab-bfe1-48ee97bc04be.json",
+          "@type": "sc:Manifest",
+          "label": "MS. Bodl. 264"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Stanford University",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://dms-data.stanford.edu/data/manifests/RomanCoins/bb853kn3021/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Roman Coins"
+        },
+        {
+          "label": "California as Island",
+          "@id": "http://dms-data.stanford.edu/data/manifests/McLaughlin/bc788vp3448/manifest.json",
+          "@type": "sc:Manifest"
+        },
+        {
+          "@id": "http://dms-data.stanford.edu/data/manifests/kn/mw497gz1295/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Japanese Songbook"
+        },
+        {
+          "@id": "http://files.universalviewer.io/manifests/stanford/hc941fm6529.json",
+          "@type": "sc:Manifest",
+          "label": "Vertebra"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Sentences Commentary Text Archive",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://scta.info/iiif/pp-sorb/manifest",
+          "@type": "sc:Manifest",
+          "label": "Witness to Peter Plaoul's Commentary on the Sentences"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "LUNA Imaging",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://luna.folger.edu/luna/servlet/iiif/m/FOLGERCM1~6~6~899189~195467/manifest",
+          "@type": "sc:Manifest",
+          "label": "The tragedy of Hamlet Prince of Denmarke"
+        },
+        {
+          "@id": "http://www.davidrumsey.com/luna/servlet/iiif/m/RUMSEY~8~1~291663~90063187/manifest",
+          "@type": "sc:Manifest",
+          "label": "Silicon Valley"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Villanova University",
+      "manifests": [
+        {
+          "label": "The Bride of the Tomb; and, Queenie's Terrible Secret",
+          "@type": "sc:Manifest",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:24299/Manifest"
+        },
+        {
+          "label": "Collections",
+          "@type": "sc:Collection",
+          "@id": "https://digital.library.villanova.edu/Collection/vudl:3/IIIF"
+        },
+        {
+          "label": "Villanova University Digital Library (collection)",
+          "@type": "sc:Collection",
+          "@id": "https://digital.library.villanova.edu/Collection/vudl:3/IIIF"
+        },
+        {
+          "label": "The Holy Bible",
+          "@type": "sc:Collection",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:60609/Manifest"
+        },
+        {
+          "label": "Letter, To: Ellie From: A. M. Thackara (download options)",
+          "@type": "sc:Manifest",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:30471/Manifest"
+        },
+        {
+          "label": "LeBlanc Bibliography, Binder 1 (multi-page pdf)",
+          "@type": "sc:Manifest",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:294631/Manifest",
+          "visible": true
+        },
+        {
+          "label": "Augustine PDF",
+          "@type": "sc:Manifest",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:100576/Manifest",
+          "visible": false
+        },
+        {
+          "label": "LeBlanc Interview, Cassette 1",
+          "@type": "sc:Manifest",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:283833/Manifest",
+          "visible": false
+        },
+        {
+          "label": "Steam Men Bibliography",
+          "@type": "sc:Manifest",
+          "@id": "http://digital.library.villanova.edu/Item/vudl:291994/Manifest",
+          "visible": false
+        },
+        {
+          "label": "Saint Augustines confessions translated [1650] (image only)",
+          "@type": "sc:Manifest",
+          "@id": "http://digital.library.villanova.edu/Item/vudl:98253/Manifest",
+          "visible": false
+        },
+        {
+          "label": "The 104th Psalm (with panorama)",
+          "@type": "sc:Manifest",
+          "@id": "http://digital.library.villanova.edu/Item/vudl:58970/Manifest",
+          "visible": false
+        },
+        {
+          "label": "Letter fragment (2 page item)",
+          "@type": "sc:Manifest",
+          "@id": "http://digital.library.villanova.edu/Item/vudl:364476/Manifest",
+          "visible": false
+        },
+        {
+          "label": "Typescript Letter (with weird aspect ratios in contents)",
+          "@type": "sc:Manifest",
+          "@id": "http://digital.library.villanova.edu/Item/vudl:347767/Manifest",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "National Gallery of Art (US)",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "http://media.nga.gov/public/manifests/nga_highlights.json",
+          "@type": "sc:Manifest",
+          "label": "NGA Highlights"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "World Digital Library",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://www.wdl.org/en/item/14291/iiif/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Treatise on Cats"
+        },
+        {
+          "@id": "http://www.wdl.org/en/item/80/iiif/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Description of Egypt. Second Edition."
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Riks Arkivet",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "https://iiif.riksarkivet.se/arkis!C0000263/manifest",
+          "@type": "sc:Manifest",
+          "label": "Ervalla kyrkoarkiv (canvas metadata)"
+        },
+        {
+          "@id": "https://iiif.riksarkivet.se/arkis!R0000004/manifest",
+          "@type": "sc:Manifest",
+          "label": "Originaltraktater med främmande makter"
+        },
+        {
+          "@id": "https://iiif.riksarkivet.se/sdhk!456/manifest",
+          "@type": "sc:Manifest",
+          "label": "SDHK nr 456, datering 1229-01-23"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Qatar Digital Library",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://www.qdl.qa/en/iiif/81055/vdc_100000001524.0x000395/manifest",
+          "@type": "sc:Manifest",
+          "label": "Correspondence and other Papers concerning the Duke of Argyll's Attack on Lewis Pelly in the House of Lords"
+        },
+        {
+          "@id": "http://www.qdl.qa/العربية/iiif/81055/vdc_100000004987.0x000001/manifest",
+          "@type": "sc:Manifest",
+          "label": "كتاب بطلميوس في التعليم المعروف بالمجسطي، نقل إسحق بن حنين بطلميوس"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Ghent University Library",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://shared.ugent.be/IIIF/collections/rug01-002212499",
+          "@type": "sc:Collection",
+          "label": "Nalatenschap Raoul De Keyser"
+        },
+        {
+          "@id": "http://shared.ugent.be/IIIF/collections/jan-frans-willems",
+          "@type": "sc:Collection",
+          "label": "Jan Frans Willems"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Yale",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://manifests.ydc2.yale.edu/manifest/Scroll",
+          "@type": "sc:Manifest",
+          "label": "Scroll"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "3D",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/flight-helmet/index.json",
+          "@type": "sc:Manifest",
+          "label": "Flight Helmet (gltf)",
+          "visible": true
+        },
+        {
+          "@id": "https://bl-3d.netlify.app/collection/jane-austen-writing-desk/index.json",
+          "@type": "sc:Manifest",
+          "label": "Jane Austen Desk",
+          "visible": true
+        },
+        {
+          "@id": "https://aleph-fixtures.netlify.app/collection/gltf/frog-draco/index.json",
+          "@type": "sc:Manifest",
+          "label": "Frog (draco)",
+          "visible": true
+        },
+        {
+          "@id": "https://aleph-fixtures.netlify.app/collection/dicom/platypus/platypus/index.json",
+          "@type": "sc:Manifest",
+          "label": "Platypus (dicom)",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Level 0",
+      "visible": false,
+      "manifests": [
+        {
+          "@id": "http://files.universalviewer.io/manifests/demo/tetons.json",
+          "@type": "sc:Manifest",
+          "label": "Tetons",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Tests",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://edsilv.github.io/code-of-ethics-zine/collection/index.json",
+          "@type": "sc:Manifest",
+          "label": "Zine Code of Ethics",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/biiif-workshop/collection/index.json",
+          "@type": "sc:Manifest",
+          "label": "Cats",
+          "visible": false
+        },
+        {
+          "@id": "http://tomcrane.github.io/scratch/manifests/top-to-bottom.json",
+          "@type": "sc:Manifest",
+          "label": "Top to Bottom",
+          "visible": true
+        },
+        {
+          "@id": "http://tomcrane.github.io/scratch/manifests/bottom-to-top.json",
+          "@type": "sc:Manifest",
+          "label": "Bottom to Top",
+          "visible": true
+        },
+        {
+          "@id": "https://sessionpapers.is.ed.ac.uk/whiiif/resources/manifests/ADV-CampbellsColl_Vol_99-paged",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (start)",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/non-paged.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (middle)",
+          "visible": true
+        },
+        {
+          "@id": "https://heaney0.ugent.be/custom_manifests/B_OB_MS685.json",
+          "@type": "sc:Manifest",
+          "label": "Non-paged (end)",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/top-level-ranges.json",
+          "@type": "sc:Manifest",
+          "label": "Multiple Top Ranges",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/top-level-ranges.json",
+          "@type": "sc:Manifest",
+          "label": "Multiple Top Ranges (small)",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-enabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Enabled",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/download-service-disabled.json",
+          "@type": "sc:Manifest",
+          "label": "Download Service Disabled",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/print.json",
+          "@type": "sc:Manifest",
+          "label": "Print Service",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/share-service.json",
+          "@type": "sc:Manifest",
+          "label": "Share Service",
+          "visible": false
+        },
+        {
+          "@id": "http://tomcrane.github.io/scratch/manifests/vdc_100000004987.0x000001.json",
+          "@type": "sc:Manifest",
+          "label": "Metadata with rtl",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/no-autocomplete.json",
+          "@type": "sc:Manifest",
+          "label": "No Autocomplete",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/members.json",
+          "@type": "sc:Manifest",
+          "label": "Members",
+          "visible": false
+        },
+        {
+          "@id": "http://tomcrane.github.io/scratch/manifests/vdc_100000004987.0x000001.json",
+          "@type": "sc:Manifest",
+          "label": "Mixed RTL",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/all-metadata.json",
+          "@type": "sc:Manifest",
+          "label": "All Metadata",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/defaultextension.json",
+          "@type": "sc:Manifest",
+          "label": "Default Extension",
+          "visible": true
+        },
+        {
+          "@id": "https://d.lib.ncsu.edu/collections/catalog/nubian-message-2003-04-01/manifest?v3=true",
+          "@type": "sc:Manifest",
+          "label": "Presentation 3 Image",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/pres3-pdf.json",
+          "@type": "sc:Manifest",
+          "label": "Presentation 3 PDF",
+          "visible": false
+        },
+        {
+          "@id": "https://purl.stanford.edu/bh502xm3351/iiif3/manifest",
+          "@type": "sc:Manifest",
+          "label": "Presentation 3 PDF (Large)",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/pres3-video.json",
+          "@type": "sc:Manifest",
+          "label": "Presentation 3 Video",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/10_babel",
+          "@type": "sc:Manifest",
+          "label": "Max Width",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/01_standard-login",
+          "@type": "sc:Manifest",
+          "label": "Standard Login",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/11_kitty_joyner",
+          "@type": "sc:Manifest",
+          "label": "Degraded: Kitty Joyner",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/02_degraded",
+          "@type": "sc:Manifest",
+          "label": "Degraded: Gauguin",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/auth1-standard.json",
+          "@type": "sc:Manifest",
+          "label": "Multiple Auth1 Standard",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/auth1-degraded.json",
+          "@type": "sc:Manifest",
+          "label": "Multiple Auth1 Degraded",
+          "visible": false
+        },
+        {
+          "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "No image service",
+          "visible": false
+        },
+        {
+          "@id": "https://loc.gov/item/03032405/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "No image service 2",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/longlicense.json",
+          "@type": "sc:Manifest",
+          "label": "Long license",
+          "visible": false
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/range-renderings.json",
+          "@type": "sc:Manifest",
+          "label": "Range Renderings",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "AV",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://edsilv.github.io/biiif-test-manifests/sound-manifest/index.json",
+          "@type": "sc:Manifest",
+          "label": "Somali Love Song (mp3)",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-video-nav-demo.netlify.app/iiif-manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Story Session 1 - Dad & Mom - Learning to Ski & A Night in Kentucky",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio.json",
+          "@type": "sc:Manifest",
+          "label": "Gapless audio playback",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/02_gapless_video.json",
+          "@type": "sc:Manifest",
+          "label": "Gapless audio playback",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/03_synchronised_video.json",
+          "@type": "sc:Manifest",
+          "label": "Synchronised video example",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av.json",
+          "@type": "sc:Manifest",
+          "label": "Synchronised video example",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text.json",
+          "@type": "sc:Manifest",
+          "label": "Video synchronised with gapless audio, text",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/fire.json",
+          "@type": "sc:Manifest",
+          "label": "Fire",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/mahler-symphony.json",
+          "@type": "sc:Manifest",
+          "label": "Symphony no. 3 - Mahler, Gustav, 1860-1911",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/lunchroom-manners.json",
+          "@type": "sc:Manifest",
+          "label": "Lunchroom manners",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02.json",
+          "@type": "sc:Manifest",
+          "label": "Temporal Fragment of a Canvas",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16.json",
+          "@type": "sc:Manifest",
+          "label": "One video file, segments of file associated with different canvases",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8.json",
+          "@type": "sc:Manifest",
+          "label": "C308_8 Brian Hayes programme",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241.json",
+          "@type": "sc:Manifest",
+          "label": "C728_241 [Demo]",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1132_116.json",
+          "@type": "sc:Manifest",
+          "label": "C1132_116 Cliff Richard interview (Heathcliff)",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003.json",
+          "@type": "sc:Manifest",
+          "label": "WS0003 Aburria aburri r1",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+          "@type": "sc:Manifest",
+          "label": "Loose ends",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_dash.json",
+          "@type": "sc:Manifest",
+          "label": "Dash",
+          "visible": false
+        },
+        {
+          "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_hls.json",
+          "@type": "sc:Manifest",
+          "label": "HLS",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/20_av_big_buck_bunny",
+          "@type": "sc:Manifest",
+          "label": "Not a service - basic AV test with no auth",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/21_av_lego",
+          "@type": "sc:Manifest",
+          "label": "Not a service - AV test with no explicit probe",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/22_av_stars",
+          "@type": "sc:Manifest",
+          "label": "Not a service - AV test with separate probe",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/23_32vs192kbps",
+          "@type": "sc:Manifest",
+          "label": "Degraded flow test for AV - Audio",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/26_bbb",
+          "@type": "sc:Manifest",
+          "label": "Degraded flow test for AV - Video",
+          "visible": false
+        },
+        {
+          "@id": "https://iiifauth.digtest.co.uk/manifest/31_adaptive_audio",
+          "@type": "sc:Manifest",
+          "label": "Adaptive audio auth",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "SlideAtlas",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://slideatlas-test-manifests.netlify.app/collection/girder/index.json",
+          "@type": "sc:Manifest",
+          "label": "fish",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "ebooks",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://ebook-test-manifests.netlify.app/collection/alice-in-wonderland/index.json",
+          "@type": "sc:Manifest",
+          "label": "Alice in Wonderland",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "biiif-template",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json",
+          "@type": "sc:Manifest",
+          "label": "Astronaut (3D)",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/video/index.json",
+          "@type": "sc:Manifest",
+          "label": "Big Buck Bunny (Video)",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/audio/index.json",
+          "@type": "sc:Manifest",
+          "label": "One Small Step for Man (Audio)",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/pdf/index.json",
+          "@type": "sc:Manifest",
+          "label": "Science and the Public (PDF)",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/images/index.json",
+          "@type": "sc:Manifest",
+          "label": "Vincent (IIIF Image)",
+          "visible": true
+        },
+        {
+          "@id": "https://biiif-template-zine.vercel.app/index.json",
+          "@type": "sc:Manifest",
+          "label": "Zine (IIIF Images)",
+          "visible": true
+        }
+      ]
+    }
+  ]
+}

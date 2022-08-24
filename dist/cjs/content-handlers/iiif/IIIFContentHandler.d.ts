@@ -1,0 +1,35 @@
+import { IExtension } from "./modules/uv-shared-module/IExtension";
+import { IIIFExtensionHost } from "./IIIFExtensionHost";
+import { IUVData } from "@/IUVData";
+import { EventHandlerWithName } from "./PubSub";
+import "../../uv.css";
+import "./themes/theme.less";
+import { IContentHandler } from "@/IContentHandler";
+import { IUVOptions } from "@/UniversalViewer";
+import { IIIFData } from "./IIIFData";
+import BaseContentHandler, { EventListener } from "../../BaseContentHandler";
+import { UVAdapter } from "@/UVAdapter";
+export default class IIIFContentHandler extends BaseContentHandler<IIIFData> implements IIIFExtensionHost, IContentHandler<IIIFData> {
+    options: IUVOptions;
+    adapter?: UVAdapter | undefined;
+    private _extensionRegistry;
+    private _pubsub;
+    extension: IExtension | null;
+    isFullScreen: boolean;
+    disposed: boolean;
+    private extra;
+    constructor(options: IUVOptions, adapter?: UVAdapter | undefined, eventListeners?: EventListener[]);
+    protected _init(): boolean;
+    private _getExtensionByType;
+    private _getExtensionByFormat;
+    set(data: IUVData, initial?: boolean): void;
+    publish(event: string, args?: any, extra?: any): void;
+    subscribe(event: string, handler: any): () => void;
+    subscribeAll(handler: EventHandlerWithName): () => void;
+    dispose(): void;
+    private _reload;
+    private _error;
+    private _createExtension;
+    exitFullScreen(): void;
+    resize(): void;
+}

@@ -1,0 +1,196 @@
+@import 'icons';
+
+.uv {
+
+    .headerPanel {
+
+        color: @text-secondary-color;
+
+        button.btn.imageBtn {
+            padding-left: 2px;
+            padding-right: 2px;
+
+            &.first,
+            &.prev,
+            &.next,
+            &.last {
+                i {
+                    background-color: @gray;
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
+                }
+            }
+
+            &.disabled,
+            &.disabled:hover,
+            &.disabled i,
+            &.disabled i:hover {
+                background-color: transparent;
+            }
+        }
+
+        .centerOptions {
+
+            .image-selectionbox-options {
+                float: left;
+                margin: 0 0 0 0;
+            }
+
+            .image-selectionbox {
+                height: 30px;
+            }
+
+            .prevOptions {
+                float: left;
+                margin: 0 15px 0 0;
+            }
+
+            .mode {
+                float: left;
+                margin: 12px 0 0 0;
+            }
+
+            .search {
+                float: left;
+                margin: 6px 0 0 5px;
+                width: 113px;
+
+                .searchText {
+                    border: none;
+                    padding: 0 0 0 2px;
+                }
+            }
+
+            .nextOptions {
+                float: left;
+                margin: 0 0 0 15px;
+            }
+
+            .mode {
+
+                input {
+                    float: left;
+                }
+
+                label {
+                    clear: none;
+                    width: 30px;
+                    margin: 0 0 0 0;
+                    padding: 0;
+                    float: left;
+                    font-size: @font-size-small;
+                    line-height: 18px;
+                    text-align: right;
+
+                    &.disabled {
+                        color: @disabled;
+                    }
+                }
+            }
+
+            &.modeOptionsDisabled {
+                width: 280px;
+            }
+
+            .autocompleteText {
+                width: 30px;
+                height: 19px;
+                line-height: 19px;
+                float: left;
+                font-size: @font-size-small;
+                padding: 0;
+                margin-top: 6px;
+                color: black;
+            }
+
+            .autocomplete {
+                position: absolute;
+                background: #fff;
+                width: 60px;
+                border: 2px solid @brand-primary-lighter;
+                list-style-type: none;
+                -webkit-margin-before: 0px;
+                -webkit-margin-after: 0px;
+                -webkit-margin-start: 0px;
+                -webkit-margin-end: 0px;
+                -webkit-padding-start: 0px;
+                margin: 0;
+                padding: 0;
+                max-height: 150px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                z-index: 1000;
+
+                .result {
+                    padding: 4px;
+                    width: 270px;
+                    overflow: hidden;
+
+                    &.loading {
+                        background-image: data-uri(@loader-white-bg);
+                        background-repeat: no-repeat;
+                        background-position: 4px 4px;
+                        height: 25px;
+                    }
+
+                    &.selected {
+                        background: @gray-lighter;
+                    }
+                }
+            }
+        }
+
+        .rightOptions {
+            .pagingToggleButtons {
+                float: left;
+                .one-up {
+                    .opacity(1);
+                    &.on {
+                        .opacity(.75);
+                    }
+                }
+                .two-up {
+                    .opacity(1);
+                    &.on {
+                        .opacity(.75);
+                    }
+                }
+            }
+            .gallery {
+                .opacity(1);
+                &.on {
+                    .opacity(.75);
+                }
+            }
+            .localeToggle {
+                .link-color-decoration(#fff, none);
+                font-size: @font-size-large;
+                float: left;
+                margin: 4px 8px 4px 8px;
+                cursor: pointer;
+            }
+        }
+
+        .searchText {
+            width: 30px;
+            height: 19px;
+            line-height: 19px;
+            float: left;
+            font-size: @font-size-small;
+            padding: 0;
+            margin-top: 6px;
+        }
+
+        .total {
+            float: left;
+            display: block;
+            height: 18px;
+            line-height: 18px;
+            margin: 6px 5px 0 5px;
+            width: 41px;
+            font-size: @font-size-small;
+            overflow: hidden;
+        }
+    }
+}

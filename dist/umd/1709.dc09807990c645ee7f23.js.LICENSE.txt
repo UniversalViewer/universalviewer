@@ -1,0 +1,9 @@
+/*!
+Element.closest and Element.matches
+https://github.com/jonathantneal/closest
+Creative Commons Zero v1.0 Universal
+*/
+
+/*!
+Element.getRootNode()
+*/

@@ -1,0 +1,163 @@
+.uv {
+    .centerPanel {
+
+        .title {
+            font-size: @headings-size-xlarge;
+            color: @text-color;
+            font-weight: normal;
+            margin: 5px 0 10px 0;
+            padding: 0 20px 0 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 30px;
+
+            .xl-mediaquery({
+                padding: 0 20px 0 20px;
+            });
+        }
+
+        .subtitle {
+            font-size: @headings-size-small;
+            color: @text-color;
+            line-height: 30px;
+            height: 30px;
+            scrollbar-width: none;
+
+            &.hide {
+                display: none;
+            }
+
+            .wrapper {
+
+                z-index: 3;
+                background: rgba(0, 0, 0, 0.7);
+                scrollbar-width: none;
+
+                .expand-btn {
+                    width: 20px;
+                    height: 30px;
+                    float: left;
+                    background: #000;
+                    border: none;
+                    color: #fff;
+                    padding: 0;
+                }
+
+                .text {
+                    display: block;
+                    float: left;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    margin: 0 10px 0 20px;
+                    scrollbar-width: none;
+
+                    &.elided {
+                        margin: 0 10px 0 0;
+                    }
+                }
+
+                &.expanded {
+                    position: absolute;
+                    overflow-y: scroll;
+                    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+                    .text {
+                        white-space: normal;
+                        text-overflow: inherit;
+                        overflow: scroll;
+                        margin: -30px 10px 0 20px;
+                    }
+                }
+
+            }
+        }
+
+        .content {
+
+            .attribution {
+
+                background: @gray-dark; // ie8
+                background: fadeout(@gray-dark, 30%);
+                backdrop-filter: blur(5px);
+                position: absolute;
+                width: 220px;
+                margin: @margin-medium-horizontal @margin-small-horizontal @margin-xlarge-vertical @margin-large-horizontal;
+                font-size: @font-size-small;
+                .header {
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+                    display: flex;
+                    overflow: hidden;
+                    min-height: 38px;
+                    align-items: center;
+
+                    .title {
+                        flex: 1 1 0px;
+                        font-size: @font-size-small;
+                        font-weight: bold;
+                        line-height: 18px;
+                        float: left;
+                        padding: @padding-medium;
+                        margin: 0;
+                        text-transform: uppercase;
+                    }
+
+                    .close {
+                      background: 0 0;
+                      border: 0;
+                      color: @text-color;
+                      font-size: 1.2rem;
+                      font-weight: 700;
+                      opacity: 0.5;
+                      padding: 4px  12px 6px 12px;
+                      line-height: 1;
+                      text-shadow: 0 1px 0 #fff;
+                      &:hover, &:focus {
+                        opacity: .75;
+                      }
+                      &:focus {
+                        .tab-focus(@text-color);
+                      }
+                    }
+                }
+
+                .main {
+
+                    margin-top: @margin-small-vertical;
+                    padding: @padding-medium;
+
+                    img {
+                        margin-top: @margin-small-vertical;
+                        margin-bottom: @margin-small-vertical;
+                        max-width: 100px;
+                    }
+
+                    a:not(.toggle) {
+                        color: @link-color;
+                        &:link {
+                            color: @link-color;
+                        }
+                        &:hover {
+                            color: @link-color;
+                        }
+                        &:visited {
+                            color: @link-color;
+                        }
+                        &:active {
+                            color: @link-color;
+                        }
+                    }
+
+                    .attribution-text {
+                        overflow: hidden;
+                        // Prevents Manifests trying to push around content in the attribution.
+                        br ~ br {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

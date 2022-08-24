@@ -1,5 +1,5 @@
 buildcache
-dist
+# dist
 
 #################
 ## TypeScript
@@ -38,7 +38,7 @@ node_modules
 ## JavaScript
 #################
 
-*.js
+# *.js
 *.js.map
 *.min.map
 /config.js
