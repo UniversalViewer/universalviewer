@@ -31,7 +31,7 @@ export class HeaderPanel extends BaseView {
     this.extensionHost.subscribe(
       IIIFEvents.SHOW_INFORMATION,
       (args: InformationArgs) => {
-        this.showInformation(args);
+        this.showInformation(Array.isArray(args) ? args[0] : args);
       }
     );
 
@@ -146,6 +146,8 @@ export class HeaderPanel extends BaseView {
       this.extension
     );
     this.information = informationFactory.Get(args);
+    if (!this.information) return;
+
     var $message = this.$informationBox.find(".message");
     $message
       .html(this.information.message)

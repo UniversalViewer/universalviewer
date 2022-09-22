@@ -27,7 +27,7 @@ export class InformationFactory {
         let label: string | null = args.param.loginService.getConfirmLabel();
 
         if (!label) {
-          label = this.extension.data.config.content.fallbackDegradedLabel;
+          label = this.extension.data.config.content.fallbackDegradedLabel || 'login';
         }
 
         loginAction.label = label;
