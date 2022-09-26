@@ -81,6 +81,9 @@
     "webpack-cli": "4.9.1",
     "webpack-dev-server": "4.3.1"
   },
+  "overrides": {
+    "@iiif/manifold": "https://pkg.csb.dev/IIIF-Commons/manifold/commit/a35d95e5/@iiif/manifold"
+  },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
     "@edsilv/key-codes": "1.0.0",
