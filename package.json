@@ -94,7 +94,7 @@
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
-    "@iiif/manifold": "https://pkg.csb.dev/IIIF-Commons/manifold/commit/a35d95e5/@iiif/manifold",
+    "@iiif/manifold": "https://pkg.csb.dev/IIIF-Commons/manifold/commit/34accb05/@iiif/manifold",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
