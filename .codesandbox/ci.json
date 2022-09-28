@@ -6,5 +6,6 @@
     "uv-config-example-7kh4s",
     "uv-nextjs-example-uh9zi"
   ],
+  "buildCommand": "prepublishOnly",
   "node": "14"
 }
