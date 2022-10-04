@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import { Files, Maths, Strings } from "@edsilv/utils";
 import {
@@ -314,17 +314,17 @@ const DownloadDialogue = ({
     } else {
       label = hasNormalDimensions
         ? Strings.format(
-            content.wholeImageHighRes,
-            size.width.toString(),
-            size.height.toString(),
-            mime
-          )
+          content.wholeImageHighRes,
+          size.width.toString(),
+          size.height.toString(),
+          mime
+        )
         : Strings.format(
-            content.wholeImageHighRes,
-            size.height.toString(),
-            size.width.toString(),
-            mime
-          );
+          content.wholeImageHighRes,
+          size.height.toString(),
+          size.width.toString(),
+          mime
+        );
     }
 
     return label;
@@ -339,15 +339,15 @@ const DownloadDialogue = ({
     if (size) {
       label = hasNormalDimensions
         ? Strings.format(
-            content.wholeImageLowResAsJpg,
-            size.width.toString(),
-            size.height.toString()
-          )
+          content.wholeImageLowResAsJpg,
+          size.width.toString(),
+          size.height.toString()
+        )
         : Strings.format(
-            content.wholeImageLowResAsJpg,
-            size.height.toString(),
-            size.width.toString()
-          );
+          content.wholeImageLowResAsJpg,
+          size.height.toString(),
+          size.width.toString()
+        );
     }
 
     return label;
@@ -363,15 +363,15 @@ const DownloadDialogue = ({
     if (dimensions) {
       label = hasNormalDimensions
         ? Strings.format(
-            label,
-            dimensions.size.width.toString(),
-            dimensions.size.height.toString()
-          )
+          label,
+          dimensions.size.width.toString(),
+          dimensions.size.height.toString()
+        )
         : Strings.format(
-            label,
-            dimensions.size.height.toString(),
-            dimensions.size.width.toString()
-          );
+          label,
+          dimensions.size.height.toString(),
+          dimensions.size.width.toString()
+        );
     }
 
     return label;
@@ -592,8 +592,8 @@ const DownloadDialogue = ({
           </ol>
           {(hasManifestRenderings() ||
             isDownloadOptionAvailable(DownloadOption.SELECTION)) && (
-            <h2>{content.allPages}</h2>
-          )}
+              <h2>{content.allPages}</h2>
+            )}
           <ol className="options">
             {isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && (
               <ManifestRenderings />

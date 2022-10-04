@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
