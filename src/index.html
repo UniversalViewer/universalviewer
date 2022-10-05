@@ -393,6 +393,7 @@
 
       $setIIIFManifestIdButton.onclick = function () {
         iiifManifestId = $iiifManifestId.value;
+        urlAdapter.set("iiifManifestId", iiifManifestId);
         clearAnnotations();
         uv.set({
           iiifManifestId: iiifManifestId,
