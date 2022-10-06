@@ -11,7 +11,7 @@ enum ContentType {
   IIIFLEGACY = "manifest",
   IIIF = "iiifManifestId",
   YOUTUBE = "youTubeVideoId",
-  UNKNOWN = "unknown",
+  UNKNOWN = "unknown"
 }
 
 interface IContentHandlerRegistry {
@@ -26,7 +26,7 @@ const ContentHandler: IContentHandlerRegistry = {
   [ContentType.YOUTUBE]: () =>
     /* webpackMode: "lazy" */ import(
       "./content-handlers/youtube/YouTubeContentHandler"
-    ),
+    )
 };
 
 export class UniversalViewer extends BaseContentHandler<IUVData> {
@@ -43,7 +43,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
     this._externalEventListeners.push({
       name,
       cb,
-      ctx,
+      ctx
     });
   }
 
@@ -77,7 +77,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
       this._assignedContentHandler = new m.default(
         {
           target: this._el,
-          data: data,
+          data: data
         },
         this.adapter,
         this._externalEventListeners
