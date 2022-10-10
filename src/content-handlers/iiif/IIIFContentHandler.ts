@@ -36,64 +36,64 @@ const Extension: IExtensionRegistry = {
     name: "uv-av-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-av-extension/Extension"
-      ),
+      "./extensions/uv-av-extension/Extension"
+    ),
   },
   ALEPH: {
     name: "uv-aleph-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-aleph-extension/Extension"
-      ),
+      "./extensions/uv-aleph-extension/Extension"
+    ),
   },
   DEFAULT: {
     name: "uv-default-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-default-extension/Extension"
-      ),
+      "./extensions/uv-default-extension/Extension"
+    ),
   },
   EBOOK: {
     name: "uv-ebook-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-ebook-extension/Extension"
-      ),
+      "./extensions/uv-ebook-extension/Extension"
+    ),
   },
   MEDIAELEMENT: {
     name: "uv-mediaelement-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-mediaelement-extension/Extension"
-      ),
+      "./extensions/uv-mediaelement-extension/Extension"
+    ),
   },
   MODELVIEWER: {
     name: "uv-model-viewer-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-model-viewer-extension/Extension"
-      ),
+      "./extensions/uv-model-viewer-extension/Extension"
+    ),
   },
   OSD: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      "./extensions/uv-openseadragon-extension/Extension"
+    ),
   },
   PDF: {
     name: "uv-pdf-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-pdf-extension/Extension"
-      ),
+      "./extensions/uv-pdf-extension/Extension"
+    ),
   },
   SLIDEATLAS: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      "./extensions/uv-openseadragon-extension/Extension"
+    ),
   },
 };
 
@@ -285,107 +285,114 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
     const that = this;
 
-    const helper: Helper = await loadManifest({
-      manifestUri: data.iiifManifestId,
-      collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
-      manifestIndex: data.manifestIndex || 0,
-      canvasId: data.canvasId,
-      canvasIndex: data.canvasIndex || 0,
-      rangeId: data.rangeId,
-      locale: data.locales ? data.locales[0].name : undefined,
-    } as IManifoldOptions);
+    let helper: Helper;
 
-    let trackingLabel: string | null = helper.getTrackingLabel();
+    try {
+      helper = await loadManifest({
+        manifestUri: data.iiifManifestId,
+        collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
+        manifestIndex: data.manifestIndex || 0,
+        canvasId: data.canvasId,
+        canvasIndex: data.canvasIndex || 0,
+        rangeId: data.rangeId,
+        locale: data.locales ? data.locales[0].name : undefined,
+      } as IManifoldOptions);
 
-    if (trackingLabel) {
-      trackingLabel +=
-        ", URI: " + (window.location !== window.parent.location)
-          ? document.referrer
-          : document.location;
-      window.trackingLabel = trackingLabel;
-    }
+      let trackingLabel: string | null = helper.getTrackingLabel();
 
-    let canvas: Canvas | undefined;
+      if (trackingLabel) {
+        trackingLabel +=
+          ", URI: " + (window.location !== window.parent.location)
+            ? document.referrer
+            : document.location;
+        window.trackingLabel = trackingLabel;
+      }
 
-    canvas = helper.getCurrentCanvas();
+      let canvas: Canvas | undefined;
 
-    if (!canvas) {
-      that._error(`Canvas ${data.canvasIndex} not found.`);
-      return;
-    }
+      canvas = helper.getCurrentCanvas();
 
-    let extension: IExtension | undefined;
+      if (!canvas) {
+        that._error(`Canvas ${data.canvasIndex} not found.`);
+        return;
+      }
 
-    const content: Annotation[] = canvas.getContent();
-    let format: string | undefined;
+      let extension: IExtension | undefined;
 
-    if (content.length) {
-      const annotation: Annotation = content[0];
-      const body: AnnotationBody[] = annotation.getBody();
+      const content: Annotation[] = canvas.getContent();
+      let format: string | undefined;
 
-      if (body && body.length) {
-        format = body[0].getFormat() as string;
+      if (content.length) {
+        const annotation: Annotation = content[0];
+        const body: AnnotationBody[] = annotation.getBody();
 
-        if (format) {
-          extension = await that._getExtensionByFormat(format);
+        if (body && body.length) {
+          format = body[0].getFormat() as string;
 
-          if (!extension) {
-            // try type
+          if (format) {
+            extension = await that._getExtensionByFormat(format);
+
+            if (!extension) {
+              // try type
+              const type: ExternalResourceType | null = body[0].getType();
+
+              if (type) {
+                extension = await that._getExtensionByFormat(type);
+              }
+            }
+          } else {
             const type: ExternalResourceType | null = body[0].getType();
 
             if (type) {
               extension = await that._getExtensionByFormat(type);
             }
           }
-        } else {
-          const type: ExternalResourceType | null = body[0].getType();
+        }
+      } else {
+        const canvasType: ExternalResourceType | null = canvas.getType();
 
-          if (type) {
-            extension = await that._getExtensionByFormat(type);
-          }
+        if (canvasType) {
+          // try using canvasType
+          extension = await that._getExtensionByFormat(canvasType);
+        }
+
+        // if there isn't an extension for the canvasType, try the format
+        if (!extension) {
+          const format: any = canvas.getProperty("format");
+          extension = await that._getExtensionByFormat(format);
         }
       }
-    } else {
-      const canvasType: ExternalResourceType | null = canvas.getType();
 
-      if (canvasType) {
-        // try using canvasType
-        extension = await that._getExtensionByFormat(canvasType);
+      // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
+      const hasRanges: boolean = helper.getRanges().length > 0;
+
+      if (extension!.type === Extension.AV && !hasRanges) {
+        extension = await that._getExtensionByType(
+          Extension.MEDIAELEMENT,
+          format
+        );
       }
 
-      // if there isn't an extension for the canvasType, try the format
+      // if there still isn't a matching extension, use the default extension.
       if (!extension) {
-        const format: any = canvas.getProperty("format");
-        extension = await that._getExtensionByFormat(format);
+        extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
       }
+
+      if (!data.locales) {
+        data.locales = [];
+        data.locales.push(defaultLocale);
+      }
+
+      // import the config file
+      let config = await (extension as any).loadConfig(data.locales[0].name);
+
+      data.config = await that.configure(config);
+
+      that._createExtension(extension, data, helper);
+    } catch (e) {
+      this.hideSpinner();
+      alert("Unable to load manifest");
     }
-
-    // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
-    const hasRanges: boolean = helper.getRanges().length > 0;
-
-    if (extension!.type === Extension.AV && !hasRanges) {
-      extension = await that._getExtensionByType(
-        Extension.MEDIAELEMENT,
-        format
-      );
-    }
-
-    // if there still isn't a matching extension, use the default extension.
-    if (!extension) {
-      extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
-    }
-
-    if (!data.locales) {
-      data.locales = [];
-      data.locales.push(defaultLocale);
-    }
-
-    // import the config file
-    let config = await (extension as any).loadConfig(data.locales[0].name);
-
-    data.config = await that.configure(config);
-
-    that._createExtension(extension, data, helper);
   }
 
   private _error(message: string): void {
