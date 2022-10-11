@@ -259,10 +259,10 @@ export class ContentLeftPanel extends LeftPanel {
         const range: Range = topRanges[i];
         this.$treeSelect.append(
           '<option value="' +
-            range.id +
-            '">' +
-            LanguageMap.getValue(range.getLabel()) +
-            "</option>"
+          range.id +
+          '">' +
+          LanguageMap.getValue(range.getLabel()) +
+          "</option>"
         );
       }
     }
@@ -490,7 +490,7 @@ export class ContentLeftPanel extends LeftPanel {
       }
     }
 
-    const paged = !!this.extension.getSettings().pagingEnabled;
+    const paged: boolean = (!!this.extension.getSettings().pagingEnabled && this.extension.helper.isPaged());
 
     const selectedIndices: number[] = this.extension.getPagedIndices(
       this.extension.helper.canvasIndex
@@ -554,7 +554,7 @@ export class ContentLeftPanel extends LeftPanel {
       return (
         Bools.getBool(this.config.options.pageModeEnabled, true) &&
         (<OpenSeadragonExtension>this.extension).getMode().toString() ===
-          Mode.page.toString()
+        Mode.page.toString()
       );
     }
     return Bools.getBool(this.config.options.pageModeEnabled, true);
@@ -840,8 +840,8 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$tabsContent.height(
       this.$main.height() -
-        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
-        this.$tabsContent.verticalPadding()
+      (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
+      this.$tabsContent.verticalPadding()
     );
     this.$views.height(
       this.$tabsContent.height() - this.$options.outerHeight()
