@@ -91,7 +91,7 @@
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
-    "@iiif/manifold": "^2.0.15",
+    "@iiif/manifold": "^2.0.17",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
