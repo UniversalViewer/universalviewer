@@ -165,6 +165,8 @@ export class HeaderPanel extends BaseView {
       $actions.append($action);
     }
 
+    this.extensionHost.publish(IIIFEvents.MESSAGE_DISPLAYED, this.information)
+
     this.$informationBox.attr("aria-hidden", "false");
     this.$informationBox.show();
     this.$element.addClass("showInformation");
