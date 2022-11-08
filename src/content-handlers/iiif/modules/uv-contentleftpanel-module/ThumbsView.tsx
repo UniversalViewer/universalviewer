@@ -78,11 +78,12 @@ const Thumbnails = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const thumb = ref.current?.querySelector(`#thumb-${selected[0]}`);
-    thumb?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "start",
+    const thumb: HTMLElement = ref.current?.querySelector(`#thumb-${selected[0]}`) as HTMLElement;
+    const y: number = thumb?.offsetTop;
+    ref.current?.parentElement!.scrollTo({
+      top: y,
+      left: 0,
+      behavior: 'smooth'
     });
   }, [selected]);
 

@@ -4,7 +4,7 @@ import { createRoot, Root } from "react-dom/client";
 import ThumbsView from "./ThumbsView";
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
-const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
+// const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { IIIFEvents } from "../../IIIFEvents";
@@ -259,10 +259,10 @@ export class ContentLeftPanel extends LeftPanel {
         const range: Range = topRanges[i];
         this.$treeSelect.append(
           '<option value="' +
-            range.id +
-            '">' +
-            LanguageMap.getValue(range.getLabel()) +
-            "</option>"
+          range.id +
+          '">' +
+          LanguageMap.getValue(range.getLabel()) +
+          "</option>"
         );
       }
     }
@@ -435,29 +435,30 @@ export class ContentLeftPanel extends LeftPanel {
   renderThumbs(): void {
     if (!this.thumbsRoot) return;
 
-    let width: number;
-    let height: number;
+    // let width: number;
+    // let height: number;
 
-    const viewingHint: ViewingHint | null = this.getViewingHint();
+    // const viewingHint: ViewingHint | null = this.getViewingHint();
     const viewingDirection: ViewingDirection | null = this.getViewingDirection();
 
-    if (
-      viewingDirection &&
-      (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT ||
-        viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)
-    ) {
-      width = this.config.options.twoColThumbWidth;
-      height = this.config.options.twoColThumbHeight;
-    } else if (viewingHint && viewingHint === ViewingHintEnum.PAGED) {
-      width = this.config.options.twoColThumbWidth;
-      height = this.config.options.twoColThumbHeight;
-    } else {
-      width = this.config.options.oneColThumbWidth;
-      height = this.config.options.oneColThumbHeight;
-    }
+    // if (
+    //   viewingDirection &&
+    //   (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT ||
+    //     viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)
+    // ) {
+    //   width = this.config.options.twoColThumbWidth;
+    //   height = this.config.options.twoColThumbHeight;
+    // } else if (viewingHint && viewingHint === ViewingHintEnum.PAGED) {
+    //   width = this.config.options.twoColThumbWidth;
+    //   height = this.config.options.twoColThumbHeight;
+    // } else {
+    //   width = this.config.options.oneColThumbWidth;
+    //   height = this.config.options.oneColThumbHeight;
+    // }
 
     const thumbs: Thumb[] = <Thumb[]>(
-      this.extension.helper.getThumbs(width, height)
+      this.extension.helper.getThumbs(90)
+      // this.extension.helper.getThumbs(width, height)
     );
 
     if (
@@ -490,7 +491,7 @@ export class ContentLeftPanel extends LeftPanel {
       }
     }
 
-    const paged = !!this.extension.getSettings().pagingEnabled;
+    const paged: boolean = (!!this.extension.getSettings().pagingEnabled && this.extension.helper.isPaged());
 
     const selectedIndices: number[] = this.extension.getPagedIndices(
       this.extension.helper.canvasIndex
@@ -554,7 +555,7 @@ export class ContentLeftPanel extends LeftPanel {
       return (
         Bools.getBool(this.config.options.pageModeEnabled, true) &&
         (<OpenSeadragonExtension>this.extension).getMode().toString() ===
-          Mode.page.toString()
+        Mode.page.toString()
       );
     }
     return Bools.getBool(this.config.options.pageModeEnabled, true);
@@ -840,8 +841,8 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$tabsContent.height(
       this.$main.height() -
-        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
-        this.$tabsContent.verticalPadding()
+      (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
+      this.$tabsContent.verticalPadding()
     );
     this.$views.height(
       this.$tabsContent.height() - this.$options.outerHeight()

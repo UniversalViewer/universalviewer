@@ -1554,12 +1554,13 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return index;
   }
 
-  // https://codesandbox.io/s/iiif-thumbnails-p7ipi7?file=/src/App.tsx
+  // https://github.com/UniversalViewer/iiif-thumbnails/blob/main/src/App.tsx#L49
   getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
     // todo: get these from the store (inc canvasIndex)
-    const sequence = this.helper.manifest!.getSequences()[0];
+    const manifest = this.helper.manifest;
+    const sequence = manifest!.getSequences()[0];
     const canvases = sequence.getCanvases();
-    const paged = !!this.getSettings().pagingEnabled;
+    const paged = (!!this.getSettings().pagingEnabled && this.helper.isPaged());
     const viewingDirection = this.helper.getViewingDirection();
 
     let indices: number[] = [];
