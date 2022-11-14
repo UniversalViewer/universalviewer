@@ -806,6 +806,18 @@
           "visible": true
         },
         {
+          "@id": "https://lbiiif.riksarkivet.se/arkis!00147269/manifest",
+          "@type": "sc:Collection",
+          "label": "Riksarkivet Image API 2 and 3",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+          "@type": "sc:Collection",
+          "label": "Image Service v3 Recipe",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/test-manifests/pres3-pdf.json",
           "@type": "sc:Manifest",
           "label": "Presentation 3 PDF",
