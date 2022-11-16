@@ -12,7 +12,7 @@ import {
     Utils
 } from "manifesto.js";
 
-export class TestExternalResource implements IExternalResource {
+export class ExternalResource implements IExternalResource {
     public authAPIVersion: number;
     public authHoldingPage: any = null;
     public clickThroughService: Service | null = null;
@@ -34,7 +34,7 @@ export class TestExternalResource implements IExternalResource {
     public width: number;
 
     constructor(canvas: Canvas, options: IExternalResourceOptions) {
-        canvas.externalResource = <TestExternalResource>this;
+        canvas.externalResource = <ExternalResource>this;
         this.dataUri = this._getDataUri(canvas);
         this.index = canvas.index;
         this.authAPIVersion = options.authApiVersion;
@@ -314,14 +314,14 @@ export class TestExternalResource implements IExternalResource {
         return false;
     }
 
-    public getData(accessToken?: IAccessToken): Promise<TestExternalResource> {
+    public getData(accessToken?: IAccessToken): Promise<ExternalResource> {
 
         console.log("getData", this.dataUri);
 
         const that = this;
         that.data = {};
 
-        return new Promise<TestExternalResource>((resolve, reject) => {
+        return new Promise<ExternalResource>((resolve, reject) => {
             if (!that.dataUri) {
                 reject("There is no dataUri to fetch");
                 return;
@@ -375,6 +375,8 @@ export class TestExternalResource implements IExternalResource {
                     } else {
                         that.status = HTTPStatusCode.OK;
                     }
+
+                    that.data = data;
 
                     resolve(that);
                 };

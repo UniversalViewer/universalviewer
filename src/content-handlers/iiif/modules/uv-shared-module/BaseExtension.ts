@@ -14,10 +14,11 @@ import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
   AnnotationGroup,
-  ExternalResource,
+  // ExternalResource,
   Helper,
   ILabelValuePair,
 } from "@iiif/manifold";
+import { ExternalResource } from "./TestExternalResource";
 import {
   Annotation,
   AnnotationBody,
@@ -31,7 +32,6 @@ import {
   Manifest,
   Range,
 } from "manifesto.js";
-// import { TestExternalResource } from "./TestExternalResource";
 import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "@edsilv/key-codes";
 import {

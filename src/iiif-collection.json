@@ -1007,6 +1007,18 @@
           "visible": true
         },
         {
+          "@id": "https://api-beta.bl.uk/metadata/iiif/ark:/81055/vdc_100061383968.0x000002/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "BL AV Root Download",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/bl-av-download-rendering-ranges.json",
+          "@type": "sc:Manifest",
+          "label": "BL AV Ranges Download",
+          "visible": true
+        },
+        {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_dash.json",
           "@type": "sc:Manifest",
           "label": "Dash",

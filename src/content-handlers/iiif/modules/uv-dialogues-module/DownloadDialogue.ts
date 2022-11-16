@@ -171,10 +171,10 @@ export class DownloadDialogue extends Dialogue {
 
     this.$downloadOptions.append(
       '<li><a href="' +
-        uri +
-        '" target="_blank" download tabindex="0">' +
-        label +
-        "</li>"
+      uri +
+      '" target="_blank" download tabindex="0">' +
+      label +
+      "</li>"
     );
   }
 
@@ -189,6 +189,7 @@ export class DownloadDialogue extends Dialogue {
     defaultLabel: string,
     type: DownloadOption
   ): IRenderingOption[] {
+
     const renderings: Rendering[] = resource.getRenderings();
 
     const downloadOptions: any[] = [];
@@ -213,16 +214,16 @@ export class DownloadDialogue extends Dialogue {
         this.renderingUrls[<any>currentId] = rendering.id;
         const $button: JQuery = $(
           '<li class="option dynamic"><input id="' +
-            currentId +
-            '" data-mime="' +
-            mime +
-            '" title="' +
-            label +
-            '" type="radio" name="downloadOptions" tabindex="0" /><label for="' +
-            currentId +
-            '">' +
-            label +
-            "</label></li>"
+          currentId +
+          '" data-mime="' +
+          mime +
+          '" title="' +
+          label +
+          '" type="radio" name="downloadOptions" tabindex="0" /><label for="' +
+          currentId +
+          '">' +
+          label +
+          "</label></li>"
         );
 
         downloadOptions.push({
@@ -241,12 +242,19 @@ export class DownloadDialogue extends Dialogue {
 
   getCurrentResourceId(): string {
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    return canvas.externalResource.data.id;
+    let id = canvas.externalResource.data.id;
+
+    // if there's no id, use contentLocation
+    if (!id) {
+      id = canvas.externalResource.data.contentLocation;
+    }
+
+    return id;
   }
 
   getCurrentResourceFormat(): string {
     const id: string = this.getCurrentResourceId();
-    return id.substr(id.lastIndexOf(".") + 1).toLowerCase();
+    return id?.substr(id.lastIndexOf(".") + 1).toLowerCase();
   }
 
   updateNoneAvailable(): void {
