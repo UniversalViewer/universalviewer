@@ -24,7 +24,9 @@
     "build-tsc": "tsc --skipLibCheck --module CommonJS --esModuleInterop --declarationDir ./dist/cjs --declaration --outDir ./dist/cjs -p . && npm run copy-files",
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
     "test": "jest",
-    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es"
+    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -46,6 +48,17 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@storybook/addon-actions": "^6.5.13",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-interactions": "^6.5.13",
+    "@storybook/addon-links": "^6.5.13",
+    "@storybook/builder-webpack4": "^6.5.13",
+    "@storybook/builder-webpack5": "^6.5.13",
+    "@storybook/manager-webpack4": "^6.5.13",
+    "@storybook/manager-webpack5": "^6.5.13",
+    "@storybook/react": "^6.5.13",
+    "@storybook/testing-library": "^0.0.13",
     "@types/jest": "22.2.2",
     "@types/jquery": "^3.5.14",
     "@types/node": "^8.10.52",
@@ -54,6 +67,7 @@
     "@types/react-dom": "^18.0.0",
     "@webpack-cli/serve": "1.6.0",
     "async": "0.9.0",
+    "babel-loader": "^8.3.0",
     "chai": "4.1.2",
     "chalk": "0.5.1",
     "copy-webpack-plugin": "^9.0.1",
@@ -116,6 +130,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^8.34.0",
+    "storybook-preset-less": "^1.1.3",
     "xss": "1.0.3",
     "zustand": "^4.0.0-rc.0"
   },
