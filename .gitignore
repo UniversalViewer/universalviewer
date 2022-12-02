@@ -59,3 +59,7 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 *.tmp.txt
+
+# Local Netlify folder
+.netlify
+storybook-static
