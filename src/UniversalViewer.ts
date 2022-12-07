@@ -21,12 +21,12 @@ interface IContentHandlerRegistry {
 const ContentHandler: IContentHandlerRegistry = {
   [ContentType.IIIF]: () =>
     /* webpackMode: "lazy" */ import(
-      "./content-handlers/iiif/IIIFContentHandler"
-    ),
+    "./content-handlers/iiif/IIIFContentHandler"
+  ),
   [ContentType.YOUTUBE]: () =>
     /* webpackMode: "lazy" */ import(
-      "./content-handlers/youtube/YouTubeContentHandler"
-    ),
+    "./content-handlers/youtube/YouTubeContentHandler"
+  ),
 };
 
 export class UniversalViewer extends BaseContentHandler<IUVData> {
@@ -34,7 +34,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
   private _assignedContentHandler: IContentHandler<IUVData>;
   private _externalEventListeners: EventListener[] = [];
 
-  constructor(public options: IUVOptions) {
+  constructor(options: IUVOptions) {
     super(options);
     this._assignContentHandler(this.options.data);
   }

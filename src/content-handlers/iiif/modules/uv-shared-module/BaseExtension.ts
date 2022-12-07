@@ -172,9 +172,9 @@ export class BaseExtension implements IExtension {
           let manifestUri:
             | string
             | null = Urls.getQuerystringParameterFromString(
-            "manifest",
-            a.search
-          );
+              "manifest",
+              a.search
+            );
 
           if (!manifestUri) {
             // look for collection param
@@ -957,7 +957,7 @@ export class BaseExtension implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function() {
+        getFormat: function () {
           return "";
         },
       };

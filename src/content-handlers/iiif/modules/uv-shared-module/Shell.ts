@@ -34,8 +34,8 @@ export class Shell extends BaseView {
     // Jump link
     this.$element.append(
       '<a class="sr-only" href="#download-btn">' +
-        this.extension.data.config.content.skipToDownload +
-        "</a>"
+      this.extension.data.config.content.skipToDownload +
+      "</a>"
     );
 
     this.$headerPanel = $('<div class="headerPanel"></div>');
@@ -47,8 +47,8 @@ export class Shell extends BaseView {
     this.$centerPanel = $('<div class="centerPanel"></div>');
     this.$centerPanel.append(
       '<h2 class="sr-only">' +
-        this.extension.data.config.content.mediaViewer +
-        "</h2>"
+      this.extension.data.config.content.mediaViewer +
+      "</h2>"
     );
     this.$mainPanel.append(this.$centerPanel);
 

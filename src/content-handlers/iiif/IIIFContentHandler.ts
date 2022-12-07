@@ -107,8 +107,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   private extra = { initial: false };
 
   constructor(
-    public options: IUVOptions,
-    public adapter?: UVAdapter,
+    options: IUVOptions,
+    adapter?: UVAdapter,
     eventListeners?: EventListener[]
   ) {
     super(options, adapter, eventListeners);
@@ -287,6 +287,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
 
     let helper: Helper;
 
+    console.log(data);
+
     try {
       helper = await loadManifest({
         manifestUri: data.iiifManifestId,
@@ -391,6 +393,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       that._createExtension(extension, data, helper);
     } catch (e) {
       this.hideSpinner();
+      console.log(e);
       alert("Unable to load manifest");
     }
   }

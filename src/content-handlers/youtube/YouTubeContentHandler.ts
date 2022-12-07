@@ -22,8 +22,8 @@ export default class YouTubeContentHandler extends BaseContentHandler<
   public config: YouTubeConfig;
 
   constructor(
-    public options: IUVOptions,
-    public adapter?: UVAdapter,
+    options: IUVOptions,
+    adapter?: UVAdapter,
     eventListeners?: EventListener[]
   ) {
     super(options, adapter, eventListeners);
@@ -202,7 +202,7 @@ export default class YouTubeContentHandler extends BaseContentHandler<
     }
   }
 
-  public exitFullScreen(): void {}
+  public exitFullScreen(): void { }
 
   public resize(): void {
     const width = this._el.clientWidth + "px";

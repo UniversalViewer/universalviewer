@@ -18,12 +18,16 @@ export default class BaseContentHandler<IUVData>
   private _eventListeners: {
     [key: string]: EventListenerDictionaryItem[];
   };
+  public options: IUVOptions;
+  public adapter: UVAdapter | undefined;
 
   constructor(
-    public options: IUVOptions,
-    public adapter?: UVAdapter,
+    options: IUVOptions,
+    adapter?: UVAdapter,
     eventListeners?: EventListener[]
   ) {
+    this.options = options;
+    this.adapter = adapter;
     // console.log("create YouTubeContentHandler");
     this._el = this.options.target;
     // this._assignedContentHandler.adapter = this.adapter; // set adapter
@@ -36,7 +40,7 @@ export default class BaseContentHandler<IUVData>
     }
   }
 
-  public set(data: IUVData, initial?: boolean): void {}
+  public set(data: IUVData, initial?: boolean): void { }
 
   public on(name: string, cb: Function, ctx?: any): void {
     var e = this._eventListeners || (this._eventListeners = {});
@@ -91,9 +95,9 @@ export default class BaseContentHandler<IUVData>
     return config;
   }
 
-  public exitFullScreen(): void {}
+  public exitFullScreen(): void { }
 
-  public resize(): void {}
+  public resize(): void { }
 
   public dispose(): void {
     this._el.innerHTML = "";
