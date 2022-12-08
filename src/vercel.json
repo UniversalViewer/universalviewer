@@ -8,7 +8,7 @@
       }
     },
     {
-      "buildCommand": "npm run build-storybook",
+      "buildCommand": "npm run build-es && npm run build-storybook",
       "devCommand": "npm run storybook",
       "installCommand": "npm install --legacy-peer-deps",
       "framework": null,
