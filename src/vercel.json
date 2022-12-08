@@ -14,7 +14,7 @@
       "framework": null,
       "outputDirectory": "./storybook-static",
       "config": {
-        "distDir": "dist/esm"
+        "distDir": "dist"
       }
     }
   ],
