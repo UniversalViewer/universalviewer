@@ -1,13 +1,6 @@
 {
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
       "buildCommand": "npm run build-es && npm run build-storybook",
       "devCommand": "npm run storybook",
       "installCommand": "npm install",
