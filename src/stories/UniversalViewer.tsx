@@ -7,8 +7,11 @@ import { Events, init, Viewer } from '../../dist/esm/';
 type UniversalViewerProps = {
   // autoPlay?: boolean;
   // duration?: number | Duration | null;
+  footerPanelEnabled?: boolean;
+  headerPanelEnabled?: boolean;
   iiifManifestId?: string;
   leftPanelEnabled?: boolean;
+  rightPanelEnabled?: boolean;
   // muted?: boolean;
   // rotation?: number | null;
   // target?: string | null;
@@ -18,8 +21,11 @@ type UniversalViewerProps = {
 const UniversalViewer: React.FC<UniversalViewerProps> = ({
   // autoPlay,
   // duration = null,
+  footerPanelEnabled,
+  headerPanelEnabled,
   iiifManifestId,
   leftPanelEnabled,
+  rightPanelEnabled,
   // muted,
   // rotation = null,
   // target = null,
@@ -106,14 +112,17 @@ const UniversalViewer: React.FC<UniversalViewerProps> = ({
 
     refIIIFConfig.current = {
       options: {
+        footerPanelEnabled,
+        headerPanelEnabled,
         leftPanelEnabled,
+        rightPanelEnabled,
       }
     }
 
     initUV();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leftPanelEnabled]);
+  }, [footerPanelEnabled, headerPanelEnabled, leftPanelEnabled, rightPanelEnabled]);
 
   return useMemo(() => {
     return (
