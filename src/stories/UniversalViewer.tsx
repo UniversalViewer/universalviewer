@@ -119,6 +119,8 @@ const UniversalViewer: React.FC<UniversalViewerProps> = ({
       }
     }
 
+    console.log("config", refIIIFConfig.current);
+
     initUV();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
