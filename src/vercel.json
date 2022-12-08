@@ -10,9 +10,12 @@
     {
       "buildCommand": "npm run build-es && npm run build-storybook",
       "devCommand": "npm run storybook",
-      "installCommand": "npm install --legacy-peer-deps",
+      "installCommand": "npm install",
       "framework": null,
-      "outputDirectory": "./storybook-static"
+      "outputDirectory": "./storybook-static",
+      "config": {
+        "distDir": "dist/esm"
+      }
     }
   ],
   "headers": [
