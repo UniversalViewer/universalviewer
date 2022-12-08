@@ -19,7 +19,7 @@
     "lint": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
     "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
-    "build": "webpack -c webpack.config.js",
+    "build": "webpack -c webpack.config.js && build-es",
     "build-es": "node ./esbuild.mjs",
     "build-tsc": "tsc --skipLibCheck --module CommonJS --esModuleInterop --declarationDir ./dist/cjs --declaration --outDir ./dist/cjs -p . && npm run copy-files",
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
