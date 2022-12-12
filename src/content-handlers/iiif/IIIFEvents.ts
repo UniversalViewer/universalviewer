@@ -97,6 +97,7 @@ export class IIIFEvents {
   static SHOW_INFORMATION: string = "showInformation";
   static SHOW_LOGIN_DIALOGUE: string = "showLoginDialogue";
   static SHOW_MESSAGE: string = "showMessage";
+  static MESSAGE_DISPLAYED: string = "messageDisplayed";
   static SHOW_MOREINFO_DIALOGUE: string = "showMoreInfoDialogue";
   static SHOW_MULTISELECT_DIALOGUE: string = "showMultiSelectDialogue";
   static SHOW_OVERLAY: string = "showOverlay";

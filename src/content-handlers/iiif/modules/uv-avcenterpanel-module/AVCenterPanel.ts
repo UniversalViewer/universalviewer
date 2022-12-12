@@ -156,6 +156,12 @@ export class AVCenterPanel extends CenterPanel {
       }
     });
 
+    this.avcomponent.on('mediaerror', (err) => {
+      if (!this.config.options.hideMediaError) {
+        this.extensionHost.publish(IIIFEvents.SHOW_MESSAGE, [err]);
+      }
+    });
+
     this.avcomponent.on(
       "mediaready",
       () => {

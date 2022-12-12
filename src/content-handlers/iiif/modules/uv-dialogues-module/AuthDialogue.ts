@@ -26,7 +26,8 @@ export class AuthDialogue extends Dialogue {
     this.openCommand = IIIFEvents.SHOW_AUTH_DIALOGUE;
     this.closeCommand = IIIFEvents.HIDE_AUTH_DIALOGUE;
 
-    this.extensionHost.subscribe(this.openCommand, (e: any) => {
+    this.extensionHost.subscribe(this.openCommand, (_e: any) => {
+      const e = Array.isArray(_e) ? _e[0] : _e;
       this.closeCallback = e.closeCallback;
       this.confirmCallback = e.confirmCallback;
       this.cancelCallback = e.cancelCallback;
@@ -78,6 +79,11 @@ export class AuthDialogue extends Dialogue {
   }
 
   open(): void {
+    if (!this.service) {
+      console.error('NO SERVICE');
+      return;
+    }
+
     super.open();
 
     let header: string | null = this.service.getHeader();
