@@ -594,7 +594,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
                   maxLevel: info.levels - 1,
                   units: "mm",
                   spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function(level, x, y, query) {
+                  getTileUrl: function (level, x, y, query) {
                     var url =
                       tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
                     if (query) {
@@ -649,7 +649,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
           // load girder image
           tileSource = await this.getGirderTileSource();
         } else {
-          // load image
+          // load image without tiling
           tileSource = {
             type: "image",
             url: data.id,
@@ -947,9 +947,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
     const dimensions: CroppedImageDimensions | null = (this
       .extension as OpenSeadragonExtension).getCroppedImageDimensions(
-      canvas,
-      this.viewer
-    );
+        canvas,
+        this.viewer
+      );
 
     if (dimensions) {
       const bounds: XYWHFragment = new XYWHFragment(
@@ -985,7 +985,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (!center) return;
 
     // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
-    setTimeout(function() {
+    setTimeout(function () {
       viewer.viewport.panTo(center, true);
     }, 1);
   }

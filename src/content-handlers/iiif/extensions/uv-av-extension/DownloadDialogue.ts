@@ -21,26 +21,27 @@ export class DownloadDialogue extends BaseDownloadDialogue {
   }
 
   create(): void {
+
     this.setConfig("downloadDialogue");
 
     super.create();
 
     this.$entireFileAsOriginal = $(
       '<li class="option single"><input id="' +
-        DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
-        '" type="radio" name="downloadOptions" tabindex="0" /><label id="' +
-        DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
-        'label" for="' +
-        DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
-        '"></label></li>'
+      DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
+      '" type="radio" name="downloadOptions" tabindex="0" /><label id="' +
+      DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
+      'label" for="' +
+      DownloadOption.ENTIRE_FILE_AS_ORIGINAL +
+      '"></label></li>'
     );
     this.$downloadOptions.append(this.$entireFileAsOriginal);
     this.$entireFileAsOriginal.hide();
 
     this.$downloadButton = $(
       '<a class="btn btn-primary" href="#" tabindex="0">' +
-        this.content.download +
-        "</a>"
+      this.content.download +
+      "</a>"
     );
     this.$buttons.prepend(this.$downloadButton);
     this.$imageOptionsContainer = $('<li class="group image"></li>');
@@ -88,6 +89,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
   }
 
   open(triggerButton: HTMLElement) {
+
     super.open(triggerButton);
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -110,15 +112,30 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
       if (canvas.ranges && canvas.ranges.length) {
-        for (let i = 0; i < canvas.ranges.length; i++) {
-          const range: Range = canvas.ranges[i];
+        const currentRange: Range | null = this.extension.helper.getCurrentRange();
+
+        if (currentRange) {
+          this.$downloadOptions.append(this.$canvasOptionsContainer);
+
           const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
-            range,
+            currentRange,
             this.content.entireFileAsOriginal,
             DownloadOption.CANVAS_RENDERINGS
           );
           this.addDownloadOptionsForRenderings(renderingOptions);
         }
+
+        // commented out as part of https://github.com/UniversalViewer/universalviewer/issues/876
+        // for (let i = 0; i < canvas.ranges.length; i++) {
+        //   const range: Range = canvas.ranges[i];
+        //   const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
+        //     range,
+        //     this.content.entireFileAsOriginal,
+        //     DownloadOption.CANVAS_RENDERINGS
+        //   );
+        //   console.log("renderingOptions", renderingOptions);
+        //   this.addDownloadOptionsForRenderings(renderingOptions);
+        // }
       }
     }
 

@@ -25,6 +25,7 @@ export class Auth1 {
     options: IManifestoOptions
   ): Promise<IExternalResource[]> {
     return new Promise<IExternalResource[]>((resolve) => {
+
       Auth1.storageStrategy = storageStrategy;
 
       // set all resources to Auth API V1
@@ -47,21 +48,21 @@ export class Auth1 {
         .then((r: IExternalResource[]) => {
           resolve(r);
         })
-        ["catch"]((error: any) => {
-          switch (error.name) {
-            case StatusCode.AUTHORIZATION_FAILED.toString():
-              Auth1.publish(IIIFEvents.LOGIN_FAILED);
-              break;
-            case StatusCode.FORBIDDEN.toString():
-              Auth1.publish(IIIFEvents.FORBIDDEN);
-              break;
-            case StatusCode.RESTRICTED.toString():
-              // do nothing
-              break;
-            default:
-              Auth1.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
-          }
-        });
+      ["catch"]((error: any) => {
+        switch (error.name) {
+          case StatusCode.AUTHORIZATION_FAILED.toString():
+            Auth1.publish(IIIFEvents.LOGIN_FAILED);
+            break;
+          case StatusCode.FORBIDDEN.toString():
+            Auth1.publish(IIIFEvents.FORBIDDEN);
+            break;
+          case StatusCode.RESTRICTED.toString():
+            // do nothing
+            break;
+          default:
+            Auth1.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
+        }
+      });
     });
   }
 
