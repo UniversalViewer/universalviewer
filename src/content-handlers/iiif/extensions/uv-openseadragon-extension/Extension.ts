@@ -4,7 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
-import DownloadDialogue from "./DownloadDialogueReact";
+import DownloadDialogue from "./DownloadDialogue";
 import { OpenSeadragonExtensionEvents } from "./Events";
 import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";

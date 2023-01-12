@@ -72,5 +72,13 @@ git add .
 git commit -m "fix(component): message"
 ```
 
+#### 5. Create a release
+
+```bash
+git commit -m "Release v1.2.3"
+git tag v1.2.3
+git push origin main v1.2.3
+```
+
 Create a PR:
 https://guides.github.com/activities/forking/

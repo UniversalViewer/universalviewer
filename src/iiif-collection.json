@@ -806,6 +806,18 @@
           "visible": true
         },
         {
+          "@id": "https://lbiiif.riksarkivet.se/arkis!00147269/manifest",
+          "@type": "sc:Collection",
+          "label": "Riksarkivet Image API 2 and 3",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+          "@type": "sc:Collection",
+          "label": "Image Service v3 Recipe",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/test-manifests/pres3-pdf.json",
           "@type": "sc:Manifest",
           "label": "Presentation 3 PDF",
@@ -992,6 +1004,18 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
           "@type": "sc:Manifest",
           "label": "Loose ends",
+          "visible": true
+        },
+        {
+          "@id": "https://api-beta.bl.uk/metadata/iiif/ark:/81055/vdc_100061383968.0x000002/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "BL AV Root Download",
+          "visible": true
+        },
+        {
+          "@id": "https://edsilv.github.io/test-manifests/bl-av-download-rendering-ranges.json",
+          "@type": "sc:Manifest",
+          "label": "BL AV Ranges Download",
           "visible": true
         },
         {

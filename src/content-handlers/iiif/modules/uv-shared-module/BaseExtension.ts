@@ -14,10 +14,11 @@ import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
   AnnotationGroup,
-  ExternalResource,
+  // ExternalResource,
   Helper,
   ILabelValuePair,
 } from "@iiif/manifold";
+import { ExternalResource } from "./TestExternalResource";
 import {
   Annotation,
   AnnotationBody,
@@ -26,7 +27,7 @@ import {
   IExternalResource,
   IExternalResourceData,
   IExternalResourceOptions,
-  IExternalImageResourceData,
+  // IExternalImageResourceData,
   IManifestoOptions,
   Manifest,
   Range,
@@ -172,9 +173,9 @@ export class BaseExtension implements IExtension {
           let manifestUri:
             | string
             | null = Urls.getQuerystringParameterFromString(
-            "manifest",
-            a.search
-          );
+              "manifest",
+              a.search
+            );
 
           if (!manifestUri) {
             // look for collection param
@@ -859,6 +860,7 @@ export class BaseExtension implements IExtension {
   public getExternalResources(
     resources?: IExternalResource[]
   ): Promise<IExternalResourceData[]> {
+
     const indices: number[] = this.getPagedIndices();
     const resourcesToLoad: IExternalResource[] = [];
 
@@ -935,11 +937,11 @@ export class BaseExtension implements IExtension {
     resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
 
     // if the data isn't an info.json, give it the necessary viewing properties
-    if (!resource.hasServiceDescriptor()) {
-      resource.data.id = <string>resource.dataUri;
-      (<IExternalImageResourceData>resource.data).width = resource.width;
-      (<IExternalImageResourceData>resource.data).height = resource.height;
-    }
+    // if (!resource.hasServiceDescriptor()) {
+    //   resource.data.id = <string>resource.dataUri;
+    //   (<IExternalImageResourceData>resource.data).width = resource.width;
+    //   (<IExternalImageResourceData>resource.data).height = resource.height;
+    // }
 
     resource.data.index = resource.index;
 
@@ -957,7 +959,7 @@ export class BaseExtension implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function() {
+        getFormat: function () {
           return "";
         },
       };
