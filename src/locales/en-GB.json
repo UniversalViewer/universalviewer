@@ -13,7 +13,7 @@
   "$contents": "Contents",
   "$volume": "volume",
   "$close": "Close",
-  "$all_pages": "All Pages",
+  "$allPages": "All Pages",
   "$currentViewAsJpg": "Current view {0} x {1}px (jpg)",
   "$openNewWindow": "Opens in a new window",
   "$download": "Download",

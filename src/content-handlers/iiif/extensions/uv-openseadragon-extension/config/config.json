@@ -113,7 +113,7 @@
         "selectionEnabled": false
       },
       "content": {
-        "allPages": "$all_pages",
+        "allPages": "$allPages",
         "currentViewAsJpg": "$currentViewAsJpg",
         "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
@@ -338,9 +338,9 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$twoPageView",
+        "pagingEnabled": "$goHome",
         "reducedMotion": "$reducedMotion",
-        "preserveViewport": "$preserveViewpor",
+        "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
       }

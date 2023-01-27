@@ -493,19 +493,19 @@ export class BaseExtension implements IExtension {
       config = JSON.parse(JSON.stringify(config));
     }
 
-    return this.translate_locale(config, locale);
+    return this.translateLocale(config, locale);
   }
 
-  private async translate_locale(config: Object, locale: String): Promise<Object> {
+  private async translateLocale(config: Object, locale: String): Promise<Object> {
 
     let localeStrings = await import(`../../../../locales/${locale}.json`);  
     let conf = JSON.stringify(config);
 
-    for(const str in localeStrings) {
-      conf = conf.replace(str, localeStrings[str])
+    for(let str in localeStrings) {
+      conf = conf.replace(new RegExp(str.replace(/[$/]/g, '\\$&'), 'g'), localeStrings[str]);
     }
 
-    conf = JSON.parse(conf)
+    conf = JSON.parse(conf);
 
     return conf;
   }
