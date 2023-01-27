@@ -26,7 +26,7 @@ import {
 } from "manifesto.js";
 import { TFragment } from "../../modules/uv-shared-module/TFragment";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
 
 export default class Extension extends BaseExtension
@@ -46,11 +46,7 @@ export default class Extension extends BaseExtension
   settingsDialogue: SettingsDialogue;
   defaultConfig: any = defaultConfig;
   locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
+    "en-GB": defaultConfig
   };
 
   create(): void {

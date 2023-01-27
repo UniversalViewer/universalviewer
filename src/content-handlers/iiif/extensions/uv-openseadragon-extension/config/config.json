@@ -86,7 +86,7 @@
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "date": "$date",
-        "expand": "$$expandContents",
+        "expand": "$expandContents",
         "expandFull": "$expandGallery",
         "index": "$index",
         "manifestRanges": "$manifestRanges",
