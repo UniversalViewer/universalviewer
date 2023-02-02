@@ -92,11 +92,23 @@ var DownloadDialogue = /** @class */ (function (_super) {
         this.resetDynamicDownloadOptions();
         if (this.isDownloadOptionAvailable(DownloadOption_1.DownloadOption.RANGE_RENDERINGS)) {
             if (canvas.ranges && canvas.ranges.length) {
-                for (var i = 0; i < canvas.ranges.length; i++) {
-                    var range = canvas.ranges[i];
-                    var renderingOptions = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption_1.DownloadOption.CANVAS_RENDERINGS);
+                var currentRange = this.extension.helper.getCurrentRange();
+                if (currentRange) {
+                    this.$downloadOptions.append(this.$canvasOptionsContainer);
+                    var renderingOptions = this.getDownloadOptionsForRenderings(currentRange, this.content.entireFileAsOriginal, DownloadOption_1.DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
+                // commented out as part of https://github.com/UniversalViewer/universalviewer/issues/876
+                // for (let i = 0; i < canvas.ranges.length; i++) {
+                //   const range: Range = canvas.ranges[i];
+                //   const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
+                //     range,
+                //     this.content.entireFileAsOriginal,
+                //     DownloadOption.CANVAS_RENDERINGS
+                //   );
+                //   console.log("renderingOptions", renderingOptions);
+                //   this.addDownloadOptionsForRenderings(renderingOptions);
+                // }
             }
         }
         if (this.isDownloadOptionAvailable(DownloadOption_1.DownloadOption.IMAGE_RENDERINGS)) {

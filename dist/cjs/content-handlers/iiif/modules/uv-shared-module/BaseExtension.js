@@ -64,7 +64,7 @@ var ClickThroughDialogue_1 = require("../uv-dialogues-module/ClickThroughDialogu
 var LoginDialogue_1 = require("../uv-dialogues-module/LoginDialogue");
 var RestrictedDialogue_1 = require("../uv-dialogues-module/RestrictedDialogue");
 var Shell_1 = require("./Shell");
-var manifold_1 = require("@iiif/manifold");
+var TestExternalResource_1 = require("./TestExternalResource");
 var dist_commonjs_1 = require("@iiif/vocabulary/dist-commonjs/");
 var KeyCodes = __importStar(require("@edsilv/key-codes"));
 var utils_1 = require("@edsilv/utils");
@@ -695,7 +695,7 @@ var BaseExtension = /** @class */ (function () {
             var canvas = _this.helper.getCanvasByIndex(index);
             var r;
             if (!canvas.externalResource) {
-                r = new manifold_1.ExternalResource(canvas, {
+                r = new TestExternalResource_1.ExternalResource(canvas, {
                     authApiVersion: _this.data.config.options.authAPIVersion,
                 });
             }
@@ -750,11 +750,11 @@ var BaseExtension = /** @class */ (function () {
     BaseExtension.prototype._prepareResourceData = function (resource) {
         resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
         // if the data isn't an info.json, give it the necessary viewing properties
-        if (!resource.hasServiceDescriptor()) {
-            resource.data.id = resource.dataUri;
-            resource.data.width = resource.width;
-            resource.data.height = resource.height;
-        }
+        // if (!resource.hasServiceDescriptor()) {
+        //   resource.data.id = <string>resource.dataUri;
+        //   (<IExternalImageResourceData>resource.data).width = resource.width;
+        //   (<IExternalImageResourceData>resource.data).height = resource.height;
+        // }
         resource.data.index = resource.index;
         return utils_1.Objects.toPlainObject(resource.data);
     };

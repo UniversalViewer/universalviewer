@@ -301,7 +301,7 @@ var IIIFContentHandler = /** @class */ (function (_super) {
     };
     IIIFContentHandler.prototype._reload = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var $elem, that, helper, trackingLabel, canvas, extension, content, format, annotation, body, type, type, canvasType, format_1, hasRanges, config, _a;
+            var $elem, that, helper, trackingLabel, canvas, extension, content, format, annotation, body, type, type, canvasType, format_1, hasRanges, config, _a, e_1;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -315,6 +315,9 @@ var IIIFContentHandler = /** @class */ (function (_super) {
                         // empty the containing element
                         $elem.empty();
                         that = this;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 20, , 21]);
                         return [4 /*yield*/, (0, manifold_1.loadManifest)({
                                 manifestUri: data.iiifManifestId,
                                 collectionIndex: data.collectionIndex,
@@ -324,7 +327,7 @@ var IIIFContentHandler = /** @class */ (function (_super) {
                                 rangeId: data.rangeId,
                                 locale: data.locales ? data.locales[0].name : undefined,
                             })];
-                    case 1:
+                    case 2:
                         helper = _b.sent();
                         trackingLabel = helper.getTrackingLabel();
                         if (trackingLabel) {
@@ -334,79 +337,88 @@ var IIIFContentHandler = /** @class */ (function (_super) {
                                     : document.location;
                             window.trackingLabel = trackingLabel;
                         }
+                        canvas = void 0;
                         canvas = helper.getCurrentCanvas();
                         if (!canvas) {
                             that._error("Canvas " + data.canvasIndex + " not found.");
                             return [2 /*return*/];
                         }
+                        extension = void 0;
                         content = canvas.getContent();
-                        if (!content.length) return [3 /*break*/, 8];
+                        format = void 0;
+                        if (!content.length) return [3 /*break*/, 9];
                         annotation = content[0];
                         body = annotation.getBody();
-                        if (!(body && body.length)) return [3 /*break*/, 7];
+                        if (!(body && body.length)) return [3 /*break*/, 8];
                         format = body[0].getFormat();
-                        if (!format) return [3 /*break*/, 5];
+                        if (!format) return [3 /*break*/, 6];
                         return [4 /*yield*/, that._getExtensionByFormat(format)];
-                    case 2:
-                        extension = _b.sent();
-                        if (!!extension) return [3 /*break*/, 4];
-                        type = body[0].getType();
-                        if (!type) return [3 /*break*/, 4];
-                        return [4 /*yield*/, that._getExtensionByFormat(type)];
                     case 3:
                         extension = _b.sent();
-                        _b.label = 4;
-                    case 4: return [3 /*break*/, 7];
-                    case 5:
+                        if (!!extension) return [3 /*break*/, 5];
                         type = body[0].getType();
-                        if (!type) return [3 /*break*/, 7];
+                        if (!type) return [3 /*break*/, 5];
                         return [4 /*yield*/, that._getExtensionByFormat(type)];
-                    case 6:
+                    case 4:
                         extension = _b.sent();
-                        _b.label = 7;
-                    case 7: return [3 /*break*/, 12];
-                    case 8:
-                        canvasType = canvas.getType();
-                        if (!canvasType) return [3 /*break*/, 10];
-                        return [4 /*yield*/, that._getExtensionByFormat(canvasType)];
+                        _b.label = 5;
+                    case 5: return [3 /*break*/, 8];
+                    case 6:
+                        type = body[0].getType();
+                        if (!type) return [3 /*break*/, 8];
+                        return [4 /*yield*/, that._getExtensionByFormat(type)];
+                    case 7:
+                        extension = _b.sent();
+                        _b.label = 8;
+                    case 8: return [3 /*break*/, 13];
                     case 9:
+                        canvasType = canvas.getType();
+                        if (!canvasType) return [3 /*break*/, 11];
+                        return [4 /*yield*/, that._getExtensionByFormat(canvasType)];
+                    case 10:
                         // try using canvasType
                         extension = _b.sent();
-                        _b.label = 10;
-                    case 10:
-                        if (!!extension) return [3 /*break*/, 12];
+                        _b.label = 11;
+                    case 11:
+                        if (!!extension) return [3 /*break*/, 13];
                         format_1 = canvas.getProperty("format");
                         return [4 /*yield*/, that._getExtensionByFormat(format_1)];
-                    case 11:
-                        extension = _b.sent();
-                        _b.label = 12;
                     case 12:
-                        hasRanges = helper.getRanges().length > 0;
-                        if (!(extension.type === Extension.AV && !hasRanges)) return [3 /*break*/, 14];
-                        return [4 /*yield*/, that._getExtensionByType(Extension.MEDIAELEMENT, format)];
+                        extension = _b.sent();
+                        _b.label = 13;
                     case 13:
-                        extension = _b.sent();
-                        _b.label = 14;
+                        hasRanges = helper.getRanges().length > 0;
+                        if (!(extension.type === Extension.AV && !hasRanges)) return [3 /*break*/, 15];
+                        return [4 /*yield*/, that._getExtensionByType(Extension.MEDIAELEMENT, format)];
                     case 14:
-                        if (!!extension) return [3 /*break*/, 16];
-                        return [4 /*yield*/, that._getExtensionByFormat(Extension.DEFAULT.name)];
-                    case 15:
                         extension = _b.sent();
-                        _b.label = 16;
+                        _b.label = 15;
+                    case 15:
+                        if (!!extension) return [3 /*break*/, 17];
+                        return [4 /*yield*/, that._getExtensionByFormat(Extension.DEFAULT.name)];
                     case 16:
+                        extension = _b.sent();
+                        _b.label = 17;
+                    case 17:
                         if (!data.locales) {
                             data.locales = [];
                             data.locales.push(Utils_1.defaultLocale);
                         }
                         return [4 /*yield*/, extension.loadConfig(data.locales[0].name)];
-                    case 17:
+                    case 18:
                         config = _b.sent();
                         _a = data;
                         return [4 /*yield*/, that.configure(config)];
-                    case 18:
+                    case 19:
                         _a.config = _b.sent();
                         that._createExtension(extension, data, helper);
-                        return [2 /*return*/];
+                        return [3 /*break*/, 21];
+                    case 20:
+                        e_1 = _b.sent();
+                        this.hideSpinner();
+                        alert("Unable to load manifest");
+                        return [3 /*break*/, 21];
+                    case 21: return [2 /*return*/];
                 }
             });
         });

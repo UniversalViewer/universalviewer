@@ -19,7 +19,7 @@ var InformationFactory = /** @class */ (function () {
                 var loginAction = new InformationAction_1.InformationAction();
                 var label = args.param.loginService.getConfirmLabel();
                 if (!label) {
-                    label = this.extension.data.config.content.fallbackDegradedLabel;
+                    label = this.extension.data.config.content.fallbackDegradedLabel || 'login';
                 }
                 loginAction.label = label;
                 var resource_1 = args.param;

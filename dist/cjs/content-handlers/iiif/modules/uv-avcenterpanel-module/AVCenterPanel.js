@@ -132,6 +132,11 @@ var AVCenterPanel = /** @class */ (function (_super) {
                 enableFastRewind: true,
             }
         });
+        this.avcomponent.on('mediaerror', function (err) {
+            if (!_this.config.options.hideMediaError) {
+                _this.extensionHost.publish(IIIFEvents_1.IIIFEvents.SHOW_MESSAGE, [err]);
+            }
+        });
         this.avcomponent.on("mediaready", function () {
             _this._mediaReady = true;
             _this._flushMediaReadyQueue();

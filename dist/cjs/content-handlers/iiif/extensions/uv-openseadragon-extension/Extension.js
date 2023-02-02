@@ -43,7 +43,7 @@ var Bookmark_1 = require("../../modules/uv-shared-module/Bookmark");
 var XYWHFragment_1 = require("../../modules/uv-shared-module/XYWHFragment");
 var ContentLeftPanel_1 = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 var CroppedImageDimensions_1 = require("./CroppedImageDimensions");
-var DownloadDialogueReact_1 = __importDefault(require("./DownloadDialogueReact"));
+var DownloadDialogue_1 = __importDefault(require("./DownloadDialogue"));
 var Events_1 = require("./Events");
 var ExternalContentDialogue_1 = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
 var MobileFooter_1 = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
@@ -426,7 +426,7 @@ var OpenSeadragonExtension = /** @class */ (function (_super) {
         var downloadService = this.helper.manifest.getService(dist_commonjs_1.ServiceProfile.DOWNLOAD_EXTENSIONS);
         var selectionEnabled = config.options.selectionEnabled &&
             (downloadService === null || downloadService === void 0 ? void 0 : downloadService.__jsonld.selectionEnabled);
-        this.downloadDialogueRoot.render((0, react_1.createElement)(DownloadDialogueReact_1.default, {
+        this.downloadDialogueRoot.render((0, react_1.createElement)(DownloadDialogue_1.default, {
             canvases: canvases,
             confinedImageSize: config.options.confinedImageSize,
             content: config.content,
@@ -1114,13 +1114,14 @@ var OpenSeadragonExtension = /** @class */ (function (_super) {
         }
         return index;
     };
-    // https://codesandbox.io/s/iiif-thumbnails-p7ipi7?file=/src/App.tsx
+    // https://github.com/UniversalViewer/iiif-thumbnails/blob/main/src/App.tsx#L49
     OpenSeadragonExtension.prototype.getPagedIndices = function (canvasIndex) {
         if (canvasIndex === void 0) { canvasIndex = this.helper.canvasIndex; }
         // todo: get these from the store (inc canvasIndex)
-        var sequence = this.helper.manifest.getSequences()[0];
+        var manifest = this.helper.manifest;
+        var sequence = manifest.getSequences()[0];
         var canvases = sequence.getCanvases();
-        var paged = !!this.getSettings().pagingEnabled;
+        var paged = (!!this.getSettings().pagingEnabled && this.helper.isPaged());
         var viewingDirection = this.helper.getViewingDirection();
         var indices = [];
         // if it's a continuous manifest, get all resources.

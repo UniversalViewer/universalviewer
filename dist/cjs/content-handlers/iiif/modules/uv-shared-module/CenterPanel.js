@@ -199,21 +199,18 @@ var CenterPanel = /** @class */ (function (_super) {
         }
         this.$content.height(this.$element.height() - titleHeight - subtitleHeight);
         this.$content.width(this.$element.width());
+        var $text = this.$attribution.find('.attribution-text');
+        $text.css("maxHeight", "calc(" + this.$content.height() + "px - 100px)");
+        $text.css('overflow-y', 'auto');
         if (this.$attribution && this.isAttributionOpen) {
             switch (this.attributionPosition) {
                 case Position_1.Position.BOTTOM_LEFT:
-                    this.$attribution.css("top", this.$content.height() -
-                        this.$attribution.outerHeight() -
-                        this.$attribution.verticalMargins());
+                    this.$attribution.css("bottom", 0);
                     this.$attribution.css("left", 0);
                     break;
                 case Position_1.Position.BOTTOM_RIGHT:
-                    this.$attribution.css("top", this.$content.height() -
-                        this.$attribution.outerHeight() -
-                        this.$attribution.verticalMargins());
-                    this.$attribution.css("left", this.$content.width() -
-                        this.$attribution.outerWidth() -
-                        this.$attribution.horizontalMargins());
+                    this.$attribution.css("bottom", 0);
+                    this.$attribution.css("right", 0);
                     break;
             }
             // hide the attribution if there's no room for it

@@ -95,6 +95,7 @@ export declare class IIIFEvents {
     static SHOW_INFORMATION: string;
     static SHOW_LOGIN_DIALOGUE: string;
     static SHOW_MESSAGE: string;
+    static MESSAGE_DISPLAYED: string;
     static SHOW_MOREINFO_DIALOGUE: string;
     static SHOW_MULTISELECT_DIALOGUE: string;
     static SHOW_OVERLAY: string;

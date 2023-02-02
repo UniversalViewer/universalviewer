@@ -1,1 +1,0 @@
-import{h as e}from"./chunk-ESDP5647.js";var t=class extends e{constructor(o){super(o)}create(){this.setConfig("mobileFooterPanel"),super.create()}resize(){super.resize(),this.$options.css("left",Math.floor(this.$element.width()/2-this.$options.width()/2))}};export{t as a};

@@ -1,0 +1,31 @@
+import { Canvas, IAccessToken, IExternalResource, IExternalResourceOptions, Service } from "manifesto.js";
+export declare class ExternalResource implements IExternalResource {
+    authAPIVersion: number;
+    authHoldingPage: any;
+    clickThroughService: Service | null;
+    data: any;
+    dataUri: string | null;
+    error: any;
+    externalService: Service | null;
+    height: number;
+    index: number;
+    isProbed: boolean;
+    isResponseHandled: boolean;
+    kioskService: Service | null;
+    loginService: Service | null;
+    logoutService: Service | null;
+    probeService: Service | null;
+    restrictedService: Service | null;
+    status: number;
+    tokenService: Service | null;
+    width: number;
+    constructor(canvas: Canvas, options: IExternalResourceOptions);
+    private _getImageServiceDescriptor;
+    private _getDataUri;
+    private _parseAuthServices;
+    private _parseCanvasDimensions;
+    private _parseDescriptorDimensions;
+    isAccessControlled(): boolean;
+    hasServiceDescriptor(): boolean;
+    getData(accessToken?: IAccessToken): Promise<ExternalResource>;
+}

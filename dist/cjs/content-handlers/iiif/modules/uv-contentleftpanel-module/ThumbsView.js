@@ -55,12 +55,13 @@ var Thumbnails = function (_a) {
     var onClick = _a.onClick, paged = _a.paged, selected = _a.selected, thumbs = _a.thumbs, viewingDirection = _a.viewingDirection;
     var ref = (0, react_1.useRef)(null);
     (0, react_1.useEffect)(function () {
-        var _a;
+        var _a, _b;
         var thumb = (_a = ref.current) === null || _a === void 0 ? void 0 : _a.querySelector("#thumb-" + selected[0]);
-        thumb === null || thumb === void 0 ? void 0 : thumb.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-            inline: "start",
+        var y = thumb === null || thumb === void 0 ? void 0 : thumb.offsetTop;
+        (_b = ref.current) === null || _b === void 0 ? void 0 : _b.parentElement.scrollTo({
+            top: y,
+            left: 0,
+            behavior: 'smooth'
         });
     }, [selected]);
     function showSeparator(paged, viewingHint, index) {

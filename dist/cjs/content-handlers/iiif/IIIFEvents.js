@@ -101,6 +101,7 @@ var IIIFEvents = /** @class */ (function () {
     IIIFEvents.SHOW_INFORMATION = "showInformation";
     IIIFEvents.SHOW_LOGIN_DIALOGUE = "showLoginDialogue";
     IIIFEvents.SHOW_MESSAGE = "showMessage";
+    IIIFEvents.MESSAGE_DISPLAYED = "messageDisplayed";
     IIIFEvents.SHOW_MOREINFO_DIALOGUE = "showMoreInfoDialogue";
     IIIFEvents.SHOW_MULTISELECT_DIALOGUE = "showMultiSelectDialogue";
     IIIFEvents.SHOW_OVERLAY = "showOverlay";

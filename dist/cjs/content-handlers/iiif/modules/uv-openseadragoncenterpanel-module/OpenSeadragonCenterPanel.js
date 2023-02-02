@@ -204,7 +204,7 @@ var OpenSeadragonCenterPanel = /** @class */ (function (_super) {
                 this.viewer = (0, openseadragon_1.default)({
                     // id: this.viewerId,
                     element: this.$viewer[0],
-                    crossOriginPolicy: "Anonymous",
+                    // crossOriginPolicy: "Anonymous",
                     showNavigationControl: true,
                     showNavigator: true,
                     showRotationControl: true,
@@ -565,7 +565,7 @@ var OpenSeadragonCenterPanel = /** @class */ (function (_super) {
                         tileSource = _b.sent();
                         return [3 /*break*/, 7];
                     case 6:
-                        // load image
+                        // load image without tiling
                         tileSource = {
                             type: "image",
                             url: data.id,

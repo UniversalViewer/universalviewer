@@ -32,7 +32,7 @@ var HeaderPanel = /** @class */ (function (_super) {
         this.setConfig("headerPanel");
         _super.prototype.create.call(this);
         this.extensionHost.subscribe(IIIFEvents_1.IIIFEvents.SHOW_INFORMATION, function (args) {
-            _this.showInformation(args);
+            _this.showInformation(Array.isArray(args) ? args[0] : args);
         });
         this.extensionHost.subscribe(IIIFEvents_1.IIIFEvents.HIDE_INFORMATION, function () {
             _this.hideInformation();
@@ -107,6 +107,8 @@ var HeaderPanel = /** @class */ (function (_super) {
     HeaderPanel.prototype.showInformation = function (args) {
         var informationFactory = new InformationFactory_1.InformationFactory(this.extension);
         this.information = informationFactory.Get(args);
+        if (!this.information)
+            return;
         var $message = this.$informationBox.find(".message");
         $message
             .html(this.information.message)
@@ -120,6 +122,7 @@ var HeaderPanel = /** @class */ (function (_super) {
             $action.on("click", action.action);
             $actions.append($action);
         }
+        this.extensionHost.publish(IIIFEvents_1.IIIFEvents.MESSAGE_DISPLAYED, this.information);
         this.$informationBox.attr("aria-hidden", "false");
         this.$informationBox.show();
         this.$element.addClass("showInformation");

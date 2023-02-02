@@ -169,11 +169,16 @@ var DownloadDialogue = /** @class */ (function (_super) {
     };
     DownloadDialogue.prototype.getCurrentResourceId = function () {
         var canvas = this.extension.helper.getCurrentCanvas();
-        return canvas.externalResource.data.id;
+        var id = canvas.externalResource.data.id;
+        // if there's no id, use contentLocation
+        if (!id) {
+            id = canvas.externalResource.data.contentLocation;
+        }
+        return id;
     };
     DownloadDialogue.prototype.getCurrentResourceFormat = function () {
         var id = this.getCurrentResourceId();
-        return id.substr(id.lastIndexOf(".") + 1).toLowerCase();
+        return id === null || id === void 0 ? void 0 : id.substr(id.lastIndexOf(".") + 1).toLowerCase();
     };
     DownloadDialogue.prototype.updateNoneAvailable = function () {
         if (!this.$downloadOptions.find("li:visible").length) {

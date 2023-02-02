@@ -1,0 +1,32 @@
+import { DownloadDialogue as BaseDownloadDialogue } from "../../modules/uv-dialogues-module/DownloadDialogue";
+import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
+import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
+import { Canvas, Resource, Size } from "manifesto.js";
+export declare class DownloadDialogue extends BaseDownloadDialogue {
+    $canvasOptions: JQuery;
+    $canvasOptionsContainer: JQuery;
+    $currentViewAsJpgButton: JQuery;
+    $downloadButton: JQuery;
+    $explanatoryTextTemplate: JQuery;
+    $imageOptions: JQuery;
+    $imageOptionsContainer: JQuery;
+    $manifestOptions: JQuery;
+    $manifestOptionsContainer: JQuery;
+    $pagingNote: JQuery;
+    $selectionButton: JQuery;
+    $settingsButton: JQuery;
+    $wholeImageHighResButton: JQuery;
+    $wholeImageLowResAsJpgButton: JQuery;
+    $wholeImagesHighResButton: JQuery;
+    constructor($element: JQuery);
+    create(): void;
+    open(triggerButton?: HTMLElement): void;
+    addDownloadOptionsForRenderings(renderingOptions: IRenderingOption[]): void;
+    getCanvasImageResource(canvas: Canvas): Resource | null;
+    getCanvasHighResImageUri(canvas: Canvas): string;
+    getCanvasMimeType(canvas: Canvas): string | null;
+    getCanvasDimensions(canvas: Canvas): Size | null;
+    getCanvasComputedDimensions(canvas: Canvas): Size | null;
+    private _isLevel0;
+    isDownloadOptionAvailable(option: DownloadOption): boolean;
+}

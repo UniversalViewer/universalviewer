@@ -31,7 +31,8 @@ var AuthDialogue = /** @class */ (function (_super) {
         _super.prototype.create.call(this);
         this.openCommand = IIIFEvents_1.IIIFEvents.SHOW_AUTH_DIALOGUE;
         this.closeCommand = IIIFEvents_1.IIIFEvents.HIDE_AUTH_DIALOGUE;
-        this.extensionHost.subscribe(this.openCommand, function (e) {
+        this.extensionHost.subscribe(this.openCommand, function (_e) {
+            var e = Array.isArray(_e) ? _e[0] : _e;
             _this.closeCallback = e.closeCallback;
             _this.confirmCallback = e.confirmCallback;
             _this.cancelCallback = e.cancelCallback;
@@ -70,6 +71,10 @@ var AuthDialogue = /** @class */ (function (_super) {
         });
     };
     AuthDialogue.prototype.open = function () {
+        if (!this.service) {
+            console.error('NO SERVICE');
+            return;
+        }
         _super.prototype.open.call(this);
         var header = this.service.getHeader();
         var description = this.service.getDescription();

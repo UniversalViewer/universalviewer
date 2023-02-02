@@ -25,7 +25,7 @@ var client_1 = require("react-dom/client");
 var ThumbsView_1 = __importDefault(require("./ThumbsView"));
 var ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
     .ViewingDirection;
-var ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
+// const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 var utils_1 = require("@edsilv/utils");
 var dist_commonjs_1 = require("@iiif/vocabulary/dist-commonjs/");
 var IIIFEvents_1 = require("../../IIIFEvents");
@@ -328,25 +328,27 @@ var ContentLeftPanel = /** @class */ (function (_super) {
         var _this = this;
         if (!this.thumbsRoot)
             return;
-        var width;
-        var height;
-        var viewingHint = this.getViewingHint();
+        // let width: number;
+        // let height: number;
+        // const viewingHint: ViewingHint | null = this.getViewingHint();
         var viewingDirection = this.getViewingDirection();
-        if (viewingDirection &&
-            (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT ||
-                viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)) {
-            width = this.config.options.twoColThumbWidth;
-            height = this.config.options.twoColThumbHeight;
-        }
-        else if (viewingHint && viewingHint === ViewingHintEnum.PAGED) {
-            width = this.config.options.twoColThumbWidth;
-            height = this.config.options.twoColThumbHeight;
-        }
-        else {
-            width = this.config.options.oneColThumbWidth;
-            height = this.config.options.oneColThumbHeight;
-        }
-        var thumbs = (this.extension.helper.getThumbs(width, height));
+        // if (
+        //   viewingDirection &&
+        //   (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT ||
+        //     viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)
+        // ) {
+        //   width = this.config.options.twoColThumbWidth;
+        //   height = this.config.options.twoColThumbHeight;
+        // } else if (viewingHint && viewingHint === ViewingHintEnum.PAGED) {
+        //   width = this.config.options.twoColThumbWidth;
+        //   height = this.config.options.twoColThumbHeight;
+        // } else {
+        //   width = this.config.options.oneColThumbWidth;
+        //   height = this.config.options.oneColThumbHeight;
+        // }
+        var thumbs = (this.extension.helper.getThumbs(90)
+        // this.extension.helper.getThumbs(width, height)
+        );
         if (viewingDirection &&
             viewingDirection === ViewingDirectionEnum.BOTTOM_TO_TOP) {
             thumbs.reverse();
@@ -369,7 +371,7 @@ var ContentLeftPanel = /** @class */ (function (_super) {
                 _loop_1(i);
             }
         }
-        var paged = !!this.extension.getSettings().pagingEnabled;
+        var paged = (!!this.extension.getSettings().pagingEnabled && this.extension.helper.isPaged());
         var selectedIndices = this.extension.getPagedIndices(this.extension.helper.canvasIndex);
         // console.log("selectedIndeces", selectedIndices);
         this.thumbsRoot.render((0, react_1.createElement)(ThumbsView_1.default, {
