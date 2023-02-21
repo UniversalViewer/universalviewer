@@ -502,7 +502,9 @@ export class BaseExtension implements IExtension {
     let conf = JSON.stringify(config);
 
     for(let str in localeStrings) {
-      conf = conf.replace(new RegExp(str.replace(/[$/]/g, '\\$&'), 'g'), localeStrings[str]);
+      let replaceStr = str.replace('$','');
+      let re = new RegExp(`\\$${replaceStr}\\b`, 'g');
+      conf = conf.replace(re, localeStrings[str]);
     }
 
     conf = JSON.parse(conf);
