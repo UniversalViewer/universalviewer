@@ -87,7 +87,7 @@
     "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^1.9.2",
     "@iiif/base-component": "2.0.1",
-    "@iiif/iiif-av-component": "1.1.20",
+    "@iiif/iiif-av-component": "https://pkg.csb.dev/IIIF-Commons/iiif-av-component/commit/2dd01233/@iiif/iiif-av-component",
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
