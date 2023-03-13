@@ -14,11 +14,11 @@ import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
   AnnotationGroup,
-  // ExternalResource,
+  ExternalResource,
   Helper,
   ILabelValuePair,
 } from "@iiif/manifold";
-import { ExternalResource } from "./TestExternalResource";
+// import { ExternalResource } from "./TestExternalResource";
 import {
   Annotation,
   AnnotationBody,
@@ -173,9 +173,9 @@ export class BaseExtension implements IExtension {
           let manifestUri:
             | string
             | null = Urls.getQuerystringParameterFromString(
-              "manifest",
-              a.search
-            );
+            "manifest",
+            a.search
+          );
 
           if (!manifestUri) {
             // look for collection param
@@ -860,7 +860,6 @@ export class BaseExtension implements IExtension {
   public getExternalResources(
     resources?: IExternalResource[]
   ): Promise<IExternalResourceData[]> {
-
     const indices: number[] = this.getPagedIndices();
     const resourcesToLoad: IExternalResource[] = [];
 
@@ -959,7 +958,7 @@ export class BaseExtension implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function () {
+        getFormat: function() {
           return "";
         },
       };
