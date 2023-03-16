@@ -117,6 +117,7 @@
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^8.34.0",
     "xss": "1.0.3",
+    "waveform-panel": "https://pkg.csb.dev/digirati-co-uk/waveform-panel/commit/9e5061ca/waveform-panel",
     "zustand": "^4.0.0-rc.0"
   },
   "collective": {
