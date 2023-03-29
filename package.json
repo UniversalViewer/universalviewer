@@ -87,7 +87,7 @@
     "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^1.9.2",
     "@iiif/base-component": "2.0.1",
-    "@iiif/iiif-av-component": "1.1.20",
+    "@iiif/iiif-av-component": "^1.2.0",
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
@@ -117,6 +117,7 @@
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^8.34.0",
     "xss": "1.0.3",
+    "waveform-panel": "^1.2.0",
     "zustand": "^4.0.0-rc.0"
   },
   "collective": {
