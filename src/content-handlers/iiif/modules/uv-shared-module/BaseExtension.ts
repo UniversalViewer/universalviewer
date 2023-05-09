@@ -319,6 +319,7 @@ export class BaseExtension implements IExtension {
     );
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_LEFT_PANEL, () => {
+      if (that.$element.hasClass("loading")) that.$element.removeClass("loading")
       this.resize();
     });
 
