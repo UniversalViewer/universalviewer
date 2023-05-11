@@ -39,6 +39,10 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
     this._assignContentHandler(this.options.data);
   }
 
+  public get() {
+    return this._assignedContentHandler;
+  }
+
   public on(name: string, cb: Function, ctx?: any): void {
     this._externalEventListeners.push({
       name,

@@ -722,6 +722,14 @@ export class BaseExtension implements IExtension {
         }
         return related["@id"];
       }
+
+      // If there's a `homepage` property in the manifest
+      const manifest = this.helper.manifest;
+      const homepage = manifest && manifest.getHomepage();
+      if (homepage) {
+        // Use the `homepage` property in the URL box
+        return homepage;
+      }
     }
 
     return null;

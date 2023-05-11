@@ -55,7 +55,7 @@ export class AVCenterPanel extends CenterPanel {
       (currentTime: number) => {
         this._whenMediaReady(() => {
           if (this.avcomponent) {
-            this.avcomponent.setCurrentTime(currentTime);
+            this.avcomponent.setCurrentTime(currentTime, true);
           }
         });
       }
