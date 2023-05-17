@@ -319,6 +319,7 @@ export class BaseExtension implements IExtension {
     );
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_LEFT_PANEL, () => {
+      if (that.$element.hasClass("loading")) that.$element.removeClass("loading")
       this.resize();
     });
 
@@ -720,6 +721,14 @@ export class BaseExtension implements IExtension {
           related = related[0];
         }
         return related["@id"];
+      }
+
+      // If there's a `homepage` property in the manifest
+      const manifest = this.helper.manifest;
+      const homepage = manifest && manifest.getHomepage();
+      if (homepage) {
+        // Use the `homepage` property in the URL box
+        return homepage;
       }
     }
 
