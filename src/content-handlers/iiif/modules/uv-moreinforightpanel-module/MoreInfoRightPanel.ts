@@ -48,8 +48,13 @@ export class MoreInfoRightPanel extends RightPanel {
           "rid",
           href
         );
+        // Time change.
+        const time: string | null = Urls.getHashParameterFromString(
+          "t",
+          href
+        );
 
-        if (rangeId) {
+        if (rangeId && time === null) {
           const range: Range | null = this.extension.helper.getRangeById(
             rangeId
           );
@@ -59,16 +64,24 @@ export class MoreInfoRightPanel extends RightPanel {
           }
         }
 
-        // Time change.
-        const time: string | null = Urls.getHashParameterFromString(
-          "t",
-          href
-        );
-
         if (time !== null) {
           const timeAsNumber = Number(time);
           if (!Number.isNaN(timeAsNumber)) {
-            this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber);
+
+            if (rangeId) {
+              // We want to make the time change RELATIVE to the start of the range.
+              const range: Range | null = this.extension.helper.getRangeById(
+                rangeId
+              );
+              if (range) {
+                const duration = range.getDuration();
+                if (duration) {
+                  this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber + duration.start);
+                }
+              }
+            }  else {
+              this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber);
+            }
           }
         }
       },
