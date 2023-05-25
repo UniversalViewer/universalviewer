@@ -116,11 +116,16 @@ export class Auth1 {
   }
 
   static showDegradedMessage(resource: IExternalResource): void {
-    const informationArgs: InformationArgs = new InformationArgs(
-      InformationType.DEGRADED_RESOURCE,
-      resource
-    );
-    Auth1.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
+    if (resource.kioskService) {
+      // if it's a kiosk service, open the window immediately.
+      Auth1.publish(IIIFEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
+    } else {
+      const informationArgs: InformationArgs = new InformationArgs(
+        InformationType.DEGRADED_RESOURCE,
+        resource
+      );
+      Auth1.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
+    }
   }
 
   static storeAccessToken(
