@@ -74,10 +74,7 @@ export class MoreInfoRightPanel extends RightPanel {
                 rangeId
               );
               if (range) {
-                const duration = range.getDuration();
-                if (duration) {
-                  this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber + duration.start);
-                }
+                this.extensionHost.publish(IIIFEvents.RANGE_TIME_CHANGE, { rangeId: range.id, time: timeAsNumber });
               }
             }  else {
               this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber);
