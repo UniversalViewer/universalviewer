@@ -1,0 +1,76 @@
+/* @import "@iiif/thumbnail-panel/dist/style.css"; */
+
+[thumbnail-panel] {
+  display: flex;
+  flex-direction: column;
+}
+
+[thumbnail-panel][data-orientation="horizontal"] {
+  flex-direction: row;
+}
+
+[thumbnail-group] {
+  display: flex;
+}
+
+[thumbnail-group][data-selected="true"] {
+  /* background: blue; */
+}
+
+[thumbnail-item] {
+  display: flex;
+  margin: 0 0.5rem 0.5rem 0;
+  /* border: 2px solid transparent; */
+}
+
+[thumbnail-item] button {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+[thumbnail-item] button > figure {
+  margin: 0;
+}
+
+[thumbnail-item] button > figure > div > img {
+  width: 100%;
+  height: 100%;
+  object-position: 50% 50%;
+  object-fit: contain;
+}
+
+[thumbnail-item] button > figure > figcaption {
+  /* text-align: left; */
+  /* padding: 0.25rem 0 0.25rem 0.25rem;
+  font-size: 0.75rem; */
+}
+
+[thumbnail-item][data-selected="true"] {
+  outline: 1px solid black;
+}
+
+/* overrides */
+
+.uv .thumbsView {
+  padding-left: 2px;
+}
+
+[thumbnail-group] [thumbnail-item] button figure > div {
+  background-color: none !important;
+}
+
+[thumbnail-group] [thumbnail-item] button figure figcaption {
+  padding: 0.2rem;
+  text-align: left;
+}
+
+[thumbnail-group][data-selected="true"] [thumbnail-item] {
+  outline: none;
+}
+
+[thumbnail-group][data-selected="true"] [thumbnail-item] button {
+  outline: 2px solid white;
+}

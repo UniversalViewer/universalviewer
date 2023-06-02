@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
-import ThumbsView from "./ThumbsView";
+import ThumbsView from "./ThumbsViewCommons";
 const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
@@ -259,10 +259,10 @@ export class ContentLeftPanel extends LeftPanel {
         const range: Range = topRanges[i];
         this.$treeSelect.append(
           '<option value="' +
-          range.id +
-          '">' +
-          LanguageMap.getValue(range.getLabel()) +
-          "</option>"
+            range.id +
+            '">' +
+            LanguageMap.getValue(range.getLabel()) +
+            "</option>"
         );
       }
     }
@@ -456,10 +456,8 @@ export class ContentLeftPanel extends LeftPanel {
     //   height = this.config.options.oneColThumbHeight;
     // }
 
-    const thumbs: Thumb[] = <Thumb[]>(
-      this.extension.helper.getThumbs(90)
-      // this.extension.helper.getThumbs(width, height)
-    );
+    const thumbs: Thumb[] = <Thumb[]>this.extension.helper.getThumbs(90);
+    // this.extension.helper.getThumbs(width, height)
 
     if (
       viewingDirection &&
@@ -491,7 +489,9 @@ export class ContentLeftPanel extends LeftPanel {
       }
     }
 
-    const paged: boolean = (!!this.extension.getSettings().pagingEnabled && this.extension.helper.isPaged());
+    const paged: boolean =
+      !!this.extension.getSettings().pagingEnabled &&
+      this.extension.helper.isPaged();
 
     const selectedIndices: number[] = this.extension.getPagedIndices(
       this.extension.helper.canvasIndex
@@ -501,6 +501,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
+        helper: this.extension.helper,
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
@@ -555,7 +556,7 @@ export class ContentLeftPanel extends LeftPanel {
       return (
         Bools.getBool(this.config.options.pageModeEnabled, true) &&
         (<OpenSeadragonExtension>this.extension).getMode().toString() ===
-        Mode.page.toString()
+          Mode.page.toString()
       );
     }
     return Bools.getBool(this.config.options.pageModeEnabled, true);
@@ -841,8 +842,8 @@ export class ContentLeftPanel extends LeftPanel {
 
     this.$tabsContent.height(
       this.$main.height() -
-      (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
-      this.$tabsContent.verticalPadding()
+        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
+        this.$tabsContent.verticalPadding()
     );
     this.$views.height(
       this.$tabsContent.height() - this.$options.outerHeight()
