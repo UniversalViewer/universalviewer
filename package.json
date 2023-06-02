@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.0.17",
+  "version": "4.0.21",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=14.18.1",
@@ -87,11 +87,11 @@
     "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^1.9.2",
     "@iiif/base-component": "2.0.1",
-    "@iiif/iiif-av-component": "1.1.20",
+    "@iiif/iiif-av-component": "^1.2.1",
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
     "@iiif/iiif-tree-component": "^2.0.3",
-    "@iiif/manifold": "2.0.23",
+    "@iiif/manifold": "2.0.31",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
@@ -107,7 +107,7 @@
     "jquery": "3.5.0",
     "jsviews": "0.9.83",
     "less-plugin-clean-css": "^1.5.1",
-    "manifesto.js": "4.2.16",
+    "manifesto.js": "4.2.17",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "2.5.1",
     "openseadragon": "2.4.2",
@@ -117,6 +117,7 @@
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^8.34.0",
     "xss": "1.0.3",
+    "waveform-panel": "^1.2.0",
     "zustand": "^4.0.0-rc.0"
   },
   "collective": {

@@ -14,11 +14,11 @@ import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
   AnnotationGroup,
-  // ExternalResource,
+  ExternalResource,
   Helper,
   ILabelValuePair,
 } from "@iiif/manifold";
-import { ExternalResource } from "./TestExternalResource";
+// import { ExternalResource } from "./TestExternalResource";
 import {
   Annotation,
   AnnotationBody,
@@ -173,9 +173,9 @@ export class BaseExtension implements IExtension {
           let manifestUri:
             | string
             | null = Urls.getQuerystringParameterFromString(
-              "manifest",
-              a.search
-            );
+            "manifest",
+            a.search
+          );
 
           if (!manifestUri) {
             // look for collection param
@@ -319,6 +319,7 @@ export class BaseExtension implements IExtension {
     );
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_LEFT_PANEL, () => {
+      if (that.$element.hasClass("loading")) that.$element.removeClass("loading")
       this.resize();
     });
 
@@ -721,6 +722,14 @@ export class BaseExtension implements IExtension {
         }
         return related["@id"];
       }
+
+      // If there's a `homepage` property in the manifest
+      const manifest = this.helper.manifest;
+      const homepage = manifest && manifest.getHomepage();
+      if (homepage) {
+        // Use the `homepage` property in the URL box
+        return homepage;
+      }
     }
 
     return null;
@@ -860,7 +869,6 @@ export class BaseExtension implements IExtension {
   public getExternalResources(
     resources?: IExternalResource[]
   ): Promise<IExternalResourceData[]> {
-
     const indices: number[] = this.getPagedIndices();
     const resourcesToLoad: IExternalResource[] = [];
 
@@ -959,7 +967,7 @@ export class BaseExtension implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function () {
+        getFormat: function() {
           return "";
         },
       };

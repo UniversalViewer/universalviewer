@@ -55,7 +55,7 @@ export class AVCenterPanel extends CenterPanel {
       (currentTime: number) => {
         this._whenMediaReady(() => {
           if (this.avcomponent) {
-            this.avcomponent.setCurrentTime(currentTime);
+            this.avcomponent.setCurrentTime(currentTime, true);
           }
         });
       }
@@ -293,8 +293,10 @@ export class AVCenterPanel extends CenterPanel {
   openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
       if (this.avcomponent) {
+        let didReset = false;
         // reset if the media has already been loaded (degraded flow has happened)
         if (this.extension.helper.canvasIndex === this._lastCanvasIndex) {
+          didReset = true;
           this.avcomponent.reset();
         }
 
@@ -315,6 +317,10 @@ export class AVCenterPanel extends CenterPanel {
           limitToRange: this._limitToRange(),
           posterImageRatio: this.config.options.posterImageRatio,
         });
+
+        if (didReset) {
+          this._viewCanvas(this._lastCanvasIndex);
+        }
 
         // console.log("set up")
         // this.avcomponent.on('waveformready', () => {

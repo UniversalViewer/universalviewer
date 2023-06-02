@@ -80,7 +80,7 @@ export class AuthDialogue extends Dialogue {
 
   open(): void {
     if (!this.service) {
-      console.error('NO SERVICE');
+      console.error("NO SERVICE");
       return;
     }
 

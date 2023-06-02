@@ -24,10 +24,17 @@ export class InformationFactory {
         const actions: InformationAction[] = [];
         const loginAction: InformationAction = new InformationAction();
 
-        let label: string | null = args.param.loginService.getConfirmLabel();
+        let label: string | null;
+
+        if (args.param.loginService) {
+          label = args.param.loginService.getConfirmLabel();
+        } else {
+          label = args.param.kioskService.getConfirmLabel();
+        }
 
         if (!label) {
-          label = this.extension.data.config.content.fallbackDegradedLabel || 'login';
+          label =
+            this.extension.data.config.content.fallbackDegradedLabel || "login";
         }
 
         loginAction.label = label;
@@ -35,7 +42,9 @@ export class InformationFactory {
         const resource: IExternalResource = args.param;
 
         loginAction.action = () => {
-          resource.authHoldingPage = window.open("", "_blank");
+          if (args.param.loginService) {
+            resource.authHoldingPage = window.open("", "_blank");
+          }
           this.extension.extensionHost.publish(IIIFEvents.HIDE_INFORMATION);
           this.extension.extensionHost.publish(
             IIIFEvents.OPEN_EXTERNAL_RESOURCE,
@@ -45,7 +54,13 @@ export class InformationFactory {
 
         actions.push(loginAction);
 
-        let message: string | null = args.param.loginService.getServiceLabel();
+        let message: string | null;
+
+        if (args.param.loginService) {
+          message = args.param.loginService.getServiceLabel();
+        } else {
+          message = args.param.kioskService.getServiceLabel();
+        }
 
         if (!message) {
           message = this.extension.data.config.content.fallbackDegradedMessage;
