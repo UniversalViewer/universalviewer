@@ -36,64 +36,64 @@ const Extension: IExtensionRegistry = {
     name: "uv-av-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-av-extension/Extension"
-    ),
+        "./extensions/uv-av-extension/Extension"
+      ),
   },
   ALEPH: {
     name: "uv-aleph-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-aleph-extension/Extension"
-    ),
+        "./extensions/uv-aleph-extension/Extension"
+      ),
   },
   DEFAULT: {
     name: "uv-default-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-default-extension/Extension"
-    ),
+        "./extensions/uv-default-extension/Extension"
+      ),
   },
   EBOOK: {
     name: "uv-ebook-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-ebook-extension/Extension"
-    ),
+        "./extensions/uv-ebook-extension/Extension"
+      ),
   },
   MEDIAELEMENT: {
     name: "uv-mediaelement-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-mediaelement-extension/Extension"
-    ),
+        "./extensions/uv-mediaelement-extension/Extension"
+      ),
   },
   MODELVIEWER: {
     name: "uv-model-viewer-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-model-viewer-extension/Extension"
-    ),
+        "./extensions/uv-model-viewer-extension/Extension"
+      ),
   },
   OSD: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-openseadragon-extension/Extension"
-    ),
+        "./extensions/uv-openseadragon-extension/Extension"
+      ),
   },
   PDF: {
     name: "uv-pdf-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-pdf-extension/Extension"
-    ),
+        "./extensions/uv-pdf-extension/Extension"
+      ),
   },
   SLIDEATLAS: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-      "./extensions/uv-openseadragon-extension/Extension"
-    ),
+        "./extensions/uv-openseadragon-extension/Extension"
+      ),
   },
 };
 
@@ -127,8 +127,10 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[ExternalResourceType.IMAGE] = Extension.OSD;
     this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] =
       Extension.MEDIAELEMENT;
+    // this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
+    //   Extension.MODELVIEWER;
     this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
-      Extension.MODELVIEWER;
+      Extension.ALEPH;
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
@@ -136,8 +138,10 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
     this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
-    this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
+    // this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
+    // this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.GLB] = Extension.ALEPH;
+    this._extensionRegistry[MediaType.GLTF] = Extension.ALEPH;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
@@ -391,7 +395,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       that._createExtension(extension, data, helper);
     } catch (e) {
       this.hideSpinner();
-      alert("Unable to load manifest");
+      console.log("error loading manifest: ", e);
+      // alert("Unable to load manifest");
     }
   }
 

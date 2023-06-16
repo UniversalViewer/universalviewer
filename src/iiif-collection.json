@@ -635,7 +635,7 @@
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
       "label": "3D",
-      "visible": false,
+      "visible": true,
       "manifests": [
         {
           "@id": "https://iiif-3d-manifests.netlify.app/collection/gltf/flight-helmet/index.json",
