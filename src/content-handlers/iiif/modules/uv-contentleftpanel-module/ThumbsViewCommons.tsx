@@ -1,7 +1,7 @@
 import React from "react";
 import { Thumb } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary";
-// import "@iiif/thumbnail-panel/dist/style.css";
+import "@iiif/thumbnail-panel/dist/style.css";
 import "./ThumbsViewCommons.css";
 import {
   ThumbnailPanel,
