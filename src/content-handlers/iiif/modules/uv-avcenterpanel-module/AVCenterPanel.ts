@@ -62,6 +62,17 @@ export class AVCenterPanel extends CenterPanel {
     );
 
     this.extensionHost.subscribe(
+      IIIFEvents.RANGE_TIME_CHANGE,
+      ({ time, rangeId }: { time: number; rangeId: string }) => {
+        this._whenMediaReady(() => {
+          if (this.avcomponent) {
+            this.avcomponent.setCurrentRangeTime(time, rangeId, true);
+          }
+        });
+      }
+    );
+
+    this.extensionHost.subscribe(
       IIIFEvents.RANGE_CHANGE,
       (range: Range | null) => {
         if (!this._observeRangeChanges()) {

@@ -16,6 +16,7 @@ export class IIIFEvents {
   static COLLECTION_INDEX_CHANGE: string = "collectionIndexChange";
   static CREATE: string = "create";
   static CURRENT_TIME_CHANGE: string = "currentTimeChanged";
+  static RANGE_TIME_CHANGE: string = "rangeTimeChanged";
   static DOWN_ARROW: string = "downArrow";
   static DOWNLOAD: string = "download";
   static END: string = "end";
