@@ -474,8 +474,15 @@ export class BaseExtension implements IExtension {
     }, 1);
   }
 
-  public async loadConfig(locale: string): Promise<any> {
-    let config = this.locales[locale];
+  public async loadConfig(locale: string, extension: string): Promise<any> {
+
+    let uv_locale = locale;
+    if(extension) {
+      uv_locale = '_';
+      this.locales['_'] = () => import(`../../extensions/${extension}/config/config.json`)
+    }
+
+    let config = this.locales[uv_locale];
 
     if (!config) {
       throw new Error("Unable to load config");
@@ -487,7 +494,23 @@ export class BaseExtension implements IExtension {
       config = JSON.parse(JSON.stringify(config));
     }
 
-    return config;
+    return this.translateLocale(config, locale);
+  }
+
+  private async translateLocale(config: Object, locale: String): Promise<Object> {
+
+    let localeStrings = await import(`../../../../locales/${locale}.json`);  
+    let conf = JSON.stringify(config);
+
+    for(let str in localeStrings) {
+      let replaceStr = str.replace('$','');
+      let re = new RegExp(`\\$${replaceStr}\\b`, 'g');
+      conf = conf.replace(re, localeStrings[str]);
+    }
+
+    conf = JSON.parse(conf);
+
+    return conf;
   }
 
   createModules(): void {
