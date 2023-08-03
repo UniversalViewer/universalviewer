@@ -36,8 +36,14 @@
 
         const configUrl = urlAdapter.get('config');
         if (configUrl) {
-          uv.on("configure", function({ cb }) {
-            fetch(configUrl).then(r => r.json()).then(cb)
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function (resolve) {
+                fetch(configUrl).then(function (response) {
+                  resolve(response.json());
+                });
+              })
+            );
           })
         }
 
@@ -48,7 +54,7 @@
           $UV.setAttribute("style", "height:" + window.innerHeight + "px");
         }
 
-        document.addEventListener("resize", function() {
+        addEventListener("resize", function() {
           resize();
         });
 
