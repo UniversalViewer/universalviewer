@@ -57,7 +57,7 @@ See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Ex
 
 Read below to learn how to take part in improving the UV:
 
-- Fork the repository and [run the examples from source](#getting-started)
+- Fork the repository and [run the examples from source](#-getting-started)
 - Get familiar with [Code of Conduct](CODE_OF_CONDUCT.md)
 - Read our [guide to contributing](CONTRIBUTING.md)
 - Find an issue to work on and submit a pull request
