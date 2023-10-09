@@ -279,10 +279,10 @@ export class PDFCenterPanel extends CenterPanel {
 
       // use pdfjs cdn, it just isn't working with webpack
       if (!this._pdfjsLib) {
-        await loadScripts(["//mozilla.github.io/pdf.js/build/pdf.js"]);
+        await loadScripts(["//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"]);
         this._pdfjsLib = window["pdfjs-dist/build/pdf"];
         this._pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+          "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
       } else {
         this._$progress[0].setAttribute("value", "0");
         this._$progress.show();
