@@ -27,7 +27,7 @@ import {
   IExternalResource,
   IExternalResourceData,
   IExternalResourceOptions,
-  // IExternalImageResourceData,
+  IExternalImageResourceData,
   IManifestoOptions,
   Manifest,
   Range,
@@ -968,11 +968,11 @@ export class BaseExtension implements IExtension {
     resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
 
     // if the data isn't an info.json, give it the necessary viewing properties
-    // if (!resource.hasServiceDescriptor()) {
-    //   resource.data.id = <string>resource.dataUri;
-    //   (<IExternalImageResourceData>resource.data).width = resource.width;
-    //   (<IExternalImageResourceData>resource.data).height = resource.height;
-    // }
+    if (!resource.hasServiceDescriptor()) {
+      resource.data.id = <string>resource.dataUri;
+      (<IExternalImageResourceData>resource.data).width = resource.width;
+      (<IExternalImageResourceData>resource.data).height = resource.height;
+    }
 
     resource.data.index = resource.index;
 
