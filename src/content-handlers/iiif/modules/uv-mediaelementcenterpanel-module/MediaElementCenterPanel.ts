@@ -6,7 +6,7 @@ import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-ex
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../../../Utils";
-import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
+import { MediaType, RenderingFormat } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
   Canvas,
@@ -94,10 +94,19 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     if (renderings && renderings.length) {
       canvas.getRenderings().forEach((rendering: Rendering) => {
-        sources.push({
-          type: rendering.getFormat().toString(),
-          src: rendering.id,
-        });
+        if (this.isTypeMedia(rendering)) {
+          sources.push({
+            type: rendering.getFormat().toString(),
+            src: rendering.id,
+          });
+        }
+
+        if (this.isTypeCaption(rendering)) {
+          subtitles.push({
+            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            id: rendering.id,
+          });
+        }
       });
     } else {
       const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
@@ -106,17 +115,22 @@ export class MediaElementCenterPanel extends CenterPanel {
 
       if (formats && formats.length) {
         formats.forEach((format: AnnotationBody) => {
-          const type: MediaType | null = format.getFormat();
+          const type = format.getFormat();
 
-          // Add any additional subtitle types if required.
-          if (type && type.toString() === "text/vtt") {
-            subtitles.push(format.__jsonld);
-          } else if (type) {
+          if (type === null) {
+            return;
+          }
+
+          if (this.isTypeMedia(format)) {
             sources.push({
               label: format.__jsonld.label ? format.__jsonld.label : "",
               type: type.toString(),
               src: format.id,
             });
+          }
+
+          if (this.isTypeCaption(format)) {
+            subtitles.push(format.__jsonld);
           }
         });
       }
@@ -128,6 +142,10 @@ export class MediaElementCenterPanel extends CenterPanel {
       );
 
       // Add VTT subtitles/captions.
+      if (subtitles.length > 0) {
+        // Show captions options popover for better interface feedback
+        subtitles.unshift({ id: "none" });
+      }
       for (const subtitle of subtitles) {
         this.$media.append(
           $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
@@ -274,6 +292,36 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
     this.extensionHost.publish(Events.LOAD);
+  }
+
+  // audio/video
+  isTypeMedia(element: Rendering | AnnotationBody) {
+    const type: RenderingFormat | MediaType | null = element.getFormat();
+
+    if (type === null) {
+      return false;
+    }
+
+    const typeStr = type.toString();
+    const typeGroup = typeStr.split("/")[0];
+
+    return typeGroup === "audio" || typeGroup === "video";
+  }
+
+  // vtt, srt, csv
+  isTypeCaption(element: Rendering | AnnotationBody) {
+    const type: RenderingFormat | MediaType | null = element.getFormat();
+
+    if (type === null) {
+      return false;
+    }
+
+    const captionTypes = new Set<String>([
+      "text/vtt",
+      "text/srt",
+    ]);
+
+    return captionTypes.has(type.toString());
   }
 
   isVideo(): boolean {
