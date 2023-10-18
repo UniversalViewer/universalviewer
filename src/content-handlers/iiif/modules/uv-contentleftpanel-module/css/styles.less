@@ -115,11 +115,6 @@
         font-weight: normal;
         overflow: auto;
 
-        .iiif-tree-component.rtl {
-          direction: rtl;
-          padding-right: @padding-medium-horizontal;
-        }
-
         .iiif-tree-component ul li a.selected {
           color: @brand-primary !important;
         }
@@ -128,6 +123,19 @@
       //.galleryView{
       // iiif-gallery-component (shared-module)
       //}
+    }
+  }
+}
+
+.uv-iiif-extension-host.rtl {
+  .leftPanel {
+    .views {
+      .treeView {
+        .iiif-tree-component {
+          direction: rtl;
+          padding-right: @padding-medium-horizontal;
+        }
+      }
     }
   }
 }

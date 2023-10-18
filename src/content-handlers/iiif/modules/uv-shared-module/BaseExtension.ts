@@ -143,6 +143,10 @@ export class BaseExtension implements IExtension {
       this.$element.addClass("fullscreen");
     }
 
+    if (this.helper.isRightToLeft()) {
+      this.$element.addClass("rtl");
+    }
+
     this.$element.on("mousemove", (e) => {
       this.mouseX = e.pageX;
       this.mouseY = e.pageY;
@@ -319,7 +323,8 @@ export class BaseExtension implements IExtension {
     );
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_LEFT_PANEL, () => {
-      if (that.$element.hasClass("loading")) that.$element.removeClass("loading")
+      if (that.$element.hasClass("loading"))
+        that.$element.removeClass("loading");
       this.resize();
     });
 
@@ -475,11 +480,11 @@ export class BaseExtension implements IExtension {
   }
 
   public async loadConfig(locale: string, extension: string): Promise<any> {
-
     let uv_locale = locale;
-    if(extension) {
-      uv_locale = '_';
-      this.locales['_'] = () => import(`../../extensions/${extension}/config/config.json`)
+    if (extension) {
+      uv_locale = "_";
+      this.locales["_"] = () =>
+        import(`../../extensions/${extension}/config/config.json`);
     }
 
     let config = this.locales[uv_locale];
@@ -497,14 +502,16 @@ export class BaseExtension implements IExtension {
     return this.translateLocale(config, locale);
   }
 
-  private async translateLocale(config: Object, locale: String): Promise<Object> {
-
-    let localeStrings = await import(`../../../../locales/${locale}.json`);  
+  private async translateLocale(
+    config: Object,
+    locale: String
+  ): Promise<Object> {
+    let localeStrings = await import(`../../../../locales/${locale}.json`);
     let conf = JSON.stringify(config);
 
-    for(let str in localeStrings) {
-      let replaceStr = str.replace('$','');
-      let re = new RegExp(`\\$${replaceStr}\\b`, 'g');
+    for (let str in localeStrings) {
+      let replaceStr = str.replace("$", "");
+      let re = new RegExp(`\\$${replaceStr}\\b`, "g");
       conf = conf.replace(re, localeStrings[str]);
     }
 

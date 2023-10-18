@@ -1313,13 +1313,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       this.$title.text(sanitize(this.title));
     }
 
-    // if the manifest has a right-to-left viewing direction, add a class to the title to display it rtl
-    if (this.extension.helper.isRightToLeft()) {
-      this.$title.addClass("rtl");
-    } else {
-      this.$title.removeClass("rtl");
-    }
-
     if (
       this.extension.helper.isMultiCanvas() &&
       this.$prevButton &&
