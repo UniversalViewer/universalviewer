@@ -34,6 +34,7 @@ export class TreeView extends BaseView {
       "treeNodeSelected",
       function(node: TreeNode) {
         that.extensionHost.publish(IIIFEvents.TREE_NODE_SELECTED, node);
+        this.resize(); // renders the tree component and highlights the selected element
       },
       false
     );
