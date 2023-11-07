@@ -143,10 +143,6 @@ export class BaseExtension implements IExtension {
       this.$element.addClass("fullscreen");
     }
 
-    if (this.helper.isRightToLeft()) {
-      this.$element.addClass("rtl");
-    }
-
     this.$element.on("mousemove", (e) => {
       this.mouseX = e.pageX;
       this.mouseY = e.pageY;
