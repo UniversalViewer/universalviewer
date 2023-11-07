@@ -1309,8 +1309,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
-    if (this.title) {
-      this.$title.text(sanitize(this.title));
+    if (this.extension.helper.isRightToLeft()) {
+      this.$title.addClass("rtl");
+    } else {
+      this.$title.removeClass("rtl");
     }
 
     if (
