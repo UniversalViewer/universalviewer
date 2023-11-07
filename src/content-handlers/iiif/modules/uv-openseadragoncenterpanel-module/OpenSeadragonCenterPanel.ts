@@ -1296,6 +1296,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     if (!this.isCreated) return;
 
+    if (this.title) {
+      this.$title.text(sanitize(this.title));
+    }
+
     this.$spinner.css(
       "top",
       this.$content.height() / 2 - this.$spinner.height() / 2
