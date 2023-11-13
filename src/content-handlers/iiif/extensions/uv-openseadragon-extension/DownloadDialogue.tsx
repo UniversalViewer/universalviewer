@@ -24,6 +24,9 @@ const DownloadDialogue = ({
   canvases,
   confinedImageSize,
   content,
+  downloadCurrentViewEnabled,
+  downloadWholeImageHighResEnabled,
+  downloadWholeImageLowResEnabled,
   getConfinedImageDimensions,
   getConfinedImageUri,
   getCroppedImageDimensions,
@@ -49,6 +52,9 @@ const DownloadDialogue = ({
   canvases: Canvas[];
   confinedImageSize: number;
   content: { [key: string]: string };
+  downloadCurrentViewEnabled: boolean;
+  downloadWholeImageHighResEnabled: boolean;
+  downloadWholeImageLowResEnabled: boolean;
   getConfinedImageDimensions: (canvas: Canvas) => Size | null;
   getConfinedImageUri: (canvas: Canvas) => string | null;
   getCroppedImageDimensions: (canvas: Canvas) => CroppedImageDimensions | null;
@@ -202,10 +208,18 @@ const DownloadDialogue = ({
 
     switch (option) {
       case DownloadOption.CURRENT_VIEW:
+        if (!downloadCurrentViewEnabled) {
+          return false;
+        }
+
         return !paged;
       case DownloadOption.CANVAS_RENDERINGS:
       case DownloadOption.IMAGE_RENDERINGS:
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
+        if (!downloadWholeImageHighResEnabled) {
+          return false;
+        }
+
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
@@ -217,6 +231,10 @@ const DownloadDialogue = ({
         }
         return true;
       case DownloadOption.WHOLE_IMAGE_LOW_RES:
+        if (!downloadWholeImageLowResEnabled) {
+          return false;
+        }
+
         // hide low-res option if hi-res width is smaller than constraint
         const size: Size | null = getCanvasComputedDimensions(canvas);
         if (!size) {

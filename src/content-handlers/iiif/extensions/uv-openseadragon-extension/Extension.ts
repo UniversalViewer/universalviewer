@@ -655,6 +655,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
         canvases: canvases,
         confinedImageSize: config.options.confinedImageSize,
         content: config.content,
+        downloadCurrentViewEnabled: config.options.downloadCurrentViewEnabled,
+        downloadWholeImageHighResEnabled:
+          config.options.downloadWholeImageHighResEnabled,
+        downloadWholeImageLowResEnabled:
+          config.options.downloadWholeImageLowResEnabled,
         locale: this.getLocale(),
         manifest: this.helper.manifest as Manifest,
         maxImageWidth: config.options.maxImageWidth,
@@ -662,12 +667,12 @@ export default class OpenSeadragonExtension extends BaseExtension {
         open: downloadDialogueOpen,
         paged: paged,
         parent: this.shell.$overlays[0] as HTMLElement,
-        resources: this.resources,
         requiredStatement: this.helper.getRequiredStatement()?.value,
-        termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
+        resources: this.resources,
         rotation: this.getViewerRotation() as number,
         selectionEnabled: selectionEnabled,
         sequence: this.helper.getCurrentSequence(),
+        termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
         triggerButton: dialogueTriggerButton as HTMLElement,
         getCroppedImageDimensions: (canvas: Canvas) => {
           return this.getCroppedImageDimensions(canvas, this.getViewer());
