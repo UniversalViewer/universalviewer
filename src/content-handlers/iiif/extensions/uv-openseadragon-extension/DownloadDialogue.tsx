@@ -222,7 +222,7 @@ const DownloadDialogue = ({
         if (!size) {
           return false;
         }
-        return size.width > confinedImageSize;
+        return Math.max(size.width, size.height) > confinedImageSize;
       case DownloadOption.SELECTION:
         return selectionEnabled;
       case DownloadOption.RANGE_RENDERINGS:
