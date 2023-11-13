@@ -82,7 +82,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   shareDialogue: ShareDialogue;
   defaultConfig: any = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
 
   create(): void {
@@ -1233,23 +1233,28 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
   }
 
-  getConfinedImageDimensions(canvas: Canvas, width: number): Size {
+  getConfinedImageDimensions(canvas: Canvas, longestSide: number): Size {
     let resourceWidth: number = canvas.getWidth();
+    let resourceHeight: number = canvas.getHeight();
 
     if (!resourceWidth) {
       resourceWidth = canvas.externalResource.width;
     }
-
-    let resourceHeight: number = canvas.getHeight();
 
     if (!resourceHeight) {
       resourceHeight = canvas.externalResource.height;
     }
 
     const dimensions: Size = new Size(0, 0);
-    dimensions.width = width;
-    const normWidth = Maths.normalise(width, 0, resourceWidth);
-    dimensions.height = Math.floor(resourceHeight * normWidth);
+    if (resourceWidth > resourceHeight) {
+      dimensions.width = longestSide;
+      const normWidth = Maths.normalise(longestSide, 0, resourceWidth);
+      dimensions.height = Math.floor(resourceHeight * normWidth);
+    } else {
+      dimensions.height = longestSide;
+      const normHeight = Maths.normalise(longestSide, 0, resourceHeight);
+      dimensions.width = Math.floor(resourceWidth * normHeight);
+    }
     return dimensions;
   }
 
@@ -1556,7 +1561,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     const manifest = this.helper.manifest;
     const sequence = manifest!.getSequences()[0];
     const canvases = sequence.getCanvases();
-    const paged = (!!this.getSettings().pagingEnabled && this.helper.isPaged());
+    const paged = !!this.getSettings().pagingEnabled && this.helper.isPaged();
     const viewingDirection = this.helper.getViewingDirection();
 
     let indices: number[] = [];
