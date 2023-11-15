@@ -157,62 +157,6 @@ type HelpDialogue = {
   content: HelpDialogueContent;
 };
 
-type MoreInfoRightPanelOptions = {
-  /** Order in which canvases are displayed */
-  canvasDisplayOrder: string;
-  /** Canvases to exclude from display */
-  canvasExclude: string;
-  /** Determines if copying to clipboard is enabled */
-  copyToClipboardEnabled: boolean;
-  /** Order in which manifests are displayed */
-  manifestDisplayOrder: string;
-  /** Manifests to exclude from display */
-  manifestExclude: string;
-  /** Duration of the panel animation */
-  panelAnimationDuration: number;
-  /** Width of the collapsed panel */
-  panelCollapsedWidth: number;
-  /** Width of the expanded panel */
-  panelExpandedWidth: number;
-  /** Determines if the panel is open */
-  panelOpen: boolean;
-  /** Language codes for right-to-left languages */
-  rtlLanguageCodes: string;
-  /** Determines if all languages should be shown */
-  showAllLanguages: boolean;
-  /** Limit for the text */
-  textLimit: number;
-  /** Type of the text limit */
-  textLimitType: string;
-};
-
-type MoreInfoRightPanelContent = {
-  attribution: string;
-  canvasHeader: string;
-  collapse: string;
-  collapseFull: string;
-  copiedToClipboard: string;
-  copyToClipboard: string;
-  description: string;
-  expand: string;
-  expandFull: string;
-  holdingText: string;
-  less: string;
-  license: string;
-  logo: string;
-  manifestHeader: string;
-  more: string;
-  noData: string;
-  page: string;
-  rangeHeader: string;
-  title: string;
-};
-
-type MoreInfoRightPanel = {
-  options: MoreInfoRightPanelOptions;
-  content: MoreInfoRightPanelContent;
-};
-
 type MultiSelectDialogueOptions = {
   /** Determines if chunked resizing is enabled for gallery thumbnails */
   galleryThumbChunkedResizingEnabled: boolean;
@@ -469,7 +413,6 @@ type Modules = {
   footerPanel: FooterPanel;
   headerPanel: HeaderPanel;
   helpDialogue: HelpDialogue;
-  moreInfoRightPanel: MoreInfoRightPanel;
   multiSelectDialogue: MultiSelectDialogue;
   pagingHeaderPanel: PagingHeaderPanel;
   openSeadragonCenterPanel: OpenSeadragonCenterPanel;

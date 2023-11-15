@@ -12,7 +12,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 import { Strings, Bools } from "@edsilv/utils";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension
@@ -118,7 +118,7 @@ export default class Extension extends BaseExtension
   }
 
   isLeftPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.leftPanelEnabled, true);
   }
 
   getEmbedScript(template: string, width: number, height: number): string {

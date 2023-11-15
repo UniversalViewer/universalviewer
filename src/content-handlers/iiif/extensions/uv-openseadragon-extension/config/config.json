@@ -100,7 +100,9 @@
       }
     },
     "dialogue": {
-      "topCloseButtonEnabled": false,
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "close": "$close"
       }

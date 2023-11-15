@@ -247,7 +247,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
-          this.extension.data.config.options.clickToZoomEnabled,
+          this.extension.data.config!.options.clickToZoomEnabled,
           true
         ),
       },
@@ -1057,7 +1057,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   isZoomToSearchResultEnabled(): boolean {
     return Bools.getBool(
-      this.extension.data.config.options.zoomToSearchResultEnabled,
+      this.extension.data.config!.options.zoomToSearchResultEnabled,
       true
     );
   }
@@ -1201,7 +1201,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     // otherwise, pan into view preserving the current zoom level.
     if (
       Bools.getBool(
-        this.extension.data.config.options.zoomToBoundsEnabled,
+        this.extension.data.config!.options.zoomToBoundsEnabled,
         false
       )
     ) {
@@ -1386,7 +1386,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   setFocus(): void {
     if (this.$canvas && !this.$canvas.is(":focus")) {
-      if (this.extension.data.config.options.allowStealFocus) {
+      if (this.extension.data.config!.options.allowStealFocus) {
         this.$canvas.focus();
       }
     }

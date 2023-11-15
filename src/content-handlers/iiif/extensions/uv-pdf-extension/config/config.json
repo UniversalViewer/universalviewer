@@ -1,17 +1,49 @@
 {
   "options": {
+    "allowStealFocus": false,
     "authAPIVersion": 1,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
     "footerPanelEnabled": true,
     "headerPanelEnabled": true,
+    "leftPanelEnabled": true,
     "limitLocales": false,
+    "metrics": [
+      {
+        "type": "sm",
+        "minWidth": 0
+      },
+      {
+        "type": "md",
+        "minWidth": 768
+      },
+      {
+        "type": "lg",
+        "minWidth": 1024
+      },
+      {
+        "type": "xl",
+        "minWidth": 1280
+      }
+    ],
+    "multiSelectionMimeType": "application/zip",
+    "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
+    "overrideFullScreen": false,
+    "pagingEnabled": true,
+    "pagingOptionEnabled": true,
     "pessimisticAccessControl": false,
+    "preserveViewport": false,
     "rightPanelEnabled": true,
+    "saveUserSettings": false,
+    "clickToZoomEnabled": true,
+    "searchWithinEnabled": true,
+    "termsOfUseEnabled": false,
     "theme": "uv-en-GB-theme",
-    "usePdfJs": true
+    "tokenStorage": "session",
+    "useArrowKeysToNavigate": false,
+    "zoomToSearchResultEnabled": true
   },
   "modules": {
     "shareDialogue": {
@@ -53,7 +85,12 @@
     },
     "genericDialogue": {
       "content": {
-        "ok": "$ok"
+        "emptyValue": "$emptyValue",
+        "invalidNumber": "$invalidNumber",
+        "noMatches": "$noMatches",
+        "ok": "$ok",
+        "pageNotFound": "$pageNotFound",
+        "refresh": "$refresh"
       }
     },
     "headerPanel": {
@@ -142,11 +179,28 @@
     },
     "downloadDialogue": {
       "content": {
+        "allPages": "$allPages",
+        "currentViewAsJpg": "$currentViewAsJpg",
+        "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
+        "downloadSelection": "$downloadSelection",
+        "downloadSelectionExplanation": "$downloadSelectionExplanation",
+        "editSettings": "$editSettings",
+        "entireDocument": "$entireDocument",
         "entireFileAsOriginal": "$entireFile",
+        "individualPages": "$individualPages",
         "noneAvailable": "$noDownloadOptionsAvailable",
+        "pagingNote": "$pagingNote",
         "preview": "$preview",
-        "title": "$download"
+        "selection": "$selection",
+        "termsOfUse": "$termsOfUse",
+        "title": "$download",
+        "wholeImageHighRes": "$wholeImageHighRes",
+        "wholeImageHighResExplanation": "$openNewWindow",
+        "wholeImageLowResAsJpg": "$wholeImageLowResAsJpg",
+        "wholeImageLowResAsJpgExplanation": "$openNewWindow",
+        "wholeImagesHighRes": "$wholeImagesHighRes",
+        "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation"
       }
     },
     "pdfHeaderPanel": {
@@ -206,9 +260,11 @@
   "content": {
     "authCORSError": "$authCORSError",
     "authorisationFailedMessage": "$authorisationFailedMessage",
-    "degradedResourceMessage": "$pleaseLogInToViewAtFullQuality",
-    "degradedResourceLogin": "$log_in",
+    "canvasIndexOutOfRange": "$canvasIndexOutOfRange",
+    "fallbackDegradedLabel": "$fallbackDegradedLabel",
+    "fallbackDegradedMessage": "$fallbackDegradedMessage",
     "forbiddenResourceMessage": "$forbiddenResourceMessage",
+    "termsOfUse": "$termsOfUse",
     "mediaViewer": "$mediaViewer",
     "skipToDownload": "$skipToDownload"
   }

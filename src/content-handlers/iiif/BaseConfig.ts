@@ -10,34 +10,34 @@ export class Metric {
 
 export type Options = {
   /** Determines if the focus can be stolen */
-  allowStealFocus: boolean;
+  allowStealFocus?: boolean;
 
   /** Version of the authentication API */
   authAPIVersion: number;
 
   /** Height of the bookmark thumbnail */
-  bookmarkThumbHeight: number;
+  bookmarkThumbHeight?: number;
 
   /** Width of the bookmark thumbnail */
-  bookmarkThumbWidth: number;
+  bookmarkThumbWidth?: number;
 
   /** Determines if drop is enabled */
-  dropEnabled: boolean;
+  dropEnabled?: boolean;
 
   /** Determines if the footer panel is enabled */
-  footerPanelEnabled: boolean;
+  footerPanelEnabled?: boolean;
 
   /** Determines if the header panel is enabled */
-  headerPanelEnabled: boolean;
+  headerPanelEnabled?: boolean;
 
   /** Determines if the left panel is enabled */
-  leftPanelEnabled: boolean;
+  leftPanelEnabled?: boolean;
 
   /** Determines if locales are limited */
-  limitLocales: boolean;
+  limitLocales?: boolean;
 
   /** Determines if double click annotation is enabled */
-  doubleClickAnnotationEnabled: boolean;
+  doubleClickAnnotationEnabled?: boolean;
 
   /** Metrics array */
   metrics: Metric[];
@@ -46,7 +46,7 @@ export type Options = {
   multiSelectionMimeType: string;
 
   /** Determines if the navigator is enabled */
-  navigatorEnabled: boolean;
+  navigatorEnabled?: boolean;
 
   /** Template for opening */
   openTemplate: string;
@@ -55,31 +55,31 @@ export type Options = {
   overrideFullScreen: boolean;
 
   /** Determines if paging is enabled */
-  pagingEnabled: boolean;
+  pagingEnabled?: boolean;
 
   /** Determines if paging option is enabled */
-  pagingOptionEnabled: boolean;
+  pagingOptionEnabled?: boolean;
 
   /** Determines if access control is pessimistic */
-  pessimisticAccessControl: boolean;
+  pessimisticAccessControl?: boolean;
 
   /** Determines if viewport is preserved */
-  preserveViewport: boolean;
+  preserveViewport?: boolean;
 
   /** Determines if the right panel is enabled */
-  rightPanelEnabled: boolean;
+  rightPanelEnabled?: boolean;
 
   /** Determines if user settings are saved */
-  saveUserSettings: boolean;
+  saveUserSettings?: boolean;
 
   /** Determines if click to zoom is enabled */
-  clickToZoomEnabled: boolean;
+  clickToZoomEnabled?: boolean;
 
   /** Determines if search within is enabled */
-  searchWithinEnabled: boolean;
+  searchWithinEnabled?: boolean;
 
   /** Determines if seealso content is enabled */
-  seeAlsoEnabled: boolean;
+  seeAlsoEnabled?: boolean;
 
   /** Determines if terms of use are enabled */
   termsOfUseEnabled: boolean;
@@ -91,13 +91,16 @@ export type Options = {
   tokenStorage: string | StorageType;
 
   /** Determines if arrow keys can be used to navigate */
-  useArrowKeysToNavigate: boolean;
+  useArrowKeysToNavigate?: boolean;
+
+  /** Determines if PDF.js should be used for PDF rendering */
+  usePdfJs?: boolean;
 
   /** Determines if zoom to search result is enabled */
-  zoomToSearchResultEnabled: boolean;
+  zoomToSearchResultEnabled?: boolean;
 
   /** Determines if zoom to bounds is enabled */
-  zoomToBoundsEnabled: boolean;
+  zoomToBoundsEnabled?: boolean;
 };
 
 type Locale = {
@@ -110,12 +113,16 @@ export type Localisation = {
   locales: Locale[];
 };
 
+type DialogueOptions = {
+  topCloseButtonEnabled: boolean;
+};
+
 type DialogueContent = {
   close: string;
 };
 
 type Dialogue = {
-  topCloseButtonEnabled: boolean;
+  options?: DialogueOptions;
   content: DialogueContent;
 };
 
@@ -167,9 +174,14 @@ type DownloadDialogueContent = {
 };
 
 type DownloadDialogue = {
-  options: DownloadDialogueOptions;
+  options?: DownloadDialogueOptions;
   content: DownloadDialogueContent;
 };
+
+/**
+ * Type for Generic Dialogue Options
+ */
+type GenericDialogueOptions = {};
 
 type GenericDialogueContent = {
   emptyValue: string;
@@ -181,7 +193,64 @@ type GenericDialogueContent = {
 };
 
 type GenericDialogue = {
+  options?: GenericDialogueOptions;
   content: GenericDialogueContent;
+};
+
+type MoreInfoRightPanelOptions = {
+  /** Order in which canvases are displayed */
+  canvasDisplayOrder: string;
+  /** Canvases to exclude from display */
+  canvasExclude: string;
+  /** Determines if copying to clipboard is enabled */
+  copyToClipboardEnabled: boolean;
+  /** Order in which manifests are displayed */
+  manifestDisplayOrder: string;
+  /** Manifests to exclude from display */
+  manifestExclude: string;
+  /** Duration of the panel animation */
+  panelAnimationDuration: number;
+  /** Width of the collapsed panel */
+  panelCollapsedWidth: number;
+  /** Width of the expanded panel */
+  panelExpandedWidth: number;
+  /** Determines if the panel is open */
+  panelOpen: boolean;
+  /** Language codes for right-to-left languages */
+  rtlLanguageCodes: string;
+  /** Determines if all languages should be shown */
+  showAllLanguages: boolean;
+  /** Limit for the text */
+  textLimit: number;
+  /** Type of the text limit */
+  textLimitType: string;
+};
+
+type MoreInfoRightPanelContent = {
+  attribution: string;
+  canvasHeader: string;
+  collapse: string;
+  collapseFull: string;
+  copiedToClipboard: string;
+  copyToClipboard: string;
+  description: string;
+  expand: string;
+  expandFull: string;
+  holdingText: string;
+  less: string;
+  license: string;
+  logo: string;
+  manifestHeader: string;
+  more: string;
+  noData: string;
+  page: string;
+  rangeHeader: string;
+  title: string;
+};
+
+type MoreInfoRightPanel = {
+  options: MoreInfoRightPanelOptions;
+  content: MoreInfoRightPanelContent;
 };
 
 export type Content = {
@@ -203,6 +272,7 @@ export type BaseConfig = {
     dialogue: Dialogue;
     downloadDialogue: DownloadDialogue;
     genericDialogue: GenericDialogue;
+    moreInfoRightPanel: MoreInfoRightPanel;
   };
   localisation: Localisation;
   content: Content;

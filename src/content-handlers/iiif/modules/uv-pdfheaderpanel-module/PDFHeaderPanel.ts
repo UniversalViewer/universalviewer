@@ -182,7 +182,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
     if (isNaN(index)) {
       this.extension.showMessage(
-        this.extension.data.config.modules.genericDialogue.content.invalidNumber
+        this.extension.data.config!.modules.genericDialogue.content
+          .invalidNumber
       );
       return;
     }

@@ -100,7 +100,7 @@ export class LoginDialogue extends Dialogue {
     if (this.options.warningMessage) {
       message =
         '<span class="warning">' +
-        this.extension.data.config.content[this.options.warningMessage] +
+        this.extension.data.config!.content[this.options.warningMessage] +
         '</span><span class="description">' +
         message +
         "</span>";

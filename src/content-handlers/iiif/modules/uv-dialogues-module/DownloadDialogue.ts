@@ -75,7 +75,7 @@ export class DownloadDialogue extends Dialogue {
     this.$content.append(this.$footer);
 
     this.$termsOfUseButton = $(
-      '<a href="#">' + this.extension.data.config.content.termsOfUse + "</a>"
+      '<a href="#">' + this.extension.data.config!.content.termsOfUse + "</a>"
     );
     this.$footer.append(this.$termsOfUseButton);
 
@@ -171,10 +171,10 @@ export class DownloadDialogue extends Dialogue {
 
     this.$downloadOptions.append(
       '<li><a href="' +
-      uri +
-      '" target="_blank" download tabindex="0">' +
-      label +
-      "</li>"
+        uri +
+        '" target="_blank" download tabindex="0">' +
+        label +
+        "</li>"
     );
   }
 
@@ -189,7 +189,6 @@ export class DownloadDialogue extends Dialogue {
     defaultLabel: string,
     type: DownloadOption
   ): IRenderingOption[] {
-
     const renderings: Rendering[] = resource.getRenderings();
 
     const downloadOptions: any[] = [];
@@ -214,16 +213,16 @@ export class DownloadDialogue extends Dialogue {
         this.renderingUrls[<any>currentId] = rendering.id;
         const $button: JQuery = $(
           '<li class="option dynamic"><input id="' +
-          currentId +
-          '" data-mime="' +
-          mime +
-          '" title="' +
-          label +
-          '" type="radio" name="downloadOptions" tabindex="0" /><label for="' +
-          currentId +
-          '">' +
-          label +
-          "</label></li>"
+            currentId +
+            '" data-mime="' +
+            mime +
+            '" title="' +
+            label +
+            '" type="radio" name="downloadOptions" tabindex="0" /><label for="' +
+            currentId +
+            '">' +
+            label +
+            "</label></li>"
         );
 
         downloadOptions.push({
@@ -271,7 +270,7 @@ export class DownloadDialogue extends Dialogue {
 
     if (
       Bools.getBool(
-        this.extension.data.config.options.termsOfUseEnabled,
+        this.extension.data.config!.options.termsOfUseEnabled,
         false
       ) &&
       requiredStatement &&

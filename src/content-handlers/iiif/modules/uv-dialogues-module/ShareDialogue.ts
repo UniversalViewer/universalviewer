@@ -84,14 +84,12 @@ export class ShareDialogue extends Dialogue {
     this.$tabs = $('<div class="tabs"></div>');
     this.$content.append(this.$tabs);
 
-
     this.$shareButton = $(
       '<a class="share tab default" tabindex="0">' + this.content.share + "</a>"
     );
     if (Bools.getBool(this.config.options.shareEnabled, true)) {
       this.$tabs.append(this.$shareButton);
     }
-
 
     this.$embedButton = $(
       '<a class="embed tab" tabindex="0">' + this.content.embed + "</a>"
@@ -196,7 +194,7 @@ export class ShareDialogue extends Dialogue {
     }
 
     this.$termsOfUseButton = $(
-      '<a href="#">' + this.extension.data.config.content.termsOfUse + "</a>"
+      '<a href="#">' + this.extension.data.config!.content.termsOfUse + "</a>"
     );
     this.$footer.append(this.$termsOfUseButton);
 
@@ -326,7 +324,7 @@ export class ShareDialogue extends Dialogue {
   //     var thumbnail = canvas.getProperty('thumbnail');
 
   //     if (!thumbnail || !_.isString(thumbnail)){
-  //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config.options.bookmarkThumbWidth);
+  //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config!.options.bookmarkThumbWidth);
   //     }
 
   //     this.$link.attr('href', thumbnail);
@@ -386,7 +384,7 @@ export class ShareDialogue extends Dialogue {
 
     if (
       Bools.getBool(
-        this.extension.data.config.options.termsOfUseEnabled,
+        this.extension.data.config!.options.termsOfUseEnabled,
         false
       ) &&
       requiredStatement &&

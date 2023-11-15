@@ -165,7 +165,7 @@ export class HeaderPanel extends BaseView {
       $actions.append($action);
     }
 
-    this.extensionHost.publish(IIIFEvents.MESSAGE_DISPLAYED, this.information)
+    this.extensionHost.publish(IIIFEvents.MESSAGE_DISPLAYED, this.information);
 
     this.$informationBox.attr("aria-hidden", "false");
     this.$informationBox.show();
@@ -217,10 +217,7 @@ export class HeaderPanel extends BaseView {
     }
 
     // hide toggle buttons below minimum width
-    if (
-      this.extension.width() <
-      this.extension.data.config.options.minWidthBreakPoint
-    ) {
+    if (this.extension.isMobileMetric()) {
       if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
     } else {
       if (this.localeToggleIsVisible()) this.$localeToggleButton.show();

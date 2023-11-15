@@ -1,14 +1,14 @@
 {
   "options": {
+    "allowStealFocus": false,
     "authAPIVersion": 1,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
     "footerPanelEnabled": true,
     "headerPanelEnabled": true,
-    "leftPanelEnabled": false,
+    "leftPanelEnabled": true,
     "limitLocales": false,
-    "doubleClickAnnotationEnabled": false,
     "metrics": [
       {
         "type": "sm",
@@ -27,9 +27,23 @@
         "minWidth": 1280
       }
     ],
+    "multiSelectionMimeType": "application/zip",
+    "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
+    "overrideFullScreen": false,
+    "pagingEnabled": true,
+    "pagingOptionEnabled": true,
+    "pessimisticAccessControl": false,
+    "preserveViewport": false,
     "rightPanelEnabled": true,
-    "theme": "uv-en-GB-theme"
+    "saveUserSettings": false,
+    "clickToZoomEnabled": true,
+    "searchWithinEnabled": true,
+    "termsOfUseEnabled": false,
+    "theme": "uv-en-GB-theme",
+    "tokenStorage": "session",
+    "useArrowKeysToNavigate": false,
+    "zoomToSearchResultEnabled": true
   },
   "modules": {
     "shareDialogue": {
@@ -72,7 +86,12 @@
     },
     "genericDialogue": {
       "content": {
-        "ok": "$ok"
+        "emptyValue": "$emptyValue",
+        "invalidNumber": "$invalidNumber",
+        "noMatches": "$noMatches",
+        "ok": "$ok",
+        "pageNotFound": "$pageNotFound",
+        "refresh": "$refresh"
       }
     },
     "headerPanel": {
@@ -106,8 +125,11 @@
       },
       "content": {
         "attribution": "$attribution",
+        "canvasHeader": "$aboutTheImage",
         "collapse": "$collapseInformation",
         "collapseFull": "$collapseGallery",
+        "copiedToClipboard": "$copiedToClipboard",
+        "copyToClipboard": "$copyToClipboard",
         "description": "$description",
         "expand": "$expandInformation",
         "expandFull": "$expandGallery",
@@ -115,14 +137,12 @@
         "less": "$less",
         "license": "$license",
         "logo": "$logo",
+        "manifestHeader": "$aboutTheItem",
         "more": "$more",
         "noData": "$noDataToDisplay",
         "page": "$page",
-        "title": "$moreInformation",
-        "manifestHeader": "$aboutTheItem",
-        "canvasHeader": "$aboutTheImage",
-        "copyToClipboard": "$copyToClipboard",
-        "copiedToClipboard": "$copiedToClipboard"
+        "rangeHeader": "$aboutThisSection",
+        "title": "$moreInformation"
       }
     },
     "contentLeftPanel": {
@@ -166,11 +186,28 @@
     },
     "downloadDialogue": {
       "content": {
+        "allPages": "$allPages",
+        "currentViewAsJpg": "$currentViewAsJpg",
+        "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
+        "downloadSelection": "$downloadSelection",
+        "downloadSelectionExplanation": "$downloadSelectionExplanation",
+        "editSettings": "$editSettings",
+        "entireDocument": "$entireDocument",
         "entireFileAsOriginal": "$entireFile",
+        "individualPages": "$individualPages",
         "noneAvailable": "$noDownloadOptionsAvailable",
+        "pagingNote": "$pagingNote",
         "preview": "$preview",
-        "title": "$download"
+        "selection": "$selection",
+        "termsOfUse": "$termsOfUse",
+        "title": "$download",
+        "wholeImageHighRes": "$wholeImageHighRes",
+        "wholeImageHighResExplanation": "$openNewWindow",
+        "wholeImageLowResAsJpg": "$wholeImageLowResAsJpg",
+        "wholeImageLowResAsJpgExplanation": "$openNewWindow",
+        "wholeImagesHighRes": "$wholeImagesHighRes",
+        "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation"
       }
     },
     "loginDialogue": {
@@ -221,9 +258,11 @@
   "content": {
     "authCORSError": "$authCORSError",
     "authorisationFailedMessage": "$authorisationFailedMessage",
-    "degradedResourceMessage": "$pleaseLogInToViewAtFullQuality",
-    "degradedResourceLogin": "$log_in",
+    "canvasIndexOutOfRange": "$canvasIndexOutOfRange",
+    "fallbackDegradedLabel": "$fallbackDegradedLabel",
+    "fallbackDegradedMessage": "$fallbackDegradedMessage",
     "forbiddenResourceMessage": "$forbiddenResourceMessage",
+    "termsOfUse": "$termsOfUse",
     "mediaViewer": "$mediaViewer",
     "skipToDownload": "$skipToDownload"
   }

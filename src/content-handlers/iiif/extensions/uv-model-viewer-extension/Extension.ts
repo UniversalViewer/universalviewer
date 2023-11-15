@@ -237,7 +237,7 @@ export default class ModelViewerExtension extends BaseExtension {
   isLeftPanelEnabled(): boolean {
     return false;
     // return (
-    //   Bools.getBool(this.data.config.options.leftPanelEnabled, true) &&
+    //   Bools.getBool(this.data.config!.options.leftPanelEnabled, true) &&
     //   (this.helper.isMultiCanvas() || this.helper.isMultiSequence())
     // );
   }

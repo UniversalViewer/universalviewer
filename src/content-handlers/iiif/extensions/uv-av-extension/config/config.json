@@ -93,7 +93,9 @@
       }
     },
     "dialogue": {
-      "topCloseButtonEnabled": false,
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "close": "$close"
       }
@@ -162,13 +164,15 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines",
-        "limitToRange": false
+        "textLimitType": "lines"
       },
       "content": {
         "attribution": "$attribution",
-        "collapse": "collapseInformation",
+        "canvasHeader": "$aboutTheImage",
+        "collapse": "$collapseInformation",
         "collapseFull": "$collapseGallery",
+        "copiedToClipboard": "$copiedToClipboard",
+        "copyToClipboard": "$copyToClipboard",
         "description": "$description",
         "expand": "$expandInformation",
         "expandFull": "$expandGallery",
@@ -176,14 +180,12 @@
         "less": "$less",
         "license": "$license",
         "logo": "$logo",
-        "more": "$more",
-        "noData": "$noDataToDispla",
-        "page": "$page",
-        "title": "$moreInformation",
         "manifestHeader": "$aboutTheItem",
-        "canvasHeader": "$aboutTheImage",
-        "copyToClipboard": "$copyToClipboard",
-        "copiedToClipboard": "$copiedToClipboard"
+        "more": "$more",
+        "noData": "$noDataToDisplay",
+        "page": "$page",
+        "rangeHeader": "$aboutThisSection",
+        "title": "$moreInformation"
       }
     },
     "avCenterPanel": {
@@ -250,6 +252,7 @@
     },
     "downloadDialogue": {
       "content": {
+        "allPages": "$allPages",
         "currentViewAsJpg": "$currentViewAsJpg",
         "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
@@ -258,17 +261,19 @@
         "editSettings": "$editSettings",
         "entireDocument": "$entireDocument",
         "entireFileAsOriginal": "$entireFile",
-        "entireFileAsOriginalWithFormat": "$entireFileX",
+        "individualPages": "$individualPages",
         "noneAvailable": "$noDownloadOptionsAvailable",
         "pagingNote": "$pagingNote",
         "preview": "$preview",
+        "selection": "$selection",
+        "termsOfUse": "$termsOfUse",
         "title": "$download",
         "wholeImageHighRes": "$wholeImageHighRes",
-        "wholeImageHighResExplanation": "$wholeImageHighResExplanation",
-        "wholeImagesHighRes": "$wholeImagesHighRes",
-        "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation",
+        "wholeImageHighResExplanation": "$openNewWindow",
         "wholeImageLowResAsJpg": "$wholeImageLowResAsJpg",
-        "wholeImageLowResAsJpgExplanation": "$wholeImageLowResAsJpgExplanation"
+        "wholeImageLowResAsJpgExplanation": "$openNewWindow",
+        "wholeImagesHighRes": "$wholeImagesHighRes",
+        "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation"
       }
     },
     "loginDialogue": {

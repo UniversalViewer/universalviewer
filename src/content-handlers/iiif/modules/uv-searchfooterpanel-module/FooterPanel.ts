@@ -325,7 +325,7 @@ export class FooterPanel extends BaseFooterPanel {
 
   isZoomToSearchResultEnabled(): boolean {
     return Bools.getBool(
-      this.extension.data.config.options.zoomToSearchResultEnabled,
+      this.extension.data.config!.options.zoomToSearchResultEnabled,
       true
     );
   }
@@ -455,7 +455,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     if (this.terms === "" || this.terms === this.content.enterKeyword) {
       this.extension.showMessage(
-        this.extension.data.config.modules.genericDialogue.content.emptyValue,
+        this.extension.data.config!.modules.genericDialogue.content.emptyValue,
         function() {
           this.$searchText.focus();
         }

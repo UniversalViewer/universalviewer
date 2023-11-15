@@ -141,7 +141,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   }
 
   isLeftPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.leftPanelEnabled, true);
   }
 
   render(): void {

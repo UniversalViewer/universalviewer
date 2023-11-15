@@ -67,7 +67,9 @@
       }
     },
     "dialogue": {
-      "topCloseButtonEnabled": false,
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "close": "Close"
       }
@@ -136,28 +138,28 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines",
-        "limitToRange": false
+        "textLimitType": "lines"
       },
       "content": {
-        "attribution": "Attribution",
-        "collapse": "Collapse Information",
-        "collapseFull": "Collapse Gallery",
-        "description": "Description",
-        "expand": "Expand Information",
-        "expandFull": "Expand Gallery",
-        "holdingText": "Your module goes here!",
-        "less": "less",
-        "license": "License",
-        "logo": "Logo",
-        "more": "more",
-        "noData": "No data to display",
-        "page": "Page",
-        "title": "More Information",
-        "manifestHeader": "About the item",
-        "canvasHeader": "About the image",
-        "copyToClipboard": "Copy to clipboard",
-        "copiedToClipboard": "Copied to clipboard"
+        "attribution": "$attribution",
+        "canvasHeader": "$aboutTheImage",
+        "collapse": "$collapseInformation",
+        "collapseFull": "$collapseGallery",
+        "copiedToClipboard": "$copiedToClipboard",
+        "copyToClipboard": "$copyToClipboard",
+        "description": "$description",
+        "expand": "$expandInformation",
+        "expandFull": "$expandGallery",
+        "holdingText": "$moduleGoesHere",
+        "less": "$less",
+        "license": "$license",
+        "logo": "$logo",
+        "manifestHeader": "$aboutTheItem",
+        "more": "$more",
+        "noData": "$noDataToDisplay",
+        "page": "$page",
+        "rangeHeader": "$aboutThisSection",
+        "title": "$moreInformation"
       }
     },
     "alephCenterPanel": {
@@ -211,25 +213,28 @@
     },
     "downloadDialogue": {
       "content": {
-        "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
-        "currentViewAsJpgExplanation": "Opens in a new window",
-        "download": "Download",
-        "downloadSelection": "Download Selection",
-        "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
-        "editSettings": "Edit Settings",
-        "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file",
-        "entireFileAsOriginalWithFormat": "Entire file ({0})",
-        "noneAvailable": "No download options are available.",
-        "pagingNote": "Please turn off Two Page View for additional options.",
-        "preview": "Preview",
-        "title": "Download",
-        "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
-        "wholeImageHighResExplanation": "Opens in a new window.",
-        "wholeImagesHighRes": "Whole images ({0})",
-        "wholeImagesHighResExplanation": "Opens in two new windows.",
-        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)",
-        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
+        "allPages": "$allPages",
+        "currentViewAsJpg": "$currentViewAsJpg",
+        "currentViewAsJpgExplanation": "$openNewWindow",
+        "download": "$download",
+        "downloadSelection": "$downloadSelection",
+        "downloadSelectionExplanation": "$downloadSelectionExplanation",
+        "editSettings": "$editSettings",
+        "entireDocument": "$entireDocument",
+        "entireFileAsOriginal": "$entireFile",
+        "individualPages": "$individualPages",
+        "noneAvailable": "$noDownloadOptionsAvailable",
+        "pagingNote": "$pagingNote",
+        "preview": "$preview",
+        "selection": "$selection",
+        "termsOfUse": "$termsOfUse",
+        "title": "$download",
+        "wholeImageHighRes": "$wholeImageHighRes",
+        "wholeImageHighResExplanation": "$openNewWindow",
+        "wholeImageLowResAsJpg": "$wholeImageLowResAsJpg",
+        "wholeImageLowResAsJpgExplanation": "$openNewWindow",
+        "wholeImagesHighRes": "$wholeImagesHighRes",
+        "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation"
       }
     },
     "loginDialogue": {

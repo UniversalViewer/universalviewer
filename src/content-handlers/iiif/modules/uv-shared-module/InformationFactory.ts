@@ -17,7 +17,7 @@ export class InformationFactory {
     switch (args.informationType) {
       case InformationType.AUTH_CORS_ERROR:
         return new Information(
-          this.extension.data.config.content.authCORSError,
+          this.extension.data.config!.content.authCORSError,
           []
         );
       case InformationType.DEGRADED_RESOURCE:
@@ -34,7 +34,8 @@ export class InformationFactory {
 
         if (!label) {
           label =
-            this.extension.data.config.content.fallbackDegradedLabel || "login";
+            this.extension.data.config!.content.fallbackDegradedLabel ||
+            "login";
         }
 
         loginAction.label = label;
@@ -63,7 +64,7 @@ export class InformationFactory {
         }
 
         if (!message) {
-          message = this.extension.data.config.content.fallbackDegradedMessage;
+          message = this.extension.data.config!.content.fallbackDegradedMessage;
         }
 
         return new Information(<string>message, actions);
