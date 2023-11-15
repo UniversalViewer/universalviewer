@@ -12,6 +12,7 @@ import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension
   implements IDefaultExtension {
@@ -27,9 +28,9 @@ export default class Extension extends BaseExtension
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
 
   create(): void {

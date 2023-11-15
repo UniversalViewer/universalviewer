@@ -15,6 +15,7 @@ import { Bools, Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension implements IAVExtension {
   $downloadDialogue: JQuery;
@@ -30,9 +31,9 @@ export default class Extension extends BaseExtension implements IAVExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
   lastAvCanvasIndex?: number;
 

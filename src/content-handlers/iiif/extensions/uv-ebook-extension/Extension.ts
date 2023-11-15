@@ -16,6 +16,7 @@ import { IEbookExtensionData } from "./IEbookExtensionData";
 import { Strings } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension
   implements IEbookExtension {
@@ -35,9 +36,9 @@ export default class Extension extends BaseExtension
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   cfiFragement: string;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
 
   create(): void {

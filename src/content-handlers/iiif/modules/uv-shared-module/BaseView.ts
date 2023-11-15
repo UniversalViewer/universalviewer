@@ -44,7 +44,7 @@ export class BaseView extends Panel {
         that.config = $.extend(
           true,
           that.config,
-          that.extension.data.config.modules[moduleName]
+          that.extension.data.config!.modules[moduleName]
         );
       });
     }

@@ -21,6 +21,7 @@ import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { AnnotationGroup } from "@iiif/manifold";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
+import { Config } from "./config/Config";
 
 export default class ModelViewerExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -39,9 +40,9 @@ export default class ModelViewerExtension extends BaseExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
 
   create(): void {

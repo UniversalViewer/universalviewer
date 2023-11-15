@@ -13,6 +13,7 @@ import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeft
 import { Strings, Bools } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/en-GB.json";
+import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension
   implements IAlephExtension {
@@ -29,7 +30,7 @@ export default class Extension extends BaseExtension
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
   };

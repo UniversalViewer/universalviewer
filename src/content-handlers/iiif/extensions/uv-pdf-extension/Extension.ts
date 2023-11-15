@@ -16,6 +16,7 @@ import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
+import { Config } from "./config/Config";
 
 export default class Extension extends BaseExtension implements IPDFExtension {
   $downloadDialogue: JQuery;
@@ -30,9 +31,9 @@ export default class Extension extends BaseExtension implements IPDFExtension {
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
-  defaultConfig: any = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
-    "en-GB": defaultConfig
+    "en-GB": defaultConfig,
   };
 
   create(): void {
