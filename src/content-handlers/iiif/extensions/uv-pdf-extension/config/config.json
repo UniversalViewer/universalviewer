@@ -43,6 +43,7 @@
     "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
+    "usePdfJs": true,
     "zoomToSearchResultEnabled": true
   },
   "modules": {

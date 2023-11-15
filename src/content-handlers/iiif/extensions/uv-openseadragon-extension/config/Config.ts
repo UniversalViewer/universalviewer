@@ -26,7 +26,7 @@ type ContentLeftPanelOptions = {
   defaultToTreeEnabled: boolean;
   /** Number of items to default to tree view */
   defaultToTreeIfGreaterThan: number;
-  /** Number of items to elide */
+  /** Number of characters to elide at */
   elideCount: number;
   /** Determines if full expansion is enabled */
   expandFullEnabled: boolean;
