@@ -47,7 +47,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
 import { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
-import { BaseConfig2, Metric, MetricType } from "../../BaseConfig2";
+import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -79,7 +79,7 @@ export class BaseExtension implements IExtension {
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
-  defaultConfig: BaseConfig2;
+  defaultConfig: BaseConfig;
 
   public create(): void {
     const that = this;

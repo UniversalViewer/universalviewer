@@ -53,7 +53,7 @@ import { createElement } from "react";
 import { createStore, OpenSeadragonExtensionState } from "./Store";
 import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
-import { Config2 } from "./config/Config2";
+import { Config } from "./config/Config";
 
 export default class OpenSeadragonExtension extends BaseExtension {
   $downloadDialogue: JQuery;
@@ -81,7 +81,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: Config2 = defaultConfig;
+  defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
   };

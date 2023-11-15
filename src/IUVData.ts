@@ -2,10 +2,10 @@ import { EPubData } from "./content-handlers/iiif/EPubData";
 import { IIIFData } from "./content-handlers/iiif/IIIFData";
 import { YouTubeData } from "./content-handlers/youtube/YouTubeData";
 import { ILocale } from "./content-handlers/iiif/modules/uv-shared-module/ILocale";
-import { BaseConfig2 } from "./content-handlers/iiif/BaseConfig2";
+import { BaseConfig } from "./content-handlers/iiif/BaseConfig";
 
 export interface IUVData extends IIIFData, EPubData, YouTubeData {
-  config?: BaseConfig2; // do not pass this on initialisation, internal use only
+  config?: BaseConfig; // do not pass this on initialisation, internal use only
   debug?: boolean;
   embedded?: boolean;
   isReload?: boolean;

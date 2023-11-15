@@ -2,7 +2,7 @@ import { StorageType } from "@edsilv/utils";
 
 export { StorageType } from "@edsilv/utils";
 
-export type MetricType = "sm" | "md" | "lg" | "xl";
+export type MetricType = string | "sm" | "md" | "lg" | "xl";
 
 export class Metric {
   constructor(public type: MetricType, public minWidth: number) {}
@@ -88,7 +88,7 @@ export type Options = {
   theme: string;
 
   /** Storage for tokens */
-  tokenStorage: StorageType;
+  tokenStorage: string | StorageType;
 
   /** Determines if arrow keys can be used to navigate */
   useArrowKeysToNavigate: boolean;
@@ -110,6 +110,80 @@ export type Localisation = {
   locales: Locale[];
 };
 
+type DialogueContent = {
+  close: string;
+};
+
+type Dialogue = {
+  topCloseButtonEnabled: boolean;
+  content: DialogueContent;
+};
+
+/**
+ * Type for Download Dialogue Options
+ */
+type DownloadDialogueOptions = {
+  /** Size of the confined image */
+  confinedImageSize: number;
+  /** Percentage of the current view that is disabled */
+  currentViewDisabledPercentage: number;
+  /** Determines if download of current view is enabled */
+  downloadCurrentViewEnabled: boolean;
+  /** Determines if download of whole image in high resolution is enabled */
+  downloadWholeImageHighResEnabled: boolean;
+  /** Determines if download of whole image in low resolution is enabled */
+  downloadWholeImageLowResEnabled: boolean;
+  /** Maximum width of the image */
+  maxImageWidth: number;
+  /** Determines if explanatory text for options is enabled */
+  optionsExplanatoryTextEnabled: boolean;
+  /** Determines if selection is enabled */
+  selectionEnabled: boolean;
+};
+
+type DownloadDialogueContent = {
+  allPages: string;
+  currentViewAsJpg: string;
+  currentViewAsJpgExplanation: string;
+  download: string;
+  downloadSelection: string;
+  downloadSelectionExplanation: string;
+  editSettings: string;
+  entireDocument: string;
+  entireFileAsOriginal: string;
+  individualPages: string;
+  noneAvailable: string;
+  pagingNote: string;
+  preview: string;
+  selection: string;
+  termsOfUse: string;
+  title: string;
+  wholeImageHighRes: string;
+  wholeImageHighResExplanation: string;
+  wholeImageLowResAsJpg: string;
+  wholeImageLowResAsJpgExplanation: string;
+  wholeImagesHighRes: string;
+  wholeImagesHighResExplanation: string;
+};
+
+type DownloadDialogue = {
+  options: DownloadDialogueOptions;
+  content: DownloadDialogueContent;
+};
+
+type GenericDialogueContent = {
+  emptyValue: string;
+  invalidNumber: string;
+  noMatches: string;
+  ok: string;
+  pageNotFound: string;
+  refresh: string;
+};
+
+type GenericDialogue = {
+  content: GenericDialogueContent;
+};
+
 export type Content = {
   authCORSError: string;
   authorisationFailedMessage: string;
@@ -122,8 +196,14 @@ export type Content = {
   termsOfUse: string;
 };
 
-export default interface BaseConfig {
+export type BaseConfig = {
+  uri?: string;
   options: Options;
+  modules: {
+    dialogue: Dialogue;
+    downloadDialogue: DownloadDialogue;
+    genericDialogue: GenericDialogue;
+  };
   localisation: Localisation;
   content: Content;
-}
+};
