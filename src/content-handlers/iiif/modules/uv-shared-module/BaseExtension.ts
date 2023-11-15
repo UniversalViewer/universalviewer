@@ -9,7 +9,6 @@ import { ISharePreview } from "./ISharePreview";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { IUVData } from "@/IUVData";
 import { LoginDialogue } from "../uv-dialogues-module/LoginDialogue";
-import { Metric, MetricType } from "./Metric";
 import { RestrictedDialogue } from "../uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import {
@@ -48,6 +47,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
 import { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
+import { BaseConfig2, Metric, MetricType } from "../../BaseConfig2";
 
 export class BaseExtension implements IExtension {
   $authDialogue: JQuery;
@@ -79,7 +79,7 @@ export class BaseExtension implements IExtension {
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
-  defaultConfig: any;
+  defaultConfig: BaseConfig2;
 
   public create(): void {
     const that = this;
@@ -92,13 +92,6 @@ export class BaseExtension implements IExtension {
 
     this.$element = $(this.extensionHost.options.target);
     this.$element.data("component", this.extensionHost);
-
-    // todo: check this is ok to remove
-    // this.fire(IIIFEvents.CREATE, {
-    //   data: this.data,
-    //   settings: this.getSettings(),
-    //   preview: this.getSharePreview(),
-    // });
 
     this._parseMetrics();
     this._initLocales();
@@ -163,7 +156,7 @@ export class BaseExtension implements IExtension {
         });
       }
 
-      if (Bools.getBool(this.data.config.options.dropEnabled, true)) {
+      if (Bools.getBool(this.data.config!.options.dropEnabled, true)) {
         this.$element.on("drop", (e) => {
           e.preventDefault();
           const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData(
@@ -294,7 +287,7 @@ export class BaseExtension implements IExtension {
     });
 
     this.extensionHost.subscribe(IIIFEvents.LOGIN_FAILED, () => {
-      this.showMessage(this.data.config.content.authorisationFailedMessage);
+      this.showMessage(this.data.config!.content.authorisationFailedMessage);
     });
 
     this.extensionHost.subscribe(IIIFEvents.LOGIN, () => {
@@ -382,7 +375,7 @@ export class BaseExtension implements IExtension {
 
     this.extensionHost.subscribe(IIIFEvents.OPEN, () => {
       const openUri: string = Strings.format(
-        this.data.config.options.openTemplate,
+        this.data.config!.options.openTemplate,
         this.helper.manifestUri
       );
       window.open(openUri);
@@ -441,7 +434,7 @@ export class BaseExtension implements IExtension {
     });
 
     this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
-      const overrideFullScreen: boolean = this.data.config.options
+      const overrideFullScreen: boolean = this.data.config!.options
         .overrideFullScreen;
 
       this.extensionHost.isFullScreen = !this.extensionHost.isFullScreen;
@@ -546,7 +539,7 @@ export class BaseExtension implements IExtension {
 
   private _setDefaultFocus(): void {
     setTimeout(() => {
-      if (this.data.config.options.allowStealFocus) {
+      if (this.data.config!.options.allowStealFocus) {
         $("[tabindex=0]").focus();
       }
     }, 1);
@@ -631,7 +624,7 @@ export class BaseExtension implements IExtension {
   }
 
   private _initLocales(): void {
-    const availableLocales: any[] = this.data.config.localisation.locales.slice(
+    const availableLocales: any[] = this.data.config!.localisation.locales.slice(
       0
     );
     const configuredLocales: ILocale[] | undefined = this.data.locales;
@@ -658,7 +651,7 @@ export class BaseExtension implements IExtension {
       });
 
       const limitLocales: boolean = Bools.getBool(
-        this.data.config.options.limitLocales,
+        this.data.config!.options.limitLocales,
         false
       );
 
@@ -678,7 +671,7 @@ export class BaseExtension implements IExtension {
   }
 
   private _parseMetrics(): void {
-    const metrics: Metric[] = this.data.config.options.metrics;
+    const metrics: Metric[] = this.data.config!.options.metrics;
 
     if (metrics) {
       for (let i = 0; i < metrics.length; i++) {
@@ -726,7 +719,7 @@ export class BaseExtension implements IExtension {
   }
 
   isSeeAlsoEnabled(): boolean {
-    return this.data.config.options.seeAlsoEnabled !== false;
+    return this.data.config!.options.seeAlsoEnabled !== false;
   }
 
   getShareUrl(): string | null {
@@ -795,19 +788,19 @@ export class BaseExtension implements IExtension {
   }
 
   getSettings(): ISettings {
-    if (Bools.getBool(this.data.config.options.saveUserSettings, false)) {
+    if (Bools.getBool(this.data.config!.options.saveUserSettings, false)) {
       const settings: any = Storage.get("uv.settings", StorageType.LOCAL);
 
       if (settings) {
-        return $.extend(this.data.config.options, settings.value);
+        return $.extend(this.data.config!.options, settings.value);
       }
     }
 
-    return this.data.config.options;
+    return this.data.config!.options;
   }
 
   updateSettings(settings: ISettings): void {
-    if (Bools.getBool(this.data.config.options.saveUserSettings, false)) {
+    if (Bools.getBool(this.data.config!.options.saveUserSettings, false)) {
       const storedSettings: any = Storage.get("uv.settings", StorageType.LOCAL);
 
       if (storedSettings) {
@@ -818,7 +811,7 @@ export class BaseExtension implements IExtension {
       Storage.set("uv.settings", settings, 315360000, StorageType.LOCAL);
     }
 
-    this.data.config.options = $.extend(this.data.config.options, settings);
+    this.data.config!.options = $.extend(this.data.config!.options, settings);
   }
 
   getLocale(): string {
@@ -835,7 +828,7 @@ export class BaseExtension implements IExtension {
 
     if (!thumbnail || !(typeof thumbnail === "string")) {
       thumbnail = canvas.getCanonicalImageUri(
-        this.data.config.options.bookmarkThumbWidth
+        this.data.config!.options.bookmarkThumbWidth
       );
     }
 
@@ -904,7 +897,7 @@ export class BaseExtension implements IExtension {
 
       if (!canvas.externalResource) {
         r = new ExternalResource(canvas, <IExternalResourceOptions>{
-          authApiVersion: this.data.config.options.authAPIVersion,
+          authApiVersion: this.data.config!.options.authAPIVersion,
         });
       } else {
         r = canvas.externalResource;
@@ -928,8 +921,9 @@ export class BaseExtension implements IExtension {
       }
     });
 
-    const storageStrategy: StorageType = this.data.config.options.tokenStorage;
-    const authAPIVersion: number = this.data.config.options.authAPIVersion;
+    const storageStrategy: StorageType = this.data.config!.options
+      .tokenStorage as StorageType;
+    const authAPIVersion: number = this.data.config!.options.authAPIVersion;
 
     // if using auth api v1
     if (authAPIVersion === 1) {
@@ -1004,7 +998,7 @@ export class BaseExtension implements IExtension {
 
   viewCanvas(canvasIndex: number): void {
     if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
-      this.showMessage(this.data.config.content.canvasIndexOutOfRange);
+      this.showMessage(this.data.config!.content.canvasIndexOutOfRange);
       return;
     }
 
@@ -1073,11 +1067,11 @@ export class BaseExtension implements IExtension {
   }
 
   isHeaderPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.headerPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.headerPanelEnabled, true);
   }
 
   isLeftPanelEnabled(): boolean {
-    if (Bools.getBool(this.data.config.options.leftPanelEnabled, true)) {
+    if (Bools.getBool(this.data.config!.options.leftPanelEnabled, true)) {
       if (this.helper.hasParentCollection()) {
         return true;
       } else if (this.helper.isMultiCanvas()) {
@@ -1096,11 +1090,11 @@ export class BaseExtension implements IExtension {
   }
 
   isRightPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.rightPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.rightPanelEnabled, true);
   }
 
   isFooterPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.footerPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.footerPanelEnabled, true);
   }
 
   // isMobile(): boolean {
@@ -1125,7 +1119,10 @@ export class BaseExtension implements IExtension {
   }
 
   useArrowKeysToNavigate(): boolean {
-    return Bools.getBool(this.data.config.options.useArrowKeysToNavigate, true);
+    return Bools.getBool(
+      this.data.config!.options.useArrowKeysToNavigate,
+      true
+    );
   }
 
   bookmark(): void {
