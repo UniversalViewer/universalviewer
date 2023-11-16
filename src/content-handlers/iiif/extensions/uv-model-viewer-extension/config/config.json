@@ -65,12 +65,15 @@
     },
     "footerPanel": {
       "options": {
+        "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": false,
         "feedbackEnabled": false,
+        "fullscreenEnabled": true,
         "minimiseButtons": true,
         "moreInfoEnabled": true,
         "openEnabled": false,
+        "printEnabled": false,
         "shareEnabled": true
       },
       "content": {
@@ -78,6 +81,7 @@
         "download": "$download",
         "embed": "$embed",
         "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
@@ -95,9 +99,13 @@
       }
     },
     "headerPanel": {
+      "options": {
+        "centerOptionsEnabled": true,
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true
+      },
       "content": {
         "close": "$close",
-        "help": "$help",
         "settings": "$settings"
       }
     },
@@ -145,6 +153,21 @@
         "title": "$moreInformation"
       }
     },
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "contentLeftPanel": {
       "options": {
         "elideCount": 40,
@@ -180,6 +203,9 @@
       }
     },
     "dialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "close": "$close"
       }

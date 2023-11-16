@@ -31,11 +31,11 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   $settingsDialogue: JQuery;
   centerPanel: ModelViewerCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ContentLeftPanel;
-  mobileFooterPanel: FooterPanel;
+  mobileFooterPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;

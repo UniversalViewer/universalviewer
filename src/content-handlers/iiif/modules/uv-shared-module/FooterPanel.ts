@@ -3,8 +3,11 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { Bools, Documents } from "@edsilv/utils";
 import { Events } from "../../../../Events";
+import { BaseConfig } from "../../BaseConfig";
 
-export class FooterPanel extends BaseView {
+export class FooterPanel<
+  T extends BaseConfig["modules"]["footerPanel"]
+> extends BaseView<T> {
   $feedbackButton: JQuery;
   $bookmarkButton: JQuery;
   $downloadButton: JQuery;

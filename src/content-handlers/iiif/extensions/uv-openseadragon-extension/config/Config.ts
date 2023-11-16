@@ -1,4 +1,12 @@
-import { BaseConfig } from "@/content-handlers/iiif/BaseConfig";
+import {
+  BaseConfig,
+  FooterPanelContent,
+  FooterPanelOptions,
+  HeaderPanelContent,
+  HeaderPanelOptions,
+  LeftPanelContent,
+  LeftPanelOptions,
+} from "@/content-handlers/iiif/BaseConfig";
 
 /**
  * Type for Thumbs Cache Invalidation
@@ -10,10 +18,7 @@ type ThumbsCacheInvalidation = {
   paramType: string;
 };
 
-/**
- * Type for Content Left Panel Options
- */
-type ContentLeftPanelOptions = {
+type ContentLeftPanelOptions = LeftPanelOptions & {
   /** Determines if tree should expand automatically */
   autoExpandTreeEnabled: boolean;
   /** Number of items to auto expand tree */
@@ -28,8 +33,6 @@ type ContentLeftPanelOptions = {
   defaultToTreeIfGreaterThan: number;
   /** Number of characters to elide at */
   elideCount: number;
-  /** Determines if full expansion is enabled */
-  expandFullEnabled: boolean;
   /** Threshold for gallery thumb chunked resizing */
   galleryThumbChunkedResizingThreshold: number;
   /** Height of the gallery thumbnail */
@@ -44,14 +47,6 @@ type ContentLeftPanelOptions = {
   oneColThumbWidth: number;
   /** Determines if page mode is enabled */
   pageModeEnabled: boolean;
-  /** Duration of the panel animation */
-  panelAnimationDuration: number;
-  /** Width of the collapsed panel */
-  panelCollapsedWidth: number;
-  /** Width of the expanded panel */
-  panelExpandedWidth: number;
-  /** Determines if the panel is open */
-  panelOpen: boolean;
   /** Order of the tabs */
   tabOrder: string;
   /** Configuration for thumbs cache invalidation */
@@ -72,12 +67,8 @@ type ContentLeftPanelOptions = {
   twoColThumbWidth: number;
 };
 
-type ContentLeftPanelContent = {
-  collapse: string;
-  collapseFull: string;
+type ContentLeftPanelContent = LeftPanelContent & {
   date: string;
-  expand: string;
-  expandFull: string;
   index: string;
   manifestRanges: string;
   searchResult: string;
@@ -91,61 +82,6 @@ type ContentLeftPanelContent = {
 type ContentLeftPanel = {
   options: ContentLeftPanelOptions;
   content: ContentLeftPanelContent;
-};
-
-type FooterPanelOptions = {
-  /** Determines if autocomplete for words is allowed */
-  autocompleteAllowWords: boolean;
-  /** Determines if bookmarking is enabled */
-  bookmarkEnabled: boolean;
-  /** Determines if downloading is enabled */
-  downloadEnabled: boolean;
-  /** Determines if embedding is enabled */
-  embedEnabled: boolean;
-  /** Determines if feedback is enabled */
-  feedbackEnabled: boolean;
-  /** Determines if fullscreen mode is enabled */
-  fullscreenEnabled: boolean;
-  /** Determines if buttons are minimised */
-  minimiseButtons: boolean;
-  /** Determines if more information is enabled */
-  moreInfoEnabled: boolean;
-  /** Determines if opening is enabled */
-  openEnabled: boolean;
-  /** Determines if printing is enabled */
-  printEnabled: boolean;
-  /** Determines if sharing is enabled */
-  shareEnabled: boolean;
-};
-
-type FooterPanelContent = {
-  bookmark: string;
-  download: string;
-  embed: string;
-  exitFullScreen: string;
-  feedback: string;
-  fullScreen: string;
-  moreInfo: string;
-  open: string;
-  share: string;
-};
-
-type FooterPanel = {
-  options: FooterPanelOptions;
-  content: FooterPanelContent;
-};
-
-type HeaderPanelOptions = {
-  /** Determines if center options are enabled */
-  centerOptionsEnabled: boolean;
-  /** Determines if locale toggle is enabled */
-  localeToggleEnabled: boolean;
-  /** Determines if settings button is enabled */
-  settingsButtonEnabled: boolean;
-};
-
-type HeaderPanel = {
-  options: HeaderPanelOptions;
 };
 
 type HelpDialogueContent = {
@@ -183,23 +119,26 @@ type MultiSelectDialogue = {
   content: MultiSelectDialogueContent;
 };
 
-type PagingHeaderPanelOptions = {
-  /** Determines if autocomplete box is enabled */
-  autoCompleteBoxEnabled: boolean;
+type PagingHeaderPanelOptions = HeaderPanelOptions & {
   /** Determines if autocomplete for words is allowed */
   autocompleteAllowWords: boolean;
+  /** Determines if autocomplete box is enabled */
+  autoCompleteBoxEnabled: boolean;
   /** Determines if gallery button is enabled */
   galleryButtonEnabled: boolean;
+  /** Determines if help is enabled */
+  helpEnabled: boolean;
   /** Determines if image selection box is enabled */
   imageSelectionBoxEnabled: boolean;
+  /** Determines if mode options is enabled */
+  modeOptionsEnabled: boolean;
   /** Determines if page mode is enabled */
   pageModeEnabled: boolean;
   /** Determines if paging toggle is enabled */
   pagingToggleEnabled: boolean;
 };
 
-type PagingHeaderPanelContent = {
-  close: string;
+type PagingHeaderPanelContent = HeaderPanelContent & {
   emptyValue: string;
   first: string;
   firstImage: string;
@@ -222,7 +161,6 @@ type PagingHeaderPanelContent = {
   previous: string;
   previousImage: string;
   previousPage: string;
-  settings: string;
   twoUp: string;
 };
 
@@ -282,7 +220,9 @@ type OpenSeadragonCenterPanel = {
   content: OpenSeadragonCenterPanelContent;
 };
 
-type SearchFooterPanelOptions = {
+type SearchFooterPanelOptions = FooterPanelOptions & {
+  /** Determines if autocomplete for words is allowed */
+  autocompleteAllowWords: boolean;
   /** Number of terms to elide in details */
   elideDetailsTermsCount: number;
   /** Number of terms to elide in results */
@@ -295,7 +235,7 @@ type SearchFooterPanelOptions = {
   positionMarkerEnabled: boolean;
 };
 
-type SearchFooterPanelContent = {
+type SearchFooterPanelContent = FooterPanelContent & {
   clearSearch: string;
   defaultLabel: string;
   displaying: string;
@@ -410,8 +350,6 @@ type RestrictedDialogue = {
 
 type Modules = {
   contentLeftPanel: ContentLeftPanel;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
   helpDialogue: HelpDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   pagingHeaderPanel: PagingHeaderPanel;

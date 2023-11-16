@@ -39,8 +39,8 @@ export default class Extension extends BaseExtension<Config>
   centerPanel: MediaElementCenterPanel;
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;

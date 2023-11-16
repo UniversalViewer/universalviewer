@@ -1,5 +1,4 @@
 import { StorageType } from "@edsilv/utils";
-
 export { StorageType } from "@edsilv/utils";
 
 export type MetricType = string | "sm" | "md" | "lg" | "xl";
@@ -105,9 +104,102 @@ type Locale = {
   label: string;
 };
 
+export type ModuleOptions = {};
+
+export type ModuleContent = {};
+
+export type ModuleConfig = {
+  options: ModuleOptions;
+  content: ModuleContent;
+};
+
 export type Localisation = {
   label: string;
   locales: Locale[];
+};
+
+export type HeaderPanelOptions = {
+  /** Determines if center options are enabled */
+  centerOptionsEnabled: boolean;
+  /** Determines if locale toggle is enabled */
+  localeToggleEnabled: boolean;
+  /** Determines if settings button is enabled */
+  settingsButtonEnabled: boolean;
+};
+
+export type HeaderPanelContent = {
+  close: string;
+  settings: string;
+};
+
+type HeaderPanel = ModuleConfig & {
+  options: HeaderPanelOptions;
+  content: HeaderPanelContent;
+};
+
+export type LeftPanelOptions = {
+  /** Determines if expand full is enabled */
+  expandFullEnabled: boolean;
+  /** Determines the duration of the panel expand/collapse animation */
+  panelAnimationDuration: number;
+  /** Width of the collapsed panel */
+  panelCollapsedWidth: number;
+  /** Width of the expanded panel */
+  panelExpandedWidth: number;
+  /** Determines if the panel is open */
+  panelOpen: boolean;
+};
+
+export type LeftPanelContent = {
+  collapse: string;
+  collapseFull: string;
+  expand: string;
+  expandFull: string;
+};
+
+type LeftPanel = ModuleConfig & {
+  options: LeftPanelOptions;
+  content: LeftPanelContent;
+};
+
+export type FooterPanelOptions = {
+  /** Determines if bookmarking is enabled */
+  bookmarkEnabled: boolean;
+  /** Determines if downloading is enabled */
+  downloadEnabled: boolean;
+  /** Determines if embedding is enabled */
+  embedEnabled: boolean;
+  /** Determines if feedback is enabled */
+  feedbackEnabled: boolean;
+  /** Determines if fullscreen mode is enabled */
+  fullscreenEnabled: boolean;
+  /** Determines if buttons are minimised */
+  minimiseButtons: boolean;
+  /** Determines if more information is enabled */
+  moreInfoEnabled: boolean;
+  /** Determines if opening is enabled */
+  openEnabled: boolean;
+  /** Determines if printing is enabled */
+  printEnabled: boolean;
+  /** Determines if sharing is enabled */
+  shareEnabled: boolean;
+};
+
+export type FooterPanelContent = {
+  bookmark: string;
+  download: string;
+  embed: string;
+  exitFullScreen: string;
+  feedback: string;
+  fullScreen: string;
+  moreInfo: string;
+  open: string;
+  share: string;
+};
+
+type FooterPanel = ModuleConfig & {
+  options: FooterPanelOptions;
+  content: FooterPanelContent;
 };
 
 type DialogueOptions = {
@@ -118,7 +210,7 @@ type DialogueContent = {
   close: string;
 };
 
-type Dialogue = {
+type Dialogue = ModuleConfig & {
   options?: DialogueOptions;
   content: DialogueContent;
 };
@@ -268,7 +360,10 @@ export type BaseConfig = {
   modules: {
     dialogue: Dialogue;
     downloadDialogue: DownloadDialogue;
+    footerPanel: FooterPanel;
     genericDialogue: GenericDialogue;
+    headerPanel: HeaderPanel;
+    leftPanel: LeftPanel;
     moreInfoRightPanel: MoreInfoRightPanel;
   };
   localisation: Localisation;

@@ -27,8 +27,8 @@ export default class Extension extends BaseExtension<Config>
   $shareDialogue: JQuery;
   centerPanel: EbookCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: EbookLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   moreInfoDialogue: MoreInfoDialogue;

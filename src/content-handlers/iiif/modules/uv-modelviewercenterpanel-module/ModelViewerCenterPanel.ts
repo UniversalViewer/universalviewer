@@ -12,6 +12,7 @@ import { Async } from "@edsilv/utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Extension";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-model-viewer-extension/config/Config";
 
 export class ModelViewerCenterPanel extends CenterPanel {
   $modelviewer: JQuery;
@@ -55,9 +56,11 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.$modelviewer = $(
       `<model-viewer 
-        ${this.config.options.autoRotateEnabled ? "auto-rotate" : ""} 
         ${
-          this.config.options.interactionPromptEnabled
+          (this.config as Config).options.autoRotateEnabled ? "auto-rotate" : ""
+        } 
+        ${
+          (this.config as Config).options.interactionPromptEnabled
             ? 'interaction-prompt="auto"'
             : 'interaction-prompt="none"'
         }

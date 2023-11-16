@@ -46,15 +46,35 @@
     "zoomToSearchResultEnabled": true
   },
   "modules": {
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "ebookLeftPanel": {
       "options": {
         "expandFullEnabled": false,
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
-        "panelExpandedWidth": 255
+        "panelExpandedWidth": 255,
+        "panelOpen": false
       },
       "content": {
-        "title": "$contents"
+        "title": "$contents",
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
       }
     },
     "dialogue": {
@@ -102,10 +122,12 @@
     },
     "headerPanel": {
       "options": {
+        "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
       },
       "content": {
+        "close": "$close",
         "settings": "$settings"
       }
     },

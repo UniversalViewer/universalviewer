@@ -46,6 +46,21 @@
     "zoomToSearchResultEnabled": true
   },
   "modules": {
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "shareDialogue": {
       "options": {
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
@@ -68,21 +83,26 @@
     "footerPanel": {
       "options": {
         "bookmarkEnabled": false,
-        "downloadEnabled": false,
+        "downloadEnabled": true,
         "embedEnabled": false,
         "feedbackEnabled": false,
+        "fullscreenEnabled": true,
         "minimiseButtons": true,
+        "moreInfoEnabled": true,
         "openEnabled": false,
+        "printEnabled": false,
         "shareEnabled": true
       },
       "content": {
         "bookmark": "$add_to_bookmarks",
         "download": "$download",
-        "embed": "$share",
+        "embed": "$embed",
         "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
-        "open": "$oOpen"
+        "open": "$open",
+        "share": "$share"
       }
     },
     "genericDialogue": {
@@ -96,9 +116,14 @@
       }
     },
     "headerPanel": {
+      "options": {
+        "centerOptionsEnabled": true,
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true
+      },
       "content": {
         "close": "$close",
-        "help": "$help"
+        "settings": "$settings"
       }
     },
     "helpDialogue": {
@@ -151,10 +176,18 @@
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": true
+        "panelOpen": true,
+        "oneColThumbHeight": 320,
+        "oneColThumbWidth": 200,
+        "twoColThumbHeight": 150,
+        "twoColThumbWidth": 90
       },
       "content": {
-        "title": "$contents"
+        "title": "$contents",
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
       }
     },
     "dialogue": {

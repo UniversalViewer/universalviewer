@@ -27,7 +27,7 @@ export default class Extension extends BaseExtension<Config>
   centerPanel: PDFCenterPanel;
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
-  footerPanel: FooterPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   headerPanel: PDFHeaderPanel;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;

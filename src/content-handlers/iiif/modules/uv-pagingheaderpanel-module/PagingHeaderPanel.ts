@@ -9,8 +9,11 @@ import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class PagingHeaderPanel extends HeaderPanel {
+export class PagingHeaderPanel extends HeaderPanel<
+  Config["modules"]["pagingHeaderPanel"]
+> {
   $autoCompleteBox: JQuery;
   $firstButton: JQuery;
   $galleryButton: JQuery;

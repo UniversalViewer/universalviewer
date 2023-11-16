@@ -1,10 +1,11 @@
 const $ = require("jquery");
 import { isVisible } from "../../../../Utils";
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
 
-export class Shell extends BaseView {
+export class Shell extends BaseView<BaseConfig> {
   public $centerPanel: JQuery;
   public $element: JQuery;
   public $footerPanel: JQuery;

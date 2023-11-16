@@ -49,6 +49,21 @@
     "zoomToBoundsEnabled": true
   },
   "modules": {
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "contentLeftPanel": {
       "options": {
         "autoExpandTreeEnabled": false,
@@ -145,7 +160,6 @@
     },
     "footerPanel": {
       "options": {
-        "autocompleteAllowWords": false,
         "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": false,
@@ -184,6 +198,10 @@
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
+      },
+      "content": {
+        "close": "$close",
+        "settings": "$settings"
       }
     },
     "helpDialogue": {
@@ -252,7 +270,12 @@
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
         "pageModeEnabled": false,
-        "pagingToggleEnabled": true
+        "pagingToggleEnabled": true,
+        "centerOptionsEnabled": true,
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true,
+        "helpEnabled": true,
+        "modeOptionsEnabled": true
       },
       "content": {
         "close": "$close",
@@ -314,11 +337,22 @@
     },
     "searchFooterPanel": {
       "options": {
+        "autocompleteAllowWords": false,
         "elideDetailsTermsCount": 20,
         "elideResultsTermsCount": 10,
         "forceImageMode": false,
         "pageModeEnabled": true,
-        "positionMarkerEnabled": true
+        "positionMarkerEnabled": true,
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
       },
       "content": {
         "clearSearch": "$clearSearch",
@@ -336,7 +370,16 @@
         "print": "$print",
         "resultFoundFor": "$resultFoundFor",
         "resultsFoundFor": "$resultsFoundFor",
-        "searchWithin": "$searchWithinItem"
+        "searchWithin": "$searchWithinItem",
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "moreInfo": "$moreInfo",
+        "open": "$open",
+        "share": "$share"
       }
     },
     "settingsDialogue": {

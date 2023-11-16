@@ -46,6 +46,21 @@
     "zoomToSearchResultEnabled": true
   },
   "modules": {
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "contentLeftPanel": {
       "options": {
         "autoExpandTreeEnabled": true,
@@ -137,10 +152,12 @@
     },
     "headerPanel": {
       "options": {
+        "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
       },
       "content": {
+        "close": "$close",
         "settings": "$settings"
       }
     },

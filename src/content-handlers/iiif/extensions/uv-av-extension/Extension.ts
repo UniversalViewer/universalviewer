@@ -25,8 +25,8 @@ export default class Extension extends BaseExtension<Config>
   $shareDialogue: JQuery;
   centerPanel: AVCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   rightPanel: MoreInfoRightPanel;

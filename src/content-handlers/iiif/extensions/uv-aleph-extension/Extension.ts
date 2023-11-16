@@ -23,8 +23,8 @@ export default class Extension extends BaseExtension<Config>
   $shareDialogue: JQuery;
   centerPanel: AlephCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: AlephLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   rightPanel: MoreInfoRightPanel;

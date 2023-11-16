@@ -46,24 +46,39 @@
     "zoomToSearchResultEnabled": true
   },
   "modules": {
-    "alephLeftPanel": {
+    "leftPanel": {
       "options": {
         "expandFullEnabled": false,
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": false,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
+    "alephLeftPanel": {
+      "options": {
         "consoleTabEnabled": true,
         "graphTabEnabled": true,
         "settingsTabEnabled": true,
-        "srcTabEnabled": false
+        "srcTabEnabled": false,
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
       },
       "content": {
-        "collapse": "Collapse",
-        "collapseFull": "Collapse",
-        "expand": "Expand",
-        "expandFull": "Expand",
-        "title": "Tools"
+        "title": "Tools",
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
       }
     },
     "dialogue": {
@@ -111,11 +126,13 @@
     },
     "headerPanel": {
       "options": {
+        "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
       },
       "content": {
-        "settings": "Settings"
+        "close": "$close",
+        "settings": "$settings"
       }
     },
     "helpDialogue": {

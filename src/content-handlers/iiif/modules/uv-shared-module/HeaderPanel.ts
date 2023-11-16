@@ -8,8 +8,11 @@ import { InformationArgs } from "./InformationArgs";
 import { InformationFactory } from "./InformationFactory";
 import { Bools } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
+import { BaseConfig } from "../../BaseConfig";
 
-export class HeaderPanel extends BaseView {
+export class HeaderPanel<
+  T extends BaseConfig["modules"]["headerPanel"]
+> extends BaseView<T> {
   $centerOptions: JQuery;
   $helpButton: JQuery;
   $informationBox: JQuery;
