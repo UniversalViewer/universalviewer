@@ -93,9 +93,6 @@ export type Options = {
   /** Determines if arrow keys can be used to navigate */
   useArrowKeysToNavigate?: boolean;
 
-  /** Determines if PDF.js should be used for PDF rendering */
-  usePdfJs?: boolean;
-
   /** Determines if zoom to search result is enabled */
   zoomToSearchResultEnabled?: boolean;
 

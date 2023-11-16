@@ -27,7 +27,7 @@ export interface IExtension {
   extensionHost: IIIFExtensionHost;
   create(): void;
   createModules(): void;
-  data: IUVData;
+  data: IUVData<BaseConfig>;
   defaultConfig: BaseConfig;
   dispose(): void;
   exitFullScreen(): void;
@@ -71,7 +71,7 @@ export interface IExtension {
   type: ExtensionLoader;
   redirect(uri: string): void;
   refresh(): void;
-  reload(data?: IUVData): void;
+  reload(data?: IUVData<BaseConfig>): void;
   resize(): void;
   resources: IExternalResourceData[] | null;
   shifted: boolean;

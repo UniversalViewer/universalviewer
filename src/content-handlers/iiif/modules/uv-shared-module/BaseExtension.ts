@@ -49,7 +49,7 @@ import { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
 import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
 
-export class BaseExtension implements IExtension {
+export class BaseExtension<T extends BaseConfig> implements IExtension {
   $authDialogue: JQuery;
   $clickThroughDialogue: JQuery;
   $element: JQuery;
@@ -59,7 +59,7 @@ export class BaseExtension implements IExtension {
   annotations: AnnotationGroup[] = [];
   clickThroughDialogue: ClickThroughDialogue;
   extensionHost: IIIFExtensionHost;
-  data: IUVData;
+  data: IUVData<T>;
   extensions: any;
   helper: Helper;
   isCreated: boolean = false;
@@ -79,7 +79,7 @@ export class BaseExtension implements IExtension {
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
-  defaultConfig: BaseConfig;
+  defaultConfig: T;
 
   public create(): void {
     const that = this;
@@ -181,7 +181,7 @@ export class BaseExtension implements IExtension {
 
           if (manifestUri) {
             this.fire(Events.DROP, manifestUri);
-            const data: IUVData = <IUVData>{};
+            const data: IUVData<T> = <IUVData<T>>{};
             data.iiifManifestId = manifestUri;
             this.reload(data);
           }
@@ -714,7 +714,7 @@ export class BaseExtension implements IExtension {
   }
 
   // re-bootstraps the application with new querystring params
-  reload(data?: IUVData): void {
+  reload(data?: IUVData<T>): void {
     this.extensionHost.publish(Events.RELOAD, data);
   }
 
@@ -1039,7 +1039,7 @@ export class BaseExtension implements IExtension {
 
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
-    const data: IUVData = <IUVData>{};
+    const data: IUVData<T> = <IUVData<T>>{};
     data.iiifManifestId = this.helper.manifestUri;
     data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
     data.manifestIndex = <number>manifest.index;
@@ -1050,7 +1050,7 @@ export class BaseExtension implements IExtension {
 
   // todo: use redux in manifold to get reset state
   viewCollection(collection: Collection): void {
-    const data: IUVData = <IUVData>{};
+    const data: IUVData<T> = <IUVData<T>>{};
     //data.manifestUri = this.helper.manifestUri;
     data.iiifManifestId = collection.parentCollection
       ? collection.parentCollection.id
@@ -1168,7 +1168,7 @@ export class BaseExtension implements IExtension {
 
   changeLocale(locale: string): void {
     // re-order locales so the passed locale is first
-    const data: IUVData = <IUVData>{};
+    const data: IUVData<T> = <IUVData<T>>{};
 
     if (this.data.locales) {
       data.locales = this.data.locales.slice(0);

@@ -30,7 +30,7 @@ import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
 import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension
+export default class Extension extends BaseExtension<Config>
   implements IMediaElementExtension {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;

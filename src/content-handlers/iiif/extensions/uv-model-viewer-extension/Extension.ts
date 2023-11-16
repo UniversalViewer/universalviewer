@@ -23,7 +23,7 @@ import { AnnotationGroup } from "@iiif/manifold";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Config } from "./config/Config";
 
-export default class ModelViewerExtension extends BaseExtension {
+export default class ModelViewerExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;

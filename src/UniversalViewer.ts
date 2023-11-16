@@ -4,7 +4,7 @@ import BaseContentHandler, { EventListener } from "./BaseContentHandler";
 
 export interface IUVOptions {
   target: HTMLElement;
-  data: IUVData;
+  data: IUVData<any>;
 }
 
 enum ContentType {
@@ -29,9 +29,9 @@ const ContentHandler: IContentHandlerRegistry = {
     ),
 };
 
-export class UniversalViewer extends BaseContentHandler<IUVData> {
+export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
   private _contentType: ContentType = ContentType.UNKNOWN;
-  private _assignedContentHandler: IContentHandler<IUVData>;
+  private _assignedContentHandler: IContentHandler<IUVData<any>>;
   private _externalEventListeners: EventListener[] = [];
 
   constructor(public options: IUVOptions) {
@@ -51,7 +51,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
     });
   }
 
-  private async _assignContentHandler(data: IUVData): Promise<boolean> {
+  private async _assignContentHandler(data: IUVData<any>): Promise<boolean> {
     let contentType: ContentType;
 
     if (data[ContentType.IIIFLEGACY]) {
@@ -91,7 +91,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData> {
     return handlerChanged;
   }
 
-  public set(data: IUVData, initial?: boolean): void {
+  public set(data: IUVData<any>, initial?: boolean): void {
     // content type may have changed
     this._assignContentHandler(data).then((handlerChanged: boolean) => {
       if (handlerChanged) {

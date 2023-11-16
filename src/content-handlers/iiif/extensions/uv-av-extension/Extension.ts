@@ -17,7 +17,8 @@ import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension implements IAVExtension {
+export default class Extension extends BaseExtension<Config>
+  implements IAVExtension {
   $downloadDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;

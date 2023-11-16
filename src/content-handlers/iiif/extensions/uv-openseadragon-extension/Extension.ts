@@ -55,7 +55,7 @@ import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 
-export default class OpenSeadragonExtension extends BaseExtension {
+export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $externalContentDialogue: JQuery;
   $helpDialogue: JQuery;

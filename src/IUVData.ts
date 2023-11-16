@@ -4,8 +4,11 @@ import { YouTubeData } from "./content-handlers/youtube/YouTubeData";
 import { ILocale } from "./content-handlers/iiif/modules/uv-shared-module/ILocale";
 import { BaseConfig } from "./content-handlers/iiif/BaseConfig";
 
-export interface IUVData extends IIIFData, EPubData, YouTubeData {
-  config?: BaseConfig; // do not pass this on initialisation, internal use only
+export interface IUVData<T extends BaseConfig>
+  extends IIIFData,
+    EPubData,
+    YouTubeData {
+  config?: T; // do not pass this on initialisation, internal use only
   debug?: boolean;
   embedded?: boolean;
   isReload?: boolean;

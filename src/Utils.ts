@@ -36,8 +36,8 @@ export const debounce = (callback: (args: any) => void, wait: number) => {
 };
 
 export const propertiesChanged = (
-  newData: IUVData,
-  currentData: IUVData,
+  newData: IUVData<any>,
+  currentData: IUVData<any>,
   properties: string[]
 ): boolean => {
   let propChanged: boolean = false;
@@ -53,8 +53,8 @@ export const propertiesChanged = (
 };
 
 export const propertyChanged = (
-  newData: IUVData,
-  currentData: IUVData,
+  newData: IUVData<any>,
+  currentData: IUVData<any>,
   propertyName: string
 ): boolean => {
   return currentData[propertyName] !== newData[propertyName];
