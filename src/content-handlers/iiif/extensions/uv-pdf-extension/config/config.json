@@ -43,7 +43,6 @@
     "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
-    "usePdfJs": true,
     "zoomToSearchResultEnabled": true
   },
   "modules": {
@@ -180,7 +179,8 @@
         "titleEnabled": false,
         "subtitleEnabled": true,
         "mostSpecificRequiredStatement": true,
-        "requiredStatementEnabled": true
+        "requiredStatementEnabled": true,
+        "usePdfJs": true
       },
       "content": {
         "attribution": "$attribution"

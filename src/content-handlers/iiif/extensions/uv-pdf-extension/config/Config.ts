@@ -15,7 +15,7 @@ import {
 
 type PDFCenterPanelOptions = CenterPanelOptions & {
   /** Determines if PDF.js should be used for PDF rendering */
-  usePdfJs?: boolean;
+  usePdfJs: boolean;
 };
 
 type PDFCenterPanelContent = CenterPanelContent & {};
