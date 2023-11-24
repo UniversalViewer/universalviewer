@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -41,9 +43,9 @@ type ModelViewerShareDialogue = ModuleConfig & {
   content: ModelViewerShareDialogueContent;
 };
 
-type ModelViewerSettingsDialogueOptions = ShareDialogueOptions & {};
+type ModelViewerSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type ModelViewerSettingsDialogueContent = ShareDialogueContent & {};
+type ModelViewerSettingsDialogueContent = SettingsDialogueContent & {};
 
 type ModelViewerSettingsDialogue = ModuleConfig & {
   options: ModelViewerSettingsDialogueOptions;

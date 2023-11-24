@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -36,9 +38,9 @@ type DefaultShareDialogue = ModuleConfig & {
   content: DefaultShareDialogueContent;
 };
 
-type DefaultSettingsDialogueOptions = ShareDialogueOptions & {};
+type DefaultSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type DefaultSettingsDialogueContent = ShareDialogueContent & {};
+type DefaultSettingsDialogueContent = SettingsDialogueContent & {};
 
 type DefaultSettingsDialogue = ModuleConfig & {
   options: DefaultSettingsDialogueOptions;

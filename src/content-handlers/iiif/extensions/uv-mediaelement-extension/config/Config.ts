@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -39,9 +41,9 @@ type MediaElementShareDialogue = ModuleConfig & {
   content: MediaElementShareDialogueContent;
 };
 
-type MediaElementSettingsDialogueOptions = ShareDialogueOptions & {};
+type MediaElementSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type MediaElementSettingsDialogueContent = ShareDialogueContent & {};
+type MediaElementSettingsDialogueContent = SettingsDialogueContent & {};
 
 type MediaElementSettingsDialogue = ModuleConfig & {
   options: MediaElementSettingsDialogueOptions;

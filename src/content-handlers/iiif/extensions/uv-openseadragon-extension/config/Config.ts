@@ -11,6 +11,8 @@ import {
   HeaderPanelContent,
   HeaderPanelOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -258,9 +260,9 @@ type OSDShareDialogue = ModuleConfig & {
   content: OSDShareDialogueContent;
 };
 
-type OSDSettingsDialogueOptions = ShareDialogueOptions & {};
+type OSDSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type OSDSettingsDialogueContent = ShareDialogueContent & {};
+type OSDSettingsDialogueContent = SettingsDialogueContent & {};
 
 type OSDSettingsDialogue = ModuleConfig & {
   options: OSDSettingsDialogueOptions;

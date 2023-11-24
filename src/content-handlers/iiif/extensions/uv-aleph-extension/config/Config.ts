@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -56,9 +58,9 @@ type AlephShareDialogue = ModuleConfig & {
   content: AlephShareDialogueContent;
 };
 
-type AlephSettingsDialogueOptions = ShareDialogueOptions & {};
+type AlephSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type AlephSettingsDialogueContent = ShareDialogueContent & {};
+type AlephSettingsDialogueContent = SettingsDialogueContent & {};
 
 type AlephSettingsDialogue = ModuleConfig & {
   options: AlephSettingsDialogueOptions;

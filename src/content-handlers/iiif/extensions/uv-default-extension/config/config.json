@@ -63,12 +63,16 @@
     },
     "shareDialogue": {
       "options": {
+        "embedEnabled": true,
+        "shareEnabled": true,
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
-        "shareManifestsEnabled": true
+        "shareManifestsEnabled": true,
+        "topCloseButtonEnabled": false
       },
       "content": {
+        "close": "$close",
         "customSize": "custom",
         "embed": "Embed",
         "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
@@ -77,7 +81,8 @@
         "share": "Share",
         "shareInstructions": "To share this item, copy the URL below.",
         "size": "Size:",
-        "width": "Width"
+        "width": "Width",
+        "shareUrl": "$shareUrl"
       }
     },
     "centerPanel": {
@@ -128,7 +133,11 @@
       }
     },
     "genericDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "emptyValue": "$emptyValue",
         "invalidNumber": "$invalidNumber",
         "noMatches": "$noMatches",
@@ -149,14 +158,22 @@
       }
     },
     "helpDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "text": "$placeholder_text",
         "title": "$help"
       }
     },
     "restrictedDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
-        "cancel": "$cancel"
+        "cancel": "$cancel",
+        "close": "$close"
       }
     },
     "moreInfoRightPanel": {
@@ -175,11 +192,13 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines"
+        "textLimitType": "lines",
+        "topCloseButtonEnabled": false
       },
       "content": {
         "attribution": "$attribution",
         "canvasHeader": "$aboutTheImage",
+        "close": "$close",
         "collapse": "$collapseInformation",
         "collapseFull": "$collapseGallery",
         "copiedToClipboard": "$copiedToClipboard",
@@ -228,19 +247,31 @@
       }
     },
     "authDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "cancel": "$cancel",
+        "close": "$close",
         "confirm": "$confirm"
       }
     },
     "clickThroughDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "viewTerms": "$viewTerms"
       }
     },
     "downloadDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "allPages": "$allPages",
+        "close": "$close",
         "currentViewAsJpg": "$currentViewAsJpg",
         "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
@@ -249,6 +280,7 @@
         "editSettings": "$editSettings",
         "entireDocument": "$entireDocument",
         "entireFileAsOriginal": "$entireFile",
+        "entireFileAsOriginalWithFormat": "$entireFileWithFormat",
         "individualPages": "$individualPages",
         "noneAvailable": "$noDownloadOptionsAvailable",
         "pagingNote": "$pagingNote",
@@ -276,7 +308,11 @@
       }
     },
     "settingsDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",

@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -57,9 +59,9 @@ type EbookShareDialogue = ModuleConfig & {
   content: EbookShareDialogueContent;
 };
 
-type EbookSettingsDialogueOptions = ShareDialogueOptions & {};
+type EbookSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type EbookSettingsDialogueContent = ShareDialogueContent & {};
+type EbookSettingsDialogueContent = SettingsDialogueContent & {};
 
 type EbookSettingsDialogue = ModuleConfig & {
   options: EbookSettingsDialogueOptions;

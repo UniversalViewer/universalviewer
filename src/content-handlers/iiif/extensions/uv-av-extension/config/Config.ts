@@ -5,6 +5,8 @@ import {
   DownloadDialogueContent,
   DownloadDialogueOptions,
   ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
@@ -49,9 +51,9 @@ type AVShareDialogue = ModuleConfig & {
   content: AVShareDialogueContent;
 };
 
-type AVSettingsDialogueOptions = ShareDialogueOptions & {};
+type AVSettingsDialogueOptions = SettingsDialogueOptions & {};
 
-type AVSettingsDialogueContent = ShareDialogueContent & {};
+type AVSettingsDialogueContent = SettingsDialogueContent & {};
 
 type AVSettingsDialogue = ModuleConfig & {
   options: AVSettingsDialogueOptions;
