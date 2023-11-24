@@ -15,13 +15,7 @@ import {
   ExpandPanelOptions,
 } from "../../config/ExpandPanel";
 
-type EbookLeftPanelOptions = ExpandPanelOptions & {
-  expandFullEnabled: boolean;
-  panelAnimationDuration: number;
-  panelCollapsedWidth: number;
-  panelExpandedWidth: number;
-  panelOpen: boolean;
-};
+type EbookLeftPanelOptions = ExpandPanelOptions & {};
 
 type EbookLeftPanelContent = ExpandPanelContent & {
   title: string;

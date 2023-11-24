@@ -16,9 +16,13 @@ import {
 } from "../../config/ExpandPanel";
 
 type AlephLeftPanelOptions = ExpandPanelOptions & {
+  /** Determines if the console tab is enabled */
   consoleTabEnabled: boolean;
+  /** Determines if the graph tab is enabled */
   graphTabEnabled: boolean;
+  /** Determines if the settings tab is enabled */
   settingsTabEnabled: boolean;
+  /** Determines if the source tab is enabled */
   srcTabEnabled: boolean;
 };
 

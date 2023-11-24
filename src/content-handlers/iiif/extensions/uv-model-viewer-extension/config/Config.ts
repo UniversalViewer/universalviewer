@@ -12,9 +12,13 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 type ModelViewerCenterPanelOptions = CenterPanelOptions & {
+  /** Determines if auto rotation is enabled */
   autoRotateEnabled: boolean;
+  /** Delay in camera change */
   cameraChangeDelay: number;
+  /** Determines if double click annotation is enabled */
   doubleClickAnnotationEnabled: boolean;
+  /** Determines if interaction prompt is enabled */
   interactionPromptEnabled: boolean;
 };
 

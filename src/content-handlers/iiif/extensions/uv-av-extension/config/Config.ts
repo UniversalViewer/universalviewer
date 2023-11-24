@@ -12,15 +12,25 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 type AVCenterPanelOptions = CenterPanelOptions & {
+  /** Determines if the poster image is expanded */
   posterImageExpanded: boolean;
+  /** Determines if media errors are hidden */
   hideMediaError: boolean;
+  /** Determines if parent is included in title */
   includeParentInTitleEnabled: boolean;
+  /** Field for subtitle metadata */
   subtitleMetadataField: string;
+  /** Determines if auto play is enabled */
   autoPlay: boolean;
+  /** Determines if fast forward is enabled */
   enableFastForward: boolean;
+  /** Determines if fast rewind is enabled */
   enableFastRewind: boolean;
+  /** Ratio of the poster image */
   posterImageRatio: number;
+  /** Determines if limit is set to range */
   limitToRange: boolean;
+  /** Determines if ranges auto advance */
   autoAdvanceRanges: boolean;
 };
 
