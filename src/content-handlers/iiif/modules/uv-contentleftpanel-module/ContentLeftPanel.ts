@@ -22,11 +22,9 @@ import {
 } from "manifesto.js";
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
 import { isVisible } from "../../../../Utils";
-import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+import { ContentLeftPanel as ContentLeftPanelConfig } from "../../extensions/config/ContentLeftPanel";
 
-export class ContentLeftPanel extends LeftPanel<
-  Config["modules"]["contentLeftPanel"]
-> {
+export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $bottomOptions: JQuery;
   $galleryView: JQuery;
   $leftOptions: JQuery;

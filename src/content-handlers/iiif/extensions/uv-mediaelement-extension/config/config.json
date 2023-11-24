@@ -63,18 +63,21 @@
     },
     "shareDialogue": {
       "options": {
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "instructionsEnabled": false,
+        "shareFrameEnabled": true,
+        "shareManifestsEnabled": true
       },
       "content": {
-        "customSize": "$custom",
-        "embed": "$embed",
-        "embedInstructions": "$embedInstruction",
-        "height": "$height",
-        "iiif": "$iiifManifest",
-        "share": "$share",
-        "shareInstructions": "$shareInstructions",
-        "size": "$size",
-        "width": "$width"
+        "customSize": "custom",
+        "embed": "Embed",
+        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
+        "height": "Height",
+        "iiif": "IIIF Manifest",
+        "share": "Share",
+        "shareInstructions": "To share this item, copy the URL below.",
+        "size": "Size:",
+        "width": "Width"
       }
     },
     "footerPanel": {
@@ -129,6 +132,17 @@
         "title": "$help"
       }
     },
+    "centerPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
     "mediaelementCenterPanel": {
       "defaultHeight": 420,
       "defaultWidth": 560,
@@ -136,11 +150,29 @@
         "attribution": "$attribution"
       }
     },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "$cancel"
+      }
+    },
+    "authDialogue": {
+      "content": {
+        "cancel": "$cancel",
+        "confirm": "$confirm"
+      }
+    },
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "$viewTerms"
+      }
+    },
     "moreInfoRightPanel": {
       "options": {
         "canvasDisplayOrder": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
+        "expandFullEnabled": false,
+        "limitToRange": false,
         "manifestDisplayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
@@ -221,14 +253,21 @@
       }
     },
     "loginDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "login": "$login",
-        "cancel": "$cancel"
+        "logout": "$logout",
+        "cancel": "$cancel",
+        "close": "$close"
       }
     },
     "settingsDialogue": {
       "content": {
         "locale": "$locale",
+        "navigatorEnabled": "$navigatorEnabled",
+        "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "preserveViewport": "$preserveViewport",

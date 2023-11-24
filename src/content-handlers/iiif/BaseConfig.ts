@@ -1,4 +1,9 @@
 import { StorageType } from "@edsilv/utils";
+import {
+  ExpandPanel,
+  ExpandPanelContent,
+  ExpandPanelOptions,
+} from "./extensions/config/ExpandPanel";
 export { StorageType } from "@edsilv/utils";
 
 export type MetricType = string | "sm" | "md" | "lg" | "xl";
@@ -137,29 +142,22 @@ type HeaderPanel = ModuleConfig & {
   content: HeaderPanelContent;
 };
 
-export type LeftPanelOptions = {
-  /** Determines if expand full is enabled */
-  expandFullEnabled: boolean;
-  /** Determines the duration of the panel expand/collapse animation */
-  panelAnimationDuration: number;
-  /** Width of the collapsed panel */
-  panelCollapsedWidth: number;
-  /** Width of the expanded panel */
-  panelExpandedWidth: number;
-  /** Determines if the panel is open */
-  panelOpen: boolean;
+type LeftPanel = ExpandPanel & {};
+
+export type CenterPanelOptions = {
+  titleEnabled: boolean;
+  subtitleEnabled: boolean;
+  mostSpecificRequiredStatement: boolean;
+  requiredStatementEnabled: boolean;
 };
 
-export type LeftPanelContent = {
-  collapse: string;
-  collapseFull: string;
-  expand: string;
-  expandFull: string;
+export type CenterPanelContent = {
+  attribution: string;
 };
 
-type LeftPanel = ModuleConfig & {
-  options: LeftPanelOptions;
-  content: LeftPanelContent;
+type CenterPanel = ModuleConfig & {
+  options: CenterPanelOptions;
+  content: CenterPanelContent;
 };
 
 export type FooterPanelOptions = {
@@ -202,11 +200,11 @@ type FooterPanel = ModuleConfig & {
   content: FooterPanelContent;
 };
 
-type DialogueOptions = {
+export type DialogueOptions = {
   topCloseButtonEnabled: boolean;
 };
 
-type DialogueContent = {
+export type DialogueContent = {
   close: string;
 };
 
@@ -215,64 +213,123 @@ type Dialogue = ModuleConfig & {
   content: DialogueContent;
 };
 
-/**
- * Type for Download Dialogue Options
- */
-type DownloadDialogueOptions = {
-  /** Size of the confined image */
-  confinedImageSize: number;
-  /** Percentage of the current view that is disabled */
-  currentViewDisabledPercentage: number;
-  /** Determines if download of current view is enabled */
-  downloadCurrentViewEnabled: boolean;
-  /** Determines if download of whole image in high resolution is enabled */
-  downloadWholeImageHighResEnabled: boolean;
-  /** Determines if download of whole image in low resolution is enabled */
-  downloadWholeImageLowResEnabled: boolean;
-  /** Maximum width of the image */
-  maxImageWidth: number;
-  /** Determines if explanatory text for options is enabled */
-  optionsExplanatoryTextEnabled: boolean;
-  /** Determines if selection is enabled */
-  selectionEnabled: boolean;
+export type SettingsDialogueOptions = DialogueOptions & {};
+
+export type SettingsDialogueContent = DialogueContent & {
+  locale: string;
+  navigatorEnabled: string;
+  clickToZoomEnabled: string;
+  pagingEnabled: string;
+  reducedMotion: string;
+  preserveViewport: string;
+  title: string;
+  website: string;
 };
 
-type DownloadDialogueContent = {
-  allPages: string;
-  currentViewAsJpg: string;
-  currentViewAsJpgExplanation: string;
+type SettingsDialogue = ModuleConfig & {
+  options: SettingsDialogueOptions;
+  content: SettingsDialogueContent;
+};
+
+export type ShareDialogueOptions = DialogueOptions & {
+  /** Determines if embed is enabled */
+  embedEnabled: boolean;
+  /** Template for embedding */
+  embedTemplate: string;
+  /** Determines if instructions are enabled */
+  instructionsEnabled: boolean;
+  /** Determines if sharing is enabled */
+  shareEnabled: boolean;
+  /** Determines if sharing frame is enabled */
+  shareFrameEnabled: boolean;
+  /** Determines if sharing manifests is enabled */
+  shareManifestsEnabled: boolean;
+};
+
+export type ShareDialogueContent = DialogueContent & {
+  customSize: string;
+  embed: string;
+  embedInstructions: string;
+  height: string;
+  iiif: string;
+  share: string;
+  shareInstructions: string;
+  size: string;
+  width: string;
+  shareUrl: string;
+};
+
+type ShareDialogue = ModuleConfig & {
+  options: ShareDialogueOptions;
+  content: ShareDialogueContent;
+};
+
+type AuthDialogueOptions = DialogueOptions & {};
+
+type AuthDialogueContent = DialogueContent & {
+  cancel: string;
+  confirm: string;
+};
+
+type AuthDialogue = ModuleConfig & {
+  options: AuthDialogueOptions;
+  content: AuthDialogueContent;
+};
+
+export type DownloadDialogueOptions = DialogueOptions & {};
+
+export type DownloadDialogueContent = DialogueContent & {
   download: string;
-  downloadSelection: string;
-  downloadSelectionExplanation: string;
-  editSettings: string;
   entireDocument: string;
   entireFileAsOriginal: string;
-  individualPages: string;
+  entireFileAsOriginalWithFormat: string;
   noneAvailable: string;
-  pagingNote: string;
-  preview: string;
-  selection: string;
-  termsOfUse: string;
   title: string;
-  wholeImageHighRes: string;
-  wholeImageHighResExplanation: string;
-  wholeImageLowResAsJpg: string;
-  wholeImageLowResAsJpgExplanation: string;
-  wholeImagesHighRes: string;
-  wholeImagesHighResExplanation: string;
 };
 
-type DownloadDialogue = {
-  options?: DownloadDialogueOptions;
+export type DownloadDialogue = ModuleConfig & {
+  options: DownloadDialogueOptions;
   content: DownloadDialogueContent;
 };
 
-/**
- * Type for Generic Dialogue Options
- */
-type GenericDialogueOptions = {};
+type ClickThroughDialogueOptions = DialogueOptions & {};
 
-type GenericDialogueContent = {
+type ClickThroughDialogueContent = DialogueContent & {
+  viewTerms: string;
+};
+
+type ClickThroughDialogue = ModuleConfig & {
+  options: ClickThroughDialogueOptions;
+  content: ClickThroughDialogueContent;
+};
+
+type LoginDialogueOptions = DialogueOptions & {};
+
+type LoginDialogueContent = DialogueContent & {
+  login: string;
+  logout: string;
+  cancel: string;
+};
+
+type LoginDialogue = ModuleConfig & {
+  options: LoginDialogueOptions;
+  content: LoginDialogueContent;
+};
+
+type RestrictedDialogueOptions = DialogueOptions & {};
+
+type RestrictedDialogueContent = DialogueContent & {
+  cancel: string;
+};
+
+type RestrictedDialogue = ModuleConfig & {
+  options: RestrictedDialogueOptions;
+  content: RestrictedDialogueContent;
+};
+
+type GenericDialogueOptions = DialogueOptions & {};
+
+type GenericDialogueContent = DialogueContent & {
   emptyValue: string;
   invalidNumber: string;
   noMatches: string;
@@ -281,63 +338,71 @@ type GenericDialogueContent = {
   refresh: string;
 };
 
-type GenericDialogue = {
-  options?: GenericDialogueOptions;
+type GenericDialogue = ModuleConfig & {
+  options: GenericDialogueOptions;
   content: GenericDialogueContent;
 };
 
-type MoreInfoRightPanelOptions = {
-  /** Order in which canvases are displayed */
-  canvasDisplayOrder: string;
-  /** Canvases to exclude from display */
-  canvasExclude: string;
-  /** Determines if copying to clipboard is enabled */
-  copyToClipboardEnabled: boolean;
-  /** Order in which manifests are displayed */
-  manifestDisplayOrder: string;
-  /** Manifests to exclude from display */
-  manifestExclude: string;
-  /** Duration of the panel animation */
-  panelAnimationDuration: number;
-  /** Width of the collapsed panel */
-  panelCollapsedWidth: number;
-  /** Width of the expanded panel */
-  panelExpandedWidth: number;
-  /** Determines if the panel is open */
-  panelOpen: boolean;
-  /** Language codes for right-to-left languages */
-  rtlLanguageCodes: string;
-  /** Determines if all languages should be shown */
-  showAllLanguages: boolean;
-  /** Limit for the text */
-  textLimit: number;
-  /** Type of the text limit */
-  textLimitType: string;
-};
+type HelpDialogueOptions = DialogueOptions & {};
 
-type MoreInfoRightPanelContent = {
-  attribution: string;
-  canvasHeader: string;
-  collapse: string;
-  collapseFull: string;
-  copiedToClipboard: string;
-  copyToClipboard: string;
-  description: string;
-  expand: string;
-  expandFull: string;
-  holdingText: string;
-  less: string;
-  license: string;
-  logo: string;
-  manifestHeader: string;
-  more: string;
-  noData: string;
-  page: string;
-  rangeHeader: string;
+type HelpDialogueContent = DialogueContent & {
+  text: string;
   title: string;
 };
 
-type MoreInfoRightPanel = {
+type HelpDialogue = ModuleConfig & {
+  options: HelpDialogueOptions;
+  content: HelpDialogueContent;
+};
+
+type MoreInfoRightPanelOptions = DialogueOptions &
+  ExpandPanelOptions & {
+    /** Order in which canvases are displayed */
+    canvasDisplayOrder: string;
+    /** Canvases to exclude from display */
+    canvasExclude: string;
+    /** Determines if copying to clipboard is enabled */
+    copyToClipboardEnabled: boolean;
+    /** Determines if download is enabled */
+    limitToRange: boolean;
+    /** Order in which manifests are displayed */
+    manifestDisplayOrder: string;
+    /** Manifests to exclude from display */
+    manifestExclude: string;
+    /** Language codes for right-to-left languages */
+    rtlLanguageCodes: string;
+    /** Determines if all languages should be shown */
+    showAllLanguages: boolean;
+    /** Limit for the text */
+    textLimit: number;
+    /** Type of the text limit */
+    textLimitType: string;
+  };
+
+type MoreInfoRightPanelContent = DialogueContent &
+  ExpandPanelContent & {
+    attribution: string;
+    canvasHeader: string;
+    collapse: string;
+    collapseFull: string;
+    copiedToClipboard: string;
+    copyToClipboard: string;
+    description: string;
+    expand: string;
+    expandFull: string;
+    holdingText: string;
+    less: string;
+    license: string;
+    logo: string;
+    manifestHeader: string;
+    more: string;
+    noData: string;
+    page: string;
+    rangeHeader: string;
+    title: string;
+  };
+
+export type MoreInfoRightPanel = ModuleConfig & {
   options: MoreInfoRightPanelOptions;
   content: MoreInfoRightPanelContent;
 };
@@ -358,13 +423,21 @@ export type BaseConfig = {
   uri?: string;
   options: Options;
   modules: {
+    authDialogue: AuthDialogue;
+    centerPanel: CenterPanel;
+    clickThroughDialogue: ClickThroughDialogue;
     dialogue: Dialogue;
     downloadDialogue: DownloadDialogue;
     footerPanel: FooterPanel;
     genericDialogue: GenericDialogue;
     headerPanel: HeaderPanel;
+    helpDialogue: HelpDialogue;
     leftPanel: LeftPanel;
+    loginDialogue: LoginDialogue;
     moreInfoRightPanel: MoreInfoRightPanel;
+    restrictedDialogue: RestrictedDialogue;
+    settingsDialogue: SettingsDialogue;
+    shareDialogue: ShareDialogue;
   };
   localisation: Localisation;
   content: Content;

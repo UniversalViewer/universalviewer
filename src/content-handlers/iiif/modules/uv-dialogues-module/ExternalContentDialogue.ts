@@ -1,8 +1,11 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
-export class ExternalContentDialogue extends Dialogue {
+export class ExternalContentDialogue extends Dialogue<
+  Config["modules"]["multiSelectDialogue"]
+> {
   $iframe: JQuery;
 
   constructor($element: JQuery) {

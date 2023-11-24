@@ -14,7 +14,9 @@ import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Ext
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-model-viewer-extension/config/Config";
 
-export class ModelViewerCenterPanel extends CenterPanel {
+export class ModelViewerCenterPanel extends CenterPanel<
+  Config["modules"]["modelViewerCenterPanel"]
+> {
   $modelviewer: JQuery;
   $spinner: JQuery;
 
@@ -56,11 +58,9 @@ export class ModelViewerCenterPanel extends CenterPanel {
 
     this.$modelviewer = $(
       `<model-viewer 
+        ${this.config.options.autoRotateEnabled ? "auto-rotate" : ""} 
         ${
-          (this.config as Config).options.autoRotateEnabled ? "auto-rotate" : ""
-        } 
-        ${
-          (this.config as Config).options.interactionPromptEnabled
+          this.config.options.interactionPromptEnabled
             ? 'interaction-prompt="auto"'
             : 'interaction-prompt="none"'
         }

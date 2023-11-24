@@ -1,99 +1,23 @@
 import {
   BaseConfig,
+  CenterPanelContent,
+  CenterPanelOptions,
+  DialogueContent,
+  DialogueOptions,
+  DownloadDialogueContent,
+  DownloadDialogueOptions,
   FooterPanelContent,
   FooterPanelOptions,
   HeaderPanelContent,
   HeaderPanelOptions,
-  LeftPanelContent,
-  LeftPanelOptions,
+  ModuleConfig,
+  ShareDialogueContent,
+  ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
-/**
- * Type for Thumbs Cache Invalidation
- */
-type ThumbsCacheInvalidation = {
-  /** Determines if cache invalidation is enabled */
-  enabled: boolean;
-  /** Type of the parameter for cache invalidation */
-  paramType: string;
-};
+import { ContentLeftPanel } from "../../config/ContentLeftPanel";
 
-type ContentLeftPanelOptions = LeftPanelOptions & {
-  /** Determines if tree should expand automatically */
-  autoExpandTreeEnabled: boolean;
-  /** Number of items to auto expand tree */
-  autoExpandTreeIfFewerThan: number;
-  /** Determines if branch nodes expand on click */
-  branchNodesExpandOnClick: boolean;
-  /** Determines if branch nodes are selectable */
-  branchNodesSelectable: boolean;
-  /** Determines if tree is the default view */
-  defaultToTreeEnabled: boolean;
-  /** Number of items to default to tree view */
-  defaultToTreeIfGreaterThan: number;
-  /** Number of characters to elide at */
-  elideCount: number;
-  /** Threshold for gallery thumb chunked resizing */
-  galleryThumbChunkedResizingThreshold: number;
-  /** Height of the gallery thumbnail */
-  galleryThumbHeight: number;
-  /** Padding for gallery thumb load */
-  galleryThumbLoadPadding: number;
-  /** Width of the gallery thumbnail */
-  galleryThumbWidth: number;
-  /** Height of the one column thumbnail */
-  oneColThumbHeight: number;
-  /** Width of the one column thumbnail */
-  oneColThumbWidth: number;
-  /** Determines if page mode is enabled */
-  pageModeEnabled: boolean;
-  /** Order of the tabs */
-  tabOrder: string;
-  /** Configuration for thumbs cache invalidation */
-  thumbsCacheInvalidation: ThumbsCacheInvalidation;
-  /** Determines if thumbnails are enabled */
-  thumbsEnabled: boolean;
-  /** Extra height for thumbnails */
-  thumbsExtraHeight: number;
-  /** Duration for thumbnails image fade in */
-  thumbsImageFadeInDuration: number;
-  /** Load range for thumbnails */
-  thumbsLoadRange: number;
-  /** Determines if tree is enabled */
-  treeEnabled: boolean;
-  /** Height of the two column thumbnail */
-  twoColThumbHeight: number;
-  /** Width of the two column thumbnail */
-  twoColThumbWidth: number;
-};
-
-type ContentLeftPanelContent = LeftPanelContent & {
-  date: string;
-  index: string;
-  manifestRanges: string;
-  searchResult: string;
-  searchResults: string;
-  sortBy: string;
-  thumbnails: string;
-  title: string;
-  volume: string;
-};
-
-type ContentLeftPanel = {
-  options: ContentLeftPanelOptions;
-  content: ContentLeftPanelContent;
-};
-
-type HelpDialogueContent = {
-  text: string;
-  title: string;
-};
-
-type HelpDialogue = {
-  content: HelpDialogueContent;
-};
-
-type MultiSelectDialogueOptions = {
+type MultiSelectDialogueOptions = DialogueOptions & {
   /** Determines if chunked resizing is enabled for gallery thumbnails */
   galleryThumbChunkedResizingEnabled: boolean;
   /** Threshold for chunked resizing of gallery thumbnails */
@@ -108,13 +32,13 @@ type MultiSelectDialogueOptions = {
   pageModeEnabled: boolean;
 };
 
-type MultiSelectDialogueContent = {
+type MultiSelectDialogueContent = DialogueContent & {
   select: string;
   selectAll: string;
   title: string;
 };
 
-type MultiSelectDialogue = {
+export type MultiSelectDialogue = ModuleConfig & {
   options: MultiSelectDialogueOptions;
   content: MultiSelectDialogueContent;
 };
@@ -164,12 +88,12 @@ type PagingHeaderPanelContent = HeaderPanelContent & {
   twoUp: string;
 };
 
-type PagingHeaderPanel = {
+type PagingHeaderPanel = ModuleConfig & {
   options: PagingHeaderPanelOptions;
   content: PagingHeaderPanelContent;
 };
 
-type OpenSeadragonCenterPanelOptions = {
+type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   /** Duration of the animation */
   animationTime: number;
   /** Determines if controls are hidden automatically */
@@ -188,6 +112,8 @@ type OpenSeadragonCenterPanelOptions = {
   controlsFadeLength: number;
   /** Default zoom level */
   defaultZoomLevel: number;
+  /** Determines if annotation is enabled */
+  doubleClickAnnotationEnabled: boolean;
   /** Determines if rendering is immediate */
   immediateRender: boolean;
   /** Maximum pixel ratio for zoom */
@@ -204,7 +130,7 @@ type OpenSeadragonCenterPanelOptions = {
   visibilityRatio: number;
 };
 
-type OpenSeadragonCenterPanelContent = {
+type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
@@ -215,7 +141,7 @@ type OpenSeadragonCenterPanelContent = {
   zoomOut: string;
 };
 
-type OpenSeadragonCenterPanel = {
+type OpenSeadragonCenterPanel = ModuleConfig & {
   options: OpenSeadragonCenterPanelOptions;
   content: OpenSeadragonCenterPanelContent;
 };
@@ -254,114 +180,103 @@ type SearchFooterPanelContent = FooterPanelContent & {
   searchWithin: string;
 };
 
-type SearchFooterPanel = {
+type SearchFooterPanel = ModuleConfig & {
   options: SearchFooterPanelOptions;
   content: SearchFooterPanelContent;
 };
 
-type SettingsDialogueContent = {
-  locale: string;
-  navigatorEnabled: string;
-  clickToZoomEnabled: string;
-  pagingEnabled: string;
-  reducedMotion: string;
-  preserveViewport: string;
-  title: string;
-  website: string;
-};
+type MobileFooterPanelOptions = FooterPanelOptions & {};
 
-type SettingsDialogue = {
-  content: SettingsDialogueContent;
-};
-
-type ShareDialogueOptions = {
-  /** Template for embedding */
-  embedTemplate: string;
-  /** Determines if instructions are enabled */
-  instructionsEnabled: boolean;
-  /** Determines if sharing frame is enabled */
-  shareFrameEnabled: boolean;
-  /** Determines if sharing manifests is enabled */
-  shareManifestsEnabled: boolean;
-};
-
-type ShareDialogueContent = {
-  customSize: string;
-  embed: string;
-  embedInstructions: string;
-  height: string;
-  iiif: string;
-  share: string;
-  shareInstructions: string;
-  size: string;
-  width: string;
-};
-
-type ShareDialogue = {
-  options: ShareDialogueOptions;
-  content: ShareDialogueContent;
-};
-
-type AuthDialogueContent = {
-  cancel: string;
-  confirm: string;
-};
-
-type AuthDialogue = {
-  content: AuthDialogueContent;
-};
-
-type ClickThroughDialogueContent = {
-  viewTerms: string;
-};
-
-type ClickThroughDialogue = {
-  content: ClickThroughDialogueContent;
-};
-
-type LoginDialogueContent = {
-  login: string;
-  logout: string;
-  cancel: string;
-};
-
-type LoginDialogue = {
-  content: LoginDialogueContent;
-};
-
-type MobileFooterPanelContent = {
+type MobileFooterPanelContent = FooterPanelContent & {
   rotateRight: string;
   moreInfo: string;
   zoomIn: string;
   zoomOut: string;
 };
 
-type MobileFooterPanel = {
+type MobileFooterPanel = ModuleConfig & {
+  options: MobileFooterPanelOptions;
   content: MobileFooterPanelContent;
 };
 
-type RestrictedDialogueContent = {
-  cancel: string;
+type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
+  /** Size of the confined image */
+  confinedImageSize: number;
+  /** Percentage of the current view that is disabled */
+  currentViewDisabledPercentage: number;
+  /** Determines if download of current view is enabled */
+  downloadCurrentViewEnabled: boolean;
+  /** Determines if download of whole image in high resolution is enabled */
+  downloadWholeImageHighResEnabled: boolean;
+  /** Determines if download of whole image in low resolution is enabled */
+  downloadWholeImageLowResEnabled: boolean;
+  /** Maximum width of the image */
+  maxImageWidth: number;
+  /** Determines if explanatory text for options is enabled */
+  optionsExplanatoryTextEnabled: boolean;
+  /** Determines if selection is enabled */
+  selectionEnabled: boolean;
 };
 
-type RestrictedDialogue = {
-  content: RestrictedDialogueContent;
+type OSDDownloadDialogueContent = DownloadDialogueContent & {
+  allPages: string;
+  currentViewAsJpg: string;
+  currentViewAsJpgExplanation: string;
+  download: string;
+  downloadSelection: string;
+  downloadSelectionExplanation: string;
+  editSettings: string;
+  entireDocument: string;
+  entireFileAsOriginal: string;
+  entireFileAsOriginalWithFormat: string;
+  individualPages: string;
+  noneAvailable: string;
+  pagingNote: string;
+  preview: string;
+  selection: string;
+  termsOfUse: string;
+  title: string;
+  wholeImageHighRes: string;
+  wholeImageHighResExplanation: string;
+  wholeImageLowResAsJpg: string;
+  wholeImageLowResAsJpgExplanation: string;
+  wholeImagesHighRes: string;
+  wholeImagesHighResExplanation: string;
+};
+
+type OSDDownloadDialogue = ModuleConfig & {
+  options: OSDDownloadDialogueOptions;
+  content: OSDDownloadDialogueContent;
+};
+
+type OSDShareDialogueOptions = ShareDialogueOptions & {};
+
+type OSDShareDialogueContent = ShareDialogueContent & {};
+
+type OSDShareDialogue = ModuleConfig & {
+  options: OSDShareDialogueOptions;
+  content: OSDShareDialogueContent;
+};
+
+type OSDSettingsDialogueOptions = ShareDialogueOptions & {};
+
+type OSDSettingsDialogueContent = ShareDialogueContent & {};
+
+type OSDSettingsDialogue = ModuleConfig & {
+  options: OSDSettingsDialogueOptions;
+  content: OSDSettingsDialogueContent;
 };
 
 type Modules = {
   contentLeftPanel: ContentLeftPanel;
-  helpDialogue: HelpDialogue;
+  downloadDialogue: OSDDownloadDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   pagingHeaderPanel: PagingHeaderPanel;
   openSeadragonCenterPanel: OpenSeadragonCenterPanel;
   searchFooterPanel: SearchFooterPanel;
-  settingsDialogue: SettingsDialogue;
-  shareDialogue: ShareDialogue;
-  authDialogue: AuthDialogue;
-  clickThroughDialogue: ClickThroughDialogue;
-  loginDialogue: LoginDialogue;
   mobileFooterPanel: MobileFooterPanel;
-  restrictedDialogue: RestrictedDialogue;
+  shareDialogue: OSDShareDialogue;
+  settingsDialogue: OSDSettingsDialogue;
 };
 
 export type Config = BaseConfig & {

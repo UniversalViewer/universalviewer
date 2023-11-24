@@ -1,32 +1,55 @@
 import {
   BaseConfig,
-  LeftPanelContent,
-  LeftPanelOptions,
+  CenterPanelContent,
+  CenterPanelOptions,
+  DownloadDialogueContent,
+  DownloadDialogueOptions,
+  ModuleConfig,
+  ShareDialogueContent,
+  ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
-type ResourcesLeftPanelOptions = LeftPanelOptions & {
-  expandFullEnabled: boolean;
-  panelAnimationDuration: number;
-  panelCollapsedWidth: number;
-  panelExpandedWidth: number;
-  panelOpen: boolean;
-  twoColThumbWidth: number;
-  twoColThumbHeight: number;
-  oneColThumbWidth: number;
-  oneColThumbHeight: number;
+type FileLinkCenterPanelOptions = CenterPanelOptions & {};
+
+type FileLinkCenterPanelContent = CenterPanelContent & {};
+
+type FileLinkCenterPanel = {
+  options: FileLinkCenterPanelOptions;
+  content: FileLinkCenterPanelContent;
 };
 
-type ResourcesLeftPanelContent = LeftPanelContent & {
-  title: string;
+type DefaultDownloadDialogueOptions = DownloadDialogueOptions & {};
+
+type DefaultDownloadDialogueContent = DownloadDialogueContent & {};
+
+type DefaultDownloadDialogue = ModuleConfig & {
+  options: DefaultDownloadDialogueOptions;
+  content: DefaultDownloadDialogueContent;
 };
 
-type ResourcesLeftPanel = {
-  options: ResourcesLeftPanelOptions;
-  content: ResourcesLeftPanelContent;
+type DefaultShareDialogueOptions = ShareDialogueOptions & {};
+
+type DefaultShareDialogueContent = ShareDialogueContent & {};
+
+type DefaultShareDialogue = ModuleConfig & {
+  options: DefaultShareDialogueOptions;
+  content: DefaultShareDialogueContent;
+};
+
+type DefaultSettingsDialogueOptions = ShareDialogueOptions & {};
+
+type DefaultSettingsDialogueContent = ShareDialogueContent & {};
+
+type DefaultSettingsDialogue = ModuleConfig & {
+  options: DefaultSettingsDialogueOptions;
+  content: DefaultSettingsDialogueContent;
 };
 
 type Modules = {
-  resourcesLeftPanel: ResourcesLeftPanel;
+  fileLinkCenterPanel: FileLinkCenterPanel;
+  downloadDialogue: DefaultDownloadDialogue;
+  shareDialogue: DefaultShareDialogue;
+  settingsDialogue: DefaultSettingsDialogue;
 };
 
 export type Config = BaseConfig & {

@@ -10,7 +10,9 @@ import { Config } from "../../extensions/uv-pdf-extension/config/Config";
 
 // declare var PDFJS: any;
 
-export class PDFCenterPanel extends CenterPanel {
+export class PDFCenterPanel extends CenterPanel<
+  Config["modules"]["pdfCenterPanel"]
+> {
   // private _$spinner: JQuery;
   private _$canvas: JQuery;
   private _$nextButton: JQuery;
@@ -58,12 +60,7 @@ export class PDFCenterPanel extends CenterPanel {
     // Only attach PDF controls if we're using PDF.js; they have no meaning in
     // PDFObject. However, we still create the objects above so that references
     // to them do not cause errors (simpler than putting usePdfJs checks all over):
-    if (
-      Bools.getBool(
-        (this.extension.data.config! as Config).options.usePdfJs,
-        false
-      )
-    ) {
+    if (Bools.getBool(this.options.usePdfJs, false)) {
       // this.$content.append(this._$spinner);
       this.$content.append(this._$progress);
       this.$content.append(this._$prevButton);
@@ -271,12 +268,7 @@ export class PDFCenterPanel extends CenterPanel {
 
     this._lastMediaUri = mediaUri;
 
-    if (
-      !Bools.getBool(
-        (this.extension.data.config! as Config).options.usePdfJs,
-        false
-      )
-    ) {
+    if (!Bools.getBool(this.options.usePdfJs, false)) {
       window.PDFObject = await import(
         /* webpackChunkName: "pdfobject" */ /* webpackMode: "lazy" */ "pdfobject"
       );
@@ -328,12 +320,7 @@ export class PDFCenterPanel extends CenterPanel {
   }
 
   private _render(num: number): void {
-    if (
-      !Bools.getBool(
-        (this.extension.data.config! as Config).options.usePdfJs,
-        false
-      )
-    ) {
+    if (!Bools.getBool(this.options.usePdfJs, false)) {
       return;
     }
 

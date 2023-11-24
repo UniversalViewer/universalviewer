@@ -1,4 +1,4 @@
-import {Dimensions} from "@edsilv/utils";
+import { Dimensions } from "@edsilv/utils";
 
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
@@ -18,8 +18,11 @@ import "mediaelement-plugins/dist/source-chooser/source-chooser";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
 
-export class MediaElementCenterPanel extends CenterPanel {
+export class MediaElementCenterPanel extends CenterPanel<
+  Config["modules"]["mediaelementCenterPanel"]
+> {
   $wrapper: JQuery;
   $container: JQuery;
   $media: JQuery;
@@ -77,8 +80,8 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-    this.mediaHeight = this.config.defaultHeight;
-    this.mediaWidth = this.config.defaultWidth;
+    this.mediaHeight = this.options.defaultHeight;
+    this.mediaWidth = this.options.defaultWidth;
 
     const poster: string = (<IMediaElementExtension>(
       this.extension
@@ -103,7 +106,9 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         if (this.isTypeCaption(rendering)) {
           subtitles.push({
-            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            label:
+              rendering.getLabel().getValue() ??
+              rendering.getFormat().toString(),
             id: rendering.id,
           });
         }
@@ -177,7 +182,7 @@ export class MediaElementCenterPanel extends CenterPanel {
           "tracks",
           "volume",
           "sourcechooser",
-          "fullscreen"
+          "fullscreen",
         ],
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
@@ -316,10 +321,7 @@ export class MediaElementCenterPanel extends CenterPanel {
       return false;
     }
 
-    const captionTypes = new Set<String>([
-      "text/vtt",
-      "text/srt",
-    ]);
+    const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
 
     return captionTypes.has(type.toString());
   }
@@ -339,7 +341,12 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.$title.text(sanitize(this.title));
     }
 
-    const size = Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+    const size = Dimensions.fitRect(
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
     this.$container.height(size.height);
     this.$container.width(size.width);

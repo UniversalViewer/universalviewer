@@ -1,8 +1,11 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "./Dialogue";
 
-export class GenericDialogue extends Dialogue {
+export class GenericDialogue extends Dialogue<
+  BaseConfig["modules"]["genericDialogue"]
+> {
   acceptCallback: any;
   $acceptButton: JQuery;
   $message: JQuery;

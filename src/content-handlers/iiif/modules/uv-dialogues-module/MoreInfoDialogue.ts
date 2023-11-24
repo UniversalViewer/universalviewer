@@ -4,8 +4,11 @@ import { Dialogue } from "../uv-shared-module/Dialogue";
 import { sanitize } from "../../../../Utils";
 import { Bools } from "@edsilv/utils";
 import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
+import { BaseConfig } from "../../BaseConfig";
 
-export class MoreInfoDialogue extends Dialogue {
+export class MoreInfoDialogue extends Dialogue<
+  BaseConfig["modules"]["moreInfoRightPanel"]
+> {
   $title: JQuery;
   metadataComponent: any;
   $metadata: JQuery;

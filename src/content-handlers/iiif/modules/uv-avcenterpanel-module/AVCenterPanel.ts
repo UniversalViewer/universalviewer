@@ -14,8 +14,11 @@ import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component/dist-esmodule";
 import { Bools } from "@edsilv/utils";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-av-extension/config/Config";
 
-export class AVCenterPanel extends CenterPanel {
+export class AVCenterPanel extends CenterPanel<
+  Config["modules"]["avCenterPanel"]
+> {
   $avcomponent: JQuery;
   avcomponent: any;
   private _lastCanvasIndex: number | undefined;
@@ -164,10 +167,10 @@ export class AVCenterPanel extends CenterPanel {
         posterImageExpanded: this.options.posterImageExpanded,
         enableFastForward: true,
         enableFastRewind: true,
-      }
+      },
     });
 
-    this.avcomponent.on('mediaerror', (err) => {
+    this.avcomponent.on("mediaerror", (err) => {
       if (!this.config.options.hideMediaError) {
         this.extensionHost.publish(IIIFEvents.SHOW_MESSAGE, [err]);
       }
@@ -262,7 +265,7 @@ export class AVCenterPanel extends CenterPanel {
     const groups: MetadataGroup[] = this.extension.helper.getMetadata(<
       MetadataOptions
     >{
-      range: currentRange
+      range: currentRange,
     });
 
     for (let i = 0; i < groups.length; i++) {

@@ -1,9 +1,12 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILocale } from "../uv-shared-module/ILocale";
 
-export class SettingsDialogue extends Dialogue {
+export class SettingsDialogue extends Dialogue<
+  BaseConfig["modules"]["settingsDialogue"]
+> {
   $locale: JQuery;
   $localeDropDown: JQuery;
   $localeLabel: JQuery;

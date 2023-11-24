@@ -146,6 +146,8 @@
         "canvasDisplayOrder": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
+        "expandFullEnabled": false,
+        "limitToRange": false,
         "manifestDisplayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
@@ -179,8 +181,23 @@
         "title": "$moreInformation"
       }
     },
+    "centerPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
     "alephCenterPanel": {
       "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true,
         "dracoDecoderPath": "uv/lib/"
       },
       "content": {
@@ -203,7 +220,8 @@
       "options": {
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
         "instructionsEnabled": false,
-        "shareFrameEnabled": true
+        "shareFrameEnabled": true,
+        "shareManifestsEnabled": true
       },
       "content": {
         "customSize": "custom",
@@ -255,10 +273,14 @@
       }
     },
     "loginDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
-        "login": "Login",
-        "logout": "Logout",
-        "cancel": "Cancel"
+        "login": "$login",
+        "logout": "$logout",
+        "cancel": "$cancel",
+        "close": "$close"
       }
     },
     "restrictedDialogue": {

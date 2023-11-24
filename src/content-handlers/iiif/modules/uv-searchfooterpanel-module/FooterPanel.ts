@@ -11,8 +11,11 @@ import { Bools, Strings } from "@edsilv/utils";
 import * as KeyCodes from "@edsilv/key-codes";
 import { AnnotationGroup } from "@iiif/manifold";
 import { Canvas, LanguageMap } from "manifesto.js";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class FooterPanel extends BaseFooterPanel {
+export class FooterPanel extends BaseFooterPanel<
+  Config["modules"]["searchFooterPanel"]
+> {
   $clearSearchResultsButton: JQuery;
   $line: JQuery;
   $nextResultButton: JQuery;

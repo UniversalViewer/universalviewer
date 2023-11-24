@@ -94,11 +94,13 @@
         "thumbsExtraHeight": 8,
         "thumbsImageFadeInDuration": 300,
         "thumbsLoadRange": 15,
+        "topCloseButtonEnabled": false,
         "treeEnabled": true,
         "twoColThumbHeight": 150,
         "twoColThumbWidth": 90
       },
       "content": {
+        "close": "$close",
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "date": "$date",
@@ -131,10 +133,12 @@
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
         "optionsExplanatoryTextEnabled": false,
-        "selectionEnabled": false
+        "selectionEnabled": false,
+        "topCloseButtonEnabled": false
       },
       "content": {
         "allPages": "$allPages",
+        "close": "$close",
         "currentViewAsJpg": "$currentViewAsJpg",
         "currentViewAsJpgExplanation": "$openNewWindow",
         "download": "$download",
@@ -143,6 +147,7 @@
         "editSettings": "$editSettings",
         "entireDocument": "$entireDocument",
         "entireFileAsOriginal": "$entireFile",
+        "entireFileAsOriginalWithFormat": "$entireFileWithFormat",
         "individualPages": "$individualPages",
         "noneAvailable": "$noDownloadOptionsAvailable",
         "pagingNote": "$pagingNote",
@@ -184,8 +189,12 @@
       }
     },
     "genericDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "emptyValue": "$emptyValue",
+        "close": "$close",
         "invalidNumber": "$invalidNumber",
         "noMatches": "$noMatches",
         "ok": "$ok",
@@ -205,7 +214,11 @@
       }
     },
     "helpDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "text": "$placeholder_text",
         "title": "$help"
       }
@@ -215,6 +228,8 @@
         "canvasDisplayOrder": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
+        "expandFullEnabled": false,
+        "limitToRange": false,
         "manifestDisplayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
@@ -224,11 +239,13 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines"
+        "textLimitType": "lines",
+        "topCloseButtonEnabled": false
       },
       "content": {
         "attribution": "$attribution",
         "canvasHeader": "$aboutTheImage",
+        "close": "$close",
         "collapse": "$collapseInformation",
         "collapseFull": "$collapseGallery",
         "copiedToClipboard": "$copiedToClipboard",
@@ -255,9 +272,11 @@
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
-        "pageModeEnabled": true
+        "pageModeEnabled": true,
+        "topCloseButtonEnabled": false
       },
       "content": {
+        "close": "$close",
         "select": "$download",
         "selectAll": "$selectAll",
         "title": "$selectPagesForDownload"
@@ -305,22 +324,37 @@
         "twoUp": "$twoPageView"
       }
     },
+    "centerPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
     "openSeadragonCenterPanel": {
       "options": {
         "animationTime": 0.15,
         "autoHideControls": true,
-        "requiredStatementEnabled": true,
         "blendTime": 0,
         "constrainDuringPan": false,
         "controlsFadeAfterInactive": 1500,
         "controlsFadeDelay": 250,
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
+        "doubleClickAnnotationEnabled": false,
         "immediateRender": false,
         "maxZoomPixelRatio": 1.25,
+        "mostSpecificRequiredStatement": true,
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 50,
+        "requiredStatementEnabled": true,
         "showHomeControl": false,
+        "subtitleEnabled": true,
+        "titleEnabled": true,
         "trimAttributionCount": 150,
         "visibilityRatio": 0.5
       },
@@ -383,7 +417,11 @@
       }
     },
     "settingsDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
@@ -396,12 +434,16 @@
     },
     "shareDialogue": {
       "options": {
+        "embedEnabled": true,
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
         "instructionsEnabled": false,
+        "shareEnabled": true,
         "shareFrameEnabled": true,
-        "shareManifestsEnabled": true
+        "shareManifestsEnabled": true,
+        "topCloseButtonEnabled": false
       },
       "content": {
+        "close": "$close",
         "customSize": "$custom",
         "embed": "$embed",
         "embedInstructions": "$embedInstructions",
@@ -409,39 +451,76 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareUrl": "$shareUrl",
         "size": "$size",
         "width": "$width"
       }
     },
     "authDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "cancel": "$cancel",
-        "confirm": "$confirm"
+        "confirm": "$confirm",
+        "close": "$close"
       }
     },
     "clickThroughDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
+        "close": "$close",
         "viewTerms": "$viewTerms"
       }
     },
     "loginDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "login": "$login",
         "logout": "$logout",
-        "cancel": "$cancel"
+        "cancel": "$cancel",
+        "close": "$close"
       }
     },
     "mobileFooterPanel": {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
+      },
       "content": {
         "rotateRight": "$rotateRight",
         "moreInfo": "$moreInfo",
         "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut"
+        "zoomOut": "$zoomOut",
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "open": "$open",
+        "share": "$share"
       }
     },
     "restrictedDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
-        "cancel": "$cancel"
+        "cancel": "$cancel",
+        "close": "$close"
       }
     }
   },

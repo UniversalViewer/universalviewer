@@ -14,8 +14,11 @@ import {
 } from "manifesto.js";
 import { RenderingFormat, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import { ILabelValuePair } from "@iiif/manifold";
+import { BaseConfig } from "../../BaseConfig";
 
-export class DownloadDialogue extends Dialogue {
+export class DownloadDialogue extends Dialogue<
+  BaseConfig["modules"]["downloadDialogue"]
+> {
   $downloadOptions: JQuery;
   $noneAvailable: JQuery;
   $title: JQuery;

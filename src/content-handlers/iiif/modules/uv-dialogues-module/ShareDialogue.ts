@@ -1,10 +1,13 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { Bools, Numbers } from "@edsilv/utils";
 import { ILabelValuePair } from "@iiif/manifold";
 
-export class ShareDialogue extends Dialogue {
+export class ShareDialogue<
+  T extends BaseConfig["modules"]["shareDialogue"]
+> extends Dialogue<T> {
   $code: JQuery;
   $customSize: JQuery;
   $customSizeDropDown: JQuery;

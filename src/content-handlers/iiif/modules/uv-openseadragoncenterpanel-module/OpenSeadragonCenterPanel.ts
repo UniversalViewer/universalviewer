@@ -23,8 +23,11 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import "@openseadragon-imaging/openseadragon-viewerinputhook";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class OpenSeadragonCenterPanel extends CenterPanel {
+export class OpenSeadragonCenterPanel extends CenterPanel<
+  Config["modules"]["openSeadragonCenterPanel"]
+> {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
   currentBounds: XYWHFragment | null;
@@ -394,6 +397,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     // when mouse move stopped
     this.$element.on(
+      //@ts-ignore
       "mousemove",
       () => {
         // if over element, hide controls.

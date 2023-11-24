@@ -172,6 +172,8 @@
         "canvasDisplayOrder": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
+        "expandFullEnabled": false,
+        "limitToRange": false,
         "manifestDisplayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
@@ -203,6 +205,17 @@
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
         "title": "$moreInformation"
+      }
+    },
+    "centerPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
       }
     },
     "avCenterPanel": {
@@ -242,18 +255,19 @@
       "options": {
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
         "instructionsEnabled": false,
-        "shareFrameEnabled": true
+        "shareFrameEnabled": true,
+        "shareManifestsEnabled": true
       },
       "content": {
-        "customSize": "$custom",
-        "embed": "$embed",
-        "embedInstructions": "$embedInstructions",
-        "height": "$height",
-        "iiif": "$iiifManifest",
-        "share": "$share",
-        "shareInstructions": "$shareInstructions",
-        "size": "$size",
-        "width": "$width"
+        "customSize": "custom",
+        "embed": "Embed",
+        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
+        "height": "Height",
+        "iiif": "IIIF Manifest",
+        "share": "Share",
+        "shareInstructions": "To share this item, copy the URL below.",
+        "size": "Size:",
+        "width": "Width"
       }
     },
     "authDialogue": {
@@ -294,10 +308,14 @@
       }
     },
     "loginDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
       "content": {
         "login": "$login",
         "logout": "$logout",
-        "cancel": "$cancel"
+        "cancel": "$cancel",
+        "close": "$close"
       }
     },
     "restrictedDialogue": {

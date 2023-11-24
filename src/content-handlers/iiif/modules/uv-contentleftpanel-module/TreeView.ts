@@ -3,8 +3,9 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
 import { TreeComponent } from "@iiif/iiif-tree-component";
+import { ContentLeftPanel } from "./ContentLeftPanel";
 
-export class TreeView extends BaseView {
+export class TreeView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
   treeComponent: any;
   treeData: any;

@@ -5,8 +5,11 @@ import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../../../Utils";
 import { Bools } from "@edsilv/utils";
+import { BaseConfig } from "../../BaseConfig";
 
-export class CenterPanel extends BaseView {
+export class CenterPanel<
+  T extends BaseConfig["modules"]["centerPanel"]
+> extends BaseView<T> {
   title: string | null;
   subtitle: string | null;
   subtitleExpanded: boolean = false;
@@ -189,11 +192,9 @@ export class CenterPanel extends BaseView {
           }
         });
 
-      $attributionText
-        .find("img")
-        .one('error', () => {
-          resize();
-        })
+      $attributionText.find("img").one("error", () => {
+        resize();
+      });
 
       $attributionText.targetBlank();
     }
@@ -265,10 +266,10 @@ export class CenterPanel extends BaseView {
 
     this.$content.height(this.$element.height() - titleHeight - subtitleHeight);
     this.$content.width(this.$element.width());
-    const $text = this.$attribution.find('.attribution-text');
+    const $text = this.$attribution.find(".attribution-text");
 
     $text.css("maxHeight", `calc(${this.$content.height()}px - 100px)`);
-    $text.css('overflow-y', 'auto');
+    $text.css("overflow-y", "auto");
 
     if (this.$attribution && this.isAttributionOpen) {
       switch (this.attributionPosition) {

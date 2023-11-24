@@ -1,9 +1,12 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
-export class ClickThroughDialogue extends Dialogue {
+export class ClickThroughDialogue extends Dialogue<
+  BaseConfig["modules"]["clickThroughDialogue"]
+> {
   acceptCallback: any;
   $acceptTermsButton: JQuery;
   $message: JQuery;

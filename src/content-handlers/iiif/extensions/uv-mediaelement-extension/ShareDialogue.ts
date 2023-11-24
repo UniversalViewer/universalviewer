@@ -1,7 +1,10 @@
 import { ShareDialogue as BaseShareDialogue } from "../../modules/uv-dialogues-module/ShareDialogue";
+import { Config } from "../uv-mediaelement-extension/config/Config";
 import { IMediaElementExtension } from "./IMediaElementExtension";
 
-export class ShareDialogue extends BaseShareDialogue {
+export class ShareDialogue extends BaseShareDialogue<
+  Config["modules"]["shareDialogue"]
+> {
   constructor($element: JQuery) {
     super($element);
   }

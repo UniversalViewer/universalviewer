@@ -1,9 +1,29 @@
 import {
   BaseConfig,
+  CenterPanelContent,
+  CenterPanelOptions,
+  DownloadDialogueContent,
+  DownloadDialogueOptions,
   HeaderPanelContent,
   HeaderPanelOptions,
-  Options,
+  ModuleConfig,
+  SettingsDialogueContent,
+  SettingsDialogueOptions,
+  ShareDialogueContent,
+  ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
+
+type PDFCenterPanelOptions = CenterPanelOptions & {
+  /** Determines if PDF.js should be used for PDF rendering */
+  usePdfJs?: boolean;
+};
+
+type PDFCenterPanelContent = CenterPanelContent & {};
+
+type PDFCenterPanel = {
+  options: PDFCenterPanelOptions;
+  content: PDFCenterPanelContent;
+};
 
 type PDFHeaderPanelOptions = HeaderPanelOptions & {};
 
@@ -23,16 +43,41 @@ type PDFHeaderPanel = {
   content: PDFHeaderPanelContent;
 };
 
-type Modules = {
-  pdfHeaderPanel: PDFHeaderPanel;
+type PDFDownloadDialogueOptions = DownloadDialogueOptions & {};
+
+type PDFDownloadDialogueContent = DownloadDialogueContent & {};
+
+type PDFDownloadDialogue = ModuleConfig & {
+  options: PDFDownloadDialogueOptions;
+  content: PDFDownloadDialogueContent;
 };
 
-type PDFOptions = Options & {
-  /** Determines if PDF.js should be used for PDF rendering */
-  usePdfJs?: boolean;
+type PDFShareDialogueOptions = ShareDialogueOptions & {};
+
+type PDFShareDialogueContent = ShareDialogueContent & {};
+
+type PDFShareDialogue = ModuleConfig & {
+  options: PDFShareDialogueOptions;
+  content: PDFShareDialogueContent;
+};
+
+type PDFSettingsDialogueOptions = SettingsDialogueOptions & {};
+
+type PDFSettingsDialogueContent = SettingsDialogueContent & {};
+
+type PDFSettingsDialogue = {
+  options: PDFSettingsDialogueOptions;
+  content: PDFSettingsDialogueContent;
+};
+
+type Modules = {
+  pdfCenterPanel: PDFCenterPanel;
+  pdfHeaderPanel: PDFHeaderPanel;
+  settingsDialogue: PDFSettingsDialogue;
+  downloadDialogue: PDFDownloadDialogue;
+  shareDialogue: PDFShareDialogue;
 };
 
 export type Config = BaseConfig & {
-  options: PDFOptions;
   modules: Modules;
 };
