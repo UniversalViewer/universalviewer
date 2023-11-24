@@ -11,7 +11,7 @@ import { Config } from "../../extensions/uv-pdf-extension/config/Config";
 // declare var PDFJS: any;
 
 export class PDFCenterPanel extends CenterPanel<
-  Config["modules"]["pdfCenterPanel"]
+  Config["modules"]["centerPanel"]
 > {
   // private _$spinner: JQuery;
   private _$canvas: JQuery;
@@ -42,7 +42,7 @@ export class PDFCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("pdfCenterPanel");
+    this.setConfig("centerPanel");
 
     super.create();
 
@@ -60,6 +60,7 @@ export class PDFCenterPanel extends CenterPanel<
     // Only attach PDF controls if we're using PDF.js; they have no meaning in
     // PDFObject. However, we still create the objects above so that references
     // to them do not cause errors (simpler than putting usePdfJs checks all over):
+
     if (Bools.getBool(this.options.usePdfJs, false)) {
       // this.$content.append(this._$spinner);
       this.$content.append(this._$progress);

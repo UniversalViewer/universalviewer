@@ -71,8 +71,8 @@ type PDFSettingsDialogue = {
 };
 
 type Modules = {
-  pdfCenterPanel: PDFCenterPanel;
-  pdfHeaderPanel: PDFHeaderPanel;
+  centerPanel: PDFCenterPanel;
+  headerPanel: PDFHeaderPanel;
   settingsDialogue: PDFSettingsDialogue;
   downloadDialogue: PDFDownloadDialogue;
   shareDialogue: PDFShareDialogue;

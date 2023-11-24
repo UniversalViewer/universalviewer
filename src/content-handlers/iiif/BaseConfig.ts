@@ -208,7 +208,7 @@ export type DialogueContent = {
   close: string;
 };
 
-type Dialogue = ModuleConfig & {
+export type Dialogue = ModuleConfig & {
   options?: DialogueOptions;
   content: DialogueContent;
 };
@@ -434,6 +434,7 @@ export type BaseConfig = {
     helpDialogue: HelpDialogue;
     leftPanel: LeftPanel;
     loginDialogue: LoginDialogue;
+    mobileFooterPanel: FooterPanel;
     moreInfoRightPanel: MoreInfoRightPanel;
     restrictedDialogue: RestrictedDialogue;
     settingsDialogue: SettingsDialogue;

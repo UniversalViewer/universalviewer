@@ -13,7 +13,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-default-extension/config/Config";
 
 export class FileLinkCenterPanel extends CenterPanel<
-  Config["modules"]["fileLinkCenterPanel"]
+  Config["modules"]["centerPanel"]
 > {
   $scroll: JQuery;
   $downloadItems: JQuery;
@@ -24,7 +24,7 @@ export class FileLinkCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("fileLinkCenterPanel");
+    this.setConfig("centerPanel");
 
     super.create();
 

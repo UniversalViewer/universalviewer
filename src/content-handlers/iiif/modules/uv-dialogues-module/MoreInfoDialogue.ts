@@ -18,7 +18,7 @@ export class MoreInfoDialogue extends Dialogue<
   }
 
   create(): void {
-    this.setConfig("moreInfoDialogue");
+    this.setConfig("moreInfoRightPanel");
 
     super.create();
 

@@ -4,7 +4,7 @@ import { Config } from "../../extensions/uv-openseadragon-extension/config/Confi
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ExternalContentDialogue extends Dialogue<
-  Config["modules"]["multiSelectDialogue"]
+  Config["modules"]["externalContentDialogue"]
 > {
   $iframe: JQuery;
 
@@ -13,7 +13,7 @@ export class ExternalContentDialogue extends Dialogue<
   }
 
   create(): void {
-    this.setConfig("externalContentDialogue");
+    this.setConfig<Config>("externalContentDialogue");
 
     super.create();
 

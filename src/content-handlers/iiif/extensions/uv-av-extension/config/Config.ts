@@ -61,7 +61,7 @@ type AVSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  avCenterPanel: AVCenterPanel;
+  centerPanel: AVCenterPanel;
   downloadDialogue: AVDownloadDialogue;
   shareDialogue: AVShareDialogue;
   settingsDialogue: AVSettingsDialogue;

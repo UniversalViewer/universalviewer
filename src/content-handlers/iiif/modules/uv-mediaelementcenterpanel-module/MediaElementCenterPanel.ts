@@ -21,7 +21,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
 
 export class MediaElementCenterPanel extends CenterPanel<
-  Config["modules"]["mediaelementCenterPanel"]
+  Config["modules"]["centerPanel"]
 > {
   $wrapper: JQuery;
   $container: JQuery;
@@ -36,7 +36,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("mediaelementCenterPanel");
+    this.setConfig("centerPanel");
 
     super.create();
 

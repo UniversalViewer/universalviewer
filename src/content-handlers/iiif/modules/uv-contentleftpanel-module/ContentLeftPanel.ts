@@ -58,7 +58,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   }
 
   create(): void {
-    this.setConfig("contentLeftPanel");
+    this.setConfig("leftPanel");
 
     super.create();
 

@@ -23,7 +23,7 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
   }
 
   create(): void {
-    this.setConfig("resourcesLeftPanel");
+    this.setConfig("leftPanel");
 
     super.create();
 

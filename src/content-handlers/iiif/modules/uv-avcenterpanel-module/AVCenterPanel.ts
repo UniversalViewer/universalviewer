@@ -17,7 +17,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";
 
 export class AVCenterPanel extends CenterPanel<
-  Config["modules"]["avCenterPanel"]
+  Config["modules"]["centerPanel"]
 > {
   $avcomponent: JQuery;
   avcomponent: any;
@@ -31,7 +31,7 @@ export class AVCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("avCenterPanel");
+    this.setConfig("centerPanel");
 
     super.create();
 

@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { Panel } from "./Panel";
 import { IExtension } from "./IExtension";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
-import { ModuleConfig } from "../../BaseConfig";
+import { BaseConfig, ModuleConfig } from "../../BaseConfig";
 
 export class BaseView<T extends ModuleConfig> extends Panel {
   config: T;
@@ -56,11 +56,11 @@ export class BaseView<T extends ModuleConfig> extends Panel {
 
   init(): void {}
 
-  setConfig(moduleName: string): void {
+  setConfig<T extends BaseConfig>(moduleName: keyof T["modules"]): void {
     if (!this.modules) {
       this.modules = [];
     }
-    this.modules.push(moduleName);
+    this.modules.push(moduleName as string);
   }
 
   resize(): void {

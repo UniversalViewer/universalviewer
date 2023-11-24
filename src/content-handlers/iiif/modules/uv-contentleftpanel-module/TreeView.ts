@@ -16,7 +16,7 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   create(): void {
-    this.setConfig("contentLeftPanel");
+    this.setConfig("leftPanel");
     super.create();
     this.$tree = $('<div class="iiif-tree-component"></div>');
     this.$element.append(this.$tree);
