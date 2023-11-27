@@ -90,7 +90,7 @@
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/iiif-gallery-component": "^1.1.21",
     "@iiif/iiif-metadata-component": "^1.1.19",
-    "@iiif/iiif-tree-component": "2.0.4",
+    "@iiif/iiif-tree-component": "2.0.6",
     "@iiif/manifold": "2.0.31",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
