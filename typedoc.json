@@ -1,4 +1,4 @@
 {
   "entryPoints": ["src/content-handlers/iiif/Docs.ts"],
-  "out": "dist/docs"
+  "out": "docs"
 }

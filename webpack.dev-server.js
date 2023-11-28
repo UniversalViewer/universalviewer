@@ -84,10 +84,7 @@ const config = {
     compress: true,
     port: 8080,
     onListening(devServer) {
-      devServer.app.use(
-        "/docs",
-        express.static(path.join(__dirname, "dist/docs"))
-      );
+      devServer.app.use("/docs", express.static(path.join(__dirname, "docs")));
       devServer.app.use(
         "/iiif-collection.json",
         express.static(path.join(__dirname, "src", "iiif-collection.json"))
