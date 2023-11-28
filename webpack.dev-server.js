@@ -9,7 +9,7 @@ const config = {
     UV: ["./src/index.ts"],
   },
   mode: "development",
-  devtool: 'eval-source-map',
+  devtool: "eval-source-map",
   output: {
     libraryTarget: "umd",
     library: "UV",
@@ -19,7 +19,7 @@ const config = {
   },
   resolve: {
     alias: {
-      'jquery': require.resolve('jquery/dist/jquery.js'),
+      jquery: require.resolve("jquery/dist/jquery.js"),
     },
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
@@ -29,7 +29,7 @@ const config = {
   },
   module: {
     rules: [
-      { test: /\.js$/, loader: 'source-map-loader', enforce: 'pre' },
+      { test: /\.js$/, loader: "source-map-loader", enforce: "pre" },
       {
         test: /\.ts$/,
         use: [{ loader: "ts-loader" }],
@@ -84,6 +84,10 @@ const config = {
     compress: true,
     port: 8080,
     onListening(devServer) {
+      devServer.app.use(
+        "/docs",
+        express.static(path.join(__dirname, "dist/docs"))
+      );
       devServer.app.use(
         "/iiif-collection.json",
         express.static(path.join(__dirname, "src", "iiif-collection.json"))
