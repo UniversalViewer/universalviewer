@@ -43,9 +43,9 @@ A community-developed open source project on a mission<br/> to help you share yo
 
 [Visit the UV demo page](https://uv.netlify.app) to try it out.
 
-## 📖 Scope
+<!-- ## 📖 Scope
 
-Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
+Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About) -->
 
 ## 💻 Getting Started
 
