@@ -47,7 +47,7 @@ A community-developed open source project on a mission<br/> to help you share yo
 
 Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About) -->
 
-## 💻 Getting Started
+## 📖 Getting Started
 
 See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Examples) for how to use the UV in various scenarios.
 
