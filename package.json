@@ -101,6 +101,7 @@
     "@universalviewer/aleph": "0.0.15",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
+    "aleph-r3f": "^0.0.15",
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
@@ -119,9 +120,10 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^8.34.0",
+    "vite-react-ts-button-test-project": "^0.0.17",
     "waveform-panel": "^1.2.0",
     "xss": "1.0.3",
-    "zustand": "^4.0.0-rc.0"
+    "zustand": "^4.4.7"
   },
   "collective": {
     "type": "opencollective",
