@@ -25,6 +25,17 @@ describe('Universal Viewer', () => {
     const visibleCheckbox = await page.$('#extendLabelsCheckbox');
     expect(visibleCheckbox).not.toBe(null);
   });
+
+  it('does not show checkbox when labels have no overflow', async () => {
+    const newPage = await browser.newPage();
+    await newPage.goto('http://localhost:8080/#?xywh=-1830%2C1555%2C6228%2C3936&iiifManifestId=https%3A%2F%2Fwellcomelibrary.org%2Fiiif%2Fb18035723%2Fmanifest');
+
+    // Check that the checkbox is not present
+    const checkbox = await newPage.$('#extendLabelsCheckbox');
+    expect(checkbox).toBe(null);
+
+    await newPage.close();
+  });
 });
 
 //   it('loads the viewer images', async () => {
