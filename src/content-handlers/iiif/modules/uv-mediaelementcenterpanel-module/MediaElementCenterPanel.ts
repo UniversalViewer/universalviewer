@@ -99,6 +99,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
           sources.push({
+            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
             type: rendering.getFormat().toString(),
             src: rendering.id,
           });
