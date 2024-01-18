@@ -114,6 +114,7 @@
   "$navigatorEnabled": "Navigator Enabled",
   "$clickToZoomEnabled": "Mouse Click To Zoom",
   "$reducedMotion": "Reduce motion (disables animations)",
+  "extendThumbnailLabels": "Extend Thumbnail Labels",
   "$preserveViewport": "Preserve Zoom",
   "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>",
   "$custom": "custom",

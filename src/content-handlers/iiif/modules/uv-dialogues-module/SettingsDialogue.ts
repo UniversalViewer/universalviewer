@@ -92,7 +92,7 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsCheckbox);
 
     this.$extendThumbnailLabelsLabel = $(
-      '<label for="extendThumbnailLabels">' + "Extend Thumbnail Labels" + "</label>"
+      '<label for="extendThumbnailLabels">' + this.content.extendThumbnailLabels  + "</label>"
     );
 
     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsLabel);
