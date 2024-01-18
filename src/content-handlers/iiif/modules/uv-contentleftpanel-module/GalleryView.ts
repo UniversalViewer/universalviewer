@@ -2,13 +2,14 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { ContentLeftPanel } from "../../extensions/config/ContentLeftPanel";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
-import $ from "jquery"; 
+import $ from "jquery";
 
 export class GalleryView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
   galleryComponent: any;
   galleryData: any;
   $gallery: JQuery;
+  $extendLabelsCheckbox: JQuery | undefined;
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -53,7 +54,6 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
       },
       false
     );
-;
   }
 
   public databind(): void {
@@ -65,11 +65,13 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   show(): void {
     this.isOpen = true;
     this.$element.show();
-
+  
     setTimeout(() => {
       this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
+      this.applyExtendedLabelsStyles(); // Call the method here.
     }, 10);
   }
+  
 
   hide(): void {
     this.isOpen = false;
@@ -83,4 +85,16 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     $main.height(this.$element.height() - $header.height());
   }
 
+
+
+  public applyExtendedLabelsStyles(): void {
+    
+    // extend labels in gallery view.
+    this.$gallery.find('.info .label').css({
+      'overflow-x': 'visible',
+      'text-overflow': 'nowrap',
+      'white-space': 'break-spaces',
+      'max-width': '100%',
+    });
+  }
 }
