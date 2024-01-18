@@ -9,7 +9,6 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   galleryComponent: any;
   galleryData: any;
   $gallery: JQuery;
-  $extendLabelsCheckbox: JQuery | undefined;
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -54,25 +53,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
       },
       false
     );
-
-    setTimeout(() => {
-      const labelHasOverflow = this.checkLabelOverflow();
-
-      if (labelHasOverflow) {
-        this.$extendLabelsCheckbox = $('<input type="checkbox" id="extendLabelsCheckbox">');
-        const $label = $('<label for="extendLabelsCheckbox">Show full labels</label>');
-
-        this.$element.prepend($label);
-        this.$element.prepend(this.$extendLabelsCheckbox);
-
-        this.$extendLabelsCheckbox.on('change', () => {
-          const extendLabels = this.$extendLabelsCheckbox?.prop('checked');
-          if (extendLabels !== undefined) {
-            this.toggleLabelExtension(extendLabels);
-          }
-        });
-      }
-    }, 0);
+;
   }
 
   public databind(): void {
@@ -102,32 +83,4 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     $main.height(this.$element.height() - $header.height());
   }
 
-  checkLabelOverflow(): boolean {
-    const $labels = this.$gallery.find('.info .label');
-    for (let i = 0; i < $labels.length; i++) {
-      const label = $labels[i];
-      if (label.scrollWidth > label.clientWidth) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  toggleLabelExtension(extendLabels: boolean): void {
-    if (extendLabels) {
-      this.$gallery.find('.info .label').css({
-        'overflow-x': 'visible',
-        'text-overflow': 'nowrap',
-        'white-space': 'break-spaces',
-        'max-width': '100%',
-      });
-    } else {
-      this.$gallery.find('.info .label').css({
-        'overflow-x': 'hidden',
-        'text-overflow': 'ellipsis',
-        'white-space': 'nowrap',
-        'max-width': '100%',
-      });
-    }
-  }
 }
