@@ -242,6 +242,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "extendThumbnailLabels": "$extendThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

@@ -114,6 +114,7 @@
     "$navigatorEnabled": "Włączona nawigacja",
     "$clickToZoomEnabled": "Przybliżenie przez kliknięcie myszą",
     "$reducedMotion": "Zmniejsz ruch (wyłącza animacje)",
+    "extendThumbnailLabels": "Rozszerz etykiety miniatur",
     "$preserveViewport": "Zachowanie przybliżenia",
     "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>więcej informacji</a>",
     "$custom": "Ustawienia",
