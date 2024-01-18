@@ -4,9 +4,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILocale } from "../uv-shared-module/ILocale";
 
-export class SettingsDialogue extends Dialogue<
-  BaseConfig["modules"]["settingsDialogue"]
-> {
+export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDialogue"]> {
   $locale: JQuery;
   $localeDropDown: JQuery;
   $localeLabel: JQuery;
@@ -19,6 +17,11 @@ export class SettingsDialogue extends Dialogue<
   $reducedAnimation: JQuery;
   $reducedAnimationLabel: JQuery;
   $reducedAnimationCheckbox: JQuery;
+
+  // New checkbox for extending thumbnail labels
+  $extendThumbnailLabels: JQuery;
+  $extendThumbnailLabelsLabel: JQuery;
+  $extendThumbnailLabelsCheckbox: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -77,6 +80,34 @@ export class SettingsDialogue extends Dialogue<
     this._createLocalesMenu();
 
     this._createAccessibilityMenu();
+
+    // Extend Thumbnail Labels
+    this.$extendThumbnailLabels = $('<div class="setting extendThumbnailLabels"></div>');
+    this.$scroll.append(this.$extendThumbnailLabels);
+
+    this.$extendThumbnailLabelsCheckbox = $(
+      '<input id="extendThumbnailLabels" type="checkbox" tabindex="0" />'
+    );
+
+    this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsCheckbox);
+
+    this.$extendThumbnailLabelsLabel = $(
+      '<label for="extendThumbnailLabels">' + "Extend Thumbnail Labels" + "</label>"
+    );
+
+    this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsLabel);
+
+    this.$extendThumbnailLabelsCheckbox.change(() => {
+      const settings: ISettings = {};
+
+      if (this.$extendThumbnailLabelsCheckbox.is(":checked")) {
+        settings.extendThumbnailLabels = true;
+      } else {
+        settings.extendThumbnailLabels = false;
+      }
+
+      this.updateSettings(settings);
+    });
 
     this.$element.hide();
   }
