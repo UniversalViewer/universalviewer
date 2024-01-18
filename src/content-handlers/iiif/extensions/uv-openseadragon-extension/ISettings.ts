@@ -6,4 +6,5 @@ interface ISettings {
   preserveViewport?: boolean;
   clickToZoomEnabled?: boolean;
   reducedAnimation?: boolean;
+  extendThumbnailLabels?: boolean;
 }

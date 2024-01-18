@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
@@ -10,6 +10,7 @@ const ThumbImage = ({
   paged,
   selected,
   thumb,
+  extendThumbnailLabels, // Add this prop
   viewingDirection,
 }: {
   first: boolean;
@@ -17,6 +18,7 @@ const ThumbImage = ({
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
+  extendThumbnailLabels: boolean; // Add this prop type
   viewingDirection: ViewingDirection;
 }) => {
   const [ref, inView] = useInView({
@@ -37,6 +39,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
+        "extend-labels": extendThumbnailLabels, // Apply the class conditionally
       })}
       tabIndex={0}
     >
@@ -67,47 +70,16 @@ const Thumbnails = ({
   selected,
   thumbs,
   viewingDirection,
+  extendThumbnailLabels, // Add this prop
 }: {
   onClick: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
+  extendThumbnailLabels: boolean; // Add this prop type
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [extendLabels, setExtendLabels] = useState(false);
-  const [shouldShowCheckbox, setShouldShowCheckbox] = useState(false);
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (ref.current) {
-        const thumbLabels = ref.current.querySelectorAll('.thumb .info .label');
-        let overflowDetected = false;
-  
-        thumbLabels.forEach((label) => {
-          if (label.scrollWidth > label.clientWidth) {
-            overflowDetected = true;
-            return;
-          }
-        });
-  
-        setShouldShowCheckbox(overflowDetected);
-      } else {
-        setShouldShowCheckbox(false);
-      }
-    };
-  
-    
-    checkOverflow();
-  
-    
-  
-    
-    return () => {
-      
-    };
-  }, [thumbs]);  
-  
 
   useEffect(() => {
     const thumb: HTMLElement = ref.current?.querySelector(
@@ -117,7 +89,7 @@ const Thumbnails = ({
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: "smooth",
+      behavior: 'smooth'
     });
   }, [selected]);
 
@@ -131,6 +103,7 @@ const Thumbnails = ({
     }
 
     if (paged) {
+      // if paged, show separator after every 2 thumbs
       return !((index - 1) % 2 === 0);
     }
 
@@ -142,43 +115,32 @@ const Thumbnails = ({
   });
 
   return (
-    <div>
-      {shouldShowCheckbox && (
-        <div>
-          <label htmlFor="extendLabelsCheckbox">Show full labels </label>
-          <input
-            type="checkbox"
-            id="extendLabelsCheckbox"
-            checked={extendLabels}
-            onChange={(e) => setExtendLabels(e.target.checked)}
-          />
-        </div>
-      )}
-      <div
-        ref={ref}
-        className={cx("thumbs", {
-          "extend-labels": extendLabels,
-          "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
-          "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
-          paged: paged,
-        })}
-      >
-        {thumbs.map((thumb, index) => (
-          <span key={`thumb-${index}`} id={`thumb-${index}`}>
-            <ThumbImage
-              first={index === firstNonPagedIndex}
-              onClick={onClick}
-              paged={paged}
-              selected={selected.includes(index)}
-              thumb={thumb}
-              viewingDirection={viewingDirection}
-            />
-            {showSeparator(paged, thumb.viewingHint, index) && (
-              <div className="separator"></div>
-            )}
-          </span>
-        ))}
-      </div>
+    <div
+      ref={ref}
+      className={cx("thumbs", {
+        "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
+        "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
+        paged: paged,
+        "extend-labels": extendThumbnailLabels, // Apply the class conditionally
+      })}
+    >
+      {thumbs.map((thumb, index) => (
+  <span key={`thumb-${index}`} id={`thumb-${index}`}>
+    <ThumbImage
+      first={index === firstNonPagedIndex}
+      onClick={onClick}
+      paged={paged}
+      selected={selected.includes(index)}
+      thumb={thumb}
+      extendThumbnailLabels={extendThumbnailLabels} // Make sure to pass the prop
+      viewingDirection={viewingDirection}
+    />
+    {showSeparator(paged, thumb.viewingHint, index) && (
+      <div className="separator"></div>
+    )}
+  </span>
+))}
+      
     </div>
   );
 };

@@ -491,26 +491,28 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     }
 
     const paged: boolean =
-      !!this.extension.getSettings().pagingEnabled &&
-      this.extension.helper.isPaged();
-
-    const selectedIndices: number[] = this.extension.getPagedIndices(
-      this.extension.helper.canvasIndex
-    );
-
-    // console.log("selectedIndeces", selectedIndices);
-
-    this.thumbsRoot.render(
-      createElement(ThumbsView, {
-        thumbs,
-        paged,
-        viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
-        selected: selectedIndices,
-        onClick: (thumb: Thumb) => {
-          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
-        },
-      })
-    );
+    !!this.extension.getSettings().pagingEnabled &&
+    this.extension.helper.isPaged();
+  
+  const selectedIndices: number[] = this.extension.getPagedIndices(
+    this.extension.helper.canvasIndex
+  );
+  
+  const settings = this.extension.getSettings(); // Get settings object
+  
+  this.thumbsRoot.render(
+    createElement(ThumbsView, {
+      thumbs,
+      paged,
+      viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
+      selected: selectedIndices,
+      extendThumbnailLabels: settings.extendThumbnailLabels || false,
+      onClick: (thumb: Thumb) => {
+        this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+      },
+    })
+  );
+  
   }
 
   createGalleryView(): void {
