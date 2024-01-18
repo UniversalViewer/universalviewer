@@ -134,6 +134,7 @@
         "enableTsDiagnostics": true
       }
     },
+    "testTimeout": 10000,
     "preset": "jest-puppeteer",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

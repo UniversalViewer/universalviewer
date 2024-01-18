@@ -199,7 +199,7 @@
         "clickToZoomEnabled": "Mouse Click To Zoom",
         "pagingEnabled": "Two Page View",
         "reducedMotion": "Reduce motion (disables animations)",
-        "extendThumbnailLabels": "E",
+        "extendThumbnailLabels": "Extend Thumbnail Labels",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"

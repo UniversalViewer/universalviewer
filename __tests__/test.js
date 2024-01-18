@@ -1,8 +1,19 @@
 test.skip('Configuration options', () => {});
 
+const puppeteer = require('puppeteer');
+
 describe('Universal Viewer', () => {
+  let browser;
+  let page;
+
   beforeAll(async () => {
+    browser = await puppeteer.launch();
+    page = await browser.newPage();
     await page.goto('http://localhost:8080/#?xywh=-1741%2C125%2C8017%2C6807&iiifManifestId=http%3A%2F%2Fiiif.bodleian.ox.ac.uk%2Fexamples%2Fmushaf4.json');
+  });
+
+  afterAll(async () => {
+    await browser.close();
   });
 
   it('has the correct page title', async () => {
@@ -10,32 +21,46 @@ describe('Universal Viewer', () => {
     expect(title).toBe('Universal Viewer Examples');
   });
 
-  it('shows checkbox when label overflows', async () => {
+  it('extends thumbnail labels when "extend labels" checkbox is clicked', async () => {
     
-    await page.waitForSelector('#extendLabelsCheckbox', { timeout: 15000 }); 
-  
-    const checkbox = await page.$('#extendLabelsCheckbox');
-    expect(checkbox).not.toBe(null);
-  
-    const isChecked = await page.$eval('#extendLabelsCheckbox', (el) => el.checked);
-    expect(isChecked).toBe(false);
-    
-    await page.waitForSelector('#extendLabelsCheckbox', { visible: true, timeout: 15000 }); 
+    jest.setTimeout(10000);
+
+
+    await page.waitForSelector('.btn.imageBtn.settings .uv-icon-settings');
+    await page.click('.btn.imageBtn.settings .uv-icon-settings');
+
    
-    const visibleCheckbox = await page.$('#extendLabelsCheckbox');
-    expect(visibleCheckbox).not.toBe(null);
+    await page.waitForSelector('.setting.extendThumbnailLabels');
+
+   
+    await page.click('#extendThumbnailLabels');
+
+    
+    await page.waitForSelector('.thumb.extend-labels');
+
+    
+    const labelContainerStyle = await page.evaluate(() => {
+        const firstThumbnailLabelContainer = document.querySelector('.thumb.extend-labels .info .label');
+        return window.getComputedStyle(firstThumbnailLabelContainer).getPropertyValue('white-space');
+    });
+
+    
+    expect(labelContainerStyle).toBe('break-spaces');
+});
+
+it('settings button is visible', async () => {
+  
+  await page.waitForSelector('.btn.imageBtn.settings');
+  
+ 
+  const isSettingsButtonVisible = await page.evaluate(() => {
+    const settingsButton = document.querySelector('.btn.imageBtn.settings');
+    const style = window.getComputedStyle(settingsButton);
+    return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
   });
 
-  it('does not show checkbox when labels have no overflow', async () => {
-    const newPage = await browser.newPage();
-    await newPage.goto('http://localhost:8080/#?xywh=-1830%2C1555%2C6228%2C3936&iiifManifestId=https%3A%2F%2Fwellcomelibrary.org%2Fiiif%2Fb18035723%2Fmanifest');
-
-    // Check that the checkbox is not present
-    const checkbox = await newPage.$('#extendLabelsCheckbox');
-    expect(checkbox).toBe(null);
-
-    await newPage.close();
-  });
+  expect(isSettingsButtonVisible).toBe(true);
+});
 });
 
 //   it('loads the viewer images', async () => {
