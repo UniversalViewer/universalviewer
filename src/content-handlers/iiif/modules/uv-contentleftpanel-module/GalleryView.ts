@@ -68,7 +68,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   
     setTimeout(() => {
       this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
-      this.applyExtendedLabelsStyles(); // Call the method here.
+      this.applyExtendedLabelsStyles(); 
     }, 10);
   }
   
@@ -89,7 +89,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
   public applyExtendedLabelsStyles(): void {
     
-    // extend labels in gallery view.
+    // extend labels in gallery view
     this.$gallery.find('.info .label').css({
       'overflow-x': 'visible',
       'text-overflow': 'nowrap',
