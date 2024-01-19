@@ -498,6 +498,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     this.extension.helper.canvasIndex
   );
   
+  // console.log("selectedIndeces", selectedIndices);
+  
   const settings = this.extension.getSettings(); // Get settings object
   
   this.thumbsRoot.render(
