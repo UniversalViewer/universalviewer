@@ -23,7 +23,7 @@ describe('Universal Viewer', () => {
 
   it('extends thumbnail labels when "extend labels" checkbox is clicked', async () => {
     
-    jest.setTimeout(10000);
+    
 
 
     await page.waitForSelector('.btn.imageBtn.settings .uv-icon-settings');
