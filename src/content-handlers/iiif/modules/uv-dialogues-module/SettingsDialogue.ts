@@ -100,11 +100,7 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
     this.$extendThumbnailLabelsCheckbox.change(() => {
       const settings: ISettings = {};
 
-      if (this.$extendThumbnailLabelsCheckbox.is(":checked")) {
-        settings.extendThumbnailLabels = true;
-      } else {
-        settings.extendThumbnailLabels = false;
-      }
+      settings.extendThumbnailLabels = this.$extendThumbnailLabelsCheckbox.is(":checked");
 
       this.updateSettings(settings);
     });
