@@ -90,12 +90,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
   public applyExtendedLabelsStyles(): void {
     
-    // extend labels in gallery view
-    this.$gallery.find('.info .label').css({
-      'overflow-x': 'visible',
-      'text-overflow': 'nowrap',
-      'white-space': 'break-spaces',
-      'max-width': '100%',
-    });
+    this.$gallery.addClass('label-extended');
   }
+  
 }
