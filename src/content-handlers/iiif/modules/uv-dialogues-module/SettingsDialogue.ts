@@ -18,9 +18,6 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
   $reducedAnimationLabel: JQuery;
   $reducedAnimationCheckbox: JQuery;
 
- 
- 
-
   constructor($element: JQuery) {
     super($element);
   }
