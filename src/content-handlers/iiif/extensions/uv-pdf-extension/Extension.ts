@@ -80,7 +80,7 @@ export default class Extension extends BaseExtension<Config>
     return (
       super.isHeaderPanelEnabled() &&
       Bools.getBool(
-        this.data.config!.modules.centerPanel.options.usePdfJs,
+        this.data.config!.modules.pdfCenterPanel.options.usePdfJs,
         true
       )
     );

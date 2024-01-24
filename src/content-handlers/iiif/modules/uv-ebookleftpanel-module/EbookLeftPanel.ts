@@ -9,7 +9,9 @@ import {
 } from "@universalviewer/uv-ebook-components/loader";
 import { Config } from "../../extensions/uv-ebook-extension/config/Config";
 
-export class EbookLeftPanel extends LeftPanel<Config["modules"]["leftPanel"]> {
+export class EbookLeftPanel extends LeftPanel<
+  Config["modules"]["ebookLeftPanel"]
+> {
   private _ebookTOC: any;
   private _$container: JQuery;
   private _$ebookTOC: JQuery;
@@ -19,7 +21,7 @@ export class EbookLeftPanel extends LeftPanel<Config["modules"]["leftPanel"]> {
   }
 
   async create(): Promise<void> {
-    this.setConfig("leftPanel");
+    this.setConfig("ebookLeftPanel");
     super.create();
 
     this._$container = $('<div class="container"></div>');

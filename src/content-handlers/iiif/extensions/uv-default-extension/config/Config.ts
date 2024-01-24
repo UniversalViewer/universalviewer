@@ -11,13 +11,13 @@ import {
   ShareDialogueOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
-type DefaultCenterPanelOptions = CenterPanelOptions & {};
+type FileLinkCenterPanelOptions = CenterPanelOptions & {};
 
-type DefaultCenterPanelContent = CenterPanelContent & {};
+type FileLinkCenterPanelContent = CenterPanelContent & {};
 
-type DefaultCenterPanel = {
-  options: DefaultCenterPanelOptions;
-  content: DefaultCenterPanelContent;
+type FileLinkCenterPanel = {
+  options: FileLinkCenterPanelOptions;
+  content: FileLinkCenterPanelContent;
 };
 
 type DefaultDownloadDialogueOptions = DownloadDialogueOptions & {};
@@ -48,7 +48,7 @@ type DefaultSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  centerPanel: DefaultCenterPanel;
+  fileLinkCenterPanel: FileLinkCenterPanel;
   downloadDialogue: DefaultDownloadDialogue;
   shareDialogue: DefaultShareDialogue;
   settingsDialogue: DefaultSettingsDialogue;

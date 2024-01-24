@@ -22,7 +22,7 @@ export class MultiSelectDialogue extends Dialogue<
   }
 
   create(): void {
-    this.setConfig<Config>("multiSelectDialogue");
+    this.setConfig("multiSelectDialogue");
 
     super.create();
 

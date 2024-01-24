@@ -72,8 +72,8 @@ type AlephSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  leftPanel: AlephLeftPanel;
-  centerPanel: AlephCenterPanel;
+  alephLeftPanel: AlephLeftPanel;
+  alephCenterPanel: AlephCenterPanel;
   downloadDialogue: AlephDownloadDialogue;
   shareDialogue: AlephShareDialogue;
   settingsDialogue: AlephSettingsDialogue;

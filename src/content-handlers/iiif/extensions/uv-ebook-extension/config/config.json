@@ -55,6 +55,21 @@
         "panelOpen": false
       },
       "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
+    "ebookLeftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
         "title": "$contents",
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
@@ -183,6 +198,17 @@
         "attribution": "$attribution"
       }
     },
+    "ebookCenterPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
     "settingsDialogue": {
       "options": {
         "topCloseButtonEnabled": false
@@ -291,34 +317,6 @@
       "content": {
         "cancel": "$cancel",
         "close": "$close"
-      }
-    },
-    "mobileFooterPanel": {
-      "options": {
-        "bookmarkEnabled": false,
-        "downloadEnabled": true,
-        "embedEnabled": false,
-        "feedbackEnabled": false,
-        "fullscreenEnabled": true,
-        "minimiseButtons": true,
-        "moreInfoEnabled": true,
-        "openEnabled": false,
-        "printEnabled": false,
-        "shareEnabled": true
-      },
-      "content": {
-        "rotateRight": "$rotateRight",
-        "moreInfo": "$moreInfo",
-        "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut",
-        "bookmark": "$add_to_bookmarks",
-        "download": "$download",
-        "embed": "$embed",
-        "exitFullScreen": "$exitFullScreen",
-        "feedback": "$feedback",
-        "fullScreen": "$fullScreen",
-        "open": "$open",
-        "share": "$share"
       }
     }
   },

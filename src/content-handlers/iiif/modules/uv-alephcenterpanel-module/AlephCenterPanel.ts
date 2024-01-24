@@ -23,7 +23,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-aleph-extension/config/Config";
 
 export class AlephCenterPanel extends CenterPanel<
-  Config["modules"]["centerPanel"]
+  Config["modules"]["alephCenterPanel"]
 > {
   private _alViewer: any;
   private _alViewerReady: boolean = false;
@@ -36,7 +36,7 @@ export class AlephCenterPanel extends CenterPanel<
   }
 
   async create(): Promise<void> {
-    this.setConfig("centerPanel");
+    this.setConfig("alephCenterPanel");
 
     super.create();
 

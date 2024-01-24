@@ -46,6 +46,21 @@
     "zoomToSearchResultEnabled": true
   },
   "modules": {
+    "leftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
@@ -71,6 +86,17 @@
       }
     },
     "centerPanel": {
+      "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
+    "fileLinkCenterPanel": {
       "options": {
         "titleEnabled": true,
         "subtitleEnabled": true,
@@ -192,7 +218,7 @@
         "title": "$moreInformation"
       }
     },
-    "leftPanel": {
+    "resourcesLeftPanel": {
       "options": {
         "expandFullEnabled": false,
         "panelAnimationDuration": 250,
@@ -295,34 +321,6 @@
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
-      }
-    },
-    "mobileFooterPanel": {
-      "options": {
-        "bookmarkEnabled": false,
-        "downloadEnabled": true,
-        "embedEnabled": false,
-        "feedbackEnabled": false,
-        "fullscreenEnabled": true,
-        "minimiseButtons": true,
-        "moreInfoEnabled": true,
-        "openEnabled": false,
-        "printEnabled": false,
-        "shareEnabled": true
-      },
-      "content": {
-        "rotateRight": "$rotateRight",
-        "moreInfo": "$moreInfo",
-        "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut",
-        "bookmark": "$add_to_bookmarks",
-        "download": "$download",
-        "embed": "$embed",
-        "exitFullScreen": "$exitFullScreen",
-        "feedback": "$feedback",
-        "fullScreen": "$fullScreen",
-        "open": "$open",
-        "share": "$share"
       }
     }
   },
