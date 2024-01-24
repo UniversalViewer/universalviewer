@@ -18,10 +18,8 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
   $reducedAnimationLabel: JQuery;
   $reducedAnimationCheckbox: JQuery;
 
-  // New checkbox for extending thumbnail labels
-  $extendThumbnailLabels: JQuery;
-  $extendThumbnailLabelsLabel: JQuery;
-  $extendThumbnailLabelsCheckbox: JQuery;
+ 
+ 
 
   constructor($element: JQuery) {
     super($element);
@@ -81,29 +79,6 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
 
     this._createAccessibilityMenu();
 
-    // Extend Thumbnail Labels
-    this.$extendThumbnailLabels = $('<div class="setting extendThumbnailLabels"></div>');
-    this.$scroll.append(this.$extendThumbnailLabels);
-
-    this.$extendThumbnailLabelsCheckbox = $(
-      '<input id="extendThumbnailLabels" type="checkbox" tabindex="0" />'
-    );
-
-    this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsCheckbox);
-
-    this.$extendThumbnailLabelsLabel = $(
-      '<label for="extendThumbnailLabels">' + this.content.extendThumbnailLabels  + "</label>"
-    );
-
-    this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsLabel);
-
-    this.$extendThumbnailLabelsCheckbox.change(() => {
-      const settings: ISettings = {};
-
-      settings.extendThumbnailLabels = this.$extendThumbnailLabelsCheckbox.is(":checked");
-
-      this.updateSettings(settings);
-    });
 
     this.$element.hide();
   }

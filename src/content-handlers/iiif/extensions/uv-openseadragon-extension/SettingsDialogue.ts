@@ -5,6 +5,9 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $clickToZoomEnabled: JQuery;
   $clickToZoomEnabledCheckbox: JQuery;
   $clickToZoomEnabledLabel: JQuery;
+  $extendThumbnailLabels: JQuery;
+  $extendThumbnailLabelsLabel: JQuery;
+  $extendThumbnailLabelsCheckbox: JQuery;
   $navigatorEnabled: JQuery;
   $navigatorEnabledCheckbox: JQuery;
   $navigatorEnabledLabel: JQuery;
@@ -14,6 +17,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $preserveViewport: JQuery;
   $preserveViewportCheckbox: JQuery;
   $preserveViewportLabel: JQuery;
+ 
 
   constructor($element: JQuery) {
     super($element);
@@ -52,6 +56,30 @@ export class SettingsDialogue extends BaseSettingsDialogue {
       '<label for="pagingEnabled">' + this.content.pagingEnabled + "</label>"
     );
     this.$pagingEnabled.append(this.$pagingEnabledLabel);
+
+     // Extend Thumbnail Labels
+     this.$extendThumbnailLabels = $('<div class="setting extendThumbnailLabels"></div>');
+     this.$scroll.append(this.$extendThumbnailLabels);
+ 
+     this.$extendThumbnailLabelsCheckbox = $(
+       '<input id="extendThumbnailLabels" type="checkbox" tabindex="0" />'
+     );
+ 
+     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsCheckbox);
+ 
+     this.$extendThumbnailLabelsLabel = $(
+       '<label for="extendThumbnailLabels">' + this.content.extendThumbnailLabels  + "</label>"
+     );
+ 
+     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsLabel);
+ 
+     this.$extendThumbnailLabelsCheckbox.change(() => {
+       const settings: ISettings = {};
+ 
+       settings.extendThumbnailLabels = this.$extendThumbnailLabelsCheckbox.is(":checked");
+ 
+       this.updateSettings(settings);
+     });
 
     this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
     this.$scroll.append(this.$clickToZoomEnabled);
@@ -130,6 +158,9 @@ export class SettingsDialogue extends BaseSettingsDialogue {
 
       this.updateSettings(settings);
     });
+
+
+
   }
 
   open(): void {
