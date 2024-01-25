@@ -75,7 +75,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
-  store: StoreApi<ExtensionState>; 
+  store: StoreApi<ExtensionState>;
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
