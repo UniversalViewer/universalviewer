@@ -46,6 +46,7 @@ import {
   Manifest,
 } from "manifesto.js";
 import "./theme/theme.less";
+import defaultConfig from "./config/en-GB.json";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Events } from "../../../../Events";
 import { createRoot, Root } from "react-dom/client";
@@ -84,6 +85,10 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
   };
 
   create(): void {

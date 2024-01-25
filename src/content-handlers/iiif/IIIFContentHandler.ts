@@ -388,10 +388,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       }
 
       // import the config file
-      let config = await (extension as any).loadConfig(
-        data.locales[0].name,
-        extension?.type.name
-      );
+      let config = await (extension as any).loadConfig(data.locales[0].name);
 
       data.config = await that.configure(config);
 

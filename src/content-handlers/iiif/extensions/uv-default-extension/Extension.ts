@@ -11,8 +11,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
 import "./theme/theme.less";
-import defaultConfig from "./config/config.json";
-import { Config } from "./config/Config";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension<Config>
   implements IDefaultExtension {
@@ -31,6 +30,10 @@ export default class Extension extends BaseExtension<Config>
   defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
   };
 
   create(): void {

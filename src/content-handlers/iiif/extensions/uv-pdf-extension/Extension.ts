@@ -14,7 +14,7 @@ import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
-import defaultConfig from "./config/config.json";
+import defaultConfig from "./config/en-GB.json";
 import { Events } from "../../../../Events";
 import { Config } from "./config/Config";
 
@@ -35,6 +35,10 @@ export default class Extension extends BaseExtension<Config>
   defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
   };
 
   create(): void {

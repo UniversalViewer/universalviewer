@@ -14,8 +14,7 @@ import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
-import defaultConfig from "./config/config.json";
-import { Config } from "./config/Config";
+import defaultConfig from "./config/en-GB.json";
 
 export default class Extension extends BaseExtension<Config>
   implements IAVExtension {
@@ -35,6 +34,10 @@ export default class Extension extends BaseExtension<Config>
   defaultConfig: Config = defaultConfig;
   locales = {
     "en-GB": defaultConfig,
+    "cy-GB": () => import("./config/cy-GB.json"),
+    "fr-FR": () => import("./config/fr-FR.json"),
+    "pl-PL": () => import("./config/pl-PL.json"),
+    "sv-SE": () => import("./config/sv-SE.json"),
   };
   lastAvCanvasIndex?: number;
 
