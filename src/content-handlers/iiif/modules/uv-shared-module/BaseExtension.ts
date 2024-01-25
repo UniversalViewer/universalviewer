@@ -55,7 +55,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   $element: JQuery;
   $loginDialogue: JQuery;
   $restrictedDialogue: JQuery;
-  authDialogue: AuthDialogue;  
+  authDialogue: AuthDialogue;
   annotations: AnnotationGroup[] = [];
   clickThroughDialogue: ClickThroughDialogue;
   extensionHost: IIIFExtensionHost;
