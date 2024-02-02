@@ -75,31 +75,21 @@
             .thumbsView .thumbs .thumb .info .index {
                 float: left;
             }
-            /* Default thumbnail label for one column */
-            .thumbsView .thumbs .thumb.oneCol .info .label {
+            
+
+            .thumbsView .thumbs .thumb .info .label {
                 float: left;
-                overflow-x: visible;
+                overflow-x: visible; 
                 text-overflow: nowrap;
                 white-space: break-spaces;
                 max-width: 100%;
             }
-
-            /* Default thumbnail label for two columns */
-            .thumbsView .thumbs .thumb.twoCol .info .label {
-                float: left;
-                overflow-x: hidden;
+            
+            .thumbsView .thumbs.extend-labels .thumb .info .label {
+                overflow-x: hidden; 
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 max-width: 100%;
-            }
-
-         
-
-            /* Extended label when checkbox is checked for two columns */
-            .thumbsView .thumbs.extend-labels .thumb.twoCol .info .label {
-                overflow-x: visible;
-                text-overflow: nowrap;
-                white-space: break-spaces;
             }
 
             .thumbsView .thumbs .thumb .info .searchResults {

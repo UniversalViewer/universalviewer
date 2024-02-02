@@ -114,7 +114,7 @@
     "$navigatorEnabled": "Ffenest llywio ar gae",
     "$clickToZoomEnabled": "Cliciwch gyda'r llygoden i glosio",
     "$reducedMotion": "Lleihau symudiad (analluogi animeiddiadau)",
-    "extendThumbnailLabels": "Ymestyn Labeli Mân-luniau",
+    "truncateThumbnailLabels": "Labeli Bawd Torri",
     "$preserveViewport": "Cadw'r lefel o glosio",
     "$uvWebsite": "<a href='https:\/\/github.com\/universalviewer\/universalviewer'>mwy o wybodaeth<\/a>",
     "$custom": "dewisol",

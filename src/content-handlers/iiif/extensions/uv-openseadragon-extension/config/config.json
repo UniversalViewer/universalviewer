@@ -427,7 +427,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$goHome",
         "reducedMotion": "$reducedMotion",
-        "extendThumbnailLabels": "$extendThumbnailLabels",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
