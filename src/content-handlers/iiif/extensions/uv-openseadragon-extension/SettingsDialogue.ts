@@ -5,9 +5,9 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $clickToZoomEnabled: JQuery;
   $clickToZoomEnabledCheckbox: JQuery;
   $clickToZoomEnabledLabel: JQuery;
-  $extendThumbnailLabels: JQuery;
-  $extendThumbnailLabelsLabel: JQuery;
-  $extendThumbnailLabelsCheckbox: JQuery;
+  $truncateThumbnailLabels: JQuery;
+  $truncateThumbnailLabelsLabel: JQuery;
+  $truncateThumbnailLabelsCheckbox: JQuery;
   $navigatorEnabled: JQuery;
   $navigatorEnabledCheckbox: JQuery;
   $navigatorEnabledLabel: JQuery;
@@ -57,26 +57,26 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     );
     this.$pagingEnabled.append(this.$pagingEnabledLabel);
 
-     // Extend Thumbnail Labels
-     this.$extendThumbnailLabels = $('<div class="setting extendThumbnailLabels"></div>');
-     this.$scroll.append(this.$extendThumbnailLabels);
+     
+     this.$truncateThumbnailLabels = $('<div class="setting truncateThumbnailLabels"></div>');
+     this.$scroll.append(this.$truncateThumbnailLabels);
  
-     this.$extendThumbnailLabelsCheckbox = $(
-       '<input id="extendThumbnailLabels" type="checkbox" tabindex="0" />'
+     this.$truncateThumbnailLabelsCheckbox = $(
+       '<input id="truncateThumbnailLabels" type="checkbox" tabindex="0" />'
      );
  
-     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsCheckbox);
+     this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsCheckbox);
  
-     this.$extendThumbnailLabelsLabel = $(
-       '<label for="extendThumbnailLabels">' + this.content.extendThumbnailLabels  + "</label>"
+     this.$truncateThumbnailLabelsLabel = $(
+       '<label for="truncateThumbnailLabels">' + this.content.truncateThumbnailLabels  + "</label>"
      );
  
-     this.$extendThumbnailLabels.append(this.$extendThumbnailLabelsLabel);
+     this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsLabel);
  
-     this.$extendThumbnailLabelsCheckbox.change(() => {
+     this.$truncateThumbnailLabelsCheckbox.change(() => {
        const settings: ISettings = {};
  
-       settings.extendThumbnailLabels = this.$extendThumbnailLabelsCheckbox.is(":checked");
+       settings.truncateThumbnailLabels = this.$truncateThumbnailLabelsCheckbox.is(":checked");
  
        this.updateSettings(settings);
      });

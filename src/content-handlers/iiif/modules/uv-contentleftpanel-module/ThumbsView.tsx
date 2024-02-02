@@ -10,7 +10,7 @@ const ThumbImage = ({
   paged,
   selected,
   thumb,
-  extendThumbnailLabels, 
+  truncateThumbnailLabels, 
   viewingDirection,
 }: {
   first: boolean;
@@ -18,7 +18,7 @@ const ThumbImage = ({
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
-  extendThumbnailLabels: boolean; 
+  truncateThumbnailLabels: boolean; 
   viewingDirection: ViewingDirection;
 }) => {
   const [ref, inView] = useInView({
@@ -39,7 +39,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
-        "extend-labels": extendThumbnailLabels, 
+        "extend-labels": truncateThumbnailLabels, 
       })}
       tabIndex={0}
     >
@@ -70,14 +70,14 @@ const Thumbnails = ({
   selected,
   thumbs,
   viewingDirection,
-  extendThumbnailLabels, 
+  truncateThumbnailLabels, 
 }: {
   onClick: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
-  extendThumbnailLabels: boolean; 
+  truncateThumbnailLabels: boolean; 
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -121,7 +121,7 @@ const Thumbnails = ({
         "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
         "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
         paged: paged,
-        "extend-labels": extendThumbnailLabels, 
+        "extend-labels": truncateThumbnailLabels, 
       })}
     >
       {thumbs.map((thumb, index) => (
@@ -132,7 +132,7 @@ const Thumbnails = ({
       paged={paged}
       selected={selected.includes(index)}
       thumb={thumb}
-      extendThumbnailLabels={extendThumbnailLabels} 
+      truncateThumbnailLabels={truncateThumbnailLabels} 
       viewingDirection={viewingDirection}
     />
     {showSeparator(paged, thumb.viewingHint, index) && (

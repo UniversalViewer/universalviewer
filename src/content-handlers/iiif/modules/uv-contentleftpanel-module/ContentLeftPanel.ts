@@ -506,7 +506,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       paged,
       viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
       selected: selectedIndices,
-      extendThumbnailLabels: settings.extendThumbnailLabels || false,
+      truncateThumbnailLabels: settings.truncateThumbnailLabels || false,
       onClick: (thumb: Thumb) => {
         this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
       },
