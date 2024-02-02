@@ -21,32 +21,23 @@ describe('Universal Viewer', () => {
     expect(title).toBe('Universal Viewer Examples');
   });
 
-  it('extends thumbnail labels when "extend labels" checkbox is clicked', async () => {
-    
-    
-
-
+  it('truncates thumbnail labels when "truncate labels" checkbox is clicked', async () => {
     await page.waitForSelector('.btn.imageBtn.settings .uv-icon-settings');
     await page.click('.btn.imageBtn.settings .uv-icon-settings');
 
-   
-    await page.waitForSelector('.setting.extendThumbnailLabels');
+    await page.waitForSelector('.setting.truncateThumbnailLabels'); 
+    await page.click('#truncateThumbnailLabels'); 
 
-   
-    await page.click('#extendThumbnailLabels');
+    await page.waitForSelector('.thumb.truncate-labels'); 
 
-    
-    await page.waitForSelector('.thumb.extend-labels');
-
-    
     const labelContainerStyle = await page.evaluate(() => {
-        const firstThumbnailLabelContainer = document.querySelector('.thumb.extend-labels .info .label');
+        const firstThumbnailLabelContainer = document.querySelector('.thumb.truncate-labels .info .label'); 
         return window.getComputedStyle(firstThumbnailLabelContainer).getPropertyValue('white-space');
     });
 
-    
-    expect(labelContainerStyle).toBe('break-spaces');
+    expect(labelContainerStyle).toBe('nowrap');
 });
+
 
 it('settings button is visible', async () => {
   

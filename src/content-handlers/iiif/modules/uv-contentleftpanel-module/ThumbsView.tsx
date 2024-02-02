@@ -39,7 +39,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
-        "extend-labels": truncateThumbnailLabels, 
+        "truncate-labels": truncateThumbnailLabels, 
       })}
       tabIndex={0}
     >
@@ -121,7 +121,7 @@ const Thumbnails = ({
         "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
         "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
         paged: paged,
-        "extend-labels": truncateThumbnailLabels, 
+        "truncate-labels": truncateThumbnailLabels, 
       })}
     >
       {thumbs.map((thumb, index) => (
