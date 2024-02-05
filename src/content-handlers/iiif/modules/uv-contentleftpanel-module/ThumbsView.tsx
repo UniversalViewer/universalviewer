@@ -10,7 +10,7 @@ const ThumbImage = ({
   paged,
   selected,
   thumb,
-  truncateThumbnailLabels, 
+  truncateThumbnailLabels,
   viewingDirection,
 }: {
   first: boolean;
@@ -18,7 +18,7 @@ const ThumbImage = ({
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
-  truncateThumbnailLabels: boolean; 
+  truncateThumbnailLabels: boolean;
   viewingDirection: ViewingDirection;
 }) => {
   const [ref, inView] = useInView({
@@ -39,7 +39,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
-        "truncate-labels": truncateThumbnailLabels, 
+        "truncate-labels": truncateThumbnailLabels,
       })}
       tabIndex={0}
     >
@@ -70,14 +70,14 @@ const Thumbnails = ({
   selected,
   thumbs,
   viewingDirection,
-  truncateThumbnailLabels, 
+  truncateThumbnailLabels,
 }: {
   onClick: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
-  truncateThumbnailLabels: boolean; 
+  truncateThumbnailLabels: boolean;
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -121,26 +121,26 @@ const Thumbnails = ({
         "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
         "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
         paged: paged,
-        "truncate-labels": truncateThumbnailLabels, 
+        "truncate-labels": truncateThumbnailLabels,
       })}
     >
       {thumbs.map((thumb, index) => (
-  <span key={`thumb-${index}`} id={`thumb-${index}`}>
-    <ThumbImage
-      first={index === firstNonPagedIndex}
-      onClick={onClick}
-      paged={paged}
-      selected={selected.includes(index)}
-      thumb={thumb}
-      truncateThumbnailLabels={truncateThumbnailLabels} 
-      viewingDirection={viewingDirection}
-    />
-    {showSeparator(paged, thumb.viewingHint, index) && (
-      <div className="separator"></div>
-    )}
-  </span>
-))}
-      
+    <span key={`thumb-${index}`} id={`thumb-${index}`}>
+      <ThumbImage
+        first={index === firstNonPagedIndex}
+        onClick={onClick}
+        paged={paged}
+        selected={selected.includes(index)}
+        thumb={thumb}
+        truncateThumbnailLabels={truncateThumbnailLabels}
+        viewingDirection={viewingDirection}
+      />
+      {showSeparator(paged, thumb.viewingHint, index) && (
+        <div className="separator"></div>
+      )}
+    </span>
+  ))}
+
     </div>
   );
 };

@@ -17,7 +17,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $preserveViewport: JQuery;
   $preserveViewportCheckbox: JQuery;
   $preserveViewportLabel: JQuery;
- 
+
 
   constructor($element: JQuery) {
     super($element);
@@ -57,27 +57,27 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     );
     this.$pagingEnabled.append(this.$pagingEnabledLabel);
 
-     
+
      this.$truncateThumbnailLabels = $('<div class="setting truncateThumbnailLabels"></div>');
      this.$scroll.append(this.$truncateThumbnailLabels);
- 
+
      this.$truncateThumbnailLabelsCheckbox = $(
        '<input id="truncateThumbnailLabels" type="checkbox" tabindex="0" />'
      );
- 
+
      this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsCheckbox);
- 
+
      this.$truncateThumbnailLabelsLabel = $(
        '<label for="truncateThumbnailLabels">' + this.content.truncateThumbnailLabels  + "</label>"
      );
- 
+
      this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsLabel);
- 
+
      this.$truncateThumbnailLabelsCheckbox.change(() => {
        const settings: ISettings = {};
- 
+
        settings.truncateThumbnailLabels = this.$truncateThumbnailLabelsCheckbox.is(":checked");
- 
+
        this.updateSettings(settings);
      });
 
@@ -158,9 +158,6 @@ export class SettingsDialogue extends BaseSettingsDialogue {
 
       this.updateSettings(settings);
     });
-
-
-
   }
 
   open(): void {

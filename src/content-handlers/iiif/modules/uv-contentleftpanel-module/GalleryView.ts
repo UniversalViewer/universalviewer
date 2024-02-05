@@ -65,14 +65,13 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   show(): void {
     this.isOpen = true;
     this.$element.show();
-  
+
     // todo: would be better to have no imperative methods on components and use a reactive pattern
     setTimeout(() => {
       this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
-      this.applyExtendedLabelsStyles(); 
+      this.applyExtendedLabelsStyles();
     }, 10);
   }
-  
 
   hide(): void {
     this.isOpen = false;
@@ -86,11 +85,9 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     $main.height(this.$element.height() - $header.height());
   }
 
-
-
   public applyExtendedLabelsStyles(): void {
-    
+
     this.$gallery.addClass('label-extended');
   }
-  
+
 }
