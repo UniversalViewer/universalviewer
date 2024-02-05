@@ -76,7 +76,6 @@ export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDi
 
     this._createAccessibilityMenu();
 
-
     this.$element.hide();
   }
 
