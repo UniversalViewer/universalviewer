@@ -21,29 +21,37 @@ describe('Universal Viewer', () => {
     expect(title).toBe('Universal Viewer Examples');
   });
 
-  it('truncates thumbnail labels when "truncate labels" checkbox is clicked', async () => {
-    await page.waitForSelector('.btn.imageBtn.settings .uv-icon-settings');
-    await page.click('.btn.imageBtn.settings .uv-icon-settings');
+  it('can toggle thumbnail label truncation', async () => {
+    await page.waitForSelector('#truncateThumbnailLabels');
 
-    await page.waitForSelector('.setting.truncateThumbnailLabels'); 
-    await page.click('#truncateThumbnailLabels'); 
+    const isCheckedBeforeToggle = await page.$eval('#truncateThumbnailLabels', checkbox => checkbox.checked);
+    expect(isCheckedBeforeToggle).toBe(true);
 
-    await page.waitForSelector('.thumb.truncate-labels'); 
+    const labelOverflowBeforeToggle = await page.evaluate(() => {
+      const label = document.querySelector('.thumbs .thumb .info .label');
+      return getComputedStyle(label).overflowX;
+    });
+    expect(labelOverflowBeforeToggle).toBe('visible');
 
-    const labelContainerStyle = await page.evaluate(() => {
-        const firstThumbnailLabelContainer = document.querySelector('.thumb.truncate-labels .info .label'); 
-        return window.getComputedStyle(firstThumbnailLabelContainer).getPropertyValue('white-space');
+    await page.evaluate(() => {
+      document.querySelector('#truncateThumbnailLabels').click();
     });
 
-    expect(labelContainerStyle).toBe('nowrap');
-});
+    const isCheckedAfterToggle = await page.$eval('#truncateThumbnailLabels', checkbox => checkbox.checked);
+    expect(isCheckedAfterToggle).toBe(false);
 
+    const labelOverflowAfterToggle = await page.evaluate(() => {
+      const label = document.querySelector('.thumbs .thumb .info .label');
+      return getComputedStyle(label).overflowX;
+    });
+    expect(labelOverflowAfterToggle).toBe('hidden');
+  });
 
 it('settings button is visible', async () => {
-  
+
   await page.waitForSelector('.btn.imageBtn.settings');
-  
- 
+
+
   const isSettingsButtonVisible = await page.evaluate(() => {
     const settingsButton = document.querySelector('.btn.imageBtn.settings');
     const style = window.getComputedStyle(settingsButton);
