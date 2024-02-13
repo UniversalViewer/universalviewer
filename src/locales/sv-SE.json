@@ -114,7 +114,7 @@
     "$navigatorEnabled": "Visa minivy",
     "$clickToZoomEnabled": "Zooma med musklick",
     "$reducedMotion": "Minska rörelse (inaktiverar animationer)",
-    "truncateThumbnailLabels": "Trunkera miniatyretiketter",
+    "truncateThumbnailLabels": "Visa fullständiga miniatyretiketter",
     "$preserveViewport": "Behåll zoomnivå",
     "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>mer info</a>",
     "$custom": "Anpassad",

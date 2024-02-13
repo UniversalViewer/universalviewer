@@ -57,7 +57,6 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     );
     this.$pagingEnabled.append(this.$pagingEnabledLabel);
 
-
      this.$truncateThumbnailLabels = $('<div class="setting truncateThumbnailLabels"></div>');
      this.$scroll.append(this.$truncateThumbnailLabels);
 
@@ -71,7 +70,10 @@ export class SettingsDialogue extends BaseSettingsDialogue {
        '<label for="truncateThumbnailLabels">' + this.content.truncateThumbnailLabels  + "</label>"
      );
 
-     this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsLabel);
+    this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsLabel);
+
+    const settings: ISettings = {};
+    this.$truncateThumbnailLabelsCheckbox.prop('checked', settings.truncateThumbnailLabels || true);
 
      this.$truncateThumbnailLabelsCheckbox.change(() => {
        const settings: ISettings = {};

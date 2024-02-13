@@ -9,7 +9,6 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   galleryComponent: any;
   galleryData: any;
   $gallery: JQuery;
-  $extendLabelsCheckbox: JQuery | undefined;
 
   constructor($element: JQuery) {
     super($element, true, true);
