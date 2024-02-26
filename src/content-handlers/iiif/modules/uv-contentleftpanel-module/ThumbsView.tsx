@@ -140,7 +140,6 @@ const Thumbnails = ({
           )}
         </span>
       ))}
-
     </div>
   );
 };
