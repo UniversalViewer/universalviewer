@@ -512,7 +512,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         },
       })
     );
-    }
+  }
 
   createGalleryView(): void {
     this.galleryView = new GalleryView(this.$galleryView);
