@@ -67,7 +67,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
           <div class="separator"></div> \
         {{/if}}',
     });
-    
+
     const extraHeight: number = this.options.thumbsExtraHeight;
 
     $.views.helpers({
