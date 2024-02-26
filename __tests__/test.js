@@ -28,29 +28,28 @@ describe('Universal Viewer', () => {
     expect(isCheckedBeforeToggle).toBe(true);
 
     const labelOverflowBeforeToggle = await page.evaluate(() => {
-      const label = document.querySelector('.thumbs .thumb .info .label');
-      return getComputedStyle(label).overflowX;
+        const label = document.querySelector('.thumbsView .thumbs .thumb .info .label');
+        return getComputedStyle(label).overflowX;
     });
-    expect(labelOverflowBeforeToggle).toBe('visible');
+    expect(labelOverflowBeforeToggle).toBe('hidden');
 
     await page.evaluate(() => {
-      document.querySelector('#truncateThumbnailLabels').click();
+        document.querySelector('#truncateThumbnailLabels').click();
     });
 
     const isCheckedAfterToggle = await page.$eval('#truncateThumbnailLabels', checkbox => checkbox.checked);
     expect(isCheckedAfterToggle).toBe(false);
 
     const labelOverflowAfterToggle = await page.evaluate(() => {
-      const label = document.querySelector('.thumbs .thumb .info .label');
-      return getComputedStyle(label).overflowX;
+        const label = document.querySelector('.thumbsView .thumbs .thumb .info .label');
+        return getComputedStyle(label).overflowX;
     });
-    expect(labelOverflowAfterToggle).toBe('hidden');
-  });
+    expect(labelOverflowAfterToggle).toBe('visible');
+});
 
 it('settings button is visible', async () => {
 
   await page.waitForSelector('.btn.imageBtn.settings');
-
 
   const isSettingsButtonVisible = await page.evaluate(() => {
     const settingsButton = document.querySelector('.btn.imageBtn.settings');
