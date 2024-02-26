@@ -85,7 +85,6 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   }
 
   public applyExtendedLabelsStyles(): void {
-
     this.$gallery.addClass('label-extended');
   }
 
