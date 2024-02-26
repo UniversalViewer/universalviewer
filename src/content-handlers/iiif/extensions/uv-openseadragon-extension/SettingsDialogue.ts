@@ -18,7 +18,6 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $preserveViewportCheckbox: JQuery;
   $preserveViewportLabel: JQuery;
 
-
   constructor($element: JQuery) {
     super($element);
   }
