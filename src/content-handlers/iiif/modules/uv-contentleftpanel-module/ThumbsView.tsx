@@ -125,21 +125,21 @@ const Thumbnails = ({
       })}
     >
       {thumbs.map((thumb, index) => (
-    <span key={`thumb-${index}`} id={`thumb-${index}`}>
-      <ThumbImage
-        first={index === firstNonPagedIndex}
-        onClick={onClick}
-        paged={paged}
-        selected={selected.includes(index)}
-        thumb={thumb}
-        truncateThumbnailLabels={truncateThumbnailLabels}
-        viewingDirection={viewingDirection}
-      />
-      {showSeparator(paged, thumb.viewingHint, index) && (
-        <div className="separator"></div>
-      )}
-    </span>
-  ))}
+        <span key={`thumb-${index}`} id={`thumb-${index}`}>
+          <ThumbImage
+            first={index === firstNonPagedIndex}
+            onClick={onClick}
+            paged={paged}
+            selected={selected.includes(index)}
+            thumb={thumb}
+            truncateThumbnailLabels={truncateThumbnailLabels}
+            viewingDirection={viewingDirection}
+          />
+          {showSeparator(paged, thumb.viewingHint, index) && (
+            <div className="separator"></div>
+          )}
+        </span>
+      ))}
 
     </div>
   );
