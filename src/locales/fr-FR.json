@@ -114,7 +114,7 @@
     "$navigatorEnabled": "Navigateur activé",
     "$clickToZoomEnabled": "Cliquer pour zoomer",
     "$reducedMotion": "Réduire le mouvement (désactive les animations)",
-    "truncateThumbnailLabels": "Afficher les étiquettes de miniatures complètes",
+    "truncateThumbnailLabels": "Tronquer les étiquettes des vignettes",
     "$preserveViewport": "Conserver le zoom",
     "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>informations</a>",
     "$custom": "personnalisée",
