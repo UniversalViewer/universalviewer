@@ -491,8 +491,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     }
 
     const paged: boolean =
-    !!this.extension.getSettings().pagingEnabled &&
-    this.extension.helper.isPaged();
+      !!this.extension.getSettings().pagingEnabled &&
+      this.extension.helper.isPaged();
 
     const selectedIndices: number[] = this.extension.getPagedIndices(
       this.extension.helper.canvasIndex
