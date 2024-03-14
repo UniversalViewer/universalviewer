@@ -1281,7 +1281,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
   getImageId(canvas: Canvas): string | null {
     if (canvas.externalResource) {
-      const id: string | undefined = canvas.externalResource.data["@id"];
+      const id: string | undefined = canvas.externalResource.data["@id"] || canvas.externalResource.data.id;
 
       if (id) {
         return id.substr(id.lastIndexOf("/") + 1);
@@ -1339,7 +1339,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
             id += "/";
           }
 
-          if (Utils.isImageProfile(service.getProfile())) {
+          if (Utils.isImageProfile(service.getProfile()) || Utils.isImageServiceType(service.getIIIFResourceType())) {
             infoUri = id + "info.json";
           }
         }
