@@ -23,6 +23,7 @@ import {
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
 import { isVisible } from "../../../../Utils";
 import { ContentLeftPanel as ContentLeftPanelConfig } from "../../extensions/config/ContentLeftPanel";
+import { Dates } from "@edsilv/utils";
 
 export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $bottomOptions: JQuery;
@@ -52,6 +53,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
   thumbsRoot: Root;
+  thumbsCacheKey: string;
 
   constructor($element: JQuery) {
     super($element);
@@ -62,6 +64,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     super.create();
 
+    this.updateThumbsCacheKey();
+    
     this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
       this.render();
     });
@@ -113,6 +117,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
       this.selectCurrentTreeNode();
       this.updateTreeTabBySelection();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.LOGIN, () => {
+      this.updateThumbsCacheKey();
+      this.renderThumbs();
+      this.renderGallery();
     });
 
     // this.extensionHost.subscribe(
@@ -246,6 +256,10 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   //   );
   // }
 
+  updateThumbsCacheKey(): void {
+    this.thumbsCacheKey = Dates.getTimeStamp().toString();
+  }
+  
   createTreeView(): void {
     this.treeView = new TreeView(this.$treeView);
     this.treeView.treeData = this.getTreeData();
@@ -457,9 +471,16 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     //   height = this.config.options.oneColThumbHeight;
     // }
 
-    const thumbs: Thumb[] = <Thumb[]>this.extension.helper.getThumbs(90);
+    let thumbs: Thumb[] = <Thumb[]>this.extension.helper.getThumbs(90);
     // this.extension.helper.getThumbs(width, height)
 
+    thumbs = thumbs.map(
+      (t) => {
+        t.uri += '?t=' + this.thumbsCacheKey;
+        return t;
+      }
+    );
+    
     if (
       viewingDirection &&
       viewingDirection === ViewingDirectionEnum.BOTTOM_TO_TOP
