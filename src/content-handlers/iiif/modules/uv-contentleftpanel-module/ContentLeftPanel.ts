@@ -476,7 +476,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     thumbs = thumbs.map(
       (t) => {
-        t.uri += '?t=' + this.thumbsCacheKey;
+        let u = new URL(t.uri)
+        if (u.search == '') {
+          u.search += '?_uv_t='+ this.thumbsCacheKey;
+        } else {
+          u.search += '&_uv_t='+ this.thumbsCacheKey;
+        }
+        t.uri = u.href;
         return t;
       }
     );
