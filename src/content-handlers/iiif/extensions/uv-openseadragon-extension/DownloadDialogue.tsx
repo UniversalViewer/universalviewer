@@ -10,6 +10,7 @@ import {
   IExternalImageResourceData,
   Resource,
   Annotation,
+  AnnotationBody,
   ManifestResource,
   Rendering,
   LanguageMap,
@@ -264,11 +265,32 @@ const DownloadDialogue = ({
     return null;
   }
 
+  function getCanvasImageAnnotationBody(canvas: Canvas): AnnotationBody | null {
+    const images: Annotation[] = canvas.getContent();
+    if (images.length == 0) return null;
+
+    const bodies: AnnotationBody[] = images[0].getBody();
+    if (bodies.length == 0) return null;
+  
+    return bodies[0];
+  }
+
   function getCanvasMimeType(canvas: Canvas): string | null {
+    // presentation api version 2
     const resource: Resource | null = getCanvasImageResource(canvas);
 
     if (resource) {
       const format: MediaType | null = resource.getFormat();
+
+      if (format) {
+        return format.toString();
+      }
+    }
+
+    // presentation api version 3
+    const annotationBody: AnnotationBody | null = getCanvasImageAnnotationBody(canvas);
+    if (annotationBody) {
+      const format: MediaType | null = annotationBody.getFormat();
 
       if (format) {
         return format.toString();
