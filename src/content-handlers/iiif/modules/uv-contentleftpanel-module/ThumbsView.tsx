@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
@@ -50,6 +50,7 @@ const ThumbImage = ({
         {inView && <img src={thumb.uri} alt={thumb.label} />}
       </div>
       <div className="info">
+        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
@@ -75,49 +76,14 @@ const Thumbnails = ({
   viewingDirection: ViewingDirection;
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [extendLabels, setExtendLabels] = useState(false);
-  const [shouldShowCheckbox, setShouldShowCheckbox] = useState(false);
 
   useEffect(() => {
-    const checkOverflow = () => {
-      if (ref.current) {
-        const thumbLabels = ref.current.querySelectorAll('.thumb .info .label');
-        let overflowDetected = false;
-  
-        thumbLabels.forEach((label) => {
-          if (label.scrollWidth > label.clientWidth) {
-            overflowDetected = true;
-            return;
-          }
-        });
-  
-        setShouldShowCheckbox(overflowDetected);
-      } else {
-        setShouldShowCheckbox(false);
-      }
-    };
-  
-    
-    checkOverflow();
-  
-    
-  
-    
-    return () => {
-      
-    };
-  }, [thumbs]);  
-  
-
-  useEffect(() => {
-    const thumb: HTMLElement = ref.current?.querySelector(
-      `#thumb-${selected[0]}`
-    ) as HTMLElement;
+    const thumb: HTMLElement = ref.current?.querySelector(`#thumb-${selected[0]}`) as HTMLElement;
     const y: number = thumb?.offsetTop;
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: "smooth",
+      behavior: 'smooth'
     });
   }, [selected]);
 
@@ -131,6 +97,7 @@ const Thumbnails = ({
     }
 
     if (paged) {
+      // if paged, show separator after every 2 thumbs
       return !((index - 1) % 2 === 0);
     }
 
@@ -142,43 +109,29 @@ const Thumbnails = ({
   });
 
   return (
-    <div>
-      {shouldShowCheckbox && (
-        <div>
-          <label htmlFor="extendLabelsCheckbox">Show full labels </label>
-          <input
-            type="checkbox"
-            id="extendLabelsCheckbox"
-            checked={extendLabels}
-            onChange={(e) => setExtendLabels(e.target.checked)}
+    <div
+      ref={ref}
+      className={cx("thumbs", {
+        "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
+        "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
+        paged: paged,
+      })}
+    >
+      {thumbs.map((thumb, index) => (
+        <span key={`thumb-${index}`} id={`thumb-${index}`}>
+          <ThumbImage
+            first={index === firstNonPagedIndex}
+            onClick={onClick}
+            paged={paged}
+            selected={selected.includes(index)}
+            thumb={thumb}
+            viewingDirection={viewingDirection}
           />
-        </div>
-      )}
-      <div
-        ref={ref}
-        className={cx("thumbs", {
-          "extend-labels": extendLabels,
-          "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
-          "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
-          paged: paged,
-        })}
-      >
-        {thumbs.map((thumb, index) => (
-          <span key={`thumb-${index}`} id={`thumb-${index}`}>
-            <ThumbImage
-              first={index === firstNonPagedIndex}
-              onClick={onClick}
-              paged={paged}
-              selected={selected.includes(index)}
-              thumb={thumb}
-              viewingDirection={viewingDirection}
-            />
-            {showSeparator(paged, thumb.viewingHint, index) && (
-              <div className="separator"></div>
-            )}
-          </span>
-        ))}
-      </div>
+          {showSeparator(paged, thumb.viewingHint, index) && (
+            <div className="separator"></div>
+          )}
+        </span>
+      ))}
     </div>
   );
 };
