@@ -1,15 +1,14 @@
+const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { ContentLeftPanel } from "../../extensions/config/ContentLeftPanel";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
-import $ from "jquery"; 
 
 export class GalleryView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
   galleryComponent: any;
   galleryData: any;
   $gallery: JQuery;
-  $extendLabelsCheckbox: JQuery | undefined;
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -32,7 +31,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "thumbSelected",
-      function (thumb: any) {
+      function(thumb: any) {
         that.extensionHost.publish(IIIFEvents.GALLERY_THUMB_SELECTED, thumb);
         that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
       },
@@ -41,7 +40,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "decreaseSize",
-      function () {
+      function() {
         that.extensionHost.publish(IIIFEvents.GALLERY_DECREASE_SIZE);
       },
       false
@@ -49,30 +48,11 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "increaseSize",
-      function () {
+      function() {
         that.extensionHost.publish(IIIFEvents.GALLERY_INCREASE_SIZE);
       },
       false
     );
-
-    setTimeout(() => {
-      const labelHasOverflow = this.checkLabelOverflow();
-
-      if (labelHasOverflow) {
-        this.$extendLabelsCheckbox = $('<input type="checkbox" id="extendLabelsCheckbox">');
-        const $label = $('<label for="extendLabelsCheckbox">Show full labels</label>');
-
-        this.$element.prepend($label);
-        this.$element.prepend(this.$extendLabelsCheckbox);
-
-        this.$extendLabelsCheckbox.on('change', () => {
-          const extendLabels = this.$extendLabelsCheckbox?.prop('checked');
-          if (extendLabels !== undefined) {
-            this.toggleLabelExtension(extendLabels);
-          }
-        });
-      }
-    }, 0);
   }
 
   public databind(): void {
@@ -85,6 +65,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     this.isOpen = true;
     this.$element.show();
 
+    // todo: would be better to have no imperative methods on components and use a reactive pattern
     setTimeout(() => {
       this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
     }, 10);
@@ -100,34 +81,5 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     const $main: JQuery = this.$gallery.find(".main");
     const $header: JQuery = this.$gallery.find(".header");
     $main.height(this.$element.height() - $header.height());
-  }
-
-  checkLabelOverflow(): boolean {
-    const $labels = this.$gallery.find('.info .label');
-    for (let i = 0; i < $labels.length; i++) {
-      const label = $labels[i];
-      if (label.scrollWidth > label.clientWidth) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  toggleLabelExtension(extendLabels: boolean): void {
-    if (extendLabels) {
-      this.$gallery.find('.info .label').css({
-        'overflow-x': 'visible',
-        'text-overflow': 'nowrap',
-        'white-space': 'break-spaces',
-        'max-width': '100%',
-      });
-    } else {
-      this.$gallery.find('.info .label').css({
-        'overflow-x': 'hidden',
-        'text-overflow': 'ellipsis',
-        'white-space': 'nowrap',
-        'max-width': '100%',
-      });
-    }
   }
 }
