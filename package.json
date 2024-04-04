@@ -128,14 +128,12 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "jest": {
+    "preset": "jest-puppeteer",
     "transform": {
+      "^.+\\.tsx?$": "ts-jest",
       "ts-jest": {
         "diagnostics": true
       }
-    },
-    "preset": "jest-puppeteer",
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
     },
     "testPathIgnorePatterns": [
       "/node_modules/"
