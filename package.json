@@ -130,10 +130,9 @@
   "jest": {
     "preset": "jest-puppeteer",
     "transform": {
-      "^.+\\.tsx?$": "ts-jest",
-      "ts-jest": {
+      "^.+\\.tsx?$": ["ts-jest", {
         "diagnostics": true
-      }
+      }]
     },
     "testPathIgnorePatterns": [
       "/node_modules/"
