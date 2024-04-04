@@ -8,7 +8,7 @@ Before you can build the UV, we assume the following list of software is already
 - Node 14.18.1 or higher
 - Npm 8.1.1 or higher
 
-## Fork repository
+## Forking the repository
 
 In order to contribute to the UV, you must have a GitHub account so you can push code and create a new Pull Request (PR).
 
@@ -34,7 +34,7 @@ To build the debug version of the viewer, just run (on the command line, in the 
 
 This will compile the project using webpack and serve the examples on `localhost:8080`
 
-## Distribution Builds
+## Building for distribution
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
@@ -87,7 +87,7 @@ git commit -m "fix(component): message"
 
 After pushing your new branch to your fork, you can create a PR; see: https://guides.github.com/activities/forking/
 
-### Creating a release
+## Creating a release
 
 The decision to make a new release should be made by the Universal Viewer Steering Group. Once a release is planned, the appropriate commit from the dev branch should be merged into the main branch.
 
