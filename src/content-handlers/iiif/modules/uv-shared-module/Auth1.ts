@@ -100,6 +100,7 @@ export class Auth1 {
       // It can but wait.
       const poll: number = window.setInterval(() => {
         if (contentProviderWindow.closed) {
+          Auth1.publish(IIIFEvents.LOGIN);
           window.clearInterval(poll);
           resolve(true);
         }
