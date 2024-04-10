@@ -22,18 +22,18 @@ UV community team members help shepherd the community. They are here to help men
 
 Active Community Members are visibly active in our Slack and/or GitHub channels. We identify active members as being those whom contributors and staff can most count on for a response within 2-3 days.
 
-|                                                                         | (Ordered alphabetically, by first name)                                                                                                                                                                                                                          |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ![Demian](https://avatars.githubusercontent.com/demiankatz?s=460&v=4)  | **[Demian](https://github.com/demiankatz)** is Director of Library Technologies and has been at Falvey Memorial Library in some capacity since 2009, living in Philadelphia US. Ask Demian about: <ul><li>Universal Viewer</li><li>TypeScript</li><li>IIIF</li></ul> |
-| ![Edward](https://avatars.githubusercontent.com/edsilv?s=460&v=4)  | **[Edward](https://github.com/edsilv)** is an applications developer at [mnemoscene](https://mnscene.io), living in Brighton UK. Ask Edward about: <ul><li>StencilJS</li><li>three.js</li><li>Universal Viewer</li><li>TypeScript</li><li>IIIF</li></ul> |
+|                                                                       | (Ordered alphabetically, by first name)                                                                                                                                                                                                                              |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Demian](https://avatars.githubusercontent.com/demiankatz?s=460&v=4) | **[Demian](https://github.com/demiankatz)** is Director of Library Technologies and has been at Falvey Memorial Library in some capacity since 2009, living in Philadelphia US. Ask Demian about: <ul><li>Universal Viewer</li><li>TypeScript</li><li>IIIF</li></ul> |
+| ![Edward](https://avatars.githubusercontent.com/edsilv?s=460&v=4)     | **[Edward](https://github.com/edsilv)** is an applications developer at [mnemoscene](https://mnscene.io), living in Brighton UK. Ask Edward about: <ul><li>React</li><li>three.js</li><li>Universal Viewer</li><li>TypeScript</li><li>IIIF</li></ul>                 |
 
 ### Joining the Team
 
 We welcome active contributors to join the UV team. Specifically, we are looking for contributors with:
 
-* Passion for IIIF, TypeScript, stenciljs
-* Interest in helping other contributors, and fostering community growth
-* Two months of active contribution to the repository.
+- Passion for IIIF, TypeScript, React
+- Interest in helping other contributors, and fostering community growth
+- Two months of active contribution to the repository.
 
 To apply, simply contact one of our staff or community team members via Slack or email, and we'll get right back to you.
 
