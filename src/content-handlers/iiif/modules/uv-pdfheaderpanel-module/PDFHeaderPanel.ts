@@ -6,7 +6,7 @@ import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
 import { Strings } from "@edsilv/utils";
 
 export class PDFHeaderPanel extends HeaderPanel<
-  Config["modules"]["headerPanel"]
+  Config["modules"]["pdfHeaderPanel"]
 > {
   $firstButton: JQuery;
   $lastButton: JQuery;
@@ -32,7 +32,7 @@ export class PDFHeaderPanel extends HeaderPanel<
   }
 
   create(): void {
-    this.setConfig("headerPanel");
+    this.setConfig("pdfHeaderPanel");
 
     super.create();
 

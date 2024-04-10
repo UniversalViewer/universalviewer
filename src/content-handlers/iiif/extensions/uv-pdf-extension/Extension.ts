@@ -33,9 +33,6 @@ export default class Extension extends BaseExtension<Config>
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   defaultConfig: Config = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
 
   create(): void {
     super.create();
@@ -80,7 +77,7 @@ export default class Extension extends BaseExtension<Config>
     return (
       super.isHeaderPanelEnabled() &&
       Bools.getBool(
-        this.data.config!.modules.centerPanel.options.usePdfJs,
+        this.data.config!.modules.pdfCenterPanel.options.usePdfJs,
         true
       )
     );

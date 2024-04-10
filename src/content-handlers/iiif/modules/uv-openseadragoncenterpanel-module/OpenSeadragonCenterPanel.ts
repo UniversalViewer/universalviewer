@@ -26,7 +26,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
-  Config["modules"]["centerPanel"]
+  Config["modules"]["openSeadragonCenterPanel"]
 > {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
@@ -65,7 +65,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("centerPanel");
+    this.setConfig("openSeadragonCenterPanel");
 
     super.create();
 
