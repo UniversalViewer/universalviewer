@@ -14,7 +14,6 @@ import "aleph-r3f/dist/style.css";
 export class AlephR3FCenterPanel extends CenterPanel<
   Config["modules"]["centerPanel"]
 > {
-  $modelviewer: JQuery;
   $spinner: JQuery;
   viewerRoot: Root;
 
