@@ -221,6 +221,7 @@ export type SettingsDialogueContent = DialogueContent & {
   clickToZoomEnabled: string;
   pagingEnabled: string;
   reducedMotion: string;
+  truncateThumbnailLabels: string; 
   preserveViewport: string;
   title: string;
   website: string;
