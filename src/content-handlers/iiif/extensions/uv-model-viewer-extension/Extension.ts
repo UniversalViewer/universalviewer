@@ -9,6 +9,7 @@ import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { TextRightPanel } from "../../modules/uv-textrightpanel-module/TextRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
@@ -22,6 +23,7 @@ import defaultConfig from "./config/config.json";
 import { AnnotationGroup } from "@iiif/manifold";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Config } from "./config/Config";
+import { RightContainerPanel } from "../../modules/uv-shared-module/RightContainerPanel";
 
 export default class ModelViewerExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -37,7 +39,9 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   moreInfoDialogue: MoreInfoDialogue;
+  rightContainerPanel: RightContainerPanel<Config["modules"]["rightContainerPanel"]>;
   rightPanel: MoreInfoRightPanel;
+  textRightPanel: TextRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   defaultConfig: Config = defaultConfig;
@@ -89,8 +93,16 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
 
     this.centerPanel = new ModelViewerCenterPanel(this.shell.$centerPanel);
 
+    if (this.isRightContainerPanelEnabled()){
+      this.rightContainerPanel = new RightContainerPanel(this.shell.$rightContainerPanel);
+    }
+
     if (this.isRightPanelEnabled()) {
       this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
+    }
+
+    if (this.isTextRightPanelEnabled()) {
+      this.textRightPanel = new TextRightPanel(this.shell.$textRightPanel);
     }
 
     if (this.isFooterPanelEnabled()) {

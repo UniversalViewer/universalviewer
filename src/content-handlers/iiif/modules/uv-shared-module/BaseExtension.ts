@@ -321,6 +321,10 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       this.resize();
     });
 
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_TEXT_RIGHT_PANEL, () => {
+      this.resize();
+    });
+
     this.extensionHost.subscribe(
       IIIFEvents.COLLECTION_INDEX_CHANGE,
       (collectionIndex: number) => {
@@ -1089,8 +1093,16 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return false;
   }
 
+  isRightContainerPanelEnabled(): boolean {
+    return Bools.getBool(this.data.config!.options.rightContainerPanelEnabled, true);
+  }
+
   isRightPanelEnabled(): boolean {
     return Bools.getBool(this.data.config!.options.rightPanelEnabled, true);
+  }
+
+  isTextRightPanelEnabled(): boolean {
+    return Bools.getBool(this.data.config!.options.textRightPanelEnabled, true);
   }
 
   isFooterPanelEnabled(): boolean {

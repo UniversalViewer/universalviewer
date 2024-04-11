@@ -15,7 +15,9 @@ export class Shell extends BaseView<BaseConfig> {
   public $mainPanel: JQuery;
   public $mobileFooterPanel: JQuery;
   public $overlays: JQuery;
+  public $rightContainerPanel: JQuery;
   public $rightPanel: JQuery;
+  public $textRightPanel: JQuery;
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -56,8 +58,14 @@ export class Shell extends BaseView<BaseConfig> {
     this.$leftPanel = $('<div class="leftPanel"></div>');
     this.$mainPanel.append(this.$leftPanel);
 
+    this.$rightContainerPanel = $('<div class="rightContainerPanel"></div>');
+    this.$mainPanel.append(this.$rightContainerPanel);
+
+    this.$textRightPanel = $('<div class="rightPanel"></div>');
+    this.$rightContainerPanel.append(this.$textRightPanel);
+
     this.$rightPanel = $('<div class="rightPanel"></div>');
-    this.$mainPanel.append(this.$rightPanel);
+    this.$rightContainerPanel.append(this.$rightPanel);
 
     this.$footerPanel = $('<div class="footerPanel"></div>');
     this.$element.append(this.$footerPanel);

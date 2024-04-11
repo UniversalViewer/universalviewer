@@ -6,6 +6,7 @@ import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IDefaultExtension } from "./IDefaultExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { TextRightPanel } from "../../modules/uv-textrightpanel-module/TextRightPanel";
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
@@ -13,6 +14,7 @@ import { Bools, Strings } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
+import { RightContainerPanel } from "../../modules/uv-shared-module/RightContainerPanel";
 
 export default class Extension extends BaseExtension<Config>
   implements IDefaultExtension {
@@ -26,7 +28,9 @@ export default class Extension extends BaseExtension<Config>
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
+  rightContainerPanel: RightContainerPanel<Config["modules"]["rightContainerPanel"]>;
   rightPanel: MoreInfoRightPanel;
+  textRightPanel: TextRightPanel;
   settingsDialogue: SettingsDialogue;
   defaultConfig: Config = defaultConfig;
   locales = {
@@ -66,8 +70,16 @@ export default class Extension extends BaseExtension<Config>
 
     this.centerPanel = new FileLinkCenterPanel(this.shell.$centerPanel);
 
+    if (this.isRightContainerPanelEnabled()) {
+      this.rightContainerPanel = new RightContainerPanel(this.shell.$rightContainerPanel);
+    }
+
     if (this.isRightPanelEnabled()) {
       this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
+    }
+
+    if (this.isTextRightPanelEnabled()) {
+      this.textRightPanel = new TextRightPanel(this.shell.$textRightPanel);
     }
 
     if (this.isFooterPanelEnabled()) {
@@ -98,8 +110,16 @@ export default class Extension extends BaseExtension<Config>
       this.leftPanel.init();
     }
 
+    if (this.isRightContainerPanelEnabled()) {
+      this.rightContainerPanel.init();
+    }
+
     if (this.isRightPanelEnabled()) {
       this.rightPanel.init();
+    }
+
+    if (this.isTextRightPanelEnabled()) {
+      this.textRightPanel.init();
     }
   }
 

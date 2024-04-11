@@ -144,5 +144,10 @@
     "$duration": "Speltid",
     "$mute": "Tyst",
     "$pause": "Paus",
-    "$play": "Spela"
+    "$play": "Spela",
+    "$transcribedText": "Transkriberad text",
+    "$expandTranscribedText": "Expandera transkriberad text",
+    "$collapseTranscribedText": "Fäll ihop transkriberad text",
+    "$transcribedTextLeftPage": "Vänstra sidan",
+    "$transcribedTextRightPage": "Högra sidan"
 }

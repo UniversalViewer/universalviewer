@@ -3,7 +3,8 @@
     @expandFullEnabled: false;
 
     .rightPanel {
-
+        margin-left: 1px;
+        display: inline-block;
         z-index: 10;
 
         .top {
@@ -76,11 +77,22 @@
         .main {
             margin-right: @margin-medium-horizontal;
             margin-bottom: @margin-medium-vertical;
+
+            .transcribed-text {
+                width: 420px;
+                padding: 10px 20px 20px 20px;
+
+                .label {
+                    color: #9a9a9a;
+                    border-bottom: 1px solid #343434;
+                    margin: 0 10px 10px 0;
+                }
+            }
         }
     }
 
-    .expandFull() when (@expandFullEnabled = true) {
-        .title{
+    .expandFull() when (@expandFullEnabled =true) {
+        .title {
             left: 55px;
         }
 

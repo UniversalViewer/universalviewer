@@ -234,8 +234,12 @@ export class CenterPanel<
       ? Math.floor(this.extension.shell.$rightPanel.width())
       : 0;
 
+    const textRightPanelWidth: number = isVisible(this.extension.shell.$textRightPanel)
+      ? Math.floor(this.extension.shell.$textRightPanel.width())
+      : 0;
+
     const width: number = Math.floor(
-      this.$element.parent().width() - leftPanelWidth - rightPanelWidth
+      this.$element.parent().width() - leftPanelWidth - rightPanelWidth - textRightPanelWidth
     );
 
     this.$element.css({

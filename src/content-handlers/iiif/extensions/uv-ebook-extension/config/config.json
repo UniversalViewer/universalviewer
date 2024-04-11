@@ -130,6 +130,10 @@
         "title": "$help"
       }
     },
+    "rightContainerPanel": {
+      "options": {},
+      "content": {}
+    },
     "moreInfoRightPanel": {
       "options": {
         "canvasDisplayOrder": "",
@@ -171,6 +175,50 @@
         "rangeHeader": "$aboutThisSection",
         "title": "$moreInformation"
       }
+    },
+    "textRightPanel": {
+      "options": {
+        "canvasDisplayOrder": "",
+        "canvasExclude": "",
+        "copyToClipboardEnabled": false,
+        "expandFullEnabled": false,
+        "limitToRange": false,
+        "manifestDisplayOrder": "",
+        "manifestExclude": "",
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 442,
+        "panelOpen": false,
+        "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+        "showAllLanguages": false,
+        "textLimit": 4,
+        "textLimitType": "lines",
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "attribution": "$attribution",
+        "canvasHeader": "$aboutTheImage",
+        "close": "$close",
+        "collapse": "$collapseTranscribedText",
+        "collapseFull": "$collapseGallery",
+        "copiedToClipboard": "$copiedToClipboard",
+        "copyToClipboard": "$copyToClipboard",
+        "description": "$description",
+        "expand": "$expandTranscribedText",
+        "expandFull": "$expandGallery",
+        "holdingText": "$moduleGoesHere",
+        "less": "$less",
+        "license": "$license",
+        "logo": "$logo",
+        "manifestHeader": "$aboutTheItem",
+        "more": "$more",
+        "noData": "$noDataToDisplay",
+        "page": "$page",
+        "rangeHeader": "$aboutThisSection",
+        "title": "$transcribedText",
+        "leftPage": "$transcribedTextLeftPage",
+        "rightPage": "$transcribedTextRightPage"
+     }
     },
     "centerPanel": {
       "options": {

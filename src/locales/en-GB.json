@@ -144,5 +144,10 @@
   "$duration": "Duration",
   "$mute": "Mute",
   "$pause": "Pause",
-  "$play": "Play"
+  "$play": "Play",
+  "$transcribedText": "Transcribed text",
+  "$expandTranscribedText": "Expand transcribed text",
+  "$collapseTranscribedText": "Collapse transcribed text",
+  "$transcribedTextLeftPage": "Left page",
+  "$transcribedTextRightPage": "Right page"
 }

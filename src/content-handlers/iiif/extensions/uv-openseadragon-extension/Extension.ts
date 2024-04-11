@@ -54,6 +54,8 @@ import { createStore, OpenSeadragonExtensionState } from "./Store";
 import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
+import { TextRightPanel } from "../../modules/uv-textrightpanel-module/TextRightPanel";
+import { RightContainerPanel } from "../../modules/uv-shared-module/RightContainerPanel";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -78,7 +80,9 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   moreInfoDialogue: MoreInfoDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   previousAnnotationRect: AnnotationRect | null;
+  rightContainerPanel: RightContainerPanel<Config["modules"]["rightContainerPanel"]>;
   rightPanel: MoreInfoRightPanel;
+  textRightPanel: TextRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   defaultConfig: Config = defaultConfig;
@@ -529,10 +533,22 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     this.centerPanel = new OpenSeadragonCenterPanel(this.shell.$centerPanel);
 
+    if (this.isRightContainerPanelEnabled()) {
+      this.rightContainerPanel = new RightContainerPanel(this.shell.$rightContainerPanel);
+    } else {
+      this.shell.$rightContainerPanel.hide();
+    }
+
     if (this.isRightPanelEnabled()) {
       this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
     } else {
       this.shell.$rightPanel.hide();
+    }
+
+    if (this.isTextRightPanelEnabled()) {
+      this.textRightPanel = new TextRightPanel(this.shell.$textRightPanel);
+    } else {
+      this.shell.$textRightPanel.hide();
     }
 
     if (this.isFooterPanelEnabled()) {
@@ -1636,7 +1652,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         }
       }
     }
-
+    
     return indices;
   }
 }

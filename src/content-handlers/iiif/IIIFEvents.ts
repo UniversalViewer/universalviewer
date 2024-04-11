@@ -13,6 +13,7 @@ export class IIIFEvents {
   static CLOSE_ACTIVE_DIALOGUE: string = "closeActiveDialogue";
   static CLOSE_LEFT_PANEL: string = "closeLeftPanel";
   static CLOSE_RIGHT_PANEL: string = "closeRightPanel";
+  static CLOSE_TEXT_RIGHT_PANEL: string = "closeTextRightPanel";
   static COLLECTION_INDEX_CHANGE: string = "collectionIndexChange";
   static CREATE: string = "create";
   static CURRENT_TIME_CHANGE: string = "currentTimeChanged";
@@ -63,6 +64,7 @@ export class IIIFEvents {
   static OPEN_EXTERNAL_RESOURCE: string = "openExternalResource";
   static OPEN_LEFT_PANEL: string = "openLeftPanel";
   static OPEN_RIGHT_PANEL: string = "openRightPanel";
+  static OPEN_TEXT_RIGHT_PANEL: string = "openTextRightPanel";
   static OPEN_THUMBS_VIEW: string = "openThumbsView";
   static OPEN_TREE_VIEW: string = "openTreeView";
   static OPEN: string = "open";
@@ -111,6 +113,7 @@ export class IIIFEvents {
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";
   static TOGGLE_EXPAND_RIGHT_PANEL: string = "toggleExpandRightPanel";
+  static TOGGLE_EXPAND_TEXT_RIGHT_PANEL: string = "toggleExpandTextRightPanel";
   static TREE_NODE_MULTISELECTED: string = "treeNodeMultiSelected";
   static TREE_NODE_SELECTED: string = "treeNodeSelected";
   static UP_ARROW: string = "upArrow";
