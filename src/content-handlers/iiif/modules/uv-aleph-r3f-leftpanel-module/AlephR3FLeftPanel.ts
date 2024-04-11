@@ -24,7 +24,7 @@ export class AlephR3FLeftPanel extends LeftPanel<
     this.setConfig("leftPanel");
     super.create();
 
-    this.setTitle(this.content.title);
+    // this.setTitle(this.content.title);
 
     this.controlPanelRoot = createRoot(this.$main[0]);
     // this.buttonRoot.render(createElement(Button, { getStore }));
