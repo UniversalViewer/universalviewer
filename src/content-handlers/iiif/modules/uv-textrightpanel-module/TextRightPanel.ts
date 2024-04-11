@@ -27,8 +27,15 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
           header = this.content.rightPage;
         }
         // We need to see if seeAlso contains an ALTO file and maybe allow for other HTR/OCR formats in the future
-        if (seeAlso.profile.includes('alto')) {
-          this.processAltoFile(seeAlso['@id'], header);
+        // and make sure which version of IIIF Presentation API is used
+        if (seeAlso.length === undefined) { // This is IIIF Presentation API < 3
+          if (seeAlso.profile.includes('alto')) {
+            this.processAltoFile(seeAlso['@id'], header);
+          }
+        } else { // This is IIIF Presentation API 3
+          if (seeAlso[0].profile.includes('alto')) {
+            this.processAltoFile(seeAlso[0]['id'], header);
+          }
         }
       });
     });
