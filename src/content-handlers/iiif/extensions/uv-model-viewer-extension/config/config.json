@@ -245,7 +245,8 @@
         "rangeHeader": "$aboutThisSection",
         "title": "$transcribedText",
         "leftPage": "$transcribedTextLeftPage",
-        "rightPage": "$transcribedTextRightPage"
+        "rightPage": "$transcribedTextRightPage",
+        "textNotFound": "$noTranscribedTextFound"
       }
     },
     "leftPanel": {

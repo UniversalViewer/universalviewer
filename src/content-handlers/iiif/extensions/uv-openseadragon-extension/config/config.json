@@ -229,7 +229,7 @@
         "manifestExclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
-        "panelExpandedWidth": 442,
+        "panelExpandedWidth": 300,
         "panelOpen": false,
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
@@ -259,7 +259,8 @@
         "rangeHeader": "$aboutThisSection",
         "title": "$transcribedText",
         "leftPage": "$transcribedTextLeftPage",
-        "rightPage": "$transcribedTextRightPage"
+        "rightPage": "$transcribedTextRightPage",
+        "textNotFound": "$noTranscribedTextFound"
       }
     },
     "multiSelectDialogue": {

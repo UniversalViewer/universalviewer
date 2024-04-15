@@ -149,5 +149,6 @@
   "$expandTranscribedText": "Expand transcribed text",
   "$collapseTranscribedText": "Collapse transcribed text",
   "$transcribedTextLeftPage": "Left page",
-  "$transcribedTextRightPage": "Right page"
+  "$transcribedTextRightPage": "Right page",
+  "$noTranscribedTextFound": "No transcibed text found for this page."
 }

@@ -149,5 +149,6 @@
     "$expandTranscribedText": "Expandera transkriberad text",
     "$collapseTranscribedText": "Fäll ihop transkriberad text",
     "$transcribedTextLeftPage": "Vänstra sidan",
-    "$transcribedTextRightPage": "Högra sidan"
+    "$transcribedTextRightPage": "Högra sidan",
+    "$noTranscribedTextFound": "Hittade ingen transkriberad text för denna sida."
 }

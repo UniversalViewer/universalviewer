@@ -18,6 +18,7 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     this.extensionHost.on(Events.LOAD, () => {
       this.$main.html('');
       let canvases = this.extension.getCurrentCanvases();
+      canvases.sort((a, b) => (a.index as number - b.index as number));
       canvases.forEach((c, i) => {
         let seeAlso = c.getProperty("seeAlso");
         let header;
@@ -81,7 +82,11 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
         if (header) {
           this.$transcribedText.append($('<div class="label">' + header + '</div>'));
         }
-        this.$transcribedText.append(lines);
+        if (lines.length > 0) {
+          this.$transcribedText.append(lines);
+        } else {
+          this.$transcribedText.append($('<div>' + this.content.textNotFound + '</div>'));
+        }
         this.$main.append(this.$transcribedText);
       })
       .catch(() => {
