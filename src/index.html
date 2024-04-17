@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Universal Viewer Examples</title>
-  <!-- https://tailwindcss.com/docs/installation/play-cdn -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-  <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Universal Viewer Examples</title>
+    <!-- https://tailwindcss.com/docs/installation/play-cdn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+    <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
     <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
-  <%= htmlWebpackPlugin.tags.headTags %>
+    <%= htmlWebpackPlugin.tags.headTags %>
     <style>
       /** First override so that desktop always visible */
       /* #uv {
@@ -99,691 +102,725 @@
         document.documentElement.style.setProperty("--vh", `${vh}px`);
       });
     </script>
-</head>
+  </head>
 
-<body>
-  <div id="uv" class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"></div>
+  <body>
+    <div
+      id="uv"
+      class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
+    ></div>
 
-  <div id="uv-controls" class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8">
-    <div>
-      <ul id="annotation-list"></ul>
+    <div
+      id="uv-controls"
+      class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8"
+    >
+      <div>
+        <ul id="annotation-list"></ul>
+      </div>
+
+      <button id="iiifTabButton" class="controls-tab active">
+        IIIF
+      </button>
+      <button id="youTubeTabButton" class="controls-tab">YouTube</button>
+
+      <div id="iiifTab" class="controls-tab-content">
+        <div class="controls-group">
+          <h2 class="controls-title">Manifest Id</h2>
+          <div class="flex">
+            <select
+              id="iiifManifestIdSelect"
+              class="py-2 px-3 mr-2 flex-1"
+            ></select>
+            <input id="iiifManifestId" type="text" value="" class="flex-1" />
+          </div>
+          <div class="mt-2">
+            <button
+              id="setIIIFManifestIdButton"
+              class="controls-button"
+              href="#"
+            >
+              Set IIIF Manifest Id
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Target</h2>
+          <div class="flex">
+            <input id="target" type="text" value="" class="flex-1" />
+            <button
+              id="setTargetButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Target
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Rotation</h2>
+          <div class="flex">
+            <input id="rotation" type="text" value="" class="flex-1" />
+            <button
+              id="setRotationButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Rotation
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Annotations</h2>
+          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <div class="mt-2">
+            <button id="setAnnotationsButton" class="controls-button">
+              Set Annotations
+            </button>
+            <button id="clearAnnotationsButton" class="controls-button">
+              Clear Annotations
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="youTubeTab" class="hidden controls-tab-content">
+        <div class="controls-group">
+          <h2 class="controls-title">Video Id</h2>
+          <div class="flex">
+            <select id="youTubeVideoIdSelect" class="py-2 px-3 flex-1"></select>
+            <input
+              id="youTubeVideoId"
+              type="text"
+              value=""
+              class="flex-1 ml-2"
+            />
+          </div>
+          <div class="mt-2">
+            <button id="setYouTubeVideoIdButton" class="controls-button">
+              Set YouTube Video Id
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Muted</h2>
+          <input type="checkbox" id="mutedCheckbox" />
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Current Time</h2>
+          <div class="flex">
+            <input id="currentTime" type="text" value="" class="flex-1" />
+            <button
+              id="setCurrentTimeButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Current Time
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Duration</h2>
+          <div class="flex">
+            <input id="durationStart" type="number" value="0" class="flex-1" />
+            <input
+              id="durationEnd"
+              type="number"
+              value="0"
+              class="flex-1 ml-2"
+            />
+            <button
+              id="setDurationButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Duration
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button id="iiifTabButton" class="controls-tab active">
-      IIIF
-    </button>
-    <button id="youTubeTabButton" class="controls-tab">YouTube</button>
+    <!-- UV Controls -->
+    <script type="text/javascript">
+      function createOptGroup(label) {
+        var optGroup = document.createElement("optgroup");
+        optGroup.label = label;
+        return optGroup;
+      }
 
-    <div id="iiifTab" class="controls-tab-content">
-      <div class="controls-group">
-        <h2 class="controls-title">Manifest Id</h2>
-        <div class="flex">
-          <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
-          <input id="iiifManifestId" type="text" value="" class="flex-1" />
-        </div>
-        <div class="mt-2">
-          <button id="setIIIFManifestIdButton" class="controls-button" href="#">
-            Set IIIF Manifest Id
-          </button>
-        </div>
-      </div>
+      function createOption(text, value) {
+        var option = document.createElement("option");
+        option.text = text;
+        option.value = value;
+        return option;
+      }
 
-      <div class="controls-group">
-        <h2 class="controls-title">Target</h2>
-        <div class="flex">
-          <input id="target" type="text" value="" class="flex-1" />
-          <button id="setTargetButton" class="controls-button flex-initial ml-2">
-            Set Target
-          </button>
-        </div>
-      </div>
+      document.addEventListener("DOMContentLoaded", function() {
+        var iiifTabButton = document.getElementById("iiifTabButton");
+        var iiifTab = document.getElementById("iiifTab");
+        var youTubeTabButton = document.getElementById("youTubeTabButton");
+        var youTubeTab = document.getElementById("youTubeTab");
 
-      <div class="controls-group">
-        <h2 class="controls-title">Rotation</h2>
-        <div class="flex">
-          <input id="rotation" type="text" value="" class="flex-1" />
-          <button id="setRotationButton" class="controls-button flex-initial ml-2">
-            Set Rotation
-          </button>
-        </div>
-      </div>
+        iiifTabButton.addEventListener("click", function(e) {
+          e.preventDefault();
+          activateIIIFTab();
+        });
 
-      <div class="controls-group">
-        <h2 class="controls-title">Annotations</h2>
-        <textarea id="annotations" rows="5" class="w-full"></textarea>
-        <div class="mt-2">
-          <button id="setAnnotationsButton" class="controls-button">
-            Set Annotations
-          </button>
-          <button id="clearAnnotationsButton" class="controls-button">
-            Clear Annotations
-          </button>
-        </div>
-      </div>
-    </div>
+        youTubeTabButton.addEventListener("click", function(e) {
+          e.preventDefault();
+          activateYouTubeTab();
+        });
 
-    <div id="youTubeTab" class="hidden controls-tab-content">
-      <div class="controls-group">
-        <h2 class="controls-title">Video Id</h2>
-        <div class="flex">
-          <select id="youTubeVideoIdSelect" class="py-2 px-3 flex-1"></select>
-          <input id="youTubeVideoId" type="text" value="" class="flex-1 ml-2" />
-        </div>
-        <div class="mt-2">
-          <button id="setYouTubeVideoIdButton" class="controls-button">
-            Set YouTube Video Id
-          </button>
-        </div>
-      </div>
+        var uv, iiifManifestId, youTubeVideoId;
+        var $iiifManifestId = document.getElementById("iiifManifestId");
+        var $iiifManifestIdSelect = document.getElementById(
+          "iiifManifestIdSelect"
+        );
+        var $target = document.getElementById("target");
+        var $rotation = document.getElementById("rotation");
+        var $setIIIFManifestIdButton = document.getElementById(
+          "setIIIFManifestIdButton"
+        );
+        var $setTargetButton = document.getElementById("setTargetButton");
+        var $setRotationButton = document.getElementById("setRotationButton");
+        var $annotations = document.getElementById("annotations");
+        var $setAnnotationsButton = document.getElementById(
+          "setAnnotationsButton"
+        );
+        var $clearAnnotationsButton = document.getElementById(
+          "clearAnnotationsButton"
+        );
+        var $setYouTubeVideoIdButton = document.getElementById(
+          "setYouTubeVideoIdButton"
+        );
+        var $youTubeVideoId = document.getElementById("youTubeVideoId");
+        var $youTubeVideoIdSelect = document.getElementById(
+          "youTubeVideoIdSelect"
+        );
+        var $currentTime = document.getElementById("currentTime");
+        var $setCurrentTimeButton = document.getElementById(
+          "setCurrentTimeButton"
+        );
+        var $mutedCheckbox = document.getElementById("mutedCheckbox");
+        var $durationStart = document.getElementById("durationStart");
+        var $durationEnd = document.getElementById("durationEnd");
+        var $setDurationButton = document.getElementById("setDurationButton");
 
-      <div class="controls-group">
-        <h2 class="controls-title">Muted</h2>
-        <input type="checkbox" id="mutedCheckbox" />
-      </div>
+        var annotations = [];
+        var urlAdapter;
 
-      <div class="controls-group">
-        <h2 class="controls-title">Current Time</h2>
-        <div class="flex">
-          <input id="currentTime" type="text" value="" class="flex-1" />
-          <button id="setCurrentTimeButton" class="controls-button flex-initial ml-2">
-            Set Current Time
-          </button>
-        </div>
-      </div>
+        function parseIIIFCollection(manifests) {
+          for (var i = 0; i < manifests.collections.length; i++) {
+            var collection = manifests.collections[i];
 
-      <div class="controls-group">
-        <h2 class="controls-title">Duration</h2>
-        <div class="flex">
-          <input id="durationStart" type="number" value="0" class="flex-1" />
-          <input id="durationEnd" type="number" value="0" class="flex-1 ml-2" />
-          <button id="setDurationButton" class="controls-button flex-initial ml-2">
-            Set Duration
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+            if (collection.visible === false) {
+              continue;
+            }
 
-  <!-- UV Controls -->
-  <script type="text/javascript">
-    function createOptGroup(label) {
-      var optGroup = document.createElement("optgroup");
-      optGroup.label = label;
-      return optGroup;
-    }
+            var optGroup = createOptGroup(collection.label);
+            $iiifManifestIdSelect.appendChild(optGroup);
 
-    function createOption(text, value) {
-      var option = document.createElement("option");
-      option.text = text;
-      option.value = value;
-      return option;
-    }
+            for (var j = 0; j < collection.manifests.length; j++) {
+              var manifest = collection.manifests[j];
 
-    document.addEventListener("DOMContentLoaded", function () {
-      var iiifTabButton = document.getElementById("iiifTabButton");
-      var iiifTab = document.getElementById("iiifTab");
-      var youTubeTabButton = document.getElementById("youTubeTabButton");
-      var youTubeTab = document.getElementById("youTubeTab");
-
-      iiifTabButton.addEventListener("click", function (e) {
-        e.preventDefault();
-        activateIIIFTab();
-      });
-
-      youTubeTabButton.addEventListener("click", function (e) {
-        e.preventDefault();
-        activateYouTubeTab();
-      });
-
-      var uv, iiifManifestId, youTubeVideoId;
-      var $iiifManifestId = document.getElementById("iiifManifestId");
-      var $iiifManifestIdSelect = document.getElementById(
-        "iiifManifestIdSelect"
-      );
-      var $target = document.getElementById("target");
-      var $rotation = document.getElementById("rotation");
-      var $setIIIFManifestIdButton = document.getElementById(
-        "setIIIFManifestIdButton"
-      );
-      var $setTargetButton = document.getElementById("setTargetButton");
-      var $setRotationButton = document.getElementById("setRotationButton");
-      var $annotations = document.getElementById("annotations");
-      var $setAnnotationsButton = document.getElementById(
-        "setAnnotationsButton"
-      );
-      var $clearAnnotationsButton = document.getElementById(
-        "clearAnnotationsButton"
-      );
-      var $setYouTubeVideoIdButton = document.getElementById(
-        "setYouTubeVideoIdButton"
-      );
-      var $youTubeVideoId = document.getElementById("youTubeVideoId");
-      var $youTubeVideoIdSelect = document.getElementById(
-        "youTubeVideoIdSelect"
-      );
-      var $currentTime = document.getElementById("currentTime");
-      var $setCurrentTimeButton = document.getElementById(
-        "setCurrentTimeButton"
-      );
-      var $mutedCheckbox = document.getElementById("mutedCheckbox");
-      var $durationStart = document.getElementById("durationStart");
-      var $durationEnd = document.getElementById("durationEnd");
-      var $setDurationButton = document.getElementById("setDurationButton");
-
-      var annotations = [];
-      var urlAdapter;
-
-      function parseIIIFCollection(manifests) {
-        for (var i = 0; i < manifests.collections.length; i++) {
-          var collection = manifests.collections[i];
-
-          if (collection.visible === false) {
-            continue;
-          }
-
-          var optGroup = createOptGroup(collection.label);
-          $iiifManifestIdSelect.appendChild(optGroup);
-
-          for (var j = 0; j < collection.manifests.length; j++) {
-            var manifest = collection.manifests[j];
-
-            if (manifest.visible !== false) {
-              var option = createOption(manifest.label, manifest["@id"]);
-              optGroup.appendChild(option);
+              if (manifest.visible !== false) {
+                var option = createOption(manifest.label, manifest["@id"]);
+                optGroup.appendChild(option);
+              }
             }
           }
         }
-      }
 
-      function parseYouTubeCollection(collection) {
-        for (var i = 0; i < collection.length; i++) {
-          var item = collection[i];
+        function parseYouTubeCollection(collection) {
+          for (var i = 0; i < collection.length; i++) {
+            var item = collection[i];
 
-          if (item.visible === false) {
-            continue;
+            if (item.visible === false) {
+              continue;
+            }
+
+            var option = createOption(item.label, item.id);
+            $youTubeVideoIdSelect.appendChild(option);
+          }
+        }
+
+        function loadCollections(cb) {
+          Promise.all([
+            fetch("iiif-collection.json"),
+            fetch("youtube-collection.json"),
+          ])
+            .then(function(responses) {
+              // Get a JSON object from each of the responses
+              return Promise.all(
+                responses.map(function(response) {
+                  return response.json();
+                })
+              );
+            })
+            .then(function(data) {
+              parseIIIFCollection(data[0]);
+              parseYouTubeCollection(data[1]);
+              cb();
+            })
+            .catch(function(error) {
+              // if there's an error, log it
+              console.log(error);
+            });
+        }
+
+        function setSelectedIIIFManifest() {
+          var iiifContent = urlAdapter.get("iiif-content");
+          var legacyIIIFManifestParam =
+            urlAdapter.get("iiifManifestId") || urlAdapter.get("manifest");
+
+          if (iiifContent && iiifContent.indexOf("http") !== -1) {
+            // if it's a url, not an encoded annotation
+            iiifManifestId = iiifContent;
+          } else if (legacyIIIFManifestParam) {
+            iiifManifestId = legacyIIIFManifestParam;
+          } else {
+            // use the first one in the drop down box
+            var options = document.querySelectorAll(
+              "#iiifManifestIdSelect optgroup option"
+            );
+
+            if (options.length) {
+              iiifManifestId = options[0].value;
+            }
           }
 
-          var option = createOption(item.label, item.id);
-          $youTubeVideoIdSelect.appendChild(option);
+          $iiifManifestIdSelect.value = iiifManifestId;
+          $iiifManifestId.value = iiifManifestId;
         }
-      }
 
-      function loadCollections(cb) {
-        Promise.all([
-          fetch("iiif-collection.json"),
-          fetch("youtube-collection.json"),
-        ])
-          .then(function (responses) {
-            // Get a JSON object from each of the responses
-            return Promise.all(
-              responses.map(function (response) {
-                return response.json();
+        function setSelectedYouTubeVideoId() {
+          youTubeVideoId = urlAdapter.get("youTubeVideoId");
+
+          if (youTubeVideoId) {
+            $youTubeVideoIdSelect.value = youTubeVideoId;
+          } else {
+            var options = document.querySelectorAll(
+              "#youTubeVideoIdSelect option"
+            );
+
+            if (options.length) {
+              youTubeVideoId = options[0].value;
+            }
+          }
+
+          $youTubeVideoId.value = youTubeVideoId;
+        }
+
+        function setAnnotations() {
+          annotations = JSON.parse($annotations.value);
+          uv.set({
+            annotations: annotations,
+          });
+        }
+
+        $iiifManifestIdSelect.onchange = function() {
+          var $selectedOption = document.querySelector(
+            "#iiifManifestIdSelect option:checked"
+          );
+          iiifManifestId = $selectedOption.value;
+          $iiifManifestId.value = iiifManifestId;
+          urlAdapter.set("iiifManifestId", iiifManifestId);
+        };
+
+        $setIIIFManifestIdButton.onclick = function() {
+          iiifManifestId = $iiifManifestId.value;
+          urlAdapter.set("iiifManifestId", iiifManifestId);
+          clearAnnotations();
+          uv.set({
+            iiifManifestId: iiifManifestId,
+            youTubeVideoId: undefined,
+            canvasIndex: 0,
+            annotations: [],
+          });
+        };
+
+        $youTubeVideoIdSelect.onchange = function() {
+          var $selectedOption = document.querySelector(
+            "#youTubeVideoIdSelect option:checked"
+          );
+          youTubeVideoId = $selectedOption.value;
+          $youTubeVideoId.value = youTubeVideoId;
+          urlAdapter.set("youTubeVideoId", youTubeVideoId);
+        };
+
+        $setYouTubeVideoIdButton.onclick = function() {
+          clearAnnotations();
+          uv.set({
+            iiifManifestId: undefined,
+            youTubeVideoId: youTubeVideoId,
+            autoPlay: true,
+            annotations: [],
+          });
+        };
+
+        $setTargetButton.onclick = function() {
+          var target = $target.value;
+          uv.set({
+            target: target,
+          });
+        };
+
+        $setRotationButton.onclick = function() {
+          var rotation = $rotation.value;
+          uv.set({
+            rotation: rotation,
+          });
+        };
+
+        $setAnnotationsButton.onclick = function() {
+          setAnnotations();
+        };
+
+        $clearAnnotationsButton.onclick = function() {
+          clearAnnotations();
+          setAnnotations();
+        };
+
+        $mutedCheckbox.onclick = function(e) {
+          muted = e.target.checked;
+          uv.set({
+            muted: muted,
+          });
+        };
+
+        $setCurrentTimeButton.onclick = function() {
+          var currentTime = $currentTime.value;
+          uv.set({
+            currentTime: currentTime,
+          });
+        };
+
+        $setDurationButton.onclick = function() {
+          var durationStart = $durationStart.value;
+          var durationEnd = $durationEnd.value;
+          uv.set({
+            youTubeVideoId: youTubeVideoId,
+            autoPlay: true,
+            duration: [durationStart, durationEnd],
+          });
+        };
+
+        function clearAnnotations() {
+          annotations = [];
+          $annotations.value = JSON.stringify(annotations);
+        }
+
+        function activateIIIFTab() {
+          iiifTabButton.classList.add("active");
+          youTubeTabButton.classList.remove("active");
+          iiifTab.classList.remove("hidden");
+          youTubeTab.classList.add("hidden");
+
+          // uv.dispose();
+          // uv = UV.init("uv", {
+          //   iiifManifestId: iiifManifestId,
+          // });
+          // addUVEventHandlers();
+
+          urlAdapter = new UV.IIIFURLAdapter();
+
+          setSelectedIIIFManifest();
+
+          const data = urlAdapter.getInitialData({
+            iiifManifestId: iiifManifestId,
+            debug: false,
+          });
+
+          if (uv) {
+            uv.dispose();
+          }
+
+          uv = UV.init("uv", data);
+          urlAdapter.bindTo(uv);
+
+          uv.on("configure", function({ config, cb }) {
+            const manifest = urlAdapter.get("iiifManifestId");
+            if (
+              manifest ===
+              "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
+            ) {
+              // Example of custom, inline config.
+              cb({
+                options: {
+                  dropEnabled: true,
+                  footerPanelEnabled: true,
+                  headerPanelEnabled: false,
+                  // leftPanelEnabled: false,
+                  // rightPanelEnabled: false,
+                  limitLocales: false,
+                  overrideFullScreen: false,
+                  pagingEnabled: true,
+                  limitToRange: true,
+                  manifestExclude: true,
+                },
+                modules: {
+                  footerPanel: {
+                    options: {
+                      fullscreenEnabled: false,
+                    },
+                  },
+                  headerPanel: {
+                    options: {
+                      localeToggleEnabled: false,
+                    },
+                  },
+                  moreInfoRightPanel: {
+                    options: {
+                      limitToRange: true,
+                    },
+                  },
+                  avCenterPanel: {
+                    options: {
+                      autoAdvanceRanges: false,
+                      limitToRange: true,
+                      enableFastRewind: true,
+                      enableFastForward: true,
+                    },
+                  },
+                  contentLeftPanel: {
+                    options: {
+                      defaultToTreeEnabled: true,
+                    },
+                  },
+                },
+              });
+              return;
+            }
+
+            cb(
+              fetch("uv-iiif-config.json").then(function(resp) {
+                return resp.json();
               })
             );
-          })
-          .then(function (data) {
-            parseIIIFCollection(data[0]);
-            parseYouTubeCollection(data[1]);
-            cb();
-          })
-          .catch(function (error) {
-            // if there's an error, log it
-            console.log(error);
           });
-      }
 
-      function setSelectedIIIFManifest() {
-        var iiifContent = urlAdapter.get("iiif-content");
-        var legacyIIIFManifestParam =
-          urlAdapter.get("iiifManifestId") || urlAdapter.get("manifest");
-
-        if (iiifContent && iiifContent.indexOf("http") !== -1) {
-          // if it's a url, not an encoded annotation
-          iiifManifestId = iiifContent;
-        } else if (legacyIIIFManifestParam) {
-          iiifManifestId = legacyIIIFManifestParam;
-        } else {
-          // use the first one in the drop down box
-          var options = document.querySelectorAll(
-            "#iiifManifestIdSelect optgroup option"
-          );
-
-          if (options.length) {
-            iiifManifestId = options[0].value;
-          }
-        }
-
-        $iiifManifestIdSelect.value = iiifManifestId;
-        $iiifManifestId.value = iiifManifestId;
-      }
-
-      function setSelectedYouTubeVideoId() {
-        youTubeVideoId = urlAdapter.get("youTubeVideoId");
-
-        if (youTubeVideoId) {
-          $youTubeVideoIdSelect.value = youTubeVideoId;
-        } else {
-          var options = document.querySelectorAll(
-            "#youTubeVideoIdSelect option"
-          );
-
-          if (options.length) {
-            youTubeVideoId = options[0].value;
-          }
-        }
-
-        $youTubeVideoId.value = youTubeVideoId;
-      }
-
-      function setAnnotations() {
-        annotations = JSON.parse($annotations.value);
-        uv.set({
-          annotations: annotations,
-        });
-      }
-
-      $iiifManifestIdSelect.onchange = function () {
-        var $selectedOption = document.querySelector(
-          "#iiifManifestIdSelect option:checked"
-        );
-        iiifManifestId = $selectedOption.value;
-        $iiifManifestId.value = iiifManifestId;
-        urlAdapter.set("iiifManifestId", iiifManifestId);
-      };
-
-      $setIIIFManifestIdButton.onclick = function () {
-        iiifManifestId = $iiifManifestId.value;
-        urlAdapter.set("iiifManifestId", iiifManifestId);
-        clearAnnotations();
-        uv.set({
-          iiifManifestId: iiifManifestId,
-          youTubeVideoId: undefined,
-          canvasIndex: 0,
-          annotations: [],
-        });
-      };
-
-      $youTubeVideoIdSelect.onchange = function () {
-        var $selectedOption = document.querySelector(
-          "#youTubeVideoIdSelect option:checked"
-        );
-        youTubeVideoId = $selectedOption.value;
-        $youTubeVideoId.value = youTubeVideoId;
-        urlAdapter.set("youTubeVideoId", youTubeVideoId);
-      };
-
-      $setYouTubeVideoIdButton.onclick = function () {
-        clearAnnotations();
-        uv.set({
-          iiifManifestId: undefined,
-          youTubeVideoId: youTubeVideoId,
-          autoPlay: true,
-          annotations: [],
-        });
-      };
-
-      $setTargetButton.onclick = function () {
-        var target = $target.value;
-        uv.set({
-          target: target,
-        });
-      };
-
-      $setRotationButton.onclick = function () {
-        var rotation = $rotation.value;
-        uv.set({
-          rotation: rotation,
-        });
-      };
-
-      $setAnnotationsButton.onclick = function () {
-        setAnnotations();
-      };
-
-      $clearAnnotationsButton.onclick = function () {
-        clearAnnotations();
-        setAnnotations();
-      };
-
-      $mutedCheckbox.onclick = function (e) {
-        muted = e.target.checked;
-        uv.set({
-          muted: muted,
-        });
-      };
-
-      $setCurrentTimeButton.onclick = function () {
-        var currentTime = $currentTime.value;
-        uv.set({
-          currentTime: currentTime,
-        });
-      };
-
-      $setDurationButton.onclick = function () {
-        var durationStart = $durationStart.value;
-        var durationEnd = $durationEnd.value;
-        uv.set({
-          youTubeVideoId: youTubeVideoId,
-          autoPlay: true,
-          duration: [durationStart, durationEnd],
-        });
-      };
-
-      function clearAnnotations() {
-        annotations = [];
-        $annotations.value = JSON.stringify(annotations);
-      }
-
-      function activateIIIFTab() {
-        iiifTabButton.classList.add("active");
-        youTubeTabButton.classList.remove("active");
-        iiifTab.classList.remove("hidden");
-        youTubeTab.classList.add("hidden");
-
-        // uv.dispose();
-        // uv = UV.init("uv", {
-        //   iiifManifestId: iiifManifestId,
-        // });
-        // addUVEventHandlers();
-
-        urlAdapter = new UV.IIIFURLAdapter();
-
-        setSelectedIIIFManifest();
-
-        const data = urlAdapter.getInitialData({
-          iiifManifestId: iiifManifestId,
-          debug: false,
-        });
-
-        if (uv) {
-          uv.dispose();
-        }
-
-        uv = UV.init("uv", data);
-        urlAdapter.bindTo(uv);
-
-        uv.on("configure", function ({ config, cb }) {
-          const manifest = urlAdapter.get("iiifManifestId");
-          if (
-            manifest ===
-            "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
-          ) {
-            // Example of custom, inline config.
+          // test inline config, enable doubleclick annotation
+          uv.on("configure", function({ config, cb }) {
             cb({
-              options: {
-                dropEnabled: true,
-                footerPanelEnabled: true,
-                headerPanelEnabled: false,
-                // leftPanelEnabled: false,
-                // rightPanelEnabled: false,
-                limitLocales: false,
-                overrideFullScreen: false,
-                pagingEnabled: true,
-                limitToRange: true,
-                manifestExclude: true,
-              },
               modules: {
-                footerPanel: {
+                modelViewerCenterPanel: {
                   options: {
-                    fullscreenEnabled: false,
-                  },
-                },
-                headerPanel: {
-                  options: {
-                    localeToggleEnabled: false,
-                  },
-                },
-                moreInfoRightPanel: {
-                  options: {
-                    limitToRange: true,
+                    doubleClickAnnotationEnabled: true,
                   },
                 },
                 avCenterPanel: {
                   options: {
-                    autoAdvanceRanges: false,
-                    limitToRange: true,
+                    // autoAdvanceRanges: false,
+                    // limitToRange: true,
                     enableFastRewind: true,
                     enableFastForward: true,
                   },
                 },
-                contentLeftPanel: {
+                openSeadragonCenterPanel: {
                   options: {
-                    defaultToTreeEnabled: true,
+                    doubleClickAnnotationEnabled: true,
                   },
                 },
               },
             });
-            return;
+          });
+
+          uv.on("targetChange", function(target) {
+            $target.value = target;
+          });
+
+          uv.on("openseadragonExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1),
+            });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
+          });
+
+          uv.on("modelviewerExtension.doubleClick", function(e) {
+            annotations.push({
+              target: e.target,
+              bodyValue: String(annotations.length + 1),
+            });
+            $annotations.value = JSON.stringify(annotations);
+            setAnnotations();
+          });
+
+          uv.on("multiSelectionMade", function(e) {
+            console.log("multiSelectionMade", e);
+          });
+
+          uv.on("pinpointAnnotationClicked", function(index) {
+            console.log("pinpointAnnotationClicked", index);
+          });
+
+          uv.on("clearAnnotations", function(e) {
+            clearAnnotations();
+          });
+
+          // uv.on("load", function(e) {
+          //   console.log(e);
+          // });
+
+          // uv.set({
+          //   iiifManifestId: iiifManifestId,
+          //   youTubeVideoId: undefined,
+          // });
+        }
+
+        function activateYouTubeTab() {
+          youTubeTabButton.classList.add("active");
+          iiifTabButton.classList.remove("active");
+          youTubeTab.classList.remove("hidden");
+          iiifTab.classList.add("hidden");
+
+          // todo: implement youtube url adapter
+          urlAdapter = new UV.IIIFURLAdapter();
+
+          setSelectedYouTubeVideoId();
+
+          if (uv) {
+            uv.dispose();
           }
 
-          cb(
-            fetch("uv-iiif-config.json").then(function (resp) {
-              return resp.json();
-            })
-          );
-        });
-
-        // test inline config, enable doubleclick annotation
-        uv.on("configure", function ({ config, cb }) {
-          cb({
-            modules: {
-              modelViewerCenterPanel: {
-                options: {
-                  doubleClickAnnotationEnabled: true,
-                },
-              },
-              avCenterPanel: {
-                options: {
-                  // autoAdvanceRanges: false,
-                  // limitToRange: true,
-                  enableFastRewind: true,
-                  enableFastForward: true,
-                },
-              },
-              openSeadragonCenterPanel: {
-                options: {
-                  doubleClickAnnotationEnabled: true,
-                },
-              },
-            },
+          uv = UV.init("uv", {
+            youTubeVideoId: youTubeVideoId,
           });
-        });
 
-        uv.on("targetChange", function (target) {
-          $target.value = target;
-        });
-
-        uv.on("openseadragonExtension.doubleClick", function (e) {
-          annotations.push({
-            target: e.target,
-            bodyValue: String(annotations.length + 1),
-          });
-          $annotations.value = JSON.stringify(annotations);
-          setAnnotations();
-        });
-
-        uv.on("modelviewerExtension.doubleClick", function (e) {
-          annotations.push({
-            target: e.target,
-            bodyValue: String(annotations.length + 1),
-          });
-          $annotations.value = JSON.stringify(annotations);
-          setAnnotations();
-        });
-
-        uv.on("multiSelectionMade", function (e) {
-          console.log("multiSelectionMade", e);
-        });
-
-        uv.on("pinpointAnnotationClicked", function (index) {
-          console.log("pinpointAnnotationClicked", index);
-        });
-
-        uv.on("clearAnnotations", function (e) {
-          clearAnnotations();
-        });
-
-        // uv.on("load", function(e) {
-        //   console.log(e);
-        // });
-
-        // uv.set({
-        //   iiifManifestId: iiifManifestId,
-        //   youTubeVideoId: undefined,
-        // });
-      }
-
-      function activateYouTubeTab() {
-        youTubeTabButton.classList.add("active");
-        iiifTabButton.classList.remove("active");
-        youTubeTab.classList.remove("hidden");
-        iiifTab.classList.add("hidden");
-
-        // todo: implement youtube url adapter
-        urlAdapter = new UV.IIIFURLAdapter();
-
-        setSelectedYouTubeVideoId();
-
-        if (uv) {
-          uv.dispose();
-        }
-
-        uv = UV.init("uv", {
-          youTubeVideoId: youTubeVideoId,
-        });
-
-        uv.on("configure", function ({ config, cb }) {
-          cb(
-            new Promise(function (resolve) {
-              fetch("uv-youtube-config.json").then(function (response) {
-                resolve(response.json());
-              });
-            })
-          );
-        });
-
-        uv.on("load", function (e) {
-          console.log("load", e);
-        });
-
-        uv.on("unstarted", function () {
-          console.log("unstarted");
-        });
-
-        uv.on("ended", function () {
-          console.log("ended");
-        });
-
-        uv.on("playing", function () {
-          console.log("playing");
-        });
-
-        uv.on("paused", function () {
-          console.log("paused");
-        });
-
-        uv.on("error", function (e) {
-          console.log("error", e);
-        });
-
-        // uv.set({
-        //   iiifManifestId: undefined,
-        //   youTubeVideoId: youTubeVideoId,
-        // });
-      }
-
-      loadCollections(function () {
-        activateIIIFTab();
-      });
-
-      // test stories
-      let storyAnnotations, partOf, target, duration;
-      let muted = false;
-
-      // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
-      // const annotationsJson =
-      //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
-
-      const annotationsJson =
-        "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
-
-      const annotationList = document.getElementById("annotation-list");
-
-      function handleAnnotationClick(e) {
-        e.preventDefault();
-        const anno = storyAnnotations.find(
-          (a) => a.id === e.currentTarget.dataset.annoId
-        );
-        partOf = anno.partOf;
-        target = anno.target;
-        duration = anno.duration;
-
-        const type = partOf.includes("youtube") ? "youtube" : "iiif";
-
-        if (uv) {
-          uv.dispose();
-        }
-
-        uv = UV.init("uv", {
-          autoPlay: true,
-          iiifManifestId: type === "iiif" ? partOf : undefined,
-          youTubeVideoId: type === "youtube" ? partOf : undefined,
-          duration: duration,
-          target: target,
-          muted: muted,
-        });
-
-        uv.on("load", function (args) {
-          // console.log("load", args);
-          // args.player.mute();
-        });
-
-        uv.on("configure", function ({ config, cb }) {
-          cb(
-            new Promise(function (resolve) {
-              fetch(`uv-${type}-config.json`).then(function (response) {
-                resolve(response.json());
-              });
-            })
-          );
-        });
-
-        // uv.set({
-        //   autoPlay: true,
-        //   iiifManifestId: type === "iiif" ? partOf : undefined,
-        //   youTubeVideoId: type === "youtube" ? partOf : undefined,
-        //   duration: duration,
-        //   target: target,
-        //   muted: muted,
-        // });
-      }
-
-      function initStory() {
-        fetch(annotationsJson).then((res) => {
-          const data = res.json().then((data) => {
-            storyAnnotations = data.annotations.filter(
-              (anno) => anno.motivation === "framing"
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function(resolve) {
+                fetch("uv-youtube-config.json").then(function(response) {
+                  resolve(response.json());
+                });
+              })
             );
-            storyAnnotations.forEach((anno) => {
-              const li = document.createElement("li");
-              const a = document.createElement("a");
-              a.dataset.annoId = anno.id;
-              a.href = `#${anno.id}`;
-              a.innerHTML = anno.bodyValue;
-              a.onclick = handleAnnotationClick;
-              li.appendChild(a);
-              annotationList.appendChild(li);
-            });
-
-            partOf = storyAnnotations[0].partOf;
-            target = storyAnnotations[0].target;
           });
+
+          uv.on("load", function(e) {
+            console.log("load", e);
+          });
+
+          uv.on("unstarted", function() {
+            console.log("unstarted");
+          });
+
+          uv.on("ended", function() {
+            console.log("ended");
+          });
+
+          uv.on("playing", function() {
+            console.log("playing");
+          });
+
+          uv.on("paused", function() {
+            console.log("paused");
+          });
+
+          uv.on("error", function(e) {
+            console.log("error", e);
+          });
+
+          // uv.set({
+          //   iiifManifestId: undefined,
+          //   youTubeVideoId: youTubeVideoId,
+          // });
+        }
+
+        loadCollections(function() {
+          activateIIIFTab();
         });
-      }
 
-      // initStory();
-    });
-  </script>
-</body>
+        // test stories
+        let storyAnnotations, partOf, target, duration;
+        let muted = false;
 
+        // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
+        // const annotationsJson =
+        //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+
+        const annotationsJson =
+          "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+
+        const annotationList = document.getElementById("annotation-list");
+
+        function handleAnnotationClick(e) {
+          e.preventDefault();
+          const anno = storyAnnotations.find(
+            (a) => a.id === e.currentTarget.dataset.annoId
+          );
+          partOf = anno.partOf;
+          target = anno.target;
+          duration = anno.duration;
+
+          const type = partOf.includes("youtube") ? "youtube" : "iiif";
+
+          if (uv) {
+            uv.dispose();
+          }
+
+          uv = UV.init("uv", {
+            autoPlay: true,
+            iiifManifestId: type === "iiif" ? partOf : undefined,
+            youTubeVideoId: type === "youtube" ? partOf : undefined,
+            duration: duration,
+            target: target,
+            muted: muted,
+          });
+
+          uv.on("load", function(args) {
+            // console.log("load", args);
+            // args.player.mute();
+          });
+
+          uv.on("configure", function({ config, cb }) {
+            cb(
+              new Promise(function(resolve) {
+                fetch(`uv-${type}-config.json`).then(function(response) {
+                  resolve(response.json());
+                });
+              })
+            );
+          });
+
+          // uv.set({
+          //   autoPlay: true,
+          //   iiifManifestId: type === "iiif" ? partOf : undefined,
+          //   youTubeVideoId: type === "youtube" ? partOf : undefined,
+          //   duration: duration,
+          //   target: target,
+          //   muted: muted,
+          // });
+        }
+
+        function initStory() {
+          fetch(annotationsJson).then((res) => {
+            const data = res.json().then((data) => {
+              storyAnnotations = data.annotations.filter(
+                (anno) => anno.motivation === "framing"
+              );
+              storyAnnotations.forEach((anno) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.dataset.annoId = anno.id;
+                a.href = `#${anno.id}`;
+                a.innerHTML = anno.bodyValue;
+                a.onclick = handleAnnotationClick;
+                li.appendChild(a);
+                annotationList.appendChild(li);
+              });
+
+              partOf = storyAnnotations[0].partOf;
+              target = storyAnnotations[0].target;
+            });
+          });
+        }
+
+        // initStory();
+      });
+    </script>
+  </body>
 </html>
