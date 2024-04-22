@@ -1,3 +1,5 @@
+const { mapSeries } = require("async");
+
 module.exports = {
   launch: {
     headless: process.env.CI === 'true',
@@ -5,6 +7,7 @@ module.exports = {
   server: {
     command: 'npm run e2eserve',
     port: 4444,
+    launchTimeout: 10000,
   },
   setupFilesAfterEnv: [
     './jest.setup.js'
