@@ -7,7 +7,6 @@ module.exports = {
   server: {
     command: 'npm run e2eserve',
     port: 4444,
-    launchTimeout: 10000,
   },
   setupFilesAfterEnv: [
     './jest.setup.js'
