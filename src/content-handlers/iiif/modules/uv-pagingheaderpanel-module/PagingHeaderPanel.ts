@@ -12,7 +12,7 @@ import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
 export class PagingHeaderPanel extends HeaderPanel<
-  Config["modules"]["headerPanel"]
+  Config["modules"]["pagingHeaderPanel"]
 > {
   $autoCompleteBox: JQuery;
   $firstButton: JQuery;
@@ -47,7 +47,7 @@ export class PagingHeaderPanel extends HeaderPanel<
   }
 
   create(): void {
-    this.setConfig("headerPanel");
+    this.setConfig("pagingHeaderPanel");
 
     super.create();
 

@@ -7,7 +7,9 @@ import {
 } from "@universalviewer/aleph/loader";
 import { Config } from "../../extensions/uv-aleph-extension/config/Config";
 
-export class AlephLeftPanel extends LeftPanel<Config["modules"]["leftPanel"]> {
+export class AlephLeftPanel extends LeftPanel<
+  Config["modules"]["alephLeftPanel"]
+> {
   private _alControlPanel: any;
 
   constructor($element: JQuery) {
@@ -15,7 +17,7 @@ export class AlephLeftPanel extends LeftPanel<Config["modules"]["leftPanel"]> {
   }
 
   async create(): Promise<void> {
-    this.setConfig("leftPanel");
+    this.setConfig("alephLeftPanel");
     super.create();
 
     await applyPolyfills();

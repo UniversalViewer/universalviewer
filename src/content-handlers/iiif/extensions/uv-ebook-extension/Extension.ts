@@ -37,9 +37,6 @@ export default class Extension extends BaseExtension<Config>
   shareDialogue: ShareDialogue;
   cfiFragement: string;
   defaultConfig: Config = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
 
   create(): void {
     super.create();

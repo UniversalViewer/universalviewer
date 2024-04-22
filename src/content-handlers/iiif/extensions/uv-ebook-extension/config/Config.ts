@@ -63,8 +63,8 @@ type EbookSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  leftPanel: EbookLeftPanel;
-  centerPanel: EbookCenterPanel;
+  ebookLeftPanel: EbookLeftPanel;
+  ebookCenterPanel: EbookCenterPanel;
   downloadDialogue: EbookDownloadDialogue;
   shareDialogue: EbookShareDialogue;
   settingsDialogue: EbookSettingsDialogue;

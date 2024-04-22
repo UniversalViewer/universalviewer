@@ -18,7 +18,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-ebook-extension/config/Config";
 
 export class EbookCenterPanel extends CenterPanel<
-  Config["modules"]["centerPanel"]
+  Config["modules"]["ebookCenterPanel"]
 > {
   private _cfi: string;
   private _ebookReader: any;
@@ -32,7 +32,7 @@ export class EbookCenterPanel extends CenterPanel<
   }
 
   async create(): Promise<void> {
-    this.setConfig("centerPanel");
+    this.setConfig("ebookCenterPanel");
 
     super.create();
 
