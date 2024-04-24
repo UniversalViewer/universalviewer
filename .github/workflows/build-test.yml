@@ -12,15 +12,15 @@ jobs:
 
     name: Node ${{ matrix.node }} build
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
           restore-keys: |
             ${{ runner.os }}-npm-
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
