@@ -1,3 +1,4 @@
+const { mapSeries } = require("async");
 module.exports = {
   launch: {
     headless: process.env.CI === 'true',
