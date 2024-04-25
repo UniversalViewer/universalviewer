@@ -8,5 +8,5 @@
     "uv-nextjs-example-uh9zi"
   ],
   "buildCommand": "prepublishOnly",
-  "node": "16"
+  "node": "18"
 }
