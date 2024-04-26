@@ -101,6 +101,7 @@
     "@universalviewer/aleph": "0.0.15",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
+    "@xmldom/xmldom": "^0.8.10",
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
