@@ -60,7 +60,7 @@
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.0.1",
     "file-loader": "^6.2.0",
-    "html-webpack-plugin": "5.3.2",
+    "html-webpack-plugin": "5.6.0",
     "jest": "23.6.0",
     "jest-puppeteer": "3.5.0",
     "less": "4.1.2",
