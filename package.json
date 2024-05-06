@@ -71,7 +71,7 @@
     "source-map-loader": "^4.0.0",
     "style-loader": "3.3.0",
     "ts-jest": "^29",
-    "ts-loader": "9.2.6",
+    "ts-loader": "9.5.1",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.25.4",
     "typedoc-plugin-missing-exports": "^2.1.0",
