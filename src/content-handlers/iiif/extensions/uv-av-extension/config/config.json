@@ -409,6 +409,34 @@
         "close": "$close"
       }
     },
+    "mobileFooterPanel": {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
+      },
+      "content": {
+        "rotateRight": "$rotateRight",
+        "moreInfo": "$moreInfo",
+        "zoomIn": "$zoomIn",
+        "zoomOut": "$zoomOut",
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "open": "$open",
+        "share": "$share"
+      }
+    },
     "restrictedDialogue": {
       "options": {
         "topCloseButtonEnabled": false
