@@ -214,7 +214,7 @@ export type DialogueContent = {
   close: string;
 };
 
-export type Dialogue = ModuleConfig & {
+type Dialogue = ModuleConfig & {
   options?: DialogueOptions;
   content: DialogueContent;
 };

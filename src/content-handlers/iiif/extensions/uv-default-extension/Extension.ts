@@ -33,9 +33,6 @@ export default class Extension extends BaseExtension<Config>
   textRightPanel: TextRightPanel;
   settingsDialogue: SettingsDialogue;
   defaultConfig: Config = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
 
   create(): void {
     super.create();
