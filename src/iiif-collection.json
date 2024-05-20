@@ -7,6 +7,35 @@
       "@context": "http://iiif.io/api/presentation/2/context.json",
       "@id": "http://universalviewer.io/manifests.json",
       "@type": "sc:Collection",
+      "label": "Riksarkivet",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://lbiiif-acc.riksarkivet.se/arkis!30002046/manifest",
+          "@type": "sc:Manifest",
+          "label": "Göteborgs poliskammare före 1900 A II/25"
+        },
+        {
+          "@id": "https://lbiiif-acc.riksarkivet.se/arkis!30002048/manifest",
+          "@type": "sc:Manifest",
+          "label": "Göteborgs poliskammare före 1900 A II/27"
+        },
+        {
+          "@id": "https://lbiiif-acc.riksarkivet.se/arkis!30002055/manifest",
+          "@type": "sc:Manifest",
+          "label": "Göteborgs poliskammare före 1900 B II/7"
+        },
+        {
+          "@id": "https://lbiiif-acc.riksarkivet.se/arkis!30003049/manifest",
+          "@type": "sc:Manifest",
+          "label": "Göteborgs poliskammare före 1900 E X/7"
+        }
+      ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
       "label": "Wellcome Library",
       "manifests": [
         {

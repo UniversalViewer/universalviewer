@@ -144,5 +144,11 @@
     "$duration": "Czas trwania",
     "$mute": "Wycisz",
     "$pause": "Pauza",
-    "$play": "Odtwarzaj"
+    "$play": "Odtwarzaj",
+    "$transcribedText": "Transcribed text",
+    "$expandTranscribedText": "Expand transcribed text",
+    "$collapseTranscribedText": "Collapse transcribed text",
+    "$transcribedTextLeftPage": "Left page",
+    "$transcribedTextRightPage": "Right page",
+    "$noTranscribedTextFound": "Couldn't find any transcriptions for this page."
 }
