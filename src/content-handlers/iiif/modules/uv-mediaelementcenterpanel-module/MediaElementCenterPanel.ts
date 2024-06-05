@@ -20,6 +20,18 @@ import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
 
+type TextTrackDescriptor = {
+  language?: string;
+  label?: string;
+  id: string;
+};
+
+type MediaSourceDescriptor = {
+  label: string;
+  type: string;
+  src: string;
+};
+
 export class MediaElementCenterPanel extends CenterPanel<
   Config["modules"]["mediaelementCenterPanel"]
 > {
@@ -86,12 +98,8 @@ export class MediaElementCenterPanel extends CenterPanel<
     const poster: string = (<IMediaElementExtension>(
       this.extension
     )).getPosterImageUri();
-    const sources: any[] = [];
-    const subtitles: Array<{
-      language?: string;
-      label?: string;
-      id: string;
-    }> = [];
+    const sources: Array<MediaSourceDescriptor> = [];
+    const subtitles: Array<TextTrackDescriptor> = [];
 
     const renderings: Rendering[] = canvas.getRenderings();
 
@@ -142,34 +150,19 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
     }
 
+    if (subtitles.length > 0) {
+      // Show captions options popover for better interface feedback
+      subtitles.unshift({ id: "none" });
+    }
+
     if (this.isVideo()) {
       this.$media = $(
         '<video controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
       // Add VTT subtitles/captions.
-      if (subtitles.length > 0) {
-        // Show captions options popover for better interface feedback
-        subtitles.unshift({ id: "none" });
-      }
-      for (const subtitle of subtitles) {
-        this.$media.append(
-          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
-            subtitle.language
-          }" src="${subtitle.id}" ${
-            subtitles.indexOf(subtitle) === 0 ? "default" : ""
-          }>
-`)
-        );
-      }
-
-      for (const source of sources) {
-        this.$media.append(
-          $(
-            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
-          )
-        );
-      }
+      this.appendTextTracks(subtitles);
+      this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
 
@@ -233,13 +226,9 @@ export class MediaElementCenterPanel extends CenterPanel<
         '<audio controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
       );
 
-      for (const source of sources) {
-        this.$media.append(
-          $(
-            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
-          )
-        );
-      }
+      // Add VTT subtitles/captions.
+      this.appendTextTracks(subtitles);
+      this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
 
@@ -298,6 +287,28 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
     this.extensionHost.publish(Events.LOAD);
+  }
+
+  appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
+    for (const subtitle of subtitles) {
+      this.$media.append(
+        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language
+          }" src="${subtitle.id}" ${
+            subtitles.indexOf(subtitle) === 0 ? "default" : ""
+          }>
+`)
+      );
+    }
+  }
+
+  appendMediaSources(sources: Array<MediaSourceDescriptor>) {
+    for (const source of sources) {
+      this.$media.append(
+        $(
+          `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+        )
+      );
+    }
   }
 
   // audio/video
