@@ -389,6 +389,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
 
     this.$canvas = $(this.viewer.canvas);
+        
+    // Check if we have saved settings for image adjustment
+    let settings = this.extension.getSettings();
+    if (this.extension.data.config?.options.saveUserSettings && settings.rememberSettings) {
+      let contrastPercent = settings.contrastPercent;
+      let brightnessPercent = settings.brightnessPercent;
+      let saturationPercent = settings.saturationPercent;
+      this.$canvas[0].style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
+    }
 
     // disable right click on canvas
     this.$canvas.on("contextmenu", () => {

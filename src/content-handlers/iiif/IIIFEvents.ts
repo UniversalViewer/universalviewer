@@ -43,7 +43,6 @@ export class IIIFEvents {
   static HIDE_RESTRICTED_DIALOGUE: string = "hideRestrictedDialogue";
   static HIDE_SETTINGS_DIALOGUE: string = "hideSettingsDialogue";
   static HIDE_SHARE_DIALOGUE: string = "hideShareDialogue";
-  static HIDE_ADJUSTIMAGE_DIALOGUE: string = "hideAdjustImageDialogue";
   static HOME: string = "home";
   static LAST: string = "last";
   static LEFT_ARROW: string = "leftArrow";
@@ -119,4 +118,5 @@ export class IIIFEvents {
   static VIEW_FULL_TERMS: string = "viewFullTerms";
   static WINDOW_UNLOAD: string = "windowUnload";
   static SHOW_ADJUSTIMAGE_DIALOGUE: string = "showAdjustImageDialogue";
+  static HIDE_ADJUSTIMAGE_DIALOGUE: string = "hideAdjustImageDialogue";  
 }
