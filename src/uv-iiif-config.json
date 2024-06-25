@@ -33,7 +33,9 @@
     },
     "openSeadragonCenterPanel": {
       "options": {
-        "autoHideControls": false
+        "autoHideControls": false,
+        "showHomeControl": true,
+        "showAdjustImageControl": true
       }
     },
     "footerPanel": {

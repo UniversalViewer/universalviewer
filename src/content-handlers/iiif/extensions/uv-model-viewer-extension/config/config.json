@@ -330,6 +330,19 @@
         "title": "$settings",
         "website": "$uvWebsite"
       }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset"
+      }
     }
   },
   "localisation": {

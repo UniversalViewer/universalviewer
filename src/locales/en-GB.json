@@ -97,6 +97,7 @@
   "$rotateRight": "Rotate Right",
   "$zoomIn": "Zoom In",
   "$zoomOut": "Zoom Out",
+  "$adjustImage": "Adjust image",
   "$clearSearch": "Clear",
   "$displaying_A_of_B": "{0} {1} of {2}",
   "$enterKeyword": "Enter Keyword",
@@ -144,5 +145,9 @@
   "$duration": "Duration",
   "$mute": "Mute",
   "$pause": "Pause",
-  "$play": "Play"
+  "$play": "Play",
+  "$brightness": "Brightness",
+  "$contrast": "Contrast",
+  "$saturation": "Saturation",
+  "$reset": "Reset"
 }

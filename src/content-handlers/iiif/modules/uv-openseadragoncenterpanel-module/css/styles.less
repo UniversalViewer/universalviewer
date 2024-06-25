@@ -134,7 +134,22 @@
                 }
 
                 .goHome{
-                    cursor: pointer !important;
+                    display: none !important;
+
+                    .xl-mediaquery({
+                        display: inline-block !important;
+                        cursor: pointer !important;
+                        background-image: data-uri('../img/home.png') !important;
+                        width: 28px;
+                        height: 28px;
+                        // margin: 3px !important;
+                        img {
+                            display: none;
+                        }
+                        &:focus {
+                            .tab-focus();
+                        }
+                    });
                 }
 
                 div[title="Rotate left"] {
@@ -159,6 +174,26 @@
                         }
                     });
                 }
+
+                .adjustImage {
+                    display: none !important;
+
+                    .xl-mediaquery({
+                        display: inline-block !important;
+                        cursor: pointer !important;
+                        background-image: data-uri('../img/adjust.png') !important;
+                        width: 28px;
+                        height: 28px;
+                        // margin: 3px !important;
+                        img {
+                            display: none;
+                        }
+                        &:focus {
+                            .tab-focus();
+                        }
+                    });
+                }
+                
 
                 div[title="Previous page"] {
                     display: none !important;
@@ -185,6 +220,20 @@
                     @col: lighten(@search-result, 20%);
                     background-color: saturate(@col, 100%);
                 }
+                z-index: 2;
+            }
+
+            .lineAnnotationRect{
+                .opacity(.5);
+                &.current {
+                    @col: rgb(120, 251, 185);
+                    background-color: saturate(@col, 100%);
+                }
+                &:hover {
+                    @col: lighten(rgb(120, 251, 185), 20%);
+                    background-color: saturate(@col, 80%);
+                }
+                z-index: 1;
             }
 
             .annotationPin{

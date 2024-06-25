@@ -97,6 +97,7 @@
     "$rotateRight": "Rotera höger",
     "$zoomIn": "Zooma in",
     "$zoomOut": "Zooma ut",
+    "$adjustImage": "Justera bild",
     "$clearSearch": "Rensa sökning",
     "$displaying_A_of_B": "{0} {1} av {2}",
     "$enterKeyword": "Ange sökord",
@@ -144,5 +145,9 @@
     "$duration": "Speltid",
     "$mute": "Tyst",
     "$pause": "Paus",
-    "$play": "Spela"
+    "$play": "Spela",
+    "$brightness": "Ljusstyrka",
+    "$contrast": "Kontrast",
+    "$saturation": "Färgmättnad",
+    "$reset": "Återställ"
 }

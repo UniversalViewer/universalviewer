@@ -46,6 +46,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   userData: any;
   viewer: any;
   viewerId: string;
+  showAdjustImageButton: boolean;
 
   $canvas: JQuery;
   $goHomeButton: JQuery;
@@ -59,6 +60,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $viewportNavButtons: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
+  $adjustImageButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -207,6 +209,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   async createUI(): Promise<void> {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
+
+    this.showAdjustImageButton = Bools.getBool(
+      this.config.options.showAdjustImageControl,
+      false
+    );
 
     // Transparent pixel
     const pixel =
@@ -360,6 +367,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.prop("title", this.content.rotateRight);
     this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+
+    if (this.showAdjustImageButton) {
+      this.$adjustImageButton = this.$rotateButton.clone();
+      this.$adjustImageButton.prop('title', this.content.adjustImage);
+      this.$adjustImageButton.switchClass('rotate', 'adjustImage');
+      this.$adjustImageButton.onPressed(() => {
+        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
+      });
+      this.$adjustImageButton.insertAfter(this.$rotateButton);
+    }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
@@ -598,7 +615,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                   maxLevel: info.levels - 1,
                   units: "mm",
                   spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function(level, x, y, query) {
+                  getTileUrl: function (level, x, y, query) {
                     var url =
                       tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
                     if (query) {
@@ -951,9 +968,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
     const dimensions: CroppedImageDimensions | null = (this
       .extension as OpenSeadragonExtension).getCroppedImageDimensions(
-      canvas,
-      this.viewer
-    );
+        canvas,
+        this.viewer
+      );
 
     if (dimensions) {
       const bounds: XYWHFragment = new XYWHFragment(
@@ -989,7 +1006,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (!center) return;
 
     // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
-    setTimeout(function() {
+    setTimeout(function () {
       viewer.viewport.panTo(center, true);
     }, 1);
   }
