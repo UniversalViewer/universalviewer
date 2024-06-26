@@ -149,5 +149,6 @@
   "$brightness": "Disgleirdeb",
   "$contrast": "Cyferbyniad",
   "$saturation": "Dirlawnder",
-  "$reset": "Reset"
+  "$reset": "Reset",
+  "$remember": "Remember my settings"
 }

@@ -63,7 +63,7 @@ export class AdjustImageDialogue extends Dialogue<
         if (this.extension.data.config?.options.saveUserSettings) {
             this.$rememberContainer = $('<div class="rememberContainer"></div>');
             this.$rememberCheckbox = $('<input type="checkbox" id="rememberSettings" />');
-            this.$rememberLabel = $('<label for="rememberSettings">Remember my settings</label>');
+            this.$rememberLabel = $('<label for="rememberSettings">' + this.content.remember + '</label>');
             this.$rememberContainer.append(this.$rememberCheckbox);
             this.$rememberContainer.append(this.$rememberLabel);
             this.$content.append(this.$rememberContainer);
@@ -139,7 +139,12 @@ export class AdjustImageDialogue extends Dialogue<
             this.extension.updateSettings({ contrastPercent: this.contrastPercent });
             this.extension.updateSettings({ brightnessPercent: this.brightnessPercent });
             this.extension.updateSettings({ saturationPercent: this.saturationPercent });
-        } 
+        } else {
+            this.extension.updateSettings({ rememberSettings: false });
+            this.extension.updateSettings({ contrastPercent: 100 });
+            this.extension.updateSettings({ brightnessPercent: 100 });
+            this.extension.updateSettings({ saturationPercent: 100 });
+        }
         this.shell.$overlays.css('background', '');
         super.close();
     }

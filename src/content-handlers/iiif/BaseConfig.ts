@@ -284,6 +284,7 @@ type AdjustImageDialogueContent = DialogueContent & {
   contrast: string;
   saturation: string;
   reset: string;
+  remember: string;
 }
 
 export type AdjustImageDialogue = ModuleConfig & {

@@ -317,7 +317,8 @@
         "contrast": "$contrast",
         "saturation": "$saturation",
         "close": "$close",
-        "reset": "$reset"
+        "reset": "$reset",
+        "remember": "$remember"
       }
     },
     "clickThroughDialogue": {

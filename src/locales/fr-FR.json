@@ -149,5 +149,6 @@
   "$brightness": "Brightness",
   "$contrast": "Contrast",
   "$saturation": "Saturation",
-  "$reset": "Reset"
+  "$reset": "Reset",
+  "$remember": "Remember my settings"
 }
