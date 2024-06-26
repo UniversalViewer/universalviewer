@@ -396,7 +396,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       let contrastPercent = settings.contrastPercent;
       let brightnessPercent = settings.brightnessPercent;
       let saturationPercent = settings.saturationPercent;
-      this.$canvas[0].style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
+      (<HTMLCanvasElement>(this.$canvas[0].children[0])).style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
     }
 
     // disable right click on canvas

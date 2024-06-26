@@ -98,7 +98,7 @@ export class AdjustImageDialogue extends Dialogue<
             this.$contrastInput.val(this.contrastPercent);
             this.$brightnessInput.val(this.brightnessPercent);
             this.$saturationInput.val(this.saturationPercent);
-            let canvas = (<OpenSeadragonExtension>(this.extension)).centerPanel.$canvas[0];
+            let canvas = <HTMLCanvasElement>((<OpenSeadragonExtension>(this.extension)).centerPanel.$canvas[0].children[0]);
             canvas.style.filter = 'none';
         });
         this.$resetButton.insertBefore(this.$buttons.find('.close'));
@@ -107,7 +107,7 @@ export class AdjustImageDialogue extends Dialogue<
     }
 
     filter(): void {
-        let canvas = (<OpenSeadragonExtension>(this.extension)).centerPanel.$canvas[0];
+        let canvas = <HTMLCanvasElement>((<OpenSeadragonExtension>(this.extension)).centerPanel.$canvas[0].children[0]);
         canvas.style.filter = `contrast(${this.contrastPercent}%) brightness(${this.brightnessPercent}%) saturate(${this.saturationPercent}%)`;
     }
 
