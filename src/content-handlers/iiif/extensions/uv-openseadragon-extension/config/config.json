@@ -353,7 +353,7 @@
         "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
-        "showAdjustImageControl": false,
+        "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
         "trimAttributionCount": 150,
