@@ -148,7 +148,5 @@
   "$play": "Chwarae",
   "$brightness": "Disgleirdeb",
   "$contrast": "Cyferbyniad",
-  "$saturation": "Dirlawnder",
-  "$reset": "Reset",
-  "$remember": "Remember my settings"
+  "$saturation": "Dirlawnder"
 }

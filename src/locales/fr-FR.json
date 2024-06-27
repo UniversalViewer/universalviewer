@@ -145,10 +145,5 @@
   "$duration": "Durée",
   "$mute": "Muet",
   "$pause": "Pause",
-  "$play": "Jouer",
-  "$brightness": "Brightness",
-  "$contrast": "Contrast",
-  "$saturation": "Saturation",
-  "$reset": "Reset",
-  "$remember": "Remember my settings"
+  "$play": "Jouer"
 }
