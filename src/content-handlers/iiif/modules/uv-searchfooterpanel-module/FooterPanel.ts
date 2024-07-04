@@ -361,17 +361,18 @@ export class FooterPanel extends BaseFooterPanel<
     const currentCanvasIndex: number = this.extension.helper.canvasIndex;
     const lastSearchResultCanvasIndex: number = this.getLastSearchResultCanvasIndex();
     const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
+    const totalCanvases: number = this.extension.helper.getTotalCanvases();
 
     // if zoom to search result is enabled and there is a highlighted search result.
     if (
       this.isZoomToSearchResultEnabled() &&
       (<OpenSeadragonExtension>this.extension).currentAnnotationRect
     ) {
-      if (currentCanvasIndex > lastSearchResultCanvasIndex) {
+      if (currentCanvasIndex > lastSearchResultCanvasIndex) { //if you've moved past final result page
         return false;
-      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) {
+      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) { // if you're on the final result page
         if (
-          currentSearchResultRectIndex === this.getLastSearchResultRectIndex()
+          currentSearchResultRectIndex === this.getLastSearchResultRectIndex() //and you're on the last result
         ) {
           return false;
         }
@@ -379,6 +380,10 @@ export class FooterPanel extends BaseFooterPanel<
 
       return true;
     }
+
+    // if only one canvas then allow clicking next result
+    if (totalCanvases === 1) {
+      return true}
 
     return currentCanvasIndex < lastSearchResultCanvasIndex;
   }
