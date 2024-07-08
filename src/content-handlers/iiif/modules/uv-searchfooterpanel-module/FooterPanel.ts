@@ -361,7 +361,6 @@ export class FooterPanel extends BaseFooterPanel<
     const currentCanvasIndex: number = this.extension.helper.canvasIndex;
     const lastSearchResultCanvasIndex: number = this.getLastSearchResultCanvasIndex();
     const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
-    const totalCanvases: number = this.extension.helper.getTotalCanvases();
 
     // if zoom to search result is enabled and there is a highlighted search result.
     if (
@@ -381,11 +380,7 @@ export class FooterPanel extends BaseFooterPanel<
       return true;
     }
 
-    // if only one canvas then allow clicking next result
-    if (totalCanvases === 1) {
-      return true}
-
-    return currentCanvasIndex < lastSearchResultCanvasIndex;
+    return currentCanvasIndex <= lastSearchResultCanvasIndex;
   }
 
   getSearchResults(): AnnotationGroup[] {
