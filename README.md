@@ -41,7 +41,8 @@ A community-developed open source project on a mission<br/> to help you share yo
 
 ## 🌐 Website
 
-[Visit the UV demo page](https://universalviewer.dev) to try it out.
+- [Visit the stable UV demo page](https://uv-v4.netlify.app) to try out the latest stable version of the Viewer.
+- [Visit the dev branch UV demo page](https://universalviewer.dev) to try out the latest 'bleeding edge' dev branch code.
 
 <!-- ## 📖 Scope
 
