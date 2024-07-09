@@ -337,7 +337,7 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$goHome",
+        "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
