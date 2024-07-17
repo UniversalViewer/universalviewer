@@ -102,7 +102,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByCanvas();
       this.updateTreeTabBySelection();
     });
 
@@ -111,7 +111,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByRange();
       this.updateTreeTabBySelection();
     });
 
