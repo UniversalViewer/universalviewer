@@ -2,7 +2,7 @@ import { Config } from "../../extensions/uv-av-extension/config/Config";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 
 export class FooterPanel extends BaseFooterPanel<
-  Config["modules"]["mobileFooterPanel"]
+  Config["modules"]["footerPanel"]
 > {
   $fullScreenBtn: JQuery;
 

@@ -31,9 +31,6 @@ export default class Extension extends BaseExtension<Config>
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   defaultConfig: Config = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
 
   create(): void {
     super.create();

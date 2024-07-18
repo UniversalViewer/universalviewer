@@ -57,7 +57,7 @@ type ModelViewerSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  centerPanel: ModelViewerCenterPanel;
+  modelViewerCenterPanel: ModelViewerCenterPanel;
   downloadDialogue: ModelViewerDownloadDialogue;
   shareDialogue: ModelViewerShareDialogue;
   settingsDialogue: ModelViewerSettingsDialogue;

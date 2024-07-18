@@ -15,7 +15,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   }
 
   create(): void {
-    this.setConfig("leftPanel");
+    this.setConfig("contentLeftPanel");
     super.create();
 
     this.$gallery = $('<div class="iiif-gallery-component"></div>');

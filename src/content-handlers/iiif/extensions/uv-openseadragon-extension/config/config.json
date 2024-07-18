@@ -52,6 +52,21 @@
   "modules": {
     "leftPanel": {
       "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false
+      },
+      "content": {
+        "collapse": "$collapse",
+        "collapseFull": "$collapseFull",
+        "expand": "$expandContents",
+        "expandFull": "$expandGallery"
+      }
+    },
+    "contentLeftPanel": {
+      "options": {
         "autoExpandTreeEnabled": false,
         "autoExpandTreeIfFewerThan": 20,
         "branchNodesExpandOnClick": true,
@@ -149,6 +164,31 @@
         "wholeImagesHighResExplanation": "$wholeImagesHighResExplanation"
       }
     },
+    "footerPanel": {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
+      },
+      "content": {
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "moreInfo": "$moreInfo",
+        "open": "$open",
+        "share": "$share"
+      }
+    },
     "genericDialogue": {
       "options": {
         "topCloseButtonEnabled": false
@@ -161,6 +201,17 @@
         "ok": "$ok",
         "pageNotFound": "$pageNotFound",
         "refresh": "$refresh"
+      }
+    },
+    "headerPanel": {
+      "options": {
+        "centerOptionsEnabled": true,
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true
+      },
+      "content": {
+        "close": "$close",
+        "settings": "$settings"
       }
     },
     "helpDialogue": {
@@ -232,7 +283,7 @@
         "title": "$selectPagesForDownload"
       }
     },
-    "headerPanel": {
+    "pagingHeaderPanel": {
       "options": {
         "autoCompleteBoxEnabled": true,
         "autocompleteAllowWords": false,
@@ -276,6 +327,17 @@
     },
     "centerPanel": {
       "options": {
+        "titleEnabled": true,
+        "subtitleEnabled": true,
+        "mostSpecificRequiredStatement": true,
+        "requiredStatementEnabled": true
+      },
+      "content": {
+        "attribution": "$attribution"
+      }
+    },
+    "openSeadragonCenterPanel": {
+      "options": {
         "animationTime": 0.15,
         "autoHideControls": true,
         "blendTime": 0,
@@ -308,7 +370,7 @@
         "zoomOut": "$zoomOut"
       }
     },
-    "footerPanel": {
+    "searchFooterPanel": {
       "options": {
         "autocompleteAllowWords": false,
         "elideDetailsTermsCount": 20,
@@ -364,7 +426,7 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$goHome",
+        "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
@@ -461,16 +523,6 @@
       "content": {
         "cancel": "$cancel",
         "close": "$close"
-      }
-    },
-    "externalContentDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "cancel": "$cancel",
-        "close": "$close",
-        "confirm": "$confirm"
       }
     }
   },

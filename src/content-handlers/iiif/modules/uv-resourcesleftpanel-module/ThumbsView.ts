@@ -3,7 +3,7 @@ import { ExtendedLeftPanel } from "../../extensions/config/ExtendedLeftPanel";
 
 export class ThumbsView extends BaseView<ExtendedLeftPanel> {
   create(): void {
-    this.setConfig("leftPanel");
+    this.setConfig("resourcesLeftPanel");
     super.create();
   }
 }

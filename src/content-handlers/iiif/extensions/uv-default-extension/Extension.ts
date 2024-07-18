@@ -29,9 +29,6 @@ export default class Extension extends BaseExtension<Config>
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   defaultConfig: Config = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
 
   create(): void {
     super.create();

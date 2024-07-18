@@ -14,7 +14,7 @@ import { Canvas, LanguageMap } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
 export class FooterPanel extends BaseFooterPanel<
-  Config["modules"]["footerPanel"]
+  Config["modules"]["searchFooterPanel"]
 > {
   $clearSearchResultsButton: JQuery;
   $line: JQuery;
@@ -46,7 +46,7 @@ export class FooterPanel extends BaseFooterPanel<
   }
 
   create(): void {
-    this.setConfig("footerPanel");
+    this.setConfig("searchFooterPanel");
 
     super.create();
 
@@ -367,11 +367,11 @@ export class FooterPanel extends BaseFooterPanel<
       this.isZoomToSearchResultEnabled() &&
       (<OpenSeadragonExtension>this.extension).currentAnnotationRect
     ) {
-      if (currentCanvasIndex > lastSearchResultCanvasIndex) {
+      if (currentCanvasIndex > lastSearchResultCanvasIndex) { //if you've moved past final result page
         return false;
-      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) {
+      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) { // if you're on the final result page
         if (
-          currentSearchResultRectIndex === this.getLastSearchResultRectIndex()
+          currentSearchResultRectIndex === this.getLastSearchResultRectIndex() //and you're on the last result
         ) {
           return false;
         }
@@ -380,7 +380,7 @@ export class FooterPanel extends BaseFooterPanel<
       return true;
     }
 
-    return currentCanvasIndex < lastSearchResultCanvasIndex;
+    return currentCanvasIndex <= lastSearchResultCanvasIndex;
   }
 
   getSearchResults(): AnnotationGroup[] {

@@ -2,7 +2,6 @@ import {
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
-  Dialogue,
   DialogueContent,
   DialogueOptions,
   DownloadDialogueContent,
@@ -96,7 +95,7 @@ type PagingHeaderPanel = ModuleConfig & {
   content: PagingHeaderPanelContent;
 };
 
-type OSDCenterPanelOptions = CenterPanelOptions & {
+type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   /** Duration of the animation */
   animationTime: number;
   /** Determines if controls are hidden automatically */
@@ -133,7 +132,7 @@ type OSDCenterPanelOptions = CenterPanelOptions & {
   visibilityRatio: number;
 };
 
-type OSDCenterPanelContent = CenterPanelContent & {
+type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
@@ -144,9 +143,9 @@ type OSDCenterPanelContent = CenterPanelContent & {
   zoomOut: string;
 };
 
-type OSDCenterPanel = ModuleConfig & {
-  options: OSDCenterPanelOptions;
-  content: OSDCenterPanelContent;
+type OpenSeadragonCenterPanel = ModuleConfig & {
+  options: OpenSeadragonCenterPanelOptions;
+  content: OpenSeadragonCenterPanelContent;
 };
 
 type SearchFooterPanelOptions = FooterPanelOptions & {
@@ -271,16 +270,15 @@ type OSDSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  centerPanel: OSDCenterPanel;
+  contentLeftPanel: ContentLeftPanel;
   downloadDialogue: OSDDownloadDialogue;
-  footerPanel: SearchFooterPanel;
-  leftPanel: ContentLeftPanel;
-  mobileFooterPanel: MobileFooterPanel;
   multiSelectDialogue: MultiSelectDialogue;
-  headerPanel: PagingHeaderPanel;
-  settingsDialogue: OSDSettingsDialogue;
+  pagingHeaderPanel: PagingHeaderPanel;
+  openSeadragonCenterPanel: OpenSeadragonCenterPanel;
+  searchFooterPanel: SearchFooterPanel;
+  mobileFooterPanel: MobileFooterPanel;
   shareDialogue: OSDShareDialogue;
-  externalContentDialogue: Dialogue;
+  settingsDialogue: OSDSettingsDialogue;
 };
 
 export type Config = BaseConfig & {

@@ -15,7 +15,7 @@ import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-model-viewer-extension/config/Config";
 
 export class ModelViewerCenterPanel extends CenterPanel<
-  Config["modules"]["centerPanel"]
+  Config["modules"]["modelViewerCenterPanel"]
 > {
   $modelviewer: JQuery;
   $spinner: JQuery;
@@ -27,7 +27,7 @@ export class ModelViewerCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("centerPanel");
+    this.setConfig("modelViewerCenterPanel");
 
     super.create();
 

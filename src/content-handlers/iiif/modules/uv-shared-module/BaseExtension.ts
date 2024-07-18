@@ -79,7 +79,15 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
-  defaultConfig: T;
+  defaultConfig: T = {} as any;
+  localeLoaders: Record<string, () => Promise<any>> = {
+    "en-GB": () => import("../../../../locales/en-GB.json"),
+    "cy-GB": () => import("../../../../locales/cy-GB.json"),
+    "fr-FR": () => import("../../../../locales/fr-FR.json"),
+    "pl-PL": () => import("../../../../locales/pl-PL.json"),
+    "sv-SE": () => import("../../../../locales/sv-SE.json"),
+  };
+  
 
   public create(): void {
     const that = this;
@@ -469,33 +477,15 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   public async loadConfig(locale: string, extension: string): Promise<any> {
-    let uv_locale = locale;
-    if (extension) {
-      uv_locale = "_";
-      this.locales["_"] = () =>
-        import(`../../extensions/${extension}/config/config.json`);
-    }
-
-    let config = this.locales[uv_locale];
-
-    if (!config) {
-      throw new Error("Unable to load config");
-    }
-    if (typeof config === "object") {
-      config = JSON.parse(JSON.stringify(config));
-    } else if (typeof config === "function") {
-      config = await config();
-      config = JSON.parse(JSON.stringify(config));
-    }
-
-    return this.translateLocale(config, locale);
+    return this.translateLocale(this.defaultConfig, locale);
   }
 
   private async translateLocale(
     config: Object,
     locale: String
   ): Promise<Object> {
-    let localeStrings = await import(`../../../../locales/${locale}.json`);
+    let loader = this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
+    let localeStrings = (await loader()) || {};
     let conf = JSON.stringify(config);
 
     for (let str in localeStrings) {
