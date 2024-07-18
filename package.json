@@ -3,7 +3,7 @@
   "version": "4.0.25",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
-    "node": ">=14.18.1",
+    "node": ">=18",
     "npm": ">=8.1.1"
   },
   "files": [
@@ -47,31 +47,30 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
-    "@types/jest": "22.2.2",
+    "@types/jest": "^29",
     "@types/jquery": "^3.5.14",
     "@types/node": "^8.10.52",
-    "@types/puppeteer": "1.9.0",
     "@types/react": "^18.0.3",
     "@types/react-dom": "^18.0.0",
     "@webpack-cli/serve": "1.6.0",
     "async": "0.9.0",
-    "chai": "4.1.2",
+    "chai": "5.1.0",
     "chalk": "0.5.1",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.0.1",
     "file-loader": "^6.2.0",
-    "html-webpack-plugin": "5.3.2",
-    "jest": "23.6.0",
-    "jest-puppeteer": "3.5.0",
+    "html-webpack-plugin": "5.6.0",
+    "jest": "^29",
+    "jest-puppeteer": "^8",
     "less": "4.1.2",
     "less-loader": "10.1.0",
     "lodash": "4.17.21",
     "prettier": "^1.19.1",
     "prettier-check": "^2.0.0",
-    "puppeteer": "1.9.0",
+    "puppeteer": "^22",
     "source-map-loader": "^4.0.0",
     "style-loader": "3.3.0",
-    "ts-jest": "22.4.2",
+    "ts-jest": "^29",
     "ts-loader": "9.2.6",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.25.4",
@@ -82,7 +81,7 @@
     "webpack": "^5.59.1",
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "4.3.1"
+    "webpack-dev-server": "4.15.2"
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
@@ -129,15 +128,11 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "enableTsDiagnostics": true
-      }
-    },
-    "testTimeout": 10000,
     "preset": "jest-puppeteer",
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": ["ts-jest", {
+        "diagnostics": true
+      }]
     },
     "testPathIgnorePatterns": [
       "/node_modules/"
