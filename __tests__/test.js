@@ -45,29 +45,30 @@ describe('Universal Viewer', () => {
         return getComputedStyle(label).overflowX;
     });
     expect(labelOverflowAfterToggle).toBe('visible');
-});
-
-it('settings button is visible', async () => {
-
-  await page.waitForSelector('.btn.imageBtn.settings');
-
-  const isSettingsButtonVisible = await page.evaluate(() => {
-    const settingsButton = document.querySelector('.btn.imageBtn.settings');
-    const style = window.getComputedStyle(settingsButton);
-    return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
   });
 
-  expect(isSettingsButtonVisible).toBe(true);
-});
+  it('settings button is visible', async () => {
+
+    await page.waitForSelector('.btn.imageBtn.settings');
+
+    const isSettingsButtonVisible = await page.evaluate(() => {
+      const settingsButton = document.querySelector('.btn.imageBtn.settings');
+      const style = window.getComputedStyle(settingsButton);
+      return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
+    });
+
+    expect(isSettingsButtonVisible).toBe(true);
+  });
 });
 
-//   it('loads the viewer images', async () => {
-//     await page.waitForSelector('#thumb0');
-//     const imageSrc = await page.$eval('#thumb0 img', e => e.src);
-//     expect(imageSrc).toEqual(
-//       expect.stringContaining(
-//         'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg?t=1620404278998'
-//       )
-//     );
-//   });
+
+it('loads the viewer images', async () => {
+  await page.waitForSelector('#thumb-0');
+  const imageSrc = await page.$eval('#thumb-0 img', e => e.src);
+  expect(imageSrc).toEqual(
+    expect.stringContaining(
+      'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg'
+    )
+  );
+});
 
