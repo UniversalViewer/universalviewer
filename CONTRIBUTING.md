@@ -107,4 +107,4 @@ git push origin main v0.0.8
 
 Then the GitHub action will pick up the tag and publish it to NPM.
 
-Finally, merge the main branch back to the dev branch to synchronize the version numbers.
+Finally, merge the `main` branch back to the `dev` branch to synchronize the version numbers.
