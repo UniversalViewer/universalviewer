@@ -93,7 +93,7 @@ The decision to make a new release should be made by the Universal Viewer Steeri
 
 Next, checkout the `main` branch, and ensure it is up-to-date.
 
-Run `npm version [major | minor | patch]` to apply an apppropriate [semantic versioning](https://semver.org/) update; for example:
+Run `npm version [major | minor | patch]` to apply an appropriate [semantic versioning](https://semver.org/) update; for example:
 
 ```bash
 npm version patch
@@ -106,3 +106,5 @@ git push origin main v0.0.8
 ```
 
 Then the GitHub action will pick up the tag and publish it to NPM.
+
+Finally, merge the main branch back to the dev branch to synchronize the version numbers.
