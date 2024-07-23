@@ -11,7 +11,7 @@ A community-developed open source project on a mission<br/> to help you share yo
 <a href="https://app.netlify.com/sites/uv/deploys">
 <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
 </a>
-<a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
+<a href="https://github.com/UniversalViewer/universalviewer/blob/main/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
 </p>
 
 <p align="center">
@@ -54,7 +54,7 @@ Read more [about the Universal Viewer](https://github.com/UniversalViewer/univer
 
 See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Examples) for how to use the UV in various scenarios.
 
-Read the [docs](https://docs.universalviewer.io/) to learn about the various UV configuration options.
+Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
 ## 💻 Contributing
 
@@ -63,10 +63,7 @@ Read below to learn how to take part in improving the UV:
 - Fork the repository and [run the examples from source](#-getting-started)
 - Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/main/CODE_OF_CONDUCT.md)
 - Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/main/CONTRIBUTING.md)
-- Find an issue to work on and submit a pull request
-  - First time contributing to open source? Pick a [good first issue](https://github.com/universalviewer/universalviewer/labels/good%20first%20issue) to get you familiar with GitHub contributing process.
-  - First time contributing to the UV? Pick a [beginner friendly issue](https://github.com/universalviewer/universalviewer/labels/beginners) to get you familiar with codebase and our contributing process.
-  - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
+- Find an issue to work on and submit a pull request to [issues page](https://github.com/UniversalViewer/universalviewer/issues)
 - Could not find an issue? Look for bugs, typos, and missing features.
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
