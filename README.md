@@ -63,7 +63,7 @@ Read below to learn how to take part in improving the UV:
 - Fork the repository and [run the examples from source](#-getting-started)
 - Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/main/CODE_OF_CONDUCT.md)
 - Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/main/CONTRIBUTING.md)
-- Find an issue to work on and submit a pull request to [issues page](https://github.com/UniversalViewer/universalviewer/issues)
+- Find an [issue](https://github.com/UniversalViewer/universalviewer/issues) to work on and submit a pull request
 - Could not find an issue? Look for bugs, typos, and missing features.
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
