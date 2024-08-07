@@ -271,7 +271,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
 
     // this.$element.append('<a href="/" id="top"></a>');
     this.$element.append(
-      '<iframe id="commsFrame" style="display:none"></iframe>'
+      '<iframe id="commsFrame"></iframe>'
     );
 
     this.extensionHost.subscribeAll((event, args) => {
