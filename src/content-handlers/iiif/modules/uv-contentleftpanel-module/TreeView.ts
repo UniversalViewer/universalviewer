@@ -10,6 +10,7 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   treeComponent: any;
   treeData: any;
   $tree: JQuery;
+  private expandedNodeIds: Set<string> = new Set();
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -23,8 +24,6 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   setup(): void {
-    const that = this;
-
     this.treeComponent = new TreeComponent({
       target: <HTMLElement>this.$tree[0],
       data: this.treeData,
@@ -32,23 +31,44 @@ export class TreeView extends BaseView<ContentLeftPanel> {
 
     this.treeComponent.on(
       "treeNodeSelected",
-      function(node: TreeNode) {
-        that.extensionHost.publish(IIIFEvents.TREE_NODE_SELECTED, node);
+      (node: TreeNode) => {
+        this.extensionHost.publish(IIIFEvents.TREE_NODE_SELECTED, node);
       },
       false
     );
 
     this.treeComponent.on(
       "treeNodeMultiSelected",
-      function(node: TreeNode) {
-        that.extensionHost.publish(IIIFEvents.TREE_NODE_MULTISELECTED, node);
+      (node: TreeNode) => {
+        this.extensionHost.publish(IIIFEvents.TREE_NODE_MULTISELECTED, node);
       },
       false
     );
   }
 
+  private saveState(): void {
+    const allNodes = this.treeComponent.getAllNodes();
+    this.expandedNodeIds.clear();
+    allNodes.forEach(node => {
+      if (node.expanded) {
+        this.expandedNodeIds.add(node.id);
+      }
+    });
+  }
+
+  private restoreState(): void {
+    const allNodes = this.treeComponent.getAllNodes();
+    allNodes.forEach(node => {
+      if (this.expandedNodeIds.has(node.id)) {
+        this.treeComponent.expandNode(node, true);
+      }
+    });
+  }
+
   public databind(): void {
+    this.saveState(); 
     this.treeComponent.set(this.treeData);
+    this.restoreState(); 
     this.resize();
   }
 
@@ -63,29 +83,24 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   public selectNode(node: TreeNode): void {
-    if (!this.treeComponent.selectedNode) {
-      this.treeComponent.expandParents(node, true);
-
-      const link: Element | undefined = this.$tree.find(
-        "#tree-link-" + node.id
-      )[0];
-
-      if (link) {
-        // link.scrollIntoView({ inline: 'center' });
-      }
+    this.treeComponent.expandParents(node, true); // Expand node parents
+    const link: Element | undefined = this.$tree.find("#tree-link-" + node.id)[0];
+    if (link) {
+     // link.scrollIntoViewIfNeeded();
     }
 
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       this.treeComponent.selectNode(node);
-    }, 0);
-  }
+  });
+}
 
   public expandNode(node: TreeNode, expanded: boolean): void {
     this.treeComponent.expandNode(node, expanded);
   }
 
   public getAllNodes(): TreeNode[] {
-    return this.treeComponent.getAllNodes();
+    const allNodes = this.treeComponent.getAllNodes();
+    return allNodes;
   }
 
   public deselectCurrentNode(): void {
@@ -93,7 +108,8 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   public getNodeById(id: string): TreeNode {
-    return this.treeComponent.getNodeById(id);
+    const node = this.treeComponent.getNodeById(id);
+    return node;
   }
 
   resize(): void {

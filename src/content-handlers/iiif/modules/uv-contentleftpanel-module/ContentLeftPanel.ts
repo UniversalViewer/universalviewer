@@ -754,16 +754,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByRange(): void {
     if (this.treeView) {
       const range: Range | null = this.extension.helper.getCurrentRange();
-      let node: TreeNode | null = null;
-
       if (range && range.treeNode) {
-        node = this.treeView.getNodeById(range.treeNode.id);
-      }
-
-      if (node) {
-        this.treeView.selectNode(<TreeNode>node);
-      } else {
-        this.selectTreeNodeByManifest();
+        const node = this.treeView.getNodeById(range.treeNode.id);
+        if (node) {
+          this.treeView.selectNode(node);
+        } else {
+          this.selectTreeNodeByManifest();
+        }
       }
     }
   }
@@ -771,9 +768,9 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByCanvas(): void {
     if (this.treeView) {
       let node: TreeNode | null = null;
-      const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
-      const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
-      const usingCorrectTree: boolean =
+      const currentCanvasTopRangeIndex = this.getCurrentCanvasTopRangeIndex();
+      const selectedTopRangeIndex = this.getSelectedTopRangeIndex();
+      const usingCorrectTree =
         currentCanvasTopRangeIndex === selectedTopRangeIndex;
       let range: Range | null = null;
 
@@ -793,7 +790,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       // }
 
       if (node && usingCorrectTree) {
-        this.treeView.selectNode(<TreeNode>node);
+        this.treeView.selectNode(node);
       } else {
         range = this.extension.helper.getCurrentRange();
 
@@ -802,7 +799,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         }
 
         if (node) {
-          this.treeView.selectNode(<TreeNode>node);
+          this.treeView.selectNode(node);
         } else {
           this.selectTreeNodeByManifest();
         }
