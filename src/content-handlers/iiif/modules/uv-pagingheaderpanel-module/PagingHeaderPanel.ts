@@ -731,11 +731,13 @@ export class PagingHeaderPanel extends HeaderPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.disable();
+    this.$nextButton.attr("disabled","disabled");
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.enable();
+    this.$nextButton.removeAttr("disabled");
   }
 
   modeChanged(): void {
