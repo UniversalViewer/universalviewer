@@ -719,11 +719,13 @@ export class PagingHeaderPanel extends HeaderPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.disable();
+    this.$prevButton.attr("disabled","disabled");
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.enable();
+    this.$prevButton.removeAttr("disabled");
   }
 
   disableNextButton(): void {
