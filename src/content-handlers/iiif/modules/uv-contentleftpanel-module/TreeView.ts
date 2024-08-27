@@ -100,8 +100,7 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   public getAllNodes(): TreeNode[] {
-    const allNodes = this.treeComponent.getAllNodes();
-    return allNodes;
+    return this.treeComponent.getAllNodes();
   }
 
   public deselectCurrentNode(): void {
@@ -109,8 +108,7 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   }
 
   public getNodeById(id: string): TreeNode {
-    const node = this.treeComponent.getNodeById(id);
-    return node;
+    return this.treeComponent.getNodeById(id);
   }
 
   resize(): void {
