@@ -768,9 +768,9 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByCanvas(): void {
     if (this.treeView) {
       let node: TreeNode | null = null;
-      const currentCanvasTopRangeIndex = this.getCurrentCanvasTopRangeIndex();
-      const selectedTopRangeIndex = this.getSelectedTopRangeIndex();
-      const usingCorrectTree =
+      const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+      const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
+      const usingCorrectTree: boolean =
         currentCanvasTopRangeIndex === selectedTopRangeIndex;
       let range: Range | null = null;
 

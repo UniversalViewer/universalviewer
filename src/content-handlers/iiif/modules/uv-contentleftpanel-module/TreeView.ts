@@ -86,6 +86,7 @@ export class TreeView extends BaseView<ContentLeftPanel> {
     this.treeComponent.expandParents(node, true); // Expand node parents
     const link: Element | undefined = this.$tree.find("#tree-link-" + node.id)[0];
     if (link) {
+      //commented out as bug where scrolls to wrong node eg in Villanova collection
      // link.scrollIntoViewIfNeeded();
     }
 
