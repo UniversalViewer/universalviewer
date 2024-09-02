@@ -67,7 +67,7 @@
     "lodash": "4.17.21",
     "prettier": "^1.19.1",
     "prettier-check": "^2.0.0",
-    "puppeteer": "^22",
+    "puppeteer": "^23",
     "source-map-loader": "^4.0.0",
     "style-loader": "3.3.0",
     "ts-jest": "^29",
