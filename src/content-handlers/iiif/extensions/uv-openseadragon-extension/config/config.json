@@ -351,7 +351,7 @@
         "maxZoomPixelRatio": 1.25,
         "mostSpecificRequiredStatement": true,
         "navigatorPosition": "BOTTOM_RIGHT",
-        "pageGap": 500,
+        "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
         "subtitleEnabled": true,
