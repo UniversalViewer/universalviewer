@@ -21,6 +21,8 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
   defaultToTreeEnabled: boolean;
   /** Number of items to default to tree view */
   defaultToTreeIfGreaterThan: number;
+   /** Determines if collection should default to tree view */
+  defaultToTreeIfCollection: boolean;
   /** Number of characters to elide at */
   elideCount: number;
   /** Threshold for gallery thumb chunked resizing */

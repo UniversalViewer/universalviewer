@@ -286,6 +286,11 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     if (
       this.isCollection() &&
+      this.config.options.defaultToTreeIfCollection
+    ) {
+      this.$treeViewOptions.show();
+    } else if (
+      this.isCollection() &&
       this.extension.helper.treeHasNavDates(treeData)
     ) {
       this.$treeViewOptions.show();
@@ -616,9 +621,17 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     );
     const defaultToTreeIfGreaterThan: number =
       this.config.options.defaultToTreeIfGreaterThan || 0;
-
-    const treeData: TreeNode | null = this.getTree();
-
+    const defaultToTreeIfCollection: boolean = Bools.getBool(
+      this.config.options.defaultToTreeIfCollection,
+      false
+    );
+  
+    const treeData: TreeNode | null = this.getTree()
+  
+    if (defaultToTreeIfCollection && this.isCollection()) {
+      return false; // Default to tree view if the manifest is a collection
+    }
+  
     if (defaultToTreeEnabled) {
       if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan) {
         return false;
@@ -817,7 +830,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     let nodeFound: boolean = false;
 
     allNodes.map((node) => {
-      if (node.isCollection() && node.data.index === collectionIndex) {
+      if (this.config.options.defaultToTreeIfCollection && node.isCollection() && node.data.index === collectionIndex) {
         this.treeView.selectNode(node as TreeNode);
         this.treeView.expandNode(node as TreeNode, true);
         nodeFound = true;
