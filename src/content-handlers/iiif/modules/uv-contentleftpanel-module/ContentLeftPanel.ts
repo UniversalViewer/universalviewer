@@ -283,8 +283,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     if (!treeData) {
       return;
     }
-  
-    if (!this.defaultToThumbsView()) {
+    if (!this.defaultToThumbsView() || this.extension.helper.treeHasNavDates(treeData)) {
       this.$treeViewOptions.show();
     } else {
       this.$treeViewOptions.hide();
