@@ -283,16 +283,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     if (!treeData) {
       return;
     }
-
-    if (
-      this.isCollection() &&
-      this.config.options.defaultToTreeIfCollection
-    ) {
-      this.$treeViewOptions.show();
-    } else if (
-      this.isCollection() &&
-      this.extension.helper.treeHasNavDates(treeData)
-    ) {
+  
+    if (!this.defaultToThumbsView()) {
       this.$treeViewOptions.show();
     } else {
       this.$treeViewOptions.hide();
@@ -830,7 +822,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     let nodeFound: boolean = false;
 
     allNodes.map((node) => {
-      if (this.config.options.defaultToTreeIfCollection && node.isCollection() && node.data.index === collectionIndex) {
+      if (node.isCollection() && node.data.index === collectionIndex) {
         this.treeView.selectNode(node as TreeNode);
         this.treeView.expandNode(node as TreeNode, true);
         nodeFound = true;
