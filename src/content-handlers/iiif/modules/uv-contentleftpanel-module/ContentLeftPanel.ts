@@ -283,7 +283,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     if (!treeData) {
       return;
     }
-    if (!this.defaultToThumbsView() || this.extension.helper.treeHasNavDates(treeData)) {
+    if (!this.defaultToThumbsView()) {
       this.$treeViewOptions.show();
     } else {
       this.$treeViewOptions.hide();
@@ -617,10 +617,10 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       false
     );
   
-    const treeData: TreeNode | null = this.getTree()
+    const treeData: TreeNode | null = this.getTree();
   
-    if (defaultToTreeIfCollection && this.isCollection()) {
-      return false; // Default to tree view if the manifest is a collection
+    if (this.isCollection() && (defaultToTreeIfCollection || (treeData && this.extension.helper.treeHasNavDates(treeData)))) {
+      return false;
     }
   
     if (defaultToTreeEnabled) {
