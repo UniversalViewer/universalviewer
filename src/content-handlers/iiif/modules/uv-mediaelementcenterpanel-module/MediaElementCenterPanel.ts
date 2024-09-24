@@ -59,12 +59,32 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-      let t = target.t;
+      let t: number | [number, number] = target.t;
       if (Array.isArray(t)) {
-        t = t[0];
+        if ((t as [number] | [number, number]).length === 1) {
+          t = t[0];
+        } else {
+          const [startTime, endTime] = t;
+
+          if (endTime <= startTime) {
+            console.error("endTime must be greater than startTime");
+            return;
+          }
+
+          this.player.setCurrentTime(startTime);
+          this.player.play();
+
+          const duration = (endTime - startTime) * 1000;
+
+          setTimeout(() => {
+            this.player.pause();
+          }, duration);
+
+          return;
+        }
       }
-      that.player.setCurrentTime(t);
-      that.player.play();
+      this.player.setCurrentTime(t);
+      this.player.play();
     });
 
     this.extensionHost.subscribe(
@@ -107,7 +127,9 @@ export class MediaElementCenterPanel extends CenterPanel<
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
           sources.push({
-            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            label:
+              rendering.getLabel().getValue() ??
+              rendering.getFormat().toString(),
             type: rendering.getFormat().toString(),
             src: rendering.id,
           });
@@ -292,10 +314,11 @@ export class MediaElementCenterPanel extends CenterPanel<
   appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
     for (const subtitle of subtitles) {
       this.$media.append(
-        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language
-          }" src="${subtitle.id}" ${
-            subtitles.indexOf(subtitle) === 0 ? "default" : ""
-          }>
+        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
+          subtitle.language
+        }" src="${subtitle.id}" ${
+          subtitles.indexOf(subtitle) === 0 ? "default" : ""
+        }>
 `)
       );
     }
