@@ -72,13 +72,16 @@ export class MediaElementCenterPanel extends CenterPanel<
           }
 
           this.player.setCurrentTime(startTime);
-          this.player.play();
 
-          const duration = (endTime - startTime) * 1000;
+          if (this.config.options.autoPlayOnSetTarget) {
+            this.player.play();
 
-          setTimeout(() => {
-            this.player.pause();
-          }, duration);
+            const duration = (endTime - startTime) * 1000;
+
+            setTimeout(() => {
+              this.player.pause();
+            }, duration);
+          }
 
           return;
         }
