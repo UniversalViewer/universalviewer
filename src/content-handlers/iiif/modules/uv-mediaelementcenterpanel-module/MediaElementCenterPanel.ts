@@ -42,6 +42,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   mediaWidth: number;
   player: any;
   title: string | null;
+  pauseTimeoutId: any = null;
 
   constructor($element: JQuery) {
     super($element);
@@ -59,6 +60,12 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
+      // Clear any existing timeout
+      if (this.pauseTimeoutId !== null) {
+        clearTimeout(this.pauseTimeoutId);
+        this.pauseTimeoutId = null;
+      }
+
       let t: number | [number, number] = target.t;
       if (Array.isArray(t)) {
         if ((t as [number] | [number, number]).length === 1) {
@@ -78,8 +85,9 @@ export class MediaElementCenterPanel extends CenterPanel<
 
             const duration = (endTime - startTime) * 1000;
 
-            setTimeout(() => {
+            this.pauseTimeoutId = setTimeout(() => {
               this.player.pause();
+              this.pauseTimeoutId = null; // Clear the timeout ID after execution
             }, duration);
           }
 
@@ -217,6 +225,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
@@ -281,6 +293,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
