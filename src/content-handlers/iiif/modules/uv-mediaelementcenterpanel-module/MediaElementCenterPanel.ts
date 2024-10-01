@@ -67,6 +67,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
 
       let t: number | [number, number] = target.t;
+
       if (Array.isArray(t)) {
         if ((t as [number] | [number, number]).length === 1) {
           t = t[0];
@@ -81,21 +82,25 @@ export class MediaElementCenterPanel extends CenterPanel<
           this.player.setCurrentTime(startTime);
 
           if (this.config.options.autoPlayOnSetTarget) {
-            this.player.play();
-
             const duration = (endTime - startTime) * 1000;
 
             this.pauseTimeoutId = setTimeout(() => {
               this.player.pause();
               this.pauseTimeoutId = null; // Clear the timeout ID after execution
             }, duration);
+
+            this.player.play();
           }
 
           return;
         }
       }
+
       this.player.setCurrentTime(t);
-      this.player.play();
+
+      if (this.config.options.autoPlayOnSetTarget) {
+        this.player.play();
+      }
     });
 
     this.extensionHost.subscribe(
