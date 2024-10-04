@@ -54,6 +54,7 @@ import { createStore, OpenSeadragonExtensionState } from "./Store";
 import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
+import { AdjustImageDialogue } from "../../modules/uv-dialogues-module/AdjustImageDialogue";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -63,6 +64,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
+  $adjustImageDialogue: JQuery;
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
@@ -71,6 +73,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   footerPanel: FooterPanel;
   headerPanel: PagingHeaderPanel;
   helpDialogue: HelpDialogue;
+  adjustImageDialogue: AdjustImageDialogue;
   isAnnotating: boolean = false;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
@@ -566,6 +569,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
     this.shell.$overlays.append(this.$shareDialogue);
     this.shareDialogue = new ShareDialogue(this.$shareDialogue);
+
+    this.$adjustImageDialogue = $(
+      '<div class="overlay adjustImage" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$adjustImageDialogue);
+    this.adjustImageDialogue = new AdjustImageDialogue(this.$adjustImageDialogue, this.shell);
 
     this.$downloadDialogue = $("<div></div>");
     this.shell.$overlays.append(this.$downloadDialogue);

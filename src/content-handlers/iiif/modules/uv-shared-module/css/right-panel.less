@@ -76,11 +76,41 @@
         .main {
             margin-right: @margin-medium-horizontal;
             margin-bottom: @margin-medium-vertical;
+
+            .transcribed-text {
+                width: 230px;
+                padding: 5px 5px 5px 7px;
+
+                p {
+                    padding: 5px;
+                    margin: 0;
+                }
+
+                .lineAnnotation {
+                    &.current {
+                        color: #000;
+                        @col: rgb(120, 251, 185);
+                        background-color: saturate(@col, 100%);
+                    }
+
+                    &:hover {
+                        color: #000;
+                        @col: lighten(rgb(120, 251, 185), 20%);
+                        background-color: saturate(@col, 80%);
+                    }
+                }
+
+                .label {
+                    color: #9a9a9a;
+                    border-bottom: 1px solid #343434;
+                    margin: 0 10px 10px 0;
+                }
+            }
         }
     }
 
-    .expandFull() when (@expandFullEnabled = true) {
-        .title{
+    .expandFull() when (@expandFullEnabled =true) {
+        .title {
             left: 55px;
         }
 
