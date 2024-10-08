@@ -119,7 +119,7 @@
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^9.13.0",
     "waveform-panel": "^1.2.0",
-    "xss": "1.0.3",
+    "xss": "1.0.15",
     "zustand": "^4.0.0-rc.0"
   },
   "collective": {
