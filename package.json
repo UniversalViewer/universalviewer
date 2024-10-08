@@ -69,7 +69,7 @@
     "prettier-check": "^2.0.0",
     "puppeteer": "^23",
     "source-map-loader": "^4.0.0",
-    "style-loader": "3.3.0",
+    "style-loader": "4.0.0",
     "ts-jest": "^29",
     "ts-loader": "9.5.1",
     "tslint-config-prettier": "^1.18.0",
