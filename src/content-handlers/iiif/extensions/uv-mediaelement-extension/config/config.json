@@ -158,6 +158,7 @@
     },
     "mediaelementCenterPanel": {
       "options": {
+        "autoPlayOnSetTarget": true,
         "defaultHeight": 420,
         "defaultWidth": 560,
         "titleEnabled": true,
