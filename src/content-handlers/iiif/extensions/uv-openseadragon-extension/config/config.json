@@ -72,6 +72,7 @@
         "branchNodesSelectable": false,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
+        "defaultToTreeIfCollection": true,
         "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
