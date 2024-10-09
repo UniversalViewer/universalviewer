@@ -19,7 +19,7 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
   branchNodesSelectable: boolean;
   /** Determines if tree is the default view */
   defaultToTreeEnabled: boolean;
-  /** Number of items to default to tree view */
+  /** Number of items to default to tree view (when defaultToTreeEnabled = true; defaults to 0) */
   defaultToTreeIfGreaterThan: number;
    /** Determines if collection should default to tree view */
   defaultToTreeIfCollection: boolean;
