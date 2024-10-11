@@ -42,6 +42,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   mediaWidth: number;
   player: any;
   title: string | null;
+  pauseTimeoutId: any = null;
 
   constructor($element: JQuery) {
     super($element);
@@ -59,12 +60,47 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-      let t = target.t;
-      if (Array.isArray(t)) {
-        t = t[0];
+      // Clear any existing timeout
+      if (this.pauseTimeoutId !== null) {
+        clearTimeout(this.pauseTimeoutId);
+        this.pauseTimeoutId = null;
       }
-      that.player.setCurrentTime(t);
-      that.player.play();
+
+      let t: number | [number, number] = target.t;
+
+      if (Array.isArray(t)) {
+        if ((t as [number] | [number, number]).length === 1) {
+          t = t[0];
+        } else {
+          const [startTime, endTime] = t;
+
+          if (endTime <= startTime) {
+            console.error("endTime must be greater than startTime");
+            return;
+          }
+
+          this.player.setCurrentTime(startTime);
+
+          if (this.config.options.autoPlayOnSetTarget) {
+            const duration = (endTime - startTime) * 1000;
+
+            this.pauseTimeoutId = setTimeout(() => {
+              this.player.pause();
+              this.pauseTimeoutId = null; // Clear the timeout ID after execution
+            }, duration);
+
+            this.player.play();
+          }
+
+          return;
+        }
+      }
+
+      this.player.setCurrentTime(t);
+
+      if (this.config.options.autoPlayOnSetTarget) {
+        this.player.play();
+      }
     });
 
     this.extensionHost.subscribe(
@@ -107,7 +143,9 @@ export class MediaElementCenterPanel extends CenterPanel<
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
           sources.push({
-            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            label:
+              rendering.getLabel().getValue() ??
+              rendering.getFormat().toString(),
             type: rendering.getFormat().toString(),
             src: rendering.id,
           });
@@ -192,6 +230,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
@@ -256,6 +298,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
@@ -292,10 +338,11 @@ export class MediaElementCenterPanel extends CenterPanel<
   appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
     for (const subtitle of subtitles) {
       this.$media.append(
-        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${subtitle.language
-          }" src="${subtitle.id}" ${
-            subtitles.indexOf(subtitle) === 0 ? "default" : ""
-          }>
+        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
+          subtitle.language
+        }" src="${subtitle.id}" ${
+          subtitles.indexOf(subtitle) === 0 ? "default" : ""
+        }>
 `)
       );
     }
