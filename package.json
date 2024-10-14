@@ -68,7 +68,7 @@
     "prettier": "^1.19.1",
     "prettier-check": "^2.0.0",
     "puppeteer": "^23",
-    "source-map-loader": "^4.0.0",
+    "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
     "ts-jest": "^29",
     "ts-loader": "9.5.1",
