@@ -5,6 +5,9 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $clickToZoomEnabled: JQuery;
   $clickToZoomEnabledCheckbox: JQuery;
   $clickToZoomEnabledLabel: JQuery;
+  $truncateThumbnailLabels: JQuery;
+  $truncateThumbnailLabelsLabel: JQuery;
+  $truncateThumbnailLabelsCheckbox: JQuery;
   $navigatorEnabled: JQuery;
   $navigatorEnabledCheckbox: JQuery;
   $navigatorEnabledLabel: JQuery;
@@ -52,6 +55,32 @@ export class SettingsDialogue extends BaseSettingsDialogue {
       '<label for="pagingEnabled">' + this.content.pagingEnabled + "</label>"
     );
     this.$pagingEnabled.append(this.$pagingEnabledLabel);
+
+     this.$truncateThumbnailLabels = $('<div class="setting truncateThumbnailLabels"></div>');
+     this.$scroll.append(this.$truncateThumbnailLabels);
+
+     this.$truncateThumbnailLabelsCheckbox = $(
+       '<input id="truncateThumbnailLabels" type="checkbox" tabindex="0" />'
+     );
+
+     this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsCheckbox);
+
+     this.$truncateThumbnailLabelsLabel = $(
+       '<label for="truncateThumbnailLabels">' + this.content.truncateThumbnailLabels  + "</label>"
+     );
+
+    this.$truncateThumbnailLabels.append(this.$truncateThumbnailLabelsLabel);
+
+    const settings: ISettings = {};
+    this.$truncateThumbnailLabelsCheckbox.prop('checked', settings.truncateThumbnailLabels || true);
+
+     this.$truncateThumbnailLabelsCheckbox.change(() => {
+       const settings: ISettings = {};
+
+       settings.truncateThumbnailLabels = this.$truncateThumbnailLabelsCheckbox.is(":checked");
+
+       this.updateSettings(settings);
+     });
 
     this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
     this.$scroll.append(this.$clickToZoomEnabled);
