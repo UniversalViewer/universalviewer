@@ -355,6 +355,7 @@
         "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
+        "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
         "trimAttributionCount": 150,
@@ -369,7 +370,8 @@
         "previous": "$previous",
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut"
+        "zoomOut": "$zoomOut",
+        "adjustImage": "$adjustImage"
       }
     },
     "searchFooterPanel": {
@@ -467,6 +469,20 @@
         "cancel": "$cancel",
         "confirm": "$confirm",
         "close": "$close"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     },
     "clickThroughDialogue": {

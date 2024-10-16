@@ -1,4 +1,5 @@
 import {
+  AdjustImageDialogue,
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
@@ -126,6 +127,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   pageGap: number;
   /** Determines if home control is shown */
   showHomeControl: boolean;
+  /** Determines if adjust image control is shown */
+  showAdjustImageControl: boolean;
   /** Number of attributions to trim */
   trimAttributionCount: number;
   /** Ratio of visibility */
@@ -141,6 +144,7 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   rotateRight: string;
   zoomIn: string;
   zoomOut: string;
+  adjustImage: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
@@ -279,6 +283,7 @@ type Modules = {
   mobileFooterPanel: MobileFooterPanel;
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
+  adjustImageDialogue: AdjustImageDialogue
 };
 
 export type Config = BaseConfig & {

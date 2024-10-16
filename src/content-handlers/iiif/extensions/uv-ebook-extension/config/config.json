@@ -261,6 +261,20 @@
         "confirm": "$confirm"
       }
     },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
+      }
+    },
     "clickThroughDialogue": {
       "options": {
         "topCloseButtonEnabled": false
