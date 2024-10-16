@@ -15,7 +15,7 @@ import {
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
 import 'mediaelement/build/mediaelementplayer.min.css';
-import "mediaelement-plugins/dist/source-chooser/source-chooser";
+import "./js/source-chooser-fixed.js";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
