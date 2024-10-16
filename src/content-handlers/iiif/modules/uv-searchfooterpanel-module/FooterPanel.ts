@@ -136,6 +136,7 @@ export class FooterPanel extends BaseFooterPanel<
     this.$searchButton = $(
       '<button class="imageButton searchButton"></button>'
     );
+    this.$searchButton.attr('aria-label', this.content.searchWithin);
     this.$searchTextContainer.append(this.$searchButton);
 
     // search results.
