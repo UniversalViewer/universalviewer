@@ -153,6 +153,7 @@ export type CenterPanelOptions = {
 
 export type CenterPanelContent = {
   attribution: string;
+  close: string;
 };
 
 type CenterPanel = ModuleConfig & {
