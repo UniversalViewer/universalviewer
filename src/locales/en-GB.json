@@ -115,7 +115,7 @@
   "$clickToZoomEnabled": "Mouse Click To Zoom",
   "$reducedMotion": "Reduce motion (disables animations)",
   "$preserveViewport": "Preserve Zoom",
-  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>",
+  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>more info about the Universal Viewer</a>",
   "$custom": "custom",
   "$embedInstructions": "To embed this item in your own website, copy and paste the code below.",
   "$height": "Height",
