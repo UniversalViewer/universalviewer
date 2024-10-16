@@ -32,6 +32,9 @@ export class LeftPanel<
       this.options.panelOpen
     );
 
+    const viewportWidth: number = document.documentElement.clientWidth;
+    if(viewportWidth <= 767) return;
+
     if (shouldOpenPanel) {
       this.toggle(true);
     }
