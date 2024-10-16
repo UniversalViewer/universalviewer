@@ -226,7 +226,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "avCenterPanel": {
@@ -248,6 +249,7 @@
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
         "currentTime": "$currentTime",
         "delimiter": " - ",
         "duration": "$duration",

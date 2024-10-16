@@ -333,7 +333,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "openSeadragonCenterPanel": {
@@ -361,6 +362,7 @@
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
         "next": "$next",
