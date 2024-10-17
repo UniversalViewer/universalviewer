@@ -69,7 +69,7 @@ export class HeaderPanel<
       '<div class="informationBox" aria-hidden="true"> \
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
-                                    <button type="button" class="close" aria-label="Close"> \
+                                    <button type="button" class="close"> \
                                         <span aria-hidden="true">&#215;</span>\
                                     </button> \
                                   </div>'
@@ -78,8 +78,10 @@ export class HeaderPanel<
     this.$element.append(this.$informationBox);
 
     this.$informationBox.hide();
-    this.$informationBox.find(".close").attr("title", this.content.close);
-    this.$informationBox.find(".close").on("click", (e) => {
+    var $closeButton = this.$informationBox.find(".close");
+    $closeButton.attr("aria-label", this.content.close);
+    $closeButton.attr("title", this.content.close);
+    $closeButton.on("click", (e) => {
       e.preventDefault();
       this.extensionHost.publish(IIIFEvents.HIDE_INFORMATION);
     });
