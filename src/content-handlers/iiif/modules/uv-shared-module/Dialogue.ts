@@ -1,8 +1,8 @@
 const $ = require("jquery");
+import { BaseView } from "./BaseView";
+import { IIIFEvents } from "../../IIIFEvents";
 import { Maths } from "@edsilv/utils";
 import { BaseConfig } from "../../BaseConfig";
-import { IIIFEvents } from "../../IIIFEvents";
-import { BaseView } from "./BaseView";
 
 export class Dialogue<
   T extends BaseConfig["modules"]["dialogue"]
@@ -53,8 +53,8 @@ export class Dialogue<
 
     this.$closeButton = $(
       '<button type="button" class="btn btn-default close" tabindex="0">' +
-      this.content.close +
-      "</button>"
+        this.content.close +
+        "</button>"
     );
 
     this.$middle = $('<div class="middle"></div>');
@@ -124,7 +124,7 @@ export class Dialogue<
       left =
         Math.floor(
           this.extension.width() * normalisedPos -
-          this.$element.width() * normalisedPos
+            this.$element.width() * normalisedPos
         ) + horizontalPadding;
       arrowLeft = Math.floor(this.$element.width() * normalisedPos);
     }
@@ -178,7 +178,7 @@ export class Dialogue<
     this.resize();
   }
 
-  afterFirstOpen(): void { }
+  afterFirstOpen(): void {}
 
   close(): void {
     if (!this.isActive) return;
