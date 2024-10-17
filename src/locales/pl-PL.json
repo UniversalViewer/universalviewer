@@ -115,7 +115,7 @@
     "$clickToZoomEnabled": "Przybliżenie przez kliknięcie myszą",
     "$reducedMotion": "Zmniejsz ruch (wyłącza animacje)",
     "$preserveViewport": "Zachowanie przybliżenia",
-    "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>więcej informacji</a>",
+    "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>Więcej informacji o Universal Viewer</a>",
     "$custom": "Ustawienia",
     "$embedInstructions": "Aby osadzić ten obiekt na własnej witrynie, skopiuj i wklej poniższy kod.",
     "$height": "Wysokość",
