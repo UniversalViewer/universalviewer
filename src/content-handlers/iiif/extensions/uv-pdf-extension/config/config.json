@@ -121,6 +121,20 @@
         "title": "$help"
       }
     },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
+      }
+    },
     "moreInfoRightPanel": {
       "options": {
         "canvasDisplayOrder": "",
@@ -171,7 +185,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "pdfCenterPanel": {
@@ -183,7 +198,8 @@
         "usePdfJs": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "resourcesLeftPanel": {
@@ -337,7 +353,7 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$goHome",
+        "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",

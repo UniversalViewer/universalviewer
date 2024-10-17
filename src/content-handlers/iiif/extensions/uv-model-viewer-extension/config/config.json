@@ -244,7 +244,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "modelViewerCenterPanel": {
@@ -260,6 +261,7 @@
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
         "vr": "$vr"
@@ -329,6 +331,20 @@
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     }
   },
