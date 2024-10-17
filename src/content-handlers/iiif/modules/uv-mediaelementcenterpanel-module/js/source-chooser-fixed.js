@@ -80,6 +80,14 @@
 
 			player.sourcechooserButton.addEventListener('keydown', function (e) {
 
+				function focusNext(dir = 1) {
+					let radioEls = Array.from(player.sourcechooserButton.querySelectorAll('input[type="radio"]'));
+					let index = radioEls.indexOf(document.activeElement);
+					let next = dir === 1 ? 1 : radioEls.length - 1;
+					let nextIndex = (index + next) % radioEls.length;
+					radioEls[nextIndex].focus();
+				}
+
 				if (t.options.keyActions.length) {
 					var keyCode = e.which || e.keyCode || 0;
 
@@ -116,15 +124,28 @@
 									checked.matches('input[type="radio"]') &&
 									player.sourcechooserButton.contains(checked)
 								) {
-									let radioEls = Array.from(player.sourcechooserButton.querySelectorAll('input[type="radio"]'));
-
-									let index = radioEls.indexOf(checked);
-									let next = e.shiftKey ? radioEls.length - 1 : 1;
-									let nextIndex = (index + next) % radioEls.length;
-									radioEls[nextIndex].focus();
-
+									focusNext(e.shiftKey ? -1 : 1);
 									stopPropagation = true;
 								}
+							}
+							break;
+
+						// Handle keyboard selection of radio inputs
+						case 37: // Left Arrow
+						case 38: // Up Arrow
+						case 39: // Right Arrow
+						case 40: // Down Arrow
+							if (!player.isSourcechooserSelectorOpen()) {
+								break;
+							}
+
+							if (
+								document.activeElement.matches('input[type="radio"]') &&
+								player.sourcechooserButton.contains(document.activeElement)
+							) {
+								let dir = keyCode === 37 || keyCode === 38 ? -1 : 1;
+								focusNext(dir);
+								stopPropagation = true;
 							}
 							break;
 						default:
