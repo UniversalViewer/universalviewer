@@ -12,6 +12,8 @@ import {
   Utils,
 } from "manifesto.js";
 import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
+// import { Urls } from "@edsilv/utils";
+// import { Storage, StorageType, StorageItem } from "../../../../Utils";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
 
 export class Auth1 {
@@ -25,7 +27,6 @@ export class Auth1 {
     options: IManifestoOptions
   ): Promise<IExternalResource[]> {
     return new Promise<IExternalResource[]>((resolve) => {
-
       Auth1.storageStrategy = storageStrategy;
 
       // set all resources to Auth API V1
@@ -48,21 +49,21 @@ export class Auth1 {
         .then((r: IExternalResource[]) => {
           resolve(r);
         })
-      ["catch"]((error: any) => {
-        switch (error.name) {
-          case StatusCode.AUTHORIZATION_FAILED.toString():
-            Auth1.publish(IIIFEvents.LOGIN_FAILED);
-            break;
-          case StatusCode.FORBIDDEN.toString():
-            Auth1.publish(IIIFEvents.FORBIDDEN);
-            break;
-          case StatusCode.RESTRICTED.toString():
-            // do nothing
-            break;
-          default:
-            Auth1.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
-        }
-      });
+        ["catch"]((error: any) => {
+          switch (error.name) {
+            case StatusCode.AUTHORIZATION_FAILED.toString():
+              Auth1.publish(IIIFEvents.LOGIN_FAILED);
+              break;
+            case StatusCode.FORBIDDEN.toString():
+              Auth1.publish(IIIFEvents.FORBIDDEN);
+              break;
+            case StatusCode.RESTRICTED.toString():
+              // do nothing
+              break;
+            default:
+              Auth1.publish(IIIFEvents.SHOW_MESSAGE, [error.message || error]);
+          }
+        });
     });
   }
 
@@ -115,11 +116,16 @@ export class Auth1 {
   }
 
   static showDegradedMessage(resource: IExternalResource): void {
-    const informationArgs: InformationArgs = new InformationArgs(
-      InformationType.DEGRADED_RESOURCE,
-      resource
-    );
-    Auth1.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
+    if (resource.kioskService) {
+      // if it's a kiosk service, open the window immediately.
+      Auth1.publish(IIIFEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
+    } else {
+      const informationArgs: InformationArgs = new InformationArgs(
+        InformationType.DEGRADED_RESOURCE,
+        resource
+      );
+      Auth1.publish(IIIFEvents.SHOW_INFORMATION, [informationArgs]);
+    }
   }
 
   static storeAccessToken(
@@ -131,7 +137,7 @@ export class Auth1 {
         Storage.set(
           resource.tokenService.id,
           token,
-          token.expiresIn,
+          token.expiresIn || 3600, // default to 1 hour
           Auth1.storageStrategy
         );
         resolve();
@@ -232,6 +238,8 @@ export class Auth1 {
       const serviceOrigin: string = Auth1.getOrigin(tokenService.id);
       const messageId: number = new Date().getTime();
 
+      // console.log("openTokenService", messageId);
+
       Auth1.messages[messageId] = {
         resolve: resolve,
         reject: reject,
@@ -253,6 +261,7 @@ export class Auth1 {
       // it looks in Auth1.messages to find a corresponding message id with the same origin.
       // if found, it stores the returned access token, resolves and deletes the message.
       // resolving the message resolves the openTokenService promise.
+      // console.log("tokenUrl", tokenUrl);
       $("#commsFrame").prop("src", tokenUrl);
 
       // reject any unhandled messages after a configurable timeout
@@ -270,6 +279,11 @@ export class Auth1 {
   }
 
   static receiveToken(event: any): void {
+    // debug
+    // if (event.origin.startsWith("https://test.auth")) {
+    //   console.log("receiveToken", event);
+    // }
+
     if (event.data.hasOwnProperty("messageId")) {
       const message: any = Auth1.messages[event.data.messageId];
 

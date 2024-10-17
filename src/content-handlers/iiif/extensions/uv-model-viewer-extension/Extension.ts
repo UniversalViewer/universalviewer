@@ -18,11 +18,12 @@ import { Canvas, LanguageMap } from "manifesto.js";
 import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
 import { AnnotationGroup } from "@iiif/manifold";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
+import { Config } from "./config/Config";
 
-export default class ModelViewerExtension extends BaseExtension {
+export default class ModelViewerExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
@@ -30,23 +31,16 @@ export default class ModelViewerExtension extends BaseExtension {
   $settingsDialogue: JQuery;
   centerPanel: ModelViewerCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ContentLeftPanel;
-  mobileFooterPanel: FooterPanel;
+  mobileFooterPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
-  };
+  defaultConfig: Config = defaultConfig;
 
   create(): void {
     super.create();
@@ -240,7 +234,7 @@ export default class ModelViewerExtension extends BaseExtension {
   isLeftPanelEnabled(): boolean {
     return false;
     // return (
-    //   Bools.getBool(this.data.config.options.leftPanelEnabled, true) &&
+    //   Bools.getBool(this.data.config!.options.leftPanelEnabled, true) &&
     //   (this.helper.isMultiCanvas() || this.helper.isMultiSequence())
     // );
   }

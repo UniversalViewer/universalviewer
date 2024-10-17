@@ -2,13 +2,14 @@ const $ = require("jquery");
 import { Panel } from "./Panel";
 import { IExtension } from "./IExtension";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
+import { ModuleConfig } from "../../BaseConfig";
 
-export class BaseView extends Panel {
-  config: any;
-  content: any;
+export class BaseView<T extends ModuleConfig> extends Panel {
+  config: T;
+  content: T["content"];
   extension: IExtension;
   modules: string[];
-  options: any;
+  options: T["options"];
 
   constructor(
     $element: JQuery,
@@ -31,9 +32,9 @@ export class BaseView extends Panel {
       (<IIIFExtensionHost>this.extensionHost).extension
     );
 
-    this.config = {};
-    this.config.content = {};
-    this.config.options = {};
+    this.config = {} as T;
+    this.config.content = {} as T["content"];
+    this.config.options = {} as T["options"];
 
     var that = this;
 
@@ -44,7 +45,7 @@ export class BaseView extends Panel {
         that.config = $.extend(
           true,
           that.config,
-          that.extension.data.config.modules[moduleName]
+          that.extension.data.config!.modules[moduleName]
         );
       });
     }

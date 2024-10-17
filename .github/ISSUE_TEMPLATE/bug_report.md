@@ -13,7 +13,7 @@ Alternatively select the settings cog icon in the top right-hand corner of the U
 
 **I'm submitting a:**
 <!-- (check one with "x") -->
-- [ ] bug report => please fork one of these [codesandbox examples](https://github.com/UniversalViewer/universalviewer/wiki/V4-Examples) with a repro of your issue and include a link to it below
+- [ ] bug report => please fork one of these [codesandbox examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Examples) with a repro of your issue and include a link to it below
 - [ ] feature request => please use the [user stories repo](https://github.com/UniversalViewer/user-stories)
 - [ ] support request => Please do not submit support requests here, use [stackoverflow](http://stackoverflow.com/questions/tagged/iiif)
 

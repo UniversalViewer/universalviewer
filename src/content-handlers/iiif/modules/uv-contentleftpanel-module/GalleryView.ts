@@ -1,9 +1,10 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
+import { ContentLeftPanel } from "../../extensions/config/ContentLeftPanel";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
 
-export class GalleryView extends BaseView {
+export class GalleryView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
   galleryComponent: any;
   galleryData: any;

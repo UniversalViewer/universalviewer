@@ -2,8 +2,11 @@ const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Maths } from "@edsilv/utils";
+import { BaseConfig } from "../../BaseConfig";
 
-export class Dialogue extends BaseView {
+export class Dialogue<
+  T extends BaseConfig["modules"]["dialogue"]
+> extends BaseView<T> {
   allowClose: boolean = true;
   isActive: boolean = false;
   isUnopened: boolean = true;
@@ -66,7 +69,7 @@ export class Dialogue extends BaseView {
     this.$bottom = $('<div class="bottom"></div>');
     this.$element.append(this.$bottom);
 
-    if (this.config.topCloseButtonEnabled) {
+    if (this.options.topCloseButtonEnabled) {
       this.$top.append(this.$closeButton);
     } else {
       this.$buttons.append(this.$closeButton);

@@ -5,8 +5,9 @@ import { ThumbsView } from "./ThumbsView";
 import { ViewingDirection, MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import { Files } from "@edsilv/utils";
 import { Annotation, LanguageMap, Resource } from "manifesto.js";
+import { ResourcesLeftPanel as ResourcesLeftPanelConfig } from "../../extensions/config/ResourcesLeftPanel";
 
-export class ResourcesLeftPanel extends LeftPanel {
+export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
   $resources: JQuery;
   $resourcesButton: JQuery;
   $resourcesView: JQuery;

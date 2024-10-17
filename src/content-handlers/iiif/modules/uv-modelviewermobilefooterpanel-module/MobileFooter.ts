@@ -1,6 +1,9 @@
+import { BaseConfig } from "../../BaseConfig";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 
-export class FooterPanel extends BaseFooterPanel {
+export class FooterPanel<
+  T extends BaseConfig["modules"]["footerPanel"]
+> extends BaseFooterPanel<T> {
   constructor($element: JQuery) {
     super($element);
   }

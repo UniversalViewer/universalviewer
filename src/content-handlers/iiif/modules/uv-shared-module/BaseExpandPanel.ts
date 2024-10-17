@@ -2,8 +2,9 @@ const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
 import { IIIFEvents } from "../../IIIFEvents";
+import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 
-export class BaseExpandPanel extends BaseView {
+export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
   isFullyExpanded: boolean = false;
   isUnopened: boolean = true;

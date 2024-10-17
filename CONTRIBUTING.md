@@ -16,15 +16,15 @@ Once you are all setup, following the Github's guide of how to fork a repository
 
 1. Clone the `universalviewer` repository:
 
-    `git clone https://github.com/UniversalViewer/universalviewer.git`
+   `git clone https://github.com/UniversalViewer/universalviewer.git`
 
 1. On the command line, go in to the `universalviewer` folder
 
-  `cd universalviewer`
+`cd universalviewer`
 
 1. Run
 
-    `npm install`
+   `npm install`
 
 ## Running the examples on localhost
 
@@ -54,10 +54,9 @@ Before commiting your changes make sure tests are passing:
 npm test
 ```
 
- > Note: the development server must be running (`npm start`)
+> Note: the development server must be running (`npm start`)
 
- > Tests are written using [Jest](https://jestjs.io/)
-
+> Tests are written using [Jest](https://jestjs.io/)
 
 #### 4. Create a branch and commit
 
@@ -74,11 +73,27 @@ git commit -m "fix(component): message"
 
 #### 5. Create a release
 
-```bash
+<!-- ```bash
 git commit -m "Release v1.2.3"
 git tag v1.2.3
 git push origin main v1.2.3
+``` -->
+
+Checkout the `main` branch, and ensure it is up-to-date.
+
+Run `npm version [major | minor | patch]` for example:
+
+```bash
+npm version patch
 ```
+
+This will update the `package.json` version and create a git tag. Then push both the main/tag.
+
+```bash
+git push origin main v0.0.8
+```
+
+Then the GitHub action will pick up the tag and publish it to NPM.
 
 Create a PR:
 https://guides.github.com/activities/forking/

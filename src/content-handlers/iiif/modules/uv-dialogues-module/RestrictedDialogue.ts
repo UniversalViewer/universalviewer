@@ -1,9 +1,12 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { IExternalResource } from "manifesto.js";
 
-export class RestrictedDialogue extends Dialogue {
+export class RestrictedDialogue extends Dialogue<
+  BaseConfig["modules"]["restrictedDialogue"]
+> {
   $cancelButton: JQuery;
   $message: JQuery;
   $nextVisibleButton: JQuery;

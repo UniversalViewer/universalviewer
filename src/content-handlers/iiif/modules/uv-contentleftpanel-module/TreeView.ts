@@ -3,8 +3,9 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
 import { TreeComponent } from "@iiif/iiif-tree-component";
+import { ContentLeftPanel } from "./ContentLeftPanel";
 
-export class TreeView extends BaseView {
+export class TreeView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
   treeComponent: any;
   treeData: any;
@@ -17,7 +18,6 @@ export class TreeView extends BaseView {
   create(): void {
     this.setConfig("contentLeftPanel");
     super.create();
-
     this.$tree = $('<div class="iiif-tree-component"></div>');
     this.$element.append(this.$tree);
   }
@@ -75,7 +75,9 @@ export class TreeView extends BaseView {
       }
     }
 
-    this.treeComponent.selectNode(node);
+    setTimeout(() => {
+      this.treeComponent.selectNode(node);
+    }, 0);
   }
 
   public expandNode(node: TreeNode, expanded: boolean): void {

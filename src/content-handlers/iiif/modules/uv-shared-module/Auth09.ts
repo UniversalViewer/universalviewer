@@ -102,6 +102,8 @@ export class Auth09 {
         options.showCancelButton = true;
       }
 
+      console.log("login");
+
       Auth09.publish(IIIFEvents.SHOW_LOGIN_DIALOGUE, [
         {
           resource: resource,

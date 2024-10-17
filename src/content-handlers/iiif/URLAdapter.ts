@@ -40,7 +40,7 @@ export class URLAdapter extends UVAdapter {
     }
   }
 
-  public getInitialData(overrides?: IUVData): IUVData {
+  public getInitialData(overrides?: IUVData<any>): IUVData<any> {
     const formattedLocales: Array<{ label?: string; name: string }> = [];
     const locales = this.get<string>("locales", "");
     if (locales) {
@@ -189,7 +189,7 @@ export class URLAdapter extends UVAdapter {
     uv.on(
       IIIFEvents.RANGE_CHANGE,
       (range) => {
-        const rangeId = !range || typeof range === 'string' ? range : range.id;
+        const rangeId = !range || typeof range === "string" ? range : range.id;
         this.set("rid", rangeId);
       },
       false

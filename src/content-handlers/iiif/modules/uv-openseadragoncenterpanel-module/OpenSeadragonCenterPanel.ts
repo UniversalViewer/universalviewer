@@ -23,8 +23,11 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import "@openseadragon-imaging/openseadragon-viewerinputhook";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class OpenSeadragonCenterPanel extends CenterPanel {
+export class OpenSeadragonCenterPanel extends CenterPanel<
+  Config["modules"]["openSeadragonCenterPanel"]
+> {
   controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
   currentBounds: XYWHFragment | null;
@@ -247,7 +250,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
-          this.extension.data.config.options.clickToZoomEnabled,
+          this.extension.data.config!.options.clickToZoomEnabled,
           true
         ),
       },
@@ -394,6 +397,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
     // when mouse move stopped
     this.$element.on(
+      //@ts-ignore
       "mousemove",
       () => {
         // if over element, hide controls.
@@ -594,7 +598,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
                   maxLevel: info.levels - 1,
                   units: "mm",
                   spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function (level, x, y, query) {
+                  getTileUrl: function(level, x, y, query) {
                     var url =
                       tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
                     if (query) {
@@ -947,9 +951,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
     const dimensions: CroppedImageDimensions | null = (this
       .extension as OpenSeadragonExtension).getCroppedImageDimensions(
-        canvas,
-        this.viewer
-      );
+      canvas,
+      this.viewer
+    );
 
     if (dimensions) {
       const bounds: XYWHFragment = new XYWHFragment(
@@ -985,7 +989,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     if (!center) return;
 
     // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
-    setTimeout(function () {
+    setTimeout(function() {
       viewer.viewport.panTo(center, true);
     }, 1);
   }
@@ -1057,7 +1061,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   isZoomToSearchResultEnabled(): boolean {
     return Bools.getBool(
-      this.extension.data.config.options.zoomToSearchResultEnabled,
+      this.extension.data.config!.options.zoomToSearchResultEnabled,
       true
     );
   }
@@ -1201,7 +1205,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
     // otherwise, pan into view preserving the current zoom level.
     if (
       Bools.getBool(
-        this.extension.data.config.options.zoomToBoundsEnabled,
+        this.extension.data.config!.options.zoomToBoundsEnabled,
         false
       )
     ) {
@@ -1313,6 +1317,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
+    if (this.extension.helper.isRightToLeft()) {
+      this.$title.addClass("rtl");
+    } else {
+      this.$title.removeClass("rtl");
+    }
+
     if (
       this.extension.helper.isMultiCanvas() &&
       this.$prevButton &&
@@ -1380,7 +1390,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel {
 
   setFocus(): void {
     if (this.$canvas && !this.$canvas.is(":focus")) {
-      if (this.extension.data.config.options.allowStealFocus) {
+      if (this.extension.data.config!.options.allowStealFocus) {
         this.$canvas.focus();
       }
     }

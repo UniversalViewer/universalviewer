@@ -1,8 +1,11 @@
 const $ = require("jquery");
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class FooterPanel extends BaseFooterPanel {
+export class FooterPanel extends BaseFooterPanel<
+  Config["modules"]["mobileFooterPanel"]
+> {
   $rotateButton: JQuery;
   //$spacer: JQuery;
   $zoomInButton: JQuery;

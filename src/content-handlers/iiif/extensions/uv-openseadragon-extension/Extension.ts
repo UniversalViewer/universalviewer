@@ -46,15 +46,16 @@ import {
   Manifest,
 } from "manifesto.js";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
 import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
 import { Events } from "../../../../Events";
 import { createRoot, Root } from "react-dom/client";
 import { createElement } from "react";
 import { createStore, OpenSeadragonExtensionState } from "./Store";
 import { merge } from "../../../../Utils";
+import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
-export default class OpenSeadragonExtension extends BaseExtension {
+export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $externalContentDialogue: JQuery;
   $helpDialogue: JQuery;
@@ -80,14 +81,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
-  };
+  defaultConfig: Config = defaultConfig;
 
   create(): void {
     super.create();
@@ -235,7 +229,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
         args.manifestUri = this.helper.manifestUri;
         args.allCanvases = ids.length === this.helper.getCanvases().length;
         args.canvases = ids;
-        args.format = this.data.config.options.multiSelectionMimeType;
+        args.format = this.data.config!.options.multiSelectionMimeType;
         args.sequence = this.helper.getCurrentSequence().id;
         this.fire(IIIFEvents.MULTISELECTION_MADE, args);
       }
@@ -642,8 +636,8 @@ export default class OpenSeadragonExtension extends BaseExtension {
       });
 
     const config = merge(
-      this.data.config.modules.dialogue,
-      this.data.config.modules.downloadDialogue
+      this.data.config!.modules.dialogue,
+      this.data.config!.modules.downloadDialogue
     );
 
     const downloadService: Service | null = this.helper.manifest!.getService(
@@ -659,6 +653,11 @@ export default class OpenSeadragonExtension extends BaseExtension {
         canvases: canvases,
         confinedImageSize: config.options.confinedImageSize,
         content: config.content,
+        downloadCurrentViewEnabled: config.options.downloadCurrentViewEnabled,
+        downloadWholeImageHighResEnabled:
+          config.options.downloadWholeImageHighResEnabled,
+        downloadWholeImageLowResEnabled:
+          config.options.downloadWholeImageLowResEnabled,
         locale: this.getLocale(),
         manifest: this.helper.manifest as Manifest,
         maxImageWidth: config.options.maxImageWidth,
@@ -666,12 +665,12 @@ export default class OpenSeadragonExtension extends BaseExtension {
         open: downloadDialogueOpen,
         paged: paged,
         parent: this.shell.$overlays[0] as HTMLElement,
-        resources: this.resources,
         requiredStatement: this.helper.getRequiredStatement()?.value,
-        termsOfUseEnabled: this.data.config.options.termsOfUseEnabled,
+        resources: this.resources,
         rotation: this.getViewerRotation() as number,
         selectionEnabled: selectionEnabled,
         sequence: this.helper.getCurrentSequence(),
+        termsOfUseEnabled: this.data.config!.options.termsOfUseEnabled,
         triggerButton: dialogueTriggerButton as HTMLElement,
         getCroppedImageDimensions: (canvas: Canvas) => {
           return this.getCroppedImageDimensions(canvas, this.getViewer());
@@ -874,7 +873,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     }
 
     if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
-      this.showMessage(this.data.config.content.canvasIndexOutOfRange);
+      this.showMessage(this.data.config!.content.canvasIndexOutOfRange);
       canvasIndex = 0;
     }
 
@@ -935,7 +934,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   viewLabel(label: string): void {
     if (!label) {
       this.showMessage(
-        this.data.config.modules.genericDialogue.content.emptyValue
+        this.data.config!.modules.genericDialogue.content.emptyValue
       );
       this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
       return;
@@ -947,7 +946,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
       this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index);
     } else {
       this.showMessage(
-        this.data.config.modules.genericDialogue.content.pageNotFound
+        this.data.config!.modules.genericDialogue.content.pageNotFound
       );
       this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
     }
@@ -1029,7 +1028,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     bookmark.label = <string>LanguageMap.getValue(canvas.getLabel());
     bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
     bookmark.thumb = canvas.getCanonicalImageUri(
-      this.data.config.options.bookmarkThumbWidth
+      this.data.config!.options.bookmarkThumbWidth
     );
     bookmark.title = this.helper.getLabel();
     bookmark.trackingLabel = window.trackingLabel;
@@ -1042,7 +1041,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     // var args: MultiSelectionArgs = new MultiSelectionArgs();
     // args.manifestUri = this.helper.manifestUri;
     // args.allCanvases = true;
-    // args.format = this.data.config.options.printMimeType;
+    // args.format = this.data.config!.options.printMimeType;
     // args.sequence = this.helper.getCurrentSequence().id;
     window.print();
     this.fire(OpenSeadragonExtensionEvents.PRINT);
@@ -1237,23 +1236,28 @@ export default class OpenSeadragonExtension extends BaseExtension {
     return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
   }
 
-  getConfinedImageDimensions(canvas: Canvas, width: number): Size {
+  getConfinedImageDimensions(canvas: Canvas, longestSide: number): Size {
     let resourceWidth: number = canvas.getWidth();
+    let resourceHeight: number = canvas.getHeight();
 
     if (!resourceWidth) {
       resourceWidth = canvas.externalResource.width;
     }
-
-    let resourceHeight: number = canvas.getHeight();
 
     if (!resourceHeight) {
       resourceHeight = canvas.externalResource.height;
     }
 
     const dimensions: Size = new Size(0, 0);
-    dimensions.width = width;
-    const normWidth = Maths.normalise(width, 0, resourceWidth);
-    dimensions.height = Math.floor(resourceHeight * normWidth);
+    if (resourceWidth > resourceHeight) {
+      dimensions.width = longestSide;
+      const normWidth = Maths.normalise(longestSide, 0, resourceWidth);
+      dimensions.height = Math.floor(resourceHeight * normWidth);
+    } else {
+      dimensions.height = longestSide;
+      const normHeight = Maths.normalise(longestSide, 0, resourceHeight);
+      dimensions.width = Math.floor(resourceWidth * normHeight);
+    }
     return dimensions;
   }
 
@@ -1277,7 +1281,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
 
   getImageId(canvas: Canvas): string | null {
     if (canvas.externalResource) {
-      const id: string | undefined = canvas.externalResource.data["@id"];
+      const id: string | undefined = canvas.externalResource.data["@id"] || canvas.externalResource.data.id;
 
       if (id) {
         return id.substr(id.lastIndexOf("/") + 1);
@@ -1335,7 +1339,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
             id += "/";
           }
 
-          if (Utils.isImageProfile(service.getProfile())) {
+          if (Utils.isImageProfile(service.getProfile()) || Utils.isImageServiceType(service.getIIIFResourceType())) {
             infoUri = id + "info.json";
           }
         }
@@ -1357,7 +1361,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     zoom: string,
     rotation: number
   ): string {
-    const config: string = this.data.config.uri || "";
+    const config: string = this.data.config!.uri || "";
     const locales: string | null = this.getSerializedLocales();
     const appUri: string = this.getAppUri();
     const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
@@ -1371,7 +1375,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
   }
 
   isSearchEnabled(): boolean {
-    if (!Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
+    if (!Bools.getBool(this.data.config!.options.searchWithinEnabled, false)) {
       return false;
     }
 
@@ -1443,7 +1447,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
           that.annotate(annotations, terms);
         } else {
           that.showMessage(
-            that.data.config.modules.genericDialogue.content.noMatches,
+            that.data.config!.modules.genericDialogue.content.noMatches,
             () => {
               this.extensionHost.publish(IIIFEvents.ANNOTATIONS_EMPTY);
             }
@@ -1560,7 +1564,7 @@ export default class OpenSeadragonExtension extends BaseExtension {
     const manifest = this.helper.manifest;
     const sequence = manifest!.getSequences()[0];
     const canvases = sequence.getCanvases();
-    const paged = (!!this.getSettings().pagingEnabled && this.helper.isPaged());
+    const paged = !!this.getSettings().pagingEnabled && this.helper.isPaged();
     const viewingDirection = this.helper.getViewingDirection();
 
     let indices: number[] = [];

@@ -11,9 +11,10 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Strings } from "@edsilv/utils";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension
+export default class Extension extends BaseExtension<Config>
   implements IDefaultExtension {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
@@ -21,20 +22,13 @@ export default class Extension extends BaseExtension
   $settingsDialogue: JQuery;
   centerPanel: FileLinkCenterPanel;
   shareDialogue: ShareDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
-  };
+  defaultConfig: Config = defaultConfig;
 
   create(): void {
     super.create();
@@ -112,7 +106,7 @@ export default class Extension extends BaseExtension
 
   isLeftPanelEnabled(): boolean {
     return (
-      Bools.getBool(this.data.config.options.leftPanelEnabled, true) &&
+      Bools.getBool(this.data.config!.options.leftPanelEnabled, true) &&
       (this.helper.isMultiCanvas() ||
         this.helper.isMultiSequence() ||
         this.helper.hasResources())

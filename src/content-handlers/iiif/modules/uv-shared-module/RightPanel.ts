@@ -1,8 +1,9 @@
+import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 import { Bools } from "@edsilv/utils";
 
-export class RightPanel extends BaseExpandPanel {
+export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
     super($element);
   }

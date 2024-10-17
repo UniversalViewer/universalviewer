@@ -1,10 +1,13 @@
 const $ = require("jquery");
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILoginDialogueOptions } from "../uv-shared-module/ILoginDialogueOptions";
 import { IExternalResource } from "manifesto.js";
 
-export class LoginDialogue extends Dialogue {
+export class LoginDialogue extends Dialogue<
+  BaseConfig["modules"]["loginDialogue"]
+> {
   loginCallback: any;
   logoutCallback: any;
   $cancelButton: JQuery;
@@ -100,7 +103,7 @@ export class LoginDialogue extends Dialogue {
     if (this.options.warningMessage) {
       message =
         '<span class="warning">' +
-        this.extension.data.config.content[this.options.warningMessage] +
+        this.extension.data.config!.content[this.options.warningMessage] +
         '</span><span class="description">' +
         message +
         "</span>";

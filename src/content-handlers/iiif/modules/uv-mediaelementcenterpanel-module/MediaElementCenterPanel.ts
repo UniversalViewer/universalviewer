@@ -1,4 +1,4 @@
-import {Dimensions} from "@edsilv/utils";
+import { Dimensions } from "@edsilv/utils";
 
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
@@ -6,7 +6,7 @@ import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-ex
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../../../Utils";
-import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
+import { MediaType, RenderingFormat } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
   Canvas,
@@ -18,8 +18,11 @@ import "mediaelement-plugins/dist/source-chooser/source-chooser";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
 
-export class MediaElementCenterPanel extends CenterPanel {
+export class MediaElementCenterPanel extends CenterPanel<
+  Config["modules"]["mediaelementCenterPanel"]
+> {
   $wrapper: JQuery;
   $container: JQuery;
   $media: JQuery;
@@ -77,8 +80,8 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
-    this.mediaHeight = this.config.defaultHeight;
-    this.mediaWidth = this.config.defaultWidth;
+    this.mediaHeight = this.options.defaultHeight;
+    this.mediaWidth = this.options.defaultWidth;
 
     const poster: string = (<IMediaElementExtension>(
       this.extension
@@ -94,10 +97,22 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     if (renderings && renderings.length) {
       canvas.getRenderings().forEach((rendering: Rendering) => {
-        sources.push({
-          type: rendering.getFormat().toString(),
-          src: rendering.id,
-        });
+        if (this.isTypeMedia(rendering)) {
+          sources.push({
+            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            type: rendering.getFormat().toString(),
+            src: rendering.id,
+          });
+        }
+
+        if (this.isTypeCaption(rendering)) {
+          subtitles.push({
+            label:
+              rendering.getLabel().getValue() ??
+              rendering.getFormat().toString(),
+            id: rendering.id,
+          });
+        }
       });
     } else {
       const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
@@ -106,17 +121,22 @@ export class MediaElementCenterPanel extends CenterPanel {
 
       if (formats && formats.length) {
         formats.forEach((format: AnnotationBody) => {
-          const type: MediaType | null = format.getFormat();
+          const type = format.getFormat();
 
-          // Add any additional subtitle types if required.
-          if (type && type.toString() === "text/vtt") {
-            subtitles.push(format.__jsonld);
-          } else if (type) {
+          if (type === null) {
+            return;
+          }
+
+          if (this.isTypeMedia(format)) {
             sources.push({
               label: format.__jsonld.label ? format.__jsonld.label : "",
               type: type.toString(),
               src: format.id,
             });
+          }
+
+          if (this.isTypeCaption(format)) {
+            subtitles.push(format.__jsonld);
           }
         });
       }
@@ -128,6 +148,10 @@ export class MediaElementCenterPanel extends CenterPanel {
       );
 
       // Add VTT subtitles/captions.
+      if (subtitles.length > 0) {
+        // Show captions options popover for better interface feedback
+        subtitles.unshift({ id: "none" });
+      }
       for (const subtitle of subtitles) {
         this.$media.append(
           $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
@@ -159,7 +183,7 @@ export class MediaElementCenterPanel extends CenterPanel {
           "tracks",
           "volume",
           "sourcechooser",
-          "fullscreen"
+          "fullscreen",
         ],
         success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
@@ -276,6 +300,33 @@ export class MediaElementCenterPanel extends CenterPanel {
     this.extensionHost.publish(Events.LOAD);
   }
 
+  // audio/video
+  isTypeMedia(element: Rendering | AnnotationBody) {
+    const type: RenderingFormat | MediaType | null = element.getFormat();
+
+    if (type === null) {
+      return false;
+    }
+
+    const typeStr = type.toString();
+    const typeGroup = typeStr.split("/")[0];
+
+    return typeGroup === "audio" || typeGroup === "video";
+  }
+
+  // vtt, srt, csv
+  isTypeCaption(element: Rendering | AnnotationBody) {
+    const type: RenderingFormat | MediaType | null = element.getFormat();
+
+    if (type === null) {
+      return false;
+    }
+
+    const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
+
+    return captionTypes.has(type.toString());
+  }
+
   isVideo(): boolean {
     return (<IMediaElementExtension>this.extension).isVideo();
   }
@@ -291,7 +342,12 @@ export class MediaElementCenterPanel extends CenterPanel {
       this.$title.text(sanitize(this.title));
     }
 
-    const size = Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+    const size = Dimensions.fitRect(
+      this.mediaWidth,
+      this.mediaHeight,
+      this.$content.width(),
+      this.$content.height()
+    );
 
     this.$container.height(size.height);
     this.$container.width(size.width);

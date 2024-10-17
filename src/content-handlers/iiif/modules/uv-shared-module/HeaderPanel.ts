@@ -8,8 +8,11 @@ import { InformationArgs } from "./InformationArgs";
 import { InformationFactory } from "./InformationFactory";
 import { Bools } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
+import { BaseConfig } from "../../BaseConfig";
 
-export class HeaderPanel extends BaseView {
+export class HeaderPanel<
+  T extends BaseConfig["modules"]["headerPanel"]
+> extends BaseView<T> {
   $centerOptions: JQuery;
   $helpButton: JQuery;
   $informationBox: JQuery;
@@ -165,7 +168,7 @@ export class HeaderPanel extends BaseView {
       $actions.append($action);
     }
 
-    this.extensionHost.publish(IIIFEvents.MESSAGE_DISPLAYED, this.information)
+    this.extensionHost.publish(IIIFEvents.MESSAGE_DISPLAYED, this.information);
 
     this.$informationBox.attr("aria-hidden", "false");
     this.$informationBox.show();
@@ -217,10 +220,7 @@ export class HeaderPanel extends BaseView {
     }
 
     // hide toggle buttons below minimum width
-    if (
-      this.extension.width() <
-      this.extension.data.config.options.minWidthBreakPoint
-    ) {
+    if (this.extension.isMobileMetric()) {
       if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
     } else {
       if (this.localeToggleIsVisible()) this.$localeToggleButton.show();

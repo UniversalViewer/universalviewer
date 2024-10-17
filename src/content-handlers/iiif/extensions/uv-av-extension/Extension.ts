@@ -14,30 +14,25 @@ import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension implements IAVExtension {
+export default class Extension extends BaseExtension<Config>
+  implements IAVExtension {
   $downloadDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
   centerPanel: AVCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
-  };
+  defaultConfig: Config = defaultConfig;
   lastAvCanvasIndex?: number;
 
   create(): void {
@@ -144,7 +139,7 @@ export default class Extension extends BaseExtension implements IAVExtension {
   }
 
   isLeftPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.leftPanelEnabled, true);
   }
 
   render(): void {
