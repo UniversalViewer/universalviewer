@@ -506,7 +506,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
-    this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
+      this.$prevButton = $(
+        `<button class="btn btn-default paging prev" tabindex="0" title="${this.content.previous}" style="position: relative; padding-left: 0px; padding-top: 0px; display: inline-block; top: 131.5px;">
+            <i class="uv-icon-prev" aria-hidden="true"></i>
+            <span class="sr-only">${this.content.previous}</span>
+         </button>`
+    );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$prevButton.prop("title", this.content.next);
@@ -514,7 +519,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$prevButton.prop("title", this.content.previous);
     }
 
-    this.$nextButton = $('<div class="paging btn next" tabindex="0"></div>');
+    this.$nextButton = $(
+      `<button class="btn btn-default paging next" tabindex="0" title="${this.content.next}" style="position: relative; padding-right: 0px; padding-top: 0px; display: inline-block; top: 131.5px;">
+          <i class="uv-icon-next" aria-hidden="true"></i>
+          <span class="sr-only">${this.content.next}</span>
+       </button>`
+  );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$nextButton.prop("title", this.content.previous);

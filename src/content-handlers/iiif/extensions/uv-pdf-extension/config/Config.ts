@@ -18,7 +18,10 @@ type PDFCenterPanelOptions = CenterPanelOptions & {
   usePdfJs: boolean;
 };
 
-type PDFCenterPanelContent = CenterPanelContent & {};
+type PDFCenterPanelContent = CenterPanelContent & {
+  next: string;
+  previous: string;
+};
 
 type PDFCenterPanel = {
   options: PDFCenterPanelOptions;
