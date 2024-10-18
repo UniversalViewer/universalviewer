@@ -635,7 +635,7 @@ const DownloadDialogue = ({
         <div className="buttons">
           <button
             type="button"
-            className="btn btn-default close"
+            className="focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 px-4 py-2 bg-black text-white whitespace-nowrap"
             tabIndex={0}
             onClick={() => {
               onClose();

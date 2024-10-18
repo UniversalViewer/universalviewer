@@ -52,7 +52,7 @@ export class Dialogue<
     this.$element.append(this.$top);
 
     this.$closeButton = $(
-      '<button type="button" class="btn btn-default close" tabindex="0">' +
+      '<button type="button" class="focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 px-4 py-2 bg-black text-white whitespace-nowrap" tabindex="0">' +
         this.content.close +
         "</button>"
     );
