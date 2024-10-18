@@ -38,6 +38,9 @@ export class Shell extends BaseView<BaseConfig> {
         this.extension.data.config!.content.skipToDownload +
         "</a>"
     );
+    var srOnlyElements = this.$element.find('.sr-only');
+    srOnlyElements.on("focus", (e) => $(e.target).removeClass('sr-only'));
+    srOnlyElements.on("blur", (e) => $(e.target).addClass('sr-only'));
 
     this.$headerPanel = $('<div class="headerPanel"></div>');
     this.$element.append(this.$headerPanel);
