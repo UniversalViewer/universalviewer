@@ -635,7 +635,7 @@ const DownloadDialogue = ({
         <div className="buttons">
           <button
             type="button"
-            className="button-close"
+            className="btn-close"
             tabIndex={0}
             onClick={() => {
               onClose();
