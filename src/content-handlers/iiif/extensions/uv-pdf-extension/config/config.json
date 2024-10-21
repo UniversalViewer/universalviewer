@@ -199,7 +199,9 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "next": "$next",     
+        "previous": "$previous"
       }
     },
     "resourcesLeftPanel": {
