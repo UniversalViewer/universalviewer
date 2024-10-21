@@ -160,18 +160,26 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     if (this._pageIndex === 1) {
       this.$firstButton.disable();
+      this.$firstButton.attr('tabindex', '-1');
       this.$prevButton.disable();
+      this.$prevButton.attr('tabindex', '-1');
     } else {
       this.$firstButton.enable();
+      this.$firstButton.removeAttr('tabindex');
       this.$prevButton.enable();
+      this.$prevButton.removeAttr('tabindex');
     }
 
     if (this._pageIndex === this._pdfDoc.numPages) {
       this.$lastButton.disable();
+      this.$lastButton.attr('tabindex', '-1');
       this.$nextButton.disable();
+      this.$nextButton.attr('tabindex', '-1');
     } else {
       this.$lastButton.enable();
+      this.$lastButton.removeAttr('tabindex');
       this.$nextButton.enable();
+      this.$nextButton.removeAttr('tabindex');
     }
   }
 
