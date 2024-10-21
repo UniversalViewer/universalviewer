@@ -444,8 +444,8 @@ export default function jqueryPlugins($) {
     lessText: string,
     moreText: string,
     cb: () => void,
-    lessAriaLabelTemplate: string = 'Less information: Hide',
-    moreAriaLabelTemplate: string = 'More information: Reveal'
+    lessAriaLabelTemplate: string = 'Less information: Hide {0}',
+    moreAriaLabelTemplate: string = 'More information: Reveal {0}'
   ) {
     return this.each(function() {
 
