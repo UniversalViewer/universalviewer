@@ -475,7 +475,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       this._setDefaultFocus();
     }, 1);
 
-    
     this.extensionHost.subscribe(IIIFEvents.UPDATE_SETTINGS, () => {
       const settings: ISettings = this.getSettings();
       this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
