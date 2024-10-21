@@ -53,15 +53,15 @@ export class PDFCenterPanel extends CenterPanel<
     this._canvas = <HTMLCanvasElement>this._$canvas[0];
     this._ctx = this._canvas.getContext("2d");
     this._$prevButton = $(
-      `<button class="btn btn-default paging prev" tabindex="0" title="${this.content.previous}">
-          <i class="uv-icon-prev" aria-hidden="true"></i>
-          <span class="sr-only">${this.content.previous}</span>
+      `<button class="btn btn-default paging prev" title="${this.content.previous}">
+        <i class="uv-icon-prev" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.previous}</span>
       </button>`
   );
   this._$nextButton = $(
-      `<button class="btn btn-default paging next" tabindex="0" title="${this.content.next}">
-          <i class="uv-icon-next" aria-hidden="true"></i>
-          <span class="sr-only">${this.content.next}</span>
+      `<button class="btn btn-default paging next" title="${this.content.next}">
+        <i class="uv-icon-next" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.next}</span>
       </button>`
   );
     this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
