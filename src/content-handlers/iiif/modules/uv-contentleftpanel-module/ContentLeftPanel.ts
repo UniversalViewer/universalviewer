@@ -505,6 +505,9 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
+        onKeyDown: (thumb: Thumb) => {
+          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        },
       })
     );
   }
