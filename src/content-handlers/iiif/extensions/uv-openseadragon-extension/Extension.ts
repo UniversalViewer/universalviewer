@@ -483,8 +483,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.helper.canvasIndex
       );
-      const settings: ISettings = this.getSettings();
-      this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
     this.extensionHost.subscribe(
@@ -1373,14 +1371,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     const config: string = this.data.config!.uri || "";
     const locales: string | null = this.getSerializedLocales();
     const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
     const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
     const script: string = Strings.format(
       template,
       iframeSrc,
       width.toString(),
-      height.toString(),
-      title
+      height.toString()
     );
     return script;
   }
