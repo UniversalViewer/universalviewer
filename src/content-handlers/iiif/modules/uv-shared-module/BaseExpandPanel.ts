@@ -236,8 +236,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
-
-    this.focusCollapseButton();
   }
 
   collapseFullStart(): void {}
