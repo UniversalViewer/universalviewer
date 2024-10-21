@@ -1,3 +1,5 @@
+import { Strings } from "@edsilv/utils";
+
 export default function jqueryPlugins($) {
   $.fn.checkboxButton = function(onClick: (checked: boolean) => void) {
     return this.each(function() {
@@ -441,9 +443,9 @@ export default function jqueryPlugins($) {
     lines: number,
     lessText: string,
     moreText: string,
-    lessAriaLabelPrefix: string,
-    moreAriaLabelPrefix: string,
-    cb: () => void
+    cb: () => void,
+    lessAriaLabelTemplate: string = 'Less information: Hide',
+    moreAriaLabelTemplate: string = 'More information: Reveal'
   ) {
     return this.each(function() {
 
@@ -486,16 +488,14 @@ export default function jqueryPlugins($) {
       (<any>$value).toggle = function() {
         $value.empty();
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
-        let lessAriaLabel: string;
-        let moreAriaLabel: string;
         if (expanded) {
-          lessAriaLabel = [lessAriaLabelPrefix, labelText].join(' ');
+          const lessAriaLabel: string = Strings.format(lessAriaLabelTemplate, labelText);
           $value.html(expandedText + " ");
           $toggleButton.text(lessText);
           $toggleButton.switchClass("less", "more");
           $toggleButton.attr('aria-label', lessAriaLabel);
         } else {
-          moreAriaLabel = [moreAriaLabelPrefix, labelText].join(' ');
+          const moreAriaLabel: string = Strings.format(moreAriaLabelTemplate, labelText);
           $value.html(collapsedText + "&hellip; ");
           $toggleButton.text(moreText);
           $toggleButton.switchClass("more", "less");
