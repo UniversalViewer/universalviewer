@@ -367,7 +367,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
     this.onAccessibleClick(this.$zoomInButton, () => {
-      console.log(this.viewer);
+      this.zoomIn();
     }, false, true);
 
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
@@ -376,17 +376,29 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
 
+    this.onAccessibleClick(this.$zoomOutButton, () => {
+      this.zoomOut();
+    }, false, true);
+
     this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton.attr("tabindex", 0);
     this.$goHomeButton.prop("title", this.content.goHome);
     this.$goHomeButton.prop("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
 
+    this.onAccessibleClick(this.$goHomeButton, () => {
+      this.goHome();
+    }, false, true);
+
     this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.prop("title", this.content.rotateRight);
     this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+
+    this.onAccessibleClick(this.$rotateButton, () => {
+      this.rotateRight();
+    }, false, true);
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
@@ -396,6 +408,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
       this.$adjustImageButton.insertAfter(this.$rotateButton);
+
+      this.onAccessibleClick(this.$adjustImageButton, () => {
+        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
+      }, false, true);
     }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
