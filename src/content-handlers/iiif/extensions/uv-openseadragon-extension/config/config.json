@@ -363,7 +363,7 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close",
+        "close": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
         "next": "$next",

@@ -169,7 +169,7 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$closeAttribution"
       }
     },
     "restrictedDialogue": {

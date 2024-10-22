@@ -261,7 +261,7 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close",
+        "close": "$closeAttribution",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
         "vr": "$vr"

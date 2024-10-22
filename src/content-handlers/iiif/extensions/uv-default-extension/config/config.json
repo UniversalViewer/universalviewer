@@ -106,7 +106,7 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$closeAttribution"
       }
     },
     "footerPanel": {

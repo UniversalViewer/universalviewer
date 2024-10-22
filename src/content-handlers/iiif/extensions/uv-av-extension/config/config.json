@@ -249,7 +249,7 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close",
+        "close": "$closeAttribution",
         "currentTime": "$currentTime",
         "delimiter": " - ",
         "duration": "$duration",

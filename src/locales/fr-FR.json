@@ -13,6 +13,7 @@
   "$contents": "Contenus",
   "$volume": "volume",
   "$close": "Fermer",
+  "$closeAttribution": "Close attribution panel",
   "$allPages": "Toutes les pages",
   "$currentViewAsJpg": "Vue actuelle {0} x {1}px (jpg)",
   "$openNewWindow": "Ouvre une nouvelle fenêtre",
