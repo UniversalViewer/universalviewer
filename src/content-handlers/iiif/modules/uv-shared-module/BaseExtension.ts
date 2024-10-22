@@ -474,11 +474,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       this.extensionHost.publish(Events.CREATED);
       this._setDefaultFocus();
     }, 1);
-
-    this.extensionHost.subscribe(IIIFEvents.UPDATE_SETTINGS, () => {
-      const settings: ISettings = this.getSettings();
-      this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
-    });
   }
 
   public async loadConfig(locale: string, extension: string): Promise<any> {
