@@ -198,12 +198,28 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   updateResponsiveView(): void {
     this.setNavigatorVisible();
+    this.viewer.autoHideControls = true;
 
-    if (!this.extension.isDesktopMetric()) {
-      this.viewer.autoHideControls = false;
-    } else {
+    const enableAutoHide = (event: JQuery.FocusOutEvent) => {
       this.viewer.autoHideControls = true;
-    }
+    };
+
+    const disableAutoHide = () => {
+      this.viewer.autoHideControls = false;
+    };
+
+    const buttons = [
+      this.$zoomInButton,
+      this.$zoomOutButton,
+      this.$goHomeButton,
+      this.$rotateButton,
+      this.$adjustImageButton,
+    ];
+
+    buttons.forEach(button => {
+      button.on("focus", disableAutoHide);
+      button.on("focusout", enableAutoHide);
+    });
   }
 
   async createUI(): Promise<void> {
@@ -389,7 +405,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
 
     this.$canvas = $(this.viewer.canvas);
-        
+
     // Check if we have saved settings for image adjustment
     let settings = this.extension.getSettings();
     if (this.extension.data.config?.options.saveUserSettings && settings.rememberSettings) {
