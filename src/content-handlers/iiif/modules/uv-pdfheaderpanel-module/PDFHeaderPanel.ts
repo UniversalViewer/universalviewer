@@ -138,9 +138,9 @@ export class PDFHeaderPanel extends HeaderPanel<
       $(this).select();
     });
 
-    this.$searchButton.onPressed(() => {
+    this.onAccessibleClick(this.$searchButton, () => {
       this.search(this.$searchText.val());
-    });
+    }, true, true);
   }
 
   render(): void {

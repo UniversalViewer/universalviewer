@@ -185,9 +185,7 @@ export class PDFCenterPanel extends CenterPanel<
 
     this.disableNextButton();
 
-    this._$zoomInButton.onPressed((e: any) => {
-      e.preventDefault();
-
+    this.onAccessibleClick(this._$zoomInButton, () => {
       const newScale: number = this._scale + 0.5;
 
       if (newScale < this._maxScale) {
@@ -197,11 +195,9 @@ export class PDFCenterPanel extends CenterPanel<
       }
 
       this._render(this._pageIndex);
-    });
+    }, true, true);
 
-    this._$zoomOutButton.onPressed((e: any) => {
-      e.preventDefault();
-
+    this.onAccessibleClick(this._$zoomOutButton, () => {
       const newScale: number = this._scale - 0.5;
 
       if (newScale > this._minScale) {
@@ -211,7 +207,7 @@ export class PDFCenterPanel extends CenterPanel<
       }
 
       this._render(this._pageIndex);
-    });
+    }, true, true);
   }
 
   disablePrevButton(): void {
