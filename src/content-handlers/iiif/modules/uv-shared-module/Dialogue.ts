@@ -156,11 +156,11 @@ export class Dialogue<
       if ($defaultButton.length) {
         $defaultButton.focus();
       } else {
-        // if there's no default button, focus on the first visible input
-        const $input: JQuery = this.$element.find("input:visible").first();
+        // if there's no default button, focus on the first visible input or select element
+        const $firstVisibleElement: JQuery = this.$element.find("input:visible, select:visible").first();
 
-        if ($input.length) {
-          $input.focus();
+        if ($firstVisibleElement.length) {
+          $firstVisibleElement.focus();
         } else {
           // if there's no visible first input, focus on the close button
           this.$closeButton.focus();

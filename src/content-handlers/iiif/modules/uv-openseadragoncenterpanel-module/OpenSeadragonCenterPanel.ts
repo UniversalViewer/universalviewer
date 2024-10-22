@@ -198,12 +198,28 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   updateResponsiveView(): void {
     this.setNavigatorVisible();
+    this.viewer.autoHideControls = true;
 
-    if (!this.extension.isDesktopMetric()) {
-      this.viewer.autoHideControls = false;
-    } else {
+    const enableAutoHide = (event: JQuery.FocusOutEvent) => {
       this.viewer.autoHideControls = true;
-    }
+    };
+
+    const disableAutoHide = () => {
+      this.viewer.autoHideControls = false;
+    };
+
+    const buttons = [
+      this.$zoomInButton,
+      this.$zoomOutButton,
+      this.$goHomeButton,
+      this.$rotateButton,
+      this.$adjustImageButton,
+    ];
+
+    buttons.forEach(button => {
+      button.on("focus", disableAutoHide);
+      button.on("focusout", enableAutoHide);
+    });
   }
 
   async createUI(): Promise<void> {
@@ -389,7 +405,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
 
     this.$canvas = $(this.viewer.canvas);
-        
+
     // Check if we have saved settings for image adjustment
     let settings = this.extension.getSettings();
     if (this.extension.data.config?.options.saveUserSettings && settings.rememberSettings) {
@@ -506,7 +522,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
-    this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
+      this.$prevButton = $(
+        `<button class="btn btn-default paging prev" title="${this.content.previous}">
+          <i class="uv-icon-prev" aria-hidden="true"></i>
+          <span class="sr-only">${this.content.previous}</span>
+        </button>`
+    );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$prevButton.prop("title", this.content.next);
@@ -514,7 +535,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$prevButton.prop("title", this.content.previous);
     }
 
-    this.$nextButton = $('<div class="paging btn next" tabindex="0"></div>');
+    this.$nextButton = $(
+      `<button class="btn btn-default paging next" title="${this.content.next}">
+        <i class="uv-icon-next" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.next}</span>
+      </button>`
+  );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$nextButton.prop("title", this.content.previous);
