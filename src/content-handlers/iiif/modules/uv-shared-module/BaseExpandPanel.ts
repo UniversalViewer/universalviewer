@@ -92,14 +92,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     this.$top.hide();
     this.$main.hide();
-
-    // Subscribe to settings change.
-    this.extensionHost.subscribe(
-      IIIFEvents.SETTINGS_CHANGE,
-      (args: ISettings) => {
-        //this.reducedAnimation = args.reducedAnimation || false;
-      }
-    );
   }
 
   init(): void {
