@@ -10,7 +10,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isUnopened: boolean = true;
   autoToggled: boolean = false;
   expandFullEnabled: boolean = true;
-  reducedAnimation = false;
 
   $closed: JQuery;
   $closedTitle: JQuery;
@@ -98,7 +97,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     this.extensionHost.subscribe(
       IIIFEvents.SETTINGS_CHANGE,
       (args: ISettings) => {
-        this.reducedAnimation = args.reducedAnimation || false;
+        //this.reducedAnimation = args.reducedAnimation || false;
       }
     );
   }
@@ -113,6 +112,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   toggle(autoToggled?: boolean): void {
+
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
     // if collapsing, hide contents immediately.
@@ -125,7 +128,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.show();
     }
 
-    if (this.reducedAnimation) {
+    if (isReducedAnimation) {
       // This is reduced motion.
       this.$element.css("width", this.getTargetWidth());
       this.$element.css("left", this.getTargetLeft());
