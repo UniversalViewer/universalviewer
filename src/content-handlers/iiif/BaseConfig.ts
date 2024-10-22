@@ -153,6 +153,7 @@ export type CenterPanelOptions = {
 
 export type CenterPanelContent = {
   attribution: string;
+  close: string;
 };
 
 type CenterPanel = ModuleConfig & {
@@ -275,6 +276,22 @@ type AuthDialogue = ModuleConfig & {
   options: AuthDialogueOptions;
   content: AuthDialogueContent;
 };
+
+type AdjustImageDialogueOptions = DialogueOptions & {};
+
+type AdjustImageDialogueContent = DialogueContent & {
+  title: string;
+  brightness: string;
+  contrast: string;
+  saturation: string;
+  reset: string;
+  remember: string;
+}
+
+export type AdjustImageDialogue = ModuleConfig & {
+  options: AdjustImageDialogueOptions;
+  content: AdjustImageDialogueContent;
+}
 
 export type DownloadDialogueOptions = DialogueOptions & {};
 
@@ -438,6 +455,7 @@ export type BaseConfig = {
     restrictedDialogue: RestrictedDialogue;
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
+    adjustImageDialogue: AdjustImageDialogue;
   };
   localisation: Localisation;
   content: Content;

@@ -46,6 +46,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   userData: any;
   viewer: any;
   viewerId: string;
+  showAdjustImageButton: boolean;
 
   $canvas: JQuery;
   $goHomeButton: JQuery;
@@ -59,6 +60,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $viewportNavButtons: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
+  $adjustImageButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -196,17 +198,38 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   updateResponsiveView(): void {
     this.setNavigatorVisible();
+    this.viewer.autoHideControls = true;
 
-    if (!this.extension.isDesktopMetric()) {
-      this.viewer.autoHideControls = false;
-    } else {
+    const enableAutoHide = (event: JQuery.FocusOutEvent) => {
       this.viewer.autoHideControls = true;
-    }
+    };
+
+    const disableAutoHide = () => {
+      this.viewer.autoHideControls = false;
+    };
+
+    const buttons = [
+      this.$zoomInButton,
+      this.$zoomOutButton,
+      this.$goHomeButton,
+      this.$rotateButton,
+      this.$adjustImageButton,
+    ];
+
+    buttons.forEach(button => {
+      button.on("focus", disableAutoHide);
+      button.on("focusout", enableAutoHide);
+    });
   }
 
   async createUI(): Promise<void> {
     this.$spinner = $('<div class="spinner"></div>');
     this.$content.append(this.$spinner);
+
+    this.showAdjustImageButton = Bools.getBool(
+      this.config.options.showAdjustImageControl,
+      false
+    );
 
     // Transparent pixel
     const pixel =
@@ -361,6 +384,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
 
+    if (this.showAdjustImageButton) {
+      this.$adjustImageButton = this.$rotateButton.clone();
+      this.$adjustImageButton.prop('title', this.content.adjustImage);
+      this.$adjustImageButton.switchClass('rotate', 'adjustImage');
+      this.$adjustImageButton.onPressed(() => {
+        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
+      });
+      this.$adjustImageButton.insertAfter(this.$rotateButton);
+    }
+
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
     );
@@ -372,6 +405,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
 
     this.$canvas = $(this.viewer.canvas);
+
+    // Check if we have saved settings for image adjustment
+    let settings = this.extension.getSettings();
+    if (this.extension.data.config?.options.saveUserSettings && settings.rememberSettings) {
+      let contrastPercent = settings.contrastPercent;
+      let brightnessPercent = settings.brightnessPercent;
+      let saturationPercent = settings.saturationPercent;
+      (<HTMLCanvasElement>(this.$canvas[0].children[0])).style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
+    }
 
     // disable right click on canvas
     this.$canvas.on("contextmenu", () => {
@@ -480,7 +522,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
-    this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
+      this.$prevButton = $(
+        `<button class="btn btn-default paging prev" title="${this.content.previous}">
+          <i class="uv-icon-prev" aria-hidden="true"></i>
+          <span class="sr-only">${this.content.previous}</span>
+        </button>`
+    );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$prevButton.prop("title", this.content.next);
@@ -488,7 +535,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$prevButton.prop("title", this.content.previous);
     }
 
-    this.$nextButton = $('<div class="paging btn next" tabindex="0"></div>');
+    this.$nextButton = $(
+      `<button class="btn btn-default paging next" title="${this.content.next}">
+        <i class="uv-icon-next" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.next}</span>
+      </button>`
+  );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$nextButton.prop("title", this.content.previous);
@@ -598,7 +650,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                   maxLevel: info.levels - 1,
                   units: "mm",
                   spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function(level, x, y, query) {
+                  getTileUrl: function (level, x, y, query) {
                     var url =
                       tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
                     if (query) {
@@ -951,9 +1003,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
     const dimensions: CroppedImageDimensions | null = (this
       .extension as OpenSeadragonExtension).getCroppedImageDimensions(
-      canvas,
-      this.viewer
-    );
+        canvas,
+        this.viewer
+      );
 
     if (dimensions) {
       const bounds: XYWHFragment = new XYWHFragment(
@@ -989,7 +1041,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (!center) return;
 
     // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
-    setTimeout(function() {
+    setTimeout(function () {
       viewer.viewport.panTo(center, true);
     }, 1);
   }

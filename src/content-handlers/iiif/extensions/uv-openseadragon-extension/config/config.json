@@ -72,6 +72,7 @@
         "branchNodesSelectable": false,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
+        "defaultToTreeIfCollection": true,
         "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
@@ -334,7 +335,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "openSeadragonCenterPanel": {
@@ -355,6 +357,7 @@
         "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
+        "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
         "trimAttributionCount": 150,
@@ -362,13 +365,15 @@
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
         "next": "$next",
         "previous": "$previous",
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut"
+        "zoomOut": "$zoomOut",
+        "adjustImage": "$adjustImage"
       }
     },
     "searchFooterPanel": {
@@ -427,7 +432,7 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$goHome",
+        "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
@@ -437,7 +442,7 @@
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareEnabled": true,
         "shareFrameEnabled": true,
@@ -466,6 +471,20 @@
         "cancel": "$cancel",
         "confirm": "$confirm",
         "close": "$close"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     },
     "clickThroughDialogue": {

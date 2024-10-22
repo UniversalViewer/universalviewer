@@ -136,6 +136,8 @@ export class FooterPanel extends BaseFooterPanel<
     this.$searchButton = $(
       '<button class="imageButton searchButton"></button>'
     );
+    this.$searchButton.attr('aria-label', this.content.searchWithin);
+    this.$searchButton.attr('title', this.content.searchWithin);
     this.$searchTextContainer.append(this.$searchButton);
 
     // search results.
@@ -177,7 +179,7 @@ export class FooterPanel extends BaseFooterPanel<
     this.$pagePositionMarker = $('<div class="positionPlacemarker"></div>');
     this.$searchResultsContainer.append(this.$pagePositionMarker);
 
-    this.$pagePositionLabel = $('<div class="label"></div>');
+    this.$pagePositionLabel = $('<label class="label"></label>');
     this.$searchResultsContainer.append(this.$pagePositionLabel);
 
     this.$placemarkerDetails = $('<div class="placeMarkerDetails"></div>');
@@ -367,11 +369,11 @@ export class FooterPanel extends BaseFooterPanel<
       this.isZoomToSearchResultEnabled() &&
       (<OpenSeadragonExtension>this.extension).currentAnnotationRect
     ) {
-      if (currentCanvasIndex > lastSearchResultCanvasIndex) {
+      if (currentCanvasIndex > lastSearchResultCanvasIndex) { //if you've moved past final result page
         return false;
-      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) {
+      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) { // if you're on the final result page
         if (
-          currentSearchResultRectIndex === this.getLastSearchResultRectIndex()
+          currentSearchResultRectIndex === this.getLastSearchResultRectIndex() //and you're on the last result
         ) {
           return false;
         }
@@ -380,7 +382,7 @@ export class FooterPanel extends BaseFooterPanel<
       return true;
     }
 
-    return currentCanvasIndex < lastSearchResultCanvasIndex;
+    return currentCanvasIndex <= lastSearchResultCanvasIndex;
   }
 
   getSearchResults(): AnnotationGroup[] {

@@ -1,28 +1,28 @@
 # Contribution guide
 
-### Installing dependencies
+## Installing dependencies
 
 Before you can build the UV, we assume the following list of software is already installed in your system
 
 - Git
-- Node 14.18.1 or higher
+- Node 18 or higher
 - Npm 8.1.1 or higher
 
-### Fork repository
+## Forking the repository
 
-In order to contribute to the UV, you must have a github account so you can push code and create a new Pull Request (PR).
+In order to contribute to the UV, you must have a GitHub account so you can push code and create a new Pull Request (PR).
 
-Once you are all setup, following the Github's guide of how to fork a repository: https://guides.github.com/activities/forking/
+Once you are all setup, following the GitHub's guide of how to fork a repository: https://guides.github.com/activities/forking/
 
-1. Clone the `universalviewer` repository:
+1. Clone the `universalviewer` repository (or your fork):
 
    `git clone https://github.com/UniversalViewer/universalviewer.git`
 
-1. On the command line, go in to the `universalviewer` folder
+1. On the command line, navigate to the `universalviewer` folder:
 
-`cd universalviewer`
+   `cd universalviewer`
 
-1. Run
+1. To install dependencies, run:
 
    `npm install`
 
@@ -34,19 +34,21 @@ To build the debug version of the viewer, just run (on the command line, in the 
 
 This will compile the project using webpack and serve the examples on `localhost:8080`
 
-## Distribution Builds
+## Building for distribution
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
     npm run build
 
-#### 2. Open `universalviewer` folder in your IDE
+When this process completes, your build can be found in the `dist` folder under your `universalviewer` folder.
+
+## Code Architecture
 
 UV source code lives inside the `/src/` folder.
 
 Here is a [diagram](https://docs.google.com/drawings/d/1i484Jd32FoLwtE5uvkBA6l5LV-DioSOZDIWD0WfhWl8/edit?usp=sharing) showing the overall architecture of the project.
 
-#### 3. Run test suite
+## Running the test suite
 
 Before commiting your changes make sure tests are passing:
 
@@ -58,11 +60,23 @@ npm test
 
 > Tests are written using [Jest](https://jestjs.io/)
 
-#### 4. Create a branch and commit
+## Project branch strategy
+
+This project follows the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). To summarize:
+
+- Every feature should be developed in its own branch.
+- Completed features should be merged into the dev branch, which represents the bleeding edge of stable development.
+- When a release is made, the dev branch is merged into the main branch. Main represents the most recent release of the project.
+
+Please target the dev branch when opening pull requests against the project.
+
+### Creating a branch and committing
+
+After making your changes to the code in the dev branch, you can...
 
 ```bash
 # Create a git branch
-git checkout -b my-improvement
+git checkout -b feature/my-improvement
 
 # Add changes
 git add .
@@ -71,17 +85,15 @@ git add .
 git commit -m "fix(component): message"
 ```
 
-#### 5. Create a release
+After pushing your new branch to your fork, you can create a PR; see: https://guides.github.com/activities/forking/
 
-<!-- ```bash
-git commit -m "Release v1.2.3"
-git tag v1.2.3
-git push origin main v1.2.3
-``` -->
+## Creating a release
 
-Checkout the `main` branch, and ensure it is up-to-date.
+The decision to make a new release should be made by the Universal Viewer Steering Group. Once a release is planned, the appropriate commit from the dev branch should be merged into the main branch.
 
-Run `npm version [major | minor | patch]` for example:
+Next, checkout the `main` branch, and ensure it is up-to-date.
+
+Run `npm version [major | minor | patch]` to apply an appropriate [semantic versioning](https://semver.org/) update; for example:
 
 ```bash
 npm version patch
@@ -95,5 +107,4 @@ git push origin main v0.0.8
 
 Then the GitHub action will pick up the tag and publish it to NPM.
 
-Create a PR:
-https://guides.github.com/activities/forking/
+Finally, merge the `main` branch back to the `dev` branch to synchronize the version numbers.

@@ -78,7 +78,7 @@
       "options": {
         "embedEnabled": true,
         "shareEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
@@ -246,7 +246,8 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close"
       }
     },
     "modelViewerCenterPanel": {
@@ -262,6 +263,7 @@
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
         "vr": "$vr"
@@ -331,6 +333,20 @@
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     }
   },

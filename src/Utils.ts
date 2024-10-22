@@ -8,6 +8,7 @@ export const sanitize = (html: string) => {
       a: ["href", "title", "target", "class", "data-uv-navigate"],
       b: [],
       br: [],
+      em: [],
       i: [],
       img: ["src", "alt"],
       p: [],

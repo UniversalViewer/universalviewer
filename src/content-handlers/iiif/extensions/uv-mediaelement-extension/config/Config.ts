@@ -12,6 +12,7 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 type MediaElementCenterPanelOptions = CenterPanelOptions & {
+  autoPlayOnSetTarget: boolean;
   defaultHeight: number;
   defaultWidth: number;
 };
