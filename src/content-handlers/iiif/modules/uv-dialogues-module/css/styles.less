@@ -508,6 +508,22 @@
         }
     }
 
+    .btn.close {
+        padding: 0.5rem 1rem; /* Equivalent to Tailwind's px-4 py-2 */
+        background-color: black; /* bg-black */
+        color: white; /* text-white */
+        white-space: nowrap; /* Prevent text from wrapping */
+      
+        /* Remove default outline on focus */
+        outline: none;
+      }
+      
+      /* Focus state styles */
+      .btn.close:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 1), /* Darker blue (ring-blue-700 equivalent) */
+              0 0 0 6px white; /* Equivalent to ring-offset-2 (creates an offset ring) */
+      }
 }
 
 @import 'mobile';
