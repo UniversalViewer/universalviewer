@@ -79,6 +79,9 @@ const DownloadDialogue = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
+  const firstFocusableElementRef = useRef<HTMLButtonElement | null>(null);
+  const lastFocusableElementRef = useRef<HTMLButtonElement | null>(null);
+
   const [position, setPosition] = useState({ top: "0px", left: "0px" });
   const [arrowPosition, setArrowPosition] = useState("0px 0px");
   const [selectedPage, setSelectedPage] = useState<"left" | "right">("left");
@@ -109,12 +112,50 @@ const DownloadDialogue = ({
 
       setPosition({ top: `${top}px`, left: `${left}px` });
       setArrowPosition(`${arrowLeft}px 0px`);
+
+      // Focus on the first element when opened
+      firstFocusableElementRef.current?.focus();
     }
   }, [open]);
 
-  if (!open) {
-    return null;
-  }
+  // Focus trapping logic
+  const handleTabKey = (e: KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const focusableElements = ref.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusableElements) return;
+
+      const firstFocusableElement = focusableElements[0] as HTMLElement;
+      const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        // If Shift + Tab is pressed and the focus is on the first element, go to the last
+        if (document.activeElement === firstFocusableElement) {
+          e.preventDefault();
+          lastFocusableElement.focus();
+        }
+      } else {
+        // If Tab is pressed and the focus is on the last element, go to the first
+        if (document.activeElement === lastFocusableElement) {
+          e.preventDefault();
+          firstFocusableElement.focus();
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener("keydown", handleTabKey);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleTabKey);
+    };
+  }, [open]);
+
+  if (!open) return null;
 
   function getCanvasDimensions(canvas: Canvas): Size | null {
     // externalResource may not have loaded yet
@@ -561,7 +602,7 @@ const DownloadDialogue = ({
           <ol className="options">
             {isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) && (
               <li className="option single">
-                <button
+                <button ref={firstFocusableElementRef}
                   onClick={() => {
                     onDownloadCurrentView(getSelectedCanvas());
                   }}
@@ -572,7 +613,7 @@ const DownloadDialogue = ({
             )}
             {isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_HIGH_RES) && (
               <li className="option single">
-                <button
+                <button ref={lastFocusableElementRef}
                   onClick={() => {
                     window.open(getCanvasHighResImageUri(getSelectedCanvas()));
                   }}
