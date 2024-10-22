@@ -407,13 +407,13 @@ export class PagingHeaderPanel extends HeaderPanel<
       $(this).select();
     });
 
-    this.$searchButton.onPressed(() => {
+    this.onAccessibleClick(this.$searchButton, () => {
       if (this.options.autoCompleteBoxEnabled) {
         this.search(this.$autoCompleteBox.val());
       } else {
         this.search(this.$searchText.val());
       }
-    });
+    }, true, true);
 
     if (this.options.modeOptionsEnabled === false) {
       this.$modeOptions.hide();
