@@ -164,39 +164,60 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.toggled();
     }
 
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     var targetWidth: number = this.getFullTargetWidth();
     var targetLeft: number = this.getFullTargetLeft();
 
     this.expandFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.expandFullFinish();
-      }
-    );
+    if (isReducedAnimation) {
+      this.$element.css("width", targetWidth);
+      this.$element.css("left", targetLeft);
+      this.expandFullFinish();
+    }
+    else {
+      this.$element.stop().animate(
+        {
+          width: targetWidth,
+          left: targetLeft,
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.expandFullFinish();
+        }
+      );
+    }
   }
 
   collapseFull(): void {
+
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     var targetWidth: number = this.getTargetWidth();
     var targetLeft: number = this.getTargetLeft();
 
     this.collapseFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.collapseFullFinish();
-      }
-    );
+    if (isReducedAnimation) {
+      this.$element.css("width", targetWidth);
+      this.$element.css("left", targetLeft);
+      this.collapseFullFinish();
+    } else {
+      this.$element.stop().animate(
+        {
+          width: targetWidth,
+          left: targetLeft,
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.collapseFullFinish();
+        }
+      );
+    }
+    
   }
 
   getTargetWidth(): number {
