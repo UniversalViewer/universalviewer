@@ -66,7 +66,7 @@
   "$logo": "Logo",
   "$aboutTheItem": "Am yr eitem",
   "$more": "mwy",
-  "$moreAriaLabelTemplate":  "Mwy o wybodaeth: Gweld {0}",
+  "$moreAriaLabelTemplate": "Mwy o wybodaeth: Gweld {0}",
   "$noDataToDisplay": "Nid oes data i'w arddangos",
   "$page": "Tudalen",
   "$aboutThisSection": "Am yr adran hon",
