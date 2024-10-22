@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
-import { useInView } from "react-intersection-observer";
 import cx from "classnames";
+import { Thumb } from "manifesto.js";
+import React, { useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 const ThumbImage = ({
   first,
   onClick,
+  onKeyDown,
   paged,
   selected,
   thumb,
@@ -14,6 +15,7 @@ const ThumbImage = ({
 }: {
   first: boolean;
   onClick: (thumb: Thumb) => void;
+  onKeyDown: (event: React.KeyboardEvent, thumb: Thumb) => void;
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
@@ -25,9 +27,14 @@ const ThumbImage = ({
     triggerOnce: true,
   });
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    onKeyDown(event, thumb); // Pass both the event and the thumb to the onKeyDown handler
+  };
+
   return (
     <div
       onClick={() => onClick(thumb)}
+      onKeyDown={handleKeyDown}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -64,12 +71,14 @@ const ThumbImage = ({
 
 const Thumbnails = ({
   onClick,
+  onKeyDown,
   paged,
   selected,
   thumbs,
   viewingDirection,
 }: {
   onClick: (thumb: Thumb) => void;
+  onKeyDown: (event: React.KeyboardEvent, thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
@@ -122,6 +131,7 @@ const Thumbnails = ({
           <ThumbImage
             first={index === firstNonPagedIndex}
             onClick={onClick}
+            onKeyDown={onKeyDown}
             paged={paged}
             selected={selected.includes(index)}
             thumb={thumb}
