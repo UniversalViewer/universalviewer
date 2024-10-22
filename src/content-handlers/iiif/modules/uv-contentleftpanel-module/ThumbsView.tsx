@@ -1,8 +1,8 @@
-import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
-import cx from "classnames";
-import { Thumb } from "manifesto.js";
 import React, { useEffect, useRef } from "react";
+import { Thumb } from "manifesto.js";
+import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
+import cx from "classnames";
 
 const ThumbImage = ({
   first,
