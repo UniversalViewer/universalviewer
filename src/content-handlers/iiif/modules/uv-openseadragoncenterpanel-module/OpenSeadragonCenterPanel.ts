@@ -366,6 +366,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.prop("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
+    this.onAccessibleClick(this.$zoomInButton, () => {
+      console.log(this.viewer);
+    }, false, true);
+
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.prop("title", this.content.zoomOut);
