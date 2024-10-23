@@ -195,7 +195,7 @@ export class PDFCenterPanel extends CenterPanel<
       }
 
       this._render(this._pageIndex);
-    }, true, true);
+    });
 
     this.onAccessibleClick(this._$zoomOutButton, () => {
       const newScale: number = this._scale - 0.5;
@@ -207,7 +207,7 @@ export class PDFCenterPanel extends CenterPanel<
       }
 
       this._render(this._pageIndex);
-    }, true, true);
+    });
   }
 
   disablePrevButton(): void {

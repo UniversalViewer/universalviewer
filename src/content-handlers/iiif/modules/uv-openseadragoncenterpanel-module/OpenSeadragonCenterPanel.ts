@@ -368,7 +368,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       this.zoomIn();
-    }, false, true);
+    });
 
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton.attr("tabindex", 0);
@@ -378,7 +378,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       this.zoomOut();
-    }, false, true);
+    });
 
     this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton.attr("tabindex", 0);
@@ -388,7 +388,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$goHomeButton, () => {
       this.goHome();
-    }, false, true);
+    });
 
     this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton.attr("tabindex", 0);
@@ -398,7 +398,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$rotateButton, () => {
       this.rotateRight();
-    }, false, true);
+    });
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
@@ -411,7 +411,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
       this.onAccessibleClick(this.$adjustImageButton, () => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
-      }, false, true);
+      });
     }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(

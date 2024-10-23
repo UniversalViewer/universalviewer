@@ -65,7 +65,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     this.onAccessibleClick(this.$expandButton, () => {
       this.toggle();
-    }, true, true);
+    });
 
     this.$expandFullButton.on("click", () => {
       this.expandFull();
@@ -89,7 +89,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       } else {
         this.toggle();
       }
-    }, true, true);
+    });
 
     this.$top.hide();
     this.$main.hide();

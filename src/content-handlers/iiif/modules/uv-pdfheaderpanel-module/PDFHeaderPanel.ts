@@ -140,7 +140,7 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     this.onAccessibleClick(this.$searchButton, () => {
       this.search(this.$searchText.val());
-    }, true, true);
+    });
   }
 
   render(): void {

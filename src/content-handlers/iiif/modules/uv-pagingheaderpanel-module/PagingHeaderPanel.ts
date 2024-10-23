@@ -413,7 +413,7 @@ export class PagingHeaderPanel extends HeaderPanel<
       } else {
         this.search(this.$searchText.val());
       }
-    }, true, true);
+    });
 
     if (this.options.modeOptionsEnabled === false) {
       this.$modeOptions.hide();
