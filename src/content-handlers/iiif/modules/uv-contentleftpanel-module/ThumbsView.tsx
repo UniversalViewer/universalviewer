@@ -15,7 +15,7 @@ const ThumbImage = ({
 }: {
   first: boolean;
   onClick: (thumb: Thumb) => void;
-  onKeyDown: (event: React.KeyboardEvent, thumb: Thumb) => void;
+  onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
@@ -34,7 +34,7 @@ const ThumbImage = ({
   return (
     <div
       onClick={() => onClick(thumb)}
-      onKeyDown={handleKeyDown}
+      onKeyDown= {(e) => {if(e.key === 'Enter'){onKeyDown(thumb)}}}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -78,7 +78,7 @@ const Thumbnails = ({
   viewingDirection,
 }: {
   onClick: (thumb: Thumb) => void;
-  onKeyDown: (event: React.KeyboardEvent, thumb: Thumb) => void;
+  onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
