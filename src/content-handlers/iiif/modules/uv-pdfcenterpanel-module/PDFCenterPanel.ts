@@ -64,8 +64,8 @@ export class PDFCenterPanel extends CenterPanel<
         <span class="sr-only">${this.content.next}</span>
       </button>`
   );
-    this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
-    this._$zoomOutButton = $('<div class="btn zoomOut" tabindex="0"></div>');
+    this._$zoomInButton = $('<button class="btn zoomIn" tabindex="0"></button>');
+    this._$zoomOutButton = $('<button class="btn zoomOut" tabindex="0"></button>');
 
     // Only attach PDF controls if we're using PDF.js; they have no meaning in
     // PDFObject. However, we still create the objects above so that references
