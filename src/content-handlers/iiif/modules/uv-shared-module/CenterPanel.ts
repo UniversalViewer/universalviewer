@@ -73,7 +73,7 @@ export class CenterPanel<
     this.closeAttribution();
 
     this.$closeAttributionButton = this.$attribution.find(".header .close");
-    this.$closeAttributionButton.attr("aria-label", this.content.close);
+    this.$closeAttributionButton.attr("aria-label", this.content.closeAttribution);
     this.$closeAttributionButton.on("click", (e) => {
       e.preventDefault();
       this.closeAttribution();
