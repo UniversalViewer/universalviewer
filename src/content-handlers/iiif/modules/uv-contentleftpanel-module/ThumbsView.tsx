@@ -27,10 +27,6 @@ const ThumbImage = ({
     triggerOnce: true,
   });
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    onKeyDown(event, thumb); // Pass both the event and the thumb to the onKeyDown handler
-  };
-
   return (
     <div
       onClick={() => onClick(thumb)}
