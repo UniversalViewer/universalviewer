@@ -6,23 +6,23 @@ const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
   .ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
-import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
-import { ViewingDirection, ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
+import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
+import { IIIFEvents } from "../../IIIFEvents";
+import { GalleryView } from "./GalleryView";
+import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
+import { LeftPanel } from "../uv-shared-module/LeftPanel";
+import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
+import { TreeView } from "./TreeView";
 import {
   LanguageMap,
-  Range,
   Thumb,
   TreeNode,
   TreeNodeType,
+  Range,
 } from "manifesto.js";
+import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
 import { isVisible } from "../../../../Utils";
 import { ContentLeftPanel as ContentLeftPanelConfig } from "../../extensions/config/ContentLeftPanel";
-import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
-import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { IIIFEvents } from "../../IIIFEvents";
-import { LeftPanel } from "../uv-shared-module/LeftPanel";
-import { GalleryView } from "./GalleryView";
-import { TreeView } from "./TreeView";
 
 export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $bottomOptions: JQuery;
