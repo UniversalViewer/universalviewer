@@ -94,7 +94,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "fileLinkCenterPanel": {
@@ -106,7 +107,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "footerPanel": {
