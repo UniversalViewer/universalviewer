@@ -37,7 +37,7 @@ export class Panel {
     el: JQuery,
     callback: (e: JQueryEventObject) => void,
     withClick = true,
-    anchorAsButton = false
+    treatAsButton = false
   ) {
 
     if (withClick) {
@@ -48,9 +48,9 @@ export class Panel {
 
     el.on("keydown", (e) => {
 
-      // by passing anchorAsButton as true this will become false
+      // by passing treatAsButton  as true this will become false
       // and so an anchor won't be excluded from Space presses
-      let isAnchor = e.target.nodeName === 'A' && !anchorAsButton;
+      let isAnchor = e.target.nodeName === 'A' && !treatAsButton;
 
       // 13 = Enter, 32 = Space
       if ((e.which === 32 && !isAnchor) || e.which === 13) {
