@@ -13,6 +13,8 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { TreeView } from "./TreeView";
+//import * as KeyCodes from "@edsilv/key-codes";
+
 import {
   LanguageMap,
   Thumb,
@@ -23,6 +25,8 @@ import {
 import { AnnotationGroup, TreeSortType } from "@iiif/manifold";
 import { isVisible } from "../../../../Utils";
 import { ContentLeftPanel as ContentLeftPanelConfig } from "../../extensions/config/ContentLeftPanel";
+//import keycodes, { KeyDownEnter } from "@edsilv/key-codes";
+//import { KeyDown } from "@edsilv/key-codes";
 
 export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $bottomOptions: JQuery;
@@ -44,10 +48,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $treeViewOptions: JQuery;
   $treeSelect: JQuery;
   $views: JQuery;
+  $keyElement: JQuery
   expandFullEnabled: boolean = false;
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
+  keyPress:boolean = false;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -505,12 +511,23 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
-        onKeyDown: (thumb: Thumb) => {
-          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        onKeyDown: (thumb: Thumb) => { 
+          //this.handleKeyPress(); 
+          //this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);        
+          
+            this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+                                             
         },
+
+
+        
       })
     );
   }
+
+  /* this.$keyElement.on("keydown", (e: any) => {
+    this.keyPress = e.keyCode === KeyDown.Enter;
+  }); */
 
   createGalleryView(): void {
     this.galleryView = new GalleryView(this.$galleryView);
