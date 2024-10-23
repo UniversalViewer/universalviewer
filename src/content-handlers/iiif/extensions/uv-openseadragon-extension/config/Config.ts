@@ -133,6 +133,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
+  /** Whether to zoom in to first annotation on load */
+  zoomToInitialAnnotation: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {

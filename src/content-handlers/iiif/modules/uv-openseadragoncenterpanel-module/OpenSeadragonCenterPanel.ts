@@ -77,7 +77,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
-      // this.zoomToInitialAnnotation();
     });
 
     this.extensionHost.subscribe(
@@ -911,6 +910,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.viewer.addOverlay(div, rect);
       }
     }
+
+    if(annotations.length && this.isZoomToInitialAnnotationEnabled()) {
+      this.zoomToInitialAnnotation();
+    }
   }
 
   updateBounds(): void {
@@ -1114,6 +1117,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   isZoomToSearchResultEnabled(): boolean {
     return Bools.getBool(
       this.extension.data.config!.options.zoomToSearchResultEnabled,
+      true
+    );
+  }
+
+  isZoomToInitialAnnotationEnabled(): boolean {
+    return Bools.getBool(
+      this.config.options.zoomToInitialAnnotation,
       true
     );
   }
