@@ -3,11 +3,6 @@ import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import { useInView } from "react-intersection-observer";
 import cx from "classnames";
-//import  KeyDownEnter  from "@edsilv/key-codes";
-//import { event } from "jquery";
-//import  KeyDown  from "@edsilv/key-codes";
-//import * as KeyCodes from "@edsilv/key-codes";
-//import { IIIFEvents } from "../../IIIFEvents";
 
 const ThumbImage = ({
   first,
