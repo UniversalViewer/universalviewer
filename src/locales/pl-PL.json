@@ -99,6 +99,7 @@
   "$rotateRight": "Obróć w prawo",
   "$zoomIn": "Przybliż",
   "$zoomOut": "Oddal",
+  "$adjustImage": "Dostosuj obraz",
   "$clearSearch": "Wyczyść",
   "$displaying_A_of_B": "{0} {1} z {2}",
   "$enterKeyword": "Wprowadź słowo kluczowe",
