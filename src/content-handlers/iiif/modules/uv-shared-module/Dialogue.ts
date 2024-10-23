@@ -28,7 +28,6 @@ export class Dialogue<
 
   create(): void {
     this.setConfig("dialogue");
-    
     super.create();
 
     // events.
