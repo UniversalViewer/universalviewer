@@ -219,11 +219,11 @@ export class ShareDialogue<
 
     this.onAccessibleClick(this.$shareButton, () => {
       this.openShareView();
-    });
+    }, true, true);
 
     this.onAccessibleClick(this.$embedButton, () => {
       this.openEmbedView();
-    });
+    }, true, true);
 
     this.$customSizeDropDown.change(() => {
       this.update();

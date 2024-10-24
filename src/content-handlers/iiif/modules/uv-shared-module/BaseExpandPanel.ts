@@ -42,7 +42,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
 
     this.$collapseButton = $(
-      '<div role="button" class="collapseButton" tabindex="0"></div>'
+      '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
     this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
@@ -51,7 +51,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     this.$element.append(this.$closed);
 
     this.$expandButton = $(
-      '<a role="button" class="expandButton" tabindex="0"></a>'
+      '<button role="button" class="expandButton" tabindex="0"></button>'
     );
     this.$expandButton.prop("title", this.content.expand);
 
