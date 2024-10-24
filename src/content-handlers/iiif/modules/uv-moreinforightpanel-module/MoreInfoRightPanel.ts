@@ -35,6 +35,7 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
 
     this.$metadata = $('<div class="iiif-metadata-component"></div>');
     this.$main.append(this.$metadata);
+    this.$main.attr('tabindex', 0);
 
     this.metadataComponent = new MetadataComponent({
       target: <HTMLElement>this.$metadata[0],
