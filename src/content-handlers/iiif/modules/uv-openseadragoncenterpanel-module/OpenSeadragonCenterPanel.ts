@@ -84,6 +84,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       IIIFEvents.SETTINGS_CHANGE,
       (args: ISettings) => {
         this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
+        this.viewer.controlsFadeLength = this.getControlsFadeLength();
       }
     );
 
@@ -250,7 +251,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-      controlsFadeLength: this.config.options.controlsFadeLength || 250,
+      controlsFadeLength: this.getControlsFadeLength(),
       navigatorPosition:
         this.config.options.navigatorPosition || "BOTTOM_RIGHT",
       navigatorHeight: "100px",
@@ -1470,5 +1471,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.$navigator.hide();
       }
     }
+  }
+
+  getControlsFadeLength(): number {
+    return (<ISettings>this.extension.getSettings()).reducedAnimation ? 0 : this.config.options.controlsFadeLength || 250;
   }
 }

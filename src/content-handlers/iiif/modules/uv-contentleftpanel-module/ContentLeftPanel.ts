@@ -44,10 +44,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $treeViewOptions: JQuery;
   $treeSelect: JQuery;
   $views: JQuery;
+  $keyElement: JQuery
   expandFullEnabled: boolean = false;
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
+  keyPress:boolean = false;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -505,10 +507,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
+        onKeyDown: (thumb: Thumb) => {          
+            this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);                                             
+        },        
       })
     );
   }
-
   createGalleryView(): void {
     this.galleryView = new GalleryView(this.$galleryView);
     this.galleryView.galleryData = this.getGalleryData();
