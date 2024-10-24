@@ -377,8 +377,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.insertAfter($oldZoomOut);
     $oldZoomIn.remove();
     this.$zoomOutButton.attr("tabindex", 0);
-    this.$zoomOutButton.prop("title", this.content.zoomOut);
-    this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
+    this.$zoomOutButton.attr("title", this.content.zoomOut);
+    this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
     this.$zoomOutButton.on('click', () => {
       this.zoomOut();
@@ -389,8 +389,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$goHomeButton.insertAfter($oldGoHome);
     $oldGoHome.remove();
     this.$goHomeButton.attr("tabindex", 0);
-    this.$goHomeButton.prop("title", this.content.goHome);
-    this.$goHomeButton.prop("aria-label", this.content.goHome);
+    this.$goHomeButton.attr("title", this.content.goHome);
+    this.$goHomeButton.attr("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
     this.$goHomeButton.on('click', () => {
       this.goHome();
@@ -401,8 +401,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.insertAfter($oldRotate);
     $oldRotate.remove();
     this.$rotateButton.attr("tabindex", 0);
-    this.$rotateButton.prop("title", this.content.rotateRight);
-    this.$rotateButton.prop("aria-label", this.content.rotateRight);
+    this.$rotateButton.attr("title", this.content.rotateRight);
+    this.$rotateButton.attr("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
     this.$rotateButton.on('click', () => {
       this.rotateRight();
@@ -410,7 +410,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
-      this.$adjustImageButton.prop('title', this.content.adjustImage);
+      this.$adjustImageButton.attr('title', this.content.adjustImage);
       this.$adjustImageButton.switchClass('rotate', 'adjustImage');
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
