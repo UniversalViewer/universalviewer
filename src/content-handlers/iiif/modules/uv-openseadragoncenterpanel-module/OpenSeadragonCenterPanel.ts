@@ -360,29 +360,53 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       ],
     });
 
-    this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
+    let $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
+    this.$zoomInButton = $("<button />").append($oldZoomIn.contents());
+    this.$zoomInButton.insertAfter($oldZoomIn);
+    $oldZoomIn.remove();
     this.$zoomInButton.attr("tabindex", 0);
-    this.$zoomInButton.prop("title", this.content.zoomIn);
-    this.$zoomInButton.prop("aria-label", this.content.zoomIn);
+    this.$zoomInButton.attr("title", this.content.zoomIn);
+    this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
+    this.$zoomInButton.on('click', () => {
+      this.zoomIn();
+    });
 
-    this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
+    let $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
+    this.$zoomOutButton = $("<button />").append($oldZoomOut.contents());
+    this.$zoomOutButton.insertAfter($oldZoomOut);
+    $oldZoomIn.remove();
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.prop("title", this.content.zoomOut);
     this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+    this.$zoomOutButton.on('click', () => {
+      this.zoomOut();
+    });
 
-    this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
+    let $oldGoHome = this.$viewer.find('div[title="Go home"]');
+    this.$goHomeButton = $("<button />").append($oldGoHome.contents());
+    this.$goHomeButton.insertAfter($oldGoHome);
+    $oldGoHome.remove();
     this.$goHomeButton.attr("tabindex", 0);
     this.$goHomeButton.prop("title", this.content.goHome);
     this.$goHomeButton.prop("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
+    this.$goHomeButton.on('click', () => {
+      this.goHome();
+    });
 
-    this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
+    let $oldRotate = this.$viewer.find('div[title="Rotate right"]');
+    this.$rotateButton = $("<button />").append($oldRotate.contents());
+    this.$rotateButton.insertAfter($oldRotate);
+    $oldRotate.remove();
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.prop("title", this.content.rotateRight);
     this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+    this.$rotateButton.on('click', () => {
+      this.rotateRight();
+    });
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
