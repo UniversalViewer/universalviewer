@@ -33,7 +33,7 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
 
     this.setTitle(this.config.content.title);
 
-    this.$metadata = $('<div class="iiif-metadata-component"></div>');
+    this.$metadata = $('<article class="iiif-metadata-component"></article>');
     this.$main.append(this.$metadata);
 
     this.metadataComponent = new MetadataComponent({
@@ -141,5 +141,18 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
     this.$main.height(
       this.$element.height() - this.$top.height() - this.$main.verticalMargins()
     );
+
+    // always put tabindex on, so the main is focusable, 
+    // just in case there's something wrong with the height
+    // comparison below
+    this.$main.attr('tabindex', 0);
+    this.$main.attr('aria-label', this.config.content.title);
+
+    // if metadata's height lte main's, no scroll, so no focus needed
+    // and no aria label either
+    if(this.$metadata.height() <= this.$main.height()) {
+      this.$main.removeAttr('tabindex');
+      this.$main.removeAttr('aria-label');
+    }
   }
 }
