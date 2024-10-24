@@ -138,6 +138,14 @@ export class SettingsDialogue extends Dialogue<
 
     this.$reducedAnimation.append(this.$reducedAnimationLabel);
 
+    const settings: ISettings = this.getSettings();
+
+    if (settings.reducedAnimation) {
+      this.$reducedAnimationCheckbox.prop("checked", true);
+    } else {
+      this.$reducedAnimationCheckbox.removeAttr("checked");
+    }
+
     this.$reducedAnimationCheckbox.change(() => {
       const settings: ISettings = {};
 
