@@ -396,8 +396,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$adjustImageButton.on("focus", () => {
         if (this.controlsVisible) return;
         this.controlsVisible = true;
+        this.viewer.controlsFadeDelay = Number.MAX_SAFE_INTEGER;
+        this.viewer.controlsFadeLength = Number.MAX_SAFE_INTEGER;
         this.viewer.setControlsEnabled(true);
-      });   
+      }); 
     }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
