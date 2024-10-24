@@ -78,7 +78,7 @@
 				}, 0);
 			});
 
-			player.sourcechooserButton.addEventListener('keydown', function (e) {
+			player.sourcechooserButton.addEventListener('keypress', function (e) {
 
 				function focusNext(dir = 1) {
 					let radioEls = Array.from(player.sourcechooserButton.querySelectorAll('input[type="radio"]'));
