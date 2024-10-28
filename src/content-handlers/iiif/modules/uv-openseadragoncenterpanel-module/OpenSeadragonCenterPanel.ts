@@ -367,11 +367,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.prop("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
+    this.onAccessibleClick(this.$zoomInButton, () => {
+      this.zoomIn();
+    });
+
     this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.prop("title", this.content.zoomOut);
     this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+
+    this.onAccessibleClick(this.$zoomOutButton, () => {
+      this.zoomOut();
+    });
 
     this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton.attr("tabindex", 0);
@@ -379,11 +387,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$goHomeButton.prop("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
 
+    this.onAccessibleClick(this.$goHomeButton, () => {
+      this.goHome();
+    });
+
     this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.prop("title", this.content.rotateRight);
     this.$rotateButton.prop("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+
+    this.onAccessibleClick(this.$rotateButton, () => {
+      this.rotateRight();
+    });
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
@@ -393,6 +409,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
       this.$adjustImageButton.insertAfter(this.$rotateButton);
+
+      this.onAccessibleClick(this.$adjustImageButton, () => {
+        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
+      });
     }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(

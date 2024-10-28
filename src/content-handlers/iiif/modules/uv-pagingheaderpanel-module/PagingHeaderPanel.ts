@@ -217,7 +217,7 @@ export class PagingHeaderPanel extends HeaderPanel<
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      `<a class="go btn btn-primary" tabindex="0">${this.content.go}</a>`
+      `<button class="go btn btn-primary" tabindex="0">${this.content.go}</button>`
     );
     this.$search.append(this.$searchButton);
 
@@ -407,7 +407,7 @@ export class PagingHeaderPanel extends HeaderPanel<
       $(this).select();
     });
 
-    this.$searchButton.onPressed(() => {
+    this.onAccessibleClick(this.$searchButton, () => {
       if (this.options.autoCompleteBoxEnabled) {
         this.search(this.$autoCompleteBox.val());
       } else {
