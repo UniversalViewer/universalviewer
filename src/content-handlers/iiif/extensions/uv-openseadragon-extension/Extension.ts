@@ -483,8 +483,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.helper.canvasIndex
       );
-      const settings: ISettings = this.getSettings();
-      this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
     this.extensionHost.subscribe(
