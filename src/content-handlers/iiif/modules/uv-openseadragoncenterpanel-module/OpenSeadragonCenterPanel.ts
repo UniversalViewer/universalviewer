@@ -369,6 +369,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
+
     this.onAccessibleClick(this.$zoomInButton, () => {
       this.zoomIn();
     });
@@ -381,6 +382,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+
     this.onAccessibleClick(this.$zoomOutButton, () => {
       this.zoomOut();
     });
@@ -393,6 +395,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$goHomeButton.attr("title", this.content.goHome);
     this.$goHomeButton.attr("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
+
     this.onAccessibleClick(this.$goHomeButton, () => {
       this.goHome();
     });
