@@ -1,7 +1,6 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
-import { IIIFEvents } from "../../IIIFEvents";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
@@ -10,7 +9,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isUnopened: boolean = true;
   autoToggled: boolean = false;
   expandFullEnabled: boolean = true;
-  reducedAnimation = false;
 
   $closed: JQuery;
   $closedTitle: JQuery;
@@ -42,7 +40,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
 
     this.$collapseButton = $(
-      '<div role="button" class="collapseButton" tabindex="0"></div>'
+      '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
     this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
@@ -51,7 +49,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     this.$element.append(this.$closed);
 
     this.$expandButton = $(
-      '<a role="button" class="expandButton" tabindex="0"></a>'
+      '<button role="button" class="expandButton" tabindex="0"></button>'
     );
     this.$expandButton.prop("title", this.content.expand);
 
@@ -93,14 +91,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     this.$top.hide();
     this.$main.hide();
-
-    // Subscribe to settings change.
-    this.extensionHost.subscribe(
-      IIIFEvents.SETTINGS_CHANGE,
-      (args: ISettings) => {
-        this.reducedAnimation = args.reducedAnimation || false;
-      }
-    );
   }
 
   init(): void {
@@ -113,6 +103,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   toggle(autoToggled?: boolean): void {
+
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
     // if collapsing, hide contents immediately.
@@ -125,7 +119,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.show();
     }
 
-    if (this.reducedAnimation) {
+    if (isReducedAnimation) {
       // This is reduced motion.
       this.$element.css("width", this.getTargetWidth());
       this.$element.css("left", this.getTargetLeft());
@@ -170,39 +164,60 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.toggled();
     }
 
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     var targetWidth: number = this.getFullTargetWidth();
     var targetLeft: number = this.getFullTargetLeft();
 
     this.expandFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.expandFullFinish();
-      }
-    );
+    if (isReducedAnimation) {
+      this.$element.css("width", targetWidth);
+      this.$element.css("left", targetLeft);
+      this.expandFullFinish();
+    }
+    else {
+      this.$element.stop().animate(
+        {
+          width: targetWidth,
+          left: targetLeft,
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.expandFullFinish();
+        }
+      );
+    }
   }
 
   collapseFull(): void {
+
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
     var targetWidth: number = this.getTargetWidth();
     var targetLeft: number = this.getTargetLeft();
 
     this.collapseFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.collapseFullFinish();
-      }
-    );
+    if (isReducedAnimation) {
+      this.$element.css("width", targetWidth);
+      this.$element.css("left", targetLeft);
+      this.collapseFullFinish();
+    } else {
+      this.$element.stop().animate(
+        {
+          width: targetWidth,
+          left: targetLeft,
+        },
+        this.options.panelAnimationDuration,
+        () => {
+          this.collapseFullFinish();
+        }
+      );
+    }
+    
   }
 
   getTargetWidth(): number {
