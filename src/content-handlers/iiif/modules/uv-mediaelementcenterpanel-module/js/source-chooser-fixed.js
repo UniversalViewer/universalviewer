@@ -78,7 +78,7 @@
 				}, 0);
 			});
 
-			player.sourcechooserButton.addEventListener('keypress', function (e) {
+			player.sourcechooserButton.addEventListener('keydown', function (e) {
 
 				function focusNext(dir = 1) {
 					let radioEls = Array.from(player.sourcechooserButton.querySelectorAll('input[type="radio"]'));
@@ -105,9 +105,14 @@
 							) {
 								// Handle keyboard selection of radio inputs
 								document.activeElement.click();
-								player.hideSourcechooserSelector();
-								player.sourcechooserButton.querySelector('button').focus();
 								stopPropagation = true;
+
+								// a slight delay before close
+								// to show that the new source was selected
+								setTimeout(() => {
+									player.hideSourcechooserSelector();
+									player.sourcechooserButton.querySelector('button').focus();
+								}, 150);
 							}
 							break;
 						case 27: // Escape
