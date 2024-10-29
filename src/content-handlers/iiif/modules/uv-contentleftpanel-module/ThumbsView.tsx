@@ -27,10 +27,15 @@ const ThumbImage = ({
     triggerOnce: true,
   });
 
+  var keydownHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault(); onKeyDown(thumb)
+    }
+  };
   return (
     <div
       onClick={() => onClick(thumb)}
-      onKeyDown= {(e) => {if(e.key === 'Enter'){onKeyDown(thumb)}}}
+      onKeyDown= {keydownHandler}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,

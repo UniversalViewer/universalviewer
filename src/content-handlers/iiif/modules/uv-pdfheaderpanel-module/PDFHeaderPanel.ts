@@ -86,7 +86,7 @@ export class PDFHeaderPanel extends HeaderPanel<
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      '<a class="go btn btn-primary" tabindex="0">' + this.content.go + "</a>"
+      '<button class="go btn btn-primary" tabindex="0">' + this.content.go + "</button>"
     );
     this.$search.append(this.$searchButton);
     this.$searchButton.disable();
@@ -138,7 +138,7 @@ export class PDFHeaderPanel extends HeaderPanel<
       $(this).select();
     });
 
-    this.$searchButton.onPressed(() => {
+    this.onAccessibleClick(this.$searchButton, () => {
       this.search(this.$searchText.val());
     });
   }

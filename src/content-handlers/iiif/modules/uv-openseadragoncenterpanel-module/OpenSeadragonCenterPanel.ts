@@ -84,6 +84,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       IIIFEvents.SETTINGS_CHANGE,
       (args: ISettings) => {
         this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
+        this.viewer.controlsFadeLength = this.getControlsFadeLength();
       }
     );
 
@@ -250,7 +251,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-      controlsFadeLength: this.config.options.controlsFadeLength || 250,
+      controlsFadeLength: this.getControlsFadeLength(),
       navigatorPosition:
         this.config.options.navigatorPosition || "BOTTOM_RIGHT",
       navigatorHeight: "100px",
@@ -368,7 +369,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
-    this.$zoomInButton.on('click', () => {
+    this.onAccessibleClick(this.$zoomInButton, () => {
       this.zoomIn();
     });
 
@@ -380,7 +381,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
-    this.$zoomOutButton.on('click', () => {
+    this.onAccessibleClick(this.$zoomOutButton, () => {
       this.zoomOut();
     });
 
@@ -392,7 +393,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$goHomeButton.attr("title", this.content.goHome);
     this.$goHomeButton.attr("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
-    this.$goHomeButton.on('click', () => {
+    this.onAccessibleClick(this.$goHomeButton, () => {
       this.goHome();
     });
 
@@ -408,6 +409,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.rotateRight();
     });
 
+    this.onAccessibleClick(this.$rotateButton, () => {
+      this.rotateRight();
+    });
+
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
       this.$adjustImageButton.attr('title', this.content.adjustImage);
@@ -416,6 +421,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
       this.$adjustImageButton.insertAfter(this.$rotateButton);
+
+      this.onAccessibleClick(this.$adjustImageButton, () => {
+        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
+      });
     }
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
@@ -1486,5 +1495,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.$navigator.hide();
       }
     }
+  }
+
+  getControlsFadeLength(): number {
+    return (<ISettings>this.extension.getSettings()).reducedAnimation ? 0 : this.config.options.controlsFadeLength || 250;
   }
 }
