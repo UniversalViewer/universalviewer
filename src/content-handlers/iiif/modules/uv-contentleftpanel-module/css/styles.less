@@ -156,9 +156,19 @@
     }
   }
 }
-@-moz-document url-prefix() {
-  .iiif-gallery-component .header input[type="range"] {
-    margin-top: 7px;
-    width: 300px;
+.iiif-gallery-component {
+  .header {
+    input[type=range]::-moz-range-track {
+      width: 100px;
+    }
+
+    @-moz-document url-prefix() {
+      .btn {
+        &.size-up,
+        &.size-down {
+          margin-top: 4px;
+        }
+      }
+    }
   }
 }
