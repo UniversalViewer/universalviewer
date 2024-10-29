@@ -416,6 +416,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
       this.$adjustImageButton.attr('title', this.content.adjustImage);
+      this.$adjustImageButton.attr('aria-label', this.content.adjustImage);
       this.$adjustImageButton.switchClass('rotate', 'adjustImage');
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
