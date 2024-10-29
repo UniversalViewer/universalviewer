@@ -932,7 +932,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }
     }
 
-    if(annotations.length && this.isZoomToInitialAnnotationEnabled()) {
+    if (annotations.length && this.shouldZoomToInitialAnnotation()) {
       this.zoomToInitialAnnotation();
     }
   }
@@ -1142,7 +1142,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
   }
 
-  isZoomToInitialAnnotationEnabled(): boolean {
+  shouldZoomToInitialAnnotation(): boolean {
     return Bools.getBool(
       this.config.options.zoomToInitialAnnotation,
       true
