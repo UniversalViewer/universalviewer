@@ -408,9 +408,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
-    this.$rotateButton.on('click', () => {
-      this.rotateRight();
-    });
 
     this.onAccessibleClick(this.$rotateButton, () => {
       this.rotateRight();
