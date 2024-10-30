@@ -428,6 +428,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       });
     }
 
+    this.$zoomInButton
+      .add(this.$zoomOutButton)
+      .add(this.$goHomeButton)
+      .add(this.$rotateButton)
+      .add(this.$adjustImageButton).on('focus', () => {
+        if (this.controlsVisible) return;
+        this.controlsVisible = true;
+        this.viewer.setControlsEnabled(true);
+      });
+
+    this.$zoomInButton.add(this.$adjustImageButton).on('blur', () => {
+      if (!this.controlsVisible) return;
+      this.controlsVisible = false;
+      this.viewer.setControlsEnabled(false);
+    });
+
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
     );
@@ -636,16 +652,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
 
     // When Prev/Next buttons are focused, make sure the controls are enabled
-    this.$prevButton.on("focus", () => {
+    this.$prevButton.add(this.$nextButton).on("focus", () => {
       if (this.controlsVisible) return;
       this.controlsVisible = true;
       this.viewer.setControlsEnabled(true);
     });
 
-    this.$nextButton.on("focus", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
+    this.$prevButton.add(this.$nextButton).on("blur", () => {
+      if (!this.controlsVisible) return;
+      this.controlsVisible = false;
+      this.viewer.setControlsEnabled(false);
     });
   }
 
