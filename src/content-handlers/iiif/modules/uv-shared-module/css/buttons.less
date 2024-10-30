@@ -172,3 +172,26 @@
     }
 
 }
+
+.iiif-gallery-component {
+    
+    .header {
+        .btn {
+            &.size-up,
+            &.size-down {
+                &:focus {
+                    border: 1px solid @link-color;
+                }
+            }
+        }
+
+        @supports (-moz-appearance: none) {
+            .btn {
+                &.size-up,
+                &.size-down {
+                    margin-top: 4px; 
+                }
+        }
+    }
+}
+}
