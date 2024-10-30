@@ -199,7 +199,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   updateResponsiveView(): void {
     this.setNavigatorVisible();
-    this.viewer.autoHideControls = true;
+    this.viewer.autoHideControls = this.extension.isDesktopMetric();
 
     const enableAutoHide = (event: JQuery.FocusOutEvent) => {
       this.viewer.autoHideControls = true;
@@ -418,6 +418,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$adjustImageButton.attr('title', this.content.adjustImage);
       this.$adjustImageButton.attr('aria-label', this.content.adjustImage);
       this.$adjustImageButton.switchClass('rotate', 'adjustImage');
+      this.$adjustImageButton.attr('tabindex', 0);
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
