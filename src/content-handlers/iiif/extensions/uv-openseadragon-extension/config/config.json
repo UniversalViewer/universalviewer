@@ -334,7 +334,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "openSeadragonCenterPanel": {
@@ -364,6 +365,7 @@
       "content": {
         "attribution": "$attribution",
         "close": "$close",
+        "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
         "next": "$next",
