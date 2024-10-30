@@ -361,40 +361,52 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       ],
     });
 
-    this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
+    let $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
+    this.$zoomInButton = $("<button />").append($oldZoomIn.contents());
+    this.$zoomInButton.insertAfter($oldZoomIn);
+    $oldZoomIn.remove();
     this.$zoomInButton.attr("tabindex", 0);
-    this.$zoomInButton.prop("title", this.content.zoomIn);
-    this.$zoomInButton.prop("aria-label", this.content.zoomIn);
+    this.$zoomInButton.attr("title", this.content.zoomIn);
+    this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       this.zoomIn();
     });
 
-    this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
+    let $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
+    this.$zoomOutButton = $("<button />").append($oldZoomOut.contents());
+    this.$zoomOutButton.insertAfter($oldZoomOut);
+    $oldZoomIn.remove();
     this.$zoomOutButton.attr("tabindex", 0);
-    this.$zoomOutButton.prop("title", this.content.zoomOut);
-    this.$zoomOutButton.prop("aria-label", this.content.zoomOut);
+    this.$zoomOutButton.attr("title", this.content.zoomOut);
+    this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       this.zoomOut();
     });
 
-    this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
+    let $oldGoHome = this.$viewer.find('div[title="Go home"]');
+    this.$goHomeButton = $("<button />").append($oldGoHome.contents());
+    this.$goHomeButton.insertAfter($oldGoHome);
+    $oldGoHome.remove();
     this.$goHomeButton.attr("tabindex", 0);
-    this.$goHomeButton.prop("title", this.content.goHome);
-    this.$goHomeButton.prop("aria-label", this.content.goHome);
+    this.$goHomeButton.attr("title", this.content.goHome);
+    this.$goHomeButton.attr("aria-label", this.content.goHome);
     this.$goHomeButton.addClass("goHome viewportNavButton");
 
     this.onAccessibleClick(this.$goHomeButton, () => {
       this.goHome();
     });
 
-    this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
+    let $oldRotate = this.$viewer.find('div[title="Rotate right"]');
+    this.$rotateButton = $("<button />").append($oldRotate.contents());
+    this.$rotateButton.insertAfter($oldRotate);
+    $oldRotate.remove();
     this.$rotateButton.attr("tabindex", 0);
-    this.$rotateButton.prop("title", this.content.rotateRight);
-    this.$rotateButton.prop("aria-label", this.content.rotateRight);
+    this.$rotateButton.attr("title", this.content.rotateRight);
+    this.$rotateButton.attr("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
 
     this.onAccessibleClick(this.$rotateButton, () => {
@@ -403,7 +415,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
-      this.$adjustImageButton.prop('title', this.content.adjustImage);
+      this.$adjustImageButton.attr('title', this.content.adjustImage);
+      this.$adjustImageButton.attr('aria-label', this.content.adjustImage);
       this.$adjustImageButton.switchClass('rotate', 'adjustImage');
       this.$adjustImageButton.attr('tabindex', 0);
       this.$adjustImageButton.onPressed(() => {
@@ -415,6 +428,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
     }
+
+    this.$zoomInButton
+      .add(this.$zoomOutButton)
+      .add(this.$goHomeButton)
+      .add(this.$rotateButton)
+      .add(this.$adjustImageButton).on('focus', () => {
+        if (this.controlsVisible) return;
+        this.controlsVisible = true;
+        this.viewer.setControlsEnabled(true);
+      });
+
+    this.$zoomInButton.add(this.$adjustImageButton).on('blur', () => {
+      if (!this.controlsVisible) return;
+      this.controlsVisible = false;
+      this.viewer.setControlsEnabled(false);
+    });
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
       ".openseadragon-container > div:not(.openseadragon-canvas):first"
@@ -624,16 +653,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
 
     // When Prev/Next buttons are focused, make sure the controls are enabled
-    this.$prevButton.on("focus", () => {
+    this.$prevButton.add(this.$nextButton).on("focus", () => {
       if (this.controlsVisible) return;
       this.controlsVisible = true;
       this.viewer.setControlsEnabled(true);
     });
 
-    this.$nextButton.on("focus", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
+    this.$prevButton.add(this.$nextButton).on("blur", () => {
+      if (!this.controlsVisible) return;
+      this.controlsVisible = false;
+      this.viewer.setControlsEnabled(false);
     });
   }
 
