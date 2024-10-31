@@ -426,7 +426,7 @@
         "locale": "$locale",
         "navigatorEnabled": "$navigatorEnabled",
         "clickToZoomEnabled": "$clickToZoomEnabled",
-        "pagingEnabled": "$goHome",
+        "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
         "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",

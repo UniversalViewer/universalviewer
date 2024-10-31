@@ -5,7 +5,7 @@
 Before you can build the UV, we assume the following list of software is already installed in your system
 
 - Git
-- Node 14.18.1 or higher
+- Node 18 or higher
 - Npm 8.1.1 or higher
 
 ### Fork repository
