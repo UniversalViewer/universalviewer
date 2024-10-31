@@ -44,10 +44,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $treeViewOptions: JQuery;
   $treeSelect: JQuery;
   $views: JQuery;
+  $keyElement: JQuery
   expandFullEnabled: boolean = false;
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
+  keyPress:boolean = false;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -102,7 +104,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByCanvas();
       this.updateTreeTabBySelection();
     });
 
@@ -111,7 +113,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByRange();
       this.updateTreeTabBySelection();
     });
 
@@ -211,11 +213,11 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     this.onAccessibleClick(this.$treeButton, () => {
       this.openTreeView();
-    });
+    }, true, true);
 
     this.onAccessibleClick(this.$thumbsButton, () => {
       this.openThumbsView();
-    });
+    }, true, true);
 
     this.setTitle(this.content.title);
 
@@ -283,11 +285,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     if (!treeData) {
       return;
     }
-
-    if (
-      this.isCollection() &&
-      this.extension.helper.treeHasNavDates(treeData)
-    ) {
+    if (!this.defaultToThumbsView()) {
       this.$treeViewOptions.show();
     } else {
       this.$treeViewOptions.hide();
@@ -510,10 +508,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
+        onKeyDown: (thumb: Thumb) => {          
+            this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);                                             
+        },        
       })
     );
   }
-
   createGalleryView(): void {
     this.galleryView = new GalleryView(this.$galleryView);
     this.galleryView.galleryData = this.getGalleryData();
@@ -617,9 +617,17 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     );
     const defaultToTreeIfGreaterThan: number =
       this.config.options.defaultToTreeIfGreaterThan || 0;
-
+    const defaultToTreeIfCollection: boolean = Bools.getBool(
+      this.config.options.defaultToTreeIfCollection,
+      false
+    );
+  
     const treeData: TreeNode | null = this.getTree();
-
+  
+    if (this.isCollection() && (defaultToTreeIfCollection || (treeData && this.extension.helper.treeHasNavDates(treeData)))) {
+      return false;
+    }
+  
     if (defaultToTreeEnabled) {
       if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan) {
         return false;
@@ -755,16 +763,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByRange(): void {
     if (this.treeView) {
       const range: Range | null = this.extension.helper.getCurrentRange();
-      let node: TreeNode | null = null;
-
       if (range && range.treeNode) {
-        node = this.treeView.getNodeById(range.treeNode.id);
-      }
-
-      if (node) {
-        this.treeView.selectNode(<TreeNode>node);
-      } else {
-        this.selectTreeNodeByManifest();
+        const node = this.treeView.getNodeById(range.treeNode.id);
+        if (node) {
+          this.treeView.selectNode(node);
+        } else {
+          this.selectTreeNodeByManifest();
+        }
       }
     }
   }
@@ -794,7 +799,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       // }
 
       if (node && usingCorrectTree) {
-        this.treeView.selectNode(<TreeNode>node);
+        this.treeView.selectNode(node);
       } else {
         range = this.extension.helper.getCurrentRange();
 
@@ -803,7 +808,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         }
 
         if (node) {
-          this.treeView.selectNode(<TreeNode>node);
+          this.treeView.selectNode(node);
         } else {
           this.selectTreeNodeByManifest();
         }

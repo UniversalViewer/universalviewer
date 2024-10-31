@@ -54,6 +54,7 @@ import { createStore, OpenSeadragonExtensionState } from "./Store";
 import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
+import { AdjustImageDialogue } from "../../modules/uv-dialogues-module/AdjustImageDialogue";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -63,6 +64,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
+  $adjustImageDialogue: JQuery;
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
@@ -71,6 +73,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   footerPanel: FooterPanel;
   headerPanel: PagingHeaderPanel;
   helpDialogue: HelpDialogue;
+  adjustImageDialogue: AdjustImageDialogue;
   isAnnotating: boolean = false;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
@@ -480,8 +483,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.helper.canvasIndex
       );
-      const settings: ISettings = this.getSettings();
-      this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
     this.extensionHost.subscribe(
@@ -566,6 +567,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
     this.shell.$overlays.append(this.$shareDialogue);
     this.shareDialogue = new ShareDialogue(this.$shareDialogue);
+
+    this.$adjustImageDialogue = $(
+      '<div class="overlay adjustImage" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$adjustImageDialogue);
+    this.adjustImageDialogue = new AdjustImageDialogue(this.$adjustImageDialogue, this.shell);
 
     this.$downloadDialogue = $("<div></div>");
     this.shell.$overlays.append(this.$downloadDialogue);
@@ -1364,12 +1371,14 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     const config: string = this.data.config!.uri || "";
     const locales: string | null = this.getSerializedLocales();
     const appUri: string = this.getAppUri();
+    const title: string = this.helper.getLabel() || "";
     const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
     const script: string = Strings.format(
       template,
       iframeSrc,
       width.toString(),
-      height.toString()
+      height.toString(),
+      title
     );
     return script;
   }

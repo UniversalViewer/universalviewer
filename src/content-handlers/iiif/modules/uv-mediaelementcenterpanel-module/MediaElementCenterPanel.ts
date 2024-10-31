@@ -20,6 +20,18 @@ import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
 
+type TextTrackDescriptor = {
+  language?: string;
+  label?: string;
+  id: string;
+};
+
+type MediaSourceDescriptor = {
+  label: string;
+  type: string;
+  src: string;
+};
+
 export class MediaElementCenterPanel extends CenterPanel<
   Config["modules"]["mediaelementCenterPanel"]
 > {
@@ -30,6 +42,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   mediaWidth: number;
   player: any;
   title: string | null;
+  pauseTimeoutId: any = null;
 
   constructor($element: JQuery) {
     super($element);
@@ -47,12 +60,47 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-      let t = target.t;
-      if (Array.isArray(t)) {
-        t = t[0];
+      // Clear any existing timeout
+      if (this.pauseTimeoutId !== null) {
+        clearTimeout(this.pauseTimeoutId);
+        this.pauseTimeoutId = null;
       }
-      that.player.setCurrentTime(t);
-      that.player.play();
+
+      let t: number | [number, number] = target.t;
+
+      if (Array.isArray(t)) {
+        if ((t as [number] | [number, number]).length === 1) {
+          t = t[0];
+        } else {
+          const [startTime, endTime] = t;
+
+          if (endTime <= startTime) {
+            console.error("endTime must be greater than startTime");
+            return;
+          }
+
+          this.player.setCurrentTime(startTime);
+
+          if (this.config.options.autoPlayOnSetTarget) {
+            const duration = (endTime - startTime) * 1000;
+
+            this.pauseTimeoutId = setTimeout(() => {
+              this.player.pause();
+              this.pauseTimeoutId = null; // Clear the timeout ID after execution
+            }, duration);
+
+            this.player.play();
+          }
+
+          return;
+        }
+      }
+
+      this.player.setCurrentTime(t);
+
+      if (this.config.options.autoPlayOnSetTarget) {
+        this.player.play();
+      }
     });
 
     this.extensionHost.subscribe(
@@ -86,12 +134,8 @@ export class MediaElementCenterPanel extends CenterPanel<
     const poster: string = (<IMediaElementExtension>(
       this.extension
     )).getPosterImageUri();
-    const sources: any[] = [];
-    const subtitles: Array<{
-      language?: string;
-      label?: string;
-      id: string;
-    }> = [];
+    const sources: Array<MediaSourceDescriptor> = [];
+    const subtitles: Array<TextTrackDescriptor> = [];
 
     const renderings: Rendering[] = canvas.getRenderings();
 
@@ -99,7 +143,9 @@ export class MediaElementCenterPanel extends CenterPanel<
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
           sources.push({
-            label: rendering.getLabel().getValue() ?? rendering.getFormat().toString(),
+            label:
+              rendering.getLabel().getValue() ??
+              rendering.getFormat().toString(),
             type: rendering.getFormat().toString(),
             src: rendering.id,
           });
@@ -142,34 +188,19 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
     }
 
+    if (subtitles.length > 0) {
+      // Show captions options popover for better interface feedback
+      subtitles.unshift({ id: "none" });
+    }
+
     if (this.isVideo()) {
       this.$media = $(
         '<video controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
       // Add VTT subtitles/captions.
-      if (subtitles.length > 0) {
-        // Show captions options popover for better interface feedback
-        subtitles.unshift({ id: "none" });
-      }
-      for (const subtitle of subtitles) {
-        this.$media.append(
-          $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
-            subtitle.language
-          }" src="${subtitle.id}" ${
-            subtitles.indexOf(subtitle) === 0 ? "default" : ""
-          }>
-`)
-        );
-      }
-
-      for (const source of sources) {
-        this.$media.append(
-          $(
-            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
-          )
-        );
-      }
+      this.appendTextTracks(subtitles);
+      this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
 
@@ -199,6 +230,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
@@ -233,13 +268,9 @@ export class MediaElementCenterPanel extends CenterPanel<
         '<audio controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
       );
 
-      for (const source of sources) {
-        this.$media.append(
-          $(
-            `<source src="${source.src}" type="${source.type}" title="${source.label}">`
-          )
-        );
-      }
+      // Add VTT subtitles/captions.
+      this.appendTextTracks(subtitles);
+      this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
 
@@ -267,6 +298,10 @@ export class MediaElementCenterPanel extends CenterPanel<
           });
 
           mediaElement.addEventListener("pause", () => {
+            if (this.pauseTimeoutId !== null) {
+              clearTimeout(this.pauseTimeoutId);
+              this.pauseTimeoutId = null;
+            }
             // mediaelement creates a pause event before the ended event. ignore this.
             if (
               Math.floor(mediaElement.currentTime) !=
@@ -298,6 +333,29 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
     this.extensionHost.publish(Events.LOAD);
+  }
+
+  appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
+    for (const subtitle of subtitles) {
+      this.$media.append(
+        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
+          subtitle.language
+        }" src="${subtitle.id}" ${
+          subtitles.indexOf(subtitle) === 0 ? "default" : ""
+        }>
+`)
+      );
+    }
+  }
+
+  appendMediaSources(sources: Array<MediaSourceDescriptor>) {
+    for (const source of sources) {
+      this.$media.append(
+        $(
+          `<source src="${source.src}" type="${source.type}" title="${source.label}">`
+        )
+      );
+    }
   }
 
   // audio/video
