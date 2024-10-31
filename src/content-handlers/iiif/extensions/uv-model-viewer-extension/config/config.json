@@ -245,7 +245,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "modelViewerCenterPanel": {
@@ -262,6 +263,7 @@
       "content": {
         "attribution": "$attribution",
         "close": "$close",
+        "closeAttribution": "$closeAttribution",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
         "vr": "$vr"
