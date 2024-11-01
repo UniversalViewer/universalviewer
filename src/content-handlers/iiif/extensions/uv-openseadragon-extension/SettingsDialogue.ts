@@ -191,5 +191,13 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     } else {
       this.$preserveViewportCheckbox.removeAttr("checked");
     }
+  
+    if (this.$truncateThumbnailLabelsCheckbox) {
+      if (settings.truncateThumbnailLabels) {
+        this.$truncateThumbnailLabelsCheckbox.prop("checked", true);
+      } else {
+        this.$truncateThumbnailLabelsCheckbox.prop("checked", false);
+      }
+  }
   }
 }
