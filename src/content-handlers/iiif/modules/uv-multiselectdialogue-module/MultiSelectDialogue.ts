@@ -33,14 +33,16 @@ export class MultiSelectDialogue extends Dialogue<
 
     this.extensionHost.subscribe(this.openCommand, () => {
       this.open();
-      const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
+      const multiSelectState: MultiSelectState =
+        this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(true);
       this.galleryComponent.set(this.data);
     });
 
     this.extensionHost.subscribe(this.closeCommand, () => {
       this.close();
-      const multiSelectState: MultiSelectState = this.extension.helper.getMultiSelectState();
+      const multiSelectState: MultiSelectState =
+        this.extension.helper.getMultiSelectState();
       multiSelectState.setEnabled(false);
     });
 
@@ -53,8 +55,8 @@ export class MultiSelectDialogue extends Dialogue<
 
     this.data = {
       helper: this.extension.helper,
-      chunkedResizingThreshold: this.config.options
-        .galleryThumbChunkedResizingThreshold,
+      chunkedResizingThreshold:
+        this.config.options.galleryThumbChunkedResizingThreshold,
       content: this.config.content,
       debug: false,
       imageFadeInDuration: 300,

@@ -202,7 +202,7 @@
         "attribution": "$attribution",
         "close": "$close",
         "closeAttribution": "$closeAttribution",
-        "next": "$next",     
+        "next": "$next",
         "previous": "$previous"
       }
     },

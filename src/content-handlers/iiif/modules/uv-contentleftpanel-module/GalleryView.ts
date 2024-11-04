@@ -31,7 +31,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "thumbSelected",
-      function(thumb: any) {
+      function (thumb: any) {
         that.extensionHost.publish(IIIFEvents.GALLERY_THUMB_SELECTED, thumb);
         that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
       },
@@ -40,7 +40,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "decreaseSize",
-      function() {
+      function () {
         that.extensionHost.publish(IIIFEvents.GALLERY_DECREASE_SIZE);
       },
       false
@@ -48,7 +48,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "increaseSize",
-      function() {
+      function () {
         that.extensionHost.publish(IIIFEvents.GALLERY_INCREASE_SIZE);
       },
       false

@@ -180,7 +180,10 @@ export class FooterPanel<
 
   updateMinimisedButtons(): void {
     // if configured to always minimise buttons
-    if (Bools.getBool(this.options.minimiseButtons, false) || !this.extension.isDesktopMetric()) {
+    if (
+      Bools.getBool(this.options.minimiseButtons, false) ||
+      !this.extension.isDesktopMetric()
+    ) {
       this.$options.find("span").addClass("sr-only");
     } else {
       this.$options.find("span").removeClass("sr-only");

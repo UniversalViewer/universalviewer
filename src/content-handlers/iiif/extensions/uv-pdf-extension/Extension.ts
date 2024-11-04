@@ -18,8 +18,10 @@ import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
 import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension<Config>
-  implements IPDFExtension {
+export default class Extension
+  extends BaseExtension<Config>
+  implements IPDFExtension
+{
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;

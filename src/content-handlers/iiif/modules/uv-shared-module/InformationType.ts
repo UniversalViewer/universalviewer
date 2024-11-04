@@ -1,4 +1,4 @@
 export enum InformationType {
   AUTH_CORS_ERROR,
-  DEGRADED_RESOURCE
+  DEGRADED_RESOURCE,
 }

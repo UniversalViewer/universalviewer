@@ -188,9 +188,8 @@ export class PagingHeaderPanel extends HeaderPanel<
         imageIndex < this.extension.helper.getTotalCanvases();
         imageIndex++
       ) {
-        const canvas: Canvas = this.extension.helper.getCanvasByIndex(
-          imageIndex
-        );
+        const canvas: Canvas =
+          this.extension.helper.getCanvasByIndex(imageIndex);
         const label: string = sanitize(
           <string>(
             LanguageMap.getValue(
@@ -403,7 +402,7 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.search(this.$searchText.val());
     });
 
-    this.$searchText.click(function() {
+    this.$searchText.click(function () {
       $(this).select();
     });
 
@@ -699,7 +698,7 @@ export class PagingHeaderPanel extends HeaderPanel<
   disableFirstButton(): void {
     this.firstButtonEnabled = false;
     this.$firstButton.disable();
-    this.$firstButton.attr("disabled","disabled");
+    this.$firstButton.attr("disabled", "disabled");
   }
 
   enableFirstButton(): void {
@@ -711,7 +710,7 @@ export class PagingHeaderPanel extends HeaderPanel<
   disableLastButton(): void {
     this.lastButtonEnabled = false;
     this.$lastButton.disable();
-    this.$lastButton.attr("disabled","disabled");
+    this.$lastButton.attr("disabled", "disabled");
   }
 
   enableLastButton(): void {
@@ -723,7 +722,7 @@ export class PagingHeaderPanel extends HeaderPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.disable();
-    this.$prevButton.attr("disabled","disabled");
+    this.$prevButton.attr("disabled", "disabled");
   }
 
   enablePrevButton(): void {
@@ -735,7 +734,7 @@ export class PagingHeaderPanel extends HeaderPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.disable();
-    this.$nextButton.attr("disabled","disabled");
+    this.$nextButton.attr("disabled", "disabled");
   }
 
   enableNextButton(): void {

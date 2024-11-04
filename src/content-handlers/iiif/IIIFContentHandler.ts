@@ -97,8 +97,10 @@ const Extension: IExtensionRegistry = {
   },
 };
 
-export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
-  implements IIIFExtensionHost, IContentHandler<IIIFData> {
+export default class IIIFContentHandler
+  extends BaseContentHandler<IIIFData>
+  implements IIIFExtensionHost, IContentHandler<IIIFData>
+{
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;

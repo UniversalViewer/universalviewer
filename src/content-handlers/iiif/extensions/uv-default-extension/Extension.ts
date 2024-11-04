@@ -14,8 +14,10 @@ import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension<Config>
-  implements IDefaultExtension {
+export default class Extension
+  extends BaseExtension<Config>
+  implements IDefaultExtension
+{
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;

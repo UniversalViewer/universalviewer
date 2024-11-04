@@ -86,7 +86,9 @@ export class PDFHeaderPanel extends HeaderPanel<
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      '<button class="go btn btn-primary" tabindex="0">' + this.content.go + "</button>"
+      '<button class="go btn btn-primary" tabindex="0">' +
+        this.content.go +
+        "</button>"
     );
     this.$search.append(this.$searchButton);
     this.$searchButton.disable();
@@ -134,7 +136,7 @@ export class PDFHeaderPanel extends HeaderPanel<
       this.search(this.$searchText.val());
     });
 
-    this.$searchText.click(function() {
+    this.$searchText.click(function () {
       $(this).select();
     });
 
@@ -160,9 +162,9 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     if (this._pageIndex === 1) {
       this.$firstButton.disable();
-      this.$firstButton.attr("disabled","disabled");
+      this.$firstButton.attr("disabled", "disabled");
       this.$prevButton.disable();
-      this.$prevButton.attr("disabled","disabled");
+      this.$prevButton.attr("disabled", "disabled");
     } else {
       this.$firstButton.enable();
       this.$firstButton.removeAttr("disabled");
@@ -172,9 +174,9 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     if (this._pageIndex === this._pdfDoc.numPages) {
       this.$lastButton.disable();
-      this.$lastButton.attr("disabled","disabled");
+      this.$lastButton.attr("disabled", "disabled");
       this.$nextButton.disable();
-      this.$nextButton.attr("disabled","disabled");
+      this.$nextButton.attr("disabled", "disabled");
     } else {
       this.$lastButton.enable();
       this.$lastButton.removeAttr("disabled");

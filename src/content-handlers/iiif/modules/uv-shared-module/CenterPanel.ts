@@ -73,7 +73,10 @@ export class CenterPanel<
     this.closeAttribution();
 
     this.$closeAttributionButton = this.$attribution.find(".header .close");
-    this.$closeAttributionButton.attr("aria-label", this.content.closeAttribution);
+    this.$closeAttributionButton.attr(
+      "aria-label",
+      this.content.closeAttribution
+    );
     this.$closeAttributionButton.on("click", (e) => {
       e.preventDefault();
       this.closeAttribution();
@@ -162,9 +165,8 @@ export class CenterPanel<
     this.openAttribution();
 
     const $attributionTitle: JQuery = this.$attribution.find(".title");
-    const $attributionText: JQuery = this.$attribution.find(
-      ".attribution-text"
-    );
+    const $attributionText: JQuery =
+      this.$attribution.find(".attribution-text");
     const $license: JQuery = this.$attribution.find(".license");
     const $logo: JQuery = this.$attribution.find(".logo");
 
@@ -187,7 +189,7 @@ export class CenterPanel<
         .one("load", () => {
           this.resize();
         })
-        .each(function() {
+        .each(function () {
           if (this.complete) {
             resize();
           }

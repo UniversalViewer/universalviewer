@@ -285,7 +285,7 @@ type Modules = {
   mobileFooterPanel: MobileFooterPanel;
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
-  adjustImageDialogue: AdjustImageDialogue
+  adjustImageDialogue: AdjustImageDialogue;
 };
 
 export type Config = BaseConfig & {
