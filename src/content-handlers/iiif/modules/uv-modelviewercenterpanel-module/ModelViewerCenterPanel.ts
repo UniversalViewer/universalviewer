@@ -12,8 +12,11 @@ import { Async } from "@edsilv/utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Extension";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-model-viewer-extension/config/Config";
 
-export class ModelViewerCenterPanel extends CenterPanel {
+export class ModelViewerCenterPanel extends CenterPanel<
+  Config["modules"]["modelViewerCenterPanel"]
+> {
   $modelviewer: JQuery;
   $spinner: JQuery;
 

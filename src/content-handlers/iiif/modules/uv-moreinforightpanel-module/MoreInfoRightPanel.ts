@@ -6,8 +6,9 @@ import { Bools, Urls } from "@edsilv/utils";
 import { Range } from "manifesto.js";
 import { UriLabeller } from "@iiif/manifold";
 import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
+import { MoreInfoRightPanel as MoreInfoRightPanelConfig } from "../../BaseConfig";
 
-export class MoreInfoRightPanel extends RightPanel {
+export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
   metadataComponent: any;
   $metadata: JQuery;
   limitType: any;
@@ -49,10 +50,7 @@ export class MoreInfoRightPanel extends RightPanel {
           href
         );
         // Time change.
-        const time: string | null = Urls.getHashParameterFromString(
-          "t",
-          href
-        );
+        const time: string | null = Urls.getHashParameterFromString("t", href);
 
         if (rangeId && time === null) {
           const range: Range | null = this.extension.helper.getRangeById(
@@ -67,17 +65,22 @@ export class MoreInfoRightPanel extends RightPanel {
         if (time !== null) {
           const timeAsNumber = Number(time);
           if (!Number.isNaN(timeAsNumber)) {
-
             if (rangeId) {
               // We want to make the time change RELATIVE to the start of the range.
               const range: Range | null = this.extension.helper.getRangeById(
                 rangeId
               );
               if (range) {
-                this.extensionHost.publish(IIIFEvents.RANGE_TIME_CHANGE, { rangeId: range.id, time: timeAsNumber });
+                this.extensionHost.publish(IIIFEvents.RANGE_TIME_CHANGE, {
+                  rangeId: range.id,
+                  time: timeAsNumber,
+                });
               }
-            }  else {
-              this.extensionHost.publish(IIIFEvents.CURRENT_TIME_CHANGE, timeAsNumber);
+            } else {
+              this.extensionHost.publish(
+                IIIFEvents.CURRENT_TIME_CHANGE,
+                timeAsNumber
+              );
             }
           }
         }
@@ -116,7 +119,7 @@ export class MoreInfoRightPanel extends RightPanel {
       ),
       helper: this.extension.helper,
       licenseFormatter: new UriLabeller(
-        this.config.license ? this.config.license : {}
+        this.content.license ? this.content.license : {}
       ),
       limit: this.config.options.textLimit || 4,
       limitType: LimitType.LINES,

@@ -12,7 +12,7 @@ import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { IUVData } from "../../../../IUVData";
 import { Shell } from "./Shell";
 import { Helper } from "@iiif/manifold";
-import { MetricType } from "./Metric";
+import { BaseConfig, MetricType } from "../../BaseConfig";
 
 export type ExtensionLoader = { name: string; loader: () => Promise<any> };
 
@@ -27,8 +27,8 @@ export interface IExtension {
   extensionHost: IIIFExtensionHost;
   create(): void;
   createModules(): void;
-  data: IUVData;
-  defaultConfig: any;
+  data: IUVData<BaseConfig>;
+  defaultConfig: BaseConfig;
   dispose(): void;
   exitFullScreen(): void;
   fire(name: string, ...args: any[]): void;
@@ -71,7 +71,7 @@ export interface IExtension {
   type: ExtensionLoader;
   redirect(uri: string): void;
   refresh(): void;
-  reload(data?: IUVData): void;
+  reload(data?: IUVData<BaseConfig>): void;
   resize(): void;
   resources: IExternalResourceData[] | null;
   shifted: boolean;

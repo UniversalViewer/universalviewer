@@ -5,8 +5,11 @@ import {
   applyPolyfills,
   defineCustomElements,
 } from "@universalviewer/aleph/loader";
+import { Config } from "../../extensions/uv-aleph-extension/config/Config";
 
-export class AlephLeftPanel extends LeftPanel {
+export class AlephLeftPanel extends LeftPanel<
+  Config["modules"]["alephLeftPanel"]
+> {
   private _alControlPanel: any;
 
   constructor($element: JQuery) {

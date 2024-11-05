@@ -7,8 +7,11 @@ import {
   applyPolyfills,
   defineCustomElements,
 } from "@universalviewer/uv-ebook-components/loader";
+import { Config } from "../../extensions/uv-ebook-extension/config/Config";
 
-export class EbookLeftPanel extends LeftPanel {
+export class EbookLeftPanel extends LeftPanel<
+  Config["modules"]["ebookLeftPanel"]
+> {
   private _ebookTOC: any;
   private _$container: JQuery;
   private _$ebookTOC: JQuery;

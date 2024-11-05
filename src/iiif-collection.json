@@ -1106,6 +1106,18 @@
       "visible": true,
       "manifests": [
         {
+          "@id": "https://aleph-r3f-manifests.vercel.app/flight-helmet/index.json",
+          "@type": "sc:Manifest",
+          "label": "Flight Helmet (3D)",
+          "visible": true
+        },
+        {
+          "@id": "https://aleph-r3f-manifests.vercel.app/mosquito-in-amber/index.json",
+          "@type": "sc:Manifest",
+          "label": "Mosquito in Amber (3D)",
+          "visible": true
+        },
+        {
           "@id": "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json",
           "@type": "sc:Manifest",
           "label": "Astronaut (3D)",

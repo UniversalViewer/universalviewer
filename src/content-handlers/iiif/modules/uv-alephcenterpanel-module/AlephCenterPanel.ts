@@ -20,9 +20,12 @@ import {
 } from "@universalviewer/aleph/loader";
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-aleph-extension/config/Config";
 import { sanitize } from "../../../../Utils";
 
-export class AlephCenterPanel extends CenterPanel {
+export class AlephCenterPanel extends CenterPanel<
+  Config["modules"]["alephCenterPanel"]
+> {
   private _alViewer: any;
   private _alViewerReady: boolean = false;
   private _state: any = {};

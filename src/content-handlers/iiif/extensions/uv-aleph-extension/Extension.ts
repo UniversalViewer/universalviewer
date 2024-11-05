@@ -12,9 +12,10 @@ import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 import { Strings, Bools } from "@edsilv/utils";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension
+export default class Extension extends BaseExtension<Config>
   implements IAlephExtension {
   $downloadDialogue: JQuery;
   $multiSelectDialogue: JQuery;
@@ -22,17 +23,14 @@ export default class Extension extends BaseExtension
   $shareDialogue: JQuery;
   centerPanel: AlephCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: AlephLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-  };
+  defaultConfig: Config = defaultConfig;
 
   create(): void {
     super.create();
@@ -117,7 +115,7 @@ export default class Extension extends BaseExtension
   }
 
   isLeftPanelEnabled(): boolean {
-    return Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+    return Bools.getBool(this.data.config!.options.leftPanelEnabled, true);
   }
 
   getEmbedScript(template: string, width: number, height: number): string {

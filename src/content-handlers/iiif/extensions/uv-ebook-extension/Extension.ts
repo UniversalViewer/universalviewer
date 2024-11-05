@@ -15,9 +15,10 @@ import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
 import { Strings } from "@edsilv/utils";
 import "./theme/theme.less";
-import defaultConfig from "./config/en-GB.json";
+import defaultConfig from "./config/config.json";
+import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension
+export default class Extension extends BaseExtension<Config>
   implements IEbookExtension {
   $downloadDialogue: JQuery;
   $moreInfoDialogue: JQuery;
@@ -26,8 +27,8 @@ export default class Extension extends BaseExtension
   $shareDialogue: JQuery;
   centerPanel: EbookCenterPanel;
   downloadDialogue: DownloadDialogue;
-  footerPanel: FooterPanel;
-  headerPanel: HeaderPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: EbookLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   moreInfoDialogue: MoreInfoDialogue;
@@ -35,14 +36,7 @@ export default class Extension extends BaseExtension
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   cfiFragement: string;
-  defaultConfig: any = defaultConfig;
-  locales = {
-    "en-GB": defaultConfig,
-    "cy-GB": () => import("./config/cy-GB.json"),
-    "fr-FR": () => import("./config/fr-FR.json"),
-    "pl-PL": () => import("./config/pl-PL.json"),
-    "sv-SE": () => import("./config/sv-SE.json"),
-  };
+  defaultConfig: Config = defaultConfig;
 
   create(): void {
     super.create();

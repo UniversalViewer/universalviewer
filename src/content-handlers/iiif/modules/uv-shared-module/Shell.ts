@@ -1,10 +1,11 @@
 const $ = require("jquery");
 import { isVisible } from "../../../../Utils";
+import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
 
-export class Shell extends BaseView {
+export class Shell extends BaseView<BaseConfig> {
   public $centerPanel: JQuery;
   public $element: JQuery;
   public $footerPanel: JQuery;
@@ -34,7 +35,7 @@ export class Shell extends BaseView {
     // Jump link
     this.$element.append(
       '<a class="sr-only" href="#download-btn">' +
-        this.extension.data.config.content.skipToDownload +
+        this.extension.data.config!.content.skipToDownload +
         "</a>"
     );
 
@@ -47,7 +48,7 @@ export class Shell extends BaseView {
     this.$centerPanel = $('<div class="centerPanel"></div>');
     this.$centerPanel.append(
       '<h2 class="sr-only">' +
-        this.extension.data.config.content.mediaViewer +
+        this.extension.data.config!.content.mediaViewer +
         "</h2>"
     );
     this.$mainPanel.append(this.$centerPanel);

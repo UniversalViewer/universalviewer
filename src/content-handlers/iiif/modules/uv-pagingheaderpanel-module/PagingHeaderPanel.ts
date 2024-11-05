@@ -9,8 +9,11 @@ import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class PagingHeaderPanel extends HeaderPanel {
+export class PagingHeaderPanel extends HeaderPanel<
+  Config["modules"]["pagingHeaderPanel"]
+> {
   $autoCompleteBox: JQuery;
   $firstButton: JQuery;
   $galleryButton: JQuery;
@@ -619,7 +622,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
       if (isNaN(index)) {
         this.extension.showMessage(
-          this.extension.data.config.modules.genericDialogue.content
+          this.extension.data.config!.modules.genericDialogue.content
             .invalidNumber
         );
         this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
@@ -630,7 +633,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
       if (!asset) {
         this.extension.showMessage(
-          this.extension.data.config.modules.genericDialogue.content
+          this.extension.data.config!.modules.genericDialogue.content
             .pageNotFound
         );
         this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED);
@@ -743,10 +746,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     super.resize();
 
     // hide toggle buttons below minimum width
-    if (
-      this.extension.width() <
-      this.extension.data.config.options.minWidthBreakPoint
-    ) {
+    if (this.extension.isMobileMetric()) {
       if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
       if (this.galleryIsVisible()) this.$galleryButton.hide();
     } else {

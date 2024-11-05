@@ -11,8 +11,11 @@ import { Bools, Strings } from "@edsilv/utils";
 import * as KeyCodes from "@edsilv/key-codes";
 import { AnnotationGroup } from "@iiif/manifold";
 import { Canvas, LanguageMap } from "manifesto.js";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class FooterPanel extends BaseFooterPanel {
+export class FooterPanel extends BaseFooterPanel<
+  Config["modules"]["searchFooterPanel"]
+> {
   $clearSearchResultsButton: JQuery;
   $line: JQuery;
   $nextResultButton: JQuery;
@@ -325,7 +328,7 @@ export class FooterPanel extends BaseFooterPanel {
 
   isZoomToSearchResultEnabled(): boolean {
     return Bools.getBool(
-      this.extension.data.config.options.zoomToSearchResultEnabled,
+      this.extension.data.config!.options.zoomToSearchResultEnabled,
       true
     );
   }
@@ -455,7 +458,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     if (this.terms === "" || this.terms === this.content.enterKeyword) {
       this.extension.showMessage(
-        this.extension.data.config.modules.genericDialogue.content.emptyValue,
+        this.extension.data.config!.modules.genericDialogue.content.emptyValue,
         function() {
           this.$searchText.focus();
         }

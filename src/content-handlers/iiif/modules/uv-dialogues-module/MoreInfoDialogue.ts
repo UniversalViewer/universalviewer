@@ -4,8 +4,11 @@ import { Dialogue } from "../uv-shared-module/Dialogue";
 import { sanitize } from "../../../../Utils";
 import { Bools } from "@edsilv/utils";
 import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
+import { BaseConfig } from "../../BaseConfig";
 
-export class MoreInfoDialogue extends Dialogue {
+export class MoreInfoDialogue extends Dialogue<
+  BaseConfig["modules"]["moreInfoRightPanel"]
+> {
   $title: JQuery;
   metadataComponent: any;
   $metadata: JQuery;
@@ -37,8 +40,8 @@ export class MoreInfoDialogue extends Dialogue {
       this.metadataComponent.set(this._getData());
     });
 
-    this.config.content = this.extension.data.config.modules.moreInfoRightPanel.content;
-    this.config.options = this.extension.data.config.modules.moreInfoRightPanel.options;
+    this.config.content = this.extension.data.config!.modules.moreInfoRightPanel.content;
+    this.config.options = this.extension.data.config!.modules.moreInfoRightPanel.options;
 
     // create ui
     this.$title = $(

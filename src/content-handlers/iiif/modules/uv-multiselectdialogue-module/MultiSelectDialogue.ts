@@ -7,8 +7,11 @@ import { Bools } from "@edsilv/utils";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
 // import { GalleryComponent } from "../../GalleryComponent";
 import { MultiSelectState } from "@iiif/manifold";
+import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class MultiSelectDialogue extends Dialogue {
+export class MultiSelectDialogue extends Dialogue<
+  Config["modules"]["multiSelectDialogue"]
+> {
   $title: JQuery;
   $gallery: JQuery;
   galleryComponent: any;

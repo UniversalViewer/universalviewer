@@ -10,8 +10,11 @@ import {
   LanguageMap,
 } from "manifesto.js";
 import { Events } from "../../../../Events";
+import { Config } from "../../extensions/uv-default-extension/config/Config";
 
-export class FileLinkCenterPanel extends CenterPanel {
+export class FileLinkCenterPanel extends CenterPanel<
+  Config["modules"]["fileLinkCenterPanel"]
+> {
   $scroll: JQuery;
   $downloadItems: JQuery;
   $downloadItemTemplate: JQuery;
