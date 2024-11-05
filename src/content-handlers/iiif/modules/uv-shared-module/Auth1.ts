@@ -163,8 +163,9 @@ export class Auth1 {
         foundItems.push(item);
       } else {
         // find an access token for the domain
-        const domain: string = Urls.getUrlParts(<string>resource.dataUri)
-          .hostname;
+        const domain: string = Urls.getUrlParts(
+          <string>resource.dataUri
+        ).hostname;
         const items: StorageItem[] = Storage.getItems(Auth1.storageStrategy);
 
         for (let i = 0; i < items.length; i++) {
@@ -202,9 +203,8 @@ export class Auth1 {
         resolve(null);
       } else if (resource.authHoldingPage) {
         // redirect holding page
-        resource.authHoldingPage.location.href = Auth1.getCookieServiceUrl(
-          service
-        );
+        resource.authHoldingPage.location.href =
+          Auth1.getCookieServiceUrl(service);
         resolve(resource.authHoldingPage);
       } else {
         Auth1.publish(IIIFEvents.SHOW_AUTH_DIALOGUE, [
@@ -214,9 +214,8 @@ export class Auth1 {
               resolve(null);
             },
             confirmCallback: () => {
-              const win: Window | null = Auth1.openContentProviderInteraction(
-                service
-              );
+              const win: Window | null =
+                Auth1.openContentProviderInteraction(service);
               resolve(win);
             },
             cancelCallback: () => {

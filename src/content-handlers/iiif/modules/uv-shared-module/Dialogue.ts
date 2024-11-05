@@ -156,7 +156,9 @@ export class Dialogue<
         $defaultButton.focus();
       } else {
         // if there's no default button, focus on the first visible input or select element
-        const $firstVisibleElement: JQuery = this.$element.find("input:visible, select:visible").first();
+        const $firstVisibleElement: JQuery = this.$element
+          .find("input:visible, select:visible")
+          .first();
 
         if ($firstVisibleElement.length) {
           $firstVisibleElement.focus();
@@ -206,27 +208,29 @@ export class Dialogue<
 
   private handleKeydown(event: JQuery.Event): void {
     if (event.key === "Tab") {
-        const focusableSelectors =
-            'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex="0"]';
-        const focusableElements = this.$element.find(focusableSelectors).filter(':visible');
+      const focusableSelectors =
+        'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex="0"]';
+      const focusableElements = this.$element
+        .find(focusableSelectors)
+        .filter(":visible");
 
-        const firstElement = focusableElements.first()[0];
-        const lastElement = focusableElements.last()[0];
-        const activeElement = document.activeElement;
+      const firstElement = focusableElements.first()[0];
+      const lastElement = focusableElements.last()[0];
+      const activeElement = document.activeElement;
 
-        if (event.shiftKey) {
-            // Shift + Tab (backwards)
-            if (activeElement === firstElement) {
-                event.preventDefault();
-                lastElement.focus();
-            }
-        } else {
-            // Tab (forwards)
-            if (activeElement === lastElement) {
-                event.preventDefault();
-                firstElement.focus();
-            }
+      if (event.shiftKey) {
+        // Shift + Tab (backwards)
+        if (activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
         }
+      } else {
+        // Tab (forwards)
+        if (activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
     }
   }
 }

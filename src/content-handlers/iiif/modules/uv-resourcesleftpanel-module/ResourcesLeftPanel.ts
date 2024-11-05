@@ -105,7 +105,8 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
     let width: number;
     let height: number;
 
-    const viewingDirection: ViewingDirection | null = this.extension.helper.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.extension.helper.getViewingDirection();
 
     if (
       viewingDirection &&

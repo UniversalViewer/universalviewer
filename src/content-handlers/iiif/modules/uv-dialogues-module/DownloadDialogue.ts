@@ -269,7 +269,8 @@ export class DownloadDialogue extends Dialogue<
   }
 
   updateTermsOfUseButton(): void {
-    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null =
+      this.extension.helper.getRequiredStatement();
 
     if (
       Bools.getBool(

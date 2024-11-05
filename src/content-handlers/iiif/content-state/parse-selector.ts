@@ -6,10 +6,12 @@ export type ParsedSelector = {
   selectors: SupportedSelectors[];
 };
 
-const BOX_SELECTOR = /&?(xywh=)?(pixel:|percent:)?([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?)/;
+const BOX_SELECTOR =
+  /&?(xywh=)?(pixel:|percent:)?([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?)/;
 
 // Does not support 00:00:00 or 00:00 formats.
-const TEMPORAL_SELECTOR = /&?(t=)(npt:)?([0-9]+(.[0-9]+)?)?(,([0-9]+(.[0-9]+)?))?/;
+const TEMPORAL_SELECTOR =
+  /&?(t=)(npt:)?([0-9]+(.[0-9]+)?)?(,([0-9]+(.[0-9]+)?))?/;
 
 export function parseSelector(source: Selector | Selector[]): ParsedSelector {
   if (Array.isArray(source)) {

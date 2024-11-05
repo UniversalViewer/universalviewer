@@ -28,14 +28,15 @@ const ThumbImage = ({
   });
 
   var keydownHandler = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault(); onKeyDown(thumb)
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onKeyDown(thumb);
     }
   };
   return (
     <div
       onClick={() => onClick(thumb)}
-      onKeyDown= {keydownHandler}
+      onKeyDown={keydownHandler}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -88,12 +89,14 @@ const Thumbnails = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const thumb: HTMLElement = ref.current?.querySelector(`#thumb-${selected[0]}`) as HTMLElement;
+    const thumb: HTMLElement = ref.current?.querySelector(
+      `#thumb-${selected[0]}`
+    ) as HTMLElement;
     const y: number = thumb?.offsetTop;
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [selected]);
 

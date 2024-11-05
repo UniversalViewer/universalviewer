@@ -290,12 +290,12 @@ type AdjustImageDialogueContent = DialogueContent & {
   saturation: string;
   reset: string;
   remember: string;
-}
+};
 
 export type AdjustImageDialogue = ModuleConfig & {
   options: AdjustImageDialogueOptions;
   content: AdjustImageDialogueContent;
-}
+};
 
 export type DownloadDialogueOptions = DialogueOptions & {};
 

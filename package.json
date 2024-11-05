@@ -65,7 +65,7 @@
     "less": "4.1.2",
     "less-loader": "10.1.0",
     "lodash": "4.17.21",
-    "prettier": "^1.19.1",
+    "prettier": "^2.8.8",
     "prettier-check": "^2.0.0",
     "puppeteer": "^23",
     "source-map-loader": "^5.0.0",
@@ -130,9 +130,12 @@
   "jest": {
     "preset": "jest-puppeteer",
     "transform": {
-      "^.+\\.tsx?$": ["ts-jest", {
-        "diagnostics": true
-      }]
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "diagnostics": true
+        }
+      ]
     },
     "testPathIgnorePatterns": [
       "/node_modules/"
