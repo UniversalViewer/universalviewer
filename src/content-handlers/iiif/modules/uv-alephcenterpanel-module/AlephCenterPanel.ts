@@ -21,6 +21,7 @@ import {
 import "@universalviewer/aleph/dist/collection/assets/OrbitControls";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-aleph-extension/config/Config";
+import { sanitize } from "../../../../Utils";
 
 export class AlephCenterPanel extends CenterPanel<
   Config["modules"]["alephCenterPanel"]
@@ -42,6 +43,8 @@ export class AlephCenterPanel extends CenterPanel<
 
     await applyPolyfills();
     defineCustomElements(window);
+
+    this.title = this.extension.helper.getLabel();
 
     this._alViewer = document.createElement("al-viewer");
     this.$content.prepend(this._alViewer);
@@ -288,6 +291,10 @@ export class AlephCenterPanel extends CenterPanel<
 
   resize() {
     super.resize();
+
+    if (this.title) {
+      this.$title.text(sanitize(this.title));
+    }
 
     if (this._alViewerReady && this._state.srcLoaded) {
       this._alViewer.resize();
