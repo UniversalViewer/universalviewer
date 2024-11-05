@@ -127,17 +127,22 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this._extensionRegistry[ExternalResourceType.IMAGE] = Extension.OSD;
     this._extensionRegistry[ExternalResourceType.MOVING_IMAGE] =
       Extension.MEDIAELEMENT;
-    this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
-      Extension.MODELVIEWER;
+    // this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
+    //   Extension.MODELVIEWER;
+      this._extensionRegistry[ExternalResourceType.PHYSICAL_OBJECT] =
+      Extension.ALEPH;
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
-    this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
+    // this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.DRACO] = Extension.ALEPH;
     this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
     this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
-    this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
+    // this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
+    // this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
+    this._extensionRegistry[MediaType.GLB] = Extension.ALEPH;
+    this._extensionRegistry[MediaType.GLTF] = Extension.ALEPH;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
