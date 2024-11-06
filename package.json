@@ -112,7 +112,7 @@
     "manifesto.js": "4.2.20",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "2.5.1",
-    "openseadragon": "4.1.1",
+    "openseadragon": "5.0.0",
     "pdfjs-dist": "3.11.174",
     "pdfobject": "2.3.0",
     "react": "^18.0.0",
