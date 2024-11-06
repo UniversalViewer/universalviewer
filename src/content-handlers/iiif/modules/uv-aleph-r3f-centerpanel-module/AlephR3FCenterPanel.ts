@@ -3,24 +3,25 @@ import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { sanitize } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { Position } from "../uv-shared-module/Position";
 import { Async } from "@edsilv/utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-model-viewer-extension/config/Config";
 import { createRoot, Root } from "react-dom/client";
 import { createElement } from "react";
 import { Viewer } from "aleph-r3f";
-import "aleph-r3f/dist/style.css";
 
 export class AlephR3FCenterPanel extends CenterPanel<
   Config["modules"]["centerPanel"]
 > {
-  $spinner: JQuery;
+  $viewerContainer: JQuery;
   viewerRoot: Root;
 
   isLoaded: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
+    this.attributionPosition = Position.BOTTOM_RIGHT;
   }
 
   create(): void {
@@ -30,7 +31,12 @@ export class AlephR3FCenterPanel extends CenterPanel<
 
     const that = this;
 
-    this.viewerRoot = createRoot(this.$content[0]);
+    this.$viewerContainer = $('<div id="viewer"></div>');
+    this.$viewerContainer.css("width", "100%");
+    this.$viewerContainer.css("height", "100%");
+    this.$content.prepend(this.$viewerContainer);
+
+    this.viewerRoot = createRoot(this.$viewerContainer[0]);
 
     this.extensionHost.subscribe(
       IIIFEvents.OPEN_EXTERNAL_RESOURCE,
@@ -40,9 +46,6 @@ export class AlephR3FCenterPanel extends CenterPanel<
     );
 
     this.title = this.extension.helper.getLabel();
-
-    this.$spinner = $('<div class="spinner"></div>');
-    this.$content.prepend(this.$spinner);
   }
 
   whenLoaded(cb: () => void): void {
@@ -52,7 +55,6 @@ export class AlephR3FCenterPanel extends CenterPanel<
   }
 
   async openMedia(resources: IExternalResource[]) {
-    this.$spinner.show();
     await this.extension.getExternalResources(resources);
 
     let mediaUri: string | null = null;
@@ -81,15 +83,6 @@ export class AlephR3FCenterPanel extends CenterPanel<
 
   resize() {
     super.resize();
-
-    this.$spinner.css(
-      "top",
-      this.$content.height() / 2 - this.$spinner.height() / 2
-    );
-    this.$spinner.css(
-      "left",
-      this.$content.width() / 2 - this.$spinner.width() / 2
-    );
 
     if (this.title) {
       this.$title.text(sanitize(this.title));
