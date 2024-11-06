@@ -101,7 +101,7 @@
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
-    "aleph-r3f": "^0.0.21",
+    "aleph-r3f": "aleph-viewer/aleph-r3f#389390074bc0b65d018953f1dd4e4a82021c1672",
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
