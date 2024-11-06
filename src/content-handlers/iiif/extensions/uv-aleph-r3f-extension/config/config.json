@@ -212,7 +212,7 @@
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": true,
+        "panelOpen": false,
         "thumbsEnabled": true,
         "thumbsExtraHeight": 8,
         "thumbsImageFadeInDuration": 300,
