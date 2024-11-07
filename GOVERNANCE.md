@@ -248,7 +248,7 @@ with all members of the community, from the newest user to the most
 experienced SG member. All non-sensitive project management discussion
 takes place on the [Universal Viewer
 Slack](universalviewer.slack.com). Occasionally, sensitive discussion occurs in private, as
-discussed above under [**Universal Viewer Steering Group**].
+discussed above under [**Universal Viewer Steering Group**](#universal-viewer-steering-group).
 
 In order to ensure that the project is not bogged down by endless
 discussion and continual voting, the project operates a policy of lazy
