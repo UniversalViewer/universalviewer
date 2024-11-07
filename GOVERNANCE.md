@@ -157,7 +157,7 @@ regardless of the outcome of the vote. This explanation will be provided
 by the SG Chair (see below) and will be anonymous and
 constructive in nature. New committers who pass the SG vote are announced
 in the [Universal Viewer
-Slack](universalviewer.slack.com)
+Slack](universalviewer.slack.com).
 
 Nominees may decline their appointment as a committer. However, this is
 unusual, as the project does not expect any specific time or resource
@@ -185,7 +185,7 @@ the copyrights within the project outputs. The SG also votes to fill
 key roles related to Universal Viewer's membership in the Open Collective,
 including a Treasurer to manage the project's finances. All special SG
 roles are documented on the [Steering Group page of the Universal Viewer
-website](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group)
+website](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group).
 
 Members of the SG do not have significant authority over other members
 of the community, although it is the SG that votes on new committers
