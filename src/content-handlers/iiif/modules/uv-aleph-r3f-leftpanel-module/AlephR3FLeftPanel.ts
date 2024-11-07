@@ -9,6 +9,7 @@ import "aleph-r3f/dist/style.css";
 export class AlephR3FLeftPanel extends LeftPanel<
   Config["modules"]["leftPanel"]
 > {
+  $controlPanelContainer: JQuery;
   controlPanelRoot: Root;
 
   constructor($element: JQuery) {
@@ -21,7 +22,12 @@ export class AlephR3FLeftPanel extends LeftPanel<
 
     this.setTitle("CONTROLS");
 
-    this.controlPanelRoot = createRoot(this.$main[0]);
+    this.$controlPanelContainer = $('<div id="control-panel"></div>');
+    this.$controlPanelContainer.css("width", "100%");
+    this.$controlPanelContainer.css("height", "100%");
+    this.$main.prepend(this.$controlPanelContainer);
+
+    this.controlPanelRoot = createRoot(this.$controlPanelContainer[0]);
     // this.buttonRoot.render(createElement(Button, { getStore }));
     this.controlPanelRoot.render(createElement(ControlPanel, {}));
   }
