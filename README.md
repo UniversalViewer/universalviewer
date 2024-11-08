@@ -46,9 +46,9 @@ A community-developed open source project on a mission<br/> to help you share yo
 - [Visit the dev branch UV demo page](https://universalviewer.dev) to try out the latest 'bleeding edge' dev branch code for UV4.
 - [View sample items in version 3 of the Universal Viewer](https://uv-v3.netlify.app)
 
-<!-- ## 📖 Scope
+## 📖 Scope
 
-Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About) -->
+Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About) 
 
 ## 📖 Getting Started
 
@@ -63,6 +63,7 @@ Read below to learn how to take part in improving the UV:
 - Fork the repository and [run the examples from source](#-getting-started)
 - Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/main/CODE_OF_CONDUCT.md)
 - Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/main/CONTRIBUTING.md)
+- Read our [governance document](https://github.com/UniversalViewer/universalviewer/blob/dev/GOVERNANCE.md) to learn more about roles and responsibilities, support, membership, and the decision making process.
 - Find an [issue](https://github.com/UniversalViewer/universalviewer/issues) to work on and submit a pull request
 - Could not find an issue? Look for bugs, typos, and missing features.
 
