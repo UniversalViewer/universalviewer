@@ -11,7 +11,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
+import { Strings, Bools } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
@@ -235,11 +235,7 @@ export default class AlephR3FExtension extends BaseExtension<Config> {
   }
 
   isLeftPanelEnabled(): boolean {
-    return true;
-    // return (
-    //   Bools.getBool(this.data.config!.options.leftPanelEnabled, true) &&
-    //   (this.helper.isMultiCanvas() || this.helper.isMultiSequence())
-    // );
+    return Bools.getBool(this.data.config!.options.leftPanelEnabled, true);
   }
 
   bookmark(): void {
