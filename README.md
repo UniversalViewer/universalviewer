@@ -12,7 +12,7 @@ A community-developed open source project on a mission<br/> to help you share yo
 <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
 </a>
 <a href="https://github.com/UniversalViewer/universalviewer/blob/main/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
-<a href="https://github.com/UniversalViewer/universalviewer/wiki"> About</a>
+<a href="https://github.com/UniversalViewer/universalviewer/wiki">About</a>
 </p>
 
 <p align="center">
