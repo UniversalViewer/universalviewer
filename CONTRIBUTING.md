@@ -111,7 +111,7 @@ Once a stable release is ready to be published, these steps can be followed:
 1. On the `dev` branch, run `npm version X.Y.Z` (replacing "X.Y.Z" with the actual number of the new version) to appropriately update `package.json` and create a git tag.
 2. If the new release will be a major or minor version (but NOT if it will be a patch release), a new `release-X.Y` branch needs to be created from the `main` branch before anything is merged. This release branch will make it easier to backport fixes to earlier versions if critical bugs or security issues are discovered later. For example, if the current version is 4.0.25 and 4.1.0 is about to be released, a new `release-4.0` branch would be created from the `main` branch to continue tracking the development of the 4.0.x line of code.
 3. Whether or not a release branch needed to be created, it is now time to merge the `dev` branch into the `main` branch to ensure that `main` always represents the most recently released version.
-4. All changed branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.0` (for a new major release) or `git push origin main dev v4.1.1
+4. All changed branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.0` (for a new major release) or `git push origin main dev v4.1.1` (for a new minor release).
 5. At this point, a GitHub action will recognize the new version tag and publish the package to NPM.
 
 ### Backporting a Bug Fix
