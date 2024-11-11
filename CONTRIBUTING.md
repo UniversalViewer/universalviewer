@@ -98,19 +98,22 @@ Before a release can be made, some planning and testing are required:
 1. The [Universal Viewer Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) is responsible for determining when a new release is needed (for example, because a sprint has completed, or because a major fix or feature has been contributed). The community is welcome to reach out to members of the Steering Group to propose/request a release at any time.
 2. Once a release is decided upon, its version number must be determined. The project uses [semantic versioning](https://semver.org/), so given version X.Y.Z, we will increment Z for fixes (patch release), Y for new features (minor release), or X for backward-incompatible changes (major release).
 3. If outstanding work must be completed to ensure a stable release, a milestone for the new version will be created in GitHub and all relevant outstanding issues/PRs assigned to it, so that estimation can be performed to set a realistic release date (this could be done at steering group and/or community call meetings). If work is already complete, the release can proceed immediately.
-4. When it's time to begin the release process, a pull request should be created against the `dev` branch containing the result of running the `npm version X.Y.Z-rc1` command. This will create a release candidate that can be easily tested online and/or locally built.
+4. When it's time to begin the release process, a pull request should be created against the `dev` branch containing the result of running the `npm version X.Y.Z-rc1` command (where X.Y.Z is replaced with the new version determined in step 2). This will create a release candidate that can be easily tested online and/or locally built.
 5. Once the release candidate is built, the Steering Group will announce it and offer an appropriate testing window (usually 1-2 weeks, depending on scope/complexity of changes) for community feedback. During this window, community members are encouraged to build the new version and try it out in their environments.
 6. When the testing window ends, the pull request from step 4 will be merged.
 7. If problems were found during the testing window, as soon as they are fixed, steps 4-6 will be repeated with an incremented "rc" number (e.g. X.Y.Z-rc2) to ensure that no problems remain.
 8. Once the release candidate is stable, it will be promoted to the formal release. After the RC pull request is merged, the full release can be published.
 
-### Making a Release
+### Making a Normal Release
 
 Once a stable release is ready to be published, these steps can be followed:
 
-1. On the `dev` branch, run `npm version X.Y.Z` to appropriately update `package.json` and create a git tag.
-2. If the new release will be a major or minor version, a new `release-X.Y` branch needs to be created from the `main` branch before anything is merged. This release branch will make it easier to backport fixes to earlier versions if critical bugs or security issues are discovered later. For example, if the current version is 4.0.25 and 4.1.0 is about to be released, a new `release-4.0` branch would be created from the `main` branch to continue tracking the development of the 4.0 line of code.
-3. If the new release will be a patch, then the `dev` branch needs to be merged into the most recent `release-X.Y` branch to keep the release branch up to date.
-4. In all cases, it is now time to merge the `dev` branch into the `main` branch to ensure that `main` always represents the most recently released version.
-5. All changed branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.0`
-6. At this point, a GitHub action will recognize the new version tag and publish the package to NPM.
+1. On the `dev` branch, run `npm version X.Y.Z` (replacing "X.Y.Z" with the actual number of the new version) to appropriately update `package.json` and create a git tag.
+2. If the new release will be a major or minor version (but NOT if it will be a patch release), a new `release-X.Y` branch needs to be created from the `main` branch before anything is merged. This release branch will make it easier to backport fixes to earlier versions if critical bugs or security issues are discovered later. For example, if the current version is 4.0.25 and 4.1.0 is about to be released, a new `release-4.0` branch would be created from the `main` branch to continue tracking the development of the 4.0.x line of code.
+3. Whether or not a release branch needed to be created, it is now time to merge the `dev` branch into the `main` branch to ensure that `main` always represents the most recently released version.
+4. All changed branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.0` (for a new major release) or `git push origin main dev v4.1.1
+5. At this point, a GitHub action will recognize the new version tag and publish the package to NPM.
+
+### Backporting a Bug Fix
+
+If there is a need to fix a bug in an older version of the code, bug fix pull requests should be created against the appropriate `release-X.Y` branch(es). After these are merged and tested, releases can be published from the appropriate release branch(es) by running `npm version patch` and then pushing the updated files and new release tag to GitHub. There should be no need to merge from `release-X.Y` branches forward to the `dev` branch when fixes are backported.
