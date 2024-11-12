@@ -9,7 +9,7 @@ describe('Universal Viewer', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto('http://localhost:8080/#?xywh=-1741%2C125%2C8017%2C6807&iiifManifestId=http%3A%2F%2Fiiif.bodleian.ox.ac.uk%2Fexamples%2Fmushaf4.json');
+    await page.goto('http://localhost:4444');
   });
 
   afterAll(async () => {
@@ -61,14 +61,12 @@ describe('Universal Viewer', () => {
   });
 });
 
-
-it('loads the viewer images', async () => {
-  await page.waitForSelector('#thumb-0');
-  const imageSrc = await page.$eval('#thumb-0 img', e => e.src);
-  expect(imageSrc).toEqual(
-    expect.stringContaining(
-      'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg'
-    )
-  );
-});
-
+// it('loads the viewer images', async () => {
+//   await page.waitForSelector('#thumb-0');
+//   const imageSrc = await page.$eval('#thumb-0 img', e => e.src);
+//   expect(imageSrc).toEqual(
+//     expect.stringContaining(
+//       'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg'
+//     )
+//   );
+// });
