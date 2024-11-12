@@ -56,7 +56,7 @@ Before commiting your changes make sure tests are passing:
 npm test
 ```
 
-> Note: the development server must be running (`npm start`)
+> Note: the test suite runs its own server on port 4444 for browser-based testing; be sure that you have built the latest code (e.g. using `npm run build`) before running tests to ensure that you are testing the right changes.
 
 > Tests are written using [Jest](https://jestjs.io/)
 
