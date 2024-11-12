@@ -79,6 +79,7 @@ export class AlephR3FCenterPanel extends CenterPanel<
     );
 
     this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
+    this.extensionHost.publish(Events.LOAD);
   }
 
   resize() {
