@@ -77,7 +77,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
-      // this.zoomToInitialAnnotation();
     });
 
     this.extensionHost.subscribe(
@@ -217,7 +216,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$adjustImageButton,
     ];
 
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       button.on("focus", disableAutoHide);
       button.on("focusout", enableAutoHide);
     });
@@ -347,7 +346,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           handler: "dblClickHandler",
           hookHandler: (e) => {
             const settings: ISettings = this.extension.getSettings();
-            const pagingAvailable: boolean = this.extension.helper.isPagingAvailable();
+            const pagingAvailable: boolean =
+              this.extension.helper.isPagingAvailable();
             if (
               (pagingAvailable && !settings.pagingEnabled) ||
               !pagingAvailable
@@ -415,10 +415,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (this.showAdjustImageButton) {
       this.$adjustImageButton = this.$rotateButton.clone();
-      this.$adjustImageButton.attr('title', this.content.adjustImage);
-      this.$adjustImageButton.attr('aria-label', this.content.adjustImage);
-      this.$adjustImageButton.switchClass('rotate', 'adjustImage');
-      this.$adjustImageButton.attr('tabindex', 0);
+      this.$adjustImageButton.attr("title", this.content.adjustImage);
+      this.$adjustImageButton.attr("aria-label", this.content.adjustImage);
+      this.$adjustImageButton.switchClass("rotate", "adjustImage");
+      this.$adjustImageButton.attr("tabindex", 0);
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
@@ -433,13 +433,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       .add(this.$zoomOutButton)
       .add(this.$goHomeButton)
       .add(this.$rotateButton)
-      .add(this.$adjustImageButton).on('focus', () => {
+      .add(this.$adjustImageButton)
+      .on("focus", () => {
         if (this.controlsVisible) return;
         this.controlsVisible = true;
         this.viewer.setControlsEnabled(true);
       });
 
-    this.$zoomInButton.add(this.$adjustImageButton).on('blur', () => {
+    this.$zoomInButton.add(this.$adjustImageButton).on("blur", () => {
       if (!this.controlsVisible) return;
       this.controlsVisible = false;
       this.viewer.setControlsEnabled(false);
@@ -451,19 +452,23 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     //this.$viewportNavButtonsContainer.addClass("viewportControls");
 
-    this.$viewportNavButtons = this.$viewportNavButtonsContainer.find(
-      ".viewportNavButton"
-    );
+    this.$viewportNavButtons =
+      this.$viewportNavButtonsContainer.find(".viewportNavButton");
 
     this.$canvas = $(this.viewer.canvas);
 
     // Check if we have saved settings for image adjustment
     let settings = this.extension.getSettings();
-    if (this.extension.data.config?.options.saveUserSettings && settings.rememberSettings) {
+    if (
+      this.extension.data.config?.options.saveUserSettings &&
+      settings.rememberSettings
+    ) {
       let contrastPercent = settings.contrastPercent;
       let brightnessPercent = settings.brightnessPercent;
       let saturationPercent = settings.saturationPercent;
-      (<HTMLCanvasElement>(this.$canvas[0].children[0])).style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
+      (<HTMLCanvasElement>(
+        this.$canvas[0].children[0]
+      )).style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
     }
 
     // disable right click on canvas
@@ -573,8 +578,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 
-      this.$prevButton = $(
-        `<button class="btn btn-default paging prev" title="${this.content.previous}">
+    this.$prevButton = $(
+      `<button class="btn btn-default paging prev" title="${this.content.previous}">
           <i class="uv-icon-prev" aria-hidden="true"></i>
           <span class="sr-only">${this.content.previous}</span>
         </button>`
@@ -591,7 +596,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         <i class="uv-icon-next" aria-hidden="true"></i>
         <span class="sr-only">${this.content.next}</span>
       </button>`
-  );
+    );
 
     if (this.extension.helper.isRightToLeft()) {
       this.$nextButton.prop("title", this.content.previous);
@@ -733,9 +738,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$spinner.show();
     this.items = [];
 
-    let images: IExternalResourceData[] = await this.extension.getExternalResources(
-      resources
-    );
+    let images: IExternalResourceData[] =
+      await this.extension.getExternalResources(resources);
 
     const isGirder: boolean = this.extension.format === MediaType.GIRDER;
 
@@ -924,7 +928,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   overlayAnnotations(): void {
-    const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+    const annotations: AnnotationGroup[] =
+      this.getAnnotationsForCurrentImages();
 
     // clear existing annotations
     this.clearAnnotations();
@@ -962,6 +967,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.viewer.addOverlay(div, rect);
       }
     }
+
+    if (annotations.length && this.shouldZoomToInitialAnnotation()) {
+      this.zoomToInitialAnnotation();
+    }
   }
 
   updateBounds(): void {
@@ -977,8 +986,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.viewer.viewport.setRotation(parseInt(this.initialRotation));
       }
 
-      const xywh: string | undefined = (this.extension
-        .data as IOpenSeadragonExtensionData).xywh;
+      const xywh: string | undefined = (
+        this.extension.data as IOpenSeadragonExtensionData
+      ).xywh;
 
       if (xywh) {
         this.initialBounds = XYWHFragment.fromString(xywh);
@@ -1052,11 +1062,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (!this.viewer || !this.viewer.viewport) return null;
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const dimensions: CroppedImageDimensions | null = (this
-      .extension as OpenSeadragonExtension).getCroppedImageDimensions(
-        canvas,
-        this.viewer
-      );
+    const dimensions: CroppedImageDimensions | null = (
+      this.extension as OpenSeadragonExtension
+    ).getCroppedImageDimensions(canvas, this.viewer);
 
     if (dimensions) {
       const bounds: XYWHFragment = new XYWHFragment(
@@ -1103,8 +1111,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   getAnnotationsForCurrentImages(): AnnotationGroup[] {
     let annotationsForCurrentImages: AnnotationGroup[] = [];
-    const annotations: AnnotationGroup[] | null = (this
-      .extension as OpenSeadragonExtension).annotations;
+    const annotations: AnnotationGroup[] | null = (
+      this.extension as OpenSeadragonExtension
+    ).annotations;
 
     if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -1125,7 +1134,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   getAnnotationRectsForCurrentImages(): AnnotationRect[] {
-    const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+    const annotations: AnnotationGroup[] =
+      this.getAnnotationsForCurrentImages();
     if (annotations.length) {
       return annotations
         .map((x) => {
@@ -1140,7 +1150,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   updateVisibleAnnotationRects(): void {
     // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
 
     for (let i = 0; i < annotationRects.length; i++) {
       let rect: AnnotationRect = annotationRects[i];
@@ -1158,7 +1169,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   getAnnotationRectIndex(annotationRect: AnnotationRect): number {
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
     return annotationRects.indexOf(annotationRect);
   }
 
@@ -1169,10 +1181,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
   }
 
+  shouldZoomToInitialAnnotation(): boolean {
+    return Bools.getBool(this.config.options.zoomToInitialAnnotation, true);
+  }
+
   prevAnnotation(): void {
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (this
-      .extension as OpenSeadragonExtension).currentAnnotationRect;
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
+    const currentAnnotationRect: AnnotationRect | null = (
+      this.extension as OpenSeadragonExtension
+    ).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -1198,8 +1216,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is less than the current canvasIndex
       if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
-        (this
-          .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect =
+          foundRect;
         this.navigatedFromSearch = true;
         this.extensionHost.publish(IIIFEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect,
@@ -1216,9 +1234,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   nextAnnotation(): void {
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (this
-      .extension as OpenSeadragonExtension).currentAnnotationRect;
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
+    const currentAnnotationRect: AnnotationRect | null = (
+      this.extension as OpenSeadragonExtension
+    ).currentAnnotationRect;
 
     const currentAnnotationRectIndex: number = currentAnnotationRect
       ? this.getAnnotationRectIndex(currentAnnotationRect)
@@ -1247,8 +1267,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     if (foundRect && this.isZoomToSearchResultEnabled()) {
       // if the rect's canvasIndex is greater than the current canvasIndex
       if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-        (this
-          .extension as OpenSeadragonExtension).currentAnnotationRect = foundRect;
+        (this.extension as OpenSeadragonExtension).currentAnnotationRect =
+          foundRect;
         this.navigatedFromSearch = true;
         this.extensionHost.publish(IIIFEvents.ANNOTATION_CANVAS_CHANGE, [
           foundRect,
@@ -1265,13 +1285,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   getAnnotationRectByIndex(index: number): AnnotationRect | null {
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
     if (!annotationRects.length) return null;
     return annotationRects[index];
   }
 
   getInitialAnnotationRect(): AnnotationRect | null {
-    const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    const annotationRects: AnnotationRect[] =
+      this.getAnnotationRectsForCurrentImages();
     if (!annotationRects.length) return null;
 
     // if we've got this far it means that a reload has happened
@@ -1280,8 +1302,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     // if less than, select the first annotation on the current page
     // otherwise default to the first annotation
 
-    const previousAnnotationRect: AnnotationRect | null = (this
-      .extension as OpenSeadragonExtension).previousAnnotationRect;
+    const previousAnnotationRect: AnnotationRect | null = (
+      this.extension as OpenSeadragonExtension
+    ).previousAnnotationRect;
 
     if (!previousAnnotationRect) {
       if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
@@ -1301,8 +1324,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     (this.extension as OpenSeadragonExtension).previousAnnotationRect =
       (this.extension as OpenSeadragonExtension).currentAnnotationRect ||
       annotationRect;
-    (this
-      .extension as OpenSeadragonExtension).currentAnnotationRect = annotationRect;
+    (this.extension as OpenSeadragonExtension).currentAnnotationRect =
+      annotationRect;
 
     // if zoomToBoundsEnabled, zoom to the annotation's bounds.
     // otherwise, pan into view preserving the current zoom level.
@@ -1345,9 +1368,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       "#annotation-" + annotationRect.canvasIndex + "-" + annotationRect.index
     );
     $rect.addClass("current");
-    $(".annotationRect")
-      .not($rect)
-      .removeClass("current");
+    $(".annotationRect").not($rect).removeClass("current");
   }
 
   getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
@@ -1516,6 +1537,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   getControlsFadeLength(): number {
-    return (<ISettings>this.extension.getSettings()).reducedAnimation ? 0 : this.config.options.controlsFadeLength || 250;
+    return (<ISettings>this.extension.getSettings()).reducedAnimation
+      ? 0
+      : this.config.options.controlsFadeLength || 250;
   }
 }

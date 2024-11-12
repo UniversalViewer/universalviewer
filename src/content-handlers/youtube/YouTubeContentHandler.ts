@@ -15,9 +15,7 @@ interface YouTubeConfig {
   controls?: boolean;
 }
 
-export default class YouTubeContentHandler extends BaseContentHandler<
-  YouTubeData
-> {
+export default class YouTubeContentHandler extends BaseContentHandler<YouTubeData> {
   private _id: string;
   public config: YouTubeConfig;
 

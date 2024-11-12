@@ -209,21 +209,31 @@ export class ShareDialogue<
       return Numbers.numericalInput(e);
     });
 
-    this.$shareInput.focus(function() {
+    this.$shareInput.focus(function () {
       $(this).select();
     });
 
-    this.$code.focus(function() {
+    this.$code.focus(function () {
       $(this).select();
     });
 
-    this.onAccessibleClick(this.$shareButton, () => {
-      this.openShareView();
-    }, true, true);
+    this.onAccessibleClick(
+      this.$shareButton,
+      () => {
+        this.openShareView();
+      },
+      true,
+      true
+    );
 
-    this.onAccessibleClick(this.$embedButton, () => {
-      this.openEmbedView();
-    }, true, true);
+    this.onAccessibleClick(
+      this.$embedButton,
+      () => {
+        this.openEmbedView();
+      },
+      true,
+      true
+    );
 
     this.$customSizeDropDown.change(() => {
       this.update();
@@ -383,7 +393,8 @@ export class ShareDialogue<
   }
 
   updateTermsOfUseButton(): void {
-    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null =
+      this.extension.helper.getRequiredStatement();
 
     if (
       Bools.getBool(

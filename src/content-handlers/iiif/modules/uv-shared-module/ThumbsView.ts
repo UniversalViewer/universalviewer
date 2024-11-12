@@ -71,13 +71,13 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     const extraHeight: number = this.options.thumbsExtraHeight;
 
     $.views.helpers({
-      separator: function() {
+      separator: function () {
         return false;
       },
-      extraHeight: function() {
+      extraHeight: function () {
         return extraHeight;
       },
-      className: function() {
+      className: function () {
         let className: string = "thumb";
 
         if (this.data.index === 0) {
@@ -88,7 +88,8 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
           className += " placeholder";
         }
 
-        const viewingDirection: ViewingDirection | null = that.extension.helper.getViewingDirection();
+        const viewingDirection: ViewingDirection | null =
+          that.extension.helper.getViewingDirection();
 
         if (
           viewingDirection &&
@@ -104,7 +105,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
 
         return className;
       },
-      searchResultsTitle: function() {
+      searchResultsTitle: function () {
         const searchResults: number = Number(this.data.data.searchResults);
 
         if (searchResults) {
@@ -171,7 +172,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
 
     this.$thumbs.undelegate(".thumb", "click");
 
-    this.$thumbs.delegate(".thumb", "click", function(e) {
+    this.$thumbs.delegate(".thumb", "click", function (e) {
       e.preventDefault();
       const data = $.view(this).data;
       that.lastThumbClickedIndex = data.index;
@@ -180,7 +181,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     });
 
     // Support keyboard navigation (spacebar / enter)
-    this.$thumbs.delegate(".thumb", "keydown", function(e: JQueryEventObject) {
+    this.$thumbs.delegate(".thumb", "keydown", function (e: JQueryEventObject) {
       const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
       const charCode: number = Keyboard.getCharCode(originalEvent);
       if (
@@ -276,18 +277,14 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
           // fade in on load.
           $img.hide();
 
-          $img.on("load", function() {
-            $(this).fadeIn(fadeDuration, function() {
-              $(this)
-                .parent()
-                .switchClass("loading", "loaded");
+          $img.on("load", function () {
+            $(this).fadeIn(fadeDuration, function () {
+              $(this).parent().switchClass("loading", "loaded");
             });
           });
 
-          $img.on("error", function() {
-            $(this)
-              .parent()
-              .switchClass("loading", "loadingFailed");
+          $img.on("error", function () {
+            $(this).parent().switchClass("loading", "loadingFailed");
           });
 
           $wrap.append($img);
@@ -324,12 +321,8 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
   }
 
   setLabel(): void {
-    $(this.$thumbs)
-      .find("span.index")
-      .hide();
-    $(this.$thumbs)
-      .find("span.label")
-      .show();
+    $(this.$thumbs).find("span.index").hide();
+    $(this.$thumbs).find("span.label").show();
   }
 
   addSelectedClassToThumbs(index: number): void {

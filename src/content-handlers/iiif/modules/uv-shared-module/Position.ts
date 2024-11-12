@@ -7,5 +7,5 @@ export enum Position {
   CENTER_RIGHT,
   BOTTOM_LEFT,
   BOTTOM_CENTER,
-  BOTTOM_RIGHT
+  BOTTOM_RIGHT,
 }

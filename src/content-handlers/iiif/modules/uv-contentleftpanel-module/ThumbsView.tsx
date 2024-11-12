@@ -30,14 +30,15 @@ const ThumbImage = ({
   });
 
   var keydownHandler = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault(); onKeyDown(thumb)
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onKeyDown(thumb);
     }
   };
   return (
     <div
       onClick={() => onClick(thumb)}
-      onKeyDown= {keydownHandler}
+      onKeyDown={keydownHandler}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -99,7 +100,7 @@ const Thumbnails = ({
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [selected]);
 

@@ -21,7 +21,7 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
   defaultToTreeEnabled: boolean;
   /** Number of items to default to tree view (when defaultToTreeEnabled = true; defaults to 0) */
   defaultToTreeIfGreaterThan: number;
-   /** Determines if collection should default to tree view (even if defaultToTreeEnabled = false) */
+  /** Determines if collection should default to tree view (even if defaultToTreeEnabled = false) */
   defaultToTreeIfCollection: boolean;
   /** Number of characters to elide at */
   elideCount: number;

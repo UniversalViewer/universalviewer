@@ -55,9 +55,9 @@ export class AutoComplete {
     // init ui.
 
     // callback after set period.
-    const typewatch = (function() {
+    const typewatch = (function () {
       let timer: number = 0;
-      return function(cb: Function, ms: number) {
+      return function (cb: Function, ms: number) {
         clearTimeout(timer);
         timer = setTimeout(cb, ms);
       };
@@ -65,7 +65,7 @@ export class AutoComplete {
 
     const that = this;
 
-    this._$element.on("keydown", function(e: JQueryEventObject) {
+    this._$element.on("keydown", function (e: JQueryEventObject) {
       const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
       //that._lastKeyDownWasNavigation = that._isNavigationKeyDown(originalEvent);
       const charCode: number = Keyboard.getCharCode(originalEvent);
@@ -89,7 +89,7 @@ export class AutoComplete {
     // });
 
     // auto complete
-    this._$element.on("keyup", function(e) {
+    this._$element.on("keyup", function (e) {
       // if pressing enter without a list item selected
       if (
         !that._getSelectedListItem().length &&
@@ -269,7 +269,7 @@ export class AutoComplete {
     const $listItems = this._$searchResultsList.find("li");
 
     $listItems.each((_idx, item) => {
-      $(item).on("click", function(e: any) {
+      $(item).on("click", function (e: any) {
         e.preventDefault();
         that._searchForItem($(this));
       });

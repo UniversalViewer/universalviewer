@@ -103,7 +103,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   toggle(autoToggled?: boolean): void {
-
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
@@ -176,8 +175,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$element.css("width", targetWidth);
       this.$element.css("left", targetLeft);
       this.expandFullFinish();
-    }
-    else {
+    } else {
       this.$element.stop().animate(
         {
           width: targetWidth,
@@ -192,7 +190,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   collapseFull(): void {
-
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
@@ -217,7 +214,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         }
       );
     }
-    
   }
 
   getTargetWidth(): number {
