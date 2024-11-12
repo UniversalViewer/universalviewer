@@ -43,4 +43,4 @@ To apply, simply contact one of our staff or community team members via Slack or
 
 ### Review Periods
 
-Once per year, we'll check in with our team members (both _active_ and _on break_) to ensure they are feeling supported, and to check if they will remain active on our team for the coming months. If we do not hear back from members at check-in time, they will be transitioned to an alumni role.
+Once per year, we'll check in with our team members (both _active_ and _on break_) to ensure they are feeling supported, and to check if they will remain active on our team for the coming months. If we do not hear back from members at check-in time, they will be transitioned to an alumni role. Alumni will be acknowledged here as thanks for their past service and are still welcome to participate in the community, but they are no longer expected to respond quickly to inquiries or meet other specific standards of community service. Alumni can have their names entirely removed from the list by request.
