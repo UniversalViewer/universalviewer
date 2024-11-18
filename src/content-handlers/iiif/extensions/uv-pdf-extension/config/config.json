@@ -186,7 +186,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "pdfCenterPanel": {
@@ -200,7 +201,8 @@
       "content": {
         "attribution": "$attribution",
         "close": "$close",
-        "next": "$next",     
+        "closeAttribution": "$closeAttribution",
+        "next": "$next",
         "previous": "$previous"
       }
     },

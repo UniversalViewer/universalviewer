@@ -57,15 +57,19 @@ export class PDFCenterPanel extends CenterPanel<
         <i class="uv-icon-prev" aria-hidden="true"></i>
         <span class="sr-only">${this.content.previous}</span>
       </button>`
-  );
-  this._$nextButton = $(
+    );
+    this._$nextButton = $(
       `<button class="btn btn-default paging next" title="${this.content.next}">
         <i class="uv-icon-next" aria-hidden="true"></i>
         <span class="sr-only">${this.content.next}</span>
       </button>`
-  );
-    this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
-    this._$zoomOutButton = $('<div class="btn zoomOut" tabindex="0"></div>');
+    );
+    this._$zoomInButton = $(
+      '<button class="btn zoomIn" tabindex="0"></button>'
+    );
+    this._$zoomOutButton = $(
+      '<button class="btn zoomOut" tabindex="0"></button>'
+    );
 
     // Only attach PDF controls if we're using PDF.js; they have no meaning in
     // PDFObject. However, we still create the objects above so that references
@@ -185,9 +189,7 @@ export class PDFCenterPanel extends CenterPanel<
 
     this.disableNextButton();
 
-    this._$zoomInButton.onPressed((e: any) => {
-      e.preventDefault();
-
+    this.onAccessibleClick(this._$zoomInButton, () => {
       const newScale: number = this._scale + 0.5;
 
       if (newScale < this._maxScale) {
@@ -199,9 +201,7 @@ export class PDFCenterPanel extends CenterPanel<
       this._render(this._pageIndex);
     });
 
-    this._$zoomOutButton.onPressed((e: any) => {
-      e.preventDefault();
-
+    this.onAccessibleClick(this._$zoomOutButton, () => {
       const newScale: number = this._scale - 0.5;
 
       if (newScale > this._minScale) {
@@ -261,9 +261,8 @@ export class PDFCenterPanel extends CenterPanel<
 
     let mediaUri: string | null = null;
     let canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
-      canvas
-    );
+    const formats: AnnotationBody[] | null =
+      this.extension.getMediaFormats(canvas);
     const pdfUri: string = canvas.id;
 
     if (formats && formats.length) {

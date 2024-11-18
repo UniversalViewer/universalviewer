@@ -1,68 +1,65 @@
 .uv {
+	@track-color: @gray-light;
+	@thumb-color: @gray;
+	@thumb-border: @text-color;
+    @focus-border: 2px solid @link-color;
+    @focus-track-color: lighten(@track-color, 10%);
 
-    /* WebKit */
+    input[type="range"] {
+		-webkit-appearance: none;
+		appearance: none;
+		background-color: transparent;
+		cursor: pointer;
+	}
 
-    input[type=range] {
-        -webkit-appearance: none;
-    }
+	/* WebKit */
+	input[type="range"]::-webkit-slider-runnable-track {
+		height: 0.25rem;
+		background-color: @track-color;
+		border: none;
+		border-radius: 999px;
+	}
 
-    input[type=range]::-webkit-slider-runnable-track {
-        width: 300px;
-        height: 5px;
-        background: @gray-light;
-        border: none;
-    }
+	input[type="range"]::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		height: 1rem;
+		width: 1rem;
+		margin-top: -5px;
+		background-color: @thumb-color;
+		border: 2px solid @thumb-border;
+		border-radius: 999px;
+	}
 
-    input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        border: none;
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-        background: @gray;
-        margin-top: -5px;
-    }
+	input[type="range"]:focus::-webkit-slider-thumb {
+		margin-top: -7px;
+	}
 
-    input[type=range]:focus {
-        outline: none;
-    }
+	input[type="range"]:focus::-webkit-slider-runnable-track {
+		background-color: @focus-track-color;
+		border: @focus-border;
+	}
 
-    input[type=range]:focus::-webkit-slider-runnable-track {
-        background: @gray-light;
-    }
+	/* Firefox */
+	input[type="range"]::-moz-range-track {
+		height: 0.25rem;
+		background-color: @track-color;
+		border: none;
+		border-radius: 999px;
+	}
 
-    /* Firefox */
+	input[type="range"]::-moz-range-thumb {
+		height: 1rem;
+		width: 1rem;
+		margin-top: -0.5rem;
+		background-color: @thumb-color;
+		border: 2px solid @thumb-border;
+		border-radius: 999px;
+	}
 
-    input[type=range] {
-        /*required for proper track sizing in FF*/
-        width: 300px;
-    }
-
-    input[type=range]::-moz-range-track {
-        width: 300px;
-        height: 5px;
-        background: #ddd;
-        border: none;
-    }
-
-    input[type=range]::-moz-range-thumb {
-        border: none;
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-        background: @gray;
-    }
-
-    /*hide the outline behind the border*/
-    input[type=range]:-moz-focusring {
-        outline: 1px solid white;
-        outline-offset: -1px;
-    }
-
-    input[type=range]:focus::-moz-range-track {
-        background: #ccc;
-    }
-
+	input[type="range"]:focus::-moz-range-track {
+		background-color: @focus-track-color;
+		border: @focus-border;
+	}
 
     /* IE */
 

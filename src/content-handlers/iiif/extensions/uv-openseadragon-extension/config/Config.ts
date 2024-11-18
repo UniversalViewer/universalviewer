@@ -133,6 +133,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
+  /** Whether to zoom in to first annotation on load */
+  zoomToInitialAnnotation: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {
@@ -283,7 +285,7 @@ type Modules = {
   mobileFooterPanel: MobileFooterPanel;
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
-  adjustImageDialogue: AdjustImageDialogue
+  adjustImageDialogue: AdjustImageDialogue;
 };
 
 export type Config = BaseConfig & {

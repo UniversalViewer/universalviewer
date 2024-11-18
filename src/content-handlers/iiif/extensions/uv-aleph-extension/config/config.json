@@ -200,7 +200,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "alephCenterPanel": {
@@ -213,7 +214,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "settingsDialogue": {

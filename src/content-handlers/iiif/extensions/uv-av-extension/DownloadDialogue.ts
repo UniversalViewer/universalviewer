@@ -110,16 +110,18 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
       if (canvas.ranges && canvas.ranges.length) {
-        const currentRange: Range | null = this.extension.helper.getCurrentRange();
+        const currentRange: Range | null =
+          this.extension.helper.getCurrentRange();
 
         if (currentRange) {
           this.$downloadOptions.append(this.$canvasOptionsContainer);
 
-          const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
-            currentRange,
-            this.content.entireFileAsOriginal,
-            DownloadOption.CANVAS_RENDERINGS
-          );
+          const renderingOptions: IRenderingOption[] =
+            this.getDownloadOptionsForRenderings(
+              currentRange,
+              this.content.entireFileAsOriginal,
+              DownloadOption.CANVAS_RENDERINGS
+            );
           this.addDownloadOptionsForRenderings(renderingOptions);
         }
 
@@ -143,21 +145,23 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$downloadOptions.append(this.$imageOptionsContainer);
       }
       for (let i = 0; i < images.length; i++) {
-        const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
-          images[i].getResource(),
-          this.content.entireFileAsOriginal,
-          DownloadOption.IMAGE_RENDERINGS
-        );
+        const renderingOptions: IRenderingOption[] =
+          this.getDownloadOptionsForRenderings(
+            images[i].getResource(),
+            this.content.entireFileAsOriginal,
+            DownloadOption.IMAGE_RENDERINGS
+          );
         this.addDownloadOptionsForRenderings(renderingOptions);
       }
     }
 
     if (this.isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS)) {
-      const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
-        canvas,
-        this.content.entireFileAsOriginal,
-        DownloadOption.CANVAS_RENDERINGS
-      );
+      const renderingOptions: IRenderingOption[] =
+        this.getDownloadOptionsForRenderings(
+          canvas,
+          this.content.entireFileAsOriginal,
+          DownloadOption.CANVAS_RENDERINGS
+        );
       if (renderingOptions.length) {
         this.$downloadOptions.append(this.$canvasOptionsContainer);
         this.addDownloadOptionsForRenderings(renderingOptions);
@@ -165,11 +169,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     if (this.isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) {
-      let renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(
-        this.extension.helper.getCurrentSequence(),
-        this.content.entireDocument,
-        DownloadOption.MANIFEST_RENDERINGS
-      );
+      let renderingOptions: IRenderingOption[] =
+        this.getDownloadOptionsForRenderings(
+          this.extension.helper.getCurrentSequence(),
+          this.content.entireDocument,
+          DownloadOption.MANIFEST_RENDERINGS
+        );
 
       if (!renderingOptions.length && this.extension.helper.manifest) {
         renderingOptions = this.getDownloadOptionsForRenderings(

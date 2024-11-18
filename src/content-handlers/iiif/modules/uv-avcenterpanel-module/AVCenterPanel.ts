@@ -114,7 +114,8 @@ export class AVCenterPanel extends CenterPanel<
             virtualCanvasEnabled: false,
           });
 
-          const canvas: Canvas | null = this.extension.helper.getCurrentCanvas();
+          const canvas: Canvas | null =
+            this.extension.helper.getCurrentCanvas();
 
           if (canvas) {
             this._viewCanvas(this.extension.helper.canvasIndex);
@@ -196,12 +197,12 @@ export class AVCenterPanel extends CenterPanel<
       "rangechanged",
       (rangeId: string | null) => {
         if (rangeId) {
-          const range: Range | null = this.extension.helper.getRangeById(
-            rangeId
-          );
+          const range: Range | null =
+            this.extension.helper.getRangeById(rangeId);
 
           if (range) {
-            const currentRange: Range | null = this.extension.helper.getCurrentRange();
+            const currentRange: Range | null =
+              this.extension.helper.getCurrentRange();
 
             if (range !== currentRange) {
               this.extensionHost.publish(IIIFEvents.RANGE_CHANGE, range);
@@ -379,9 +380,8 @@ export class AVCenterPanel extends CenterPanel<
 
   private _viewCanvas(canvasIndex: number): void {
     this._whenMediaReady(() => {
-      const canvas: Canvas | null = this.extension.helper.getCanvasByIndex(
-        canvasIndex
-      );
+      const canvas: Canvas | null =
+        this.extension.helper.getCanvasByIndex(canvasIndex);
 
       if (this.avcomponent) {
         this.avcomponent.showCanvas(canvas.id);

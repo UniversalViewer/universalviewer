@@ -483,8 +483,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         IIIFEvents.CANVAS_INDEX_CHANGE,
         this.helper.canvasIndex
       );
-      const settings: ISettings = this.getSettings();
-      this.extensionHost.publish(IIIFEvents.SETTINGS_CHANGE, settings);
     });
 
     this.extensionHost.subscribe(
@@ -574,7 +572,10 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       '<div class="overlay adjustImage" aria-hidden="true"></div>'
     );
     this.shell.$overlays.append(this.$adjustImageDialogue);
-    this.adjustImageDialogue = new AdjustImageDialogue(this.$adjustImageDialogue, this.shell);
+    this.adjustImageDialogue = new AdjustImageDialogue(
+      this.$adjustImageDialogue,
+      this.shell
+    );
 
     this.$downloadDialogue = $("<div></div>");
     this.shell.$overlays.append(this.$downloadDialogue);
@@ -624,10 +625,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     // todo: can this be added to store?
     const paged = this.isPagingSettingEnabled();
 
-    const {
-      downloadDialogueOpen,
-      dialogueTriggerButton,
-    } = this.store.getState() as OpenSeadragonExtensionState;
+    const { downloadDialogueOpen, dialogueTriggerButton } =
+      this.store.getState() as OpenSeadragonExtensionState;
 
     // todo: can the overlay visibility be added to the store?
     if (downloadDialogueOpen) {
@@ -789,9 +788,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     for (let i = 0; i < annotations.length; i++) {
       const annotation = annotations[i];
       const canvasId: string = annotation.target.match(/(.*)#/)[1];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(
-        canvasId
-      );
+      const canvasIndex: number | null =
+        this.helper.getCanvasIndexById(canvasId);
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 
@@ -818,9 +816,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       const resource: any = annotations.resources[i];
       const canvasId: string = resource.on.match(/(.*)#/)[1];
       // console.log(canvasId)
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(
-        canvasId
-      );
+      const canvasIndex: number | null =
+        this.helper.getCanvasIndexById(canvasId);
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 
@@ -1212,10 +1209,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     if (!viewer) return null;
     if (!viewer.viewport) return null;
 
-    const dimensions: CroppedImageDimensions | null = this.getCroppedImageDimensions(
-      canvas,
-      viewer
-    );
+    const dimensions: CroppedImageDimensions | null =
+      this.getCroppedImageDimensions(canvas, viewer);
 
     if (!dimensions) {
       return null;
@@ -1290,7 +1285,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
   getImageId(canvas: Canvas): string | null {
     if (canvas.externalResource) {
-      const id: string | undefined = canvas.externalResource.data["@id"] || canvas.externalResource.data.id;
+      const id: string | undefined =
+        canvas.externalResource.data["@id"] || canvas.externalResource.data.id;
 
       if (id) {
         return id.substr(id.lastIndexOf("/") + 1);
@@ -1348,7 +1344,10 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
             id += "/";
           }
 
-          if (Utils.isImageProfile(service.getProfile()) || Utils.isImageServiceType(service.getIIIFResourceType())) {
+          if (
+            Utils.isImageProfile(service.getProfile()) ||
+            Utils.isImageServiceType(service.getIIIFResourceType())
+          ) {
             infoUri = id + "info.json";
           }
         }

@@ -7,6 +7,7 @@ import cx from "classnames";
 const ThumbImage = ({
   first,
   onClick,
+  onKeyDown,
   paged,
   selected,
   thumb,
@@ -14,6 +15,7 @@ const ThumbImage = ({
 }: {
   first: boolean;
   onClick: (thumb: Thumb) => void;
+  onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
@@ -25,9 +27,16 @@ const ThumbImage = ({
     triggerOnce: true,
   });
 
+  var keydownHandler = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onKeyDown(thumb);
+    }
+  };
   return (
     <div
       onClick={() => onClick(thumb)}
+      onKeyDown={keydownHandler}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -64,12 +73,14 @@ const ThumbImage = ({
 
 const Thumbnails = ({
   onClick,
+  onKeyDown,
   paged,
   selected,
   thumbs,
   viewingDirection,
 }: {
   onClick: (thumb: Thumb) => void;
+  onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
@@ -78,12 +89,14 @@ const Thumbnails = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const thumb: HTMLElement = ref.current?.querySelector(`#thumb-${selected[0]}`) as HTMLElement;
+    const thumb: HTMLElement = ref.current?.querySelector(
+      `#thumb-${selected[0]}`
+    ) as HTMLElement;
     const y: number = thumb?.offsetTop;
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [selected]);
 
@@ -122,6 +135,7 @@ const Thumbnails = ({
           <ThumbImage
             first={index === firstNonPagedIndex}
             onClick={onClick}
+            onKeyDown={onKeyDown}
             paged={paged}
             selected={selected.includes(index)}
             thumb={thumb}
