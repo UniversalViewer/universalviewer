@@ -1,4 +1,5 @@
-/**
+/*!
+ * This is an edited version of source-chooser from the MediaElement plugin.
  * https://github.com/mediaelement/mediaelement-plugins/blob/master/dist/source-chooser/source-chooser.js
  * Version: v2.5.1
  * Last Copied: 2024-10-16
@@ -8,7 +9,10 @@
  * 1. fix the improper use of .siblings() on line 144 (of the original).
  * 2. improve keyboard support of the source chooser button and menu (line 67).
  *
- * This will be contributed upstream when fixed and stable.
+ * These changes have been contributed upstream.
+ * Once the issues are resolved, this file should be deleted.
+ * https://github.com/mediaelement/mediaelement-plugins/pull/266
+ *
  * Chris Hallberg (challber@villanova.edu)
  */
 
