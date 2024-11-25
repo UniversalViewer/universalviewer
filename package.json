@@ -72,7 +72,7 @@
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.25.4",
+    "typedoc": "^0.26.11",
     "typedoc-plugin-missing-exports": "^2.1.0",
     "typescript": "^5",
     "typescript-tslint-plugin": "^1.0.2",
