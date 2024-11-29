@@ -21,6 +21,16 @@ describe('Universal Viewer', () => {
     expect(title).toBe('Universal Viewer Examples');
   });
 
+  it('loads the viewer images', async () => {
+    await page.waitForSelector('#thumb-0');
+    const imageSrc = await page.$eval('#thumb-0 img', e => e.src);
+    expect(imageSrc).toEqual(
+      expect.stringContaining(
+        'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg'
+      )
+    );
+  });
+
   it('can toggle thumbnail label truncation', async () => {
     await page.waitForSelector('#truncateThumbnailLabels');
 
@@ -61,12 +71,3 @@ describe('Universal Viewer', () => {
   });
 });
 
-// it('loads the viewer images', async () => {
-//   await page.waitForSelector('#thumb-0');
-//   const imageSrc = await page.$eval('#thumb-0 img', e => e.src);
-//   expect(imageSrc).toEqual(
-//     expect.stringContaining(
-//       'https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg'
-//     )
-//   );
-// });
