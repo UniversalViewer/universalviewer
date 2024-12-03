@@ -506,7 +506,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       this.extension.helper.canvasIndex
     );
 
-    // console.log("selectedIndeces", selectedIndices);
+    const settings = this.extension.getSettings();
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
@@ -514,6 +514,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
+        truncateThumbnailLabels: settings.truncateThumbnailLabels !== undefined ? settings.truncateThumbnailLabels : true,
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },

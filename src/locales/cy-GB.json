@@ -116,6 +116,7 @@
   "$navigatorEnabled": "Ffenest llywio ar gae",
   "$clickToZoomEnabled": "Cliciwch gyda'r llygoden i glosio",
   "$reducedMotion": "Lleihau symudiad (analluogi animeiddiadau)",
+  "$truncateThumbnailLabels": "Cwtogi labeli bodluniau",
   "$preserveViewport": "Cadw'r lefel o glosio",
   "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>Mwy o wybodaeth am y Universal Viewer</a>",
   "$custom": "dewisol",

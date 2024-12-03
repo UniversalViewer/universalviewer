@@ -11,6 +11,7 @@ const ThumbImage = ({
   paged,
   selected,
   thumb,
+  truncateThumbnailLabels,
   viewingDirection,
 }: {
   first: boolean;
@@ -19,6 +20,7 @@ const ThumbImage = ({
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
+  truncateThumbnailLabels: boolean;
   viewingDirection: ViewingDirection;
 }) => {
   const [ref, inView] = useInView({
@@ -46,6 +48,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
+        "truncate-labels": truncateThumbnailLabels,
       })}
       tabIndex={0}
     >
@@ -59,7 +62,6 @@ const ThumbImage = ({
         {inView && <img src={thumb.uri} alt={thumb.label} />}
       </div>
       <div className="info">
-        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
@@ -78,6 +80,7 @@ const Thumbnails = ({
   selected,
   thumbs,
   viewingDirection,
+  truncateThumbnailLabels,
 }: {
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
@@ -85,6 +88,7 @@ const Thumbnails = ({
   selected: number[];
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
+  truncateThumbnailLabels: boolean;
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -128,6 +132,7 @@ const Thumbnails = ({
         "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
         "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
         paged: paged,
+        "truncate-labels": truncateThumbnailLabels,
       })}
     >
       {thumbs.map((thumb, index) => (
@@ -139,6 +144,7 @@ const Thumbnails = ({
             paged={paged}
             selected={selected.includes(index)}
             thumb={thumb}
+            truncateThumbnailLabels={truncateThumbnailLabels}
             viewingDirection={viewingDirection}
           />
           {showSeparator(paged, thumb.viewingHint, index) && (
