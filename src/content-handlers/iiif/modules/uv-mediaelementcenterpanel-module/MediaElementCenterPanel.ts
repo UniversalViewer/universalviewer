@@ -14,7 +14,8 @@ import {
   Rendering,
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
-import "mediaelement-plugins/dist/source-chooser/source-chooser";
+import 'mediaelement/build/mediaelementplayer.min.css';
+import "./js/source-chooser-fixed.js";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
@@ -216,7 +217,7 @@ export class MediaElementCenterPanel extends CenterPanel<
           "sourcechooser",
           "fullscreen",
         ],
-        success: function(mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
             that.resize();
@@ -289,7 +290,7 @@ export class MediaElementCenterPanel extends CenterPanel<
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
-        success: function(mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
               MediaElementExtensionEvents.MEDIA_PLAYED,

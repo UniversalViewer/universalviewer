@@ -154,7 +154,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "mediaelementCenterPanel": {
@@ -169,7 +170,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "restrictedDialogue": {
@@ -329,6 +331,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

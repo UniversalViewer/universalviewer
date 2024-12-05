@@ -200,7 +200,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "alephCenterPanel": {
@@ -213,7 +214,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "settingsDialogue": {
@@ -227,6 +229,7 @@
         "clickToZoomEnabled": "Mouse Click To Zoom",
         "pagingEnabled": "Two Page View",
         "reducedMotion": "Reduce motion (disables animations)",
+        "truncateThumbnailLabels": "Truncate Thumbnail Labels",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"

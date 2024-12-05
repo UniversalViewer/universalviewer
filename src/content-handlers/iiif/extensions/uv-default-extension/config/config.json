@@ -94,7 +94,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "fileLinkCenterPanel": {
@@ -106,7 +107,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "footerPanel": {
@@ -334,6 +336,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

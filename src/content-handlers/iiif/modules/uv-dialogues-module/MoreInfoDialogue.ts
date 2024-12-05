@@ -40,8 +40,10 @@ export class MoreInfoDialogue extends Dialogue<
       this.metadataComponent.set(this._getData());
     });
 
-    this.config.content = this.extension.data.config!.modules.moreInfoRightPanel.content;
-    this.config.options = this.extension.data.config!.modules.moreInfoRightPanel.options;
+    this.config.content =
+      this.extension.data.config!.modules.moreInfoRightPanel.content;
+    this.config.options =
+      this.extension.data.config!.modules.moreInfoRightPanel.options;
 
     // create ui
     this.$title = $(
@@ -49,7 +51,7 @@ export class MoreInfoDialogue extends Dialogue<
     );
     this.$content.append(this.$title);
 
-    this.$metadata = $('<div class="iiif-metadata-component"></div>');
+    this.$metadata = $('<article class="iiif-metadata-component"></article>');
     this.$content.append(this.$metadata);
 
     this.metadataComponent = new MetadataComponent({
@@ -98,5 +100,20 @@ export class MoreInfoDialogue extends Dialogue<
 
   resize(): void {
     this.setDockedPosition();
+
+    // always put tabindex on, so the metadata is focusable,
+    // just in case there's something wrong with the height
+    // comparison below
+    this.$metadata.attr("tabindex", 0);
+    this.$metadata.attr("aria-label", this.config.content.title);
+
+    // if metadata's first group's height is lte than metadata (200px fixed I think),
+    // there's no scroll happening, so no focus needed, and no aria label either
+    if (
+      this.$metadata.find(".groups").first().height() <= this.$metadata.height()
+    ) {
+      this.$metadata.removeAttr("tabindex");
+      this.$metadata.removeAttr("aria-label");
+    }
   }
 }

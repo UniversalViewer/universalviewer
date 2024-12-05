@@ -2,8 +2,8 @@ const $ = require("jquery");
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import ThumbsView from "./ThumbsView";
-const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
-  .ViewingDirection;
+const ViewingDirectionEnum =
+  require("@iiif/vocabulary/dist-commonjs/").ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
@@ -44,12 +44,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $treeViewOptions: JQuery;
   $treeSelect: JQuery;
   $views: JQuery;
-  $keyElement: JQuery
+  $keyElement: JQuery;
   expandFullEnabled: boolean = false;
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
-  keyPress:boolean = false;
+  keyPress: boolean = false;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -211,13 +211,23 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     this.$treeViewOptions.hide();
 
-    this.onAccessibleClick(this.$treeButton, () => {
-      this.openTreeView();
-    });
+    this.onAccessibleClick(
+      this.$treeButton,
+      () => {
+        this.openTreeView();
+      },
+      true,
+      true
+    );
 
-    this.onAccessibleClick(this.$thumbsButton, () => {
-      this.openThumbsView();
-    });
+    this.onAccessibleClick(
+      this.$thumbsButton,
+      () => {
+        this.openThumbsView();
+      },
+      true,
+      true
+    );
 
     this.setTitle(this.content.title);
 
@@ -362,9 +372,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     if (autoExpandTreeEnabled) {
       // get total number of tree nodes
-      const flatTree:
-        | TreeNode[]
-        | null = this.extension.helper.getFlattenedTree();
+      const flatTree: TreeNode[] | null =
+        this.extension.helper.getFlattenedTree();
 
       if (flatTree && flatTree.length < autoExpandTreeIfFewerThan) {
         return true;
@@ -438,7 +447,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     // let height: number;
 
     // const viewingHint: ViewingHint | null = this.getViewingHint();
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     // if (
     //   viewingDirection &&
@@ -496,7 +506,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       this.extension.helper.canvasIndex
     );
 
-    // console.log("selectedIndeces", selectedIndices);
+    const settings = this.extension.getSettings();
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
@@ -504,12 +514,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
+        truncateThumbnailLabels: settings.truncateThumbnailLabels !== undefined ? settings.truncateThumbnailLabels : true,
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
-        onKeyDown: (thumb: Thumb) => {          
-            this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);                                             
-        },        
+        onKeyDown: (thumb: Thumb) => {
+          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        },
       })
     );
   }
@@ -529,8 +540,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   getGalleryData() {
     return {
       helper: this.extension.helper,
-      chunkedResizingThreshold: this.config.options
-        .galleryThumbChunkedResizingThreshold,
+      chunkedResizingThreshold:
+        this.config.options.galleryThumbChunkedResizingThreshold,
       content: this.config.content,
       debug: false,
       imageFadeInDuration: 300,
@@ -620,13 +631,17 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       this.config.options.defaultToTreeIfCollection,
       false
     );
-  
+
     const treeData: TreeNode | null = this.getTree();
-  
-    if (this.isCollection() && (defaultToTreeIfCollection || (treeData && this.extension.helper.treeHasNavDates(treeData)))) {
+
+    if (
+      this.isCollection() &&
+      (defaultToTreeIfCollection ||
+        (treeData && this.extension.helper.treeHasNavDates(treeData)))
+    ) {
       return false;
     }
-  
+
     if (defaultToTreeEnabled) {
       if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan) {
         return false;
@@ -776,7 +791,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByCanvas(): void {
     if (this.treeView) {
       let node: TreeNode | null = null;
-      const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+      const currentCanvasTopRangeIndex: number =
+        this.getCurrentCanvasTopRangeIndex();
       const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
       const usingCorrectTree: boolean =
         currentCanvasTopRangeIndex === selectedTopRangeIndex;

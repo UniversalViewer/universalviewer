@@ -75,7 +75,7 @@ export class ClickThroughDialogue extends Dialogue<
       this.$message.targetBlank();
     }
 
-    this.$message.find("a").on("click", function() {
+    this.$message.find("a").on("click", function () {
       var url: string = $(this).attr("href");
       this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
     });

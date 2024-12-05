@@ -1,8 +1,8 @@
-const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { ContentLeftPanel } from "../../extensions/config/ContentLeftPanel";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { GalleryComponent } from "@iiif/iiif-gallery-component";
+import $ from "jquery";
 
 export class GalleryView extends BaseView<ContentLeftPanel> {
   isOpen: boolean = false;
@@ -31,7 +31,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "thumbSelected",
-      function(thumb: any) {
+      function (thumb: any) {
         that.extensionHost.publish(IIIFEvents.GALLERY_THUMB_SELECTED, thumb);
         that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
       },
@@ -40,7 +40,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "decreaseSize",
-      function() {
+      function () {
         that.extensionHost.publish(IIIFEvents.GALLERY_DECREASE_SIZE);
       },
       false
@@ -48,7 +48,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
 
     this.galleryComponent.on(
       "increaseSize",
-      function() {
+      function () {
         that.extensionHost.publish(IIIFEvents.GALLERY_INCREASE_SIZE);
       },
       false
@@ -68,6 +68,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     // todo: would be better to have no imperative methods on components and use a reactive pattern
     setTimeout(() => {
       this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
+      this.applyExtendedLabelsStyles();
     }, 10);
   }
 
@@ -82,4 +83,9 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     const $header: JQuery = this.$gallery.find(".header");
     $main.height(this.$element.height() - $header.height());
   }
+
+  public applyExtendedLabelsStyles(): void {
+    this.$gallery.addClass('label-extended');
+  }
+
 }

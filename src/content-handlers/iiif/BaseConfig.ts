@@ -102,6 +102,9 @@ export type Options = {
 
   /** Determines if zoom to bounds is enabled */
   zoomToBoundsEnabled?: boolean;
+
+  /** Controls whether to have animations or not */
+  reducedAnimation?: boolean;
 };
 
 type Locale = {
@@ -154,6 +157,7 @@ export type CenterPanelOptions = {
 export type CenterPanelContent = {
   attribution: string;
   close: string;
+  closeAttribution: string;
 };
 
 type CenterPanel = ModuleConfig & {
@@ -222,6 +226,7 @@ export type SettingsDialogueContent = DialogueContent & {
   clickToZoomEnabled: string;
   pagingEnabled: string;
   reducedMotion: string;
+  truncateThumbnailLabels: string; 
   preserveViewport: string;
   title: string;
   website: string;
@@ -286,12 +291,12 @@ type AdjustImageDialogueContent = DialogueContent & {
   saturation: string;
   reset: string;
   remember: string;
-}
+};
 
 export type AdjustImageDialogue = ModuleConfig & {
   options: AdjustImageDialogueOptions;
   content: AdjustImageDialogueContent;
-}
+};
 
 export type DownloadDialogueOptions = DialogueOptions & {};
 

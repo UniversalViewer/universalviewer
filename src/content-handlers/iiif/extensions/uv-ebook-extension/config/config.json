@@ -196,7 +196,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "ebookCenterPanel": {
@@ -208,7 +209,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "settingsDialogue": {
@@ -222,6 +224,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

@@ -227,7 +227,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "avCenterPanel": {
@@ -250,6 +251,7 @@
       "content": {
         "attribution": "$attribution",
         "close": "$close",
+        "closeAttribution": "$closeAttribution",
         "currentTime": "$currentTime",
         "delimiter": " - ",
         "duration": "$duration",
@@ -271,6 +273,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

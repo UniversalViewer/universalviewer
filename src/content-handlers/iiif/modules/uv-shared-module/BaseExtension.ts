@@ -87,7 +87,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     "pl-PL": () => import("../../../../locales/pl-PL.json"),
     "sv-SE": () => import("../../../../locales/sv-SE.json"),
   };
-  
 
   public create(): void {
     const that = this;
@@ -174,12 +173,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
             "URL"
           );
           const a: HTMLAnchorElement = Urls.getUrlParts(dropUrl);
-          let manifestUri:
-            | string
-            | null = Urls.getQuerystringParameterFromString(
-            "manifest",
-            a.search
-          );
+          let manifestUri: string | null =
+            Urls.getQuerystringParameterFromString("manifest", a.search);
 
           if (!manifestUri) {
             // look for collection param
@@ -273,9 +268,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     });
 
     // this.$element.append('<a href="/" id="top"></a>');
-    this.$element.append(
-      '<iframe id="commsFrame"></iframe>'
-    );
+    this.$element.append('<iframe id="commsFrame"></iframe>');
 
     this.extensionHost.subscribeAll((event, args) => {
       // subscribe to all UV events except those handled below with their own fire() calls
@@ -432,7 +425,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       let terms: string | null = this.helper.getLicense();
 
       if (!terms) {
-        const requiredStatement: ILabelValuePair | null = this.helper.getRequiredStatement();
+        const requiredStatement: ILabelValuePair | null =
+          this.helper.getRequiredStatement();
 
         if (requiredStatement && requiredStatement.value) {
           terms = requiredStatement.value;
@@ -445,8 +439,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     });
 
     this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
-      const overrideFullScreen: boolean = this.data.config!.options
-        .overrideFullScreen;
+      const overrideFullScreen: boolean =
+        this.data.config!.options.overrideFullScreen;
 
       this.extensionHost.isFullScreen = !this.extensionHost.isFullScreen;
 
@@ -487,7 +481,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     config: Object,
     locale: String
   ): Promise<Object> {
-    let loader = this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
+    let loader =
+      this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
     let localeStrings = (await loader()) || {};
     let conf = JSON.stringify(config);
 
@@ -617,9 +612,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _initLocales(): void {
-    const availableLocales: any[] = this.data.config!.localisation.locales.slice(
-      0
-    );
+    const availableLocales: any[] =
+      this.data.config!.localisation.locales.slice(0);
     const configuredLocales: ILocale[] | undefined = this.data.locales;
     const finalLocales: ILocale[] = [];
 
@@ -980,7 +974,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function() {
+        getFormat: function () {
           return "";
         },
       };

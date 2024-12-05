@@ -39,6 +39,7 @@
     "rightPanelEnabled": true,
     "saveUserSettings": false,
     "clickToZoomEnabled": true,
+    "truncateThumbnailLabels": true,
     "searchWithinEnabled": true,
     "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
@@ -334,7 +335,8 @@
       },
       "content": {
         "attribution": "$attribution",
-        "close": "$close"
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "openSeadragonCenterPanel": {
@@ -359,11 +361,13 @@
         "subtitleEnabled": true,
         "titleEnabled": true,
         "trimAttributionCount": 150,
-        "visibilityRatio": 0.5
+        "visibilityRatio": 0.5,
+        "zoomToInitialAnnotation": true
       },
       "content": {
         "attribution": "$attribution",
         "close": "$close",
+        "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
         "next": "$next",
@@ -432,6 +436,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

@@ -118,5 +118,5 @@ export class IIIFEvents {
   static VIEW_FULL_TERMS: string = "viewFullTerms";
   static WINDOW_UNLOAD: string = "windowUnload";
   static SHOW_ADJUSTIMAGE_DIALOGUE: string = "showAdjustImageDialogue";
-  static HIDE_ADJUSTIMAGE_DIALOGUE: string = "hideAdjustImageDialogue";  
+  static HIDE_ADJUSTIMAGE_DIALOGUE: string = "hideAdjustImageDialogue";
 }

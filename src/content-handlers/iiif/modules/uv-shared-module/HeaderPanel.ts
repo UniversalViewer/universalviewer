@@ -154,10 +154,7 @@ export class HeaderPanel<
     if (!this.information) return;
 
     var $message = this.$informationBox.find(".message");
-    $message
-      .html(this.information.message)
-      .find("a")
-      .attr("target", "_top");
+    $message.html(this.information.message).find("a").attr("target", "_top");
     var $actions = this.$informationBox.find(".actions");
     $actions.empty();
 

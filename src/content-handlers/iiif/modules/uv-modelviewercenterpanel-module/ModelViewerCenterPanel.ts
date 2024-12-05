@@ -121,8 +121,9 @@ export class ModelViewerCenterPanel extends CenterPanel<
     // clear existing annotations
     this.clearAnnotations();
 
-    const annotationGroups: AnnotationGroup[] | null = (this
-      .extension as ModelViewerExtension).annotations;
+    const annotationGroups: AnnotationGroup[] | null = (
+      this.extension as ModelViewerExtension
+    ).annotations;
 
     annotationGroups.forEach((annoGroup) => {
       annoGroup.points3D.forEach((point, index) => {
@@ -171,9 +172,8 @@ export class ModelViewerCenterPanel extends CenterPanel<
 
     let mediaUri: string | null = null;
     let canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
-      canvas
-    );
+    const formats: AnnotationBody[] | null =
+      this.extension.getMediaFormats(canvas);
 
     if (formats && formats.length) {
       mediaUri = formats[0].id;

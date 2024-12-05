@@ -209,9 +209,8 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
     for (let i = 0; i < annotations.length; i++) {
       const annotation = annotations[i];
       const canvasId: string = annotation.target.match(/(.*)#/)[1];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(
-        canvasId
-      );
+      const canvasIndex: number | null =
+        this.helper.getCanvasIndexById(canvasId);
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 

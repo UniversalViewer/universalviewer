@@ -11,6 +11,7 @@ const ThumbImage = ({
   paged,
   selected,
   thumb,
+  truncateThumbnailLabels,
   viewingDirection,
 }: {
   first: boolean;
@@ -19,6 +20,7 @@ const ThumbImage = ({
   paged: boolean;
   selected: boolean;
   thumb: Thumb;
+  truncateThumbnailLabels: boolean;
   viewingDirection: ViewingDirection;
 }) => {
   const [ref, inView] = useInView({
@@ -27,10 +29,16 @@ const ThumbImage = ({
     triggerOnce: true,
   });
 
+  var keydownHandler = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onKeyDown(thumb);
+    }
+  };
   return (
     <div
       onClick={() => onClick(thumb)}
-      onKeyDown= {(e) => {if(e.key === 'Enter'){onKeyDown(thumb)}}}
+      onKeyDown={keydownHandler}
       className={cx("thumb", {
         first: first,
         placeholder: !thumb.uri,
@@ -40,6 +48,7 @@ const ThumbImage = ({
             viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
         oneCol: !paged,
         selected: selected,
+        "truncate-labels": truncateThumbnailLabels,
       })}
       tabIndex={0}
     >
@@ -53,7 +62,6 @@ const ThumbImage = ({
         {inView && <img src={thumb.uri} alt={thumb.label} />}
       </div>
       <div className="info">
-        {/* <span>{thumb.viewingHint}</span> */}
         <span className="label" title={thumb.label}>
           {thumb.label}&nbsp;
         </span>
@@ -72,6 +80,7 @@ const Thumbnails = ({
   selected,
   thumbs,
   viewingDirection,
+  truncateThumbnailLabels,
 }: {
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
@@ -79,16 +88,19 @@ const Thumbnails = ({
   selected: number[];
   thumbs: Thumb[];
   viewingDirection: ViewingDirection;
+  truncateThumbnailLabels: boolean;
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const thumb: HTMLElement = ref.current?.querySelector(`#thumb-${selected[0]}`) as HTMLElement;
+    const thumb: HTMLElement = ref.current?.querySelector(
+      `#thumb-${selected[0]}`
+    ) as HTMLElement;
     const y: number = thumb?.offsetTop;
     ref.current?.parentElement!.scrollTo({
       top: y,
       left: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }, [selected]);
 
@@ -120,6 +132,7 @@ const Thumbnails = ({
         "left-to-right": viewingDirection === ViewingDirection.LEFT_TO_RIGHT,
         "right-to-left": viewingDirection === ViewingDirection.RIGHT_TO_LEFT,
         paged: paged,
+        "truncate-labels": truncateThumbnailLabels,
       })}
     >
       {thumbs.map((thumb, index) => (
@@ -131,6 +144,7 @@ const Thumbnails = ({
             paged={paged}
             selected={selected.includes(index)}
             thumb={thumb}
+            truncateThumbnailLabels={truncateThumbnailLabels}
             viewingDirection={viewingDirection}
           />
           {showSeparator(paged, thumb.viewingHint, index) && (

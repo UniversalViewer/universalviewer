@@ -136,8 +136,8 @@ export class FooterPanel extends BaseFooterPanel<
     this.$searchButton = $(
       '<button class="imageButton searchButton"></button>'
     );
-    this.$searchButton.attr('aria-label', this.content.searchWithin);
-    this.$searchButton.attr('title', this.content.searchWithin);
+    this.$searchButton.attr("aria-label", this.content.searchWithin);
+    this.$searchButton.attr("title", this.content.searchWithin);
     this.$searchTextContainer.append(this.$searchButton);
 
     // search results.
@@ -218,7 +218,7 @@ export class FooterPanel extends BaseFooterPanel<
       );
     });
 
-    this.$placemarkerDetails.on("mouseleave", function() {
+    this.$placemarkerDetails.on("mouseleave", function () {
       $(this).hide();
 
       that.extensionHost.publish(
@@ -337,8 +337,10 @@ export class FooterPanel extends BaseFooterPanel<
 
   isPreviousButtonEnabled(): boolean {
     const currentCanvasIndex: number = this.extension.helper.canvasIndex;
-    const firstSearchResultCanvasIndex: number = this.getFirstSearchResultCanvasIndex();
-    const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
+    const firstSearchResultCanvasIndex: number =
+      this.getFirstSearchResultCanvasIndex();
+    const currentSearchResultRectIndex: number =
+      this.getCurrentSearchResultRectIndex();
 
     // if zoom to search result is enabled and there is a highlighted search result.
     if (
@@ -361,17 +363,21 @@ export class FooterPanel extends BaseFooterPanel<
 
   isNextButtonEnabled(): boolean {
     const currentCanvasIndex: number = this.extension.helper.canvasIndex;
-    const lastSearchResultCanvasIndex: number = this.getLastSearchResultCanvasIndex();
-    const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
+    const lastSearchResultCanvasIndex: number =
+      this.getLastSearchResultCanvasIndex();
+    const currentSearchResultRectIndex: number =
+      this.getCurrentSearchResultRectIndex();
 
     // if zoom to search result is enabled and there is a highlighted search result.
     if (
       this.isZoomToSearchResultEnabled() &&
       (<OpenSeadragonExtension>this.extension).currentAnnotationRect
     ) {
-      if (currentCanvasIndex > lastSearchResultCanvasIndex) { //if you've moved past final result page
+      if (currentCanvasIndex > lastSearchResultCanvasIndex) {
+        //if you've moved past final result page
         return false;
-      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) { // if you're on the final result page
+      } else if (currentCanvasIndex === lastSearchResultCanvasIndex) {
+        // if you're on the final result page
         if (
           currentSearchResultRectIndex === this.getLastSearchResultRectIndex() //and you're on the last result
         ) {
@@ -461,7 +467,7 @@ export class FooterPanel extends BaseFooterPanel<
     if (this.terms === "" || this.terms === this.content.enterKeyword) {
       this.extension.showMessage(
         this.extension.data.config!.modules.genericDialogue.content.emptyValue,
-        function() {
+        function () {
           this.$searchText.focus();
         }
       );
@@ -483,10 +489,7 @@ export class FooterPanel extends BaseFooterPanel<
 
   setCurrentSearchResultPlacemarker(): void {
     const placemarkers: JQuery = this.getSearchResultPlacemarkers();
-    placemarkers
-      .parent()
-      .find(".current")
-      .removeClass("current");
+    placemarkers.parent().find(".current").removeClass("current");
     const $current: JQuery = $(
       '.searchResultPlacemarker[data-index="' +
         this.extension.helper.canvasIndex +
@@ -521,13 +524,13 @@ export class FooterPanel extends BaseFooterPanel<
           '"></div>'
       );
 
-      ($placemarker[0] as any).ontouchstart = function(e: any) {
+      ($placemarker[0] as any).ontouchstart = function (e: any) {
         that.onPlacemarkerTouchStart.call(this, that);
       };
-      $placemarker.click(function(e: any) {
+      $placemarker.click(function (e: any) {
         that.onPlacemarkerClick.call(this, that);
       });
-      $placemarker.mouseenter(function(e: any) {
+      $placemarker.mouseenter(function (e: any) {
         that.onPlacemarkerMouseEnter.call(this, that);
       });
       // todo: this causes the placemarker to appear after a search
@@ -545,10 +548,10 @@ export class FooterPanel extends BaseFooterPanel<
         },
         false
       );
-      $placemarker.mouseleave(function(e: any) {
+      $placemarker.mouseleave(function (e: any) {
         that.onPlacemarkerMouseLeave.call(this, e, that);
       });
-      $placemarker.blur(function(e: any) {
+      $placemarker.blur(function (e: any) {
         that.onPlacemarkerMouseLeave.call(this, e, that);
       });
 
@@ -612,9 +615,8 @@ export class FooterPanel extends BaseFooterPanel<
     let title: string = "{0} {1}";
 
     if (that.isPageModeEnabled()) {
-      const canvas: Canvas = that.extension.helper.getCanvasByIndex(
-        canvasIndex
-      );
+      const canvas: Canvas =
+        that.extension.helper.getCanvasByIndex(canvasIndex);
       let label: string | null = LanguageMap.getValue(canvas.getLabel());
 
       if (!label && that.extension.helper.manifest) {
@@ -697,8 +699,9 @@ export class FooterPanel extends BaseFooterPanel<
 
     const $placemarker: JQuery = $(this);
     const newElement: Element = e.toElement || e.relatedTarget;
-    const isChild: number = $(newElement).closest(that.$placemarkerDetails)
-      .length;
+    const isChild: number = $(newElement).closest(
+      that.$placemarkerDetails
+    ).length;
 
     if (newElement != that.$placemarkerDetails.get(0) && isChild === 0) {
       that.$placemarkerDetails.hide();
@@ -792,9 +795,8 @@ export class FooterPanel extends BaseFooterPanel<
         label = this.content.defaultLabel;
       }
 
-      const lastCanvasOrderLabel:
-        | string
-        | null = this.extension.helper.getLastCanvasLabel(true);
+      const lastCanvasOrderLabel: string | null =
+        this.extension.helper.getLastCanvasLabel(true);
 
       if (lastCanvasOrderLabel) {
         this.$pagePositionLabel.html(
