@@ -6,88 +6,142 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Universal Viewer Examples</title>
-    <!-- https://tailwindcss.com/docs/installation/play-cdn -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-    <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
-    <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
+
     <%= htmlWebpackPlugin.tags.headTags %>
+
+    <link rel="stylesheet" href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css">
     <style>
-      /** First override so that desktop always visible */
-      /* #uv {
-        width: 924px;
-        height: 668px;
+      body {
+        color-scheme: light dark;
+        background-color: Canvas;
+      }
 
-        --uv-mobile-display: none;
-        --uv-mobile-visibility: hidden;
-        --uv-desktop-display: block;
-        --uv-desktop-visibility: visible;
-      } */
+      /* @apply uv w-full */
+      #uv {
+        width: 100%;
+        height: 100svh;
+      }
 
-      /** Then set custom point to enable mobile / hide desktop */
-      /* @media (max-width: 340px) {
+      /* @apply hidden mx-auto my-8 */
+      #uv-controls {
+        display: none;
+        margin-inline: auto;
+        margin-block: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        /* @apply md:w-[90vw] md:mx-auto md:h-[80vh] md:mt-4 */
         #uv {
-          --uv-mobile-display: block;
-          --uv-mobile-visibility: visible;
-          --uv-desktop-display: none;
-          --uv-desktop-visibility: hidden;
+          width: 90vw;
+          height: 80vh;
+          margin-inline: auto;
+          margin-block: 1rem;
+        }
 
+        /* @apply md:!block md:w-[90vw] */
+        #uv-controls {
+          display: block;
+          width: 90vw;
+          margin-block: 1rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        /* @apply lg:w-[65vw] */
+        #uv {
+          width: 65vw;
+        }
+
+        /* @apply lg:w-[65vw] */
+        #uv-controls {
+          width: 65vw;
+        }
+      }
+
+      #uv-controls {
+        button,
+        input[type="text"],
+        select,
+        textarea {
+          appearance: none;
+          padding-inline: 0.75rem; /* px-3 */
+          padding-block: 0.5rem; /* py-2 */
+          font: inherit;
+          line-height: 24px;
+          border: 1px solid;
+          background-color: Canvas;
+        }
+        select {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+        }
+        textarea {
           width: 100%;
         }
-      } */
-      /* todo: replace with dynamic viewport units when available: https://caniuse.com/?search=svh */
-      @media only screen and (max-width: 768px) {
-        .uv {
-          /* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
-          height: 100vh;
-          /* Fallback for browsers that do not support Custom Properties */
-          height: calc(var(--vh, 1vh) * 100);
+
+        /* Controls */
+
+        .controls-button {
+          appearance: button;
+          min-width: 10rem;
+          padding-inline: 1rem;
+          padding-block: 0.5rem;
+          line-height: 26px;
+          white-space: nowrap;
+          color: white;
+          border: none;
+          background-color: black;
+        }
+
+        .controls-group {
+          padding-block: 0.5rem;
+        }
+
+        .controls-title {
+          margin-bottom: 0;
+          padding-bottom: 0.75rem;
+          font-size: 1.125rem;
+          font-weight: 600;
+        }
+
+        .controls-tab {
+          padding-inline: 1.5rem;
+          padding-block: 0.75rem;
+          font-weight: 500;
+          font-size: 1.25rem;
+          border: none;
+          background: none;
+          cursor: pointer;
+        }
+
+        .controls-tab.active {
+          background-color: ButtonFace;
+        }
+
+        .controls-tab-content {
+          padding: 1.5rem;
+          color: ButtonText;
+          background-color: ButtonFace;
         }
       }
-    </style>
-    <style type="text/tailwindcss">
-      @layer utilities {
-        .controls-button {
-          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
-        }
-        .controls-group {
-          @apply py-2;
-        }
-        .controls-title {
-          @apply text-lg font-semibold pb-3;
-        }
-        .controls-tab {
-          @apply bg-none px-6 py-3 font-medium text-xl;
-        }
-        .controls-tab.active {
-          @apply bg-gray-200;
-        }
-        .controls-tab-content {
-          @apply bg-gray-200 p-6;
-        }
+
+      /* Utilities */
+
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
-    </style>
-    <style type="text/tailwindcss">
-      @layer utilities {
-        .controls-button {
-          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
-        }
-        .controls-group {
-          @apply py-2;
-        }
-        .controls-title {
-          @apply text-lg font-semibold pb-3;
-        }
-        .controls-tab {
-          @apply bg-none px-6 py-3 font-medium text-xl;
-        }
-        .controls-tab.active {
-          @apply bg-gray-200;
-        }
-        .controls-tab-content {
-          @apply bg-gray-200 p-6;
-        }
+      .flex-1 {
+        flex: 1 1 0%;
+      }
+      .flex-initial {
+        flex: 0 1 auto;
+      }
+      .mt-2 {
+        margin-top: 0.5rem;
       }
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
