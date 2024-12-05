@@ -112,7 +112,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     if (this.data.locales) {
       this.$element.addClass(this.data.locales[0].name.toLowerCase());
       this.$element.prop("lang", this.data.locales[0].name.substring(0,2));
-    }else{
+    } else {
       this.$element.prop("lang", defaultLocale[0].name.substring(0,2));
     }
 
