@@ -274,7 +274,7 @@ const DownloadDialogue = ({
     const bodies: AnnotationBody[] = images[0].getBody();
     if (bodies.length == 0) {
       return null;
-    }|
+    }
   
     return bodies[0];
   }
