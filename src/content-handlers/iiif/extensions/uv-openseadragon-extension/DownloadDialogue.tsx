@@ -267,10 +267,14 @@ const DownloadDialogue = ({
 
   function getCanvasImageAnnotationBody(canvas: Canvas): AnnotationBody | null {
     const images: Annotation[] = canvas.getContent();
-    if (images.length == 0) return null;
+    if (images.length == 0) {
+      return null;
+    }
 
     const bodies: AnnotationBody[] = images[0].getBody();
-    if (bodies.length == 0) return null;
+    if (bodies.length == 0) {
+      return null;
+    }|
   
     return bodies[0];
   }
