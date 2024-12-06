@@ -142,7 +142,9 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   goHome: string;
   imageUnavailable: string;
   next: string;
+  nextImage: string;
   previous: string;
+  previousImage: string;
   rotateRight: string;
   zoomIn: string;
   zoomOut: string;
