@@ -64,7 +64,7 @@
     "less": "4.1.2",
     "less-loader": "10.1.0",
     "lodash": "4.17.21",
-    "prettier": "^2.8.8",
+    "prettier": "^3.4.2",
     "prettier-check": "^2.0.0",
     "puppeteer": "^23",
     "source-map-loader": "^5.0.0",
