@@ -1,4 +1,4 @@
-name: Lint Pull Requests
+name: Update Documentation
 
 on: [push, pull_request]
 
