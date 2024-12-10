@@ -76,6 +76,10 @@
                         &.disabled {
                             background-image: data-uri('../img/right_arrow_disabled.png');
                         }
+
+                        & .uv-icon-next {
+                            background-image: none;
+                        }
                     }
 
                     &.next.vertical {
@@ -92,6 +96,13 @@
                                 background-image: data-uri('../img/up_arrow_disabled.png');
                             }
                         }
+                    }
+
+
+                    /* fixes out-of-scope iiif-tree and iiif-gallery icons */
+                    &.prev .uv-icon-prev,
+                    &.next .uv-icon-next {
+                        background-image: none;
                     }
                 }
 
