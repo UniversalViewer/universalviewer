@@ -56,16 +56,16 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     $.templates({
       thumbsTemplate:
         '<a id="thumb{{>index}}" class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}" tabindex="0">\
-                                <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
-                                <div class="info">\
-                                    <span class="index">{{:#index + 1}}</span>\
-                                    <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
-                                    <span class="searchResults" title="{{:~searchResultsTitle()}}">{{>data.searchResults}}</span>\
-                                </div>\
-                             </a>\
-                             {{if ~separator()}} \
-                                 <div class="separator"></div> \
-                             {{/if}}',
+          <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
+          <div class="info">\
+            <span class="index">{{:#index + 1}}</span>\
+            <span class="label" title="{{>label}}" style="white-space: normal;">{{>label}}&nbsp;</span>\
+            <span class="searchResults" title="{{:~searchResultsTitle()}}">{{>data.searchResults}}</span>\
+          </div>\
+        </a>\
+        {{if ~separator()}} \
+          <div class="separator"></div> \
+        {{/if}}',
     });
 
     const extraHeight: number = this.options.thumbsExtraHeight;
