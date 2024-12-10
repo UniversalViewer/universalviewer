@@ -579,29 +579,38 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       ViewingDirection.LEFT_TO_RIGHT;
 
     this.$prevButton = $(
-      `<button class="btn btn-default paging prev" title="${this.content.previous}">
+      `<button class="btn btn-default paging prev" title="${this.content.previousImage}">
           <i class="uv-icon-prev" aria-hidden="true"></i>
-          <span class="sr-only">${this.content.previous}</span>
+          <span class="sr-only">${this.content.previousImage}</span>
         </button>`
     );
 
     if (this.extension.helper.isRightToLeft()) {
-      this.$prevButton.prop("title", this.content.next);
-    } else {
-      this.$prevButton.prop("title", this.content.previous);
-    }
+      this.$prevButton
+          .prop("title", this.content.nextImage)
+          .attr("aria-label", this.content.nextImage);
+  } else {
+      this.$prevButton
+          .prop("title", this.content.previousImage)
+          .attr("aria-label", this.content.previousImage);
+  }
 
     this.$nextButton = $(
-      `<button class="btn btn-default paging next" title="${this.content.next}">
+      `<button class="btn btn-default paging next" title="${this.content.nextImage}">
         <i class="uv-icon-next" aria-hidden="true"></i>
-        <span class="sr-only">${this.content.next}</span>
+        <span class="sr-only">${this.content.nextImage}</span>
       </button>`
     );
 
     if (this.extension.helper.isRightToLeft()) {
-      this.$nextButton.prop("title", this.content.previous);
+      this.$nextButton
+          .prop("title", this.content.previousImage)
+          .attr("aria-label", this.content.previousImage)
+
     } else {
-      this.$nextButton.prop("title", this.content.next);
+      this.$nextButton
+          .prop("title", this.content.nextImage)
+          .attr("aria-label", this.content.nextImage)
     }
 
     this.viewer.addControl(this.$prevButton[0], {
