@@ -64,8 +64,8 @@
         select,
         textarea {
           appearance: none;
-          padding-inline: 0.75rem; /* px-3 */
-          padding-block: 0.5rem; /* py-2 */
+          padding-inline: 0.75rem;
+          padding-block: 0.5rem;
           font: inherit;
           line-height: 24px;
           border: 1px solid;
@@ -125,49 +125,31 @@
           color: ButtonText;
           background-color: ButtonFace;
         }
-      }
 
-      /* Utilities */
+        /* Utilities */
 
-      .flex {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .flex-1 {
-        flex: 1 1 0%;
-      }
-      .flex-initial {
-        flex: 0 1 auto;
-      }
-      .mt-2 {
-        margin-top: 0.5rem;
+        .flex {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .flex-initial {
+          flex: 0 1 auto;
+        }
+        .flex-1 {
+          flex: 1 1 0%;
+        }
+        .mt-2 {
+          margin-top: 0.5rem;
+        }
       }
     </style>
-    <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
-    <script>
-      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-      let vh = window.innerHeight * 0.01;
-      // Then we set the value in the --vh custom property to the root of the document
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-      window.addEventListener("resize", () => {
-        // We execute the same script as before
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
-      });
-    </script>
   </head>
 
   <body>
-    <div
-      id="uv"
-      class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
-    ></div>
+    <div id="uv" class="uv"></div>
 
-    <div
-      id="uv-controls"
-      class="hidden md:!block md:w-[90vw] lg:w-[65vw] mx-auto my-8"
-    >
+    <div id="uv-controls">
       <div>
         <ul id="annotation-list"></ul>
       </div>
@@ -183,7 +165,7 @@
           <div class="flex">
             <select
               id="iiifManifestIdSelect"
-              class="py-2 px-3 mr-2 flex-1"
+              class="flex-1"
             ></select>
             <input id="iiifManifestId" type="text" value="" class="flex-1" />
           </div>
@@ -204,7 +186,7 @@
             <input id="target" type="text" value="" class="flex-1" />
             <button
               id="setTargetButton"
-              class="controls-button flex-initial ml-2"
+              class="controls-button flex-initial"
             >
               Set Target
             </button>
@@ -217,7 +199,7 @@
             <input id="rotation" type="text" value="" class="flex-1" />
             <button
               id="setRotationButton"
-              class="controls-button flex-initial ml-2"
+              class="controls-button flex-initial"
             >
               Set Rotation
             </button>
@@ -226,7 +208,7 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Annotations</h2>
-          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <textarea id="annotations" rows="5"></textarea>
           <div class="mt-2">
             <button id="setAnnotationsButton" class="controls-button">
               Set Annotations
@@ -242,15 +224,15 @@
         <div class="controls-group">
           <h2 class="controls-title">Video Id</h2>
           <div class="flex">
-            <select id="youTubeVideoIdSelect" class="py-2 px-3 flex-1"></select>
+            <select id="youTubeVideoIdSelect" class="flex-1"></select>
             <input
               id="youTubeVideoId"
               type="text"
               value=""
-              class="flex-1 ml-2"
+              class="flex-1"
             />
           </div>
-          <div class="mt-2">
+          <div>
             <button id="setYouTubeVideoIdButton" class="controls-button">
               Set YouTube Video Id
             </button>
@@ -268,7 +250,7 @@
             <input id="currentTime" type="text" value="" class="flex-1" />
             <button
               id="setCurrentTimeButton"
-              class="controls-button flex-initial ml-2"
+              class="controls-button flex-initial"
             >
               Set Current Time
             </button>
@@ -283,11 +265,11 @@
               id="durationEnd"
               type="number"
               value="0"
-              class="flex-1 ml-2"
+              class="flex-1"
             />
             <button
               id="setDurationButton"
-              class="controls-button flex-initial ml-2"
+              class="controls-button flex-initial"
             >
               Set Duration
             </button>
