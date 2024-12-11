@@ -1,0 +1,32 @@
+name: Update Documentation
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build documentation
+        run: npm run docs
+
+      - name: Regenerate CNAME file
+        run: echo docs.universalviewer.io > docs/CNAME
+
+      - name: Auto-commit fixes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          add: "['docs/']"
