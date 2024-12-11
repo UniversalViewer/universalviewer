@@ -325,7 +325,7 @@ const DownloadDialogue = ({
     if (bodies.length == 0) {
       return null;
     }
-  
+
     return bodies[0];
   }
 
@@ -342,7 +342,8 @@ const DownloadDialogue = ({
     }
 
     // presentation api version 3
-    const annotationBody: AnnotationBody | null = getCanvasImageAnnotationBody(canvas);
+    const annotationBody: AnnotationBody | null =
+      getCanvasImageAnnotationBody(canvas);
     if (annotationBody) {
       const format: MediaType | null = annotationBody.getFormat();
 

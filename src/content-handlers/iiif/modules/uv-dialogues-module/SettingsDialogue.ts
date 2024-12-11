@@ -4,7 +4,9 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { ILocale } from "../uv-shared-module/ILocale";
 
-export class SettingsDialogue extends Dialogue<BaseConfig["modules"]["settingsDialogue"]> {
+export class SettingsDialogue extends Dialogue<
+  BaseConfig["modules"]["settingsDialogue"]
+> {
   $locale: JQuery;
   $localeDropDown: JQuery;
   $localeLabel: JQuery;
