@@ -22,9 +22,6 @@ jobs:
       - name: Build documentation
         run: npm run docs
 
-      - name: Regenerate CNAME file
-        run: echo docs.universalviewer.io > docs/CNAME
-
       - name: Auto-commit fixes
         uses: EndBug/add-and-commit@v9
         with:
