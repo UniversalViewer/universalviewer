@@ -142,16 +142,22 @@ export default class Extension
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      cfi: this.cfiFragement,
+    });
+
     const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
+    const title: string = this.helper.getLabel() ?? "";
     const script: string = Strings.format(
       template,
-      iframeSrc,
+      appUri,
+      hashParams.toString(),
       width.toString(),
       height.toString(),
       title
     );
+
     return script;
   }
 
