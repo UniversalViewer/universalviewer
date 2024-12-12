@@ -154,7 +154,7 @@ export default class Extension
       c: this.helper.collectionIndex.toString(),
       m: this.helper.manifestIndex.toString(),
       cv: this.helper.canvasIndex.toString(),
-      rid: this.helper.rangeId?.toString() ?? ""
+      rid: this.helper.rangeId?.toString() ?? "",
     });
 
     const appUri: string = this.getAppUri();
