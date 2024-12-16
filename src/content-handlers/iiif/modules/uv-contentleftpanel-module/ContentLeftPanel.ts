@@ -514,7 +514,10 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
-        truncateThumbnailLabels: settings.truncateThumbnailLabels !== undefined ? settings.truncateThumbnailLabels : true,
+        truncateThumbnailLabels:
+          settings.truncateThumbnailLabels !== undefined
+            ? settings.truncateThumbnailLabels
+            : true,
         onClick: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },

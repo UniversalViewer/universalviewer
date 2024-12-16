@@ -587,13 +587,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (this.extension.helper.isRightToLeft()) {
       this.$prevButton
-          .prop("title", this.content.nextImage)
-          .attr("aria-label", this.content.nextImage);
-  } else {
+        .prop("title", this.content.nextImage)
+        .attr("aria-label", this.content.nextImage);
+    } else {
       this.$prevButton
-          .prop("title", this.content.previousImage)
-          .attr("aria-label", this.content.previousImage);
-  }
+        .prop("title", this.content.previousImage)
+        .attr("aria-label", this.content.previousImage);
+    }
 
     this.$nextButton = $(
       `<button class="btn btn-default paging next" title="${this.content.nextImage}">
@@ -604,13 +604,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (this.extension.helper.isRightToLeft()) {
       this.$nextButton
-          .prop("title", this.content.previousImage)
-          .attr("aria-label", this.content.previousImage)
-
+        .prop("title", this.content.previousImage)
+        .attr("aria-label", this.content.previousImage);
     } else {
       this.$nextButton
-          .prop("title", this.content.nextImage)
-          .attr("aria-label", this.content.nextImage)
+        .prop("title", this.content.nextImage)
+        .attr("aria-label", this.content.nextImage);
     }
 
     this.viewer.addControl(this.$prevButton[0], {
