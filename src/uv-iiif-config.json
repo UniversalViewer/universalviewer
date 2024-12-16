@@ -46,7 +46,7 @@
     },
     "shareDialogue": {
       "options": {
-        "embedTemplate": "<iframe src=\"{0}/assets/uv.html#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>"
+        "embedTemplate": "<iframe src=\"{0}/uv.html#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>"
       }
     }
   }
