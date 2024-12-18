@@ -35,7 +35,7 @@
     "openSeadragonCenterPanel": {
       "options": {
         "autoHideControls": false,
-        "showHomeControl": true,
+        "showHomeControl": false,
         "showAdjustImageControl": true
       }
     },
