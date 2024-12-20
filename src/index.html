@@ -9,7 +9,10 @@
 
     <%= htmlWebpackPlugin.tags.headTags %>
 
-    <link rel="stylesheet" href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css"
+    />
     <style>
       body {
         color-scheme: light dark;
@@ -650,6 +653,7 @@
 
             cb(
               fetch("uv-iiif-config.json").then(function(resp) {
+                console.log("fetch uv-iiif-config.json");
                 return resp.json();
               })
             );

@@ -158,9 +158,9 @@
         "closeAttribution": "$closeAttribution"
       }
     },
-    "mediaelementCenterPanel": {
+    "mediaElementCenterPanel": {
       "options": {
-        "autoPlayOnSetTarget": true,
+        "autoPlayOnSetTarget": false,
         "defaultHeight": 420,
         "defaultWidth": 560,
         "titleEnabled": true,
