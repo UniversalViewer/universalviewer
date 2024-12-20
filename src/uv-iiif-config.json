@@ -39,6 +39,11 @@
         "showAdjustImageControl": true
       }
     },
+    "mediaElementCenterPanel": {
+      "options": {
+        "autoPlayOnSetTarget": false
+      }
+    },
     "footerPanel": {
       "options": {
         "downloadEnabled": true

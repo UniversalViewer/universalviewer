@@ -52,7 +52,7 @@ type MediaElementSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  mediaelementCenterPanel: MediaElementCenterPanel;
+  mediaElementCenterPanel: MediaElementCenterPanel;
   downloadDialogue: MediaElementDownloadDialogue;
   shareDialogue: MediaElementShareDialogue;
   settingsDialogue: MediaElementSettingsDialogue;

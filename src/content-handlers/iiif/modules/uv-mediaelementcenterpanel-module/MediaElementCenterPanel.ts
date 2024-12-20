@@ -14,7 +14,7 @@ import {
   Rendering,
 } from "manifesto.js";
 import "mediaelement/build/mediaelement-and-player";
-import 'mediaelement/build/mediaelementplayer.min.css';
+import "mediaelement/build/mediaelementplayer.min.css";
 import "./js/source-chooser-fixed.js";
 import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
@@ -34,7 +34,7 @@ type MediaSourceDescriptor = {
 };
 
 export class MediaElementCenterPanel extends CenterPanel<
-  Config["modules"]["mediaelementCenterPanel"]
+  Config["modules"]["mediaElementCenterPanel"]
 > {
   $wrapper: JQuery;
   $container: JQuery;
@@ -50,7 +50,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   }
 
   create(): void {
-    this.setConfig("mediaelementCenterPanel");
+    this.setConfig("mediaElementCenterPanel");
 
     super.create();
 
@@ -61,10 +61,12 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
+      console.log("SET_TARGET", target);
+
       // Clear any existing timeout
-      if (this.pauseTimeoutId !== null) {
-        clearTimeout(this.pauseTimeoutId);
-        this.pauseTimeoutId = null;
+      if (that.pauseTimeoutId !== null) {
+        clearTimeout(that.pauseTimeoutId);
+        that.pauseTimeoutId = null;
       }
 
       let t: number | [number, number] = target.t;
@@ -80,27 +82,36 @@ export class MediaElementCenterPanel extends CenterPanel<
             return;
           }
 
-          this.player.setCurrentTime(startTime);
+          that.player.setCurrentTime(startTime);
 
-          if (this.config.options.autoPlayOnSetTarget) {
+          console.log("startTime", startTime);
+
+          if (that.config.options.autoPlayOnSetTarget) {
             const duration = (endTime - startTime) * 1000;
 
-            this.pauseTimeoutId = setTimeout(() => {
-              this.player.pause();
-              this.pauseTimeoutId = null; // Clear the timeout ID after execution
+            that.pauseTimeoutId = setTimeout(() => {
+              that.player.pause();
+              that.pauseTimeoutId = null; // Clear the timeout ID after execution
             }, duration);
 
-            this.player.play();
+            that.player.play();
           }
 
           return;
         }
       }
 
-      this.player.setCurrentTime(t);
-
-      if (this.config.options.autoPlayOnSetTarget) {
-        this.player.play();
+      if (that.config.options.autoPlayOnSetTarget) {
+        that.player.setCurrentTime(t);
+        that.player.play();
+      } else {
+        // need to play first to show the frame
+        that.player.setCurrentTime(t);
+        that.player.play();
+        setTimeout(() => {
+          that.player.pause();
+          that.player.setCurrentTime(t);
+        }, 1000);
       }
     });
 
@@ -217,7 +228,7 @@ export class MediaElementCenterPanel extends CenterPanel<
           "sourcechooser",
           "fullscreen",
         ],
-        success: function (mediaElement: any, originalNode: any) {
+        success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
             that.resize();
@@ -290,7 +301,7 @@ export class MediaElementCenterPanel extends CenterPanel<
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
-        success: function (mediaElement: any, originalNode: any) {
+        success: function(mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
               MediaElementExtensionEvents.MEDIA_PLAYED,
