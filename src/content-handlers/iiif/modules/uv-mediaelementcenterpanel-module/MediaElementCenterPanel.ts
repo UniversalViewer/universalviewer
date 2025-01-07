@@ -61,7 +61,6 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-      console.log("SET_TARGET", target);
 
       // Clear any existing timeout
       if (that.pauseTimeoutId !== null) {
@@ -83,8 +82,6 @@ export class MediaElementCenterPanel extends CenterPanel<
           }
 
           that.player.setCurrentTime(startTime);
-
-          console.log("startTime", startTime);
 
           if (that.config.options.autoPlayOnSetTarget) {
             const duration = (endTime - startTime) * 1000;
