@@ -1,0 +1,22 @@
+this folder contains an experiment for changing the left panel into a react component using shadcn and tailwind
+tailwind has been installed which requires the following config files:
+
+tailwind.config.js
+globals.css
+utils.ts
+components.json
+
+only the files in this folder are target by tailwind using the following config:
+
+module.exports = {
+    ...
+  content: [
+    //only target experimental react components currently in iiif left panel
+    "./src/content-handlers/iiif/modules/uv-contentleftpanel-module-react/*.{js,jsx,ts,tsx}",
+  ],
+
+
+  components.json has 
+        "css": "src/index.css",
+which doesn't currently exist so that might need fixing.
+
