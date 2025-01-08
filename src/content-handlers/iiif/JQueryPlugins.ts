@@ -1,3 +1,5 @@
+import { Strings } from "@edsilv/utils";
+
 export default function jqueryPlugins($) {
   $.fn.checkboxButton = function (onClick: (checked: boolean) => void) {
     return this.each(function () {
@@ -432,11 +434,17 @@ export default function jqueryPlugins($) {
     lines: number,
     lessText: string,
     moreText: string,
-    cb: () => void
+    cb: () => void,
+    lessAriaLabelTemplate: string = 'Less information: Hide {0}',
+    moreAriaLabelTemplate: string = 'More information: Reveal {0}'
   ) {
     return this.each(function () {
+
       const $self: JQuery = $(this);
-      const expandedText: string = $self.html();
+      const $label: JQuery = $self.find('.label');
+      const $value: JQuery = $self.find('.value');
+      const expandedText: string = $value.html();
+      const labelText: string = $label.html();
       // add 'pad' to account for the right margin in the sidebar
       const $buttonPad: JQuery = $(
         '<span>&hellip; <a href="#" class="toggle more">morepad</a></span>'
@@ -445,21 +453,21 @@ export default function jqueryPlugins($) {
       const stringsByLine: string[] = [expandedText];
       let lastHeight: number = $self.height();
       // Until empty
-      while ($self.text().length > 0) {
-        $self.removeLastWord();
-        const html: string = $self.html();
-        $self.append($buttonPad);
+      while ($value.text().length > 0) {
+        $value.removeLastWord();
+        const html: string = $value.html();
+        $value.append($buttonPad);
 
-        if (lastHeight > $self.height()) {
+        if (lastHeight > $value.height()) {
           stringsByLine.unshift(html);
-          lastHeight = $self.height();
+          lastHeight = $value.height();
         }
 
         $buttonPad.remove();
       }
 
       if (stringsByLine.length <= lines) {
-        $self.html(expandedText);
+        $value.html(expandedText);
         return;
       }
 
@@ -468,27 +476,31 @@ export default function jqueryPlugins($) {
       // Toggle function
       let expanded: boolean = false;
 
-      (<any>$self).toggle = function () {
-        $self.empty();
+      (<any>$value).toggle = function() {
+        $value.empty();
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
         if (expanded) {
-          $self.html(expandedText + " ");
+          const lessAriaLabel: string = Strings.format(lessAriaLabelTemplate, labelText);
+          $value.html(expandedText + " ");
           $toggleButton.text(lessText);
           $toggleButton.switchClass("less", "more");
+          $toggleButton.attr('aria-label', lessAriaLabel);
         } else {
-          $self.html(collapsedText + "&hellip; ");
+          const moreAriaLabel: string = Strings.format(moreAriaLabelTemplate, labelText);
+          $value.html(collapsedText + "&hellip; ");
           $toggleButton.text(moreText);
           $toggleButton.switchClass("more", "less");
+          $toggleButton.attr('aria-label', moreAriaLabel);
         }
         $toggleButton.one("click", function (e) {
           e.preventDefault();
-          $self.toggle();
+          $value.toggle();
         });
         expanded = !expanded;
-        $self.append($toggleButton);
+        $value.append($toggleButton);
         if (cb) cb();
       };
-      $self.toggle();
+      $value.toggle();
     });
   };
 
