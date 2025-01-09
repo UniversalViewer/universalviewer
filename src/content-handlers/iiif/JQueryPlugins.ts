@@ -435,14 +435,13 @@ export default function jqueryPlugins($) {
     lessText: string,
     moreText: string,
     cb: () => void,
-    lessAriaLabelTemplate: string = 'Less information: Hide {0}',
-    moreAriaLabelTemplate: string = 'More information: Reveal {0}'
+    lessAriaLabelTemplate: string = "Less information: Hide {0}",
+    moreAriaLabelTemplate: string = "More information: Reveal {0}"
   ) {
     return this.each(function () {
-
       const $self: JQuery = $(this);
-      const $label: JQuery = $self.find('.label');
-      const $value: JQuery = $self.find('.value');
+      const $label: JQuery = $self.find(".label");
+      const $value: JQuery = $self.find(".value");
       const expandedText: string = $value.html();
       const labelText: string = $label.html();
       // add 'pad' to account for the right margin in the sidebar
@@ -476,21 +475,27 @@ export default function jqueryPlugins($) {
       // Toggle function
       let expanded: boolean = false;
 
-      (<any>$value).toggle = function() {
+      (<any>$value).toggle = function () {
         $value.empty();
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
         if (expanded) {
-          const lessAriaLabel: string = Strings.format(lessAriaLabelTemplate, labelText);
+          const lessAriaLabel: string = Strings.format(
+            lessAriaLabelTemplate,
+            labelText
+          );
           $value.html(expandedText + " ");
           $toggleButton.text(lessText);
           $toggleButton.switchClass("less", "more");
-          $toggleButton.attr('aria-label', lessAriaLabel);
+          $toggleButton.attr("aria-label", lessAriaLabel);
         } else {
-          const moreAriaLabel: string = Strings.format(moreAriaLabelTemplate, labelText);
+          const moreAriaLabel: string = Strings.format(
+            moreAriaLabelTemplate,
+            labelText
+          );
           $value.html(collapsedText + "&hellip; ");
           $toggleButton.text(moreText);
           $toggleButton.switchClass("more", "less");
-          $toggleButton.attr('aria-label', moreAriaLabel);
+          $toggleButton.attr("aria-label", moreAriaLabel);
         }
         $toggleButton.one("click", function (e) {
           e.preventDefault();
