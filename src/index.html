@@ -9,7 +9,10 @@
 
     <%= htmlWebpackPlugin.tags.headTags %>
 
-    <link rel="stylesheet" href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css"
+    />
     <style>
       body {
         color-scheme: light dark;
@@ -212,6 +215,25 @@
         </div>
 
         <div class="controls-group">
+          <h2 class="controls-title">Duration</h2>
+          <div class="flex">
+            <input id="durationStart" type="number" value="0" class="flex-1" />
+            <input
+              id="durationEnd"
+              type="number"
+              value="0"
+              class="flex-1 ml-2"
+            />
+            <button
+              id="setDurationButton"
+              class="controls-button flex-initial ml-2"
+            >
+              Set Duration
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
           <h2 class="controls-title">Rotation</h2>
           <div class="flex">
             <input id="rotation" type="text" value="" class="flex-1" />
@@ -328,39 +350,43 @@
         });
 
         var uv, iiifManifestId, youTubeVideoId;
-        var $iiifManifestId = document.getElementById("iiifManifestId");
-        var $iiifManifestIdSelect = document.getElementById(
-          "iiifManifestIdSelect"
+
+        // iiif tab
+        var $iiifManifestId = iiifTab.querySelector("#iiifManifestId");
+        var $iiifManifestIdSelect = iiifTab.querySelector(
+          "#iiifManifestIdSelect"
         );
-        var $target = document.getElementById("target");
-        var $rotation = document.getElementById("rotation");
-        var $setIIIFManifestIdButton = document.getElementById(
-          "setIIIFManifestIdButton"
+        var $target = iiifTab.querySelector("#target");
+        var $rotation = iiifTab.querySelector("#rotation");
+        var $setIIIFManifestIdButton = iiifTab.querySelector(
+          "#setIIIFManifestIdButton"
         );
-        var $setTargetButton = document.getElementById("setTargetButton");
-        var $setRotationButton = document.getElementById("setRotationButton");
-        var $annotations = document.getElementById("annotations");
-        var $setAnnotationsButton = document.getElementById(
-          "setAnnotationsButton"
+        var $setTargetButton = iiifTab.querySelector("#setTargetButton");
+        var $setRotationButton = iiifTab.querySelector("#setRotationButton");
+        var $annotations = iiifTab.querySelector("#annotations");
+        var $setAnnotationsButton = iiifTab.querySelector(
+          "#setAnnotationsButton"
         );
-        var $clearAnnotationsButton = document.getElementById(
-          "clearAnnotationsButton"
+        var $clearAnnotationsButton = iiifTab.querySelector(
+          "#clearAnnotationsButton"
         );
-        var $setYouTubeVideoIdButton = document.getElementById(
-          "setYouTubeVideoIdButton"
+
+        // youtube tab
+        var $setYouTubeVideoIdButton = youTubeTab.querySelector(
+          "#setYouTubeVideoIdButton"
         );
-        var $youTubeVideoId = document.getElementById("youTubeVideoId");
-        var $youTubeVideoIdSelect = document.getElementById(
-          "youTubeVideoIdSelect"
+        var $youTubeVideoId = youTubeTab.querySelector("#youTubeVideoId");
+        var $youTubeVideoIdSelect = youTubeTab.querySelector(
+          "#youTubeVideoIdSelect"
         );
-        var $currentTime = document.getElementById("currentTime");
-        var $setCurrentTimeButton = document.getElementById(
-          "setCurrentTimeButton"
+        var $currentTime = youTubeTab.querySelector("#currentTime");
+        var $setCurrentTimeButton = youTubeTab.querySelector(
+          "#setCurrentTimeButton"
         );
-        var $mutedCheckbox = document.getElementById("mutedCheckbox");
-        var $durationStart = document.getElementById("durationStart");
-        var $durationEnd = document.getElementById("durationEnd");
-        var $setDurationButton = document.getElementById("setDurationButton");
+        var $mutedCheckbox = youTubeTab.querySelector("#mutedCheckbox");
+        var $durationStart = youTubeTab.querySelector("#durationStart");
+        var $durationEnd = youTubeTab.querySelector("#durationEnd");
+        var $setDurationButton = youTubeTab.querySelector("#setDurationButton");
 
         var annotations = [];
         var urlAdapter;
@@ -795,9 +821,8 @@
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
         // const annotationsJson =
         //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
-
-        const annotationsJson =
-          "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+        // const annotationsJson =
+        // "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
 
         const annotationList = document.getElementById("annotation-list");
 
