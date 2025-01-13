@@ -379,6 +379,11 @@
         var $iiif_setTargetButton = iiifTab.querySelector(
           "#iiif_setTargetButton"
         );
+        var $iiif_durationStart = iiifTab.querySelector("#iiif_durationStart");
+        var $iiif_durationEnd = iiifTab.querySelector("#iiif_durationEnd");
+        var $iiif_setDurationButton = iiifTab.querySelector(
+          "#iiif_setDurationButton"
+        );
         var $iiif_setRotationButton = iiifTab.querySelector(
           "#iiif_setRotationButton"
         );
@@ -573,6 +578,14 @@
           var target = $iiif_target.value;
           uv.set({
             target: target,
+          });
+        };
+
+        $iiif_setDurationButton.onclick = function() {
+          var durationStart = $iiif_durationStart.value;
+          var durationEnd = $iiif_durationEnd.value;
+          uv.set({
+            duration: [durationStart, durationEnd],
           });
         };
 
