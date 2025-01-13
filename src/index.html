@@ -204,9 +204,9 @@
         <div class="controls-group">
           <h2 class="controls-title">Target</h2>
           <div class="flex">
-            <input id="target" type="text" value="" class="flex-1" />
+            <input id="iiif_target" type="text" value="" class="flex-1" />
             <button
-              id="setTargetButton"
+              id="iiif_setTargetButton"
               class="controls-button flex-initial ml-2"
             >
               Set Target
@@ -217,15 +217,20 @@
         <div class="controls-group">
           <h2 class="controls-title">Duration</h2>
           <div class="flex">
-            <input id="durationStart" type="number" value="0" class="flex-1" />
             <input
-              id="durationEnd"
+              id="iiif_durationStart"
+              type="number"
+              value="0"
+              class="flex-1"
+            />
+            <input
+              id="iiif_durationEnd"
               type="number"
               value="0"
               class="flex-1 ml-2"
             />
             <button
-              id="setDurationButton"
+              id="iiif_setDurationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Duration
@@ -236,9 +241,9 @@
         <div class="controls-group">
           <h2 class="controls-title">Rotation</h2>
           <div class="flex">
-            <input id="rotation" type="text" value="" class="flex-1" />
+            <input id="iiif_rotation" type="text" value="" class="flex-1" />
             <button
-              id="setRotationButton"
+              id="iiif_setRotationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Rotation
@@ -248,12 +253,12 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Annotations</h2>
-          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
           <div class="mt-2">
-            <button id="setAnnotationsButton" class="controls-button">
+            <button id="iiif_setAnnotationsButton" class="controls-button">
               Set Annotations
             </button>
-            <button id="clearAnnotationsButton" class="controls-button">
+            <button id="iiif_clearAnnotationsButton" class="controls-button">
               Clear Annotations
             </button>
           </div>
@@ -281,15 +286,20 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Muted</h2>
-          <input type="checkbox" id="mutedCheckbox" />
+          <input type="checkbox" id="youtube_mutedCheckbox" />
         </div>
 
         <div class="controls-group">
           <h2 class="controls-title">Current Time</h2>
           <div class="flex">
-            <input id="currentTime" type="text" value="" class="flex-1" />
+            <input
+              id="youtube_currentTime"
+              type="text"
+              value=""
+              class="flex-1"
+            />
             <button
-              id="setCurrentTimeButton"
+              id="youtube_setCurrentTimeButton"
               class="controls-button flex-initial ml-2"
             >
               Set Current Time
@@ -300,15 +310,20 @@
         <div class="controls-group">
           <h2 class="controls-title">Duration</h2>
           <div class="flex">
-            <input id="durationStart" type="number" value="0" class="flex-1" />
             <input
-              id="durationEnd"
+              id="youtube_durationStart"
+              type="number"
+              value="0"
+              class="flex-1"
+            />
+            <input
+              id="youtube_durationEnd"
               type="number"
               value="0"
               class="flex-1 ml-2"
             />
             <button
-              id="setDurationButton"
+              id="youtube_setDurationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Duration
@@ -356,19 +371,23 @@
         var $iiifManifestIdSelect = iiifTab.querySelector(
           "#iiifManifestIdSelect"
         );
-        var $target = iiifTab.querySelector("#target");
-        var $rotation = iiifTab.querySelector("#rotation");
+        var $iiif_target = iiifTab.querySelector("#iiif_target");
+        var $iiif_rotation = iiifTab.querySelector("#iiif_rotation");
         var $setIIIFManifestIdButton = iiifTab.querySelector(
           "#setIIIFManifestIdButton"
         );
-        var $setTargetButton = iiifTab.querySelector("#setTargetButton");
-        var $setRotationButton = iiifTab.querySelector("#setRotationButton");
-        var $annotations = iiifTab.querySelector("#annotations");
-        var $setAnnotationsButton = iiifTab.querySelector(
-          "#setAnnotationsButton"
+        var $iiif_setTargetButton = iiifTab.querySelector(
+          "#iiif_setTargetButton"
         );
-        var $clearAnnotationsButton = iiifTab.querySelector(
-          "#clearAnnotationsButton"
+        var $iiif_setRotationButton = iiifTab.querySelector(
+          "#iiif_setRotationButton"
+        );
+        var $iiif_annotations = iiifTab.querySelector("#iiif_annotations");
+        var $iiif_setAnnotationsButton = iiifTab.querySelector(
+          "#iiif_setAnnotationsButton"
+        );
+        var $iiif_clearAnnotationsButton = iiifTab.querySelector(
+          "#iiif_clearAnnotationsButton"
         );
 
         // youtube tab
@@ -379,14 +398,24 @@
         var $youTubeVideoIdSelect = youTubeTab.querySelector(
           "#youTubeVideoIdSelect"
         );
-        var $currentTime = youTubeTab.querySelector("#currentTime");
-        var $setCurrentTimeButton = youTubeTab.querySelector(
-          "#setCurrentTimeButton"
+        var $youtube_currentTime = youTubeTab.querySelector(
+          "#youtube_currentTime"
         );
-        var $mutedCheckbox = youTubeTab.querySelector("#mutedCheckbox");
-        var $durationStart = youTubeTab.querySelector("#durationStart");
-        var $durationEnd = youTubeTab.querySelector("#durationEnd");
-        var $setDurationButton = youTubeTab.querySelector("#setDurationButton");
+        var $youtube_setCurrentTimeButton = youTubeTab.querySelector(
+          "#youtube_setCurrentTimeButton"
+        );
+        var $youtube_mutedCheckbox = youTubeTab.querySelector(
+          "#youtube_mutedCheckbox"
+        );
+        var $youtube_durationStart = youTubeTab.querySelector(
+          "#youtube_durationStart"
+        );
+        var $youtube_durationEnd = youTubeTab.querySelector(
+          "#youtube_durationEnd"
+        );
+        var $youtube_setDurationButton = youTubeTab.querySelector(
+          "#youtube_setDurationButton"
+        );
 
         var annotations = [];
         var urlAdapter;
@@ -494,7 +523,7 @@
         }
 
         function setAnnotations() {
-          annotations = JSON.parse($annotations.value);
+          annotations = JSON.parse($iiif_annotations.value);
           uv.set({
             annotations: annotations,
           });
@@ -540,46 +569,48 @@
           });
         };
 
-        $setTargetButton.onclick = function() {
-          var target = $target.value;
+        $iiif_setTargetButton.onclick = function() {
+          var target = $iiif_target.value;
           uv.set({
             target: target,
           });
         };
 
-        $setRotationButton.onclick = function() {
-          var rotation = $rotation.value;
+        $iiif_setRotationButton.onclick = function() {
+          var rotation = $iiif_rotation.value;
           uv.set({
             rotation: rotation,
           });
         };
 
-        $setAnnotationsButton.onclick = function() {
+        $iiif_setAnnotationsButton.onclick = function() {
           setAnnotations();
         };
 
-        $clearAnnotationsButton.onclick = function() {
+        $iiif_clearAnnotationsButton.onclick = function() {
           clearAnnotations();
           setAnnotations();
         };
 
-        $mutedCheckbox.onclick = function(e) {
+        // youtube buttons
+
+        $youtube_mutedCheckbox.onclick = function(e) {
           muted = e.target.checked;
           uv.set({
             muted: muted,
           });
         };
 
-        $setCurrentTimeButton.onclick = function() {
-          var currentTime = $currentTime.value;
+        $youtube_setCurrentTimeButton.onclick = function() {
+          var currentTime = $youtube_currentTime.value;
           uv.set({
             currentTime: currentTime,
           });
         };
 
-        $setDurationButton.onclick = function() {
-          var durationStart = $durationStart.value;
-          var durationEnd = $durationEnd.value;
+        $youtube_setDurationButton.onclick = function() {
+          var durationStart = $youtube_durationStart.value;
+          var durationEnd = $youtube_durationEnd.value;
           uv.set({
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
@@ -589,7 +620,7 @@
 
         function clearAnnotations() {
           annotations = [];
-          $annotations.value = JSON.stringify(annotations);
+          $iiif_annotations.value = JSON.stringify(annotations);
         }
 
         function activateIIIFTab() {
@@ -708,7 +739,7 @@
           });
 
           uv.on("targetChange", function(target) {
-            $target.value = target;
+            $iiif_target.value = target;
           });
 
           uv.on("openseadragonExtension.doubleClick", function(e) {
@@ -716,7 +747,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
@@ -725,7 +756,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
