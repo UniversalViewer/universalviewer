@@ -488,20 +488,23 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     this.extensionHost.subscribe(
       IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
       (triggerButton) => {
-        this.store.getState().openDownloadDialogue(triggerButton[0]);
+        const state = this.store.getState();
+        if (state !== null) {
+          state.openDownloadDialogue(triggerButton[0]);
+        }
       }
     );
 
     this.extensionHost.subscribe(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
@@ -696,22 +699,29 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           );
         },
         onClose: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
         },
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
           window.open(<string>this.getCroppedImageUri(canvas, viewer));
         },
         onDownloadSelection: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
           this.extensionHost.publish(IIIFEvents.SHOW_MULTISELECT_DIALOGUE);
         },
         onShowTermsOfUse: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
           this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
         },
       })
     );
+  }
+
+  closeActiveDialogue(): void {
+    const state = this.store.getState();
+    if (state !== null) {
+      state.closeDialogue();
+    }
   }
 
   checkForTarget(): void {
