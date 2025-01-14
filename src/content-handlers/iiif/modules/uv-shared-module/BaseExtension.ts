@@ -1172,7 +1172,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   dispose(): void {
-    this.store?.destroy();
+    // pass
   }
 }
 
