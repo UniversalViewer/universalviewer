@@ -45,7 +45,7 @@ import {
 import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
-import { StoreApi } from "zustand/vanilla";
+import type { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
 import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
 
