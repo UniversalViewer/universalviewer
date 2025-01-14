@@ -445,7 +445,7 @@
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}/uv.html#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>",
+        "embedTemplate": "<iframe src=\"{0}#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>",
         "instructionsEnabled": false,
         "shareEnabled": true,
         "shareFrameEnabled": true,
