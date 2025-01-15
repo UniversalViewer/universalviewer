@@ -61,7 +61,6 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
-
       // Clear any existing timeout
       if (that.pauseTimeoutId !== null) {
         clearTimeout(that.pauseTimeoutId);
@@ -98,17 +97,10 @@ export class MediaElementCenterPanel extends CenterPanel<
         }
       }
 
+      that.player.setCurrentTime(t);
+
       if (that.config.options.autoPlayOnSetTarget) {
-        that.player.setCurrentTime(t);
         that.player.play();
-      } else {
-        // need to play first to show the frame
-        that.player.setCurrentTime(t);
-        that.player.play();
-        setTimeout(() => {
-          that.player.pause();
-          that.player.setCurrentTime(t);
-        }, 1000);
       }
     });
 
