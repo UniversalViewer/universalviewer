@@ -179,6 +179,7 @@ export default class Extension extends BaseExtension<Config>
     super.render();
 
     this.checkForTarget();
+    this.checkForMuted();
   }
 
   checkForTarget(): void {
@@ -201,6 +202,10 @@ export default class Extension extends BaseExtension<Config>
         TFragment.fromString(selector)
       );
     }
+  }
+
+  checkForMuted(): void {
+    this.extensionHost.publish(IIIFEvents.SET_MUTED, this.data.muted || false);
   }
 
   isLeftPanelEnabled(): boolean {
