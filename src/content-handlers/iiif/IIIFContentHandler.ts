@@ -386,9 +386,8 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       const hasRanges: boolean = helper.getRanges().length > 0;
 
       if (
-        (extension!.type === Extension.AV && !hasRanges) ||
-        (extension!.type === Extension.AV &&
-          data.config.options.preferMediaElementExtension)
+        extension!.type === Extension.AV &&
+        (!hasRanges || data.config.options.preferMediaElementExtension)
       ) {
         extension = await that._getExtensionByType(
           Extension.MEDIAELEMENT,
