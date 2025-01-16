@@ -42,7 +42,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
   constructor(public options: IUVOptions) {
     super(options);
     this._assignContentHandler(this.options.data);
-    // for backwards compat, remove in next major version
+    // for backwards compat, remove in next major version (UV5)
     this._assignedContentHandler = this.assignedContentHandler;
   }
 
