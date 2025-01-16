@@ -81,7 +81,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
     } else if (handlerChanged) {
-      this.contentType = contentType; // set content type
+      this.contentType = this._contentType = contentType; // set content type
       this.assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
       this.showSpinner(); // show spinner
