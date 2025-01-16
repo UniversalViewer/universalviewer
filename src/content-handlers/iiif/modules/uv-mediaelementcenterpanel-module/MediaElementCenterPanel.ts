@@ -44,6 +44,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   player: any;
   title: string | null;
   pauseTimeoutId: any = null;
+  muted: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
@@ -101,6 +102,12 @@ export class MediaElementCenterPanel extends CenterPanel<
 
       if (that.config.options.autoPlayOnSetTarget) {
         that.player.play();
+      }
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.SET_MUTED, (muted) => {
+      if (that.player) {
+        that.player.setMuted(muted);
       }
     });
 
@@ -259,6 +266,22 @@ export class MediaElementCenterPanel extends CenterPanel<
               MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
+          });
+
+          mediaElement.addEventListener("volumechange", (volume) => {
+            const muted: boolean = volume.detail.target.getMuted();
+
+            if (that.muted === false && muted === true) {
+              that.muted = true;
+              that.extensionHost.fire(MediaElementExtensionEvents.MEDIA_MUTED);
+            }
+
+            if (that.muted === true && muted === false) {
+              that.muted = false;
+              that.extensionHost.fire(
+                MediaElementExtensionEvents.MEDIA_UNMUTED
+              );
+            }
           });
         },
       });

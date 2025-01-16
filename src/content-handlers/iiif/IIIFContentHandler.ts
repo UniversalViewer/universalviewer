@@ -97,10 +97,8 @@ const Extension: IExtensionRegistry = {
   },
 };
 
-export default class IIIFContentHandler
-  extends BaseContentHandler<IIIFData>
-  implements IIIFExtensionHost, IContentHandler<IIIFData>
-{
+export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
+  implements IIIFExtensionHost, IContentHandler<IIIFData> {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | null;
@@ -179,10 +177,6 @@ export default class IIIFContentHandler
     type: ExtensionLoader,
     format?: string
   ): Promise<any> {
-    // previously: /* webpackChunkName: "uv-av-extension" */ /* webpackMode: "lazy" */ "./extensions/uv-av-extension/Extension"
-    // const m = (await import(
-    //   /* webpackMode: "lazy" */ `./extensions/${name}/Extension`
-    // )) as any;
     const m = await type.loader();
     const extension: IExtension = new m.default();
     extension.format = format;
@@ -264,15 +258,10 @@ export default class IIIFContentHandler
   }
 
   public dispose() {
-    // console.log("dispose IIIFContentHandler");
     super.dispose();
     this._pubsub.dispose();
     this.extension?.dispose();
     this.disposed = true;
-    // const $elem: JQuery = $(this.options.target);
-    // $elem.empty();
-    // remove all classes
-    // $elem.attr("class", "");
   }
 
   private async _reload(data: IUVData<any>): Promise<void> {

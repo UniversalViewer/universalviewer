@@ -204,9 +204,9 @@
         <div class="controls-group">
           <h2 class="controls-title">Target</h2>
           <div class="flex">
-            <input id="target" type="text" value="" class="flex-1" />
+            <input id="iiif_target" type="text" value="" class="flex-1" />
             <button
-              id="setTargetButton"
+              id="iiif_setTargetButton"
               class="controls-button flex-initial ml-2"
             >
               Set Target
@@ -215,11 +215,16 @@
         </div>
 
         <div class="controls-group">
+          <h2 class="controls-title">Muted</h2>
+          <input type="checkbox" id="iiif_mutedCheckbox" />
+        </div>
+
+        <div class="controls-group">
           <h2 class="controls-title">Rotation</h2>
           <div class="flex">
-            <input id="rotation" type="text" value="" class="flex-1" />
+            <input id="iiif_rotation" type="text" value="" class="flex-1" />
             <button
-              id="setRotationButton"
+              id="iiif_setRotationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Rotation
@@ -229,12 +234,12 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Annotations</h2>
-          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
           <div class="mt-2">
-            <button id="setAnnotationsButton" class="controls-button">
+            <button id="iiif_setAnnotationsButton" class="controls-button">
               Set Annotations
             </button>
-            <button id="clearAnnotationsButton" class="controls-button">
+            <button id="iiif_clearAnnotationsButton" class="controls-button">
               Clear Annotations
             </button>
           </div>
@@ -262,15 +267,20 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Muted</h2>
-          <input type="checkbox" id="mutedCheckbox" />
+          <input type="checkbox" id="youtube_mutedCheckbox" />
         </div>
 
         <div class="controls-group">
           <h2 class="controls-title">Current Time</h2>
           <div class="flex">
-            <input id="currentTime" type="text" value="" class="flex-1" />
+            <input
+              id="youtube_currentTime"
+              type="text"
+              value=""
+              class="flex-1"
+            />
             <button
-              id="setCurrentTimeButton"
+              id="youtube_setCurrentTimeButton"
               class="controls-button flex-initial ml-2"
             >
               Set Current Time
@@ -281,15 +291,20 @@
         <div class="controls-group">
           <h2 class="controls-title">Duration</h2>
           <div class="flex">
-            <input id="durationStart" type="number" value="0" class="flex-1" />
             <input
-              id="durationEnd"
+              id="youtube_durationStart"
+              type="number"
+              value="0"
+              class="flex-1"
+            />
+            <input
+              id="youtube_durationEnd"
               type="number"
               value="0"
               class="flex-1 ml-2"
             />
             <button
-              id="setDurationButton"
+              id="youtube_setDurationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Duration
@@ -331,39 +346,58 @@
         });
 
         var uv, iiifManifestId, youTubeVideoId;
-        var $iiifManifestId = document.getElementById("iiifManifestId");
-        var $iiifManifestIdSelect = document.getElementById(
-          "iiifManifestIdSelect"
+
+        // iiif tab
+        var $iiifManifestId = iiifTab.querySelector("#iiifManifestId");
+        var $iiifManifestIdSelect = iiifTab.querySelector(
+          "#iiifManifestIdSelect"
         );
-        var $target = document.getElementById("target");
-        var $rotation = document.getElementById("rotation");
-        var $setIIIFManifestIdButton = document.getElementById(
-          "setIIIFManifestIdButton"
+        var $iiif_target = iiifTab.querySelector("#iiif_target");
+        var $iiif_rotation = iiifTab.querySelector("#iiif_rotation");
+        var $setIIIFManifestIdButton = iiifTab.querySelector(
+          "#setIIIFManifestIdButton"
         );
-        var $setTargetButton = document.getElementById("setTargetButton");
-        var $setRotationButton = document.getElementById("setRotationButton");
-        var $annotations = document.getElementById("annotations");
-        var $setAnnotationsButton = document.getElementById(
-          "setAnnotationsButton"
+        var $iiif_setTargetButton = iiifTab.querySelector(
+          "#iiif_setTargetButton"
         );
-        var $clearAnnotationsButton = document.getElementById(
-          "clearAnnotationsButton"
+        var $iiif_mutedCheckbox = iiifTab.querySelector("#iiif_mutedCheckbox");
+        var $iiif_setRotationButton = iiifTab.querySelector(
+          "#iiif_setRotationButton"
         );
-        var $setYouTubeVideoIdButton = document.getElementById(
-          "setYouTubeVideoIdButton"
+        var $iiif_annotations = iiifTab.querySelector("#iiif_annotations");
+        var $iiif_setAnnotationsButton = iiifTab.querySelector(
+          "#iiif_setAnnotationsButton"
         );
-        var $youTubeVideoId = document.getElementById("youTubeVideoId");
-        var $youTubeVideoIdSelect = document.getElementById(
-          "youTubeVideoIdSelect"
+        var $iiif_clearAnnotationsButton = iiifTab.querySelector(
+          "#iiif_clearAnnotationsButton"
         );
-        var $currentTime = document.getElementById("currentTime");
-        var $setCurrentTimeButton = document.getElementById(
-          "setCurrentTimeButton"
+
+        // youtube tab
+        var $setYouTubeVideoIdButton = youTubeTab.querySelector(
+          "#setYouTubeVideoIdButton"
         );
-        var $mutedCheckbox = document.getElementById("mutedCheckbox");
-        var $durationStart = document.getElementById("durationStart");
-        var $durationEnd = document.getElementById("durationEnd");
-        var $setDurationButton = document.getElementById("setDurationButton");
+        var $youTubeVideoId = youTubeTab.querySelector("#youTubeVideoId");
+        var $youTubeVideoIdSelect = youTubeTab.querySelector(
+          "#youTubeVideoIdSelect"
+        );
+        var $youtube_currentTime = youTubeTab.querySelector(
+          "#youtube_currentTime"
+        );
+        var $youtube_setCurrentTimeButton = youTubeTab.querySelector(
+          "#youtube_setCurrentTimeButton"
+        );
+        var $youtube_mutedCheckbox = youTubeTab.querySelector(
+          "#youtube_mutedCheckbox"
+        );
+        var $youtube_durationStart = youTubeTab.querySelector(
+          "#youtube_durationStart"
+        );
+        var $youtube_durationEnd = youTubeTab.querySelector(
+          "#youtube_durationEnd"
+        );
+        var $youtube_setDurationButton = youTubeTab.querySelector(
+          "#youtube_setDurationButton"
+        );
 
         var annotations = [];
         var urlAdapter;
@@ -471,7 +505,7 @@
         }
 
         function setAnnotations() {
-          annotations = JSON.parse($annotations.value);
+          annotations = JSON.parse($iiif_annotations.value);
           uv.set({
             annotations: annotations,
           });
@@ -517,46 +551,57 @@
           });
         };
 
-        $setTargetButton.onclick = function() {
-          var target = $target.value;
+        // iiif inputs
+
+        $iiif_setTargetButton.onclick = function() {
+          var target = $iiif_target.value;
           uv.set({
             target: target,
           });
         };
 
-        $setRotationButton.onclick = function() {
-          var rotation = $rotation.value;
-          uv.set({
-            rotation: rotation,
-          });
-        };
-
-        $setAnnotationsButton.onclick = function() {
-          setAnnotations();
-        };
-
-        $clearAnnotationsButton.onclick = function() {
-          clearAnnotations();
-          setAnnotations();
-        };
-
-        $mutedCheckbox.onclick = function(e) {
+        $iiif_mutedCheckbox.onclick = function(e) {
           muted = e.target.checked;
           uv.set({
             muted: muted,
           });
         };
 
-        $setCurrentTimeButton.onclick = function() {
-          var currentTime = $currentTime.value;
+        $iiif_setRotationButton.onclick = function() {
+          var rotation = $iiif_rotation.value;
+          uv.set({
+            rotation: rotation,
+          });
+        };
+
+        $iiif_setAnnotationsButton.onclick = function() {
+          setAnnotations();
+        };
+
+        $iiif_clearAnnotationsButton.onclick = function() {
+          clearAnnotations();
+          setAnnotations();
+        };
+
+        // youtube inputs
+
+        $youtube_mutedCheckbox.onclick = function(e) {
+          muted = e.target.checked;
+          uv.set({
+            muted: muted,
+          });
+        };
+
+        $youtube_setCurrentTimeButton.onclick = function() {
+          var currentTime = $youtube_currentTime.value;
           uv.set({
             currentTime: currentTime,
           });
         };
 
-        $setDurationButton.onclick = function() {
-          var durationStart = $durationStart.value;
-          var durationEnd = $durationEnd.value;
+        $youtube_setDurationButton.onclick = function() {
+          var durationStart = $youtube_durationStart.value;
+          var durationEnd = $youtube_durationEnd.value;
           uv.set({
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
@@ -566,7 +611,7 @@
 
         function clearAnnotations() {
           annotations = [];
-          $annotations.value = JSON.stringify(annotations);
+          $iiif_annotations.value = JSON.stringify(annotations);
         }
 
         function activateIIIFTab() {
@@ -685,7 +730,7 @@
           });
 
           uv.on("targetChange", function(target) {
-            $target.value = target;
+            $iiif_target.value = target;
           });
 
           uv.on("openseadragonExtension.doubleClick", function(e) {
@@ -693,7 +738,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
@@ -702,7 +747,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
@@ -716,6 +761,14 @@
 
           uv.on("clearAnnotations", function(e) {
             clearAnnotations();
+          });
+
+          uv.on("mediaelementExtension.mediaMuted", function() {
+            $iiif_mutedCheckbox.checked = true;
+          });
+
+          uv.on("mediaelementExtension.mediaUnmuted", function() {
+            $iiif_mutedCheckbox.checked = false;
           });
 
           // uv.on("load", function(e) {
@@ -798,9 +851,8 @@
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
         // const annotationsJson =
         //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
-
-        const annotationsJson =
-          "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+        // const annotationsJson =
+        // "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
 
         const annotationList = document.getElementById("annotation-list");
 
@@ -853,28 +905,28 @@
           // });
         }
 
-        function initStory() {
-          fetch(annotationsJson).then((res) => {
-            const data = res.json().then((data) => {
-              storyAnnotations = data.annotations.filter(
-                (anno) => anno.motivation === "framing"
-              );
-              storyAnnotations.forEach((anno) => {
-                const li = document.createElement("li");
-                const a = document.createElement("a");
-                a.dataset.annoId = anno.id;
-                a.href = `#${anno.id}`;
-                a.innerHTML = anno.bodyValue;
-                a.onclick = handleAnnotationClick;
-                li.appendChild(a);
-                annotationList.appendChild(li);
-              });
+        // function initStory() {
+        //   fetch(annotationsJson).then((res) => {
+        //     const data = res.json().then((data) => {
+        //       storyAnnotations = data.annotations.filter(
+        //         (anno) => anno.motivation === "framing"
+        //       );
+        //       storyAnnotations.forEach((anno) => {
+        //         const li = document.createElement("li");
+        //         const a = document.createElement("a");
+        //         a.dataset.annoId = anno.id;
+        //         a.href = `#${anno.id}`;
+        //         a.innerHTML = anno.bodyValue;
+        //         a.onclick = handleAnnotationClick;
+        //         li.appendChild(a);
+        //         annotationList.appendChild(li);
+        //       });
 
-              partOf = storyAnnotations[0].partOf;
-              target = storyAnnotations[0].target;
-            });
-          });
-        }
+        //       partOf = storyAnnotations[0].partOf;
+        //       target = storyAnnotations[0].target;
+        //     });
+        //   });
+        // }
 
         // initStory();
       });
