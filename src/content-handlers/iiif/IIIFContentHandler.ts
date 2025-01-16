@@ -358,21 +358,6 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
         }
       }
 
-      // if using uv-av-extension and there is no structure, fall back to uv-mediaelement-extension
-      const hasRanges: boolean = helper.getRanges().length > 0;
-
-      if (extension!.type === Extension.AV && !hasRanges) {
-        extension = await that._getExtensionByType(
-          Extension.MEDIAELEMENT,
-          format
-        );
-      }
-
-      // if there still isn't a matching extension, use the default extension.
-      if (!extension) {
-        extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
-      }
-
       if (!data.locales) {
         data.locales = [];
         data.locales.push(defaultLocale);
@@ -385,6 +370,26 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
       );
 
       data.config = await that.configure(config);
+
+      // if using uv-av-extension and there is no structure,
+      // or the preferMediaElementExtension config is set
+      // fall back to uv-mediaelement-extension
+      const hasRanges: boolean = helper.getRanges().length > 0;
+
+      if (
+        extension!.type === Extension.AV &&
+        (!hasRanges || data.config.options.preferMediaElementExtension)
+      ) {
+        extension = await that._getExtensionByType(
+          Extension.MEDIAELEMENT,
+          format
+        );
+      }
+
+      // if there still isn't a matching extension, use the default extension.
+      if (!extension) {
+        extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
+      }
 
       that._createExtension(extension, data, helper);
     } catch (e) {

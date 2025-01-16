@@ -67,6 +67,9 @@ export type Options = {
   /** Determines if access control is pessimistic */
   pessimisticAccessControl?: boolean;
 
+  /** Determines if the mediaelement extension should be preferred */
+  preferMediaElementExtension?: boolean;
+
   /** Determines if viewport is preserved */
   preserveViewport?: boolean;
 
@@ -226,7 +229,7 @@ export type SettingsDialogueContent = DialogueContent & {
   clickToZoomEnabled: string;
   pagingEnabled: string;
   reducedMotion: string;
-  truncateThumbnailLabels: string; 
+  truncateThumbnailLabels: string;
   preserveViewport: string;
   title: string;
   website: string;
