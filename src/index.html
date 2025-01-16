@@ -568,7 +568,7 @@
         };
 
         $iiif_setRotationButton.onclick = function() {
-          var rotation = $iiif_rotation.value;
+          var rotation = parseInt($iiif_rotation.value);
           uv.set({
             rotation: rotation,
           });
