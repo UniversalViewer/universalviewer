@@ -30,17 +30,24 @@ const ContentHandler: IContentHandlerRegistry = {
 };
 
 export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
-  private _contentType: ContentType = ContentType.UNKNOWN;
-  private _assignedContentHandler: IContentHandler<IUVData<any>>;
+  public contentType: ContentType = ContentType.UNKNOWN;
+  public assignedContentHandler: IContentHandler<IUVData<any>>;
+
+  // for backwards compat, remove in next major version
+  public _contentType = this.contentType;
+  public _assignedContentHandler;
+
   private _externalEventListeners: EventListener[] = [];
 
   constructor(public options: IUVOptions) {
     super(options);
     this._assignContentHandler(this.options.data);
+    // for backwards compat, remove in next major version
+    this._assignedContentHandler = this.assignedContentHandler;
   }
 
   public get() {
-    return this._assignedContentHandler;
+    return this.assignedContentHandler;
   }
 
   public on(name: string, cb: Function, ctx?: any): void {
@@ -63,22 +70,22 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
       contentType = ContentType.IIIF;
     } else if (data[ContentType.YOUTUBE]) {
       contentType = ContentType.YOUTUBE;
-    } else if (this._contentType) {
-      contentType = this._contentType;
+    } else if (this.contentType) {
+      contentType = this.contentType;
     } else {
       contentType = ContentType.UNKNOWN;
     }
 
-    const handlerChanged: boolean = this._contentType !== contentType;
+    const handlerChanged: boolean = this.contentType !== contentType;
 
     if (contentType === ContentType.UNKNOWN) {
       console.error("Unknown content type");
     } else if (handlerChanged) {
-      this._contentType = contentType; // set content type
-      this._assignedContentHandler?.dispose(); // dispose previous content handler
+      this.contentType = contentType; // set content type
+      this.assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
       this.showSpinner(); // show spinner
-      this._assignedContentHandler = new m.default(
+      this.assignedContentHandler = new m.default(
         {
           target: this._el,
           data: data,
@@ -100,20 +107,20 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
       } else {
         // the handler didn't change, therefore handler's initial set didn't run
         // so we need to call set
-        this._assignedContentHandler.set(data, initial);
+        this.assignedContentHandler.set(data, initial);
       }
     });
   }
 
   public exitFullScreen(): void {
-    this._assignedContentHandler?.exitFullScreen();
+    this.assignedContentHandler?.exitFullScreen();
   }
 
   public resize(): void {
-    this._assignedContentHandler?.resize();
+    this.assignedContentHandler?.resize();
   }
 
   public dispose(): void {
-    this._assignedContentHandler?.dispose();
+    this.assignedContentHandler?.dispose();
   }
 }
