@@ -33,7 +33,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
   public contentType: ContentType = ContentType.UNKNOWN;
   public assignedContentHandler: IContentHandler<IUVData<any>>;
 
-  // for backwards compat, remove in next major version
+  // for backwards compat, remove in next major version (UV5)
   public _contentType = this.contentType;
   public _assignedContentHandler;
 
