@@ -764,11 +764,11 @@
           });
 
           uv.on("mediaelementExtension.mediaMuted", function() {
-            console.log("muted");
+            $iiif_mutedCheckbox.checked = true;
           });
 
           uv.on("mediaelementExtension.mediaUnmuted", function() {
-            console.log("unmuted");
+            $iiif_mutedCheckbox.checked = false;
           });
 
           // uv.on("load", function(e) {
@@ -905,28 +905,28 @@
           // });
         }
 
-        function initStory() {
-          fetch(annotationsJson).then((res) => {
-            const data = res.json().then((data) => {
-              storyAnnotations = data.annotations.filter(
-                (anno) => anno.motivation === "framing"
-              );
-              storyAnnotations.forEach((anno) => {
-                const li = document.createElement("li");
-                const a = document.createElement("a");
-                a.dataset.annoId = anno.id;
-                a.href = `#${anno.id}`;
-                a.innerHTML = anno.bodyValue;
-                a.onclick = handleAnnotationClick;
-                li.appendChild(a);
-                annotationList.appendChild(li);
-              });
+        // function initStory() {
+        //   fetch(annotationsJson).then((res) => {
+        //     const data = res.json().then((data) => {
+        //       storyAnnotations = data.annotations.filter(
+        //         (anno) => anno.motivation === "framing"
+        //       );
+        //       storyAnnotations.forEach((anno) => {
+        //         const li = document.createElement("li");
+        //         const a = document.createElement("a");
+        //         a.dataset.annoId = anno.id;
+        //         a.href = `#${anno.id}`;
+        //         a.innerHTML = anno.bodyValue;
+        //         a.onclick = handleAnnotationClick;
+        //         li.appendChild(a);
+        //         annotationList.appendChild(li);
+        //       });
 
-              partOf = storyAnnotations[0].partOf;
-              target = storyAnnotations[0].target;
-            });
-          });
-        }
+        //       partOf = storyAnnotations[0].partOf;
+        //       target = storyAnnotations[0].target;
+        //     });
+        //   });
+        // }
 
         // initStory();
       });
