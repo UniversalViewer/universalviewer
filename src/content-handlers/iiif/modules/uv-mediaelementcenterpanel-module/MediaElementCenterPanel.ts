@@ -105,9 +105,15 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
     });
 
-    this.extensionHost.subscribe(IIIFEvents.SET_MUTED, (muted) => {
+    this.extensionHost.subscribe(IIIFEvents.SET_MUTED, (muted: boolean) => {
       if (that.player) {
         that.player.setMuted(muted);
+
+        if (muted) {
+          that.$media.attr("muted", "");
+        } else {
+          that.$media.removeAttr("muted");
+        }
       }
     });
 
@@ -350,6 +356,22 @@ export class MediaElementCenterPanel extends CenterPanel<
               MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
+          });
+
+          mediaElement.addEventListener("volumechange", (volume) => {
+            const muted: boolean = volume.detail.target.getMuted();
+
+            if (that.muted === false && muted === true) {
+              that.muted = true;
+              that.extensionHost.fire(MediaElementExtensionEvents.MEDIA_MUTED);
+            }
+
+            if (that.muted === true && muted === false) {
+              that.muted = false;
+              that.extensionHost.fire(
+                MediaElementExtensionEvents.MEDIA_UNMUTED
+              );
+            }
           });
         },
       });
