@@ -108,12 +108,7 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.extensionHost.subscribe(IIIFEvents.SET_MUTED, (muted: boolean) => {
       if (that.player) {
         that.player.setMuted(muted);
-
-        if (muted) {
-          that.$media.attr("muted", "");
-        } else {
-          that.$media.removeAttr("muted");
-        }
+        that.updateMutedAttribute(muted);
       }
     });
 
@@ -131,6 +126,14 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.$wrapper.append(this.$container);
 
     this.title = this.extension.helper.getLabel();
+  }
+
+  updateMutedAttribute(muted: boolean) {
+    if (muted) {
+      this.$media.attr("muted", "");
+    } else {
+      this.$media.removeAttr("muted");
+    }
   }
 
   async openMedia(resources: IExternalResource[]) {
@@ -284,10 +287,13 @@ export class MediaElementCenterPanel extends CenterPanel<
 
             if (that.muted === true && muted === false) {
               that.muted = false;
+
               that.extensionHost.fire(
                 MediaElementExtensionEvents.MEDIA_UNMUTED
               );
             }
+
+            that.updateMutedAttribute(that.muted);
           });
         },
       });
@@ -372,6 +378,8 @@ export class MediaElementCenterPanel extends CenterPanel<
                 MediaElementExtensionEvents.MEDIA_UNMUTED
               );
             }
+
+            that.updateMutedAttribute(that.muted);
           });
         },
       });
