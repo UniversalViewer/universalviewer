@@ -33,7 +33,7 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
   public contentType: ContentType = ContentType.UNKNOWN;
   public assignedContentHandler: IContentHandler<IUVData<any>>;
 
-  // for backwards compat, remove in next major version (UV5)
+  // include _contentType for backwards compat, remove in next major version (UV5)
   public _contentType = this.contentType;
   public _assignedContentHandler;
 
@@ -42,8 +42,6 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
   constructor(public options: IUVOptions) {
     super(options);
     this._assignContentHandler(this.options.data);
-    // for backwards compat, remove in next major version (UV5)
-    this._assignedContentHandler = this.assignedContentHandler;
   }
 
   public get() {
@@ -85,7 +83,8 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
       this.assignedContentHandler?.dispose(); // dispose previous content handler
       const m = await ContentHandler[contentType](); // import content handler
       this.showSpinner(); // show spinner
-      this.assignedContentHandler = new m.default(
+      // include _assignedContentHandler for backwards compat, remove in next major version (UV5)
+      this.assignedContentHandler = this._assignedContentHandler = new m.default(
         {
           target: this._el,
           data: data,
