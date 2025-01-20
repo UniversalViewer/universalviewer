@@ -101,7 +101,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
   implements IIIFExtensionHost, IContentHandler<IIIFData> {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
-  public extension: IExtension | null;
+  public extension: IExtension | undefined;
   public isFullScreen: boolean = false;
   public disposed = false;
   private extra = { initial: false };
