@@ -1,17 +1,11 @@
 import { IUVData } from "./IUVData";
 import { IContentHandler } from "./IContentHandler";
 import BaseContentHandler, { EventListener } from "./BaseContentHandler";
+import { ContentType } from "./ContentType";
 
 export interface IUVOptions {
   target: HTMLElement;
   data: IUVData<any>;
-}
-
-enum ContentType {
-  IIIFLEGACY = "manifest",
-  IIIF = "iiifManifestId",
-  YOUTUBE = "youTubeVideoId",
-  UNKNOWN = "unknown",
 }
 
 interface IContentHandlerRegistry {
