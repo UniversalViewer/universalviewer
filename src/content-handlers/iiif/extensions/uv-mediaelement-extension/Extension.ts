@@ -252,16 +252,33 @@ export default class Extension extends BaseExtension<Config>
     return script;
   }
 
-  // todo: use canvas.getThumbnail()
-  getPosterImageUri(): string {
-    const canvas: Canvas = this.helper.getCurrentCanvas();
-    const annotations: Annotation[] = canvas.getContent();
+  getPosterImageUri(): string | null {
+    let posterUri: string | null = null;
 
-    if (annotations && annotations.length) {
-      return annotations[0].getProperty("thumbnail");
+    const canvas: Canvas = this.helper.getCurrentCanvas();
+
+    // if there's an accompanying canvas, use that.
+    const accompanyingCanvas: any = canvas.getProperty("accompanyingCanvas");
+
+    if (accompanyingCanvas) {
+      if (accompanyingCanvas.items && accompanyingCanvas.items.length) {
+        const annotationPage: any = accompanyingCanvas.items[0];
+        if (annotationPage.items && annotationPage.items.length) {
+          const annotation: any = annotationPage.items[0];
+          posterUri = annotation.body?.id;
+        }
+      }
     } else {
-      return canvas.getProperty("thumbnail");
+      const annotations: Annotation[] = canvas.getContent();
+
+      if (annotations && annotations.length) {
+        posterUri = annotations[0].getProperty("thumbnail");
+      } else {
+        posterUri = canvas.getProperty("thumbnail");
+      }
     }
+
+    return posterUri;
   }
 
   isVideoFormat(type: string): boolean {
