@@ -264,8 +264,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this.disposed = true;
   }
 
-  private async _loadAndApplyConfigToExtension(data: IUVData<any>, extension: any): Promise<void> {
-    const that = this;
+  private async _loadAndApplyConfigToExtension(that: IIIFContentHandler, data: IUVData<any>, extension: any): Promise<void> {
     // import the config file
     if (!data.locales) {
       data.locales = [];
@@ -373,7 +372,7 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
         }
       }
 
-      await this._loadAndApplyConfigToExtension(data, extension);
+      await this._loadAndApplyConfigToExtension(that, data, extension);
 
       // if using uv-av-extension and there is no structure,
       // or the preferMediaElementExtension config is set
@@ -388,13 +387,13 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
           Extension.MEDIAELEMENT,
           format
         );
-        await this._loadAndApplyConfigToExtension(data, extension);
+        await this._loadAndApplyConfigToExtension(that, data, extension);
       }
 
       // if there still isn't a matching extension, use the default extension.
       if (!extension) {
         extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
-        await this._loadAndApplyConfigToExtension(data, extension);
+        await this._loadAndApplyConfigToExtension(that, data, extension);
       }
 
       that._createExtension(extension, data, helper);
