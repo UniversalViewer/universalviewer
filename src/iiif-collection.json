@@ -917,6 +917,12 @@
           "visible": true
         },
         {
+          "@id": "https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Audio Presentation with Accompanying Image",
+          "visible": true
+        },
+        {
           "@id": "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json",
           "@type": "sc:Manifest",
           "label": "Table of Contents for Multiple A/V Files on a Single Canvas",
