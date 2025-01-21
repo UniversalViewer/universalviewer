@@ -148,9 +148,10 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.mediaHeight = this.options.defaultHeight;
     this.mediaWidth = this.options.defaultWidth;
 
-    const poster: string = (<IMediaElementExtension>(
+    const poster: string | null = (<IMediaElementExtension>(
       this.extension
     )).getPosterImageUri();
+
     const sources: Array<MediaSourceDescriptor> = [];
     const subtitles: Array<TextTrackDescriptor> = [];
 
