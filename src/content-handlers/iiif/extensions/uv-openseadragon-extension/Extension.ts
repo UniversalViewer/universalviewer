@@ -2,7 +2,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
-import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module-react/ContentLeftPanel";
+import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
 import DownloadDialogue from "./DownloadDialogue";
 import { OpenSeadragonExtensionEvents } from "./Events";
@@ -16,7 +16,7 @@ import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDial
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
-import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
+import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanelReact";
 import { Point } from "../../modules/uv-shared-module/Point";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";

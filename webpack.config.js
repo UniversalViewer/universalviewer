@@ -23,6 +23,9 @@ const config = [
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
       fallback: {
         zlib: false,
         stream: false,
@@ -40,7 +43,7 @@ const config = [
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
+          use: ["style-loader", "css-loader", "postcss-loader"],
         },
         {
           test: /\.less$/,
@@ -77,7 +80,9 @@ const config = [
         },
       ],
     },
-    plugins: [
+    plugins: [    new webpack.DefinePlugin({
+      __dirname: JSON.stringify(path.resolve(__dirname, './src'))
+  }),
       new webpack.EnvironmentPlugin({
         PACKAGE_VERSION: pkg.version,
       }),

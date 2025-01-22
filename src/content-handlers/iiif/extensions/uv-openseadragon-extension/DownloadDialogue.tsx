@@ -526,12 +526,12 @@ const DownloadDialogue = ({
 
     return (
       <>
-        {canvas.ranges?.map((range: Range) => {
+        {canvas.ranges?.map((range: Range) => (
           <Renderings
             resource={range}
             defaultLabel={content.entireFileAsOriginal}
-          />;
-        })}
+          />
+        ))}
       </>
     );
   }
@@ -542,12 +542,12 @@ const DownloadDialogue = ({
 
     return (
       <>
-        {images.map((image: Annotation) => {
+        {images.map((image: Annotation) => (
           <Renderings
             resource={image.getResource()}
             defaultLabel={content.entireFileAsOriginal}
-          />;
-        })}
+          />
+        ))}
       </>
     );
   }

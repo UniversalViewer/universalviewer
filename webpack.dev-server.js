@@ -4,6 +4,8 @@ const express = require("express");
 const webpack = require("webpack");
 const pkg = require("./package.json");
 
+
+
 const config = {
   entry: {
     UV: ["./src/index.ts"],
@@ -20,6 +22,7 @@ const config = {
   resolve: {
     alias: {
       jquery: require.resolve("jquery/dist/jquery.js"),
+      "@": path.resolve(__dirname, "./src"),
     },
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
@@ -40,7 +43,7 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
         test: /\.less$/,
@@ -107,7 +110,9 @@ const config = {
       );
     },
   },
-  plugins: [
+  plugins: [new webpack.DefinePlugin({
+        __dirname: JSON.stringify(path.resolve(__dirname, './src'))
+    }),
     new webpack.EnvironmentPlugin({
       PACKAGE_VERSION: `${pkg.version} (development)`,
     }),
@@ -131,6 +136,7 @@ const config = {
     }),
   ],
   ignoreWarnings: [/Failed to parse source map/],
+  
 };
 
 module.exports = config;

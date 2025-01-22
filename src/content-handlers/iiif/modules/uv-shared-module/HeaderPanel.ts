@@ -21,6 +21,7 @@ export class HeaderPanel<
   $rightOptions: JQuery;
   $settingsButton: JQuery;
   information: Information;
+  $leftOptions: JQuery;
 
   constructor($element: JQuery) {
     super($element, false, false);
@@ -44,6 +45,9 @@ export class HeaderPanel<
 
     this.$options = $('<div class="options"></div>');
     this.$element.append(this.$options);
+
+    this.$leftOptions = $('<div class="leftOptionsReact"></div>');
+    this.$options.append(this.$leftOptions);
 
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);

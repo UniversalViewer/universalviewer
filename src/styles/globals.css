@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
+  /* this is usually for :root (see tailwind/shadcn docs) but applying it only to .tailwind class elements for now */
+  .:root {
+    --background: black;
     --foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --popover: 0 0% 100%;
+    --popover: black;
     --popover-foreground: 222.2 47.4% 11.2%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
@@ -23,7 +24,7 @@
     --destructive: 0 100% 50%;
     --destructive-foreground: 210 40% 98%;
     --ring: 215 20.2% 65.1%;
-    --radius: 0.5rem;
+    --radius: 0;
   }
 
   .dark {
