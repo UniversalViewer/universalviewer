@@ -85,7 +85,7 @@
     "@edsilv/http-status-codes": "1.0.3",
     "@edsilv/key-codes": "1.0.0",
     "@edsilv/utils": "^1.0.2",
-    "@google/model-viewer": "^1.9.2",
+    "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/iiif-gallery-component": "^1.1.22",
