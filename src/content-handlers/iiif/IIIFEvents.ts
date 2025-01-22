@@ -87,6 +87,7 @@ export class IIIFEvents {
   // static SET: string = "set";
   static SET_ROTATION: string = "setRotation";
   static SET_TARGET: string = "setTarget";
+  static SET_MUTED: string = "setMuted";
   static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";
   static SHOW_CLICKTHROUGH_DIALOGUE: string = "showClickThroughDialogue";

@@ -905,6 +905,30 @@
       "visible": true,
       "manifests": [
         {
+          "@id": "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Simplest Audio Example 1",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Simplest Video Example 3",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Audio Presentation with Accompanying Image",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Table of Contents for Multiple A/V Files on a Single Canvas",
+          "visible": true
+        },
+        {
           "@id": "https://edsilv.github.io/biiif-test-manifests/sound-manifest/index.json",
           "@type": "sc:Manifest",
           "label": "Somali Love Song (mp3)",
@@ -962,7 +986,7 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/lunchroom-manners.json",
           "@type": "sc:Manifest",
           "label": "Lunchroom manners",
-          "visible": true
+          "visible": false
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02.json",
@@ -1004,19 +1028,19 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
           "@type": "sc:Manifest",
           "label": "Loose ends",
-          "visible": true
+          "visible": false
         },
         {
           "@id": "https://api-beta.bl.uk/metadata/iiif/ark:/81055/vdc_100061383968.0x000002/manifest.json",
           "@type": "sc:Manifest",
           "label": "BL AV Root Download",
-          "visible": true
+          "visible": false
         },
         {
           "@id": "https://edsilv.github.io/test-manifests/bl-av-download-rendering-ranges.json",
           "@type": "sc:Manifest",
           "label": "BL AV Ranges Download",
-          "visible": true
+          "visible": false
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_dash.json",

@@ -67,6 +67,9 @@ export type Options = {
   /** Determines if access control is pessimistic */
   pessimisticAccessControl?: boolean;
 
+  /** Determines if the mediaelement extension should be preferred */
+  preferMediaElementExtension?: boolean;
+
   /** Determines if viewport is preserved */
   preserveViewport?: boolean;
 
