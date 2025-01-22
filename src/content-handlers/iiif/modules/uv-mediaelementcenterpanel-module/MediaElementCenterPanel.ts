@@ -234,7 +234,7 @@ export class MediaElementCenterPanel extends CenterPanel<
           "sourcechooser",
           "fullscreen",
         ],
-        success: function(mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
             that.resize();
@@ -326,7 +326,7 @@ export class MediaElementCenterPanel extends CenterPanel<
         defaultAudioHeight: "auto",
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
-        success: function(mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any) {
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
               MediaElementExtensionEvents.MEDIA_PLAYED,

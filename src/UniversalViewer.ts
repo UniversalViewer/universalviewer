@@ -78,14 +78,15 @@ export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
       const m = await ContentHandler[contentType](); // import content handler
       this.showSpinner(); // show spinner
       // include _assignedContentHandler for backwards compat, remove in next major version (UV5)
-      this.assignedContentHandler = this._assignedContentHandler = new m.default(
-        {
-          target: this._el,
-          data: data,
-        },
-        this.adapter,
-        this._externalEventListeners
-      ); // create content handler
+      this.assignedContentHandler = this._assignedContentHandler =
+        new m.default(
+          {
+            target: this._el,
+            data: data,
+          },
+          this.adapter,
+          this._externalEventListeners
+        ); // create content handler
     }
 
     return handlerChanged;

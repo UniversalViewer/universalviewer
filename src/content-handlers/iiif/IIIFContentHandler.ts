@@ -97,8 +97,10 @@ const Extension: IExtensionRegistry = {
   },
 };
 
-export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
-  implements IIIFExtensionHost, IContentHandler<IIIFData> {
+export default class IIIFContentHandler
+  extends BaseContentHandler<IIIFData>
+  implements IIIFExtensionHost, IContentHandler<IIIFData>
+{
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | undefined;
@@ -264,13 +266,17 @@ export default class IIIFContentHandler extends BaseContentHandler<IIIFData>
     this.disposed = true;
   }
 
-  private async _loadAndApplyConfigToExtension(that: IIIFContentHandler, data: IUVData<any>, extension: any): Promise<void> {
+  private async _loadAndApplyConfigToExtension(
+    that: IIIFContentHandler,
+    data: IUVData<any>,
+    extension: any
+  ): Promise<void> {
     // import the config file
     if (!data.locales) {
       data.locales = [];
       data.locales.push(defaultLocale);
     }
-    let config = await (extension).loadConfig(
+    let config = await extension.loadConfig(
       data.locales[0].name,
       extension?.type.name
     );
