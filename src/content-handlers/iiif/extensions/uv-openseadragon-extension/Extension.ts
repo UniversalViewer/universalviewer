@@ -16,7 +16,7 @@ import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDial
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
-import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanelReact";
+import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
 import { Point } from "../../modules/uv-shared-module/Point";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
