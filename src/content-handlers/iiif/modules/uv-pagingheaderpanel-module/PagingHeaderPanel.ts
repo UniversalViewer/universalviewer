@@ -41,7 +41,6 @@ export class PagingHeaderPanel extends HeaderPanel<
   $total: JQuery;
   $twoUpButton: JQuery;
 
-
   firstButtonEnabled: boolean = false;
   lastButtonEnabled: boolean = false;
   nextButtonEnabled: boolean = false;
@@ -274,11 +273,11 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.rightOptionsRoot.render(
       createElement(PagingHeaderPanelRightOptions, {})
-    )
+    );
 
     this.leftOptionsRoot.render(
       createElement(PagingHeaderPanelLeftOptions, {})
-    )
+    );
 
     this.$oneUpButton = $(`
           <button class="btn imageBtn one-up" title="${this.content.oneUp}">
@@ -774,8 +773,4 @@ export class PagingHeaderPanel extends HeaderPanel<
       if (this.galleryIsVisible()) this.$galleryButton.show();
     }
   }
-
-
-
-
 }

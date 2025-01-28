@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const PDFHeaderPanelRightOptions = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default PDFHeaderPanelRightOptions
+export default PDFHeaderPanelRightOptions;
