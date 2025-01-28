@@ -10,6 +10,9 @@ import { Bools } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
+import { createRoot, Root } from "react-dom/client";
+
+
 export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"]
 > extends BaseView<T> {
@@ -22,6 +25,9 @@ export class HeaderPanel<
   $settingsButton: JQuery;
   information: Information;
   $leftOptions: JQuery;
+
+  leftOptionsRoot: Root;
+  rightOptionsRoot: Root;
 
   constructor($element: JQuery) {
     super($element, false, false);
@@ -46,14 +52,21 @@ export class HeaderPanel<
     this.$options = $('<div class="options"></div>');
     this.$element.append(this.$options);
 
-    this.$leftOptions = $('<div class="leftOptionsReact"></div>');
+    this.$leftOptions = $('<div class="leftOptions"></div>');
     this.$options.append(this.$leftOptions);
+    this.leftOptionsRoot = createRoot(this.$leftOptions[0]) 
 
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
 
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
+    this.rightOptionsRoot = createRoot(this.$rightOptions[0])    
+
+    //temporarily hide center options while transferring functionality to left options
+    this.$centerOptions.hide();
+
+
 
     //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
     //this.$rightOptions.append(this.$helpButton);

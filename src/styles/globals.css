@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  /* this is usually for :root (see tailwind/shadcn docs) but applying it only to .tailwind class elements for now */
   :root {
     --background: black;
     --foreground: white;
