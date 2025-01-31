@@ -9,6 +9,10 @@ import { InformationFactory } from "./InformationFactory";
 import { Bools } from "@edsilv/utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
+import { Root, createRoot } from "react-dom/client";
+import { createElement } from "react";
+
+import ShadcnTest from "./ShadcnTest";
 
 export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"]
@@ -21,6 +25,9 @@ export class HeaderPanel<
   $rightOptions: JQuery;
   $settingsButton: JQuery;
   information: Information;
+
+  $shadcnTest: JQuery;
+  shadcnTestRoot: Root;
 
   constructor($element: JQuery) {
     super($element, false, false);
@@ -44,6 +51,11 @@ export class HeaderPanel<
 
     this.$options = $('<div class="options"></div>');
     this.$element.append(this.$options);
+
+    this.$shadcnTest = $('<div class="shadcntest"></div>');
+    this.$element.prepend(this.$shadcnTest);
+    this.shadcnTestRoot = createRoot(this.$shadcnTest[0]);
+    this.shadcnTestRoot.render(createElement(ShadcnTest, {}));
 
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);

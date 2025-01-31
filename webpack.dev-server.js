@@ -20,6 +20,7 @@ const config = {
   resolve: {
     alias: {
       jquery: require.resolve("jquery/dist/jquery.js"),
+      "@": path.resolve(__dirname, "./src"),
     },
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
@@ -37,10 +38,6 @@ const config = {
       {
         test: /\.tsx$/,
         use: [{ loader: "ts-loader" }],
-      },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.less$/,
@@ -64,6 +61,10 @@ const config = {
             },
           },
         ],
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
         test: /\.(png|jpg|gif|svg)$/i,

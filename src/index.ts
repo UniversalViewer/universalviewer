@@ -1,4 +1,5 @@
 import "./shim-jquery";
+import "./styles/globals.css";
 export { ContentType } from "./ContentType";
 export { URLAdapter as IIIFURLAdapter } from "./content-handlers/iiif/URLAdapter";
 export { UniversalViewer as Viewer } from "./UniversalViewer";
