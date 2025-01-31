@@ -18,7 +18,7 @@ import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
 import "../../uv.css";
 import "./themes/theme.less";
-import "@/styles/globals.css"
+import "@/styles/globals.css";
 
 import { IContentHandler } from "@/IContentHandler";
 import { IUVOptions } from "@/UniversalViewer";

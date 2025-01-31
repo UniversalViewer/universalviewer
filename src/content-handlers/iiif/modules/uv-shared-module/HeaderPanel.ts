@@ -55,10 +55,7 @@ export class HeaderPanel<
     this.$shadcnTest = $('<div class="shadcntest"></div>');
     this.$element.prepend(this.$shadcnTest);
     this.shadcnTestRoot = createRoot(this.$shadcnTest[0]);
-    this.shadcnTestRoot.render(
-      createElement(ShadcnTest, {}
-      )
-    )
+    this.shadcnTestRoot.render(createElement(ShadcnTest, {}));
 
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
