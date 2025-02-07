@@ -1379,18 +1379,30 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     zoom: string,
     rotation: number
   ): string {
-    const config: string = this.data.config!.uri || "";
-    const locales: string | null = this.getSerializedLocales();
+    const config: string = this.data.config?.uri ?? "";
+    const locales: string = this.getSerializedLocales() ?? "";
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+      config: config,
+      locales: locales,
+      xywh: zoom,
+      r: rotation.toString(),
+    });
+
     const appUri: string = this.getAppUri();
     const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
     const script: string = Strings.format(
       template,
-      iframeSrc,
+      appUri,
+      hashParams.toString(),
       width.toString(),
       height.toString(),
       title
     );
+
     return script;
   }
 

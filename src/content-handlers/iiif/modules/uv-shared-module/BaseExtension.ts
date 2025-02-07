@@ -765,13 +765,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   getAppUri(): string {
-    const appUri: string =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      (window.location.port ? ":" + window.location.port : "");
-
-    return appUri + "/uv.html";
+    const port = window.location.port ? `:${window.location.port}` : "";
+    return `${window.location.protocol}//${window.location.hostname}${port}/uv.html`;
   }
 
   getSettings(): ISettings {
