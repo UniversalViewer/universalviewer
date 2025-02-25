@@ -1,4 +1,24 @@
 // Exposed CSS variables
+// --------------------------------------------------
+
+@property --color-canvas { syntax: "<color>"; }
+@property --color-text { syntax: "<color>"; }
+@property --color-text-muted { syntax: "<color>"; }
+
+@property --color-panel-bg { syntax: "<color>"; }
+@property --color-panel-border { syntax: "<color>"; }
+
+@property --color-accent-bg { syntax: "<color>"; }
+@property --color-accent-text { syntax: "<color>"; }
+@property --color-link { syntax: "<color>"; }
+
+@property --color-btn-text { syntax: "<color>"; }
+@property --color-btn-bg { syntax: "<color>"; }
+@property --color-btn-border { syntax: "<color>"; }
+@property --color-btn-primary-text { syntax: "<color>"; }
+@property --color-btn-primary-bg { syntax: "<color>"; }
+@property --color-btn-primary-border { syntax: "<color>"; }
+
 @body-bg:       var(--color-canvas, #000);
 @text-color:    var(--color-text, #fff);
 @text-muted:    var(--color-text-muted, #9a9a9a);
@@ -8,7 +28,7 @@
 
 @accent-bg:   var(--color-accent-bg, @brand-primary);
 @accent-text: var(--color-accent-text, @brand-primary);
-@link-color: var(--color-link, @accent-text);
+@link-color:  var(--color-link, @accent-text);
 
 @btn-default-color:  var(--color-btn-text, @text-color);
 @btn-default-bg:     var(--color-btn-bg, @gray);
