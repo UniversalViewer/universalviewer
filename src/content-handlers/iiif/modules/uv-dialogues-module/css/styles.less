@@ -510,14 +510,14 @@
 
     .btn.close {
         padding: 0.5rem 1rem; /* Equivalent to Tailwind's px-4 py-2 */
-        background-color: black; /* bg-black */
-        color: white; /* text-white */
+        background-color: @body-bg; /* bg-black */
+        color: @text-color; /* text-white */
         white-space: nowrap; /* Prevent text from wrapping */
-      
+
         /* Remove default outline on focus */
         outline: none;
       }
-      
+
       /* Focus state styles */
       .btn.close:focus {
         outline: none;
