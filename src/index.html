@@ -24,12 +24,14 @@
         width: 100%;
         height: 100svh;
 
-        --color-canvas: #0a3622;
-        --color-panel-bg: #031633;
-        --color-text: #ffe69c;
+        --color-canvas: white;
+        --color-panel-bg: oklch(0.967 0.003 264.542); /* Tailwind gray-100 */
+        --color-text: black;
 
-        --color-accent-bg: #984c0c;
-        --color-accent-text: #fd9843;
+        --color-accent-bg: oklch(0.902 0.063 306.703); /* Tailwind purple-200 */
+        --color-accent-text: oklch(0.438 0.218 303.724); /* Tailwind purple-800 */
+        --color-btn-primary-bg: var(--color-accent-text);
+        --color-btn-primary-border: black;
       }
 
       /* @apply hidden mx-auto my-8 */
