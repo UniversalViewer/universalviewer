@@ -818,14 +818,21 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   getAppUri(): string {
     const options = this.data.config!.modules.shareDialogue.options;
 
-    const host = options?.embedHost ?? `${window.location.protocol}//${window.location.hostname}`;
+    const host =
+      options?.embedHost ??
+      `${window.location.protocol}//${window.location.hostname}`;
     const port = options?.embedPort ?? window.location.port;
     const path = options?.embedPath ?? "/uv.html";
 
     return `${host}${port ? `:${port}` : ""}${path}`;
   }
 
-  buildEmbedScript(template: string, width: number, height: number, hashParams: URLSearchParams): string {
+  buildEmbedScript(
+    template: string,
+    width: number,
+    height: number,
+    hashParams: URLSearchParams
+  ): string {
     const appUri: string = this.getAppUri();
     const title: string = this.helper.getLabel() ?? "";
 
