@@ -13,7 +13,6 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
-import { Strings } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
@@ -147,18 +146,7 @@ export default class Extension
       cfi: this.cfiFragement,
     });
 
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() ?? "";
-    const script: string = Strings.format(
-      template,
-      appUri,
-      hashParams.toString(),
-      width.toString(),
-      height.toString(),
-      title
-    );
-
-    return script;
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 
   checkForCFIParam(): void {

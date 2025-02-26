@@ -12,7 +12,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools } from "@edsilv/utils";
 import {
   ExternalResourceType,
   MediaType,
@@ -248,18 +248,7 @@ export default class Extension
       cv: this.helper.canvasIndex.toString(),
     });
 
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() ?? "";
-    const script: string = Strings.format(
-      template,
-      appUri,
-      hashParams.toString(),
-      width.toString(),
-      height.toString(),
-      title
-    );
-
-    return script;
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 
   getPosterImageUri(): string | null {

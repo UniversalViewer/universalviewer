@@ -11,7 +11,7 @@ import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/R
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
@@ -167,17 +167,6 @@ export default class Extension
       cv: this.helper.canvasIndex.toString(),
     });
 
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() ?? "";
-    const script: string = Strings.format(
-      template,
-      appUri,
-      hashParams.toString(),
-      width.toString(),
-      height.toString(),
-      title
-    );
-
-    return script;
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 }

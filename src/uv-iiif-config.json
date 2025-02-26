@@ -52,7 +52,9 @@
     },
     "shareDialogue": {
       "options": {
-        "embedTemplate": "<iframe src=\"{0}#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>"
+        "embedPath": "/uv.html",
+        "embedHost": null,
+        "embedPort": 3000
       }
     }
   }

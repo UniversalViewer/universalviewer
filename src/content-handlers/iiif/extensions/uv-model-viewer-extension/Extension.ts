@@ -13,7 +13,6 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
@@ -262,17 +261,6 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
       cv: this.helper.canvasIndex.toString(),
     });
 
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() ?? "";
-    const script: string = Strings.format(
-      template,
-      appUri,
-      hashParams.toString(),
-      width.toString(),
-      height.toString(),
-      title
-    );
-
-    return script;
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 }
