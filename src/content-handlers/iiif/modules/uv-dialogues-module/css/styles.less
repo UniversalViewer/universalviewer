@@ -28,28 +28,24 @@
                         font-size: 0px;
 
                         .tab {
+                            margin-bottom: -1px;
+                            padding: 0.25em;
                             line-height: normal;
-                            color: @gray;
+                            color: @overlay-color;
                             font-size: @font-size-base;
                             display: inline-block;
                             text-align: center;
-                            line-height: 22px;
-                            height: 22px;
                             overflow: hidden;
                             width: 75px;
                             margin: 0;
                             cursor: pointer;
                             text-decoration: none;
+                            border-bottom: 1px solid transparent;
                             user-select: none;
 
                             &:hover {
-                                border-bottom: 1px solid @brand-primary;
-                                color: @text-secondary-color;
-                                margin-bottom: -1px;
-                                font-weight: bold;
-                                height: 23px;
-                                line-height: 23px;
                                 text-decoration: none;
+                                border-color: @overlay-color;
                             }
 
                             &.first {
@@ -57,12 +53,9 @@
                             }
 
                             &.on {
-                                border-bottom: 1px solid @brand-primary;
-                                color: @text-secondary-color;
-                                margin-bottom: -1px;
-                                font-weight: bold;
-                                height: 23px;
-                                line-height: 23px;
+                                font-weight: 700;
+                                color: @accent-text;
+                                border-color: @accent-text;
                             }
                         }
                     }
@@ -77,10 +70,6 @@
                         }
 
                         .shareView {
-                            .shareInput {
-                                .single-line-code();
-                            }
-
                             .shareLink {
                                 display: block;
                                 overflow: hidden;
@@ -97,10 +86,6 @@
                         }
 
                         .embedView {
-                            .code {
-                                .single-line-code();
-                            }
-
                             .customSize {
                                 overflow: hidden;
                                 padding-top: @padding-medium-vertical;

@@ -8,6 +8,10 @@
 @property --color-panel-bg { syntax: "<color>"; }
 @property --color-panel-border { syntax: "<color>"; }
 
+@property --color-overlay-bg { syntax: "<color>"; }
+@property --color-overlay-text { syntax: "<color>"; }
+@property --color-overlay-border { syntax: "<color>"; }
+
 @property --color-accent-bg { syntax: "<color>"; }
 @property --color-accent-text { syntax: "<color>"; }
 @property --color-link { syntax: "<color>"; }
@@ -25,6 +29,10 @@
 
 @panel-dark-bg: var(--color-panel-bg, #212121);
 @panel-border-color: var(--color-panel-border, #212121);
+
+@overlay-bg:     var(--color-overlay-bg, white);
+@overlay-color:  var(--color-overlay-text, black);
+@overlay-border: var(--color-overlay-border, transparent);
 
 @accent-bg:   var(--color-accent-bg, @brand-primary);
 @accent-text: var(--color-accent-text, @brand-primary);
@@ -230,8 +238,8 @@
 // -------------------------
 
 @overlay-modal-bg:              rgba(0, 0, 0, 0.5);
-@overlay-bg:                    #fff;
 @overlay-group-bg:              #F5F5F5;
+// @overlay-bg:                    #fff; see CSS Variables at top
 
 // Miscellaneous
 // -------------------------

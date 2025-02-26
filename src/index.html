@@ -23,6 +23,24 @@
       #uv {
         width: 100%;
         height: 100svh;
+
+        --color-canvas: white;
+        --color-text: black;
+        --color-text-muted: oklch(0.446 0.03 256.802); /* Tailwind gray-600 */
+
+        --color-panel-bg: oklch(0.967 0.003 264.542); /* Tailwind gray-100 */
+        --color-panel-border: oklch(0.872 0.01 258.338); /* Tailwind gray-300 */
+
+        /*
+        --color-overlay-bg: yellow;
+        --color-overlay-text: blue;
+        --color-overlay-border: red;
+        */
+
+        --color-accent-bg: oklch(0.902 0.063 306.703); /* Tailwind purple-200 */
+        --color-accent-text: oklch(0.438 0.218 303.724); /* Tailwind purple-800 */
+        --color-btn-primary-bg: var(--color-accent-text);
+        --color-btn-primary-border: black;
       }
 
       /* @apply hidden mx-auto my-8 */
