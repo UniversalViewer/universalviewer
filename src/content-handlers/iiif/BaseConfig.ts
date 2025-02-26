@@ -243,6 +243,10 @@ type SettingsDialogue = ModuleConfig & {
 export type ShareDialogueOptions = DialogueOptions & {
   /** Determines if embed is enabled */
   embedEnabled: boolean;
+  /** Hosting settings for embedding */
+  embedHost?: string;
+  embedPort?: number;
+  embedPath: string; // starts with "/"
   /** Template for embedding */
   embedTemplate: string;
   /** Determines if instructions are enabled */
