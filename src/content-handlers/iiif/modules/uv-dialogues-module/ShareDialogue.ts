@@ -87,7 +87,9 @@ export class ShareDialogue<
     this.$urlInput = $(
       `<input class="copy-input" id="urlInput" type="text" value="${shareUrl}" readonly/>`
     );
-    this.$urlInput.focus(function () { $(this).select(); });
+    this.$urlInput.focus(function () {
+      $(this).select();
+    });
     this.$urlSection.append(this.$urlInput);
     this.$content.append(this.$urlSection);
 
@@ -97,11 +99,15 @@ export class ShareDialogue<
       `<div class="share__section"><label class="share__label" for="manifestCode">${this.content.iiif}</label></div>`
     );
 
-    const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifestsEnabled);
+    const iiifUrl: string = this.extension.getIIIFShareUrl(
+      this.shareManifestsEnabled
+    );
     this.$manifestInput = $(
       `<input class="copy-input" id="manifestInput" type="text" value="${iiifUrl}" readonly/>`
     );
-    this.$manifestInput.focus(function () { $(this).select(); });
+    this.$manifestInput.focus(function () {
+      $(this).select();
+    });
     this.$manifestSection.append(this.$manifestInput);
     this.$content.append(this.$manifestSection);
 
@@ -114,7 +120,9 @@ export class ShareDialogue<
     this.$embedCode = $(
       `<input class="copy-input" id="embedCode" type="text" readonly/>`
     );
-    this.$embedCode.focus(function () { $(this).select(); });
+    this.$embedCode.focus(function () {
+      $(this).select();
+    });
     this.$embedSection.append(this.$embedCode);
     this.$content.append(this.$embedSection);
 
@@ -123,11 +131,15 @@ export class ShareDialogue<
     this.$customSize = $('<div class="customSize"></div>');
     this.$embedSection.append(this.$customSize);
 
-    this.$size = $('<label for="size" class="size">' + this.content.size + "</label>");
+    this.$size = $(
+      '<label for="size" class="size">' + this.content.size + "</label>"
+    );
     this.$customSize.append(this.$size);
 
     this.$customSizeDropDown = $(
-      '<select class="embed-size-select" id="size" aria-label="' + this.content.size + '"></select>'
+      '<select class="embed-size-select" id="size" aria-label="' +
+        this.content.size +
+        '"></select>'
     );
     this.$customSizeDropDown.append(
       '<option value="small" data-width="560" data-height="420">560 x 420</option>'
@@ -141,7 +153,9 @@ export class ShareDialogue<
     this.$customSizeDropDown.append(
       '<option value="custom">' + this.content.customSize + "</option>"
     );
-    this.$customSizeDropDown.change(() => { this.update(); });
+    this.$customSizeDropDown.change(() => {
+      this.update();
+    });
     this.$customSize.append(this.$customSizeDropDown);
 
     this.$widthInput = $(
