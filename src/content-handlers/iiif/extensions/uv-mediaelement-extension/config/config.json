@@ -158,9 +158,9 @@
         "closeAttribution": "$closeAttribution"
       }
     },
-    "mediaelementCenterPanel": {
+    "mediaElementCenterPanel": {
       "options": {
-        "autoPlayOnSetTarget": true,
+        "autoPlayOnSetTarget": false,
         "defaultHeight": 420,
         "defaultWidth": 560,
         "titleEnabled": true,
@@ -248,10 +248,12 @@
         "expandFull": "$expandGallery",
         "holdingText": "$moduleGoesHere",
         "less": "$less",
+        "lessAriaLabelTemplate": "$lessAriaLabelTemplate",
         "license": "$license",
         "logo": "$logo",
         "manifestHeader": "$aboutTheItem",
         "more": "$more",
+        "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",

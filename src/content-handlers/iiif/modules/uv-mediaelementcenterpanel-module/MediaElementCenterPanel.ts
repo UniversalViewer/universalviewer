@@ -34,7 +34,7 @@ type MediaSourceDescriptor = {
 };
 
 export class MediaElementCenterPanel extends CenterPanel<
-  Config["modules"]["mediaelementCenterPanel"]
+  Config["modules"]["mediaElementCenterPanel"]
 > {
   $wrapper: JQuery;
   $container: JQuery;
@@ -44,13 +44,14 @@ export class MediaElementCenterPanel extends CenterPanel<
   player: any;
   title: string | null;
   pauseTimeoutId: any = null;
+  muted: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
   }
 
   create(): void {
-    this.setConfig("mediaelementCenterPanel");
+    this.setConfig("mediaElementCenterPanel");
 
     super.create();
 
@@ -62,9 +63,9 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     this.extensionHost.subscribe(IIIFEvents.SET_TARGET, (target: TFragment) => {
       // Clear any existing timeout
-      if (this.pauseTimeoutId !== null) {
-        clearTimeout(this.pauseTimeoutId);
-        this.pauseTimeoutId = null;
+      if (that.pauseTimeoutId !== null) {
+        clearTimeout(that.pauseTimeoutId);
+        that.pauseTimeoutId = null;
       }
 
       let t: number | [number, number] = target.t;
@@ -80,27 +81,34 @@ export class MediaElementCenterPanel extends CenterPanel<
             return;
           }
 
-          this.player.setCurrentTime(startTime);
+          that.player.setCurrentTime(startTime);
 
-          if (this.config.options.autoPlayOnSetTarget) {
+          if (that.config.options.autoPlayOnSetTarget) {
             const duration = (endTime - startTime) * 1000;
 
-            this.pauseTimeoutId = setTimeout(() => {
-              this.player.pause();
-              this.pauseTimeoutId = null; // Clear the timeout ID after execution
+            that.pauseTimeoutId = setTimeout(() => {
+              that.player.pause();
+              that.pauseTimeoutId = null; // Clear the timeout ID after execution
             }, duration);
 
-            this.player.play();
+            that.player.play();
           }
 
           return;
         }
       }
 
-      this.player.setCurrentTime(t);
+      that.player.setCurrentTime(t);
 
-      if (this.config.options.autoPlayOnSetTarget) {
-        this.player.play();
+      if (that.config.options.autoPlayOnSetTarget) {
+        that.player.play();
+      }
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.SET_MUTED, (muted: boolean) => {
+      if (that.player) {
+        that.player.setMuted(muted);
+        that.updateMutedAttribute(muted);
       }
     });
 
@@ -120,6 +128,14 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.title = this.extension.helper.getLabel();
   }
 
+  updateMutedAttribute(muted: boolean) {
+    if (muted) {
+      this.$media.attr("muted", "");
+    } else {
+      this.$media.removeAttr("muted");
+    }
+  }
+
   async openMedia(resources: IExternalResource[]) {
     const that = this;
 
@@ -132,9 +148,10 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.mediaHeight = this.options.defaultHeight;
     this.mediaWidth = this.options.defaultWidth;
 
-    const poster: string = (<IMediaElementExtension>(
+    const poster: string | null = (<IMediaElementExtension>(
       this.extension
     )).getPosterImageUri();
+
     const sources: Array<MediaSourceDescriptor> = [];
     const subtitles: Array<TextTrackDescriptor> = [];
 
@@ -260,6 +277,25 @@ export class MediaElementCenterPanel extends CenterPanel<
               Math.floor(mediaElement.currentTime)
             );
           });
+
+          mediaElement.addEventListener("volumechange", (volume) => {
+            const muted: boolean = volume.detail.target.getMuted();
+
+            if (that.muted === false && muted === true) {
+              that.muted = true;
+              that.extensionHost.fire(MediaElementExtensionEvents.MEDIA_MUTED);
+            }
+
+            if (that.muted === true && muted === false) {
+              that.muted = false;
+
+              that.extensionHost.fire(
+                MediaElementExtensionEvents.MEDIA_UNMUTED
+              );
+            }
+
+            that.updateMutedAttribute(that.muted);
+          });
         },
       });
     } else {
@@ -327,6 +363,24 @@ export class MediaElementCenterPanel extends CenterPanel<
               MediaElementExtensionEvents.MEDIA_TIME_UPDATE,
               Math.floor(mediaElement.currentTime)
             );
+          });
+
+          mediaElement.addEventListener("volumechange", (volume) => {
+            const muted: boolean = volume.detail.target.getMuted();
+
+            if (that.muted === false && muted === true) {
+              that.muted = true;
+              that.extensionHost.fire(MediaElementExtensionEvents.MEDIA_MUTED);
+            }
+
+            if (that.muted === true && muted === false) {
+              that.muted = false;
+              that.extensionHost.fire(
+                MediaElementExtensionEvents.MEDIA_UNMUTED
+              );
+            }
+
+            that.updateMutedAttribute(that.muted);
           });
         },
       });

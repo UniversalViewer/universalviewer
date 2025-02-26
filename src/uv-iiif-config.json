@@ -7,6 +7,7 @@
     "limitLocales": false,
     "overrideFullScreen": false,
     "pagingEnabled": true,
+    "preferMediaElementExtension": false,
     "rightPanelEnabled": true,
     "clickToZoomEnabled": false,
     "saveUserSettings": true
@@ -35,8 +36,13 @@
     "openSeadragonCenterPanel": {
       "options": {
         "autoHideControls": false,
-        "showHomeControl": true,
+        "showHomeControl": false,
         "showAdjustImageControl": true
+      }
+    },
+    "mediaElementCenterPanel": {
+      "options": {
+        "autoPlayOnSetTarget": false
       }
     },
     "footerPanel": {
