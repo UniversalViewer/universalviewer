@@ -32,6 +32,33 @@
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.1);
 
+            .share__section {
+                margin-block-end: 1.5em;
+
+                label {
+                    font-weight: 700;
+                    color: @gray;
+
+                    .share__label {
+                        display: block;
+                    }
+                }
+            }
+            .copy-input,
+            .embed-size-select {
+                color: black;
+                background-color: white;
+                border: 1px solid black;
+            }
+            .copy-input {
+                width: 100%;
+                padding: 2px;
+                background-color: @gray-lighter;
+            }
+            .customSize {
+                margin-block: 0.5em;
+            }
+
             .buttons {
                 padding: @padding-medium-vertical;
                 float: right;
@@ -42,9 +69,8 @@
             }
 
             .content {
-                padding-right: @padding-medium-horizontal;
-                padding-bottom: @padding-medium-vertical;
-                padding-left: @padding-medium-horizontal;
+                padding-inline: @padding-medium-horizontal;
+                padding-block: @padding-medium-vertical;
 
                 overflow: auto;
                 text-overflow: ellipsis;
