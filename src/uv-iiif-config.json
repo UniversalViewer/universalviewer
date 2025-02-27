@@ -54,8 +54,8 @@
       "options": {
         "embedPath": "/uv.html",
         "embedHost": null,
-        "embedPort": 3000,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
+        "embedPort": null,
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>"
       }
     }
   }
