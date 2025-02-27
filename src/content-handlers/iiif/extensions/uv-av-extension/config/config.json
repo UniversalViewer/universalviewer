@@ -286,7 +286,7 @@
         "embedEnabled": true,
         "shareEnabled": true,
         "embedPath": "/uv.html",
-        "embedTemplate": "<iframe src=\"{0}#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>",
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,

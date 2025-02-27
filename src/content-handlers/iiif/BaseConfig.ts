@@ -243,10 +243,12 @@ type SettingsDialogue = ModuleConfig & {
 export type ShareDialogueOptions = DialogueOptions & {
   /** Determines if embed is enabled */
   embedEnabled: boolean;
-  /** Hosting settings for embedding */
+  /** Set host for embed code (default: window.location.hostname) */
   embedHost?: string;
+  /** Set port for embed code (default: window.location.protocol) */
   embedPort?: number;
-  embedPath: string; // starts with "/"
+  /** Set path to uv.html on embed host (default: /uv.html) */
+  embedPath: string;
   /** Template for embedding */
   embedTemplate: string;
   /** Determines if instructions are enabled */

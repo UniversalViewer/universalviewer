@@ -833,13 +833,16 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     height: number,
     hashParams: URLSearchParams
   ): string {
-    const appUri: string = this.getAppUri();
+    let appUri: string = this.getAppUri();
     const title: string = this.helper.getLabel() ?? "";
+
+    if ((hashParams?.size ?? 0) > 0) {
+      appUri += `#${hashParams.toString()}`;
+    }
 
     const script: string = Strings.format(
       template,
       appUri,
-      hashParams.toString(),
       width.toString(),
       height.toString(),
       title
