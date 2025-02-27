@@ -764,16 +764,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return parts.host;
   }
 
-  getAppUri(): string {
-    const appUri: string =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      (window.location.port ? ":" + window.location.port : "");
-
-    return appUri + "/uv.html";
-  }
-
   getSettings(): ISettings {
     if (Bools.getBool(this.data.config!.options.saveUserSettings, false)) {
       const settings: any = Storage.get("uv.settings", StorageType.LOCAL);
@@ -823,6 +813,42 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       title: title,
       image: thumbnail,
     };
+  }
+
+  getAppUri(): string {
+    const options = this.data.config!.modules.shareDialogue.options;
+
+    const host =
+      options?.embedHost ??
+      `${window.location.protocol}//${window.location.hostname}`;
+    const port = options?.embedPort ?? window.location.port;
+    const path = options?.embedPath ?? "/uv.html";
+
+    return `${host}${port ? `:${port}` : ""}${path}`;
+  }
+
+  buildEmbedScript(
+    template: string,
+    width: number,
+    height: number,
+    hashParams: URLSearchParams
+  ): string {
+    let appUri: string = this.getAppUri();
+    const title: string = this.helper.getLabel() ?? "";
+
+    if ((hashParams?.size ?? 0) > 0) {
+      appUri += `#${hashParams.toString()}`;
+    }
+
+    const script: string = Strings.format(
+      template,
+      appUri,
+      width.toString(),
+      height.toString(),
+      title
+    );
+
+    return script;
   }
 
   public getPagedIndices(
