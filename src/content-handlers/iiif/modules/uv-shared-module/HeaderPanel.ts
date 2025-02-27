@@ -51,8 +51,12 @@ export class HeaderPanel<
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
 
-    //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
-    //this.$rightOptions.append(this.$helpButton);
+    this.$helpButton = $(`
+      <button class="btn imageBtn help" tabindex="0">
+        <i class="uv-icon-help" aria-hidden="true"></i>
+      </button>
+    `);
+    this.$rightOptions.append(this.$helpButton); 
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
