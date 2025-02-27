@@ -100,20 +100,82 @@
         background: @body-bg; // important, otherwise you see two spinners
     }
 
-    .leftPanel {
-        position: absolute;
-        background: @panel-dark-bg;
-        border: @panel-border;
+    .mainPanel {
+
+        background: red;
+
+        .lg-mediaquery({
+            background: maroon;
+
+            display: grid;
+            grid-template-columns: [left] minmax(25%, 255px) [center] 1fr [right] minmax(25%, 255px);
+            grid-template-areas: "left center right";
+            //gap: 10px;
+        });
     }
 
     .centerPanel {
         position: absolute;
     }
 
+    .centerPanel {
+        width: 100% !important;
+        left: auto !important;
+        
+        background: yellow;
+
+        .lg-mediaquery({
+            background: wheat;
+
+            z-index: 12;
+            grid-area: center;
+        });
+    }
+
+    .leftPanel {
+        position: absolute;
+        background: @panel-dark-bg;
+        border: @panel-border;
+    }
+
+    .leftPanel {
+        background: pink;
+        
+        position: relative;
+        width: auto !important;
+        height: auto !important;
+
+        .lg-mediaquery({
+            background: fuchsia;
+
+            grid-area: left;
+            z-index: 10;
+            position: absolute;
+            top: 0.625rem !important;
+            right: 0.625rem !important;
+            bottom: 0.625rem !important;
+            left: 0.625rem !important;
+        });
+    }
+
     .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
+    }
+
+    .rightPanel {
+        background: lime;
+        z-index: 11;
+        grid-area: right;
+
+        width: auto !important;
+        height: auto !important;
+        position: absolute;
+        top: 0.625rem !important;
+        right: 0.625rem !important;
+        bottom: 0.625rem !important;
+        left: 0.625rem !important;
     }
 
     .footerPanel {
