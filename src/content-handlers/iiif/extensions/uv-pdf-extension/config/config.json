@@ -104,7 +104,9 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": true,
+        "helpUrl": "universalviewer.io"
       },
       "content": {
         "close": "$close",
@@ -272,7 +274,9 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": true,
+        "helpUrl": ""
       },
       "content": {
         "emptyValue": "$pleaseEnterValue",

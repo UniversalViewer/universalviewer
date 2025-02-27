@@ -128,7 +128,9 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "universalviewer.io"
       },
       "content": {
         "close": "$close",

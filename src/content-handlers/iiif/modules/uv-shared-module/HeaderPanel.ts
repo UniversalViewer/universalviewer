@@ -222,6 +222,12 @@ export class HeaderPanel<
       }
     }
 
+    if (this.options.helpEnabled && this.options.helpUrl) {
+      this.$helpButton.show();
+    } else {
+      this.$helpButton.hide();
+    }
+
     // hide toggle buttons below minimum width
     if (this.extension.isMobileMetric()) {
       if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
