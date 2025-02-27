@@ -8,7 +8,6 @@ import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-ebookmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IEbookExtension } from "./IEbookExtension";
-import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
@@ -23,7 +22,6 @@ export default class Extension
   implements IEbookExtension
 {
   $downloadDialogue: JQuery;
-  $moreInfoDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
@@ -33,7 +31,6 @@ export default class Extension
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: EbookLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
-  moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
@@ -90,12 +87,6 @@ export default class Extension
     } else {
       this.shell.$footerPanel.hide();
     }
-
-    this.$moreInfoDialogue = $(
-      '<div class="overlay moreInfo" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$moreInfoDialogue);
-    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
     this.$shareDialogue = $(
       '<div class="overlay share" aria-hidden="true"></div>'
