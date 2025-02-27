@@ -1,3 +1,50 @@
+// Exposed CSS variables
+// --------------------------------------------------
+
+@property --color-canvas { syntax: "<color>"; }
+@property --color-text { syntax: "<color>"; }
+@property --color-text-muted { syntax: "<color>"; }
+
+@property --color-panel-bg { syntax: "<color>"; }
+@property --color-panel-border { syntax: "<color>"; }
+
+@property --color-overlay-bg { syntax: "<color>"; }
+@property --color-overlay-text { syntax: "<color>"; }
+@property --color-overlay-border { syntax: "<color>"; }
+
+@property --color-accent-bg { syntax: "<color>"; }
+@property --color-accent-text { syntax: "<color>"; }
+@property --color-link { syntax: "<color>"; }
+
+@property --color-btn-text { syntax: "<color>"; }
+@property --color-btn-bg { syntax: "<color>"; }
+@property --color-btn-border { syntax: "<color>"; }
+@property --color-btn-primary-text { syntax: "<color>"; }
+@property --color-btn-primary-bg { syntax: "<color>"; }
+@property --color-btn-primary-border { syntax: "<color>"; }
+
+@body-bg:       var(--color-canvas, #000);
+@text-color:    var(--color-text, #fff);
+@text-muted:    var(--color-text-muted, #9a9a9a);
+
+@panel-dark-bg: var(--color-panel-bg, #212121);
+@panel-border-color: var(--color-panel-border, #212121);
+
+@overlay-bg:     var(--color-overlay-bg, white);
+@overlay-color:  var(--color-overlay-text, black);
+@overlay-border: var(--color-overlay-border, transparent);
+
+@accent-bg:   var(--color-accent-bg, @brand-primary);
+@accent-text: var(--color-accent-text, @brand-primary);
+@link-color:  var(--color-link, @accent-text);
+
+@btn-default-color:  var(--color-btn-text, @text-color);
+@btn-default-bg:     var(--color-btn-bg, @gray);
+@btn-default-border: var(--color-btn-border, @gray);
+
+@btn-primary-color:  var(--color-btn-primary-text, #fff);
+@btn-primary-bg:     var(--color-btn-primary-bg, @accent-bg);
+@btn-primary-border: var(--color-btn-primary-border, @accent-bg);
 
 // Global values
 // --------------------------------------------------
@@ -33,8 +80,8 @@
 // Scaffolding
 // -------------------------
 
-@body-bg:                       #000;
-@text-color:                    #fff;
+// @body-bg:                       #000; See CSS Variables at top
+// @text-color:                    #fff; See CSS Variables at top
 @text-secondary-color:          #000;
 @text-tertiary-color:           #949494;
 @headings-color:                #000;
@@ -43,8 +90,8 @@
 // Links
 // -------------------------
 
-@link-color:                    #26b5cc;
-@link-hover-color:              lighten(@link-color, 10%);
+// @link-color:                    #26b5cc; See CSS Variables at top
+@link-hover-color:              if((iscolor(@link-color)), lighten(@link-color, 10%), @text-color);
 @link-secondary-color:          @brand-secondary;
 @link-secondary-hover-color:    lighten(@link-secondary-color, 10%);
 
@@ -97,13 +144,14 @@
 
 @btn-font-weight:               normal;
 
-@btn-default-color:             #fff;
-@btn-default-bg:                @gray;
-@btn-default-border:            @gray;
+// See CSS Variables at top
+// @btn-default-color:             #fff;
+// @btn-default-bg:                @gray;
+// @btn-default-border:            @gray;
 
-@btn-primary-color:             #fff;
-@btn-primary-bg:                @brand-primary;
-@btn-primary-border:            @brand-primary;
+// @btn-primary-color:             #fff;
+// @btn-primary-bg:                @brand-primary;
+// @btn-primary-border:            @brand-primary;
 
 @btn-secondary-color:           #fff;
 @btn-secondary-bg:              @brand-secondary;
@@ -135,9 +183,9 @@
 // Panels
 // -------------------------
 
-@panel-dark-bg:                 #212121;
+// @panel-dark-bg:                 #212121; See CSS Variables at top
 @panel-light-bg:                #dfdfdf;
-@panel-border-color:            #373737;
+// @panel-border-color:            #373737; See CSS Variables at top
 @panel-border:                  none;
 @panel-margin:                  8px;
 
@@ -190,8 +238,8 @@
 // -------------------------
 
 @overlay-modal-bg:              rgba(0, 0, 0, 0.5);
-@overlay-bg:                    #fff;
 @overlay-group-bg:              #F5F5F5;
+// @overlay-bg:                    #fff; see CSS Variables at top
 
 // Miscellaneous
 // -------------------------
