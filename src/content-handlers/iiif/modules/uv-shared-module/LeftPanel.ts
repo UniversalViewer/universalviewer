@@ -67,4 +67,14 @@ export class LeftPanel<
       this.$element.width(this.$element.parent().width());
     }
   }
+
+  toggle(autoToggled?: boolean): void {
+    if (this.isExpanded) {
+      this.$element.parent().removeClass("leftPanelOpen");
+    } else {
+      this.$element.parent().addClass("leftPanelOpen");
+    }
+
+    super.toggle(autoToggled);
+  }
 }

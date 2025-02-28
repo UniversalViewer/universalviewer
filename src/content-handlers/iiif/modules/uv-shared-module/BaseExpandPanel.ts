@@ -108,6 +108,8 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
+    this.$element.toggleClass("open");
+
     // if collapsing, hide contents immediately.
     if (this.isExpanded) {
       this.$top.attr("aria-hidden", "true");
@@ -118,7 +120,19 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.show();
     }
 
+    // to allow for the css transition to finish
+    // TODO: get this var from config and make sure css uses the same
+    // although make sure it is +50 to allow for lag
+    // and re-introduce the animation check
     if (isReducedAnimation) {
+      this.toggled();
+    } else {
+      setTimeout(() => {
+        this.toggled();
+      }, 300);
+    }
+
+    /* if (isReducedAnimation) {
       // This is reduced motion.
       this.$element.css("width", this.getTargetWidth());
       this.$element.css("left", this.getTargetLeft());
@@ -135,7 +149,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
           this.toggled();
         }
       );
-    }
+    } */
   }
 
   toggled(): void {
