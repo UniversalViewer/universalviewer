@@ -66,4 +66,14 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
       ),
     });
   }
+
+  toggle(autoToggled?: boolean): void {
+    if (this.isExpanded) {
+      this.$element.parent().removeClass('rightPanelOpen');
+    } else {
+      this.$element.parent().addClass('rightPanelOpen');
+    }
+
+    super.toggle(autoToggled);
+  }
 }
