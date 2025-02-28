@@ -108,7 +108,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
-    this.$element.toggleClass('open');
+    this.$element.toggleClass("open");
 
     // if collapsing, hide contents immediately.
     if (this.isExpanded) {
