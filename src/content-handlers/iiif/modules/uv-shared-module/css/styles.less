@@ -18,6 +18,9 @@
 @import 'lg';
 @import 'xl';
 
+:root {
+    --uv-animation: 1;
+}
 
 .hidden {
     .hidden();
@@ -102,32 +105,56 @@
 
     .mainPanel {
 
+        // TODO: set these at runtime in html element style attr by getting from config?
+        --uv-grid-left-width-open: 271px;
+        --uv-grid-right-width-open: 271px;
+
+        --uv-grid-left-width: 30px;
+        --uv-grid-right-width: 30px;
+
         background: red;
+        margin: 0;
+        padding: 0;
+        
+        overflow: hidden;
 
-        .lg-mediaquery({
+        .md-mediaquery({
             background: maroon;
-
+            padding: 0.5rem;
             display: grid;
-            grid-template-columns: [left] minmax(25%, 255px) [center] 1fr [right] minmax(25%, 255px);
+            grid-template-columns: 
+                [left] var(--uv-grid-left-width) 
+                [center] minmax(0, 1fr)
+                [right] var(--uv-grid-right-width);
             grid-template-areas: "left center right";
-            //gap: 10px;
+
+            transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
         });
+    }
+
+    .mainPanel.leftPanelOpen {
+        --uv-grid-left-width: var(--uv-grid-left-width-open);
+    }
+
+    .mainPanel.rightPanelOpen {
+        --uv-grid-right-width: var(--uv-grid-right-width-open);
     }
 
     .centerPanel {
         position: absolute;
+        overflow: hidden;
     }
 
     .centerPanel {
         width: 100% !important;
         left: auto !important;
         
-        background: yellow;
+        background: darkcyan;
 
-        .lg-mediaquery({
-            background: wheat;
+        .md-mediaquery({
+            background: darkolivegreen;
 
-            z-index: 12;
+            z-index: 15;
             grid-area: center;
         });
     }
@@ -138,44 +165,85 @@
         border: @panel-border;
     }
 
-    .leftPanel {
-        background: pink;
-        
-        position: relative;
-        width: auto !important;
-        height: auto !important;
-
-        .lg-mediaquery({
-            background: fuchsia;
-
-            grid-area: left;
-            z-index: 10;
-            position: absolute;
-            top: 0.625rem !important;
-            right: 0.625rem !important;
-            bottom: 0.625rem !important;
-            left: 0.625rem !important;
-        });
-    }
-
     .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
     }
 
-    .rightPanel {
-        background: lime;
-        z-index: 11;
-        grid-area: right;
+    .leftPanel, .rightPanel {
+        overflow: hidden;
+        z-index: 20;
+        /* display: none; */
+        
+        transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
+
+        position: absolute;
+        top: 2em !important;
+        right: 0em !important;
+        bottom: 2em !important;
+        left: 0em !important;
 
         width: auto !important;
         height: auto !important;
-        position: absolute;
-        top: 0.625rem !important;
-        right: 0.625rem !important;
-        bottom: 0.625rem !important;
-        left: 0.625rem !important;
+
+        .md-mediaquery({
+            display: block !important;
+            position: relative;
+
+            top: 0rem !important;
+            right: 0rem !important;
+            bottom: 0rem !important;
+            left: 0rem !important;
+        });
+
+        &.open {
+            display: block;
+        }
+    }
+
+    .leftPanel {
+        background: pink;
+        transform: translateX(calc(-100% + 30px));
+
+        .md-mediaquery({
+            background: fuchsia;
+            grid-area: left;
+            transform: none;
+        });
+    }
+
+    .leftPanel.open {
+        left: 0 !important;
+        right: 3em !important;
+        transform: none;
+
+        .md-mediaquery({
+            left: initial !important;
+            right: initial !important;
+        });
+    }
+
+    .rightPanel {
+        background: lime;
+        transform: translateX(calc(100% - 30px));
+        
+        .md-mediaquery({
+            background: yellowgreen;
+            grid-area: right;
+            transform: none;
+        });
+    }
+
+    .rightPanel.open {
+        right: 0 !important;
+        left: 3em !important;
+        transform: none;
+
+        .md-mediaquery({
+            left: initial !important;
+            right: initial !important;
+        });
     }
 
     .footerPanel {
