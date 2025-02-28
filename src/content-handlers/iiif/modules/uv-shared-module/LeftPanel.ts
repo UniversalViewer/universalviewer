@@ -70,9 +70,9 @@ export class LeftPanel<
 
   toggle(autoToggled?: boolean): void {
     if (this.isExpanded) {
-      this.$element.parent().removeClass('leftPanelOpen');
+      this.$element.parent().removeClass("leftPanelOpen");
     } else {
-      this.$element.parent().addClass('leftPanelOpen');
+      this.$element.parent().addClass("leftPanelOpen");
     }
 
     super.toggle(autoToggled);
