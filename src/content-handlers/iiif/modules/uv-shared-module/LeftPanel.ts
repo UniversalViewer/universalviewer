@@ -81,14 +81,14 @@ export class LeftPanel<
   expandFull(): void {
     console.log("LeftPanel.ts:expandFull()");
 
-    this.$element.parent().addClass('leftPanelOpenFull');
+    this.$element.parent().addClass("leftPanelOpenFull");
     super.expandFull();
   }
 
   collapseFull(): void {
     console.log("LeftPanel.ts:collapseFull()");
 
-    this.$element.parent().removeClass('leftPanelOpenFull');
+    this.$element.parent().removeClass("leftPanelOpenFull");
 
     // need this because 'closing' full width shouldn't actually do that
     // if puts the left panel back to normal open state

@@ -173,7 +173,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   expandFull(): void {
-
     console.log("BaseExpandPanel.ts:expandFull()");
 
     const settings = this.extension.getSettings();
@@ -197,7 +196,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         this.expandFullFinish();
       }, 550);
     }
-
 
     /* if (isReducedAnimation) {
       this.$element.css("width", targetWidth);
@@ -260,7 +258,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     return 0;
   }
 
-  toggleStart(): void { }
+  toggleStart(): void {}
 
   toggleFinish(): void {
     if (this.isExpanded && !this.autoToggled) {
@@ -270,14 +268,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
   }
 
-  expandFullStart(): void { }
+  expandFullStart(): void {}
 
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
   }
 
-  collapseFullStart(): void { }
+  collapseFullStart(): void {}
 
   collapseFullFinish(): void {
     this.isFullyExpanded = false;
