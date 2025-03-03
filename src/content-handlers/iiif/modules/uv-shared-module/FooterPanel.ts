@@ -149,7 +149,7 @@ export class FooterPanel<
 
     this.$moreInfoButton.onPressed(() => {
       this.extensionHost.publish(
-        IIIFEvents.SHOW_MOREINFO_DIALOGUE,
+        IIIFEvents.TOGGLE_MOREINFO_RIGHT_PANEL,
         this.$moreInfoButton
       );
     });

@@ -12,7 +12,6 @@ import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPan
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
-import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
@@ -60,7 +59,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $externalContentDialogue: JQuery;
   $helpDialogue: JQuery;
-  $moreInfoDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
@@ -78,7 +76,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   mode: Mode;
-  moreInfoDialogue: MoreInfoDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   previousAnnotationRect: AnnotationRect | null;
   rightPanel: MoreInfoRightPanel;
@@ -550,12 +547,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
     this.shell.$overlays.append(this.$helpDialogue);
     this.helpDialogue = new HelpDialogue(this.$helpDialogue);
-
-    this.$moreInfoDialogue = $(
-      '<div class="overlay moreInfo" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$moreInfoDialogue);
-    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
     this.$multiSelectDialogue = $(
       '<div class="overlay multiSelect" aria-hidden="true"></div>'
