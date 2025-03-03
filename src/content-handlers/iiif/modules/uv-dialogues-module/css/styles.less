@@ -22,57 +22,78 @@
 
             .middle {
                 .content {
-                    .shareFrame {
-                        width: 240px;
-                        border: none;
-                        height: 30px;
-                        margin-top: @margin-small-vertical;
-                    }
+                    .tabs {
+                        line-height: normal;
+                        font-size: 0px;
 
-                    .customSize {
-                        overflow: hidden;
-
-                        .size {
-                            padding: 0 @padding-small-horizontal 0 0;
-                        }
-
-                        .x {
-                            padding: 0 @padding-small-horizontal 0 @padding-small-horizontal;
-                        }
-
-                        select {
-                            height: 25px;
-                            min-width: 80px;
-                            padding: 4px;
-                            font-size: 11px;
-                        }
-
-                        input {
+                        .tab {
+                            padding: @padding-small-vertical @padding-small-horizontal;
+                            color: @gray;
+                            font-size: @font-size-base;
                             display: inline-block;
-                            width: 50px;
-                            height: 21px;
-                            font-size: 11px;
-                        }
-                    }
+                            text-align: center;
+                            overflow: hidden;
+                            margin: 0;
+                            margin-bottom: -1px;
+                            border-bottom: 1px solid transparent;
+                            cursor: pointer;
+                            text-decoration: none;
+                            user-select: none;
 
-                    .footer {
-                        overflow: hidden;
-
-                        a {
-                            font-size: @font-size-small;
-                            display: block;
-                            float: left;
-                            line-height: 30px;
-
-                            &.imageBtn {
-                                width: 30px;
-                                height: 30px;
+                            &:hover {
+                                border-color: @brand-primary;
+                                color: @text-secondary-color;
                             }
 
-                            &.iiif {
-                                background-image: data-uri('../../../modules/uv-shared-module/img/iiif.png');
-                                background-repeat: no-repeat;
-                                margin-right: @margin-small-horizontal;
+                            &.first {
+                                margin: 0 0 0 @margin-medium-horizontal;
+                            }
+
+                            &.on {
+                                border-color: @brand-primary;
+                                color: @text-secondary-color;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+
+                .tabsContent {
+                    padding: @padding-medium-vertical 0 @padding-small-vertical 0;
+                    border-top: 1px solid @gray-lighter;
+
+                    .header {
+                        margin-bottom: @margin-small-vertical;
+                        font-size: @font-size-small;
+                    }
+
+                    .share-view {
+                        .shareLink {
+                            display: block;
+                            overflow: hidden;
+                            height: 18px;
+                            text-overflow: ellipsis;
+                        }
+                    }
+
+                    .manifest-view {
+                        .customSize {
+                            overflow: hidden;
+                            padding-top: @padding-medium-vertical;
+
+                            .size {
+                                padding: 0 @padding-small-horizontal 0 0;
+                            }
+
+                            .x {
+                                padding: 0 @padding-small-horizontal 0 @padding-small-horizontal;
+                            }
+
+                            select {
+                                height: 25px;
+                                min-width: 80px;
+                                padding: 4px;
+                                font-size: 11px;
                             }
                         }
                     }
@@ -438,11 +459,11 @@
         background-color: black; /* bg-black */
         color: white; /* text-white */
         white-space: nowrap; /* Prevent text from wrapping */
-
+      
         /* Remove default outline on focus */
         outline: none;
       }
-
+      
       /* Focus state styles */
       .btn.close:focus {
         outline: none;
