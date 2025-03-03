@@ -13,7 +13,6 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
@@ -255,16 +254,13 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString(),
-      title
-    );
-    return script;
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 }
