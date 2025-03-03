@@ -214,7 +214,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -300,7 +301,7 @@
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": true,
-        "helpUrl": "",
+        "helpUrl": "https://universalviewer.io/",
         "modeOptionsEnabled": true
       },
       "content": {

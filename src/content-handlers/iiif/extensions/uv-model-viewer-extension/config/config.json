@@ -147,7 +147,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {

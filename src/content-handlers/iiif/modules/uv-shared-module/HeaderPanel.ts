@@ -52,7 +52,7 @@ export class HeaderPanel<
     this.$options.append(this.$rightOptions);
 
     this.$helpButton = $(`
-      <button class="btn imageBtn help" tabindex="0">
+      <button class="btn imageBtn help" tabindex="0" title="${this.content.help}">
         <i class="uv-icon-help" aria-hidden="true"></i>
       </button>
     `);
@@ -221,6 +221,11 @@ export class HeaderPanel<
         $message.text(this.information.message);
       }
     }
+
+    this.$helpButton.onPressed(() => {
+      window.open(this.options.helpUrl); 
+    });
+    
 
     if (this.options.helpEnabled && this.options.helpUrl) {
       this.$helpButton.show();

@@ -110,7 +110,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -288,7 +289,8 @@
         "previous": "$previous",
         "pageSearchLabel": "$searchByPageNumber",
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "shareDialogue": {

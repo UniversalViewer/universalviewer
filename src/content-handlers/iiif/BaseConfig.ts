@@ -144,6 +144,7 @@ export type HeaderPanelOptions = {
 export type HeaderPanelContent = {
   close: string;
   settings: string;
+  help: string;
 };
 
 type HeaderPanel = ModuleConfig & {
