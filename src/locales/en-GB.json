@@ -58,6 +58,7 @@
   "$collapseGallery": "Collapse Gallery",
   "$copiedToClipboard": "Copied to clipboard",
   "$copyToClipboard": "Copy to clipboard",
+  "$copyBtn": "Copy",
   "$description": "Description",
   "$expandInformation": "Expand Information",
   "$moduleGoesHere": "Your module goes here!",
