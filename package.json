@@ -101,7 +101,7 @@
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-less": "^1.1.5",
     "esbuild-plugin-svg": "^0.1.0",
     "jquery": "3.5.0",
