@@ -16,7 +16,8 @@ export class ShareDialogue<
 
   $manifestInput: JQuery;
   $manifestSection: JQuery;
-  shareManifestsEnabled: boolean = false;
+  shareManifestsEnabled = false;
+  $iiifButton: JQuery;
 
   embedCode: string;
   $embedCode: JQuery;
@@ -189,10 +190,12 @@ export class ShareDialogue<
     });
     this.$customSize.append(this.$heightInput);
 
-    // Share IFRAME
+    // IIIF Drag and Drop
 
-    this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
-    this.$content.append(this.$shareFrame);
+    this.$iiifButton = $(
+      `<a class="imageBtn iiif" href="${iiifUrl}" title="${this.content.iiif}" target="_blank"></a>`
+    );
+    this.$content.append(this.$iiifButton);
 
     // Options
 
