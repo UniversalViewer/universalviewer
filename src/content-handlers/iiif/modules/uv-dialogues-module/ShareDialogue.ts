@@ -9,7 +9,6 @@ export class ShareDialogue<
   T extends BaseConfig["modules"]["shareDialogue"]
 > extends Dialogue<T> {
   $shareButton: JQuery;
-  $shareFrame: JQuery;
 
   $urlInput: JQuery;
   $urlSection: JQuery;
@@ -259,7 +258,6 @@ export class ShareDialogue<
 
     this.updateInstructions();
     this.updateShareOptions();
-    this.updateShareFrame();
     this.updateTermsOfUseButton();
   }
 
@@ -332,24 +330,6 @@ export class ShareDialogue<
     }
     this.currentHeight = Math.floor(this.currentWidth * this.aspectRatio);
     this.$heightInput.val(String(this.currentHeight));
-  }
-
-  updateShareFrame(): void {
-    const shareUrl: string | null = this.extension.helper.getShareServiceUrl();
-
-    if (!shareUrl) {
-      return;
-    }
-
-    if (
-      Bools.getBool(this.config.options.shareFrameEnabled, true) &&
-      shareUrl
-    ) {
-      this.$shareFrame.prop("src", shareUrl);
-      this.$shareFrame.show();
-    } else {
-      this.$shareFrame.hide();
-    }
   }
 
   updateTermsOfUseButton(): void {
