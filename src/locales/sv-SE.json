@@ -120,7 +120,7 @@
   "$reducedMotion": "Minska rörelse (inaktiverar animationer)",
   "$truncateThumbnailLabels": "Förkorta miniatyrtext",
   "$preserveViewport": "Behåll zoomnivå",
-  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer#contributors'>Mer information om Universal Viewer</a>",
+  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>Mer information om Universal Viewer</a>",
   "$custom": "Anpassad",
   "$embedInstructions": "För att bädda in det här objektet i din egen webbplats, kopiera och klistra koden nedan.",
   "$height": "Höjd",
