@@ -427,7 +427,6 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.$search.hide();
     }
 
-
     // todo: discuss on community call
     // Get visible element in centerOptions with greatest tabIndex
     // var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();

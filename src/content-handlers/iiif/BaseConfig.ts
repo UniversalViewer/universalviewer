@@ -137,7 +137,7 @@ export type HeaderPanelOptions = {
   /** Determines if settings button is enabled */
   settingsButtonEnabled: boolean;
   /** Determines if help is enabled */
-  helpEnabled:boolean; 
+  helpEnabled: boolean;
   helpUrl: string;
 };
 

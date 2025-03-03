@@ -56,7 +56,7 @@ export class HeaderPanel<
         <i class="uv-icon-help" aria-hidden="true"></i>
       </button>
     `);
-    this.$rightOptions.append(this.$helpButton); 
+    this.$rightOptions.append(this.$helpButton);
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
@@ -223,9 +223,8 @@ export class HeaderPanel<
     }
 
     this.$helpButton.onPressed(() => {
-      window.open(this.options.helpUrl); 
+      window.open(this.options.helpUrl);
     });
-    
 
     if (this.options.helpEnabled && this.options.helpUrl) {
       this.$helpButton.show();
