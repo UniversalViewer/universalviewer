@@ -1,9 +1,9 @@
 const $ = require("jquery");
-import { BaseConfig } from "../../BaseConfig";
+import { Bools, Numbers } from "@edsilv/utils";
+import type { ILabelValuePair } from "@iiif/manifold";
+import type { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
-import { Bools, Numbers } from "@edsilv/utils";
-import { ILabelValuePair } from "@iiif/manifold";
 
 export class ShareDialogue<
   T extends BaseConfig["modules"]["shareDialogue"]
@@ -12,7 +12,7 @@ export class ShareDialogue<
 
   $urlInput: JQuery;
   $urlSection: JQuery;
-  isShareViewVisible: boolean = false;
+  isShareViewVisible = false;
 
   $manifestInput: JQuery;
   $manifestSection: JQuery;
@@ -22,7 +22,7 @@ export class ShareDialogue<
   embedCode: string;
   $embedCode: JQuery;
   $embedSection: JQuery;
-  isEmbedViewVisible: boolean = false;
+  isEmbedViewVisible = false;
 
   $customSize: JQuery;
   $customSizeDropDown: JQuery;
@@ -33,12 +33,12 @@ export class ShareDialogue<
 
   $termsOfUseButton: JQuery;
 
-  aspectRatio: number = 1.0;
+  aspectRatio = 1.0;
   currentHeight: number;
   currentWidth: number;
-  maxWidth: number = 8000;
+  maxWidth = 8000;
   maxHeight: number = this.maxWidth * this.aspectRatio;
-  minWidth: number = 200;
+  minWidth = 200;
   minHeight: number = this.minWidth * this.aspectRatio;
 
   constructor($element: JQuery) {
@@ -132,14 +132,12 @@ export class ShareDialogue<
     this.$embedSection.append(this.$customSize);
 
     this.$size = $(
-      '<label for="size" class="size">' + this.content.size + "</label>"
+      `<label for="size" class="size">${this.content.size}</label>`
     );
     this.$customSize.append(this.$size);
 
     this.$customSizeDropDown = $(
-      '<select class="embed-size-select" id="size" aria-label="' +
-        this.content.size +
-        '"></select>'
+      `<select class="embed-size-select" id="size" aria-label="${this.content.size}"></select>`
     );
     this.$customSizeDropDown.append(
       '<option value="small" data-width="560" data-height="420">560 x 420</option>'
@@ -151,7 +149,7 @@ export class ShareDialogue<
       '<option value="large" data-width="800" data-height="600">800 x 600</option>'
     );
     this.$customSizeDropDown.append(
-      '<option value="custom">' + this.content.customSize + "</option>"
+      `<option value="custom">${this.content.customSize}</option>`
     );
     this.$customSizeDropDown.change(() => {
       this.update();
@@ -159,9 +157,7 @@ export class ShareDialogue<
     this.$customSize.append(this.$customSizeDropDown);
 
     this.$widthInput = $(
-      '<input class="width" type="text" maxlength="10" aria-label="' +
-        this.content.width +
-        '"/>'
+      `<input class="width" type="text" maxlength="10" aria-label="${this.content.width}"/>`
     );
     this.$widthInput.on("keydown", (e) => {
       return Numbers.numericalInput(e);
@@ -177,9 +173,7 @@ export class ShareDialogue<
     this.$customSize.append(this.$x);
 
     this.$heightInput = $(
-      '<input class="height" type="text" maxlength="10" aria-label="' +
-        this.content.height +
-        '"/>'
+      `<input class="height" type="text" maxlength="10" aria-label="${this.content.height}"/>`
     );
     this.$heightInput.on("keydown", (e) => {
       return Numbers.numericalInput(e);
@@ -212,7 +206,7 @@ export class ShareDialogue<
     }
 
     this.$termsOfUseButton = $(
-      '<a href="#">' + this.extension.data.config!.content.termsOfUse + "</a>"
+      `<a href="#">${this.extension.data.config?.content.termsOfUse}</a>`
     );
     this.onAccessibleClick(this.$termsOfUseButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
@@ -341,7 +335,7 @@ export class ShareDialogue<
 
     if (
       Bools.getBool(
-        this.extension.data.config!.options.termsOfUseEnabled,
+        this.extension.data.config?.options.termsOfUseEnabled,
         false
       ) &&
       requiredStatement &&
