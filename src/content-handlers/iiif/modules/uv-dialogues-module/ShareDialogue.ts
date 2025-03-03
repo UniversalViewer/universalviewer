@@ -94,8 +94,12 @@ export class ShareDialogue<
     $tabLinks.append(this.$shareTabLink);
     $tabLinks.append(this.$manifestTabLink);
 
-    this.$shareTabContent = $('<div class="share-view view" data-tab-content="share"></div>');
-    this.$manifestTabContent = $('<div class="manifest-view view hidden" data-tab-content="manifest"></div>');
+    this.$shareTabContent = $(
+      '<div class="share-view view" data-tab-content="share"></div>'
+    );
+    this.$manifestTabContent = $(
+      '<div class="manifest-view view hidden" data-tab-content="manifest"></div>'
+    );
     $tabContents.append(this.$shareTabContent);
     $tabContents.append(this.$manifestTabContent);
 
@@ -124,7 +128,9 @@ export class ShareDialogue<
       `<div class="share__section"><label class="share__label" for="manifestCode">${this.content.iiif}</label></div>`
     );
 
-    const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifestsEnabled);
+    const iiifUrl: string = this.extension.getIIIFShareUrl(
+      this.shareManifestsEnabled
+    );
     this.$manifestInput = $(
       `<input class="copy-input" id="manifestInput" type="text" value="${iiifUrl}" readonly/>`
     );
