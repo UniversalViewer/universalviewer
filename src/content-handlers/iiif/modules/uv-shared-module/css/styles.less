@@ -19,12 +19,14 @@
 @import 'xl';
 
 :root {
+    // TODO: set these at runtime in html element style attr by getting from config?
     --uv-animation: 1;
 
     --uv-grid-left-width-open: 271px;
     --uv-grid-right-width-open: 271px;
 
     --uv-grid-left-width: 30px;
+    --uv-grid-main-width: minmax(0, 1fr);
     --uv-grid-right-width: 30px;
 }
 
@@ -110,23 +112,17 @@
     }
 
     .mainPanel {
-
-        // TODO: set these at runtime in html element style attr by getting from config?
-        
-
-        background: red;
         margin: 0;
         padding: 0;
         
         overflow: hidden;
 
         .md-mediaquery({
-            background: maroon;
             padding: 0.5rem;
             display: grid;
             grid-template-columns: 
                 [left] var(--uv-grid-left-width) 
-                [center] minmax(0, 1fr)
+                [center] var(--uv-grid-main-width)
                 [right] var(--uv-grid-right-width);
             grid-template-areas: "left center right";
 
@@ -142,6 +138,14 @@
         --uv-grid-right-width: var(--uv-grid-right-width-open);
     }
 
+    .mainPanel.leftPanelOpenFull {
+        --uv-grid-left-width: 100%;
+        --uv-grid-main-width: 0;
+        --uv-grid-right-width: 0;
+
+        transition-duration: calc(var(--uv-animation) * 500ms);
+    }
+
     .centerPanel {
         position: absolute;
         overflow: hidden;
@@ -150,12 +154,8 @@
     .centerPanel {
         width: 100% !important;
         left: auto !important;
-        
-        background: darkcyan;
 
         .md-mediaquery({
-            background: darkolivegreen;
-
             z-index: 15;
             grid-area: center;
         });
@@ -199,17 +199,35 @@
             left: 0rem !important;
         });
 
+        /* .top {
+            display: none;
+        }
+        .closed {
+            display: block;
+        }
+        .main {
+            display: none;
+        } */
+
         &.open {
             display: block;
+
+            /* .top {
+                display: block;
+            }
+            .closed {
+                display: none;
+            }
+            .main {
+                display: block;
+            } */
         }
     }
 
     .leftPanel {
-        background: pink;
         transform: translateX(calc(-100% + 30px));
 
         .md-mediaquery({
-            background: fuchsia;
             grid-area: left;
             transform: none;
         });
@@ -227,11 +245,9 @@
     }
 
     .rightPanel {
-        background: lime;
         transform: translateX(calc(100% - 30px));
         
         .md-mediaquery({
-            background: yellowgreen;
             grid-area: right;
             transform: none;
         });

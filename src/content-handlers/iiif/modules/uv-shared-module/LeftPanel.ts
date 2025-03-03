@@ -77,4 +77,27 @@ export class LeftPanel<
 
     super.toggle(autoToggled);
   }
+
+  expandFull(): void {
+    console.log("LeftPanel.ts:expandFull()");
+
+    this.$element.parent().addClass('leftPanelOpenFull');
+    super.expandFull();
+  }
+
+  collapseFull(): void {
+    console.log("LeftPanel.ts:collapseFull()");
+
+    this.$element.parent().removeClass('leftPanelOpenFull');
+
+    // need this because 'closing' full width shouldn't actually do that
+    // if puts the left panel back to normal open state
+    // but if the left panel was previously closed, this class won't be present
+    // so we put it back
+    if (!this.$element.parent().hasClass("leftPanelOpen")) {
+      this.$element.parent().addClass("leftPanelOpen");
+    }
+
+    super.collapseFull();
+  }
 }

@@ -76,4 +76,8 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
     super.toggle(autoToggled);
   }
+
+  expandFull(): void {
+    super.expandFull();
+  }
 }
