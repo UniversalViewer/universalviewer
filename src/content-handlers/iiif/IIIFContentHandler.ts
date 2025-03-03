@@ -406,7 +406,6 @@ export default class IIIFContentHandler
     } catch (e) {
       this.hideSpinner();
       alert("Unable to load manifest");
-      console.error(e);
     }
   }
 
