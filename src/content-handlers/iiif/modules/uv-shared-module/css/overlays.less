@@ -11,6 +11,26 @@
 
     .overlay {
         position: absolute;
+        color: @overlay-color;
+
+        input,
+        textarea  {
+            width: 100%;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 2px;
+            color: black;
+            background-color: white;
+            border: 1px solid black;
+        }
+
+        [readonly] {
+            font-family: monospace;
+            background-color: #eee;
+        }
 
         .top {
             width: 100%;
@@ -30,7 +50,7 @@
             width: 100%;
             background: @overlay-bg;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid @overlay-border;
 
             .buttons {
                 padding: @padding-medium-vertical;
@@ -50,7 +70,6 @@
                 text-overflow: ellipsis;
 
                 h1 {
-                    color: @headings-color;
                     font-size: @headings-size-large;
                     font-weight: @headings-font-weight;
                     margin: @margin-large-vertical 0px 0px 0px;
@@ -58,7 +77,6 @@
                 }
 
                 h2 {
-                    color: @headings-color;
                     font-size: @headings-size-small;
                     font-weight: @headings-font-weight;
                     margin: 0;
