@@ -103,15 +103,37 @@
                                 font-size: 11px;
                             }
                         }
+                    }
 
-                        .imageBtn.iiif {
-                            display: block;
+                    .copy-group {
+                        display: grid;
+                        grid-template-columns: 1fr auto;
+                    }
+
+                    .imageBtn {
+                        display: block;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+
+                        &.iiif {
                             width: 30px;
                             height: 30px;
                             margin-right: @margin-small-horizontal;
                             background-image: data-uri('../../../modules/uv-shared-module/img/iiif-black.webp');
                             background-size: contain;
-                            background-repeat: no-repeat;
+                        }
+                    }
+
+                    .copyBtn {
+                        padding-inline: @padding-small-horizontal;
+                        height: 100%;
+                        background-color: black;
+                        cursor: pointer;
+
+                        &.imageBtn {
+                            width: 2em;
+                            background-image: data-uri('../../../modules/uv-shared-module/img/copy.png');
+                            background-size: 15px;
                         }
                     }
                 }

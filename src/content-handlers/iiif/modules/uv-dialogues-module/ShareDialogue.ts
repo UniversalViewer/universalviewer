@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { Bools, Numbers } from "@edsilv/utils";
+import { Bools, Clipboard, Numbers } from "@edsilv/utils";
 import type { ILabelValuePair } from "@iiif/manifold";
 import type { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
@@ -12,6 +12,7 @@ export class ShareDialogue<
   $shareTabContent: JQuery;
   $manifestTabLink: JQuery;
   $manifestTabContent: JQuery;
+  copyToClipboardEnabled = true;
 
   $urlInput: JQuery;
   $urlSection: JQuery;
@@ -263,6 +264,19 @@ export class ShareDialogue<
       true
     );
 
+    // Copy buttons
+
+    if (Bools.getBool(this.config.options.copyToClipboardEnabled, true)) {
+      this.addCopyButton(this.$urlInput);
+      this.addCopyButton(this.$embedCode);
+      this.addCopyButton(this.$manifestInput);
+    }
+
+    this.$element.hide();
+    this.update();
+
+    // Helper functions
+
     function openShareTab(nextTab) {
       for (const tabEl of $tabLinks.children()) {
         tabEl.classList.toggle("on", tabEl.dataset.tabLink === nextTab);
@@ -276,9 +290,6 @@ export class ShareDialogue<
         }
       }
     }
-
-    this.$element.hide();
-    this.update();
   }
 
   open(triggerButton?: HTMLElement): void {
@@ -292,6 +303,28 @@ export class ShareDialogue<
 
   isShareAvailable(): boolean {
     return !!this.getShareUrl();
+  }
+
+  addCopyButton($input) {
+    const $btn = $(
+      `<button class="copyBtn" aria-label="${this.content.copyToClipboard}">${this.content.copyBtn}</button>`
+    );
+
+    this.onAccessibleClick(
+      $btn,
+      () => {
+        Clipboard.copy($input.val());
+        $input.focus();
+      },
+      true,
+      true
+    );
+
+    // sleight of hand
+    const $copyBtnGroup = $('<div class="copy-group"></div>');
+    $copyBtnGroup.append($btn);
+    $copyBtnGroup.insertBefore($input);
+    $input.insertBefore($btn);
   }
 
   update(): void {
