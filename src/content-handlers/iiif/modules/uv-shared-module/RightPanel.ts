@@ -38,8 +38,6 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
     });
   }
 
-
-
   getTargetWidth(): number {
     return this.isExpanded
       ? this.options.panelCollapsedWidth
