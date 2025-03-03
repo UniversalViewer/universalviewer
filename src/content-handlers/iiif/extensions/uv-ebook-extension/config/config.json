@@ -130,7 +130,7 @@
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": true,
-        "helpUrl": "universalviewer.io"
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "close": "$close",

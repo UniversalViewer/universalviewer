@@ -156,7 +156,7 @@
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": false,
-        "helpUrl": "universalviewer.io"
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "close": "$close",
