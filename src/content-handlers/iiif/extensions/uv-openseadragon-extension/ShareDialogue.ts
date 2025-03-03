@@ -39,7 +39,7 @@ export class ShareDialogue extends BaseShareDialogue<
       (<OpenSeadragonExtension>this.extension).getViewerRotation()
     );
 
-    this.code = (<OpenSeadragonExtension>this.extension).getEmbedScript(
+    this.embedCode = (<OpenSeadragonExtension>this.extension).getEmbedScript(
       this.options.embedTemplate,
       this.currentWidth,
       this.currentHeight,
@@ -47,7 +47,7 @@ export class ShareDialogue extends BaseShareDialogue<
       rotation
     );
 
-    this.$code.val(this.code);
+    this.$embedCode.val(this.embedCode);
   }
 
   resize(): void {
