@@ -427,10 +427,6 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.$search.hide();
     }
 
-    if (this.options.helpEnabled === false) {
-      this.$helpButton.hide();
-    }
-
     // todo: discuss on community call
     // Get visible element in centerOptions with greatest tabIndex
     // var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
