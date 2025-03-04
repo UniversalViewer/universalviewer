@@ -298,6 +298,7 @@
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": true,
+        "helpUrl": "https://universalviewer.io/",
         "modeOptionsEnabled": true
       },
       "content": {
