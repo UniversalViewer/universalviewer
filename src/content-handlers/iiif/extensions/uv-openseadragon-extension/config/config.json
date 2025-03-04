@@ -208,14 +208,11 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true,
-        "helpEnabled": true,
-        "helpUrl": "https://universalviewer.io"
+        "settingsButtonEnabled": true
       },
       "content": {
         "close": "$close",
-        "settings": "$settings",
-        "help": "$help"
+        "settings": "$settings"
       }
     },
     "helpDialogue": {

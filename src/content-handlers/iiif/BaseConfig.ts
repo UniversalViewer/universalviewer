@@ -137,14 +137,14 @@ export type HeaderPanelOptions = {
   /** Determines if settings button is enabled */
   settingsButtonEnabled: boolean;
   /** Determines if help is enabled */
-  helpEnabled: boolean;
-  helpUrl: string;
+  helpEnabled?: boolean;
+  helpUrl?: string;
 };
 
 export type HeaderPanelContent = {
   close: string;
   settings: string;
-  help: string;
+  help?: string;
 };
 
 type HeaderPanel = ModuleConfig & {
