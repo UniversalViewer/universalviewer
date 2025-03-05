@@ -20,9 +20,17 @@
             width: 280px;
             padding: 0 0 0 8px;
 
+            .iiif-section {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                gap: 1em;
+                margin-block: 1.5em;
+            }
+
             .customSize {
                 overflow: hidden;
-                padding-top: @padding-medium-vertical;
+                margin-block: 0.5em;
 
                 .size {
                     padding: 0 @padding-small-horizontal 0 0;
@@ -47,11 +55,6 @@
                 }
             }
 
-            .copy-group {
-                display: grid;
-                grid-template-columns: 1fr auto;
-            }
-
             .imageBtn {
                 display: block;
                 background-position: center center;
@@ -60,23 +63,8 @@
                 &.iiif {
                     width: 30px;
                     height: 30px;
-                    margin-right: @margin-small-horizontal;
                     background-image: data-uri('../../../modules/uv-shared-module/img/iiif-black.webp');
                     background-size: contain;
-                }
-            }
-
-            .copyBtn {
-                padding-inline: @padding-small-horizontal;
-                height: 100%;
-                color: white;
-                background-color: black;
-                cursor: pointer;
-
-                &.imageBtn {
-                    width: 2em;
-                    background-image: data-uri('../../../modules/uv-shared-module/img/copy.png');
-                    background-size: 15px;
                 }
             }
         }

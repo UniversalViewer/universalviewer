@@ -187,10 +187,19 @@ export class ShareDialogue<
 
     // IIIF Drag and Drop
 
+    const $iiifSection = $('<div class="iiif-section"></div>');
     this.$iiifButton = $(
       `<a class="imageBtn iiif" href="${iiifUrl}" title="${this.content.iiif}" target="_blank"></a>`
     );
-    this.$content.append(this.$iiifButton);
+    $iiifSection.append(this.$iiifButton);
+    this.$content.append($iiifSection);
+
+    // Terms of Use Link
+
+    this.$termsOfUseButton = $(
+      `<a href="#">${this.extension.data.config?.content.termsOfUse}</a>`
+    );
+    $iiifSection.append(this.$termsOfUseButton);
 
     // Options
 
@@ -205,11 +214,6 @@ export class ShareDialogue<
     } else {
       this.$embedSection.hide();
     }
-
-    this.$termsOfUseButton = $(
-      `<a href="#">${this.extension.data.config?.content.termsOfUse}</a>`
-    );
-    this.$content.append(this.$termsOfUseButton);
 
     // Click Events
 
@@ -370,7 +374,7 @@ export class ShareDialogue<
     if (
       Bools.getBool(
         this.extension.data.config?.options.termsOfUseEnabled,
-        false
+        true
       ) &&
       requiredStatement &&
       requiredStatement.value
