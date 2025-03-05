@@ -241,6 +241,8 @@ type SettingsDialogue = ModuleConfig & {
 };
 
 export type ShareDialogueOptions = DialogueOptions & {
+  /** Determines if copy buttons are enabled */
+  copyToClipboardEnabled: boolean;
   /** Determines if embed is enabled */
   embedEnabled: boolean;
   /** Set host for embed code (default: window.location.hostname) */
@@ -262,6 +264,8 @@ export type ShareDialogueOptions = DialogueOptions & {
 };
 
 export type ShareDialogueContent = DialogueContent & {
+  copyBtn: string;
+  copyToClipboard: string;
   customSize: string;
   embed: string;
   embedInstructions: string;
