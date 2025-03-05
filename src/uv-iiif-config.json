@@ -10,7 +10,8 @@
     "preferMediaElementExtension": false,
     "rightPanelEnabled": true,
     "clickToZoomEnabled": false,
-    "saveUserSettings": true
+    "saveUserSettings": true,
+    "animationDuration": 250
   },
   "modules": {
     "avCenterPanel": {
@@ -57,6 +58,11 @@
         "embedPort": null,
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>"
       }
+    },
+    "contentLeftPanel": {
+        "options": {
+            "panelAnimationDuration": 300
+        }
     }
   }
 }
