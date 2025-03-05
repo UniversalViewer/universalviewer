@@ -135,6 +135,8 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     setTimeout(() => {
       this.toggled();
 
+      this.$element.toggleClass('open-finished');
+
       if (oldAnimationDuration) {
         document.documentElement.style.setProperty(
           "--uv-animation-duration",
