@@ -74,6 +74,13 @@ export class ShareDialogue<
       IIIFEvents.SHOW_EMBED_DIALOGUE,
       (triggerButton: HTMLElement) => {
         this.open(triggerButton);
+
+        if (triggerButton && $(triggerButton).is(".embed.btn")) {
+          // after setTimeout in Dialogue super class
+          setTimeout(() => {
+            this.$embedCode.focus();
+          }, 2);
+        }
       }
     );
 
