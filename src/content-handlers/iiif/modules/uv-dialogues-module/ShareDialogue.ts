@@ -8,10 +8,6 @@ import { Dialogue } from "../uv-shared-module/Dialogue";
 export class ShareDialogue<
   T extends BaseConfig["modules"]["shareDialogue"]
 > extends Dialogue<T> {
-  $shareTabLink: JQuery;
-  $shareTabContent: JQuery;
-  $manifestTabLink: JQuery;
-  $manifestTabContent: JQuery;
   copyToClipboardEnabled = true;
 
   $urlInput: JQuery;
@@ -81,32 +77,6 @@ export class ShareDialogue<
       }
     );
 
-    // Tabs
-
-    const $tabLinks = $('<div class="tabs"></div>');
-    const $tabContents = $('<div class="tabsContent"></div>');
-
-    this.$shareTabLink = $(
-      `<a class="share-tab tab on" data-tab-link="share" tabindex="0">${this.content.share}</a>`
-    );
-    this.$manifestTabLink = $(
-      `<a class="manifest-tab tab" data-tab-link="manifest" tabindex="0">${this.content.iiif}</a>`
-    );
-    $tabLinks.append(this.$shareTabLink);
-    $tabLinks.append(this.$manifestTabLink);
-
-    this.$shareTabContent = $(
-      '<div class="share-view view" data-tab-content="share"></div>'
-    );
-    this.$manifestTabContent = $(
-      '<div class="manifest-view view hidden" data-tab-content="manifest"></div>'
-    );
-    $tabContents.append(this.$shareTabContent);
-    $tabContents.append(this.$manifestTabContent);
-
-    this.$content.append($tabLinks);
-    this.$content.append($tabContents);
-
     // Share URL
 
     this.$urlSection = $(
@@ -121,7 +91,7 @@ export class ShareDialogue<
       $(this).select();
     });
     this.$urlSection.append(this.$urlInput);
-    this.$shareTabContent.append(this.$urlSection);
+    this.$content.append(this.$urlSection);
 
     // Manifest URL
 
@@ -139,7 +109,7 @@ export class ShareDialogue<
       $(this).select();
     });
     this.$manifestSection.append(this.$manifestInput);
-    this.$manifestTabContent.append(this.$manifestSection);
+    this.$content.append(this.$manifestSection);
 
     // Embed IFRAME code
 
@@ -154,7 +124,7 @@ export class ShareDialogue<
       $(this).select();
     });
     this.$embedSection.append(this.$embedCode);
-    this.$shareTabContent.append(this.$embedSection);
+    this.$content.append(this.$embedSection);
 
     // Embed size customization
 
@@ -220,7 +190,7 @@ export class ShareDialogue<
     this.$iiifButton = $(
       `<a class="imageBtn iiif" href="${iiifUrl}" title="${this.content.iiif}" target="_blank"></a>`
     );
-    this.$manifestTabContent.append(this.$iiifButton);
+    this.$content.append(this.$iiifButton);
 
     // Options
 
@@ -239,30 +209,13 @@ export class ShareDialogue<
     this.$termsOfUseButton = $(
       `<a href="#">${this.extension.data.config?.content.termsOfUse}</a>`
     );
-    this.$manifestTabContent.append(this.$termsOfUseButton);
+    this.$content.append(this.$termsOfUseButton);
 
     // Click Events
 
     this.onAccessibleClick(this.$termsOfUseButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
     });
-
-    this.onAccessibleClick(
-      this.$shareTabLink,
-      () => {
-        openShareTab("share");
-      },
-      true,
-      true
-    );
-    this.onAccessibleClick(
-      this.$manifestTabLink,
-      () => {
-        openShareTab("manifest");
-      },
-      true,
-      true
-    );
 
     // Copy buttons
 
@@ -274,22 +227,6 @@ export class ShareDialogue<
 
     this.$element.hide();
     this.update();
-
-    // Helper functions
-
-    function openShareTab(nextTab) {
-      for (const tabEl of $tabLinks.children()) {
-        tabEl.classList.toggle("on", tabEl.dataset.tabLink === nextTab);
-      }
-
-      for (const viewEl of $tabContents.children()) {
-        if (viewEl.dataset.tabContent === nextTab) {
-          $(viewEl).show();
-        } else {
-          $(viewEl).hide();
-        }
-      }
-    }
   }
 
   open(triggerButton?: HTMLElement): void {

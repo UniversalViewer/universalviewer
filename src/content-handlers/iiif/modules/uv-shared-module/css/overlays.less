@@ -55,8 +55,24 @@
                 padding: 2px;
                 background-color: @gray-lighter;
             }
-            .customSize {
-                margin-block: 0.5em;
+
+            .copy-group {
+                display: grid;
+                grid-template-columns: 1fr auto;
+            }
+
+            .copyBtn {
+                padding-inline: @padding-small-horizontal;
+                height: 100%;
+                color: white;
+                background-color: black;
+                cursor: pointer;
+
+                &.imageBtn {
+                    width: 2em;
+                    background-image: data-uri('../../../modules/uv-shared-module/img/copy.png');
+                    background-size: 15px;
+                }
             }
 
             .buttons {
