@@ -108,8 +108,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
-    this.$element.toggleClass("open");
-
     // if collapsing, hide contents immediately.
     if (this.isExpanded) {
       this.$top.attr("aria-hidden", "true");
@@ -120,19 +118,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.show();
     }
 
-    // to allow for the css transition to finish
-    // TODO: get this var from config and make sure css uses the same
-    // although make sure it is +50 to allow for lag
-    // and re-introduce the animation check
     if (isReducedAnimation) {
-      this.toggled();
-    } else {
-      setTimeout(() => {
-        this.toggled();
-      }, 300);
-    }
-
-    /* if (isReducedAnimation) {
       // This is reduced motion.
       this.$element.css("width", this.getTargetWidth());
       this.$element.css("left", this.getTargetLeft());
@@ -149,7 +135,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
           this.toggled();
         }
       );
-    } */
+    }
   }
 
   toggled(): void {
@@ -173,31 +159,19 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   expandFull(): void {
-    console.log("BaseExpandPanel.ts:expandFull()");
+    if (!this.isExpanded) {
+      this.toggled();
+    }
 
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    /* var targetWidth: number = this.getFullTargetWidth();
-    var targetLeft: number = this.getFullTargetLeft(); */
+    var targetWidth: number = this.getFullTargetWidth();
+    var targetLeft: number = this.getFullTargetLeft();
 
     this.expandFullStart();
 
     if (isReducedAnimation) {
-      if (!this.isExpanded) {
-        this.toggled();
-      }
-      this.expandFullFinish();
-    } else {
-      setTimeout(() => {
-        if (!this.isExpanded) {
-          this.toggled();
-        }
-        this.expandFullFinish();
-      }, 550);
-    }
-
-    /* if (isReducedAnimation) {
       this.$element.css("width", targetWidth);
       this.$element.css("left", targetLeft);
       this.expandFullFinish();
@@ -212,7 +186,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
           this.expandFullFinish();
         }
       );
-    } */
+    }
   }
 
   collapseFull(): void {
