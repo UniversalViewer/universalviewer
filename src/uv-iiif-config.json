@@ -60,9 +60,9 @@
       }
     },
     "contentLeftPanel": {
-        "options": {
-            "panelAnimationDuration": 300
-        }
+      "options": {
+        "panelAnimationDuration": 300
+      }
     }
   }
 }

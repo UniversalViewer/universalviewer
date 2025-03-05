@@ -103,9 +103,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
     if (this.options.panelAnimationDuration) {
-      document.documentElement.style.setProperty('--uv-animation-duration', `${this.options.panelAnimationDuration}ms`);
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration}ms`
+      );
     }
 
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
@@ -120,14 +126,20 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     let timeout = 0;
     if (!isReducedAnimation) {
-      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
     }
 
     setTimeout(() => {
       this.toggled();
 
       if (oldAnimationDuration) {
-        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
       }
     }, timeout);
   }
@@ -153,9 +165,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
     if (this.options.panelAnimationDuration) {
-      document.documentElement.style.setProperty('--uv-animation-duration', `${(this.options.panelAnimationDuration * 2)}ms`);
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration * 2}ms`
+      );
     }
 
     this.expandFullStart();
@@ -163,7 +181,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     let timeout = 0;
 
     if (!isReducedAnimation) {
-      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
 
       // double it because it's the full expand
       timeout = timeout * 2;
@@ -176,7 +197,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.expandFullFinish();
 
       if (oldAnimationDuration) {
-        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
       }
     }, timeout);
   }
@@ -185,9 +209,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
     if (this.options.panelAnimationDuration) {
-      document.documentElement.style.setProperty('--uv-animation-duration', `${(this.options.panelAnimationDuration * 2)}ms`);
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration * 2}ms`
+      );
     }
 
     this.collapseFullStart();
@@ -197,7 +227,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     // if we're not reducing animation then set the correct timeout
     if (!isReducedAnimation) {
-      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
 
       // double duration for full size anims
       timeout = timeout * 2;
@@ -207,7 +240,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.collapseFullFinish();
 
       if (oldAnimationDuration) {
-        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
       }
     }, timeout);
   }
@@ -278,8 +314,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   resize(): void {
     super.resize();
 
-    this.$main.height(
-      this.$element.height() - this.$top.outerHeight(true)
-    );
+    this.$main.height(this.$element.height() - this.$top.outerHeight(true));
   }
 }

@@ -78,7 +78,7 @@ export class LeftPanel<
 
   expandFull(): void {
     this.$element.parent().addClass("leftPanelOpenFull");
-    this.$element.addClass('open');
+    this.$element.addClass("open");
     super.expandFull();
   }
 
