@@ -13,8 +13,6 @@ export class LeftPanel<
   create(): void {
     super.create();
 
-    this.$element.width(this.options.panelCollapsedWidth);
-
     this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
       if (this.isFullyExpanded) {
         this.collapseFull();
@@ -79,15 +77,12 @@ export class LeftPanel<
   }
 
   expandFull(): void {
-    console.log("LeftPanel.ts:expandFull()");
-
     this.$element.parent().addClass("leftPanelOpenFull");
+    this.$element.addClass('open');
     super.expandFull();
   }
 
   collapseFull(): void {
-    console.log("LeftPanel.ts:collapseFull()");
-
     this.$element.parent().removeClass("leftPanelOpenFull");
 
     // need this because 'closing' full width shouldn't actually do that

@@ -10,7 +10,6 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   create(): void {
     super.create();
-    this.$element.width(this.options.panelCollapsedWidth);
   }
 
   init(): void {
@@ -63,12 +62,6 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   resize(): void {
     super.resize();
-
-    this.$element.css({
-      left: Math.floor(
-        this.$element.parent().width() - this.$element.outerWidth()
-      ),
-    });
   }
 
   toggle(autoToggled?: boolean): void {

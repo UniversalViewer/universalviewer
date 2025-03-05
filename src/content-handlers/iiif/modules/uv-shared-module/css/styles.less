@@ -19,9 +19,6 @@
 @import 'xl';
 
 :root {
-    // TODO: set these at runtime in html element style attr by getting from config?
-    --uv-animation: 1;
-
     --uv-grid-left-width-open: 271px;
     --uv-grid-right-width-open: 271px;
 
@@ -114,7 +111,6 @@
     .mainPanel {
         margin: 0;
         padding: 0;
-        
         overflow: hidden;
 
         .md-mediaquery({
@@ -126,7 +122,9 @@
                 [right] var(--uv-grid-right-width);
             grid-template-areas: "left center right";
 
-            transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+            transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
         });
     }
 
@@ -143,7 +141,9 @@
         --uv-grid-main-width: 0;
         --uv-grid-right-width: 0;
 
-        transition-duration: calc(var(--uv-animation) * 500ms);
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+        transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
     }
 
     .centerPanel {
@@ -152,8 +152,8 @@
     }
 
     .centerPanel {
-        width: 100% !important;
-        left: auto !important;
+        width: 100%;
+        left: auto;
 
         .md-mediaquery({
             z-index: 15;
@@ -178,13 +178,15 @@
         z-index: 20;
         // display: none;
         
-        transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+        transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
 
         position: absolute;
-        top: 2em !important;
-        right: 0em !important;
-        bottom: 2em !important;
-        left: 0em !important;
+        top: 3em;
+        right: 0em;
+        bottom: 2em;
+        left: 0em;
 
         width: auto !important;
         height: auto !important;
@@ -199,7 +201,7 @@
             left: 0rem !important;
         });
 
-        /* .top {
+        .top {
             display: none;
         }
         .closed {
@@ -207,12 +209,12 @@
         }
         .main {
             display: none;
-        } */
+        }
 
         &.open {
             display: block;
 
-            /* .top {
+            .top {
                 display: block;
             }
             .closed {
@@ -220,7 +222,7 @@
             }
             .main {
                 display: block;
-            } */
+            }
         }
     }
 
@@ -235,7 +237,7 @@
 
     .leftPanel.open {
         left: 0 !important;
-        right: 3em !important;
+        right: 2em !important;
         transform: none;
 
         .md-mediaquery({
@@ -255,12 +257,13 @@
 
     .rightPanel.open {
         right: 0 !important;
-        left: 3em !important;
+        left: 2em !important;
         transform: none;
 
         .md-mediaquery({
             left: initial !important;
             right: initial !important;
+            width: auto !important;
         });
     }
 

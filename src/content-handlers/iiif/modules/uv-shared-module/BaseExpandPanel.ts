@@ -88,9 +88,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         this.toggle();
       }
     });
-
-    this.$top.hide();
-    this.$main.hide();
   }
 
   init(): void {
@@ -106,50 +103,33 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
+    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty('--uv-animation-duration', `${this.options.panelAnimationDuration}ms`);
+    }
+
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
     this.$element.toggleClass("open");
 
-    // if collapsing, hide contents immediately.
     if (this.isExpanded) {
       this.$top.attr("aria-hidden", "true");
       this.$main.attr("aria-hidden", "true");
       this.$closed.attr("aria-hidden", "false");
-      this.$top.hide();
-      this.$main.hide();
-      this.$closed.show();
     }
 
-    // to allow for the css transition to finish
-    // TODO: get this var from config and make sure css uses the same
-    // although make sure it is +50 to allow for lag
-    // and re-introduce the animation check
-    if (isReducedAnimation) {
-      this.toggled();
-    } else {
-      setTimeout(() => {
-        this.toggled();
-      }, 300);
+    let timeout = 0;
+    if (!isReducedAnimation) {
+      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
     }
 
-    /* if (isReducedAnimation) {
-      // This is reduced motion.
-      this.$element.css("width", this.getTargetWidth());
-      this.$element.css("left", this.getTargetLeft());
+    setTimeout(() => {
       this.toggled();
-    } else {
-      // Otherwise animate.
-      this.$element.stop().animate(
-        {
-          width: this.getTargetWidth(),
-          left: this.getTargetLeft(),
-        },
-        this.options.panelAnimationDuration,
-        () => {
-          this.toggled();
-        }
-      );
-    } */
+
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+      }
+    }, timeout);
   }
 
   toggled(): void {
@@ -162,9 +142,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "false");
       this.$main.attr("aria-hidden", "false");
       this.$closed.attr("aria-hidden", "true");
-      this.$closed.hide();
-      this.$top.show();
-      this.$main.show();
     }
 
     this.toggleFinish();
@@ -173,73 +150,66 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   expandFull(): void {
-    console.log("BaseExpandPanel.ts:expandFull()");
-
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    /* var targetWidth: number = this.getFullTargetWidth();
-    var targetLeft: number = this.getFullTargetLeft(); */
+    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty('--uv-animation-duration', `${(this.options.panelAnimationDuration * 2)}ms`);
+    }
 
     this.expandFullStart();
 
-    if (isReducedAnimation) {
+    let timeout = 0;
+
+    if (!isReducedAnimation) {
+      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
+
+      // double it because it's the full expand
+      timeout = timeout * 2;
+    }
+
+    setTimeout(() => {
       if (!this.isExpanded) {
         this.toggled();
       }
       this.expandFullFinish();
-    } else {
-      setTimeout(() => {
-        if (!this.isExpanded) {
-          this.toggled();
-        }
-        this.expandFullFinish();
-      }, 550);
-    }
 
-    /* if (isReducedAnimation) {
-      this.$element.css("width", targetWidth);
-      this.$element.css("left", targetLeft);
-      this.expandFullFinish();
-    } else {
-      this.$element.stop().animate(
-        {
-          width: targetWidth,
-          left: targetLeft,
-        },
-        this.options.panelAnimationDuration,
-        () => {
-          this.expandFullFinish();
-        }
-      );
-    } */
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+      }
+    }, timeout);
   }
 
   collapseFull(): void {
     const settings = this.extension.getSettings();
     let isReducedAnimation = settings.reducedAnimation;
 
-    var targetWidth: number = this.getTargetWidth();
-    var targetLeft: number = this.getTargetLeft();
+    const oldAnimationDuration = document.documentElement.style.getPropertyValue('--uv-animation-duration');
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty('--uv-animation-duration', `${(this.options.panelAnimationDuration * 2)}ms`);
+    }
 
     this.collapseFullStart();
 
-    if (isReducedAnimation) {
-      this.$element.css("width", targetWidth);
-      this.$element.css("left", targetLeft);
-      this.collapseFullFinish();
-    } else {
-      this.$element.stop().animate(
-        {
-          width: targetWidth,
-          left: targetLeft,
-        },
-        this.options.panelAnimationDuration,
-        () => {
-          this.collapseFullFinish();
-        }
-      );
+    // run a timeout either way, zero just means instant(ish)
+    let timeout = 0;
+
+    // if we're not reducing animation then set the correct timeout
+    if (!isReducedAnimation) {
+      timeout = (this.options.panelAnimationDuration ?? settings.animationDuration ?? 250) + 50;
+
+      // double duration for full size anims
+      timeout = timeout * 2;
     }
+
+    setTimeout(() => {
+      this.collapseFullFinish();
+
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty('--uv-animation-duration', `${oldAnimationDuration}`);
+      }
+    }, timeout);
   }
 
   getTargetWidth(): number {
@@ -309,7 +279,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     super.resize();
 
     this.$main.height(
-      this.$element.parent().height() - this.$top.outerHeight(true)
+      this.$element.height() - this.$top.outerHeight(true)
     );
   }
 }

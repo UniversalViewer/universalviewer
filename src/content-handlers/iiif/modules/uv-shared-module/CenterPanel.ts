@@ -229,23 +229,6 @@ export class CenterPanel<
   resize(): void {
     super.resize();
 
-    const leftPanelWidth: number = isVisible(this.extension.shell.$leftPanel)
-      ? Math.floor(this.extension.shell.$leftPanel.width())
-      : 0;
-
-    const rightPanelWidth: number = isVisible(this.extension.shell.$rightPanel)
-      ? Math.floor(this.extension.shell.$rightPanel.width())
-      : 0;
-
-    const width: number = Math.floor(
-      this.$element.parent().width() - leftPanelWidth - rightPanelWidth
-    );
-
-    this.$element.css({
-      left: leftPanelWidth,
-      width: width,
-    });
-
     let titleHeight: number;
     let subtitleHeight: number;
 
