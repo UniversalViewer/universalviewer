@@ -864,13 +864,21 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   resize(): void {
     super.resize();
 
-    this.$tabsContent.height(
-      this.$main.height() -
+    // bit of a race condition happening
+    // timeout gives tabs time to appear and be counted
+    // so the correct height is calc'd
+    setTimeout(() => {
+
+      this.$tabsContent.height(
+        this.$main.height() -
         (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
         this.$tabsContent.verticalPadding()
-    );
-    this.$views.height(
-      this.$tabsContent.height() - this.$options.outerHeight()
-    );
+      );
+
+      this.$views.height(
+        this.$tabsContent.height() - this.$options.outerHeight()
+      );
+
+    }, 1);
   }
 }
