@@ -739,9 +739,11 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     this.resize();
 
     if (this.isFullyExpanded) {
-      this.$thumbsView.hide();
-      if (this.galleryView) this.galleryView.show();
-      if (this.galleryView) this.galleryView.resize();
+      setTimeout(() => {
+        this.$thumbsView.hide();
+        if (this.galleryView) this.galleryView.show();
+        if (this.galleryView) this.galleryView.resize();
+      }, 1);
     } else {
       if (this.galleryView) this.galleryView.hide();
       this.$thumbsView.show();
