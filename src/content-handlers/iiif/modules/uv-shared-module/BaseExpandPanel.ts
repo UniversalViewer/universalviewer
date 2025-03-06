@@ -19,7 +19,11 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   $title: JQuery;
   $top: JQuery;
 
-  constructor($element: JQuery, fitToParentWidth: boolean = false, fitToParentHeight: boolean = true) {
+  constructor(
+    $element: JQuery,
+    fitToParentWidth: boolean = false,
+    fitToParentHeight: boolean = true
+  ) {
     super($element, fitToParentWidth, fitToParentHeight);
   }
 
@@ -135,7 +139,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     setTimeout(() => {
       this.toggled();
 
-      this.$element.toggleClass('open-finished');
+      this.$element.toggleClass("open-finished");
 
       if (oldAnimationDuration) {
         document.documentElement.style.setProperty(
@@ -266,7 +270,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     return 0;
   }
 
-  toggleStart(): void { }
+  toggleStart(): void {}
 
   toggleFinish(): void {
     if (this.isExpanded && !this.autoToggled) {
@@ -276,14 +280,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
   }
 
-  expandFullStart(): void { }
+  expandFullStart(): void {}
 
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
   }
 
-  collapseFullStart(): void { }
+  collapseFullStart(): void {}
 
   collapseFullFinish(): void {
     this.isFullyExpanded = false;
