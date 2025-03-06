@@ -5,7 +5,7 @@ import { Bools } from "@edsilv/utils";
 
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
-    super($element);
+    super($element, false, false);
   }
 
   create(): void {

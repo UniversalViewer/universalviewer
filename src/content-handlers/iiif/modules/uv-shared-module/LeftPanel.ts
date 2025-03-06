@@ -7,7 +7,7 @@ export class LeftPanel<
   T extends BaseConfig["modules"]["leftPanel"]
 > extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
-    super($element);
+    super($element, false, false);
   }
 
   create(): void {
