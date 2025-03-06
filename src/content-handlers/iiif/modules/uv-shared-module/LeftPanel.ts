@@ -62,7 +62,7 @@ export class LeftPanel<
     super.resize();
 
     if (this.isFullyExpanded) {
-      this.$element.width(this.$element.parent().width());
+      //this.$element.width(this.$element.parent().width());
     }
   }
 
