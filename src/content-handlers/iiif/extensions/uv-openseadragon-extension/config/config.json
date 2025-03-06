@@ -298,7 +298,7 @@
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
-        "helpEnabled": true,
+        "helpEnabled": false,
         "helpUrl": "https://universalviewer.io/",
         "modeOptionsEnabled": true
       },
