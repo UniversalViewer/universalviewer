@@ -135,7 +135,8 @@ export class CenterPanel<
   }
 
   closeAttribution(explicitlyClosed: boolean = false): void {
-    this.attributionExplicitlyClosed = this.attributionExplicitlyClosed || explicitlyClosed;
+    this.attributionExplicitlyClosed =
+      this.attributionExplicitlyClosed || explicitlyClosed;
     this.$attribution.hide();
     this.isAttributionOpen = false;
   }
