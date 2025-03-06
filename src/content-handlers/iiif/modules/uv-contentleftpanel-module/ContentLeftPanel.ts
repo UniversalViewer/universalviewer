@@ -118,13 +118,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     });
 
     this.extensionHost.subscribe(IIIFEvents.TREE_NODE_SELECTED, () => {
-      if (this.extension.isMobileMetric()) {
+      if (this.extension.isMetric('sm')) {
         this.toggle(true)
       }
     })
 
     this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, () => {
-      if (this.extension.isMobileMetric()) {
+      if (this.extension.isMetric('sm')) {
         this.toggle(true)
       }
     })

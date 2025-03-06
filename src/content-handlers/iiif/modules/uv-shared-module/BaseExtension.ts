@@ -101,6 +101,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.$element.data("component", this.extensionHost);
 
     this._parseMetrics();
+    this._updateMetric();
     this._initLocales();
 
     // add/remove classes.
@@ -669,7 +670,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _updateMetric(): void {
-    setTimeout(() => {
       // loop through all metrics
       // find one that matches the current dimensions
       // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
@@ -692,7 +692,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
           break;
         }
       }
-    }, 1);
   }
 
   resize(): void {
@@ -1024,6 +1023,10 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return this.metric === "sm" || this.metric === "md";
   }
 
+  isMetric(metric: string): boolean {
+    return this.metric === metric && ['sm', 'md', 'lg', 'xl'].includes(metric);
+  }
+  
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData<T> = <IUVData<T>>{};
