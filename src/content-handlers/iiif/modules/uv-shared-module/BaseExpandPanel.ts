@@ -139,8 +139,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     setTimeout(() => {
       this.toggled();
 
-      this.$element.toggleClass("open-finished");
-
       if (oldAnimationDuration) {
         document.documentElement.style.setProperty(
           "--uv-animation-duration",
@@ -161,6 +159,8 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$main.attr("aria-hidden", "false");
       this.$closed.attr("aria-hidden", "true");
     }
+
+    this.$element.toggleClass("open-finished");
 
     this.toggleFinish();
 
