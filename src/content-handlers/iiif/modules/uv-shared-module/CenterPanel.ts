@@ -127,6 +127,7 @@ export class CenterPanel<
   }
 
   openAttribution(): void {
+    // If the user explicitly closed the box, don't reopen it:
     if (this.attributionExplicitlyClosed) {
       return;
     }
@@ -135,6 +136,8 @@ export class CenterPanel<
   }
 
   closeAttribution(explicitlyClosed: boolean = false): void {
+    // If the user explicitly closes the box once, remember that state; this
+    // will get reset in the viewer reload when a different manifest is loaded.
     this.attributionExplicitlyClosed =
       this.attributionExplicitlyClosed || explicitlyClosed;
     this.$attribution.hide();
