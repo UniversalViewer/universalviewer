@@ -237,7 +237,7 @@
         "truncateThumbnailLabels": "Truncate Thumbnail Labels",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "website": "$uvWebsite"
       }
     },
     "shareDialogue": {

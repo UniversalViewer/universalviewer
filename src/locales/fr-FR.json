@@ -120,7 +120,7 @@
   "$reducedMotion": "Réduire le mouvement (désactive les animations)",
   "$truncateThumbnailLabels": "Tronquer les onglets",
   "$preserveViewport": "Conserver le zoom",
-  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer>En savoir + sur le Universal Viewer</a>",
+  "$uvWebsite": "<a href='https://github.com/UniversalViewer/universalviewer/wiki/About>En savoir + sur le Universal Viewer</a>",
   "$custom": "personnalisée",
   "$embedInstructions": "Pour afficher ce contenu sur votre site internet, copier-collez le code ci-dessous.",
   "$height": "Hauteur",
