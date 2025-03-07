@@ -22,6 +22,7 @@ export class CenterPanel<
   $subtitleExpand: JQuery;
   $subtitleText: JQuery;
   isAttributionOpen: boolean = false;
+  attributionExplicitlyClosed: boolean = false;
   attributionPosition: Position = Position.BOTTOM_LEFT;
   isAttributionLoaded: boolean = false;
 
@@ -79,7 +80,7 @@ export class CenterPanel<
     );
     this.$closeAttributionButton.on("click", (e) => {
       e.preventDefault();
-      this.closeAttribution();
+      this.closeAttribution(true);
     });
 
     this.$subtitleExpand.on("click", (e) => {
@@ -126,11 +127,19 @@ export class CenterPanel<
   }
 
   openAttribution(): void {
+    // If the user explicitly closed the box, don't reopen it:
+    if (this.attributionExplicitlyClosed) {
+      return;
+    }
     this.$attribution.show();
     this.isAttributionOpen = true;
   }
 
-  closeAttribution(): void {
+  closeAttribution(explicitlyClosed: boolean = false): void {
+    // If the user explicitly closes the box once, remember that state; this
+    // will get reset in the viewer reload when a different manifest is loaded.
+    this.attributionExplicitlyClosed =
+      this.attributionExplicitlyClosed || explicitlyClosed;
     this.$attribution.hide();
     this.isAttributionOpen = false;
   }
