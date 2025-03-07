@@ -17,6 +17,10 @@ export class FooterPanel<
   $openButton: JQuery;
   $fullScreenBtn: JQuery;
   $options: JQuery;
+  $toggleLeftPanelButton: JQuery;
+  $mainOptions: JQuery;
+  $leftOptions: JQuery;
+  $rightOptions: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -50,13 +54,22 @@ export class FooterPanel<
     this.$options = $('<div class="options"></div>');
     this.$element.append(this.$options);
 
+    this.$leftOptions = $('<div class="left-options"></div>');
+    this.$options.prepend(this.$leftOptions);
+
+    this.$mainOptions = $('<div class="main-options"></div>');
+    this.$options.append(this.$mainOptions);
+
+    this.$rightOptions = $('<div class="right-options"></div>');
+    this.$options.append(this.$rightOptions);
+
     this.$feedbackButton = $(`
           <button class="feedback btn imageBtn" title="${this.content.feedback}">
             <i class="uv-icon uv-icon-feedback" aria-hidden="true"></i>
             <span class="sr-only">${this.content.feedback}</span>
           </button>
         `);
-    this.$options.prepend(this.$feedbackButton);
+    this.$mainOptions.prepend(this.$feedbackButton);
 
     this.$openButton = $(`
           <button class="open btn imageBtn" title="${this.content.open}">
@@ -64,7 +77,7 @@ export class FooterPanel<
             <span class="sr-only">${this.content.open}</span>
           </button>
         `);
-    this.$options.prepend(this.$openButton);
+    this.$mainOptions.prepend(this.$openButton);
 
     this.$bookmarkButton = $(`
           <button class="bookmark btn imageBtn" title="${this.content.bookmark}">
@@ -72,7 +85,7 @@ export class FooterPanel<
             <span class="sr-only">${this.content.bookmark}</span>
           </button>
         `);
-    this.$options.prepend(this.$bookmarkButton);
+    this.$mainOptions.prepend(this.$bookmarkButton);
 
     this.$shareButton = $(`
           <button class="share btn imageBtn" title="${this.content.share}">
@@ -80,7 +93,7 @@ export class FooterPanel<
             <span class="sr-only">${this.content.share}</span>
           </button>
         `);
-    this.$options.append(this.$shareButton);
+    this.$mainOptions.append(this.$shareButton);
 
     this.$embedButton = $(`
           <button class="embed btn imageBtn" title="${this.content.embed}">
@@ -88,7 +101,7 @@ export class FooterPanel<
             <span class="sr-only">${this.content.embed}</span>
           </button>
         `);
-    this.$options.append(this.$embedButton);
+    this.$mainOptions.append(this.$embedButton);
 
     this.$downloadButton = $(`
           <button class="download btn imageBtn" title="${this.content.download}" id="download-btn">
@@ -96,15 +109,7 @@ export class FooterPanel<
             <span class="sr-only">${this.content.download}</span>
           </button>
         `);
-    this.$options.prepend(this.$downloadButton);
-
-    this.$moreInfoButton = $(`
-          <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}">
-            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
-            <span class="sr-only">${this.content.moreInfo}</span>
-          </button>
-        `);
-    this.$options.prepend(this.$moreInfoButton);
+    this.$mainOptions.prepend(this.$downloadButton);
 
     this.$fullScreenBtn = $(`
           <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}">
@@ -112,7 +117,23 @@ export class FooterPanel<
             <span class="sr-only">${this.content.fullScreen}</span>
           </button>
         `);
-    this.$options.append(this.$fullScreenBtn);
+    this.$mainOptions.append(this.$fullScreenBtn);
+
+    this.$moreInfoButton = $(`
+      <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}">
+        <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.moreInfo}</span>
+      </button>
+    `);
+    this.$rightOptions.append(this.$moreInfoButton);
+
+    this.$toggleLeftPanelButton = $(`
+      <button class="toggleLeftPanelButton btn imageBtn" title="${this.content.toggleLeftPanel}">
+        <i class="uv-icon uv-icon-toggle-left-panel" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.toggleLeftPanel}</span>
+      </button>
+    `);
+    this.$leftOptions.append(this.$toggleLeftPanelButton);
 
     this.$openButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.OPEN);
@@ -149,7 +170,14 @@ export class FooterPanel<
 
     this.$moreInfoButton.onPressed(() => {
       this.extensionHost.publish(
-        IIIFEvents.TOGGLE_MOREINFO_RIGHT_PANEL,
+        IIIFEvents.TOGGLE_RIGHT_PANEL,
+        this.$moreInfoButton
+      );
+    });
+
+    this.$toggleLeftPanelButton.onPressed(() => {
+      this.extensionHost.publish(
+        IIIFEvents.TOGGLE_LEFT_PANEL,
         this.$moreInfoButton
       );
     });

@@ -42,6 +42,7 @@
   "$feedback": "Commentaire",
   "$fullScreen": "Affichage en plein écran",
   "$moreInfo": "Informations",
+  "$toggleLeftPanel": "Toggle Left Panel",
   "$open": "Ouvrir",
   "$share": "Partager",
   "$emptyValue": "veuillez saisir une valeur.",

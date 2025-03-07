@@ -33,7 +33,7 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
       }
     });
 
-    this.extensionHost.subscribe(IIIFEvents.TOGGLE_MOREINFO_RIGHT_PANEL, () => {
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_RIGHT_PANEL, () => {
       this.toggle();
     });
   }

@@ -42,6 +42,7 @@
   "$feedback": "Feedback",
   "$fullScreen": "Helskärm",
   "$moreInfo": "Mer information",
+  "$toggleLeftPanel": "Toggle Left Panel",
   "$open": "Öppna",
   "$share": "Dela",
   "$emptyValue": "ange ett värde.",

@@ -198,6 +198,7 @@ type MobileFooterPanelOptions = FooterPanelOptions & {};
 type MobileFooterPanelContent = FooterPanelContent & {
   rotateRight: string;
   moreInfo: string;
+  toggleLeftPanel: string;
   zoomIn: string;
   zoomOut: string;
 };

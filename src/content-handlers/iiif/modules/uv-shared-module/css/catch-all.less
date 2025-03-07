@@ -31,6 +31,12 @@
             /*width: 315px;*/
             height: 42px;
 
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
             .spacer {
                 float: left;
                 width: 30px;
@@ -45,6 +51,10 @@
               	font-size: 0;
 
                 &.moreInfo {
+                    display: inline-block;
+                }
+
+                &.toggleLeftPanelButton {
                     display: inline-block;
                 }
 

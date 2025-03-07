@@ -199,6 +199,7 @@ export type FooterPanelContent = {
   feedback: string;
   fullScreen: string;
   moreInfo: string;
+  toggleLeftPanel: string;
   open: string;
   share: string;
 };

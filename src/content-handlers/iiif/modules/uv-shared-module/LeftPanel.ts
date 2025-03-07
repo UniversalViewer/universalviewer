@@ -35,6 +35,10 @@ export class LeftPanel<
     if (shouldOpenPanel) {
       this.toggle(true);
     }
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_LEFT_PANEL, () => {
+      this.toggle();
+    });
   }
 
   getTargetWidth(): number {
