@@ -1,7 +1,7 @@
+import { Bools } from "@edsilv/utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
-import { Bools } from "@edsilv/utils";
 
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
@@ -62,5 +62,19 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   resize(): void {
     super.resize();
+  }
+
+  toggle(autoToggled?: boolean): void {
+    if (this.isExpanded) {
+      this.$element.parent().removeClass("rightPanelOpen");
+    } else {
+      this.$element.parent().addClass("rightPanelOpen");
+    }
+
+    super.toggle(autoToggled);
+  }
+
+  expandFull(): void {
+    super.expandFull();
   }
 }
