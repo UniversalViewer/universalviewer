@@ -203,11 +203,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       }
     );
 
-    this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-      this.shell.$centerPanel.hide();
-      this.shell.$rightPanel.hide();
-    });
-
     this.extensionHost.subscribe(IIIFEvents.MINUS, () => {
       this.centerPanel.setFocus();
     });
