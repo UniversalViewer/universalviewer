@@ -171,10 +171,6 @@
         border: @panel-border;
     }
 
-    .centerPanel {
-        position: absolute;
-    }
-
     .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
@@ -237,7 +233,7 @@
     }
 
     .leftPanel {
-        transform: translateX(calc(-100% + 30px));
+        transform: translateX(calc(-100% + 1px));
 
         .md-mediaquery({
             grid-area: left;
@@ -258,7 +254,7 @@
     }
 
     .rightPanel {
-        transform: translateX(calc(100% - 30px));
+        transform: translateX(calc(100% - 1px));
         
         .md-mediaquery({
             grid-area: right;
