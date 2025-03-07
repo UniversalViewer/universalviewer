@@ -53,8 +53,6 @@ type PagingHeaderPanelOptions = HeaderPanelOptions & {
   autoCompleteBoxEnabled: boolean;
   /** Determines if gallery button is enabled */
   galleryButtonEnabled: boolean;
-  /** Determines if help is enabled */
-  helpEnabled: boolean;
   /** Determines if image selection box is enabled */
   imageSelectionBoxEnabled: boolean;
   /** Determines if mode options is enabled */
