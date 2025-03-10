@@ -87,7 +87,7 @@ export class ShareDialogue<
     // Share URL
 
     this.$urlSection = $(
-      `<div class="share__section"><label class="share__label" for="embedCode">${this.content.share}</label></div>`
+      `<div class="share__section"><label class="share__label" for="embedCode">${this.content.shareLink}</label></div>`
     );
 
     const shareUrl = this.getShareUrl();

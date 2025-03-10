@@ -272,6 +272,7 @@ export type ShareDialogueContent = DialogueContent & {
   height: string;
   iiif: string;
   share: string;
+  shareLink: string;
   shareInstructions: string;
   size: string;
   width: string;

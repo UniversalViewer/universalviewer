@@ -126,6 +126,7 @@
   "$embedInstructions": "To embed this item in your own website, copy and paste the code below.",
   "$height": "Height",
   "$iiifManifest": "IIIF Manifest",
+  "$shareLink": "Link to this Page",
   "$shareInstructions": "To share this item, copy the URL below.",
   "$size": "Size:",
   "$width": "Width",
