@@ -526,7 +526,9 @@
         "moreInfoEnabled": true,
         "openEnabled": false,
         "printEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": true,
+        "helpEnabled": true,
+        "helpUrl": "https://universalviewer.io/"
       },
       "content": {
         "rotateRight": "$rotateRight",
@@ -540,7 +542,8 @@
         "feedback": "$feedback",
         "fullScreen": "$fullScreen",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "help": "$help"
       }
     },
     "restrictedDialogue": {
