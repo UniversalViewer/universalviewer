@@ -310,6 +310,7 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareLink": "$shareLink",
         "size": "$size",
         "width": "$width",
         "shareUrl": "$shareUrl"

@@ -467,6 +467,7 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareLink": "$shareLink",
         "shareUrl": "$shareUrl",
         "size": "$size",
         "width": "$width"
