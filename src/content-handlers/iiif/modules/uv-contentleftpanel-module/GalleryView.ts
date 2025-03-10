@@ -10,8 +10,10 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
   galleryData: any;
   $gallery: JQuery;
 
-  constructor($element: JQuery) {
-    super($element, true, true);
+  constructor($element: JQuery,
+    fitToParentWidth: boolean = true,
+    fitToParentHeight: boolean = true) {
+    super($element, fitToParentWidth, fitToParentHeight);
   }
 
   create(): void {
