@@ -1049,11 +1049,11 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return this.metric === "sm" || this.metric === "md";
   }
 
-  isMetric(metric: string | string[]) {
+  isMetric(metric: string | string[]): boolean {
     if (typeof metric === 'string') {
       return this.metric === metric;
     }
-    
+
     return metric.some(item => this.metric === item);
   }
   
