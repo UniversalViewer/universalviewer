@@ -298,7 +298,6 @@ export class ShareDialogue<
       this.$heightInput.val(String(this.currentHeight));
     }
 
-    this.updateInstructions();
     this.updateShareOptions();
     this.updateTermsOfUseButton();
   }
@@ -316,33 +315,6 @@ export class ShareDialogue<
       this.$urlInput.show();
     }
   }
-
-  updateInstructions(): void {
-    // if (Bools.getBool(this.options.instructionsEnabled, false)) {
-    //   this.$shareHeader.show();
-    //   this.$embedHeader.show();
-    //   this.$shareHeader.text(this.content.shareInstructions);
-    //   this.$embedHeader.text(this.content.embedInstructions);
-    // } else {
-    //   this.$shareHeader.hide();
-    //   this.$embedHeader.hide();
-    // }
-  }
-
-  // updateThumbnail(): void {
-  //     var canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
-
-  //     if (!canvas) return;
-
-  //     var thumbnail = canvas.getProperty('thumbnail');
-
-  //     if (!thumbnail || !_.isString(thumbnail)){
-  //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config!.options.bookmarkThumbWidth);
-  //     }
-
-  //     this.$link.attr('href', thumbnail);
-  //     this.$image.attr('src', thumbnail);
-  // }
 
   getSelectedSize(): JQuery {
     return this.$customSizeDropDown.find(":selected");
