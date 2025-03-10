@@ -59,7 +59,7 @@ export class FooterPanel extends BaseFooterPanel<
     }
 
     this.$helpButton.onPressed(() => {
-      window.open(this.options.helpUrl); 
+      window.open(this.options.helpUrl);
     });
 
     this.$zoomInButton.onPressed(() => {
