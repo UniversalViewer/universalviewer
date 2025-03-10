@@ -18,17 +18,6 @@
 @import 'lg';
 @import 'xl';
 
-:root {
-    // TODO: set these at runtime in html element style attr by getting from config?
-    --uv-animation: 1;
-
-    --uv-grid-left-width-open: 271px;
-    --uv-grid-right-width-open: 271px;
-
-    --uv-grid-left-width: 30px;
-    --uv-grid-main-width: minmax(0, 1fr);
-    --uv-grid-right-width: 30px;
-}
 
 .hidden {
     .hidden();
@@ -111,157 +100,20 @@
         background: @body-bg; // important, otherwise you see two spinners
     }
 
-    .mainPanel {
-        margin: 0;
-        padding: 0;
-        
-        overflow: hidden;
-
-        .md-mediaquery({
-            padding: 0.5rem;
-            display: grid;
-            grid-template-columns: 
-                [left] var(--uv-grid-left-width) 
-                [center] var(--uv-grid-main-width)
-                [right] var(--uv-grid-right-width);
-            grid-template-areas: "left center right";
-
-            transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
-        });
-    }
-
-    .mainPanel.leftPanelOpen {
-        --uv-grid-left-width: var(--uv-grid-left-width-open);
-    }
-
-    .mainPanel.rightPanelOpen {
-        --uv-grid-right-width: var(--uv-grid-right-width-open);
-    }
-
-    .mainPanel.leftPanelOpenFull {
-        --uv-grid-left-width: 100%;
-        --uv-grid-main-width: 0;
-        --uv-grid-right-width: 0;
-
-        transition-duration: calc(var(--uv-animation) * 500ms);
-    }
-
-    .centerPanel {
-        position: absolute;
-        overflow: hidden;
-    }
-
-    .centerPanel {
-        width: 100% !important;
-        left: auto !important;
-
-        .md-mediaquery({
-            z-index: 15;
-            grid-area: center;
-        });
-    }
-
     .leftPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
     }
 
+    .centerPanel {
+        position: absolute;
+    }
+
     .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
-    }
-
-    .leftPanel, .rightPanel {
-        overflow: hidden;
-        z-index: 20;
-        /* display: none; */
-        
-        transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
-
-        position: absolute;
-        top: 2em !important;
-        right: 0em !important;
-        bottom: 2em !important;
-        left: 0em !important;
-
-        width: auto !important;
-        height: auto !important;
-
-        .md-mediaquery({
-            display: block !important;
-            position: relative;
-
-            top: 0rem !important;
-            right: 0rem !important;
-            bottom: 0rem !important;
-            left: 0rem !important;
-        });
-
-        /* .top {
-            display: none;
-        }
-        .closed {
-            display: block;
-        }
-        .main {
-            display: none;
-        } */
-
-        &.open {
-            display: block;
-
-            /* .top {
-                display: block;
-            }
-            .closed {
-                display: none;
-            }
-            .main {
-                display: block;
-            } */
-        }
-    }
-
-    .leftPanel {
-        transform: translateX(calc(-100% + 30px));
-
-        .md-mediaquery({
-            grid-area: left;
-            transform: none;
-        });
-    }
-
-    .leftPanel.open {
-        left: 0 !important;
-        right: 3em !important;
-        transform: none;
-
-        .md-mediaquery({
-            left: initial !important;
-            right: initial !important;
-        });
-    }
-
-    .rightPanel {
-        transform: translateX(calc(100% - 30px));
-        
-        .md-mediaquery({
-            grid-area: right;
-            transform: none;
-        });
-    }
-
-    .rightPanel.open {
-        right: 0 !important;
-        left: 3em !important;
-        transform: none;
-
-        .md-mediaquery({
-            left: initial !important;
-            right: initial !important;
-        });
     }
 
     .footerPanel {

@@ -121,7 +121,7 @@
   "$reducedMotion": "Lleihau symudiad (analluogi animeiddiadau)",
   "$truncateThumbnailLabels": "Cwtogi labeli bodluniau",
   "$preserveViewport": "Cadw'r lefel o glosio",
-  "$uvWebsite": "<a href='https://github.com/universalviewer/universalviewer'>Mwy o wybodaeth am y Universal Viewer</a>",
+  "$uvWebsite": "<a href='https://github.com/UniversalViewer/universalviewer/wiki/About'>Mwy o wybodaeth am y Universal Viewer</a>",
   "$custom": "dewisol",
   "$embedInstructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop\u00efwch a gosodwch y cod isod.",
   "$height": "Hyd",

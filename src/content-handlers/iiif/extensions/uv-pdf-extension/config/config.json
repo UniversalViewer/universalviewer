@@ -108,7 +108,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -272,7 +273,9 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "emptyValue": "$pleaseEnterValue",
@@ -284,7 +287,8 @@
         "previous": "$previous",
         "pageSearchLabel": "$searchByPageNumber",
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "shareDialogue": {
