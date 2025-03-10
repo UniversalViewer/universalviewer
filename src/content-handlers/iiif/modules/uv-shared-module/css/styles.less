@@ -18,17 +18,6 @@
 @import 'lg';
 @import 'xl';
 
-:root {
-    // TODO: set these at runtime in html element style attr by getting from config?
-    --uv-animation: 1;
-
-    --uv-grid-left-width-open: 271px;
-    --uv-grid-right-width-open: 271px;
-
-    --uv-grid-left-width: 30px;
-    --uv-grid-main-width: minmax(0, 1fr);
-    --uv-grid-right-width: 30px;
-}
 
 .hidden {
     .hidden();
@@ -111,60 +100,14 @@
         background: @body-bg; // important, otherwise you see two spinners
     }
 
-    .mainPanel {
-        margin: 0;
-        padding: 0;
-        
-        overflow: hidden;
-
-        .md-mediaquery({
-            padding: 0.5rem;
-            display: grid;
-            grid-template-columns: 
-                [left] var(--uv-grid-left-width) 
-                [center] var(--uv-grid-main-width)
-                [right] var(--uv-grid-right-width);
-            grid-template-areas: "left center right";
-
-            transition:all calc(var(--uv-animation) * 250ms) ease-in-out;
-        });
-    }
-
-    .mainPanel.leftPanelOpen {
-        --uv-grid-left-width: var(--uv-grid-left-width-open);
-    }
-
-    .mainPanel.rightPanelOpen {
-        --uv-grid-right-width: var(--uv-grid-right-width-open);
-    }
-
-    .mainPanel.leftPanelOpenFull {
-        --uv-grid-left-width: 100%;
-        --uv-grid-main-width: 0;
-        --uv-grid-right-width: 0;
-
-        transition-duration: calc(var(--uv-animation) * 500ms);
-    }
-
-    .centerPanel {
-        position: absolute;
-        overflow: hidden;
-    }
-
-    .centerPanel {
-        width: 100% !important;
-        left: auto !important;
-
-        .md-mediaquery({
-            z-index: 15;
-            grid-area: center;
-        });
-    }
-
     .leftPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
+    }
+
+    .centerPanel {
+        position: absolute;
     }
 
     .rightPanel {
