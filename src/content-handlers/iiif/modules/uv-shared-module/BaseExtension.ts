@@ -101,6 +101,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.$element.data("component", this.extensionHost);
 
     this._parseMetrics();
+    this._updateMetric();
     this._initLocales();
 
     // add/remove classes.
@@ -669,30 +670,28 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _updateMetric(): void {
-    setTimeout(() => {
-      // loop through all metrics
-      // find one that matches the current dimensions
-      // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
+    // loop through all metrics
+    // find one that matches the current dimensions
+    // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
 
-      for (let i = this.metrics.length - 1; i >= 0; i--) {
-        const metric: Metric = this.metrics[i];
+    for (let i = this.metrics.length - 1; i >= 0; i--) {
+      const metric: Metric = this.metrics[i];
 
-        const width: number = window.innerWidth;
+      const width: number = window.innerWidth;
 
-        if (width >= metric.minWidth) {
-          if (this.metric !== metric.type) {
-            this.metric = metric.type;
-            // remove current metric class
-            for (var j = 0; j < this.metrics.length; j++) {
-              this.$element.removeClass(this.metrics[j].type);
-            }
-            this.$element.addClass(metric.type);
-            this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
+      if (width >= metric.minWidth) {
+        if (this.metric !== metric.type) {
+          this.metric = metric.type;
+          // remove current metric class
+          for (var j = 0; j < this.metrics.length; j++) {
+            this.$element.removeClass(this.metrics[j].type);
           }
-          break;
+          this.$element.addClass(metric.type);
+          this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
         }
+        break;
       }
-    }, 1);
+    }
   }
 
   resize(): void {
@@ -1050,6 +1049,14 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return this.metric === "sm" || this.metric === "md";
   }
 
+  isMetric(metric: string | string[]): boolean {
+    if (typeof metric === 'string') {
+      return this.metric === metric;
+    }
+
+    return metric.some(item => this.metric === item);
+  }
+  
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData<T> = <IUVData<T>>{};
