@@ -191,13 +191,17 @@ type SearchFooterPanel = ModuleConfig & {
   content: SearchFooterPanelContent;
 };
 
-type MobileFooterPanelOptions = FooterPanelOptions & {};
+type MobileFooterPanelOptions = FooterPanelOptions & {
+  helpEnabled: boolean;
+  helpUrl: string;
+};
 
 type MobileFooterPanelContent = FooterPanelContent & {
   rotateRight: string;
   moreInfo: string;
   zoomIn: string;
   zoomOut: string;
+  help: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {
