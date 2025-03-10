@@ -33,7 +33,7 @@ export class ShareDialogue<
 
   $termsOfUseButton: JQuery;
 
-  aspectRatio = 1.0;
+  aspectRatio = 0.75;
   currentHeight: number;
   currentWidth: number;
   maxWidth = 8000;
