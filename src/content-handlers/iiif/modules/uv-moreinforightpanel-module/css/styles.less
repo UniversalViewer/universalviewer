@@ -47,19 +47,25 @@
               text-transform: uppercase;
             }
 
+            .label {
+              color: @text-muted;
+              border-bottom: 1px solid @panel-border-color;
+            }
+
             .value {
               color: @text-color;
             }
           }
         }
 
+        .items .item a.toggle,
         [data-uv-navigate] {
-          color: @link-secondary-color;
+          color: @link-color;
           cursor: pointer;
 
           &:hover {
             text-decoration: underline;
-            color: @link-secondary-hover-color;
+            color: @link-hover-color;
           }
         }
       }
