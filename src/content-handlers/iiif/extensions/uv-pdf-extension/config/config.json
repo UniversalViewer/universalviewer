@@ -300,10 +300,13 @@
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "$custom",
         "embed": "$embed",
         "embedInstructions": "$embedInstructions",
@@ -311,6 +314,7 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareLink": "$shareLink",
         "size": "$size",
         "width": "$width",
         "shareUrl": "$shareUrl"
