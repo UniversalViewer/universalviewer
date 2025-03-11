@@ -1,7 +1,7 @@
+import { Bools } from "@edsilv/utils";
 import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
-import { Bools } from "@edsilv/utils";
 
 export class LeftPanel<
   T extends BaseConfig["modules"]["leftPanel"]
@@ -60,6 +60,8 @@ export class LeftPanel<
       this.extensionHost.publish(IIIFEvents.CLOSE_LEFT_PANEL);
     }
     this.extension.updateSettings({ leftPanelOpen: this.isExpanded });
+
+    this.$element.toggleClass("open-finished");
   }
 
   resize(): void {

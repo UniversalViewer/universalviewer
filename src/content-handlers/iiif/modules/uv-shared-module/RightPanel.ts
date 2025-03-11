@@ -58,6 +58,13 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
       this.extensionHost.publish(IIIFEvents.CLOSE_RIGHT_PANEL);
     }
     this.extension.updateSettings({ rightPanelOpen: this.isExpanded });
+
+    // there's a strange rendering issue due to the right panel being transformed by 100% to the right
+    // for some reason a 100ms timeout on removing open-finished solves the problem
+    // this can't be in the base panel class or the timeout interferes with test running even though it works fine
+    setTimeout(() => {
+      this.$element.toggleClass("open-finished");
+    }, 100);
   }
 
   resize(): void {

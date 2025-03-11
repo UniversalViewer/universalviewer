@@ -160,12 +160,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.attr("aria-hidden", "true");
     }
 
-    /* // this timeout is to resolve an unknown rendering issue (in chrome at least)
-    // where the panel doesn't position correctly
-    setTimeout(() => { */
-    this.$element.toggleClass("open-finished");
-    /* }, 100); */
-
     this.toggleFinish();
 
     this.isUnopened = false;
