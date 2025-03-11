@@ -12,31 +12,22 @@ if (!['checkLocaleUsage', 'compareLocales'].includes(runType)) {
 const allLocales = ['cy-GB', 'en-GB', 'fr-FR', 'pl-PL', 'sv-SE'];
 const primaryLocale = 'en-GB';
 
-// List of all UV modules
-const uvModules = [
-  'uv-av-extension',
-  'uv-ebook-extension',
-  'uv-model-viewer-extension',
-  'uv-pdf-extension',
-  'uv-aleph-extension',
-  'uv-default-extension',
-  'uv-mediaelement-extension',
-  'uv-openseadragon-extension'
-];
-
 const checkLocaleUsage = () => {
+    // get a list of all UV extensions
+    const uvExtensions = getUVExtensions();
+
     // Read primary locale file.
     let localeData = readLocaleFile(primaryLocale);
     // replace all values with a 0
-    // we will increment the value for each key found in the module config files
+    // we will increment the value for each key found in the extension config files
     let localeKeys = Object.keys(localeData).reduce((acc, key) => {
         acc[key] = 0;
         return acc;
     }, {});
 
-    // Loop through all UV modules.
-    uvModules.forEach(module => {
-        let config = readModuleConfig(module);
+    // Loop through all UV extensions.
+    uvExtensions.forEach(extension => {
+        let config = readExtensionConfig(extension);
         // Recursively extract all locale values from any "content" objects.
         let contentLocaleValues = extractContentLocaleValues(config);
         // For each locale value found, if it exists in the primary locale keys, increment its count.
@@ -51,6 +42,28 @@ const checkLocaleUsage = () => {
     console.log("Unused locale keys:", getUnusedLocaleKeys(localeKeys));
 };
 
+const getUVExtensions = () => {
+    let extensions = [];
+    // get a list of all UV extensions
+    const directoryPath = path.join(__dirname, '../src/content-handlers/iiif/extensions/');
+
+    try {
+        const files = fs.readdirSync(directoryPath);
+
+        files.forEach(function (file) {
+            let dir = file.substring(0, 2);
+            // only get directories that start with 'uv'
+            if (dir === 'uv') {
+                extensions.push(file);
+            }
+        });
+    } catch (err) {
+        console.log('Unable to scan directory: ' + err);
+    }
+
+    return extensions;
+}
+
 const getUnusedLocaleKeys = (localeKeys) => {
     return Object.entries(localeKeys).filter(([key, value]) => value === 0);
 }
@@ -62,7 +75,7 @@ const extractContentLocaleValues = (obj) => {
         if (prop === 'content' && typeof value === 'object' && value !== null) {
             Object.values(value).forEach(item => {
                 if (typeof item === 'string' && item.startsWith('$')) {
-                    values.push(item); // keep the value as is (with "$")
+                    values.push(item);
                 }
             });
         } else if (typeof value === 'object' && value !== null) {
@@ -83,8 +96,8 @@ const readLocaleFile = (lang) => {
     return JSON.parse(fileContent);
 };
 
-const readModuleConfig = (module) => {
-    const configPath = path.join(__dirname, `../src/content-handlers/iiif/extensions/${module}/config/config.json`);
+const readExtensionConfig = (extension) => {
+    const configPath = path.join(__dirname, `../src/content-handlers/iiif/extensions/${extension}/config/config.json`);
     const configContent = fs.readFileSync(configPath, 'utf8');
     return JSON.parse(configContent);
 };
