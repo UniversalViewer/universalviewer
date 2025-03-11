@@ -1050,13 +1050,13 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   isMetric(metric: string | string[]): boolean {
-    if (typeof metric === 'string') {
+    if (typeof metric === "string") {
       return this.metric === metric;
     }
 
-    return metric.some(item => this.metric === item);
+    return metric.some((item) => this.metric === item);
   }
-  
+
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData<T> = <IUVData<T>>{};

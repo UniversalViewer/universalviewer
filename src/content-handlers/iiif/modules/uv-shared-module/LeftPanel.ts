@@ -27,7 +27,7 @@ export class LeftPanel<
 
     const shouldOpenPanel: boolean = Bools.getBool(
       this.extension.getSettings().leftPanelOpen,
-      this.options.panelOpen && !this.extension.isMetric('sm')
+      this.options.panelOpen && !this.extension.isMetric("sm")
     );
 
     if (shouldOpenPanel) {
