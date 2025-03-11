@@ -106,7 +106,8 @@ export class IIIFEvents {
   static SHOW_SHARE_DIALOGUE: string = "showShareDialogue";
   static SHOW_TERMS_OF_USE: string = "showTermsOfUse";
   static TARGET_CHANGE: string = "targetChange";
-  static TOGGLE_MOREINFO_RIGHT_PANEL: string = "toggleMoreInfoRightPanel";
+  static TOGGLE_RIGHT_PANEL: string = "toggleRightPanel";
+  static TOGGLE_LEFT_PANEL: string = "toggleLeftPanel";
   static THUMB_MULTISELECTED: string = "thumbMultiSelected";
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";
