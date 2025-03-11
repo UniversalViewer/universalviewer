@@ -160,11 +160,11 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.attr("aria-hidden", "true");
     }
 
-    // this timeout is to resolve an unknown rendering issue (in chrome at least)
+    /* // this timeout is to resolve an unknown rendering issue (in chrome at least)
     // where the panel doesn't position correctly
-    setTimeout(() => {
-      this.$element.toggleClass("open-finished");
-    }, 100);
+    setTimeout(() => { */
+    this.$element.toggleClass("open-finished");
+    /* }, 100); */
 
     this.toggleFinish();
 
@@ -274,7 +274,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     return 0;
   }
 
-  toggleStart(): void {}
+  toggleStart(): void { }
 
   toggleFinish(): void {
     if (this.isExpanded && !this.autoToggled) {
@@ -284,14 +284,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
   }
 
-  expandFullStart(): void {}
+  expandFullStart(): void { }
 
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
   }
 
-  collapseFullStart(): void {}
+  collapseFullStart(): void { }
 
   collapseFullFinish(): void {
     this.isFullyExpanded = false;
