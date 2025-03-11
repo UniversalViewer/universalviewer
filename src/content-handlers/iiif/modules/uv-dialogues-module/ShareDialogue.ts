@@ -50,6 +50,10 @@ export class ShareDialogue<
 
     super.create();
 
+    // Accessibility.
+    this.$element.attr("role", "region");
+    this.$element.attr("aria-label", this.content.share);
+
     this.openCommand = IIIFEvents.SHOW_SHARE_DIALOGUE;
     this.closeCommand = IIIFEvents.HIDE_SHARE_DIALOGUE;
     this.shareManifestsEnabled = this.options.shareManifestsEnabled || false;
@@ -83,6 +87,12 @@ export class ShareDialogue<
         }
       }
     );
+
+    // Title
+    const $title = $(
+      `<div role="heading" class="heading">${this.content.share}</div>`
+    );
+    this.$content.append($title);
 
     // Share URL
 
