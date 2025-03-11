@@ -271,7 +271,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   // }
 
   createTreeView(): void {
-    this.treeView = new TreeView(this.$treeView);
+    this.treeView = new TreeView(this.$treeView, false);
     this.treeView.treeData = this.getTreeData();
     this.treeView.setup();
     this.renderTree();
