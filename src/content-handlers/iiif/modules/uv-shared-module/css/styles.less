@@ -195,7 +195,11 @@
             display: none;
         }
         .closed {
-            display: block;
+            display: none;
+
+            .md-mediaquery({
+                display: block;
+            });
         }
         .main {
             display: none;
@@ -208,6 +212,10 @@
             }
             .closed {
                 display: none;
+
+                .md-mediaquery({
+                    display: none;
+                });
             }
             .main {
                 display: block;
