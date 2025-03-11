@@ -268,7 +268,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     return 0;
   }
 
-  toggleStart(): void { }
+  toggleStart(): void {}
 
   toggleFinish(): void {
     if (this.isExpanded && !this.autoToggled) {
@@ -278,14 +278,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
   }
 
-  expandFullStart(): void { }
+  expandFullStart(): void {}
 
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
   }
 
-  collapseFullStart(): void { }
+  collapseFullStart(): void {}
 
   collapseFullFinish(): void {
     this.isFullyExpanded = false;
