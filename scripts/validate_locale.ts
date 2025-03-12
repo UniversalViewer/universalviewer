@@ -52,7 +52,7 @@ const checkHardCodedStrings = () => {
         // For each locale value found, if it exists in the primary locale keys, increment its count.
         contentLocaleValues.forEach(val => {
             // if val does not start with $
-            let hasStartingDelimiter = keyStartsWithDollar(val, extension);
+            let hasStartingDelimiter = keyStartsWithDollar(val);
             if (!hasStartingDelimiter) {
                 missing.push({ extension: extension, key: val });
             }
@@ -62,7 +62,7 @@ const checkHardCodedStrings = () => {
     console.log("missing locale keys:", missing);
 };
 
-const keyStartsWithDollar = (val, extension) => {
+const keyStartsWithDollar = (val) => {
     if (val.substring(0, 1) !== '$') {
         return false
     }
