@@ -66,10 +66,6 @@ export class LeftPanel<
 
   resize(): void {
     super.resize();
-
-    if (this.isFullyExpanded) {
-      //this.$element.width(this.$element.parent().width());
-    }
   }
 
   toggle(autoToggled?: boolean): void {
