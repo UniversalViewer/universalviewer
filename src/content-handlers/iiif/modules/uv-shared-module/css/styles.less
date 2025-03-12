@@ -123,7 +123,7 @@
             grid-template-areas: "left center right";
 
             transition-property: grid-template-columns;
-            transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+            transition-timing-function: linear;
             transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
         });
     }
@@ -142,7 +142,7 @@
         --uv-grid-right-width: 0;
 
         transition-property: grid-template-columns;
-        transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+        transition-timing-function: linear;
         transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
     }
 
@@ -166,7 +166,7 @@
         z-index: 20;
         
         transition-property: all;
-        transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+        transition-timing-function: linear;
         transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
 
         position: absolute;
