@@ -4,9 +4,6 @@ const path = require('path');
 // Read in parameters to choose which type of validation to run
 let args = process.argv.slice(2);
 let runType = args[0];
-if (!['checkLocaleUsage', 'missingTranslations', 'hardCodedStrings'].includes(runType)) {
-    console.error('No parameter or no valid run type. Please use checkLocaleUsage, missingTranslations or hardCodedStrings');
-}
 
 // Define primary locale
 const primaryLocale = 'en-GB.json';
@@ -160,12 +157,17 @@ const missingTranslations = () => {
     }
 };
 
-if (runType === 'checkLocaleUsage') {
-    checkLocaleUsage();
-}
-if (runType === 'missingTranslations') {
-    missingTranslations();
-}
-if (runType === 'hardCodedStrings') {
-    checkHardCodedStrings();
+switch (runType) {
+    case 'checkLocaleUsage':
+        checkLocaleUsage();
+        break;
+    case 'missingTranslations':
+        missingTranslations();
+        break;
+    case 'hardCodedStrings':
+        checkHardCodedStrings();
+        break;
+    default:
+        console.error('No parameter or no valid run type. Please use checkLocaleUsage, missingTranslations or hardCodedStrings');
+        break;
 }
