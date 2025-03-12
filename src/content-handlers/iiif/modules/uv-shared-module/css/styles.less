@@ -191,9 +191,19 @@
             height: auto;
         });
 
-        .top {
-            display: none;
+        // by default top and main are shown, as on mobile the panel is transformed to off-screen
+        // but on md they're hidden, just in case
+        .top,
+        .main {
+            display: block;
+
+            .md-mediaquery({
+                display: none;
+            });
         }
+
+        // by default closed is hidden unless on md and up
+        // when it serves as a tab to click
         .closed {
             display: none;
 
@@ -201,15 +211,10 @@
                 display: block;
             });
         }
-        .main {
-            display: none;
-        }
- 
+
+        // open-finished hides the .closed tab on md+
         &.open-finished {
             
-            .top {
-                display: block;
-            }
             .closed {
                 display: none;
 
@@ -217,9 +222,20 @@
                     display: none;
                 });
             }
-            .main {
-                display: block;
-            }
+        }
+
+        // only when the container has open & open-finished can top and main display on md+
+        // this prevents the content getting squished when the panels contract when the grid changes
+        &.open.open-finished {
+            .md-mediaquery({
+                .top,
+                .main {
+                    display: block;
+                }
+                .closed {
+                    display: none;
+                }
+            });
         }
     }
 
