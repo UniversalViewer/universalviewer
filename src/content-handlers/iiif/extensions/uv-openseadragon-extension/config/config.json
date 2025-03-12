@@ -527,7 +527,7 @@
         "openEnabled": false,
         "printEnabled": false,
         "shareEnabled": true,
-        "helpEnabled": true,
+        "helpEnabled": false,
         "helpUrl": "https://universalviewer.io/"
       },
       "content": {
