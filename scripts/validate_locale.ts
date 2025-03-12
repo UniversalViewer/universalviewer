@@ -54,7 +54,6 @@ const checkHardCodedStrings = () => {
             // if val does not start with $
             let hasStartingDelimiter = keyStartsWithDollar(val, extension);
             if (!hasStartingDelimiter) {
-                // console.log(`Key ${val} in extension ${extension} does not start with $`);
                 missing.push({ extension: extension, key: val });
             }
         });
@@ -64,7 +63,6 @@ const checkHardCodedStrings = () => {
 };
 
 const keyStartsWithDollar = (val, extension) => {
-    console.log('val', val, 'extension', extension);
     if (val.substring(0, 1) !== '$') {
         return false
     }

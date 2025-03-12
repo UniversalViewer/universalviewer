@@ -27,8 +27,8 @@
     "test": "jest",
     "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
     "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
-    "missingTranslations": "node scripts/validate_locale.ts missingTranslations",
-    "hardCodedStrings": "node scripts/validate_locale.ts hardCodedStrings"
+    "findMissingTranslations": "node scripts/validate_locale.ts missingTranslations",
+    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings"
   },
   "repository": {
     "type": "git",
