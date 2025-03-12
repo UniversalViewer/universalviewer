@@ -4,13 +4,12 @@ const path = require('path');
 // Read in parameters to choose which type of validation to run
 let args = process.argv.slice(2);
 let runType = args[0];
-if (!['checkLocaleUsage', 'compareLocales'].includes(runType)) {
-    console.log('No parameter or no valid run type. Please use checkLocaleUsage or compareLocales');
+if (!['checkLocaleUsage', 'missingTranslations', 'hardCodedStrings'].includes(runType)) {
+    console.error('No parameter or no valid run type. Please use checkLocaleUsage, missingTranslations or hardCodedStrings');
 }
 
-// Define all locales and primary locale
-const allLocales = ['cy-GB', 'en-GB', 'fr-FR', 'pl-PL', 'sv-SE'];
-const primaryLocale = 'en-GB';
+// Define primary locale
+const primaryLocale = 'en-GB.json';
 
 const checkLocaleUsage = () => {
     // get a list of all UV extensions
@@ -42,6 +41,40 @@ const checkLocaleUsage = () => {
     console.log("Unused locale keys:", getUnusedLocaleKeys(localeKeys));
 };
 
+
+const checkHardCodedStrings = () => {
+    let missing = [];
+    // get a list of all UV extensions
+    const uvExtensions = getUVExtensions();
+
+    // Loop through all UV extensions.
+    uvExtensions.forEach(extension => {
+        let config = readExtensionConfig(extension);
+        // Recursively extract all locale values from any "content" objects.
+        let contentLocaleValues = extractContentLocaleValues(config);
+        // For each locale value found, if it exists in the primary locale keys, increment its count.
+        contentLocaleValues.forEach(val => {
+            // if val does not start with $
+            let hasStartingDelimiter = keyStartsWithDollar(val, extension);
+            if (!hasStartingDelimiter) {
+                // console.log(`Key ${val} in extension ${extension} does not start with $`);
+                missing.push({ extension: extension, key: val });
+            }
+        });
+    });
+
+    console.log("missing locale keys:", missing);
+};
+
+const keyStartsWithDollar = (val, extension) => {
+    console.log('val', val, 'extension', extension);
+    if (val.substring(0, 1) !== '$') {
+        return false
+    }
+
+    return true;
+};
+
 const getUVExtensions = () => {
     let extensions = [];
     // get a list of all UV extensions
@@ -64,6 +97,12 @@ const getUVExtensions = () => {
     return extensions;
 }
 
+const getUVLocales = () => {
+    const localeDir = path.join(__dirname, '../src/locales');
+    const localeFiles = fs.readdirSync(localeDir);
+    return localeFiles;
+};
+
 const getUnusedLocaleKeys = (localeKeys) => {
     return Object.entries(localeKeys).filter(([key, value]) => value === 0);
 }
@@ -74,7 +113,7 @@ const extractContentLocaleValues = (obj) => {
     for (const [prop, value] of Object.entries(obj)) {
         if (prop === 'content' && typeof value === 'object' && value !== null) {
             Object.values(value).forEach(item => {
-                if (typeof item === 'string' && item.startsWith('$')) {
+                if (typeof item === 'string') {
                     values.push(item);
                 }
             });
@@ -87,7 +126,7 @@ const extractContentLocaleValues = (obj) => {
 
 const readLocaleFile = (lang) => {
     const localeDir = path.join(__dirname, '../src/locales');
-    const localeFiles = fs.readdirSync(localeDir).filter(file => file.endsWith(`${lang}.json`));
+    const localeFiles = fs.readdirSync(localeDir).filter(file => file.endsWith(`${lang}`));
     if (localeFiles.length === 0) {
         throw new Error(`No locale file found for language ${lang}`);
     }
@@ -102,8 +141,9 @@ const readExtensionConfig = (extension) => {
     return JSON.parse(configContent);
 };
 
-const compareLocales = () => {
+const missingTranslations = () => {
     const primaryLocaleData = readLocaleFile(primaryLocale);
+    const allLocales = getUVLocales();
 
     for (let locale of allLocales) {
         if (locale === primaryLocale) {
@@ -123,6 +163,9 @@ const compareLocales = () => {
 if (runType === 'checkLocaleUsage') {
     checkLocaleUsage();
 }
-if (runType === 'compareLocales') {
-    compareLocales();
+if (runType === 'missingTranslations') {
+    missingTranslations();
+}
+if (runType === 'hardCodedStrings') {
+    checkHardCodedStrings();
 }

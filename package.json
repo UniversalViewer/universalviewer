@@ -25,7 +25,10 @@
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
     "docs": "typedoc --plugin typedoc-plugin-missing-exports ; echo docs.universalviewer.io > docs/CNAME",
     "test": "jest",
-    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es"
+    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
+    "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
+    "missingTranslations": "node scripts/validate_locale.ts missingTranslations",
+    "hardCodedStrings": "node scripts/validate_locale.ts hardCodedStrings"
   },
   "repository": {
     "type": "git",
