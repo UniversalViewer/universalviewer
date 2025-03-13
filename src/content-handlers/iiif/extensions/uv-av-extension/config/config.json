@@ -139,7 +139,8 @@
         "moreInfo": "$moreInfo",
         "open": "$open",
         "share": "$share",
-        "toggleLeftPanel": "$toggleLeftPanel"
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel"
       }
     },
     "genericDialogue": {

@@ -128,12 +128,13 @@ export class FooterPanel<
     this.$rightOptions.append(this.$moreInfoButton);
 
     this.$toggleLeftPanelButton = $(`
-      <button class="toggleLeftPanelButton btn imageBtn" title="${this.content.toggleLeftPanel}">
+      <button class="toggleLeftPanelButton btn imageBtn" title="${this.content.openLeftPanel}">
         <i class="uv-icon uv-icon-toggle-left-panel" aria-hidden="true"></i>
-        <span class="sr-only">${this.content.toggleLeftPanel}</span>
+        <span class="sr-only">${this.content.openLeftPanel}</span>
       </button>
     `);
     this.$leftOptions.append(this.$toggleLeftPanelButton);
+
 
     this.$openButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.OPEN);
@@ -176,10 +177,13 @@ export class FooterPanel<
     });
 
     this.$toggleLeftPanelButton.onPressed(() => {
+      console.log(this.extension.getSettings().leftPanelOpen);
       this.extensionHost.publish(
         IIIFEvents.TOGGLE_LEFT_PANEL,
         this.$moreInfoButton
       );
+      console.log(this.extension.getSettings().leftPanelOpen);
+      this.$toggleLeftPanelButton.attr("title", this.extension.getSettings().leftPanelOpen ? this.content.openLeftPanel : this.content.closeLeftPanel);
     });
 
     this.onAccessibleClick(

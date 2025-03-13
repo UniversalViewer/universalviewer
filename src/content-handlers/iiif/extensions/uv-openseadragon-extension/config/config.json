@@ -188,7 +188,8 @@
         "moreInfo": "$moreInfo",
         "open": "$open",
         "share": "$share",
-        "toggleLeftPanel": "Toggle Left Panel"
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel"
       }
     },
     "genericDialogue": {
@@ -428,7 +429,8 @@
         "moreInfo": "$moreInfo",
         "open": "$open",
         "share": "$share",
-        "toggleLeftPanel": "Toggle Left Panel"
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel"
       }
     },
     "settingsDialogue": {
@@ -543,7 +545,8 @@
         "fullScreen": "$fullScreen",
         "open": "$open",
         "share": "$share",
-        "toggleLeftPanel": "Toggle Left Panel"
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel"
       }
     },
     "restrictedDialogue": {

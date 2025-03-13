@@ -110,7 +110,8 @@
         "feedback": "Feedback",
         "fullScreen": "Full Screen",
         "moreInfo": "More Information",
-        "toggleLeftPanel": "Toggle Left Panel",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
         "open": "Open",
         "share": "Share"
       }
