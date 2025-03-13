@@ -39,8 +39,8 @@ export class LeftPanel<
     });
 
     this.extensionHost.subscribe(IIIFEvents.TOGGLE_RIGHT_PANEL, () => {
-      if (this.extension.isMetric('sm') && this.isExpanded) {
-        this.toggle(true)
+      if (this.extension.isMetric("sm") && this.isExpanded) {
+        this.toggle(true);
       }
     });
   }
