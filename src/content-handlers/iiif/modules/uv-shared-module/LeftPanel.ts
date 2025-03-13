@@ -37,6 +37,12 @@ export class LeftPanel<
     this.extensionHost.subscribe(IIIFEvents.TOGGLE_LEFT_PANEL, () => {
       this.toggle();
     });
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_RIGHT_PANEL, () => {
+      if (this.extension.isMetric('sm') && this.isExpanded) {
+        this.toggle(true)
+      }
+    });
   }
 
   getTargetWidth(): number {
