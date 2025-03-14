@@ -120,21 +120,24 @@ export class FooterPanel<
     this.$mainOptions.append(this.$fullScreenBtn);
 
     this.$moreInfoButton = $(`
-      <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}">
+      <button class="moreInfo btn imageBtn" title="${$('.mainPanel.rightPanelOpen').length !==0 ? this.content.closeRightPanel : this.content.openRightPanel}">
         <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
-        <span class="sr-only">${this.content.moreInfo}</span>
+        <span class="sr-only">${$('.mainPanel.rightPanelOpen').length !==0 ? this.content.closeRightPanel : this.content.openRightPanel}</span>
       </button>
     `);
     this.$rightOptions.append(this.$moreInfoButton);
 
     this.$toggleLeftPanelButton = $(`
-      <button class="toggleLeftPanelButton btn imageBtn" title="${this.content.openLeftPanel}">
+      <button class="toggleLeftPanelButton btn imageBtn" title="${$('.mainPanel.leftPanelOpen').length !==0 ? this.content.closeLeftPanel : this.content.openLeftPanel}">
         <i class="uv-icon uv-icon-toggle-left-panel" aria-hidden="true"></i>
-        <span class="sr-only">${this.content.openLeftPanel}</span>
+        <span class="sr-only">${$('.mainPanel.leftPanelOpen').length !==0 ? this.content.closeLeftPanel : this.content.openLeftPanel}</span>
       </button>
     `);
     this.$leftOptions.append(this.$toggleLeftPanelButton);
 
+    if ($('.leftPanel').css('display') === 'none') {
+      this.$toggleLeftPanelButton.hide();
+    }
 
     this.$openButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.OPEN);
@@ -174,17 +177,22 @@ export class FooterPanel<
         IIIFEvents.TOGGLE_RIGHT_PANEL,
         this.$moreInfoButton
       );
+      const newLabel = $('.mainPanel.rightPanelOpen').length !==0 ? this.content.closeRightPanel : this.content.openRightPanel
+      this.$moreInfoButton.attr("title", newLabel);
+      this.$moreInfoButton.find('.sr-only').text(newLabel);
     });
 
     this.$toggleLeftPanelButton.onPressed(() => {
-      console.log(this.extension.getSettings().leftPanelOpen);
       this.extensionHost.publish(
         IIIFEvents.TOGGLE_LEFT_PANEL,
         this.$moreInfoButton
       );
-      console.log(this.extension.getSettings().leftPanelOpen);
-      this.$toggleLeftPanelButton.attr("title", this.extension.getSettings().leftPanelOpen ? this.content.openLeftPanel : this.content.closeLeftPanel);
+      const newLabel = $('.mainPanel.leftPanelOpen').length !==0 ? this.content.closeLeftPanel : this.content.openLeftPanel
+      this.$toggleLeftPanelButton.attr("title", newLabel);
+      this.$toggleLeftPanelButton.find('.sr-only').text(newLabel);
     });
+
+
 
     this.onAccessibleClick(
       this.$fullScreenBtn,

@@ -198,6 +198,8 @@ type MobileFooterPanelContent = FooterPanelContent & {
   moreInfo: string;
   openLeftPanel: string;
   closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   zoomIn: string;
   zoomOut: string;
 };

@@ -189,7 +189,9 @@
         "open": "$open",
         "share": "$share",
         "openLeftPanel": "$openLeftPanel",
-        "closeLeftPanel": "$closeLeftPanel"
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {
@@ -430,7 +432,9 @@
         "open": "$open",
         "share": "$share",
         "openLeftPanel": "$openLeftPanel",
-        "closeLeftPanel": "$closeLeftPanel"
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "settingsDialogue": {
@@ -546,7 +550,9 @@
         "open": "$open",
         "share": "$share",
         "openLeftPanel": "$openLeftPanel",
-        "closeLeftPanel": "$closeLeftPanel"
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "restrictedDialogue": {

@@ -46,7 +46,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     this.$collapseButton = $(
       '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
-    this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');

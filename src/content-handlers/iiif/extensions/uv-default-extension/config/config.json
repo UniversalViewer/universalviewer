@@ -136,7 +136,9 @@
         "open": "$open",
         "share": "$share",
         "openLeftPanel": "$openLeftPanel",
-        "closeLeftPanel": "$closeLeftPanel"
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {

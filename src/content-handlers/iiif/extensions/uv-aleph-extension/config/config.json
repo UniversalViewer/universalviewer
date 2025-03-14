@@ -112,6 +112,8 @@
         "moreInfo": "More Information",
         "openLeftPanel": "$openLeftPanel",
         "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel",
         "open": "Open",
         "share": "Share"
       }

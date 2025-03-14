@@ -208,6 +208,8 @@ export type FooterPanelContent = {
   moreInfo: string;
   openLeftPanel: string;
   closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   open: string;
   share: string;
 };
