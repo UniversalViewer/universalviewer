@@ -12,8 +12,12 @@ export class TreeView extends BaseView<ContentLeftPanel> {
   $tree: JQuery;
   private expandedNodeIds: Set<string> = new Set();
 
-  constructor($element: JQuery) {
-    super($element, true, true);
+  constructor(
+    $element: JQuery,
+    fitToParentWidth: boolean = true,
+    fitToParentHeight: boolean = true
+  ) {
+    super($element, fitToParentWidth, fitToParentHeight);
   }
 
   create(): void {

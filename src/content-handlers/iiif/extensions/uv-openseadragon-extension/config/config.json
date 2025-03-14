@@ -187,7 +187,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {
@@ -426,7 +430,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "settingsDialogue": {
@@ -547,6 +555,10 @@
         "fullScreen": "$fullScreen",
         "open": "$open",
         "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel",
         "help": "$help"
       }
     },
