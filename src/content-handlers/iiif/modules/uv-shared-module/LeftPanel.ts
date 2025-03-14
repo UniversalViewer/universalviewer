@@ -82,7 +82,6 @@ export class LeftPanel<
     }
 
     super.toggle(autoToggled);
-    
   }
 
   expandFull(): void {
