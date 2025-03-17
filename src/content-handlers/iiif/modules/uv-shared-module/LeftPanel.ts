@@ -43,6 +43,12 @@ export class LeftPanel<
         this.toggle(true);
       }
     });
+
+    this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, () => {
+      if (this.extension.isMetric("sm")) {
+        this.toggle()
+      }
+    });
   }
 
   getTargetWidth(): number {
