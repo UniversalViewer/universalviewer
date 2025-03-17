@@ -10,6 +10,7 @@ export class FooterPanel extends BaseFooterPanel<
   //$spacer: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
+  $helpButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -43,6 +44,23 @@ export class FooterPanel extends BaseFooterPanel<
             </button>
         `);
     this.$mainOptions.prepend(this.$zoomInButton);
+
+    this.$helpButton = $(`
+      <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
+        <i class="uv-icon-help" aria-hidden="true"></i>
+      </a>
+    `);
+    this.$options.prepend(this.$helpButton);
+
+    if (this.options.helpEnabled && this.options.helpUrl) {
+      this.$helpButton.show();
+    } else {
+      this.$helpButton.hide();
+    }
+
+    this.$helpButton.onPressed(() => {
+      window.open(this.options.helpUrl);
+    });
 
     this.$zoomInButton.onPressed(() => {
       this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_IN);

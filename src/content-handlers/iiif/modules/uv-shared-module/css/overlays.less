@@ -32,6 +32,49 @@
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.1);
 
+            .share__section {
+                margin-block-end: 1.5em;
+
+                label {
+                    font-weight: 700;
+                    color: @gray;
+
+                    .share__label {
+                        display: block;
+                    }
+                }
+            }
+            .copy-input,
+            .embed-size-select {
+                color: black;
+                background-color: white;
+                border: 1px solid black;
+            }
+            .copy-input {
+                width: 100%;
+                padding: 2px;
+                background-color: @gray-lighter;
+            }
+
+            .copy-group {
+                display: grid;
+                grid-template-columns: 1fr auto;
+            }
+
+            .copyBtn {
+                padding-inline: @padding-small-horizontal;
+                height: 100%;
+                color: white;
+                background-color: black;
+                cursor: pointer;
+
+                &.imageBtn {
+                    width: 2em;
+                    background-image: data-uri('../../../modules/uv-shared-module/img/copy.png');
+                    background-size: 15px;
+                }
+            }
+
             .buttons {
                 padding: @padding-medium-vertical;
                 float: right;
@@ -42,9 +85,8 @@
             }
 
             .content {
-                padding-right: @padding-medium-horizontal;
-                padding-bottom: @padding-medium-vertical;
-                padding-left: @padding-medium-horizontal;
+                padding-inline: @padding-medium-horizontal;
+                padding-block: @padding-medium-vertical;
 
                 overflow: auto;
                 text-overflow: ellipsis;
