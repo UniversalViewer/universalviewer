@@ -87,7 +87,7 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     this.$searchButton = $(
       '<button class="go btn btn-primary" tabindex="0">' +
-        this.content.go +
+        this.content.go + 
         "</button>"
     );
     this.$search.append(this.$searchButton);

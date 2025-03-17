@@ -169,6 +169,36 @@ export class PDFCenterPanel extends CenterPanel<
       }
     );
 
+    this.extensionHost.subscribe(
+      PDFExtensionEvents.ZOOM_IN,
+      () => {
+        const newScale: number = this._scale + 0.5;
+
+        if (newScale < this._maxScale) {
+          this._scale = newScale;
+        } else {
+          this._scale = this._maxScale;
+        }
+  
+        this._render(this._pageIndex);
+      }
+    )
+
+    this.extensionHost.subscribe(
+      PDFExtensionEvents.ZOOM_OUT,
+      () => {
+        const newScale: number = this._scale - 0.5;
+
+        if (newScale > this._minScale) {
+          this._scale = newScale;
+        } else {
+          this._scale = this._minScale;
+        }
+  
+        this._render(this._pageIndex);
+      }
+    )
+
     this._$prevButton.onPressed((e: any) => {
       e.preventDefault();
 
@@ -345,6 +375,14 @@ export class PDFCenterPanel extends CenterPanel<
     }
     if (highScale > this._maxScale) {
       this._$zoomInButton.disable();
+    }
+
+    if (this.extension.isMetric("sm")) {
+      this._$zoomOutButton.hide();
+      this._$zoomInButton.hide();
+    } else {
+      this._$zoomOutButton.show();
+      this._$zoomInButton.show();
     }
 
     //this._pdfDoc.getPage(num).then((page: any) => {

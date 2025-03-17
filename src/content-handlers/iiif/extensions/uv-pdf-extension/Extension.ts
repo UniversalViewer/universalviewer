@@ -7,6 +7,7 @@ import { IPDFExtension } from "./IPDFExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { PDFCenterPanel } from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
 import { PDFHeaderPanel } from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-pdfmobilefooterpanel-module/MobileFooter";
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
@@ -30,6 +31,7 @@ export default class Extension
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  mobileFooterPanel: MobileFooterPanel;
   headerPanel: PDFHeaderPanel;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
@@ -106,6 +108,9 @@ export default class Extension
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+        );
     } else {
       this.shell.$footerPanel.hide();
     }
