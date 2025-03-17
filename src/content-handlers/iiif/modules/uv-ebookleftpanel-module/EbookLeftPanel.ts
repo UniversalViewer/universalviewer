@@ -57,8 +57,11 @@ export class EbookLeftPanel extends LeftPanel<
       "itemClicked",
       (e: any) => {
         this.extensionHost.publish(EbookExtensionEvents.ITEM_CLICKED, e.detail);
-      },
-      false
+          if (this.extension.isMetric("sm")) {
+            this.toggle(true);
+            console.log('ebook toc selected')
+      }
+      false}
     );
 
     Async.waitFor(
