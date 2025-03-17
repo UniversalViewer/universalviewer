@@ -4,6 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { MediaElementExtensionEvents } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-mediaelementmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IMediaElementExtension } from "./IMediaElementExtension";
@@ -42,6 +43,7 @@ export default class Extension
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  mobileFooterPanel: MobileFooterPanel;
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
@@ -140,6 +142,9 @@ export default class Extension
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+        );
     } else {
       this.shell.$footerPanel.hide();
     }
