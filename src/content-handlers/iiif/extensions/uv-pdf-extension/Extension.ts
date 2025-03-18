@@ -110,7 +110,7 @@ export default class Extension
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
       this.mobileFooterPanel = new MobileFooterPanel(
         this.shell.$mobileFooterPanel
-        );
+      );
     } else {
       this.shell.$footerPanel.hide();
     }
