@@ -46,7 +46,7 @@ export class LeftPanel<
 
     this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, () => {
       if (this.extension.isMetric("sm")) {
-        this.toggle()
+        this.toggle();
       }
     });
   }

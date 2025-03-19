@@ -10,7 +10,7 @@ import {
   ShareDialogueContent,
   ShareDialogueOptions,
   FooterPanelContent,
-  FooterPanelOptions
+  FooterPanelOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
 type AVCenterPanelOptions = CenterPanelOptions & {

@@ -169,35 +169,29 @@ export class PDFCenterPanel extends CenterPanel<
       }
     );
 
-    this.extensionHost.subscribe(
-      PDFExtensionEvents.ZOOM_IN,
-      () => {
-        const newScale: number = this._scale + 0.5;
+    this.extensionHost.subscribe(PDFExtensionEvents.ZOOM_IN, () => {
+      const newScale: number = this._scale + 0.5;
 
-        if (newScale < this._maxScale) {
-          this._scale = newScale;
-        } else {
-          this._scale = this._maxScale;
-        }
-  
-        this._render(this._pageIndex);
+      if (newScale < this._maxScale) {
+        this._scale = newScale;
+      } else {
+        this._scale = this._maxScale;
       }
-    )
 
-    this.extensionHost.subscribe(
-      PDFExtensionEvents.ZOOM_OUT,
-      () => {
-        const newScale: number = this._scale - 0.5;
+      this._render(this._pageIndex);
+    });
 
-        if (newScale > this._minScale) {
-          this._scale = newScale;
-        } else {
-          this._scale = this._minScale;
-        }
-  
-        this._render(this._pageIndex);
+    this.extensionHost.subscribe(PDFExtensionEvents.ZOOM_OUT, () => {
+      const newScale: number = this._scale - 0.5;
+
+      if (newScale > this._minScale) {
+        this._scale = newScale;
+      } else {
+        this._scale = this._minScale;
       }
-    )
+
+      this._render(this._pageIndex);
+    });
 
     this._$prevButton.onPressed((e: any) => {
       e.preventDefault();

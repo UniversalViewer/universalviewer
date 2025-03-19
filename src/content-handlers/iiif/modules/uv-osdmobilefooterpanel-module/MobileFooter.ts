@@ -68,7 +68,6 @@ export class FooterPanel extends BaseFooterPanel<
 
     this.$zoomOutButton.onPressed(() => {
       this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_OUT);
-      
     });
 
     this.$rotateButton.onPressed(() => {

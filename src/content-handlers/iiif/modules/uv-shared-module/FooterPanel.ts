@@ -151,7 +151,10 @@ export class FooterPanel<
     `);
     this.$leftOptions.append(this.$toggleLeftPanelButton);
 
-    if ($('.leftPanel').css('display') === 'none' || $('.leftPanel').contents().length === 0) {
+    if (
+      $(".leftPanel").css("display") === "none" ||
+      $(".leftPanel").contents().length === 0
+    ) {
       this.$toggleLeftPanelButton.hide();
     }
 
