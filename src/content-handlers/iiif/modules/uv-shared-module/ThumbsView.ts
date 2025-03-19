@@ -42,12 +42,6 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
       this.loadThumbs();
     });
 
-    this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, () => {
-      if (this.extension.isMetric("sm")) {
-        //close panel
-      }
-    });
-
     this.$thumbs = $('<div class="thumbs"></div>');
     this.$element.append(this.$thumbs);
 
