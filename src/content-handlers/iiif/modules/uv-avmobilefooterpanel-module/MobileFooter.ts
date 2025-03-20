@@ -1,4 +1,3 @@
-// const $ = require("jquery");
 import { Config } from "../../extensions/uv-av-extension/config/Config";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 
