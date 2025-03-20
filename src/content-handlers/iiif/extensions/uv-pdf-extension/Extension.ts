@@ -87,6 +87,7 @@ export default class Extension
     );
   }
 
+
   createModules(): void {
     super.createModules();
 
@@ -173,5 +174,14 @@ export default class Extension
     });
 
     return super.buildEmbedScript(template, width, height, hashParams);
+  }
+
+  isPdfJsEnabled(): boolean {
+    return (
+      Bools.getBool(
+        this.data.config!.modules.pdfCenterPanel.options.usePdfJs,
+        true
+      )
+    );
   }
 }

@@ -101,8 +101,7 @@
         "moreInfoEnabled": true,
         "openEnabled": false,
         "printEnabled": false,
-        "shareEnabled": true,
-        "usePdfJs": true
+        "shareEnabled": true
       },
       "content": {
         "rotateRight": "$rotateRight",
