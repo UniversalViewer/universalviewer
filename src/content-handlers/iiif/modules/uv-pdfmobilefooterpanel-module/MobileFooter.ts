@@ -24,7 +24,9 @@ export class FooterPanel extends BaseFooterPanel<
           <i class="uv-icon-zoom-out" aria-hidden="true"></i>${this.content.zoomOut}
       </button>
   `);
-    this.$mainOptions.prepend(this.$zoomOutButton);
+    if ($('iframe.pdfobject').length === 0) {
+      this.$mainOptions.prepend(this.$zoomOutButton);
+    }
 
     this.$zoomInButton = $(`
       <button class="btn imageBtn zoomIn" title="${this.content.zoomIn}">
@@ -33,6 +35,11 @@ export class FooterPanel extends BaseFooterPanel<
   `);
     this.$mainOptions.prepend(this.$zoomInButton);
 
+    if ($('.pdfobject').length === 0) {
+      this.$zoomInButton.hide();
+      this.$zoomOutButton.hide();
+    }
+
     this.$zoomInButton.onPressed(() => {
       this.extensionHost.publish(PDFExtensionEvents.ZOOM_IN);
     });
@@ -40,6 +47,7 @@ export class FooterPanel extends BaseFooterPanel<
     this.$zoomOutButton.onPressed(() => {
       this.extensionHost.publish(PDFExtensionEvents.ZOOM_OUT);
     });
+    
   }
 
   resize(): void {

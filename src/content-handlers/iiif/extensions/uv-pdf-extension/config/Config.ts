@@ -20,6 +20,7 @@ type PDFCenterPanelOptions = CenterPanelOptions & {
   usePdfJs: boolean;
 };
 
+
 type PDFCenterPanelContent = CenterPanelContent & {
   next: string;
   previous: string;
