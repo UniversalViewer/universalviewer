@@ -44,7 +44,6 @@ export class FooterPanel extends BaseFooterPanel<
     this.$zoomOutButton.onPressed(() => {
       this.extensionHost.publish(PDFExtensionEvents.ZOOM_OUT);
     });
-    
   }
 
   resize(): void {
