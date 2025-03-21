@@ -112,7 +112,7 @@
     "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.2.21",
     "mediaelement": "4.2.15",
-    "mediaelement-plugins": "2.5.1",
+    "mediaelement-plugins": "5.0.0",
     "openseadragon": "4.0.0",
     "pdfjs-dist": "3.11.174",
     "pdfobject": "2.3.0",
