@@ -318,12 +318,6 @@ export class ShareDialogue<
     if (shareUrl) {
       this.$urlInput.val(shareUrl);
     }
-
-    if (this.extension.isMobile()) {
-      this.$urlInput.hide();
-    } else {
-      this.$urlInput.show();
-    }
   }
 
   getSelectedSize(): JQuery {
