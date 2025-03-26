@@ -138,7 +138,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {

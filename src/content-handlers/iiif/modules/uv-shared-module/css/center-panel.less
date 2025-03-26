@@ -87,8 +87,17 @@
                 backdrop-filter: blur(5px);
                 position: absolute;
                 width: 220px;
-                margin: @margin-medium-horizontal @margin-medium-horizontal @margin-medium-vertical @margin-medium-horizontal;
                 font-size: @font-size-small;
+
+                .sm-mediaquery({
+                    margin: 25px 20px;
+                });
+
+                .md-mediaquery({
+                    margin: @margin-medium-horizontal @margin-medium-horizontal @margin-medium-vertical @margin-medium-horizontal;
+                });
+
+
                 .header {
                     border-bottom: 1px solid rgba(0, 0, 0, 0.4);
                     display: flex;

@@ -108,6 +108,9 @@ export type Options = {
 
   /** Controls whether to have animations or not */
   reducedAnimation?: boolean;
+
+  /** A default animation duration */
+  animationDuration?: number;
 };
 
 type Locale = {
@@ -203,6 +206,10 @@ export type FooterPanelContent = {
   feedback: string;
   fullScreen: string;
   moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   open: string;
   share: string;
 };

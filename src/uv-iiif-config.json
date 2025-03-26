@@ -10,7 +10,8 @@
     "preferMediaElementExtension": false,
     "rightPanelEnabled": true,
     "clickToZoomEnabled": false,
-    "saveUserSettings": true
+    "saveUserSettings": true,
+    "animationDuration": 250
   },
   "modules": {
     "avCenterPanel": {

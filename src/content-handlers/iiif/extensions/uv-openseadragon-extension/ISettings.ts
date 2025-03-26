@@ -11,4 +11,5 @@ interface ISettings {
   brightnessPercent?: number;
   saturationPercent?: number;
   rememberSettings?: boolean;
+  animationDuration?: number;
 }
