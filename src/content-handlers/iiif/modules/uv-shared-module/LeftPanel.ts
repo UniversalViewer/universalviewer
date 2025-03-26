@@ -99,10 +99,12 @@ export class LeftPanel<
   collapseFull(): void {
     this.$element.parent().removeClass("leftPanelOpenFull");
 
-    // need this because 'closing' full width shouldn't actually do that
-    // if puts the left panel back to normal open state
-    // but if the left panel was previously closed, this class won't be present
-    // so we put it back
+    // Collapsing the fully open left panel doesn't actually close it,
+    // it puts it back to the normal open state.
+    // However, if the panel was closed when expandFull was triggered
+    // the .mainPanel (parent of .leftPanel) won't have the class leftPanelOpen
+    // which is required when the panel is in a normal open state (for the css grid to be set correctly).
+    // So we check for this and add the class if necessary.
     if (!this.$element.parent().hasClass("leftPanelOpen")) {
       this.$element.parent().addClass("leftPanelOpen");
     }
