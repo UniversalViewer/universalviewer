@@ -14,13 +14,31 @@
       height: 80px;
     }
 
-    .options {
-      height: 40px;
-      background-color: @panel-dark-bg;
+        .header-button {
+            width: 30px;
+            height: 30px;
+            transition: background-color 100ms ease;
+            cursor: pointer;
+          }
+          
+          
+          .header-button:hover {
+            background-color: @gray;
+          }
+          
 
-      .centerOptions {
-        position: absolute;
-      }
+        .options {
+            padding-left: 8px;
+            padding-right: 8px;
+            height: 30px;
+            background-color: @panel-dark-bg;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .centerOptions {
+                text-align: center;
+            }
 
       .rightOptions {
         float: right;

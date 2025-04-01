@@ -10,6 +10,9 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+import PagingHeaderPanelLeftOptions from "./PagingHeaderPanelLeftOptions";
+import PagingHeaderPanelRightOptions from "./PagingHeaderPanelRightOptions";
+import { createElement } from "react";
 
 export class PagingHeaderPanel extends HeaderPanel<
   Config["modules"]["pagingHeaderPanel"]
@@ -266,6 +269,14 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
     this.$rightOptions.prepend(this.$pagingToggleButtons);
+
+    this.rightOptionsRoot.render(
+      createElement(PagingHeaderPanelRightOptions, {})
+    )
+
+    this.leftOptionsRoot.render(
+      createElement(PagingHeaderPanelLeftOptions, {})
+    )
 
     this.$oneUpButton = $(`
           <button class="btn imageBtn one-up" title="${this.content.oneUp}">
