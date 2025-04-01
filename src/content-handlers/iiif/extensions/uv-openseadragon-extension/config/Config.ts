@@ -53,8 +53,6 @@ type PagingHeaderPanelOptions = HeaderPanelOptions & {
   autoCompleteBoxEnabled: boolean;
   /** Determines if gallery button is enabled */
   galleryButtonEnabled: boolean;
-  /** Determines if help is enabled */
-  helpEnabled: boolean;
   /** Determines if image selection box is enabled */
   imageSelectionBoxEnabled: boolean;
   /** Determines if mode options is enabled */
@@ -193,13 +191,21 @@ type SearchFooterPanel = ModuleConfig & {
   content: SearchFooterPanelContent;
 };
 
-type MobileFooterPanelOptions = FooterPanelOptions & {};
+type MobileFooterPanelOptions = FooterPanelOptions & {
+  helpEnabled: boolean;
+  helpUrl: string;
+};
 
 type MobileFooterPanelContent = FooterPanelContent & {
   rotateRight: string;
   moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   zoomIn: string;
   zoomOut: string;
+  help: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {

@@ -110,6 +110,10 @@
         "feedback": "Feedback",
         "fullScreen": "Full Screen",
         "moreInfo": "More Information",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel",
         "open": "Open",
         "share": "Share"
       }
@@ -132,11 +136,14 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -181,10 +188,12 @@
         "expandFull": "$expandGallery",
         "holdingText": "$moduleGoesHere",
         "less": "$less",
+        "lessAriaLabelTemplate": "$lessAriaLabelTemplate",
         "license": "$license",
         "logo": "$logo",
         "manifestHeader": "$aboutTheItem",
         "more": "$more",
+        "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
@@ -232,21 +241,25 @@
         "truncateThumbnailLabels": "Truncate Thumbnail Labels",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "website": "$uvWebsite"
       }
     },
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
         "shareEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
+        "embedPath": "/uv.html",
+        "embedTemplate": "<iframe src=\"{0}#?{1}\" width=\"{2}\" height=\"{3}\" allowfullscreen frameborder=\"0\" title=\"{4}\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "custom",
         "embed": "Embed",
         "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
@@ -254,6 +267,7 @@
         "iiif": "IIIF Manifest",
         "share": "Share",
         "shareInstructions": "To share this item, copy the URL below.",
+        "shareLink": "$shareLink",
         "shareUrl": "$shareUrl",
         "size": "Size:",
         "width": "Width"

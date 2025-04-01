@@ -12,7 +12,6 @@ import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPan
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
-import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
@@ -60,7 +59,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $externalContentDialogue: JQuery;
   $helpDialogue: JQuery;
-  $moreInfoDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
@@ -78,7 +76,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   mode: Mode;
-  moreInfoDialogue: MoreInfoDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   previousAnnotationRect: AnnotationRect | null;
   rightPanel: MoreInfoRightPanel;
@@ -205,11 +202,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         this.resize();
       }
     );
-
-    this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-      this.shell.$centerPanel.hide();
-      this.shell.$rightPanel.hide();
-    });
 
     this.extensionHost.subscribe(IIIFEvents.MINUS, () => {
       this.centerPanel.setFocus();
@@ -488,20 +480,23 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     this.extensionHost.subscribe(
       IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
       (triggerButton) => {
-        this.store.getState().openDownloadDialogue(triggerButton[0]);
+        const state = this.store.getState();
+        if (state !== null) {
+          state.openDownloadDialogue(triggerButton[0]);
+        }
       }
     );
 
     this.extensionHost.subscribe(IIIFEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     this.extensionHost.subscribe(IIIFEvents.ESCAPE, () => {
-      this.store.getState().closeDialogue();
+      this.closeActiveDialogue();
     });
 
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
@@ -547,12 +542,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
     this.shell.$overlays.append(this.$helpDialogue);
     this.helpDialogue = new HelpDialogue(this.$helpDialogue);
-
-    this.$moreInfoDialogue = $(
-      '<div class="overlay moreInfo" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$moreInfoDialogue);
-    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
     this.$multiSelectDialogue = $(
       '<div class="overlay multiSelect" aria-hidden="true"></div>'
@@ -696,22 +685,29 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           );
         },
         onClose: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
         },
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
           window.open(<string>this.getCroppedImageUri(canvas, viewer));
         },
         onDownloadSelection: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
           this.extensionHost.publish(IIIFEvents.SHOW_MULTISELECT_DIALOGUE);
         },
         onShowTermsOfUse: () => {
-          this.store.getState().closeDialogue();
+          this.closeActiveDialogue();
           this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
         },
       })
     );
+  }
+
+  closeActiveDialogue(): void {
+    const state = this.store.getState();
+    if (state !== null) {
+      state.closeDialogue();
+    }
   }
 
   checkForTarget(): void {
@@ -1369,19 +1365,20 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     zoom: string,
     rotation: number
   ): string {
-    const config: string = this.data.config!.uri || "";
-    const locales: string | null = this.getSerializedLocales();
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString(),
-      title
-    );
-    return script;
+    const config: string = this.data.config?.uri ?? "";
+    const locales: string = this.getSerializedLocales() ?? "";
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+      config: config,
+      locales: locales,
+      xywh: zoom,
+      r: rotation.toString(),
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 
   isSearchEnabled(): boolean {

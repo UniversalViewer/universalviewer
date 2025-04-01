@@ -45,7 +45,7 @@ import {
 import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
-import { StoreApi } from "zustand/vanilla";
+import type { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
 import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
 
@@ -75,7 +75,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
-  store: StoreApi<ExtensionState>;
+  store: StoreApi<ExtensionState | null>; // null for dispose()
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
@@ -101,6 +101,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.$element.data("component", this.extensionHost);
 
     this._parseMetrics();
+    this._updateMetric();
     this._initLocales();
 
     // add/remove classes.
@@ -669,30 +670,28 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _updateMetric(): void {
-    setTimeout(() => {
-      // loop through all metrics
-      // find one that matches the current dimensions
-      // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
+    // loop through all metrics
+    // find one that matches the current dimensions
+    // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
 
-      for (let i = this.metrics.length - 1; i >= 0; i--) {
-        const metric: Metric = this.metrics[i];
+    for (let i = this.metrics.length - 1; i >= 0; i--) {
+      const metric: Metric = this.metrics[i];
 
-        const width: number = window.innerWidth;
+      const width: number = window.innerWidth;
 
-        if (width >= metric.minWidth) {
-          if (this.metric !== metric.type) {
-            this.metric = metric.type;
-            // remove current metric class
-            for (var j = 0; j < this.metrics.length; j++) {
-              this.$element.removeClass(this.metrics[j].type);
-            }
-            this.$element.addClass(metric.type);
-            this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
+      if (width >= metric.minWidth) {
+        if (this.metric !== metric.type) {
+          this.metric = metric.type;
+          // remove current metric class
+          for (var j = 0; j < this.metrics.length; j++) {
+            this.$element.removeClass(this.metrics[j].type);
           }
-          break;
+          this.$element.addClass(metric.type);
+          this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
         }
+        break;
       }
-    }, 1);
+    }
   }
 
   resize(): void {
@@ -764,16 +763,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return parts.host;
   }
 
-  getAppUri(): string {
-    const appUri: string =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      (window.location.port ? ":" + window.location.port : "");
-
-    return appUri + "/uv.html";
-  }
-
   getSettings(): ISettings {
     if (Bools.getBool(this.data.config!.options.saveUserSettings, false)) {
       const settings: any = Storage.get("uv.settings", StorageType.LOCAL);
@@ -823,6 +812,42 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       title: title,
       image: thumbnail,
     };
+  }
+
+  getAppUri(): string {
+    const options = this.data.config!.modules.shareDialogue.options;
+
+    const host =
+      options?.embedHost ??
+      `${window.location.protocol}//${window.location.hostname}`;
+    const port = options?.embedPort ?? window.location.port;
+    const path = options?.embedPath ?? "/uv.html";
+
+    return `${host}${port ? `:${port}` : ""}${path}`;
+  }
+
+  buildEmbedScript(
+    template: string,
+    width: number,
+    height: number,
+    hashParams: URLSearchParams
+  ): string {
+    let appUri: string = this.getAppUri();
+    const title: string = this.helper.getLabel() ?? "";
+
+    if ((hashParams?.size ?? 0) > 0) {
+      appUri += `#${hashParams.toString()}`;
+    }
+
+    const script: string = Strings.format(
+      template,
+      appUri,
+      width.toString(),
+      height.toString(),
+      title
+    );
+
+    return script;
   }
 
   public getPagedIndices(
@@ -1024,6 +1049,14 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return this.metric === "sm" || this.metric === "md";
   }
 
+  isMetric(metric: string | string[]): boolean {
+    if (typeof metric === "string") {
+      return this.metric === metric;
+    }
+
+    return metric.some((item) => this.metric === item);
+  }
+
   // todo: use redux in manifold to get reset state
   viewManifest(manifest: Manifest): void {
     const data: IUVData<T> = <IUVData<T>>{};
@@ -1172,7 +1205,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   dispose(): void {
-    this.store?.destroy();
+    this.store?.setState(null);
   }
 }
 

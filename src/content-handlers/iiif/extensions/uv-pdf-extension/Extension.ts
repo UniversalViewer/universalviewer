@@ -7,11 +7,12 @@ import { IPDFExtension } from "./IPDFExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { PDFCenterPanel } from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
 import { PDFHeaderPanel } from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-pdfmobilefooterpanel-module/MobileFooter";
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools } from "@edsilv/utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
@@ -30,6 +31,7 @@ export default class Extension
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  mobileFooterPanel: MobileFooterPanel;
   headerPanel: PDFHeaderPanel;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
@@ -106,6 +108,9 @@ export default class Extension
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+      );
     } else {
       this.shell.$footerPanel.hide();
     }
@@ -160,16 +165,20 @@ export default class Extension
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString(),
-      title
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
+  }
+
+  isPdfJsEnabled(): boolean {
+    return Bools.getBool(
+      this.data.config!.modules.pdfCenterPanel.options.usePdfJs,
+      true
     );
-    return script;
   }
 }
