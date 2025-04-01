@@ -121,6 +121,7 @@ Once a stable release is ready to be published, these steps can be followed by t
 3. Merge the `release-X.Y` branch into the `main` branch, so that `main` continues to point to the most recent stable release.
 4. All changed/deleted branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.1 :release-4.1.0`. (Note the colon on `:release-4.1.0` -- this deletes the short-lived release branch while updating all of the long-lived branches).
 5. At this point, a GitHub action will recognize the new version tag and publish the package to NPM.
+6. Don't forget to create a release with appropriate release notes through the GitHub web interface to make the new version more visible.
 
 ### Backporting a Bug Fix
 
