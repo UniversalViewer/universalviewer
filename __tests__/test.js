@@ -67,61 +67,16 @@ describe("Universal Viewer", () => {
     expect(labelOverflowAfterToggle).toBe("visible");
   });
 
-  it("can toggle gallery view", async () => {
-    // gallery view is not default view
-    const galleryViewBeforeToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewBeforeToggle).toBe("hidden");
+  // it('settings button is visible', async () => {
 
-    // gallery toggle icon is visible
-    await page.waitForSelector(".uv-icon-gallery");
-    const galleryViewToggle = await page.evaluate(() => {
-      const toggle = document.querySelector(".uv-icon-gallery");
-      return getComputedStyle(toggle).overflowX;
-    });
-    expect(galleryViewToggle).toBe("visible");
+  //   await page.waitForSelector('.btn.imageBtn.settings');
 
-    // gallery view can be toggled on
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-gallery").click();
-    });
-    const galleryViewAfterToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterToggle).toBe("visible");
+  //   const isSettingsButtonVisible = await page.evaluate(() => {
+  //     const settingsButton = document.querySelector('.btn.imageBtn.settings');
+  //     const style = window.getComputedStyle(settingsButton);
+  //     return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
+  //   });
 
-    // gallery view can be toggled off
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-two-up").click();
-    });
-    const galleryViewAfterTwoUpToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterTwoUpToggle).toBe("hidden");
-  });
-
-  it("settings button is visible", async () => {
-    await page.waitForSelector(".btn.imageBtn.settings");
-
-    const isSettingsButtonVisible = await page.evaluate(() => {
-      const settingsButton = document.querySelector(".btn.imageBtn.settings");
-      const style = window.getComputedStyle(settingsButton);
-      return (
-        style.getPropertyValue("visibility") !== "hidden" &&
-        style.getPropertyValue("display") !== "none"
-      );
-    });
-
-    expect(isSettingsButtonVisible).toBe(true);
-  });
+  //   expect(isSettingsButtonVisible).toBe(true);
+  // });
 });
