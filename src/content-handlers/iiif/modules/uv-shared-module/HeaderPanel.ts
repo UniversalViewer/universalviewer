@@ -10,6 +10,8 @@ import { Bools } from "../../Utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 import { createRoot, Root } from "react-dom/client";
+import HeaderPanelRightOptions from "./HeaderPanelRightOptions";
+import { createElement } from "react";
 
 export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"],
@@ -114,6 +116,10 @@ export class HeaderPanel<
         this.$settingsButton
       );
     });
+
+    this.rightOptionsRoot.render(
+      createElement(HeaderPanelRightOptions, {})
+    );
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
       this.$centerOptions.hide();

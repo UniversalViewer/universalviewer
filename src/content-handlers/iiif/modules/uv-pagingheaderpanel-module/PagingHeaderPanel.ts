@@ -11,7 +11,6 @@ import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 import PagingHeaderPanelLeftOptions from "./PagingHeaderPanelLeftOptions";
-import PagingHeaderPanelRightOptions from "./PagingHeaderPanelRightOptions";
 import { createElement } from "react";
 
 export class PagingHeaderPanel extends HeaderPanel<
@@ -270,9 +269,9 @@ export class PagingHeaderPanel extends HeaderPanel<
     this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
     this.$rightOptions.prepend(this.$pagingToggleButtons);
 
-    this.rightOptionsRoot.render(
-      createElement(PagingHeaderPanelRightOptions, {})
-    )
+    // this.rightOptionsRoot.render(
+    //   createElement(PagingHeaderPanelRightOptions, {})
+    // );
 
     this.leftOptionsRoot.render(
       createElement(PagingHeaderPanelLeftOptions, {})
