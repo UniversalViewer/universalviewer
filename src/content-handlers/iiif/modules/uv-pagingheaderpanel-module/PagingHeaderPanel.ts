@@ -276,15 +276,6 @@ export class PagingHeaderPanel extends HeaderPanel<
     // );
 
     this.leftOptionsRoot.render(
-      createElement(Pager, {
-        helper: this.extension.helper,
-        extensionHost: this.extensionHost,
-        content: this.content,
-        options: this.options
-      })
-    )
-
-    this.leftOptionsRoot.render(
       createElement(
         'div', 
         { 
