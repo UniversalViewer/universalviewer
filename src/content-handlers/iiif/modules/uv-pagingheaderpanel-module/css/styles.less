@@ -6,7 +6,6 @@
 
         .pager-container {
             display: flex;
-            overflow: hidden;
             transition: max-width 0.15s ease-out, opacity 0.1s ease-out;
             opacity: 0;
           }
@@ -37,54 +36,50 @@
         
         .search-input-container {
             display: flex;
-            align-items: center;         /* Center the input and the button vertically */
-            height: 100%;                 /* Make the container take up the full height of the form */
+            align-items: center;
+            height: 100%; 
             margin-right: 8px;
             margin-left: 8px;
             position: relative; 
         }
 
         .search-input {
+            padding: 0 4px;
             border: 1px solid @gray;
             border-radius: 0;     
             outline: none;        
             caret-color: white;
             z-index: 10; /* Ensures the input is above the dropdown */
             text-align: right;
+            background-color: rgba(28,27,34,255);
         }
 
-        /* Styles for the autocomplete dropdown */
 .autocomplete-dropdown {
     position: absolute;
-    top: 100%;  /* Position it directly below the input field */
+    top: 100%;
     left: 0;
-    width: 100%; /* Ensure the dropdown matches the input's width */
-    background-color: #333; /* Dark background for the dropdown */
-    border: 1px solid #444; /* Slightly darker border */
-    max-height: 150px; /* Limit the height */
-    overflow-y: auto;  /* Scroll if there are too many items */
-    z-index: 100; /* Ensure the dropdown is above other elements */
-    margin-top: 0px; /* Small gap between input and dropdown */
-    padding: 0; /* Remove padding */
-    list-style: none; /* Remove bullet points */
-    width: 8ch; /* Make the dropdown match the input width */
+    width: 100%;
+    background-color: rgba(28,27,34,255);
+    border-radius: 0;
+    max-height: 150px;
+    overflow-y: auto; 
+    z-index: 100;
+    margin-top: 0px;
+    padding: 0;
+    list-style: none;
 }
 
 .autocomplete-dropdown li {
-    padding: 4px; 
+    padding: 4px 7px; 
     cursor: pointer;
 }
 
 .autocomplete-dropdown li:hover {
-    background-color: #444;  /* Slightly lighter background on hover */
-}
-
-.autocomplete-dropdown li.active {
-    background-color: #007bff;  /* Highlight active option */
+    background-color: @gray; 
 }
 
 .total-label {
-    margin-left: 8px;
+    margin-left: 4px;
 }
 
 

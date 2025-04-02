@@ -22,8 +22,8 @@ export const Pager: React.FC<PagerProps> = ({
   const [searchValue, setSearchValue] = useState<string>(
     String(helper.canvasIndex + 1)
   );
-//   const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
-//   const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
+  const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
+  const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
   const pagerRef = useRef<HTMLDivElement>(null);
   const [maxWidth, setMaxWidth] = useState(0);
   const [isPagerVisible, setIsPagerVisible] = useState(false);
@@ -34,7 +34,8 @@ export const Pager: React.FC<PagerProps> = ({
     const isPageModeEnabled = () => Boolean(options.pageModeEnabled);
 
   //for development only, toggle this to show the full << < > >> buttons (could change to config setting)
-  const showFullControls = true;
+  const showFullControls = false;
+  const inputWidth = "6ch" //set this dynamically based on character length of longest canvas index/label
 
   useEffect(() => {
     if (isPagerVisible && pagerRef.current) {
@@ -82,32 +83,32 @@ export const Pager: React.FC<PagerProps> = ({
     const value = e.target.value;
     setSearchValue(value);
 
-    // if (options.autoCompleteBoxEnabled) {
-    //   const results: string[] = [];
+    if (options.autoCompleteBoxEnabled) {
+      const results: string[] = [];
 
-    //   for (let i = 0; i < helper.totalCanvases; i++) {
-    //     const canvas = helper.getCanvasByIndex(i);
+      for (let i = 0; i < helper.getTotalCanvases(); i++) {
+        const canvas = helper.getCanvasByIndex(i);
 
-    //     if (isPageModeEnabled()) {
-    //       const label = LanguageMap.getValue(canvas.getLabel());
-    //       if (label && label.startsWith(value)) {
-    //         results.push(String(label));
-    //       }
-    //     } else if (String(i + 1).startsWith(value)) {
-    //       results.push(String(i + 1));
-    //     }
-    //   }
+        if (isPageModeEnabled()) {
+          const label = LanguageMap.getValue(canvas.getLabel());
+          if (label && label.startsWith(value)) {
+            results.push(String(label));
+          }
+        } else if (String(i + 1).startsWith(value)) {
+          results.push(String(i + 1));
+        }
+      }
 
-    //   setAutoCompleteOptions(results);
-    //   setShowAutoComplete(results.length > 0 && value.length > 0);
-    // }
+      setAutoCompleteOptions(results);
+      setShowAutoComplete(results.length > 0 && value.length > 0);
+    }
   };
 
-//   const handleAutoCompleteSelect = (value: string) => {
-//     setSearchValue(value);
-//     setShowAutoComplete(false);
-//     handleSearch(value);
-//   };
+  const handleAutoCompleteSelect = (value: string) => {
+    setSearchValue(value);
+    setShowAutoComplete(false);
+    handleSearch(value);
+  };
 
   const setButtonStates = () => {
     if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
@@ -146,6 +147,9 @@ export const Pager: React.FC<PagerProps> = ({
 
       if (isNaN(index) || index < 0 || index >= helper.totalCanvases) {
         alert("Invalid page number");
+
+        //also check if search is in range before submitting
+        // maybe no alert, just return to current value if input is invalid?
         return;
       }
 
@@ -243,7 +247,7 @@ export const Pager: React.FC<PagerProps> = ({
     }
   };
 
-  // Only show pager if there are multiple canvases
+  // move this to condition rendering in the parent component.
   if (helper.getTotalCanvases() <= 1) {
     return null;
   }
@@ -266,7 +270,7 @@ export const Pager: React.FC<PagerProps> = ({
         </svg>
       </HeaderButton>
       <div
-    //   fix the 'ahidden' thing
+    //   remember to fix the 'ahidden' thing
         className={`pager-container ${isPagerVisible ? "avisible" : "ahidden"}`}
         ref={pagerRef}
         style={{
@@ -302,11 +306,12 @@ export const Pager: React.FC<PagerProps> = ({
                 onChange={handleSearchChange}
                 aria-label={content.pageSearchLabel}
                 maxLength={30}
-                style={{width: "6ch"}}
+                style={{width: inputWidth}}
               />
 
-              {/* {showAutoComplete && options.autoCompleteBoxEnabled && (
-                <ul className="autocomplete-dropdown">
+              {showAutoComplete && options.autoCompleteBoxEnabled && (
+                <ul className="autocomplete-dropdown" style={{width: inputWidth}}
+>
                   {autoCompleteOptions.map((option, index) => (
                     <li
                       key={index}
@@ -316,7 +321,7 @@ export const Pager: React.FC<PagerProps> = ({
                     </li>
                   ))}
                 </ul>
-              )} */}
+              )}
 
               <span className="total-label">{getTotalLabel()}</span>
             </div>
