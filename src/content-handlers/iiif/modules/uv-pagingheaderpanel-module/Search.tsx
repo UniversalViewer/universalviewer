@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import HeaderButton from "../uv-shared-module/HeaderButton";
 
 
-const PagingHeaderPanelLeftOptions: React.FC = (props) => {
+const Search: React.FC = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleSearch = () => {
@@ -10,8 +10,8 @@ const PagingHeaderPanelLeftOptions: React.FC = (props) => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <HeaderButton
+    <>
+    <HeaderButton
         onClick={toggleSearch}
         label={isSearchVisible ? "Hide search" : "Show search"}
       >
@@ -22,20 +22,20 @@ const PagingHeaderPanelLeftOptions: React.FC = (props) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle cx="13" cy="13" r="8" stroke="white" stroke-width="4" />
+          <circle cx="13" cy="13" r="8" stroke="white" strokeWidth="4" />
           <line
             x1="20"
             y1="20"
             x2="27"
             y2="27"
             stroke="white"
-            stroke-width="5"
-            stroke-linecap="straight"
+            strokeWidth="5"
+            strokeLinecap="square"
           />
         </svg>
       </HeaderButton>
-    </div>
+    </>
   );
 };
 
-export default PagingHeaderPanelLeftOptions;
+export default Search;

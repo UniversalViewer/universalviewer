@@ -10,8 +10,8 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-// import PagingHeaderPanelLeftOptions from "./PagingHeaderPanelLeftOptions";
 import Pager from "./Pager";
+import Search from "./Search"
 //import PagingHeaderPanelRightOptions from "./PagingHeaderPanelRightOptions";
 import { createElement } from "react";
 
@@ -283,6 +283,25 @@ export class PagingHeaderPanel extends HeaderPanel<
         options: this.options
       })
     )
+
+    this.leftOptionsRoot.render(
+      createElement(
+        'div', 
+        { 
+          className: 'pagingHeaderPanelLeftOptions',
+          style: { display: "flex", alignItems: "center"}
+        }, 
+        [
+          createElement(Pager, {key: 'pager', 
+            helper: this.extension.helper,
+            extensionHost: this.extensionHost,
+            content: this.content,
+            options: this.options
+          }),
+          createElement(Search, { key: 'search'})
+        ]
+      )
+    );
 
     this.$oneUpButton = $(`
           <button class="btn imageBtn one-up" title="${this.content.oneUp}">
