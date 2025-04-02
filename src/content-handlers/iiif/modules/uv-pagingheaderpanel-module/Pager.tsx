@@ -35,7 +35,7 @@ export const Pager: React.FC<PagerProps> = ({
   const [lastButtonEnabled, setLastButtonEnabled] = useState<boolean>(true);
 
   const dropdownRef = useRef<HTMLUListElement>(null);
-  const pagerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const viewingDirection =
     helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
@@ -47,19 +47,21 @@ export const Pager: React.FC<PagerProps> = ({
 
   useEffect(() => {
     if (focusedOptionIndex >= 0 && dropdownRef.current) {
-      const focusedOption = document.getElementById(`option-${focusedOptionIndex}`);
+      const focusedOption = document.getElementById(
+        `option-${focusedOptionIndex}`
+      );
       if (focusedOption) {
         focusedOption.scrollIntoView({
-          behavior: 'instant',
-          block: 'nearest'
+          behavior: "instant",
+          block: "nearest",
         });
       }
     }
   }, [focusedOptionIndex]);
 
   useEffect(() => {
-    if (isPagerVisible && pagerRef.current) {
-      setMaxWidth(pagerRef.current.scrollWidth);
+    if (isPagerVisible && containerRef.current) {
+      setMaxWidth(containerRef.current.scrollWidth);
     }
   }, [isPagerVisible]);
 
@@ -285,7 +287,7 @@ export const Pager: React.FC<PagerProps> = ({
     }
   };
 
-  // move this to condition rendering in the parent component.
+  // move this to conditional rendering in the parent component.
   if (helper.getTotalCanvases() <= 1) {
     return null;
   }
@@ -330,6 +332,20 @@ export const Pager: React.FC<PagerProps> = ({
     }
   };
 
+  function positionDropdown(triggerElement, dropdownElement) {
+    if (!triggerElement || !dropdownElement) return;
+  
+    const rect = triggerElement.getBoundingClientRect();
+    dropdownElement.style.top = `${rect.bottom}px`;
+    dropdownElement.style.left = `${rect.left}px`;
+  }
+  
+  useEffect(() => {
+    const input = document.querySelector('.search-input');
+    const portal = document.querySelector('.dropdown-portal');
+    positionDropdown(input, portal);
+  }, [showAutoComplete]);
+
   return (
     <>
       <HeaderButton
@@ -349,105 +365,110 @@ export const Pager: React.FC<PagerProps> = ({
       </HeaderButton>
       <div
         //   remember to fix the 'ahidden' thing
-        className={`pager-container ${isPagerVisible ? "avisible" : "ahidden"}`}
-        ref={pagerRef}
+        className={`slide-out-container ${
+          isPagerVisible ? "avisible" : "ahidden"
+        }`}
+        ref={containerRef}
         style={{
           maxWidth: isPagerVisible ? `${maxWidth}px` : "0",
           opacity: isPagerVisible ? 1 : 0,
         }}
       >
-        <div className="pager">
-          <div style={{ display: showFullControls ? "block" : "none" }}>
-            <HeaderButton
-              onClick={() => handleNavigation("first")}
-              label={getNavigationTitle("first")}
-              disabled={!firstButtonEnabled}
-            >
-              &lt;&lt;
-            </HeaderButton>
+        <div
+          className="pager"
+          style={{ display: showFullControls ? "block" : "none" }}
+        >
+          <HeaderButton
+            onClick={() => handleNavigation("first")}
+            label={getNavigationTitle("first")}
+            disabled={!firstButtonEnabled}
+          >
+            &lt;&lt;
+          </HeaderButton>
 
-            <HeaderButton
-              onClick={() => handleNavigation("prev")}
-              label={getNavigationTitle("prev")}
-              disabled={!prevButtonEnabled}
-            >
-              &lt;
-            </HeaderButton>
+          <HeaderButton
+            onClick={() => handleNavigation("prev")}
+            label={getNavigationTitle("prev")}
+            disabled={!prevButtonEnabled}
+          >
+            &lt;
+          </HeaderButton>
+        </div>
+
+        <form className="search-form" onSubmit={handleSearchSubmit}>
+          <div className="search-input-container">
+            <input
+              type="text"
+              className="search-input"
+              value={searchValue}
+              onChange={handleSearchChange}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
+              onKeyDown={handleInputKeyDown}
+              aria-label={content.pageSearchLabel}
+              aria-expanded={showAutoComplete}
+              aria-autocomplete="list"
+              aria-controls="autocomplete-list"
+              aria-activedescendant={
+                focusedOptionIndex >= 0
+                  ? `option-${focusedOptionIndex}`
+                  : undefined
+              }
+              maxLength={30}
+              style={{ width: inputWidth }}
+            />
+            <span className="total-label">{getTotalLabel()}</span>
           </div>
+        </form>
+        <div style={{ display: showFullControls ? "block" : "none" }}>
+          <HeaderButton
+            onClick={() => handleNavigation("next")}
+            label={getNavigationTitle("next")}
+            disabled={!nextButtonEnabled}
+          >
+            &gt;&gt;
+          </HeaderButton>
 
-          <form className="search-form" onSubmit={handleSearchSubmit}>
-            <div className="search-input-container">
-              <input
-                type="text"
-                className="search-input"
-                value={searchValue}
-                onChange={handleSearchChange}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-                onKeyDown={handleInputKeyDown}
-                aria-label={content.pageSearchLabel}
-                aria-expanded={showAutoComplete}
-                aria-autocomplete="list"
-                aria-controls="autocomplete-list"
-                aria-activedescendant={
-                  focusedOptionIndex >= 0
-                    ? `option-${focusedOptionIndex}`
-                    : undefined
-                }
-                maxLength={30}
-                style={{ width: inputWidth }}
-              />
-
-              {showAutoComplete && options.autoCompleteBoxEnabled && (
-                <ul 
-  id="autocomplete-list" 
-  ref={dropdownRef}
-  className="autocomplete-dropdown" 
-  style={{width: inputWidth}}
-  role="listbox"
->
-                  {autoCompleteOptions.map((option, index) => (
-                    <li
-                      key={index}
-                      id={`option-${index}`}
-                      role="option"
-                      aria-selected={focusedOptionIndex === index}
-                      className={
-                        focusedOptionIndex === index ? "focused-option" : ""
-                      }
-                      onMouseDown={() => {
-                        handleAutoCompleteSelect(option);
-                      }}
-                      onMouseEnter={() => setFocusedOptionIndex(index)}
-                    >
-                      {option}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              <span className="total-label">{getTotalLabel()}</span>
-            </div>
-          </form>
-          <div style={{ display: showFullControls ? "block" : "none" }}>
-            <HeaderButton
-              onClick={() => handleNavigation("next")}
-              label={getNavigationTitle("next")}
-              disabled={!nextButtonEnabled}
-            >
-              &gt;&gt;
-            </HeaderButton>
-
-            <HeaderButton
-              onClick={() => handleNavigation("last")}
-              label={getNavigationTitle("last")}
-              disabled={!lastButtonEnabled}
-            >
-              &gt;
-            </HeaderButton>
-          </div>
+          <HeaderButton
+            onClick={() => handleNavigation("last")}
+            label={getNavigationTitle("last")}
+            disabled={!lastButtonEnabled}
+          >
+            &gt;
+          </HeaderButton>
         </div>
       </div>
+
+{/* the dropdown is rendered in a portal because 'hidden' needs to applied to the container above for animations to work nicely.  */}
+      <div className="dropdown-portal">
+            {showAutoComplete && options.autoCompleteBoxEnabled && (
+              <ul
+                id="autocomplete-list"
+                ref={dropdownRef}
+                className="autocomplete-dropdown"
+                style={{ width: inputWidth }}
+                role="listbox"
+              >
+                {autoCompleteOptions.map((option, index) => (
+                  <li
+                    key={index}
+                    id={`option-${index}`}
+                    role="option"
+                    aria-selected={focusedOptionIndex === index}
+                    className={
+                      focusedOptionIndex === index ? "focused-option" : ""
+                    }
+                    onMouseDown={() => {
+                      handleAutoCompleteSelect(option);
+                    }}
+                    onMouseEnter={() => setFocusedOptionIndex(index)}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            )}
+</div>
     </>
   );
 };

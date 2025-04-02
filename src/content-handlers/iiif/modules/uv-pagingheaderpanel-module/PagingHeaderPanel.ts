@@ -289,7 +289,12 @@ export class PagingHeaderPanel extends HeaderPanel<
             content: this.content,
             options: this.options
           }),
-          createElement(Search, { key: 'search'})
+          createElement(Search, { key: 'search',
+            extension: this.extension as OpenSeadragonExtension,
+            extensionHost: this.extensionHost,
+            content: this.content,
+            options: this.options
+          })
         ]
       )
     );

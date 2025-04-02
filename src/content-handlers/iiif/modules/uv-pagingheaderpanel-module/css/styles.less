@@ -4,22 +4,26 @@
   .headerPanel {
     color: @text-secondary-color;
 
-        .pager-container {
+        .slide-out-container {
             display: flex;
-            transition: max-width 0.15s ease-out, opacity 0.1s ease-out;
+            transition: 
+            max-width 0.1s cubic-bezier(0.4, 0, 0.6, 1), 
+            opacity 0.2s ease-out;
             opacity: 0;
+            overflow: hidden;
+            position: relative;
           }
           
-          .pager-container.avisible {
+          .slide-out-container.avisible {
             opacity: 1;
           }
           
           /* Prevent content wrapping */
-          .pager-container > * {
+          .slide-out-container > * {
             white-space: nowrap;
           }
 
-        .pager {
+        .pager .search-new {
             display: flex;                /* Use flexbox to arrange elements in a row */
             justify-content: space-between; /* Distribute space evenly between the elements */
             align-items: center;          /* Vertically center the items */
@@ -40,7 +44,7 @@
             height: 100%; 
             margin-right: 8px;
             margin-left: 8px;
-            position: relative; 
+            position: relative;
         }
 
         .search-input {
@@ -54,20 +58,23 @@
             background-color: rgba(28,27,34,255);
         }
 
-.autocomplete-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: rgba(28,27,34,255);
-    border-radius: 0;
-    max-height: 150px;
-    overflow-y: auto; 
-    z-index: 100;
-    margin-top: 0px;
-    padding: 0;
-    list-style: none;
-}
+
+        .dropdown-portal {
+            position: fixed;
+            z-index: 1000;
+          }
+
+          .autocomplete-dropdown {
+            position: absolute;
+            background-color: rgba(28,27,34,255);
+            border-radius: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 0px;
+            padding: 0;
+            list-style: none;
+          }
 
 .autocomplete-dropdown li {
     padding: 4px 7px; 
