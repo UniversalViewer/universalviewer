@@ -18,24 +18,44 @@ export const Pager: React.FC<PagerProps> = ({
   content,
   options,
 }) => {
-
   const [searchValue, setSearchValue] = useState<string>(
     String(helper.canvasIndex + 1)
   );
   const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
-  const pagerRef = useRef<HTMLDivElement>(null);
   const [maxWidth, setMaxWidth] = useState(0);
   const [isPagerVisible, setIsPagerVisible] = useState(false);
+  const [lastValidValue, setLastValidValue] = useState<string>(
+    String(helper.canvasIndex + 1)
+  );
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
+  const [firstButtonEnabled, setFirstButtonEnabled] = useState<boolean>(true);
+  const [prevButtonEnabled, setPrevButtonEnabled] = useState<boolean>(true);
+  const [nextButtonEnabled, setNextButtonEnabled] = useState<boolean>(true);
+  const [lastButtonEnabled, setLastButtonEnabled] = useState<boolean>(true);
+
+  const dropdownRef = useRef<HTMLUListElement>(null);
+  const pagerRef = useRef<HTMLDivElement>(null);
 
   const viewingDirection =
     helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
-    
-    const isPageModeEnabled = () => Boolean(options.pageModeEnabled);
+  const isPageModeEnabled = () => Boolean(options.pageModeEnabled);
 
   //for development only, toggle this to show the full << < > >> buttons (could change to config setting)
   const showFullControls = false;
-  const inputWidth = "6ch" //set this dynamically based on character length of longest canvas index/label
+  const inputWidth = "6ch"; //set this dynamically based on character length of longest canvas index/label
+
+  useEffect(() => {
+    if (focusedOptionIndex >= 0 && dropdownRef.current) {
+      const focusedOption = document.getElementById(`option-${focusedOptionIndex}`);
+      if (focusedOption) {
+        focusedOption.scrollIntoView({
+          behavior: 'auto',
+          block: 'center'
+        });
+      }
+    }
+  }, [focusedOptionIndex]);
 
   useEffect(() => {
     if (isPagerVisible && pagerRef.current) {
@@ -43,32 +63,12 @@ export const Pager: React.FC<PagerProps> = ({
     }
   }, [isPagerVisible]);
 
-  const togglePager = () => {
-    setIsPagerVisible(!isPagerVisible);
-  };
-
-  // Button states
-  const [firstButtonEnabled, setFirstButtonEnabled] = useState<boolean>(true);
-  const [prevButtonEnabled, setPrevButtonEnabled] = useState<boolean>(true);
-  const [nextButtonEnabled, setNextButtonEnabled] = useState<boolean>(true);
-  const [lastButtonEnabled, setLastButtonEnabled] = useState<boolean>(true);
-
   useEffect(() => {
     setButtonStates();
-  }, [])
+  }, []);
 
-  const updateSearchFieldValue = (canvasIndex) => {
-    let value: string;
-
-    if (isPageModeEnabled()) {
-      //   const orderLabel = LanguageMap.getValue(canvas.getLabel());
-      //   value = orderLabel === "-" ? "" : String(orderLabel);
-      value = "test";
-    } else {
-      value = String(canvasIndex + 1);
-    }
-
-    setSearchValue(value);
+  const togglePager = () => {
+    setIsPagerVisible(!isPagerVisible);
   };
 
   extensionHost.subscribe(
@@ -79,9 +79,23 @@ export const Pager: React.FC<PagerProps> = ({
     }
   );
 
+  const updateSearchFieldValue = (canvasIndex) => {
+    let value: string;
+    if (isPageModeEnabled()) {
+      //   const orderLabel = LanguageMap.getValue(canvas.getLabel());
+      //   value = orderLabel === "-" ? "" : String(orderLabel);
+      value = "test";
+    } else {
+      value = String(canvasIndex + 1);
+    }
+    setSearchValue(value);
+    setLastValidValue(value);
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
+    setFocusedOptionIndex(-1);
 
     if (options.autoCompleteBoxEnabled) {
       const results: string[] = [];
@@ -112,17 +126,41 @@ export const Pager: React.FC<PagerProps> = ({
 
   const setButtonStates = () => {
     if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
-        setFirstButtonEnabled(!helper.isLastCanvas());
-        setPrevButtonEnabled(!helper.isLastCanvas());
-        setNextButtonEnabled(!helper.isFirstCanvas());
-        setLastButtonEnabled(!helper.isFirstCanvas());
+      setFirstButtonEnabled(!helper.isLastCanvas());
+      setPrevButtonEnabled(!helper.isLastCanvas());
+      setNextButtonEnabled(!helper.isFirstCanvas());
+      setLastButtonEnabled(!helper.isFirstCanvas());
+    } else {
+      setFirstButtonEnabled(!helper.isFirstCanvas());
+      setPrevButtonEnabled(!helper.isFirstCanvas());
+      setNextButtonEnabled(!helper.isLastCanvas());
+      setLastButtonEnabled(!helper.isLastCanvas());
+    }
+  };
+
+  const handleInputFocus = () => {
+    setSearchValue("");
+    setFocusedOptionIndex(-1);
+    const allCanvases: string[] = [];
+    for (let i = 0; i < helper.getTotalCanvases(); i++) {
+      if (isPageModeEnabled()) {
+        // const canvas = helper.getCanvasByIndex(i);
+        // const label = LanguageMap.getValue(canvas.getLabel());
+        // if (label) {
+        //     allCanvases.push(String(label));
+        // }
       } else {
-        setFirstButtonEnabled(!helper.isFirstCanvas());
-        setPrevButtonEnabled(!helper.isFirstCanvas());
-        setNextButtonEnabled(!helper.isLastCanvas());
-        setLastButtonEnabled(!helper.isLastCanvas());
+        allCanvases.push(String(i + 1));
       }
     }
+    setAutoCompleteOptions(allCanvases);
+    setShowAutoComplete(true);
+  };
+
+  const handleInputBlur = () => {
+    setShowAutoComplete(false);
+    setSearchValue(lastValidValue);
+  };
 
   const handleSearch = (value: string) => {
     if (!value) {
@@ -153,7 +191,7 @@ export const Pager: React.FC<PagerProps> = ({
         return;
       }
 
-      extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index)
+      extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index);
     }
   };
 
@@ -252,6 +290,46 @@ export const Pager: React.FC<PagerProps> = ({
     return null;
   }
 
+  //keyboard navigation
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (
+        showAutoComplete &&
+        focusedOptionIndex >= 0 &&
+        focusedOptionIndex < autoCompleteOptions.length
+      ) {
+        handleAutoCompleteSelect(autoCompleteOptions[focusedOptionIndex]);
+      } else {
+        handleSearch(searchValue);
+      }
+      return;
+    }
+
+    if (!showAutoComplete) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setFocusedOptionIndex((prev) =>
+          prev < autoCompleteOptions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setFocusedOptionIndex((prev) => (prev > 0 ? prev - 1 : 0));
+        break;
+      case "Escape":
+        setShowAutoComplete(false);
+        setFocusedOptionIndex(-1);
+        handleInputBlur();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <HeaderButton
@@ -270,7 +348,7 @@ export const Pager: React.FC<PagerProps> = ({
         </svg>
       </HeaderButton>
       <div
-    //   remember to fix the 'ahidden' thing
+        //   remember to fix the 'ahidden' thing
         className={`pager-container ${isPagerVisible ? "avisible" : "ahidden"}`}
         ref={pagerRef}
         style={{
@@ -304,18 +382,43 @@ export const Pager: React.FC<PagerProps> = ({
                 className="search-input"
                 value={searchValue}
                 onChange={handleSearchChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                onKeyDown={handleInputKeyDown}
                 aria-label={content.pageSearchLabel}
+                aria-expanded={showAutoComplete}
+                aria-autocomplete="list"
+                aria-controls="autocomplete-list"
+                aria-activedescendant={
+                  focusedOptionIndex >= 0
+                    ? `option-${focusedOptionIndex}`
+                    : undefined
+                }
                 maxLength={30}
-                style={{width: inputWidth}}
+                style={{ width: inputWidth }}
               />
 
               {showAutoComplete && options.autoCompleteBoxEnabled && (
-                <ul className="autocomplete-dropdown" style={{width: inputWidth}}
+                <ul 
+  id="autocomplete-list" 
+  ref={dropdownRef}
+  className="autocomplete-dropdown" 
+  style={{width: inputWidth}}
+  role="listbox"
 >
                   {autoCompleteOptions.map((option, index) => (
                     <li
                       key={index}
-                      onClick={() => handleAutoCompleteSelect(option)}
+                      id={`option-${index}`}
+                      role="option"
+                      aria-selected={focusedOptionIndex === index}
+                      className={
+                        focusedOptionIndex === index ? "focused-option" : ""
+                      }
+                      onMouseDown={() => {
+                        handleAutoCompleteSelect(option);
+                      }}
+                      onMouseEnter={() => setFocusedOptionIndex(index)}
                     >
                       {option}
                     </li>
