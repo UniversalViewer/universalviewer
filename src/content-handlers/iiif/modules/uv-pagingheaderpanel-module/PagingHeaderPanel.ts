@@ -10,7 +10,9 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-import PagingHeaderPanelLeftOptions from "./PagingHeaderPanelLeftOptions";
+// import PagingHeaderPanelLeftOptions from "./PagingHeaderPanelLeftOptions";
+import Pager from "./Pager";
+import PagingHeaderPanelRightOptions from "./PagingHeaderPanelRightOptions";
 import { createElement } from "react";
 
 export class PagingHeaderPanel extends HeaderPanel<
@@ -274,7 +276,12 @@ export class PagingHeaderPanel extends HeaderPanel<
     // );
 
     this.leftOptionsRoot.render(
-      createElement(PagingHeaderPanelLeftOptions, {})
+      createElement(Pager, {
+        helper: this.extension.helper,
+        extensionHost: this.extensionHost,
+        content: this.content,
+        options: this.options
+      })
     )
 
     this.$oneUpButton = $(`

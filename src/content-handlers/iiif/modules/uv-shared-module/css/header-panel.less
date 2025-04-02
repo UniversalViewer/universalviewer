@@ -17,15 +17,42 @@
         .header-button {
             width: 30px;
             height: 30px;
+            padding: 0; /* Crucial - removes default spacing */
+            display: inline-flex; /* For perfect centering */
+            align-items: center;
+            justify-content: center;
             transition: background-color 100ms ease;
             cursor: pointer;
+            border: none; /* Remove default button border */
+            background: transparent; /* Remove default background */
           }
-          
           
           .header-button:hover {
             background-color: @gray;
           }
           
+          /* Add this for the SVG icon */
+          .header-button svg {
+            width: 100%; /* Fill available space */
+            height: 100%; /* Fill available space */
+            max-width: 15px; /* Control visible size */
+            max-height: 15px; /* Control visible size */
+          }
+
+          .header-button:disabled {
+            cursor: default; /* Indicate that it's not clickable */
+            opacity: 0.5; /* Reduce opacity to visually show it's disabled */
+        }
+        
+        .header-button:disabled:hover {
+            background-color: transparent;
+        }
+        
+        .header-button:disabled svg {
+            opacity: 0.2;
+        }
+        
+
 
         .options {
             padding-left: 8px;
@@ -35,6 +62,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            .leftOptions {
+                display: flex; 
+                width: auto;
+                height: auto;
+                justify-content: flex-start;
+                align-items: center;
+            }
 
             .centerOptions {
                 text-align: center;

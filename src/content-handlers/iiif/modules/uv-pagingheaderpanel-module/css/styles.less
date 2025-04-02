@@ -4,140 +4,229 @@
   .headerPanel {
     color: @text-secondary-color;
 
-    button.btn.imageBtn {
-      padding-left: 2px;
-      padding-right: 2px;
-
-      &.first,
-      &.prev,
-      &.next,
-      &.last {
-        i {
-          background-color: @gray;
-          &:hover {
-            background-color: @gray-dark;
+        .pager-container {
+            display: flex;
+            overflow: hidden;
+            transition: max-width 0.15s ease-out, opacity 0.1s ease-out;
+            opacity: 0;
           }
-        }
-      }
-
-      &.disabled,
-      &.disabled:hover,
-      &.disabled i,
-      &.disabled i:hover {
-        background-color: transparent;
-      }
-    }
-
-    .centerOptions {
-      .image-selectionbox-options {
-        float: left;
-        margin: 0;
-      }
-
-      .image-selectionbox {
-        height: 30px;
-      }
-
-      .prevOptions {
-        float: left;
-        margin: 0 15px 0 0;
-      }
-
-      .mode {
-        float: left;
-        margin: 12px 0 0;
-      }
-
-      .search {
-        float: left;
-        margin: 6px 0 0 5px;
-        width: auto;
-
-        .searchText {
-          border: none;
-          padding: 0 0 0 2px;
-        }
-      }
-
-      .nextOptions {
-        float: left;
-        margin: 0 0 0 15px;
-      }
-
-      .mode {
-        input {
-          float: left;
-        }
-
-        label {
-          clear: none;
-          width: auto;
-          margin: 0;
-          padding: 0;
-          float: left;
-          font-size: @font-size-small;
-          line-height: 18px;
-          text-align: right;
-
-          &.disabled {
-            color: @disabled;
+          
+          .pager-container.avisible {
+            opacity: 1;
           }
-        }
-      }
-
-      &.modeOptionsDisabled {
-        width: 280px;
-      }
-
-      .autocompleteText {
-        width: 30px;
-        height: 19px;
-        line-height: 19px;
-        float: left;
-        font-size: @font-size-small;
-        padding-inline: 2px;
-        padding-block: 0;
-        margin-top: 6px;
-        color: black;
-        background-color: white;
-        border: none;
-      }
-
-      .autocomplete {
-        position: absolute;
-        background: #fff;
-        width: 60px;
-        border: 2px solid @brand-primary-lighter;
-        list-style-type: none;
-        -webkit-margin-before: 0;
-        -webkit-margin-after: 0;
-        -webkit-margin-start: 0;
-        -webkit-margin-end: 0;
-        -webkit-padding-start: 0;
-        margin: 0;
-        padding: 0;
-        max-height: 150px;
-        overflow: hidden auto;
-        z-index: 1000;
-
-        .result {
-          padding: 4px;
-          width: 270px;
-          overflow: hidden;
-
-          &.loading {
-            background-image: data-uri(@loader-white-bg);
-            background-repeat: no-repeat;
-            background-position: 4px 4px;
-            height: 25px;
+          
+          /* Prevent content wrapping */
+          .pager-container > * {
+            white-space: nowrap;
           }
 
-          &.selected {
-            background: @gray-lighter;
-          }
+        .pager {
+            display: flex;                /* Use flexbox to arrange elements in a row */
+            justify-content: space-between; /* Distribute space evenly between the elements */
+            align-items: center;          /* Vertically center the items */
+            height: 30px;                 /* Set the height of the parent container */
         }
-      }
-    }
+        
+        .search-form {
+            display: flex;
+            align-items: center;         /* Vertically center the form elements */
+            height: 100%;                 /* Ensure the form takes up the full height of the parent */
+            margin: 0;                   /* Remove any default margin from the form */
+            position: relative; /* To position the autocomplete dropdown relative to the form */
+        }
+        
+        .search-input-container {
+            display: flex;
+            align-items: center;         /* Center the input and the button vertically */
+            height: 100%;                 /* Make the container take up the full height of the form */
+            margin-right: 8px;
+            margin-left: 8px;
+            position: relative; 
+        }
+
+        .search-input {
+            border: 1px solid @gray;
+            border-radius: 0;     
+            outline: none;        
+            caret-color: white;
+            z-index: 10; /* Ensures the input is above the dropdown */
+            text-align: right;
+        }
+
+        /* Styles for the autocomplete dropdown */
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;  /* Position it directly below the input field */
+    left: 0;
+    width: 100%; /* Ensure the dropdown matches the input's width */
+    background-color: #333; /* Dark background for the dropdown */
+    border: 1px solid #444; /* Slightly darker border */
+    max-height: 150px; /* Limit the height */
+    overflow-y: auto;  /* Scroll if there are too many items */
+    z-index: 100; /* Ensure the dropdown is above other elements */
+    margin-top: 0px; /* Small gap between input and dropdown */
+    padding: 0; /* Remove padding */
+    list-style: none; /* Remove bullet points */
+    width: 8ch; /* Make the dropdown match the input width */
+}
+
+.autocomplete-dropdown li {
+    padding: 4px; 
+    cursor: pointer;
+}
+
+.autocomplete-dropdown li:hover {
+    background-color: #444;  /* Slightly lighter background on hover */
+}
+
+.autocomplete-dropdown li.active {
+    background-color: #007bff;  /* Highlight active option */
+}
+
+.total-label {
+    margin-left: 8px;
+}
+
+
+        }
+
+        // button.btn.imageBtn {
+        //     padding-left: 2px;
+        //     padding-right: 2px;
+
+        //     &.first,
+        //     &.prev,
+        //     &.next,
+        //     &.last {
+        //         i {
+        //             background-color: @gray;
+        //             &:hover {
+        //                 background-color: @gray-dark;
+        //             }
+        //         }
+        //     }
+
+        //     &.disabled,
+        //     &.disabled:hover,
+        //     &.disabled i,
+        //     &.disabled i:hover {
+        //         background-color: transparent;
+        //     }
+        // }
+
+        // .centerOptions {
+
+        //     .image-selectionbox-options {
+        //         float: left;
+        //         margin: 0 0 0 0;
+        //     }
+
+        //     .image-selectionbox {
+        //         height: 30px;
+        //     }
+
+        //     .prevOptions {
+        //         float: left;
+        //         margin: 0 15px 0 0;
+        //     }
+
+        //     .mode {
+        //         float: left;
+        //         margin: 12px 0 0 0;
+        //     }
+
+        //     .search {
+        //         float: left;
+        //         margin: 6px 0 0 5px;
+        //         width: auto;
+
+        //         .searchText {
+        //             border: none;
+        //             padding: 0 0 0 2px;
+        //         }
+        //     }
+
+        //     .nextOptions {
+        //         float: left;
+        //         margin: 0 0 0 15px;
+        //     }
+
+        //     .mode {
+
+        //         input {
+        //             float: left;
+        //         }
+
+        //         label {
+        //             clear: none;
+        //             width: auto;
+        //             margin: 0 0 0 0;
+        //             padding: 0;
+        //             float: left;
+        //             font-size: @font-size-small;
+        //             line-height: 18px;
+        //             text-align: right;
+
+        //             &.disabled {
+        //                 color: @disabled;
+        //             }
+        //         }
+        //     }
+
+        //     &.modeOptionsDisabled {
+        //         width: 280px;
+        //     }
+
+        //     .autocompleteText {
+        //         width: 30px;
+        //         height: 19px;
+        //         line-height: 19px;
+        //         float: left;
+        //         font-size: @font-size-small;
+        //         padding-inline: 2px;
+        //         padding-block: 0;
+        //         margin-top: 6px;
+        //         color: black;
+        //         background-color: white;
+        //         border: none;
+        //     }
+
+        //     .autocomplete {
+        //         position: absolute;
+        //         background: #fff;
+        //         width: 60px;
+        //         border: 2px solid @brand-primary-lighter;
+        //         list-style-type: none;
+        //         -webkit-margin-before: 0px;
+        //         -webkit-margin-after: 0px;
+        //         -webkit-margin-start: 0px;
+        //         -webkit-margin-end: 0px;
+        //         -webkit-padding-start: 0px;
+        //         margin: 0;
+        //         padding: 0;
+        //         max-height: 150px;
+        //         overflow-y: auto;
+        //         overflow-x: hidden;
+        //         z-index: 1000;
+
+        //         .result {
+        //             padding: 4px;
+        //             width: 270px;
+        //             overflow: hidden;
+
+        //             &.loading {
+        //                 background-image: data-uri(@loader-white-bg);
+        //                 background-repeat: no-repeat;
+        //                 background-position: 4px 4px;
+        //                 height: 25px;
+        //             }
+
+        //             &.selected {
+        //                 background: @gray-lighter;
+        //             }
+        //         }
+        //     }
+        // }
 
     .rightOptions {
       .pagingToggleButtons {
@@ -170,25 +259,25 @@
       }
     }
 
-    .searchText {
-      width: 30px;
-      height: 19px;
-      line-height: 19px;
-      float: left;
-      font-size: @font-size-small;
-      padding: 0;
-      margin-top: 6px;
+        // .searchText {
+        //     width: 30px;
+        //     height: 19px;
+        //     line-height: 19px;
+        //     float: left;
+        //     font-size: @font-size-small;
+        //     padding: 0;
+        //     margin-top: 6px;
+        // }
+
+        // .total {
+        //     float: left;
+        //     display: block;
+        //     height: 18px;
+        //     line-height: 18px;
+        //     margin: 6px 5px 0 5px;
+        //     width: 41px;
+        //     font-size: @font-size-small;
+        //     overflow: hidden;
+        // }
     }
 
-    .total {
-      float: left;
-      display: block;
-      height: 18px;
-      line-height: 18px;
-      margin: 6px 5px 0;
-      width: 41px;
-      font-size: @font-size-small;
-      overflow: hidden;
-    }
-  }
-}
