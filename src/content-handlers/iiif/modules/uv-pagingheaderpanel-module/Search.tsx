@@ -86,8 +86,8 @@ export const Search: React.FC<SearchProps> = ({
       const highlightedItem = suggestionItems[focusedOptionIndex];
       if (highlightedItem) {
         highlightedItem.scrollIntoView({
-          block: "nearest",
-          behavior: "smooth",
+            behavior: "instant",
+            block: "nearest",
         });
       }
     }
@@ -186,7 +186,7 @@ const handleAutoCompleteSelect = (suggestion: string) => {
             y2="27"
             stroke="white"
             strokeWidth="5"
-            strokeLinecap="square"
+            strokeLinecap="butt"
           />
         </svg>
       </HeaderButton>

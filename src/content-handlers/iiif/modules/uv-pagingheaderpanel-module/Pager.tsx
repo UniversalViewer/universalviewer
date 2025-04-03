@@ -357,7 +357,7 @@ export const Pager: React.FC<PagerProps> = ({
           viewBox="0 0 30 30"
           width="30"
           height="30"
-          fill={isPagerVisible ? "#10819A" : "white"}
+          fill="white"
         >
           <path d="M2 2.5L15 15L2 27.5V2.5Z" />
           <path d="M15 2.5L28 15L15 27.5V2.5Z" />
@@ -375,7 +375,7 @@ export const Pager: React.FC<PagerProps> = ({
         }}
       >
         <div
-          className="pager"
+          className="paging-back-buttons"
           style={{ display: showFullControls ? "block" : "none" }}
         >
           <HeaderButton
@@ -420,7 +420,7 @@ export const Pager: React.FC<PagerProps> = ({
             <span className="total-label">{getTotalLabel()}</span>
           </div>
         </form>
-        <div style={{ display: showFullControls ? "block" : "none" }}>
+        <div className="paging-forward-buttons" style={{ display: showFullControls ? "block" : "none" }}>
           <HeaderButton
             onClick={() => handleNavigation("next")}
             label={getNavigationTitle("next")}
