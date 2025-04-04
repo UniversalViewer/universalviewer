@@ -143,6 +143,8 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   adjustImage: string;
+  oneUp: string;
+  twoUp: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {

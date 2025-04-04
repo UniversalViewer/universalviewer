@@ -1,7 +1,6 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Maths } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class Dialogue<
@@ -65,9 +64,6 @@ export class Dialogue<
     this.$buttons = $('<div class="buttons"></div>');
     this.$middle.append(this.$buttons);
 
-    this.$bottom = $('<div class="bottom"></div>');
-    this.$element.append(this.$bottom);
-
     if (this.options.topCloseButtonEnabled) {
       this.$top.append(this.$closeButton);
     } else {
@@ -95,40 +91,11 @@ export class Dialogue<
 
   setDockedPosition(): void {
     let top: number = Math.floor(
-      this.extension.height() - this.$element.outerHeight(true)
+      (this.extension.height() - this.$element.outerHeight(true)) / 2
     );
-    let left: number = 0;
-    let arrowLeft: number = 0;
-    let normalisedPos: number = 0;
-
-    if (this.$triggerButton) {
-      const verticalPadding: number = 4;
-      const horizontalPadding: number = 2;
-
-      const a: number = (<any>this.$triggerButton.offset()).top;
-      const b: number = (<JQueryCoordinates>this.extension.$element.offset())
-        .top;
-      const d: number = this.$element.outerHeight(true);
-      const e: number = a - b - d;
-
-      top = e + verticalPadding;
-
-      const f: number = (<JQueryCoordinates>this.$triggerButton.offset()).left;
-      const g: number = (<JQueryCoordinates>this.extension.$element.offset())
-        .left;
-      const h: number = f - g;
-
-      normalisedPos = Maths.normalise(h, 0, this.extension.width());
-
-      left =
-        Math.floor(
-          this.extension.width() * normalisedPos -
-            this.$element.width() * normalisedPos
-        ) + horizontalPadding;
-      arrowLeft = Math.floor(this.$element.width() * normalisedPos);
-    }
-
-    this.$bottom.css("backgroundPosition", arrowLeft + "px 0px");
+    let left: number = Math.floor(
+      (this.extension.width() - this.$element.outerWidth(true)) / 2
+    );
 
     this.$element.css({
       top: top,
@@ -141,13 +108,6 @@ export class Dialogue<
 
     this.$element.attr("aria-hidden", "false");
     this.$element.show();
-
-    if (triggerButton) {
-      this.$triggerButton = $(triggerButton);
-      this.$bottom.show();
-    } else {
-      this.$bottom.hide();
-    }
 
     this.isActive = true;
 

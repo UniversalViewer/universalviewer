@@ -1,7 +1,7 @@
 import React from "react";
 
 interface HeaderButtonProps {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   label: string;
   disabled?: boolean;
   children: React.ReactNode;

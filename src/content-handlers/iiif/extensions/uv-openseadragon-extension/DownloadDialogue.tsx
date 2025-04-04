@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Files, Maths, Strings } from "../../Utils";
+import { Files, Strings } from "../../Utils";
 import {
   Canvas,
   Size,
@@ -82,43 +82,32 @@ const DownloadDialogue = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: "0px", left: "0px" });
-  const [arrowPosition, setArrowPosition] = useState("0px 0px");
   const [selectedPage, setSelectedPage] = useState<"left" | "right">("left");
   const hasNormalDimensions: boolean = rotation % 180 == 0;
 
   useEffect(() => {
-    if (open) {
-      const top: number =
-        parent.clientHeight -
-        ref.current!.clientHeight -
-        triggerButton.clientHeight;
+    const updatePosition = () => {
+      if (open && parent && ref.current) {
+        const top = Math.floor((parent.clientHeight - ref.current.clientHeight) / 2);
+        const left = Math.floor((parent.clientWidth - ref.current.clientWidth) / 2);
 
-      let left: number =
-        triggerButton.getBoundingClientRect().left -
-        parent.getBoundingClientRect().left;
+        setPosition({ top: `${top}px`, left: `${left}px` });
 
-      const normalisedPos: number = Maths.normalise(
-        left,
-        0,
-        parent.clientWidth
-      );
-
-      left =
-        parent.clientWidth * normalisedPos -
-        ref.current!.clientWidth * normalisedPos;
-
-      const arrowLeft = ref.current!.clientWidth * normalisedPos;
-
-      setPosition({ top: `${top}px`, left: `${left}px` });
-      setArrowPosition(`${arrowLeft}px 0px`);
-
-      // Focus on the first element when opened
-      const focusableElements = getFocusableElements();
-      if (focusableElements && focusableElements.length > 0) {
-        focusableElements[0]?.focus();
+        // Focus on the first element when opened
+        const focusableElements = getFocusableElements();
+        if (focusableElements && focusableElements.length > 0) {
+          focusableElements[0]?.focus();
+        }
       }
-    }
-  }, [open]);
+    };
+    updatePosition();
+
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [open, parent]);
 
   // Method to get focusable elements inside the component
   const getFocusableElements = (): NodeListOf<HTMLElement> | null => {
@@ -745,12 +734,6 @@ const DownloadDialogue = ({
           </button>
         </div>
       </div>
-      <div
-        className={cx("bottom")}
-        style={{
-          backgroundPosition: arrowPosition,
-        }}
-      ></div>
     </div>
   );
 };
