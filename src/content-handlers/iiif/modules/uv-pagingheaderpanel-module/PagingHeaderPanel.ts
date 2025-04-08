@@ -280,7 +280,6 @@ export class PagingHeaderPanel extends HeaderPanel<
         'div', 
         { 
           className: 'pagingHeaderPanelLeftOptions',
-          style: { display: "flex", alignItems: "center"}
         }, 
         [
           createElement(Pager, {key: 'pager', 

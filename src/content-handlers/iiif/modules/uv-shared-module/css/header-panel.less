@@ -17,14 +17,14 @@
         .header-button {
             width: 30px;
             height: 30px;
-            padding: 0; /* Crucial - removes default spacing */
-            display: inline-flex; /* For perfect centering */
+            padding: 0;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 100ms ease;
+            transition: background-color 120ms ease;
             cursor: pointer;
-            border: none; /* Remove default button border */
-            background: transparent; /* Remove default background */
+            border: none; 
+            background: transparent;
             z-index:1000;
           }
           
@@ -32,22 +32,20 @@
             background-color: @gray;
           }
           
-          /* Add this for the SVG icon */
           .header-button svg {
-            width: 100%; /* Fill available space */
-            height: 100%; /* Fill available space */
-            max-width: 15px; /* Control visible size */
-            max-height: 15px; /* Control visible size */
-            transition: fill 100ms ease;
+            width: 100%;
+            height: 100%;
+            fill: white;
+            transition: fill 120ms ease;
           }
 
-        //   .header-button:hover svg {
-        //     fill: #10819A;
-        // }
+          .header-button:hover svg {
+            fill: #00fff2;
+        }
 
           .header-button:disabled {
-            cursor: default; /* Indicate that it's not clickable */
-            opacity: 0.5; /* Reduce opacity to visually show it's disabled */
+            cursor: default;
+            opacity: 0.6;
         }
         
         .header-button:disabled:hover {
@@ -57,6 +55,53 @@
         .header-button:disabled svg {
             opacity: 0.2;
         }
+
+.header-button-container {
+    height: 30px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip {
+    position: absolute;
+    left: 50%;
+    bottom: -33px;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: @gray;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    transition: all 200ms ease-in-out;
+    transition-delay: 300ms;
+  }
+  
+  .tooltip-hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+    visibility: hidden;
+    transition-delay: 0ms;
+  }
+  
+  .tooltip-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    visibility: visible;
+    transition-delay: 300ms;
+  }
+  
+  .tooltip-arrow {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: @gray;
+    transform: rotate(45deg);
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+    transition: inherit;
+  }
+  
         
 
 
@@ -70,9 +115,9 @@
             align-items: center;
 
             .leftOptions {
+                height: 30px;
                 display: flex; 
                 width: auto;
-                height: auto;
                 justify-content: flex-start;
                 align-items: center;
             }

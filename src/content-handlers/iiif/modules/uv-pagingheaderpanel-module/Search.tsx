@@ -3,6 +3,7 @@ import HeaderButton from "../uv-shared-module/HeaderButton";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
+import { Search as SearchIcon } from "../../../../icons/icons"
 
 interface SearchProps {
   extension: OpenSeadragonExtension;
@@ -169,26 +170,11 @@ const handleAutoCompleteSelect = (suggestion: string) => {
     <>
       <HeaderButton
         onClick={toggleSearch}
-        label={isSearchVisible ? "Hide search" : "Show search"}
+        //add searchWithin to the headerpanel content and use here
+        title={isSearchVisible ? "Search" : "Search"}
+        label={isSearchVisible ? "Search" : "Search"}
       >
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 30 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="13" cy="13" r="8" stroke="white" strokeWidth="4" />
-          <line
-            x1="20"
-            y1="20"
-            x2="27"
-            y2="27"
-            stroke="white"
-            strokeWidth="5"
-            strokeLinecap="butt"
-          />
-        </svg>
+        <SearchIcon />
       </HeaderButton>
       <div
         //   remember to fix the 'ahidden' thing

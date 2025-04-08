@@ -4,6 +4,7 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import HeaderButton from "../uv-shared-module/HeaderButton";
 import { IIIFEvents } from "../../IIIFEvents";
+import { Goto, PreviousPage, FirstPage, NextPage, LastPage } from "../../../../icons/icons"
 
 interface PagerProps {
   helper: any;
@@ -350,18 +351,10 @@ export const Pager: React.FC<PagerProps> = ({
     <>
       <HeaderButton
         onClick={togglePager}
-        label={isPagerVisible ? "Hide pager" : "Show pager"}
+        title={isPagerVisible ? content.go : content.go }
+        label={isPagerVisible ? content.go : content.go }
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 30 30"
-          width="30"
-          height="30"
-          fill="white"
-        >
-          <path d="M2 2.5L15 15L2 27.5V2.5Z" />
-          <path d="M15 2.5L28 15L15 27.5V2.5Z" />
-        </svg>
+        <Goto />
       </HeaderButton>
       <div
         //   remember to fix the 'ahidden' thing
@@ -380,18 +373,20 @@ export const Pager: React.FC<PagerProps> = ({
         >
           <HeaderButton
             onClick={() => handleNavigation("first")}
+            title={getNavigationTitle("first")}
             label={getNavigationTitle("first")}
             disabled={!firstButtonEnabled}
           >
-            &lt;&lt;
+            <FirstPage />
           </HeaderButton>
 
           <HeaderButton
             onClick={() => handleNavigation("prev")}
+            title={getNavigationTitle("prev")}
             label={getNavigationTitle("prev")}
             disabled={!prevButtonEnabled}
           >
-            &lt;
+            <PreviousPage />
           </HeaderButton>
         </div>
 
@@ -423,18 +418,20 @@ export const Pager: React.FC<PagerProps> = ({
         <div className="paging-forward-buttons" style={{ display: showFullControls ? "block" : "none" }}>
           <HeaderButton
             onClick={() => handleNavigation("next")}
+            title={getNavigationTitle("next")}
             label={getNavigationTitle("next")}
             disabled={!nextButtonEnabled}
           >
-            &gt;&gt;
+            <NextPage />
           </HeaderButton>
 
           <HeaderButton
             onClick={() => handleNavigation("last")}
+            title={getNavigationTitle("last")}
             label={getNavigationTitle("last")}
             disabled={!lastButtonEnabled}
           >
-            &gt;
+            <LastPage />
           </HeaderButton>
         </div>
       </div>
