@@ -167,16 +167,6 @@
         "help": "$help"
       }
     },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text",
-        "title": "$help"
-      }
-    },
     "restrictedDialogue": {
       "options": {
         "topCloseButtonEnabled": false

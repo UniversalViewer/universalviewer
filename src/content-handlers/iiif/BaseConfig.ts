@@ -132,13 +132,28 @@ export type HeaderPanelOptions = {
   settingsButtonEnabled: boolean;
   /** Determines if help is enabled */
   helpEnabled?: boolean;
+  /** Determines help URL */
   helpUrl?: string;
+  /** Determines if download is enabled */
+  downloadEnabled?: boolean;
+  /** Determines if share is enabled */
+  shareEnabled?: boolean;
+  /** Determines if print is enabled */
+  printEnabled?: boolean;
+  /** Determines if fullscreen is enabled */
+  fullscreenEnabled?: boolean;
 };
 
 export type HeaderPanelContent = {
+  helpUrl?: string | undefined;
   close: string;
   settings: string;
   help: string;
+  download?: string;
+  share?: string;
+  print?: string;
+  maximize?: string;
+  minimize?: string;
 };
 
 type HeaderPanel = ModuleConfig & {
@@ -377,17 +392,6 @@ type GenericDialogue = ModuleConfig & {
   content: GenericDialogueContent;
 };
 
-type HelpDialogueOptions = DialogueOptions & {};
-
-type HelpDialogueContent = DialogueContent & {
-  text: string;
-  title: string;
-};
-
-type HelpDialogue = ModuleConfig & {
-  options: HelpDialogueOptions;
-  content: HelpDialogueContent;
-};
 
 type MoreInfoRightPanelOptions = DialogueOptions &
   ExpandPanelOptions & {
@@ -465,7 +469,6 @@ export type BaseConfig = {
     footerPanel: FooterPanel;
     genericDialogue: GenericDialogue;
     headerPanel: HeaderPanel;
-    helpDialogue: HelpDialogue;
     leftPanel: LeftPanel;
     loginDialogue: LoginDialogue;
     moreInfoRightPanel: MoreInfoRightPanel;

@@ -118,7 +118,11 @@ export class HeaderPanel<
     });
 
     this.rightOptionsRoot.render(
-      createElement(HeaderPanelRightOptions, { extensionHost: this.extensionHost })
+      createElement(HeaderPanelRightOptions, {
+        extensionHost: this.extensionHost,
+        options: this.options,   
+        content: this.content    
+      })
     );
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {

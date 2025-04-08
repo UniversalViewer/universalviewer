@@ -3,7 +3,6 @@ import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { FileLinkCenterPanel } from "../../modules/uv-filelinkcenterpanel-module/FileLinkCenterPanel";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
-import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IDefaultExtension } from "./IDefaultExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
@@ -20,13 +19,11 @@ export default class Extension
 {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
-  $helpDialogue: JQuery;
   $settingsDialogue: JQuery;
   centerPanel: FileLinkCenterPanel;
   shareDialogue: ShareDialogue;
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
-  helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
@@ -74,12 +71,6 @@ export default class Extension
     } else {
       this.shell.$footerPanel.hide();
     }
-
-    this.$helpDialogue = $(
-      '<div class="overlay help" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$helpDialogue);
-    this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
     this.$shareDialogue = $(
       '<div class="overlay share" aria-hidden="true"></div>'

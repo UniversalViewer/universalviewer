@@ -6,7 +6,6 @@ import { MediaElementExtensionEvents } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-mediaelementmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
-import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IMediaElementExtension } from "./IMediaElementExtension";
 import { MediaElementCenterPanel } from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
@@ -37,7 +36,6 @@ export default class Extension
 {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
-  $helpDialogue: JQuery;
   $settingsDialogue: JQuery;
   centerPanel: MediaElementCenterPanel;
   downloadDialogue: DownloadDialogue;
@@ -45,7 +43,6 @@ export default class Extension
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   mobileFooterPanel: MobileFooterPanel;
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
-  helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
@@ -148,12 +145,6 @@ export default class Extension
     } else {
       this.shell.$footerPanel.hide();
     }
-
-    this.$helpDialogue = $(
-      '<div class="overlay help" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$helpDialogue);
-    this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
     this.$downloadDialogue = $(
       '<div class="overlay download" aria-hidden="true"></div>'

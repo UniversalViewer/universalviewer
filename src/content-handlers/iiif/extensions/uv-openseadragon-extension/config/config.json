@@ -205,22 +205,23 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "downloadEnabled": true,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true
       },
       "content": {
         "close": "$close",
         "settings": "$settings",
-        "help": "$help"
-      }
-    },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text",
-        "title": "$help"
+        "help": "$help",
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "maximize": "$maximize",
+        "minimize": "$minimize"
       }
     },
     "moreInfoRightPanel": {
@@ -293,10 +294,8 @@
         "pagingToggleEnabled": true,
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true,
-        "helpEnabled": false,
-        "helpUrl": "https://universalviewer.io/",
-        "modeOptionsEnabled": true
+        "modeOptionsEnabled": true,
+        "settingsButtonEnabled": true
       },
       "content": {
         "close": "$close",

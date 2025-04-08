@@ -144,16 +144,6 @@
         "help": "$help"
       }
     },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text text",
-        "title": "$help"
-      }
-    },
     "adjustImageDialogue": {
       "options": {
         "topCloseButtonEnabled": false

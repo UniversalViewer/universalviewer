@@ -138,16 +138,6 @@
         "help": "$help"
       }
     },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text",
-        "title": "$help"
-      }
-    },
     "moreInfoRightPanel": {
       "options": {
         "canvasDisplayOrder": "",
