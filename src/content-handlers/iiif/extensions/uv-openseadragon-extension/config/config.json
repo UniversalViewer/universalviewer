@@ -290,7 +290,7 @@
         "autocompleteAllowWords": false,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
-        "pageModeEnabled": false,
+        "pageModeEnabled": true,
         "pagingToggleEnabled": true,
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,

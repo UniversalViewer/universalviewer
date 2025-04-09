@@ -10,9 +10,8 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-import Pager from "./Pager";
+import GoTo from "./GoTo";
 import Search from "./Search"
-//import PagingHeaderPanelRightOptions from "./PagingHeaderPanelRightOptions";
 import { createElement } from "react";
 
 export class PagingHeaderPanel extends HeaderPanel<
@@ -271,10 +270,6 @@ export class PagingHeaderPanel extends HeaderPanel<
     this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
     this.$rightOptions.prepend(this.$pagingToggleButtons);
 
-    // this.rightOptionsRoot.render(
-    //   createElement(PagingHeaderPanelRightOptions, {})
-    // );
-
     this.leftOptionsRoot.render(
       createElement(
         'div', 
@@ -282,7 +277,7 @@ export class PagingHeaderPanel extends HeaderPanel<
           className: 'pagingHeaderPanelLeftOptions',
         }, 
         [
-          createElement(Pager, {key: 'pager', 
+          createElement(GoTo, {key: 'goto', 
             helper: this.extension.helper,
             extensionHost: this.extensionHost,
             content: this.content,

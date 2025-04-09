@@ -1,50 +1,73 @@
 import React, { useState, useEffect, useRef } from "react";
-import { LanguageMap } from "manifesto.js";
+import { Canvas } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import HeaderButton from "../uv-shared-module/HeaderButton";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Goto, PreviousPage, FirstPage, NextPage, LastPage } from "../../../../icons/icons"
+import { Goto, FirstPage, LastPage } from "../../../../icons/icons"
 
-interface PagerProps {
+interface GoToProps {
   helper: any;
   extensionHost: any;
   content: any;
   options: any;
 }
 
-export const Pager: React.FC<PagerProps> = ({
+export const GoTo: React.FC<GoToProps> = ({
   helper,
   extensionHost,
   content,
   options,
 }) => {
-  const [searchValue, setSearchValue] = useState<string>(
-    String(helper.canvasIndex + 1)
-  );
-  const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [autoCompleteOptions, setAutoCompleteOptions] = useState<Canvas[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
   const [maxWidth, setMaxWidth] = useState(0);
   const [isPagerVisible, setIsPagerVisible] = useState(false);
-  const [lastValidValue, setLastValidValue] = useState<string>(
-    String(helper.canvasIndex + 1)
-  );
+  const [lastValidValue, setLastValidValue] = useState<string>("");
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
-  const [firstButtonEnabled, setFirstButtonEnabled] = useState<boolean>(true);
-  const [prevButtonEnabled, setPrevButtonEnabled] = useState<boolean>(true);
-  const [nextButtonEnabled, setNextButtonEnabled] = useState<boolean>(true);
-  const [lastButtonEnabled, setLastButtonEnabled] = useState<boolean>(true);
+  // const [firstButtonEnabled, setFirstButtonEnabled] = useState<boolean>(true);
+  // const [prevButtonEnabled, setPrevButtonEnabled] = useState<boolean>(true);
+  // const [nextButtonEnabled, setNextButtonEnabled] = useState<boolean>(true);
+  // const [lastButtonEnabled, setLastButtonEnabled] = useState<boolean>(true);
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const viewingDirection =
-    helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
-  const isPageModeEnabled = () => Boolean(options.pageModeEnabled);
+  // const viewingDirection = helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
+  const pageModeEnabled = Boolean(options.pageModeEnabled);
+
+  const allCanvases: Canvas[] = helper.getCanvases()
 
   //for development only, toggle this to show the full << < > >> buttons (could change to config setting)
   const showFullControls = false;
-  const inputWidth = "6ch"; //set this dynamically based on character length of longest canvas index/label
+
+  const getInputWidth = () => {
+    // Default minimum width
+    let maxLabelLength = 6;
+  
+    if (pageModeEnabled) {
+      for (const canvas of allCanvases) {
+        const labelLength = canvas?.getLabel()?.getValue()?.length;
+        if (labelLength === undefined) continue;
+        if (labelLength > maxLabelLength) {
+          maxLabelLength = labelLength;
+        }
+      }
+    } else {
+      for (const canvas of allCanvases) {
+        const labelLength = String(canvas?.index).length;
+        if (labelLength === undefined) continue;
+        if (labelLength > maxLabelLength) {
+          maxLabelLength = labelLength;
+        }
+      }
+    }
+  
+    // Enforce maximum width of 20 characters
+    const clampedLength = Math.min(maxLabelLength, 20);
+    return `${clampedLength}ch`;
+  };
 
   useEffect(() => {
     if (focusedOptionIndex >= 0 && dropdownRef.current) {
@@ -63,12 +86,13 @@ export const Pager: React.FC<PagerProps> = ({
   useEffect(() => {
     if (isPagerVisible && containerRef.current) {
       setMaxWidth(containerRef.current.scrollWidth);
+      updateSearchFieldValue();
     }
   }, [isPagerVisible]);
 
-  useEffect(() => {
-    setButtonStates();
-  }, []);
+  // useEffect(() => {
+  //   setButtonStates();
+  // }, []);
 
   const togglePager = () => {
     setIsPagerVisible(!isPagerVisible);
@@ -77,85 +101,75 @@ export const Pager: React.FC<PagerProps> = ({
   extensionHost.subscribe(
     IIIFEvents.CANVAS_INDEX_CHANGE,
     (canvasIndex: number) => {
-      updateSearchFieldValue(canvasIndex);
-      setButtonStates();
+      updateSearchFieldValue();
+      // setButtonStates();
     }
   );
 
-  const updateSearchFieldValue = (canvasIndex) => {
+  const updateSearchFieldValue = () => {
+    const canvas = helper.getCurrentCanvas();
     let value: string;
-    if (isPageModeEnabled()) {
-      //   const orderLabel = LanguageMap.getValue(canvas.getLabel());
-      //   value = orderLabel === "-" ? "" : String(orderLabel);
-      value = "test";
+    if (pageModeEnabled) {
+        value = canvas.getLabel().getValue();
     } else {
-      value = String(canvasIndex + 1);
+      value = String(canvas.getIndex() + 1);
     }
     setSearchValue(value);
     setLastValidValue(value);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value
     setSearchValue(value);
     setFocusedOptionIndex(-1);
 
     if (options.autoCompleteBoxEnabled) {
-      const results: string[] = [];
+      let results: Canvas[] = [];
 
-      for (let i = 0; i < helper.getTotalCanvases(); i++) {
-        const canvas = helper.getCanvasByIndex(i);
-
-        if (isPageModeEnabled()) {
-          const label = LanguageMap.getValue(canvas.getLabel());
-          if (label && label.startsWith(value)) {
-            results.push(String(label));
-          }
-        } else if (String(i + 1).startsWith(value)) {
-          results.push(String(i + 1));
+        if (pageModeEnabled) {
+          results = allCanvases.filter(canvas => {
+          const label = canvas.getLabel().getValue()?.toLowerCase();
+          return label?.includes(value);
+        });
+        } else {
+          results = allCanvases.filter((canvas, index) => 
+            String(index).startsWith(value)
+        );
         }
+
+        setAutoCompleteOptions(results);
+        setShowAutoComplete(results.length > 0 && value.length > 0);
       }
+    };
 
-      setAutoCompleteOptions(results);
-      setShowAutoComplete(results.length > 0 && value.length > 0);
-    }
-  };
-
-  const handleAutoCompleteSelect = (value: string) => {
-    setSearchValue(value);
-    setShowAutoComplete(false);
-    handleSearch(value);
-  };
-
-  const setButtonStates = () => {
-    if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
-      setFirstButtonEnabled(!helper.isLastCanvas());
-      setPrevButtonEnabled(!helper.isLastCanvas());
-      setNextButtonEnabled(!helper.isFirstCanvas());
-      setLastButtonEnabled(!helper.isFirstCanvas());
+  const handleAutoCompleteSelect = (selection: Canvas) => {
+    if (pageModeEnabled) {
+      setSearchValue(selection.getLabel().getValue() || "test");
+      console.log(selection.getLabel().getValue() || "test")
     } else {
-      setFirstButtonEnabled(!helper.isFirstCanvas());
-      setPrevButtonEnabled(!helper.isFirstCanvas());
-      setNextButtonEnabled(!helper.isLastCanvas());
-      setLastButtonEnabled(!helper.isLastCanvas());
+      setSearchValue(String(selection.index));
     }
+    go(selection);
+    setShowAutoComplete(false);
   };
+
+  // const setButtonStates = () => {
+  //   if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
+  //     setFirstButtonEnabled(!helper.isLastCanvas());
+  //     setPrevButtonEnabled(!helper.isLastCanvas());
+  //     setNextButtonEnabled(!helper.isFirstCanvas());
+  //     setLastButtonEnabled(!helper.isFirstCanvas());
+  //   } else {
+  //     setFirstButtonEnabled(!helper.isFirstCanvas());
+  //     setPrevButtonEnabled(!helper.isFirstCanvas());
+  //     setNextButtonEnabled(!helper.isLastCanvas());
+  //     setLastButtonEnabled(!helper.isLastCanvas());
+  //   }
+  // };
 
   const handleInputFocus = () => {
     setSearchValue("");
     setFocusedOptionIndex(-1);
-    const allCanvases: string[] = [];
-    for (let i = 0; i < helper.getTotalCanvases(); i++) {
-      if (isPageModeEnabled()) {
-        // const canvas = helper.getCanvasByIndex(i);
-        // const label = LanguageMap.getValue(canvas.getLabel());
-        // if (label) {
-        //     allCanvases.push(String(label));
-        // }
-      } else {
-        allCanvases.push(String(i + 1));
-      }
-    }
     setAutoCompleteOptions(allCanvases);
     setShowAutoComplete(true);
   };
@@ -165,46 +179,17 @@ export const Pager: React.FC<PagerProps> = ({
     setSearchValue(lastValidValue);
   };
 
-  const handleSearch = (value: string) => {
-    if (!value) {
+  const go = (selection: Canvas) => {
+    if (!selection) {
       alert(content.emptyValue);
       return;
     }
 
-    if (isPageModeEnabled()) {
-      // Search by page label
-      for (let i = 0; i < helper.totalCanvases; i++) {
-        const canvas = helper.getCanvasByIndex(i);
-        const label = LanguageMap.getValue(canvas.getLabel());
-
-        if (label === value) {
-          helper.onCanvasIndexChange(i);
-          return;
-        }
-      }
-    } else {
-      // Search by page number
-      const index = parseInt(value, 10) - 1;
-
-      if (isNaN(index) || index < 0 || index >= helper.totalCanvases) {
-        alert("Invalid page number");
-
-        //also check if search is in range before submitting
-        // maybe no alert, just return to current value if input is invalid?
-        return;
-      }
-
-      extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, index);
-    }
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSearch(searchValue);
+    extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, selection.index);
   };
 
   const getNavigationTitle = (type: "first" | "prev" | "next" | "last") => {
-    if (isPageModeEnabled()) {
+    if (pageModeEnabled) {
       if (helper.isRightToLeft()) {
         const titles = {
           first: content.lastPage,
@@ -280,18 +265,19 @@ export const Pager: React.FC<PagerProps> = ({
     }
   };
 
+
   const getTotalLabel = () => {
-    if (isPageModeEnabled()) {
+    if (pageModeEnabled) {
       return Strings.format(content.of, helper.getLastCanvasLabel(true));
     } else {
       return Strings.format(content.of, helper.getTotalCanvases().toString());
     }
   };
 
-  // move this to conditional rendering in the parent component.
-  if (helper.getTotalCanvases() <= 1) {
-    return null;
-  }
+  // // move this to conditional rendering in the parent component.
+  // if (helper.getTotalCanvases() <= 1) {
+  //   return null;
+  // }
 
   //keyboard navigation
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -305,7 +291,17 @@ export const Pager: React.FC<PagerProps> = ({
       ) {
         handleAutoCompleteSelect(autoCompleteOptions[focusedOptionIndex]);
       } else {
-        handleSearch(searchValue);
+        if (pageModeEnabled) {
+          const target = allCanvases.find(canvas => canvas.getLabel().getValue() === searchValue);
+          if (target) {
+            go(target)
+          }
+        } else {
+          const target = allCanvases.find(canvas => String(canvas.index) === searchValue)
+          if (target) {
+            go(target)
+          }
+        }
       }
       return;
     }
@@ -375,22 +371,21 @@ export const Pager: React.FC<PagerProps> = ({
             onClick={() => handleNavigation("first")}
             title={getNavigationTitle("first")}
             label={getNavigationTitle("first")}
-            disabled={!firstButtonEnabled}
+            // disabled={!firstButtonEnabled}
           >
             <FirstPage />
           </HeaderButton>
 
-          <HeaderButton
+          {/* <HeaderButton
             onClick={() => handleNavigation("prev")}
             title={getNavigationTitle("prev")}
             label={getNavigationTitle("prev")}
-            disabled={!prevButtonEnabled}
+            // disabled={!prevButtonEnabled}
           >
             <PreviousPage />
-          </HeaderButton>
+          </HeaderButton> */}
         </div>
 
-        <form className="search-form" onSubmit={handleSearchSubmit}>
           <div className="search-input-container">
             <input
               type="text"
@@ -410,26 +405,26 @@ export const Pager: React.FC<PagerProps> = ({
                   : undefined
               }
               maxLength={30}
-              style={{ width: inputWidth }}
+              style={{ width: getInputWidth() }}
             />
-            <span className="total-label">{getTotalLabel()}</span>
+
+            {!pageModeEnabled && <span className="total-label">{getTotalLabel()}</span>}
           </div>
-        </form>
         <div className="paging-forward-buttons" style={{ display: showFullControls ? "block" : "none" }}>
-          <HeaderButton
+          {/* <HeaderButton
             onClick={() => handleNavigation("next")}
             title={getNavigationTitle("next")}
             label={getNavigationTitle("next")}
-            disabled={!nextButtonEnabled}
+            // disabled={!nextButtonEnabled}
           >
             <NextPage />
-          </HeaderButton>
+          </HeaderButton> */}
 
           <HeaderButton
             onClick={() => handleNavigation("last")}
             title={getNavigationTitle("last")}
             label={getNavigationTitle("last")}
-            disabled={!lastButtonEnabled}
+            // disabled={!lastButtonEnabled}
           >
             <LastPage />
           </HeaderButton>
@@ -443,7 +438,7 @@ export const Pager: React.FC<PagerProps> = ({
                 id="autocomplete-list"
                 ref={dropdownRef}
                 className="autocomplete-dropdown"
-                style={{ width: inputWidth }}
+                style={{ width: getInputWidth() }}
                 role="listbox"
               >
                 {autoCompleteOptions.map((option, index) => (
@@ -460,7 +455,7 @@ export const Pager: React.FC<PagerProps> = ({
                     }}
                     onMouseEnter={() => setFocusedOptionIndex(index)}
                   >
-                    {option}
+                    {pageModeEnabled ? option.getLabel().getValue() : String(option.index)}
                   </li>
                 ))}
               </ul>
@@ -470,4 +465,4 @@ export const Pager: React.FC<PagerProps> = ({
   );
 };
 
-export default Pager;
+export default GoTo;
