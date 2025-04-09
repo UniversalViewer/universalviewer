@@ -144,8 +144,8 @@ export const GoTo: React.FC<GoToProps> = ({
 
   const handleAutoCompleteSelect = (selection: Canvas) => {
     if (pageModeEnabled) {
-      setSearchValue(selection.getLabel().getValue() || "test");
-      console.log(selection.getLabel().getValue() || "test")
+      setSearchValue(selection.getLabel().getValue() || "");
+      console.log(selection.getLabel().getValue() || "")
     } else {
       setSearchValue(String(selection.index));
     }

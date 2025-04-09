@@ -206,6 +206,25 @@ export const LastPage: React.FC<IconProps> = ({
   </svg>
 );
 
+export const Mail: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+  >
+    <path d="M8,11v-1h14v1l-7,4.4L8,11z M15,16.6l-7-4.4V20h14v-7.8L15,16.6z" />
+  </svg>
+);
+
 export const NextPage: React.FC<IconProps> = ({
   className = "",
   width = 30,
