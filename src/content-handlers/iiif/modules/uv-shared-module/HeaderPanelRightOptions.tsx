@@ -36,9 +36,10 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
       {options.helpEnabled && content.helpUrl && (
         <HeaderButton
           onClick={() => window.open(content.helpUrl)}
-          label={content.help}
+          title={content.help}
         >
           <i className="uv-icon uv-icon-help" aria-hidden="true"></i>
+          <span className="sr-only">{content.help}</span>
         </HeaderButton>
       )}
 
@@ -47,9 +48,10 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
           onClick={(event) =>
             extensionHost.publish(IIIFEvents.SHOW_DOWNLOAD_DIALOGUE, event.currentTarget)
           }
-          label={content.download || "Download"}
+          title={content.download || "Download"}
         >
           <i className="uv-icon uv-icon-download" aria-hidden="true"></i>
+          <span className="sr-only">{content.download}</span>
         </HeaderButton>
       )}
 
@@ -58,20 +60,46 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
           onClick={(event) =>
             extensionHost.publish(IIIFEvents.SHOW_SHARE_DIALOGUE, event.currentTarget)
           }
-          label={content.share || "Share"}
+          title={content.share}
         >
           <i className="uv-icon uv-icon-share" aria-hidden="true"></i>
+          <span className="sr-only">{content.share}</span>
         </HeaderButton>
       )}
 
       {options.printEnabled && (
         <HeaderButton
-          onClick={(event) =>
+          onClick={() =>
             extensionHost.publish(OpenSeadragonExtensionEvents.PRINT)
           }
-          label={content.print || "Print"}
+          title={content.print}
         >
           <i className="uv-icon uv-icon-print" aria-hidden="true"></i>
+          <span className="sr-only">{content.print}</span>
+        </HeaderButton>
+      )}
+
+      {options.bookmarkEnabled && (
+        <HeaderButton
+          onClick={() =>
+            extensionHost.publish(IIIFEvents.BOOKMARK)
+          }
+          title={content.bookmark}
+        >
+          <i className="uv-icon uv-icon-bookmark" aria-hidden="true"></i>
+          <span className="sr-only">{content.bookmark}</span>
+        </HeaderButton>
+      )}
+
+      {options.feedbackEnabled && (
+        <HeaderButton
+          onClick={() =>
+            extensionHost.publish(IIIFEvents.FEEDBACK)
+          }
+          title={content.feedback}
+        >
+          <i className="uv-icon uv-icon-feedback" aria-hidden="true"></i>
+          <span className="sr-only">{content.feedback}</span>
         </HeaderButton>
       )}
 
@@ -80,15 +108,17 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
           onClick={(event) =>
             extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE, event.currentTarget)
           }
-          label={content.settings}
+          title={content.settings}
         >
           <i className="uv-icon uv-icon-settings" aria-hidden="true"></i>
+          <span className="sr-only">{content.settings}</span>
         </HeaderButton>
       )}
+
       {options.fullscreenEnabled && (
         <HeaderButton
           onClick={handleFullScreenClick}
-          label={isFullScreen ? content.minimize || "Minimize" : content.maximize || "Maximize"}
+          title={isFullScreen ? content.exitFullScreen : content.fullScreen}
         >
           <i
             className={`uv-icon ${
@@ -96,6 +126,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
             }`}
             aria-hidden="true"
           ></i>
+          <span className="sr-only"> isFullScreen ? content.exitFullScreen : content.fullScreen </span>
         </HeaderButton>
       )}
     </>

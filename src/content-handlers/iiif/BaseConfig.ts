@@ -124,36 +124,37 @@ export type Localisation = {
 };
 
 export type HeaderPanelOptions = {
-  /** Determines if center options are enabled */
-  centerOptionsEnabled: boolean;
-  /** Determines if locale toggle is enabled */
-  localeToggleEnabled: boolean;
-  /** Determines if settings button is enabled */
   settingsButtonEnabled: boolean;
   /** Determines if help is enabled */
-  helpEnabled?: boolean;
+  helpEnabled: boolean;
   /** Determines help URL */
   helpUrl?: string;
   /** Determines if download is enabled */
-  downloadEnabled?: boolean;
+  downloadEnabled: boolean;
   /** Determines if share is enabled */
-  shareEnabled?: boolean;
+  shareEnabled: boolean;
   /** Determines if print is enabled */
-  printEnabled?: boolean;
+  printEnabled: boolean;
   /** Determines if fullscreen is enabled */
-  fullscreenEnabled?: boolean;
+  fullscreenEnabled: boolean;
+  /** Determines if feedback is enabled */
+  feedbackEnabled: boolean;
+  /** Determines if bookmark is enabled */
+  bookmarkEnabled: boolean;
 };
 
 export type HeaderPanelContent = {
-  helpUrl?: string | undefined;
+  bookmark: string;
+  feedback: string;
   close: string;
   settings: string;
   help: string;
+  helpUrl?: string;
   download?: string;
-  share?: string;
-  print?: string;
-  maximize?: string;
-  minimize?: string;
+  share: string;
+  print: string;
+  fullScreen: string;
+  exitFullScreen: string;
 };
 
 type HeaderPanel = ModuleConfig & {

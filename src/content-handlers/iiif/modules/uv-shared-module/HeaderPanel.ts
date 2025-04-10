@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
-import { ILocale } from "./ILocale";
+// import { ILocale } from "./ILocale";
 import { Information } from "./Information";
 import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
@@ -73,8 +73,8 @@ export class HeaderPanel<
             <i class="uv-icon-settings" aria-hidden="true"></i>
           </button>
         `);
-    this.$settingsButton.attr("title", this.content.settings);
-    this.$rightOptions.append(this.$settingsButton);
+   // this.$settingsButton.attr("title", this.content.settings);
+   //  this.$rightOptions.append(this.$settingsButton);
 
     this.$helpButton = $(`
       <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
@@ -125,9 +125,9 @@ export class HeaderPanel<
       })
     );
 
-    if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
-      this.$centerOptions.hide();
-    }
+    // if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
+    //   this.$centerOptions.hide();
+    // }
 
     this.updateLocaleToggle();
     this.updateSettingsButton();
@@ -160,14 +160,14 @@ export class HeaderPanel<
   }
 
   localeToggleIsVisible(): boolean {
-    const locales: ILocale[] | undefined = this.extension.data.locales;
+    // const locales: ILocale[] | undefined = this.extension.data.locales;
 
-    if (locales) {
-      return (
-        locales.length > 1 &&
-        Bools.getBool(this.options.localeToggleEnabled, false)
-      );
-    }
+    // if (locales) {
+    //   return (
+    //     locales.length > 1 &&
+    //     Bools.getBool(this.options.localeToggleEnabled, false)
+    //   );
+    // }
 
     return false;
   }

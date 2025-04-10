@@ -203,14 +203,14 @@
     },
     "headerPanel": {
       "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
-        "settingsButtonEnabled": true,
+        "settingsButtonEnabled": false,
         "helpEnabled": false,
-        "downloadEnabled": true,
-        "shareEnabled": true,
+        "downloadEnabled": false,
+        "shareEnabled": false,
         "printEnabled": false,
-        "fullscreenEnabled": true
+        "fullscreenEnabled": false,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false
       },
       "content": {
         "close": "$close",
@@ -220,8 +220,10 @@
         "download": "$download",
         "share": "$share",
         "print": "$print",
-        "maximize": "$maximize",
-        "minimize": "$minimize"
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "moreInfoRightPanel": {
@@ -295,6 +297,13 @@
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "modeOptionsEnabled": true,
+        "helpEnabled": false,
+        "downloadEnabled": true,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false,
         "settingsButtonEnabled": true
       },
       "content": {
@@ -321,8 +330,16 @@
         "previous": "$previous",
         "previousImage": "$previousImage",
         "previousPage": "$previousPage",
+        "twoUp": "$twoPageView",
         "settings": "$settings",
-        "twoUp": "$twoPageView"
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "centerPanel": {

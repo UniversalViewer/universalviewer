@@ -142,16 +142,27 @@
     },
     "headerPanel": {
       "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": false,
-        "helpUrl": "https://universalviewer.io"
+        "downloadEnabled": true,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false
       },
       "content": {
         "close": "$close",
         "settings": "$settings",
-        "help": "$help"
+        "help": "$help",
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "moreInfoRightPanel": {
