@@ -110,14 +110,8 @@
                 p {
                     margin: 0;
                     padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-
-                    p {
-                        padding-top: 0;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
+                    overflow-wrap: break-word;
+                    hyphens: auto;
                 }
 
                 ol.options {
@@ -162,7 +156,9 @@
         }
 
         &.genericDialogue {
-            width: 250px;
+            width: fit-content;
+            min-width: 250px;
+            max-width: 400px;
 
             .bottom {
                 background: none;
