@@ -4,7 +4,20 @@ import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { Strings } from "@edsilv/utils";
 import HeaderButton from "../uv-shared-module/HeaderButton";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Goto, FirstPage, LastPage } from "../../../../icons/icons"
+import { Goto, FirstPage, LastPage } from "../../../../icons/icons";
+
+//Notes
+// This rewrites some of the original logic in the PagingHeaderPanel 'search' function for navigating to new pages:
+// that function uses the OpenSeadragonExtensionEvents.PAGE_SEARCH event to navigate to new pages by page label if pagingMode is enabled.
+// However, that functionality had no way of handling items where there were multiple identical page labels (e.g. first few pages of Wunder Der Verebung).
+// There is a hack that just ignored the duplicate '-' labels in the previous component.
+// I've duplicated most of the functionality of the original autocomplete/paging navigation here, except defaulting to page labels (as discussed with Scott Jenson et al.)
+// and made it so that the underlying logic always relies on the canvas index (i.e. the unique value) for navigating, which explains why some of this code seems complicated - not unneccessarily so!
+// The component currently uses a Canvas[] as its data source and calls the various methods on this as needed. I think all that's needed here is the index and the label
+// so it would be better to load this upfront as a memoized array of labels and grab the label/index from that
+
+// a lot of the bulky code here is to do with keyboard navigation: lots of the natural browser nav is overridden to make the UI work properly
+
 
 interface GoToProps {
   helper: any;
@@ -37,7 +50,7 @@ export const GoTo: React.FC<GoToProps> = ({
   // const viewingDirection = helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
   const pageModeEnabled = Boolean(options.pageModeEnabled);
 
-  const allCanvases: Canvas[] = helper.getCanvases()
+  const allCanvases: Canvas[] = helper.getCanvases();
 
   //for development only, toggle this to show the full << < > >> buttons (could change to config setting)
   const showFullControls = false;
@@ -45,7 +58,7 @@ export const GoTo: React.FC<GoToProps> = ({
   const getInputWidth = () => {
     // Default minimum width
     let maxLabelLength = 6;
-  
+
     if (pageModeEnabled) {
       for (const canvas of allCanvases) {
         const labelLength = canvas?.getLabel()?.getValue()?.length;
@@ -63,9 +76,9 @@ export const GoTo: React.FC<GoToProps> = ({
         }
       }
     }
-  
-    // Enforce maximum width of 20 characters
-    const clampedLength = Math.min(maxLabelLength, 20);
+
+    const maxWidth = 20;
+    const clampedLength = Math.min(maxLabelLength, maxWidth);
     return `${clampedLength}ch`;
   };
 
@@ -110,7 +123,7 @@ export const GoTo: React.FC<GoToProps> = ({
     const canvas = helper.getCurrentCanvas();
     let value: string;
     if (pageModeEnabled) {
-        value = canvas.getLabel().getValue();
+      value = canvas.getLabel().getValue();
     } else {
       value = String(canvas.getIndex() + 1);
     }
@@ -119,38 +132,33 @@ export const GoTo: React.FC<GoToProps> = ({
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
+    const value = e.target.value;
     setSearchValue(value);
     setFocusedOptionIndex(-1);
 
     if (options.autoCompleteBoxEnabled) {
       let results: Canvas[] = [];
 
-        if (pageModeEnabled) {
-          results = allCanvases.filter(canvas => {
+      if (pageModeEnabled) {
+        results = allCanvases.filter((canvas) => {
           const label = canvas.getLabel().getValue()?.toLowerCase();
           return label?.includes(value);
         });
-        } else {
-          results = allCanvases.filter((canvas, index) => 
-            String(index).startsWith(value)
+      } else {
+        results = allCanvases.filter((canvas, index) =>
+          String(index).startsWith(value)
         );
-        }
-
-        setAutoCompleteOptions(results);
-        setShowAutoComplete(results.length > 0 && value.length > 0);
       }
-    };
+
+      setAutoCompleteOptions(results);
+      setShowAutoComplete(results.length > 0 && value.length > 0);
+    }
+  };
 
   const handleAutoCompleteSelect = (selection: Canvas) => {
-    if (pageModeEnabled) {
-      setSearchValue(selection.getLabel().getValue() || "");
-      console.log(selection.getLabel().getValue() || "")
-    } else {
-      setSearchValue(String(selection.index));
-    }
-    go(selection);
     setShowAutoComplete(false);
+    go(selection);
+    updateSearchFieldValue();
   };
 
   // const setButtonStates = () => {
@@ -180,11 +188,6 @@ export const GoTo: React.FC<GoToProps> = ({
   };
 
   const go = (selection: Canvas) => {
-    if (!selection) {
-      alert(content.emptyValue);
-      return;
-    }
-
     extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, selection.index);
   };
 
@@ -265,7 +268,6 @@ export const GoTo: React.FC<GoToProps> = ({
     }
   };
 
-
   const getTotalLabel = () => {
     if (pageModeEnabled) {
       return Strings.format(content.of, helper.getLastCanvasLabel(true));
@@ -292,14 +294,18 @@ export const GoTo: React.FC<GoToProps> = ({
         handleAutoCompleteSelect(autoCompleteOptions[focusedOptionIndex]);
       } else {
         if (pageModeEnabled) {
-          const target = allCanvases.find(canvas => canvas.getLabel().getValue() === searchValue);
+          const target = allCanvases.find(
+            (canvas) => canvas.getLabel().getValue() === searchValue
+          );
           if (target) {
-            go(target)
+            go(target);
           }
         } else {
-          const target = allCanvases.find(canvas => String(canvas.index) === searchValue)
+          const target = allCanvases.find(
+            (canvas) => String(canvas.index) === searchValue
+          );
           if (target) {
-            go(target)
+            go(target);
           }
         }
       }
@@ -331,15 +337,15 @@ export const GoTo: React.FC<GoToProps> = ({
 
   function positionDropdown(triggerElement, dropdownElement) {
     if (!triggerElement || !dropdownElement) return;
-  
+
     const rect = triggerElement.getBoundingClientRect();
     dropdownElement.style.top = `${rect.bottom}px`;
     dropdownElement.style.left = `${rect.left}px`;
   }
-  
+
   useEffect(() => {
-    const input = document.querySelector('.search-input');
-    const portal = document.querySelector('.dropdown-portal');
+    const input = document.querySelector(".search-input");
+    const portal = document.querySelector(".dropdown-portal");
     positionDropdown(input, portal);
   }, [showAutoComplete]);
 
@@ -347,8 +353,8 @@ export const GoTo: React.FC<GoToProps> = ({
     <>
       <HeaderButton
         onClick={togglePager}
-        title={isPagerVisible ? content.go : content.go }
-        label={isPagerVisible ? content.go : content.go }
+        title={isPagerVisible ? content.go : content.go}
+        label={isPagerVisible ? content.go : content.go}
       >
         <Goto />
       </HeaderButton>
@@ -386,31 +392,36 @@ export const GoTo: React.FC<GoToProps> = ({
           </HeaderButton> */}
         </div>
 
-          <div className="search-input-container">
-            <input
-              type="text"
-              className="search-input"
-              value={searchValue}
-              onChange={handleSearchChange}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              onKeyDown={handleInputKeyDown}
-              aria-label={content.pageSearchLabel}
-              aria-expanded={showAutoComplete}
-              aria-autocomplete="list"
-              aria-controls="autocomplete-list"
-              aria-activedescendant={
-                focusedOptionIndex >= 0
-                  ? `option-${focusedOptionIndex}`
-                  : undefined
-              }
-              maxLength={30}
-              style={{ width: getInputWidth() }}
-            />
+        <div className="search-input-container">
+          <input
+            type="text"
+            className="search-input"
+            value={searchValue}
+            onChange={handleSearchChange}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            aria-label={content.pageSearchLabel}
+            aria-expanded={showAutoComplete}
+            aria-autocomplete="list"
+            aria-controls="autocomplete-list"
+            aria-activedescendant={
+              focusedOptionIndex >= 0
+                ? `option-${focusedOptionIndex}`
+                : undefined
+            }
+            maxLength={30}
+            style={{ width: getInputWidth() }}
+          />
 
-            {!pageModeEnabled && <span className="total-label">{getTotalLabel()}</span>}
-          </div>
-        <div className="paging-forward-buttons" style={{ display: showFullControls ? "block" : "none" }}>
+          {!pageModeEnabled && (
+            <span className="total-label">{getTotalLabel()}</span>
+          )}
+        </div>
+        <div
+          className="paging-forward-buttons"
+          style={{ display: showFullControls ? "block" : "none" }}
+        >
           {/* <HeaderButton
             onClick={() => handleNavigation("next")}
             title={getNavigationTitle("next")}
@@ -431,36 +442,36 @@ export const GoTo: React.FC<GoToProps> = ({
         </div>
       </div>
 
-{/* the dropdown is rendered in a portal because 'hidden' needs to applied to the container above for animations to work nicely.  */}
+      {/* the dropdown is rendered in a portal because 'hidden' needs to applied to the container above for animations to work nicely.  */}
       <div className="dropdown-portal">
-            {showAutoComplete && options.autoCompleteBoxEnabled && (
-              <ul
-                id="autocomplete-list"
-                ref={dropdownRef}
-                className="autocomplete-dropdown"
-                style={{ width: getInputWidth() }}
-                role="listbox"
+        {showAutoComplete && options.autoCompleteBoxEnabled && (
+          <ul
+            id="autocomplete-list"
+            ref={dropdownRef}
+            className="autocomplete-dropdown"
+            style={{ width: getInputWidth() }}
+            role="listbox"
+          >
+            {autoCompleteOptions.map((option, index) => (
+              <li
+                key={index}
+                id={`option-${index}`}
+                role="option"
+                aria-selected={focusedOptionIndex === index}
+                className={focusedOptionIndex === index ? "focused-option" : ""}
+                onMouseDown={() => {
+                  handleAutoCompleteSelect(option);
+                }}
+                onMouseEnter={() => setFocusedOptionIndex(index)}
               >
-                {autoCompleteOptions.map((option, index) => (
-                  <li
-                    key={index}
-                    id={`option-${index}`}
-                    role="option"
-                    aria-selected={focusedOptionIndex === index}
-                    className={
-                      focusedOptionIndex === index ? "focused-option" : ""
-                    }
-                    onMouseDown={() => {
-                      handleAutoCompleteSelect(option);
-                    }}
-                    onMouseEnter={() => setFocusedOptionIndex(index)}
-                  >
-                    {pageModeEnabled ? option.getLabel().getValue() : String(option.index)}
-                  </li>
-                ))}
-              </ul>
-            )}
-</div>
+                {pageModeEnabled
+                  ? option.getLabel().getValue()
+                  : String(option.index)}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </>
   );
 };
