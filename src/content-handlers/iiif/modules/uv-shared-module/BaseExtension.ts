@@ -425,7 +425,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.extensionHost.subscribe(IIIFEvents.SHOW_TERMS_OF_USE, () => {
       let terms: string | null = null;
 
-      const requiredStatement: ILabelValuePair | null = this.helper.getRequiredStatement();
+      const requiredStatement: ILabelValuePair | null =
+        this.helper.getRequiredStatement();
       if (requiredStatement?.value) {
         terms = requiredStatement.value;
       }
