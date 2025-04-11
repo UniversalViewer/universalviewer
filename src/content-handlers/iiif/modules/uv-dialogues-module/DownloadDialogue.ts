@@ -82,7 +82,7 @@ export class DownloadDialogue extends Dialogue<
     );
     this.$footer.append(this.$termsOfUseButton);
 
-    this.$termsOfUseButton.onPressed(() => {
+    this.onAccessibleClick(this.$termsOfUseButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
     });
 
