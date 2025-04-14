@@ -108,6 +108,9 @@ export type Options = {
 
   /** Controls whether to have animations or not */
   reducedAnimation?: boolean;
+
+  /** A default animation duration */
+  animationDuration?: number;
 };
 
 type Locale = {
@@ -136,11 +139,15 @@ export type HeaderPanelOptions = {
   localeToggleEnabled: boolean;
   /** Determines if settings button is enabled */
   settingsButtonEnabled: boolean;
+  /** Determines if help is enabled */
+  helpEnabled?: boolean;
+  helpUrl?: string;
 };
 
 export type HeaderPanelContent = {
   close: string;
   settings: string;
+  help: string;
 };
 
 type HeaderPanel = ModuleConfig & {
@@ -199,6 +206,10 @@ export type FooterPanelContent = {
   feedback: string;
   fullScreen: string;
   moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   open: string;
   share: string;
 };
@@ -241,8 +252,16 @@ type SettingsDialogue = ModuleConfig & {
 };
 
 export type ShareDialogueOptions = DialogueOptions & {
+  /** Determines if copy buttons are enabled */
+  copyToClipboardEnabled: boolean;
   /** Determines if embed is enabled */
   embedEnabled: boolean;
+  /** Set host for embed code (default: window.location.hostname) */
+  embedHost?: string;
+  /** Set port for embed code (default: window.location.protocol) */
+  embedPort?: number;
+  /** Set path to uv.html on embed host (default: /uv.html) */
+  embedPath: string;
   /** Template for embedding */
   embedTemplate: string;
   /** Determines if instructions are enabled */
@@ -256,12 +275,15 @@ export type ShareDialogueOptions = DialogueOptions & {
 };
 
 export type ShareDialogueContent = DialogueContent & {
+  copyBtn: string;
+  copyToClipboard: string;
   customSize: string;
   embed: string;
   embedInstructions: string;
   height: string;
   iiif: string;
   share: string;
+  shareLink: string;
   shareInstructions: string;
   size: string;
   width: string;

@@ -8,12 +8,10 @@ import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-ebookmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IEbookExtension } from "./IEbookExtension";
-import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IEbookExtensionData } from "./IEbookExtensionData";
-import { Strings } from "@edsilv/utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
@@ -23,7 +21,6 @@ export default class Extension
   implements IEbookExtension
 {
   $downloadDialogue: JQuery;
-  $moreInfoDialogue: JQuery;
   $multiSelectDialogue: JQuery;
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
@@ -33,7 +30,6 @@ export default class Extension
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   leftPanel: EbookLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
-  moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
@@ -91,12 +87,6 @@ export default class Extension
       this.shell.$footerPanel.hide();
     }
 
-    this.$moreInfoDialogue = $(
-      '<div class="overlay moreInfo" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$moreInfoDialogue);
-    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
-
     this.$shareDialogue = $(
       '<div class="overlay share" aria-hidden="true"></div>'
     );
@@ -142,17 +132,12 @@ export default class Extension
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    const appUri: string = this.getAppUri();
-    const title: string = this.helper.getLabel() || "";
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&cfi=${this.cfiFragement}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString(),
-      title
-    );
-    return script;
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      cfi: this.cfiFragement,
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 
   checkForCFIParam(): void {

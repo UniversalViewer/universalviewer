@@ -53,13 +53,13 @@ export class EbookLeftPanel extends LeftPanel<
       }
     );
 
-    this._ebookTOC.addEventListener(
-      "itemClicked",
-      (e: any) => {
-        this.extensionHost.publish(EbookExtensionEvents.ITEM_CLICKED, e.detail);
-      },
-      false
-    );
+    this._ebookTOC.addEventListener("itemClicked", (e: any) => {
+      this.extensionHost.publish(EbookExtensionEvents.ITEM_CLICKED, e.detail);
+      if (this.extension.isMetric("sm")) {
+        this.toggle(true);
+      }
+      false;
+    });
 
     Async.waitFor(
       () => {

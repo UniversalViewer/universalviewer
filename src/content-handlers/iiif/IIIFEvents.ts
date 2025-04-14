@@ -37,7 +37,6 @@ export class IIIFEvents {
   static HIDE_HELP_DIALOGUE: string = "hideHelpDialogue";
   static HIDE_INFORMATION: string = "hideInformation";
   static HIDE_LOGIN_DIALOGUE: string = "hideLoginDialogue";
-  static HIDE_MOREINFO_DIALOGUE: string = "hideMoreInfoDialogue";
   static HIDE_MULTISELECT_DIALOGUE: string = "hideMultiSelectDialogue";
   static HIDE_OVERLAY: string = "hideOverlay";
   static HIDE_RESTRICTED_DIALOGUE: string = "hideRestrictedDialogue";
@@ -100,7 +99,6 @@ export class IIIFEvents {
   static SHOW_LOGIN_DIALOGUE: string = "showLoginDialogue";
   static SHOW_MESSAGE: string = "showMessage";
   static MESSAGE_DISPLAYED: string = "messageDisplayed";
-  static SHOW_MOREINFO_DIALOGUE: string = "showMoreInfoDialogue";
   static SHOW_MULTISELECT_DIALOGUE: string = "showMultiSelectDialogue";
   static SHOW_OVERLAY: string = "showOverlay";
   static SHOW_RESTRICTED_DIALOGUE: string = "showRestrictedDialogue";
@@ -108,6 +106,8 @@ export class IIIFEvents {
   static SHOW_SHARE_DIALOGUE: string = "showShareDialogue";
   static SHOW_TERMS_OF_USE: string = "showTermsOfUse";
   static TARGET_CHANGE: string = "targetChange";
+  static TOGGLE_RIGHT_PANEL: string = "toggleRightPanel";
+  static TOGGLE_LEFT_PANEL: string = "toggleLeftPanel";
   static THUMB_MULTISELECTED: string = "thumbMultiSelected";
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";

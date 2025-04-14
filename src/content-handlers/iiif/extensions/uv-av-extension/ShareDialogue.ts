@@ -18,13 +18,13 @@ export class ShareDialogue extends BaseShareDialogue<
   update(): void {
     super.update();
 
-    this.code = (<IAVExtension>this.extension).getEmbedScript(
+    this.embedCode = (<IAVExtension>this.extension).getEmbedScript(
       this.options.embedTemplate,
       this.currentWidth,
       this.currentHeight
     );
 
-    this.$code.val(this.code);
+    this.$embedCode.val(this.embedCode);
   }
 
   resize(): void {

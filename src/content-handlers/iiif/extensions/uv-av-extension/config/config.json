@@ -138,7 +138,43 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
+      }
+    },
+    "mobileFooterPanel": {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
+      },
+      "content": {
+        "rotateRight": "$rotateRight",
+        "moreInfo": "$moreInfo",
+        "zoomIn": "$zoomIn",
+        "zoomOut": "$zoomOut",
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "open": "$open",
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {
@@ -159,11 +195,14 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -285,14 +324,18 @@
       "options": {
         "embedEnabled": true,
         "shareEnabled": true,
+        "embedPath": "/uv.html",
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "custom",
         "embed": "Embed",
         "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
@@ -300,6 +343,7 @@
         "iiif": "IIIF Manifest",
         "share": "Share",
         "shareInstructions": "To share this item, copy the URL below.",
+        "shareLink": "$shareLink",
         "size": "Size:",
         "width": "Width",
         "shareUrl": "$shareUrl"
