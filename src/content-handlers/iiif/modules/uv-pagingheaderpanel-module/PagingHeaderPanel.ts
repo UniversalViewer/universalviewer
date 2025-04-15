@@ -305,6 +305,8 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.$galleryButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
+      this.extensionHost.publish(IIIFEvents.OPEN_THUMBS_VIEW);
+      console.log('pressed')
     });
 
     this.setNavigationTitles();
