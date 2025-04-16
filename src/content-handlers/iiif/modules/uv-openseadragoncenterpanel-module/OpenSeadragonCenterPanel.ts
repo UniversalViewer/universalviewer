@@ -462,6 +462,15 @@ this.$viewer.on("mousemove", () => {
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
+    this.$zoomInButton.html(`<svg
+    width="28"
+    height="28"
+    viewBox="0 0 28 28"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
+  </svg>`)
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
@@ -476,6 +485,16 @@ this.$viewer.on("mousemove", () => {
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+    this.$zoomOutButton.html(`<svg
+  width="30"
+  height="30"
+  viewBox="0 0 30 30"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+>
+  <rect x="8" y="14" width="14" height="2" />
+</svg>
+`)
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
@@ -503,6 +522,22 @@ this.$viewer.on("mousemove", () => {
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+    this.$rotateButton.html(`<svg
+    width="30"
+    height="30"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-2.1,0-3.9-0.7-5.3-2.2S7.5,17.1,7.5,15s0.7-3.9,2.2-5.3s3.2-2.2,5.3-2.2
+		c1.1,0,2.1,0.2,3.1,0.7s1.8,1.1,2.5,1.9V7.5h1.9v6.6h-6.6v-1.9h3.9c-0.5-0.9-1.2-1.6-2.1-2.1C17,9.6,16,9.4,15,9.4
+		c-1.6,0-2.9,0.5-4,1.6s-1.6,2.4-1.6,4s0.5,2.9,1.6,4s2.4,1.6,4,1.6c1.2,0,2.3-0.3,3.3-1s1.6-1.6,2-2.7h2c-0.4,1.7-1.3,3-2.7,4.1
+		S16.7,22.5,15,22.5z"
+      />
+    </g>
+  </svg>`)
 
     this.onAccessibleClick(this.$rotateButton, () => {
       this.rotateRight();
@@ -517,6 +552,22 @@ this.$viewer.on("mousemove", () => {
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
+      this.$adjustImageButton.html(`  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-1,0-2-0.2-2.9-0.6c-0.9-0.4-1.7-0.9-2.4-1.6c-0.7-0.7-1.2-1.5-1.6-2.4
+		C7.7,17,7.5,16,7.5,15s0.2-2,0.6-2.9S9,10.4,9.7,9.7c0.7-0.7,1.5-1.2,2.4-1.6C13,7.7,14,7.5,15,7.5s2,0.2,2.9,0.6s1.7,0.9,2.4,1.6
+		c0.7,0.7,1.2,1.5,1.6,2.4c0.4,0.9,0.6,1.9,0.6,2.9s-0.2,2-0.6,2.9c-0.4,0.9-0.9,1.7-1.6,2.4c-0.7,0.7-1.5,1.2-2.4,1.6
+		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
+      />
+    </g>
+  </svg>`)
       this.$adjustImageButton.insertAfter(this.$rotateButton);
 
       this.onAccessibleClick(this.$adjustImageButton, () => {
