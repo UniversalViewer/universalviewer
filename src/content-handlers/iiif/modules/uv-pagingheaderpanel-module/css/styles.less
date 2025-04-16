@@ -61,13 +61,14 @@
 
         .search-input {
             padding: 0 4px;
-            border: 1px solid @gray;
+            // border: 1px solid @gray;
+            border: none;
             border-radius: 0;     
             outline: none;        
-            caret-color: white;
             z-index: 10; /* Ensures the input is above the dropdown */
             text-align: right;
-            background-color: rgba(28,27,34,255);
+            color: black;
+            background-color: white;
         }
 
 
@@ -78,7 +79,8 @@
 
           .autocomplete-dropdown {
             position: absolute;
-            background-color: rgba(28,27,34,255);
+            color: black;
+            background-color: white;
             border-radius: 0;
             max-height: 150px;
             overflow-y: auto;

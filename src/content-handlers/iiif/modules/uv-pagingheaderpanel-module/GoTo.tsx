@@ -97,6 +97,24 @@ export const GoTo: React.FC<GoToProps> = ({
   }, [focusedOptionIndex]);
 
   useEffect(() => {
+    const handleScroll = (event) => {
+      if (
+        showAutoComplete &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowAutoComplete(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [showAutoComplete]);
+
+  useEffect(() => {
     if (isPagerVisible && containerRef.current) {
       setMaxWidth(containerRef.current.scrollWidth);
       updateSearchFieldValue();

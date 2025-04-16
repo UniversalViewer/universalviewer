@@ -21,15 +21,15 @@ export const Search: React.FC<SearchProps> = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [maxWidth, setMaxWidth] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-    const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
+  const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
   
   const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
-    const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-    const dropdownRef = useRef<HTMLUListElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
   
 
   //dev only, set width
@@ -81,6 +81,11 @@ export const Search: React.FC<SearchProps> = ({
     }
   };
 
+  const handleInputBlur = () => {
+    setAutoCompleteOptions([]);
+    setShowAutoComplete(false);
+  }
+
   useEffect(() => {
     if (focusedOptionIndex >= 0 && dropdownRef.current) {
       const suggestionItems = dropdownRef.current.querySelectorAll("li");
@@ -93,6 +98,24 @@ export const Search: React.FC<SearchProps> = ({
       }
     }
   }, [focusedOptionIndex]);
+
+  useEffect(() => {
+    const handleScroll = (event) => {
+      if (
+        showAutoComplete &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowAutoComplete(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [showAutoComplete]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (autoCompleteOptions.length > 0) {
@@ -139,15 +162,15 @@ export const Search: React.FC<SearchProps> = ({
     setAutoCompleteOptions([]);
     setSearchTerm("");
     handleSearchSubmit(term);
+    toggleSearch();
   };
 
 const handleAutoCompleteSelect = (suggestion: string) => {
-    handleSearchSubmit(suggestion);
-    setSearchTerm("");
-    setAutoCompleteOptions([]);
+  go(suggestion)
   };
 
   const toggleSearch = () => {
+    setShowAutoComplete(false);
     setIsSearchVisible(!isSearchVisible);
   };
 
@@ -163,7 +186,6 @@ const handleAutoCompleteSelect = (suggestion: string) => {
       const input = document.querySelector('#text-search');
       const portal = document.querySelector('#text-dropdown-portal');
       positionDropdown(input, portal);
-      console.log(input)
     }, [showAutoComplete]);
 
   return (
@@ -201,7 +223,7 @@ const handleAutoCompleteSelect = (suggestion: string) => {
                 onKeyDown={handleKeyDown}
 
                 // onFocus={handleInputFocus}
-                // onBlur={handleInputBlur}
+                onBlur={handleInputBlur}
                 // onKeyDown={handleInputKeyDown}
                 // aria-label={content.pageSearchLabel}
                 // aria-expanded={showAutoComplete}
@@ -219,6 +241,7 @@ const handleAutoCompleteSelect = (suggestion: string) => {
         </div>
       </div>
       {/* the dropdown is rendered in a portal because 'hidden' needs to applied to the container above for animations to work nicely.  */}
+      {showAutoComplete && options.autoCompleteBoxEnabled && (
       <div className="dropdown-portal" id="text-dropdown-portal">
             {options.autoCompleteBoxEnabled && (
               <ul
@@ -247,7 +270,7 @@ const handleAutoCompleteSelect = (suggestion: string) => {
                 ))}
               </ul>
             )}
-</div>
+</div>)}
     </>
   );
 };
