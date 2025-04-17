@@ -27,6 +27,9 @@ const config = [
         zlib: false,
         stream: false,
       },
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      }
     },
     module: {
       rules: [
