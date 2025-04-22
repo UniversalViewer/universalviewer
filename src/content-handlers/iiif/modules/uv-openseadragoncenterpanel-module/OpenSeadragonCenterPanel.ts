@@ -463,9 +463,9 @@ this.$viewer.on("mousemove", () => {
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
     this.$zoomInButton.html(`<svg
-    width="28"
-    height="28"
-    viewBox="0 0 28 28"
+    width="26"
+    height="26"
+    viewBox="0 0 26 26"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
   >
@@ -486,9 +486,9 @@ this.$viewer.on("mousemove", () => {
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
     this.$zoomOutButton.html(`<svg
-  width="30"
-  height="30"
-  viewBox="0 0 30 30"
+  width="26"
+  height="26"
+  viewBox="0 0 26 26"
   xmlns="http://www.w3.org/2000/svg"
   fill="currentColor"
 >
