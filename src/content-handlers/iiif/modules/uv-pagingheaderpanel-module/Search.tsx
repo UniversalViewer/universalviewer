@@ -31,7 +31,6 @@ export const Search: React.FC<SearchProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
   
-
   //dev only, set width
   const inputWidth = "20ch";
 
@@ -82,8 +81,11 @@ export const Search: React.FC<SearchProps> = ({
   };
 
   const handleInputBlur = () => {
-    setAutoCompleteOptions([]);
-    setShowAutoComplete(false);
+    // Add a small delay before hiding autocomplete to allow click events to register
+    setTimeout(() => {
+      setAutoCompleteOptions([]);
+      setShowAutoComplete(false);
+    }, 150);
   }
 
   useEffect(() => {
@@ -131,42 +133,53 @@ export const Search: React.FC<SearchProps> = ({
           setFocusedOptionIndex((prev) => (prev > 0 ? prev - 1 : 0));
           break;
         case "Tab":
-        e.preventDefault();
-        if (e.shiftKey) {
-            setFocusedOptionIndex(prev => prev > 0 ? prev - 1 : 0);
-        } else {
-            setFocusedOptionIndex(prev => 
-            prev < autoCompleteOptions.length - 1 ? prev + 1 : prev
-            );
-        }
-        break;
+          e.preventDefault();
+          if (e.shiftKey) {
+              setFocusedOptionIndex(prev => prev > 0 ? prev - 1 : 0);
+          } else {
+              setFocusedOptionIndex(prev => 
+              prev < autoCompleteOptions.length - 1 ? prev + 1 : prev
+              );
+          }
+          break;
         case "Enter":
           e.preventDefault();
           if (focusedOptionIndex >= 0) {
+            // If an option is focused, use it
             const selectedTerm = autoCompleteOptions[focusedOptionIndex];
             go(selectedTerm);
-          } else if (searchTerm) {
+          } else {
+            // Otherwise use the current search term
             go(searchTerm);
           }
           break;
         case "Escape":
           setAutoCompleteOptions([]);
+          setShowAutoComplete(false);
           break;
       }
-    } else if (e.key === "Enter" && searchTerm) {
+    } else if (e.key === "Enter" && searchTerm.trim()) {
+      // Handle Enter key when no autocomplete options are showing
+      e.preventDefault();
       go(searchTerm);
     }
   };
 
   const go = (term) => {
-    setAutoCompleteOptions([]);
-    setSearchTerm("");
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+      debounceTimer.current = null;
+    }
+    
     handleSearchSubmit(term);
+    setSearchTerm("");
     toggleSearch();
+    setAutoCompleteOptions([]);
+    setShowAutoComplete(false);
   };
 
-const handleAutoCompleteSelect = (suggestion: string) => {
-  go(suggestion)
+  const handleAutoCompleteSelect = (suggestion: string) => {
+    go(suggestion);
   };
 
   const toggleSearch = () => {
@@ -174,32 +187,30 @@ const handleAutoCompleteSelect = (suggestion: string) => {
     setIsSearchVisible(!isSearchVisible);
   };
 
-    function positionDropdown(triggerElement, dropdownElement) {
-      if (!triggerElement || !dropdownElement) return;
-    
-      const rect = triggerElement.getBoundingClientRect();
-      dropdownElement.style.top = `${rect.bottom}px`;
-      dropdownElement.style.left = `${rect.left}px`;
-    }
-    
-    useEffect(() => {
-      const input = document.querySelector('#text-search');
-      const portal = document.querySelector('#text-dropdown-portal');
-      positionDropdown(input, portal);
-    }, [showAutoComplete]);
+  function positionDropdown(triggerElement, dropdownElement) {
+    if (!triggerElement || !dropdownElement) return;
+  
+    const rect = triggerElement.getBoundingClientRect();
+    dropdownElement.style.top = `${rect.bottom}px`;
+    dropdownElement.style.left = `${rect.left}px`;
+  }
+  
+  useEffect(() => {
+    const input = document.querySelector('#text-search');
+    const portal = document.querySelector('#text-dropdown-portal');
+    positionDropdown(input, portal);
+  }, [showAutoComplete]);
 
   return (
     <>
       <HeaderButton
         onClick={toggleSearch}
-        //add searchWithin to the headerpanel content and use here
-        title={isSearchVisible ? "Search" : "Search"}
-        label={isSearchVisible ? "Search" : "Search"}
+        title="Search"
+        label="Search"
       >
         <SearchIcon />
       </HeaderButton>
       <div
-        //   remember to fix the 'ahidden' thing
         className={`slide-out-container ${
           isSearchVisible ? "avisible" : "ahidden"
         }`}
@@ -209,7 +220,6 @@ const handleAutoCompleteSelect = (suggestion: string) => {
           opacity: isSearchVisible ? 1 : 0,
         }}
       >
-        {/* NB change classname and css selectors to search (or whatever) when old elements deleted */}
         <div className="search-new">
             <div className="search-input-container">
               <input
@@ -221,26 +231,22 @@ const handleAutoCompleteSelect = (suggestion: string) => {
                 value={searchTerm}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-
-                // onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
-                // onKeyDown={handleInputKeyDown}
-                // aria-label={content.pageSearchLabel}
-                // aria-expanded={showAutoComplete}
-                // aria-autocomplete="list"
-                // aria-controls="autocomplete-list"
-                // aria-activedescendant={
-                //   focusedOptionIndex >= 0
-                //     ? `option-${focusedOptionIndex}`
-                //     : undefined
-                // }
                 maxLength={30}
                 style={{ width: inputWidth }}
+                aria-label="Search text"
+                aria-expanded={showAutoComplete}
+                aria-autocomplete="list"
+                aria-controls={showAutoComplete ? "autocomplete-list" : undefined}
+                aria-activedescendant={
+                  focusedOptionIndex >= 0
+                    ? `option-${focusedOptionIndex}`
+                    : undefined
+                }
               />
             </div>
         </div>
       </div>
-      {/* the dropdown is rendered in a portal because 'hidden' needs to applied to the container above for animations to work nicely.  */}
       {showAutoComplete && options.autoCompleteBoxEnabled && (
       <div className="dropdown-portal" id="text-dropdown-portal">
             {options.autoCompleteBoxEnabled && (
@@ -270,7 +276,7 @@ const handleAutoCompleteSelect = (suggestion: string) => {
                 ))}
               </ul>
             )}
-</div>)}
+      </div>)}
     </>
   );
 };
