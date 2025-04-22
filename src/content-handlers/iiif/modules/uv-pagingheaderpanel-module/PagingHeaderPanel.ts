@@ -11,7 +11,7 @@ import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 import GoTo from "./GoTo";
-import Search from "./Search"
+import Search from "./Search";
 import { createElement } from "react";
 
 export class PagingHeaderPanel extends HeaderPanel<
@@ -272,23 +272,34 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.leftOptionsRoot.render(
       createElement(
-        'div', 
-        { 
-          className: 'pagingHeaderPanelLeftOptions',
-        }, 
+        "div",
+        {
+          className: "pagingHeaderPanelLeftOptions",
+        },
+
         [
-          createElement(GoTo, {key: 'goto', 
-            helper: this.extension.helper,
-            extensionHost: this.extensionHost,
-            content: this.content,
-            options: this.options
-          }),
-          createElement(Search, { key: 'search',
-            extension: this.extension as OpenSeadragonExtension,
-            extensionHost: this.extensionHost,
-            content: this.content,
-            options: this.options
-          })
+          ...(this.extension.helper.getTotalCanvases() > 1
+            ? [
+                createElement(GoTo, {
+                  key: "goto",
+                  helper: this.extension.helper,
+                  extensionHost: this.extensionHost,
+                  content: this.content,
+                  options: this.options,
+                }),
+              ]
+            : []),
+          ...(this.isSearchEnabled()
+            ? [
+                createElement(Search, {
+                  key: "search",
+                  extension: this.extension as OpenSeadragonExtension,
+                  extensionHost: this.extensionHost,
+                  content: this.content,
+                  options: this.options,
+                }),
+              ]
+            : []),
         ]
       )
     );
@@ -782,5 +793,9 @@ export class PagingHeaderPanel extends HeaderPanel<
       if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.show();
       if (this.galleryIsVisible()) this.$galleryButton.show();
     }
+  }
+
+  isSearchEnabled(): boolean {
+    return (<OpenSeadragonExtension>this.extension).isSearchEnabled();
   }
 }
