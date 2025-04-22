@@ -123,6 +123,10 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       }
     });
 
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+      this.openThumbsView();
+    });
+
     // this.extensionHost.subscribe(
     //   OpenSeadragonExtensionEvents.PAGING_TOGGLED,
     //   (_paged: boolean) => {
