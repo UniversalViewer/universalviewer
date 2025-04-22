@@ -1,5 +1,4 @@
 const $ = require("jquery");
-import { AutoComplete } from "../uv-shared-module/AutoComplete";
 import { IIIFEvents } from "../../IIIFEvents";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
@@ -7,8 +6,7 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
 import { sanitize } from "../../../../Utils";
-import { Bools, Strings } from "../../Utils";
-import * as KeyCodes from "../../KeyCodes";
+import { Bools, Strings } from "@edsilv/utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
@@ -26,16 +24,10 @@ export class FooterPanel extends BaseFooterPanel<
   $placemarkerDetailsTop: JQuery;
   $previousResultButton: JQuery;
   $printButton: JQuery;
-  $searchButton: JQuery;
-  $searchContainer: JQuery;
-  $searchLabel: JQuery;
-  $searchOptions: JQuery;
   $searchPagerContainer: JQuery;
   $searchPagerControls: JQuery;
   $searchResultsContainer: JQuery;
   $searchResultsInfo: JQuery;
-  $searchText: JQuery;
-  $searchTextContainer: JQuery;
 
   currentPlacemarkerIndex: number;
   placemarkerTouched: boolean = false;
@@ -91,10 +83,6 @@ export class FooterPanel extends BaseFooterPanel<
       }
     );
 
-    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS_EMPTY, () => {
-      this.hideSearchSpinner();
-    });
-
     this.extensionHost.subscribe(IIIFEvents.ANNOTATION_CHANGE, () => {
       this.updatePrevButton();
       this.updateNextButton();
@@ -106,39 +94,6 @@ export class FooterPanel extends BaseFooterPanel<
           </button>
         `);
     this.$options.prepend(this.$printButton);
-
-    // search input.
-    this.$searchContainer = $('<div class="search"></div>');
-    this.$element.prepend(this.$searchContainer);
-
-    this.$searchOptions = $('<div class="searchOptions"></div>');
-    this.$searchContainer.append(this.$searchOptions);
-
-    this.$searchLabel = $(
-      '<label class="label" for="searchWithinInput">' +
-        this.content.searchWithin +
-        "</label>"
-    );
-    this.$searchOptions.append(this.$searchLabel);
-
-    this.$searchTextContainer = $('<div class="searchTextContainer"></div>');
-    this.$searchOptions.append(this.$searchTextContainer);
-
-    this.$searchText = $(
-      '<input class="searchText" id="searchWithinInput" autocomplete="off" type="text" maxlength="100" value="' +
-        this.content.enterKeyword +
-        '" aria-label="' +
-        this.content.searchWithin +
-        '"/>'
-    );
-    this.$searchTextContainer.append(this.$searchText);
-
-    this.$searchButton = $(
-      '<button class="imageButton searchButton"></button>'
-    );
-    this.$searchButton.attr("aria-label", this.content.searchWithin);
-    this.$searchButton.attr("title", this.content.searchWithin);
-    this.$searchTextContainer.append(this.$searchButton);
 
     // search results.
     this.$searchPagerContainer = $('<div class="searchPager"></div>');
@@ -199,18 +154,7 @@ export class FooterPanel extends BaseFooterPanel<
 
     // ui event handlers.
     var that = this;
-
-    this.$searchButton.on("click", (e: any) => {
-      e.preventDefault();
-      this.search(this.$searchText.val());
-    });
-
-    this.$searchText.on("focus", () => {
-      // clear initial text.
-      if (this.$searchText.val() === this.content.enterKeyword)
-        this.$searchText.val("");
-    });
-
+    
     this.$placemarkerDetails.on("mouseover", () => {
       that.extensionHost.publish(
         OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
@@ -262,7 +206,6 @@ export class FooterPanel extends BaseFooterPanel<
 
     // hide search options if not enabled/supported.
     if (!this.isSearchEnabled()) {
-      this.$searchContainer.hide();
       this.$searchPagerContainer.hide();
       this.$searchResultsContainer.hide();
       this.$element.addClass("min");
@@ -270,41 +213,6 @@ export class FooterPanel extends BaseFooterPanel<
 
     if (this.extension.helper.getTotalCanvases() === 1) {
       this.$searchResultsContainer.hide();
-    }
-
-    const autocompleteService: string | null = (<OpenSeadragonExtension>(
-      this.extension
-    )).getAutoCompleteUri();
-
-    if (autocompleteService) {
-      new AutoComplete(
-        this.$searchText,
-        (terms: string, cb: (results: string[]) => void) => {
-          fetch(Strings.format(autocompleteService, terms))
-            .then((response) => response.json())
-            .then((results) => {
-              cb(results);
-            });
-        },
-        (results: any) => {
-          return $.map(results.terms, (result: any) => {
-            return result.match;
-          });
-        },
-        (terms: string) => {
-          this.search(terms);
-        },
-        300,
-        2,
-        true,
-        Bools.getBool(this.options.autocompleteAllowWords, false)
-      );
-    } else {
-      this.$searchText.on("keyup", (e) => {
-        if (e.keyCode === KeyCodes.KeyDown.Enter) {
-          that.search(that.$searchText.val());
-        }
-      });
     }
 
     this.$printButton.onPressed(() => {
@@ -474,11 +382,6 @@ export class FooterPanel extends BaseFooterPanel<
 
       return;
     }
-
-    // blur search field
-    this.$searchText.blur();
-
-    this.showSearchSpinner();
 
     this.extensionHost.publish(OpenSeadragonExtensionEvents.SEARCH, this.terms);
   }
@@ -754,15 +657,8 @@ export class FooterPanel extends BaseFooterPanel<
     const $placemarkers: JQuery = this.getSearchResultPlacemarkers();
     $placemarkers.remove();
 
-    // clear search input field.
-    this.$searchText.val(this.content.enterKeyword);
-
     // hide pager.
-    this.$searchContainer.show();
     this.$searchPagerContainer.hide();
-
-    // set focus to search box.
-    this.$searchText.focus();
   }
 
   getPageLineRatio(): number {
@@ -829,25 +725,14 @@ export class FooterPanel extends BaseFooterPanel<
     );
   }
 
-  showSearchSpinner(): void {
-    this.$searchText.addClass("searching");
-  }
-
-  hideSearchSpinner(): void {
-    this.$searchText.removeClass("searching");
-  }
-
   displaySearchResults(results: AnnotationGroup[], terms?: string): void {
     if (!this.isSearchEnabled()) {
       return;
     }
 
-    this.hideSearchSpinner();
     this.positionSearchResultPlacemarkers();
 
     // show pager.
-    this.$searchContainer.hide();
-
     this.$searchPagerControls.css({
       left: 0,
     });
@@ -899,11 +784,6 @@ export class FooterPanel extends BaseFooterPanel<
     // position search pager controls.
     this.$searchPagerControls.css({
       left: center - this.$searchPagerControls.width() / 2,
-    });
-
-    // position search input.
-    this.$searchOptions.css({
-      left: center - this.$searchOptions.outerWidth() / 2,
     });
   }
 }
