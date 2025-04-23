@@ -124,23 +124,23 @@ export type Localisation = {
 };
 
 export type HeaderPanelOptions = {
-  settingsButtonEnabled: boolean;
+  settingsButtonEnabled?: boolean;
   /** Determines if help is enabled */
-  helpEnabled: boolean;
+  helpEnabled?: boolean;
   /** Determines help URL */
   helpUrl?: string;
   /** Determines if download is enabled */
-  downloadEnabled: boolean;
+  downloadEnabled?: boolean;
   /** Determines if share is enabled */
-  shareEnabled: boolean;
+  shareEnabled?: boolean;
   /** Determines if print is enabled */
-  printEnabled: boolean;
+  printEnabled?: boolean;
   /** Determines if fullscreen is enabled */
-  fullscreenEnabled: boolean;
+  fullscreenEnabled?: boolean;
   /** Determines if feedback is enabled */
-  feedbackEnabled: boolean;
+  feedbackEnabled?: boolean;
   /** Determines if bookmark is enabled */
-  bookmarkEnabled: boolean;
+  bookmarkEnabled?: boolean;
 };
 
 export type HeaderPanelContent = {

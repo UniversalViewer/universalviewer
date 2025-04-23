@@ -203,20 +203,11 @@
     },
     "headerPanel": {
       "options": {
-        "settingsButtonEnabled": false,
-        "helpEnabled": false,
-        "downloadEnabled": false,
-        "shareEnabled": false,
-        "printEnabled": false,
-        "fullscreenEnabled": false,
-        "bookmarkEnabled": false,
-        "feedbackEnabled": false
       },
       "content": {
         "close": "$close",
         "settings": "$settings",
         "help": "$help",
-        "helpUrl": "https://universalviewer.io/",
         "download": "$download",
         "share": "$share",
         "print": "$print",
