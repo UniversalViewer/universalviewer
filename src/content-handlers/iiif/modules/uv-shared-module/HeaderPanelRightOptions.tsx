@@ -33,7 +33,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
   }, [extensionHost]);
 
   return (
-    <>
+    <div style={{ marginTop: "5px" }}>
       {options.helpEnabled && content.helpUrl && (
         <HeaderButton
           onClick={() => window.open(content.helpUrl)}
@@ -139,7 +139,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
         </span>
       </HeaderButton>      
       )}
-    </>
+    </div>
   );
 };
 

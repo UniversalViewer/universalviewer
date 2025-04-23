@@ -1,4 +1,5 @@
 import React from "react";
+import { OneUp, TwoUp, Gallery} from "../../../../icons/icons"
 
 interface PageToggleProps {
   onOneUpClick: () => void;
@@ -12,16 +13,15 @@ const PageToggle: React.FC<PageToggleProps> = ({ onOneUpClick, onTwoUpClick, onG
 
 
   return (
-    <div className="osd-controls" style={{ marginLeft: "30px" }}>
+    <div className="osd-controls" style={{ marginLeft: "25px"}}>
       <button className="btn imageBtn one-up" onClick={onOneUpClick}>
-        <i className="uv-icon-one-up" aria-hidden="true"></i>
+        <OneUp aria-hidden="true" />
       </button>
-
       <button className="btn imageBtn two-up" onClick={onTwoUpClick}>
-        <i className="uv-icon-two-up" aria-hidden="true"></i>
+        <TwoUp aria-hidden="true" />
       </button>
       <button className="btn imageBtn gallery" onClick={onGalleryClick}>
-        <i className="uv-icon-gallery" aria-hidden="true"></i>
+        <Gallery aria-hidden="true" />
       </button>
 
     </div>
