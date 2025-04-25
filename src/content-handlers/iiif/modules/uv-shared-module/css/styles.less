@@ -253,6 +253,10 @@
     .leftPanel.open {
         left: 0;
         right: 2em;
+        
+        right: auto;
+        width: min(90%, 25rem);
+
         transform: none;
 
         .md-mediaquery({
@@ -276,6 +280,8 @@
     .rightPanel.open {
         
         transform: none;
+
+        width: min(90%, 25rem);
 
         .md-mediaquery({
             transition-property: none;
