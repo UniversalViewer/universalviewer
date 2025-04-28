@@ -357,6 +357,7 @@
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
         "doubleClickAnnotationEnabled": false,
+        "galleryButtonEnabled": true,
         "immediateRender": false,
         "maxZoomPixelRatio": 1.25,
         "mostSpecificRequiredStatement": true,
@@ -385,7 +386,8 @@
         "zoomOut": "$zoomOut",
         "adjustImage": "$adjustImage",
         "oneUp": "$singlePageView",
-        "twoUp": "$doublePageView"
+        "twoUp": "$twoPageView",
+        "gallery": "$gallery"
       }
     },
     "searchFooterPanel": {

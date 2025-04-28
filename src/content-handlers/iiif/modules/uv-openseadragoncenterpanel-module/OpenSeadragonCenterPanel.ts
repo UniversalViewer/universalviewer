@@ -24,9 +24,6 @@ import "@openseadragon-imaging/openseadragon-viewerinputhook";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-import { createRoot, Root } from 'react-dom/client';  
-import React from 'react';
-import PageToggle from './PageToggle';
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
@@ -66,8 +63,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
-  $toggleContainer: JQuery; 
-  toggleRoot: Root;  
+  $toggleContainer: JQuery;
+  $galleryButton: JQuery;
+  $pagingToggleButtons: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -86,8 +84,57 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewerId = "osd" + new Date().getTime();
     this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
     this.$content.prepend(this.$viewer);
-    this.createButtons();
+    this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
+    this.$content.prepend(this.$pagingToggleButtons);
+    this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
+    this.$content.prepend(this.$pagingToggleButtons);
 
+    this.$oneUpButton = $(`
+      <button class="btn imageBtn one-up" title="${this.content.oneUp}">
+        <i class="uv-icon-one-up" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.oneUp}</span>
+      </button>
+    `);
+    this.$pagingToggleButtons.append(this.$oneUpButton);
+
+    this.$twoUpButton = $(`
+      <button class="btn imageBtn two-up" title="${this.content.twoUp}">
+        <i class="uv-icon-two-up" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.twoUp}</span>
+      </button>
+    `);
+    this.$pagingToggleButtons.append(this.$twoUpButton);
+
+    const hasPaging = (this.extension as OpenSeadragonExtension).helper.isPagingAvailable();
+    if (!hasPaging) {
+      this.$oneUpButton.hide();
+      this.$twoUpButton.hide();
+    }
+
+      this.$oneUpButton.onPressed(() => {
+        const enabled: boolean = false;
+        this.updateSettings({ pagingEnabled: enabled });
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, enabled);
+      });
+      
+      this.$twoUpButton.onPressed(() => {
+        const enabled: boolean = true;
+        this.updateSettings({ pagingEnabled: enabled });
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, enabled);
+      });
+    
+      this.$galleryButton = $(`
+        <button class="btn imageBtn gallery" title="${this.content.gallery}" style="display: none;">
+          <i class="uv-icon-gallery" aria-hidden="true"></i>
+          <span class="sr-only">${this.content.gallery}</span>
+        </button>
+      `);
+      this.$pagingToggleButtons.append(this.$galleryButton);
+      
+      this.$galleryButton.onPressed(() => {
+        this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
+      });
+      
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
     });
@@ -111,6 +158,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           this.isLoaded = false;
           await this.openMedia(resources);
           this.isLoaded = true;
+          this.updateGalleryButton();
           this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
           this.extensionHost.publish(Events.LOAD);
         });
@@ -184,83 +232,20 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }
     );
   }
-
-  createButtons(): void {
-    const isPaged = this.extension.helper.isPaged(); 
-    this.$toggleContainer = $('<div class="osd-toggle-container"></div>');
-    this.$viewer.append(this.$toggleContainer);
-
-    this.toggleRoot = createRoot(this.$toggleContainer[0]);
-
-    this.toggleRoot.render(
-      React.createElement(PageToggle, {
-        onOneUpClick: () => {
-          const enabled = false;
-          this.updateSettings({ pagingEnabled: enabled });
-          this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, enabled);
-        },
-        onTwoUpClick: () => {
-          const enabled = true;
-          this.updateSettings({ pagingEnabled: enabled });
-          this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, enabled);
-        },
-        onGalleryClick: () => {
-          this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
-        },
-        isPaged, 
-      })
+  
+  updateGalleryButton(): void {
+    if (!this.galleryIsVisible()) {
+      this.$galleryButton.hide();
+    } else {
+      this.$galleryButton.show();
+    }
+  }
+  
+  galleryIsVisible(): boolean {
+    return (
+      Bools.getBool(this.options.galleryButtonEnabled, true) &&
+      this.extension?.isLeftPanelEnabled?.()
     );
-    
-    this.updateLayout();
-
-this.$toggleContainer.show();
-
-
-let inactivityTimer: number;
-
-const startInactivityTimer = () => {
-    clearTimeout(inactivityTimer);
-    inactivityTimer = window.setTimeout(() => {
-        this.$toggleContainer.fadeOut(200);
-    }, 1800);
-};
-
-setTimeout(() => {
-    this.$toggleContainer.fadeOut(400);
-}, 400);
-
-
-this.$viewer.on("mouseenter", () => {
-    this.$toggleContainer.stop(true, true).fadeIn(400);
-    startInactivityTimer(); 
-});
-
-
-this.$viewer.on("mouseleave", () => {
-    clearTimeout(inactivityTimer);
-    this.$toggleContainer.fadeOut(400);
-});
-
-
-this.$viewer.on("mousemove", () => {
-    this.$toggleContainer.stop(true, true).fadeIn(400);
-    startInactivityTimer();
-});
-
-}
-
-  updateLayout(): void {
-    this.$viewer.find(".osd-toggle-container").css({
-      position: "absolute",
-      bottom: "10px",  
-      left: "7%",  
-      transform: "translateX(-50%)",  
-      zIndex: 10, 
-    });
-
-    this.$viewer.find(".osd-image").css({
-      paddingBottom: "40px", 
-    });
   }
 
   whenCreated(cb: () => void): void {
@@ -1696,3 +1681,25 @@ this.$viewer.on("mousemove", () => {
       : this.config.options.controlsFadeLength || 250;
   }
 }
+
+const style = document.createElement('style');
+style.textContent = `
+  .pagingToggleButtons {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: flex;
+    background: black;
+  }
+
+  .pagingToggleButtons button {
+    cursor: pointer;
+  }
+
+  .pagingToggleButtons button:hover {
+    background:rgb(70, 70, 70);
+  }
+`;
+document.head.appendChild(style);
+
