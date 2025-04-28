@@ -6,18 +6,24 @@
     .centerPanel {
 
         .pagingToggleButtons {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            background: black;
-        
-            button {
-              cursor: pointer;
-            }
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 1000;
+          display: flex;
+          background: black;
+          transition: opacity 0.3s ease;
+      
+          button {
+            cursor: pointer;
           }
-        
+      
+          &.fade-out {
+            opacity: 0;
+            pointer-events: none;
+          }
+        }
+      }
 
         .content{
             position: relative;
@@ -326,7 +332,6 @@
     }
   }
 
-  .openseadragon-canvas {
-    outline: none;
-  }
-}
+    .openseadragon-canvas {
+        outline: none;
+    }

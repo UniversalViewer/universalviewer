@@ -645,6 +645,54 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.config.options.controlsFadeAfterInactive
     );
 
+    const fadeDelay = 1500; 
+
+    let fadeButtonsTimeout: number | undefined;
+
+    const showPagingButtons = () => {
+      this.$pagingToggleButtons.removeClass("fade-out");
+      this.$galleryButton.removeClass("fade-out");
+    };
+
+    const hidePagingButtons = () => {
+      this.$pagingToggleButtons.addClass("fade-out");
+      this.$galleryButton.addClass("fade-out");
+    };
+
+    const resetPagingFadeTimer = () => {
+      clearTimeout(fadeButtonsTimeout);
+      showPagingButtons();
+
+      fadeButtonsTimeout = window.setTimeout(() => {
+        hidePagingButtons();
+      }, fadeDelay);
+    };
+
+
+    this.$element.on("mousemove", () => {
+      resetPagingFadeTimer();
+    });
+
+    this.$pagingToggleButtons.on("mouseenter", () => {
+      showPagingButtons();
+      clearTimeout(fadeButtonsTimeout);
+    });
+    this.$galleryButton.on("mouseenter", () => {
+      showPagingButtons();
+      clearTimeout(fadeButtonsTimeout);
+    });
+
+    this.$pagingToggleButtons.on("mouseleave", () => {
+      resetPagingFadeTimer();
+    });
+    this.$galleryButton.on("mouseleave", () => {
+      resetPagingFadeTimer();
+    });
+
+
+    showPagingButtons();
+    resetPagingFadeTimer()
+
     this.viewer.addHandler("tile-drawn", () => {
       this.$spinner.hide();
     });
