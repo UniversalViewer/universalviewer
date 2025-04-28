@@ -1681,25 +1681,3 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       : this.config.options.controlsFadeLength || 250;
   }
 }
-
-const style = document.createElement('style');
-style.textContent = `
-  .pagingToggleButtons {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1000;
-    display: flex;
-    background: black;
-  }
-
-  .pagingToggleButtons button {
-    cursor: pointer;
-  }
-
-  .pagingToggleButtons button:hover {
-    background:rgb(70, 70, 70);
-  }
-`;
-document.head.appendChild(style);
-

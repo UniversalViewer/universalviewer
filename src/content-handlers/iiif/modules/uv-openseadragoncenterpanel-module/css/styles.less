@@ -3,9 +3,24 @@
 .uv-iiif-extension-host.uv-openseadragon-extension {
   @search-result: @brand-secondary;
 
-  .centerPanel {
-    .content {
-      position: relative;
+    .centerPanel {
+
+        .pagingToggleButtons {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            background: black;
+        
+            button {
+              cursor: pointer;
+            }
+          }
+        
+
+        .content{
+            position: relative;
 
       .displayregion {
         border: 2px solid #fff !important;
