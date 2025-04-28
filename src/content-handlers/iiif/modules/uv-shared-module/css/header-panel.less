@@ -102,32 +102,29 @@
     transition: inherit;
   }
   
-        
+  .options {
+      padding-left: 8px;
+      padding-right: 8px;
+      height: 30px;
+      background-color: @panel-dark-bg;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
+      .leftOptions {
+          height: 30px;
+          display: flex; 
+          width: auto;
+          justify-content: flex-start;
+          align-items: center;
+      }
 
-        .options {
-            padding-left: 8px;
-            padding-right: 8px;
-            height: 30px;
-            background-color: @panel-dark-bg;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .leftOptions {
-                height: 30px;
-                display: flex; 
-                width: auto;
-                justify-content: flex-start;
-                align-items: center;
-            }
-
-            .centerOptions {
-                text-align: center;
-            }
+      .centerOptions {
+          text-align: center;
+      }
 
       .rightOptions {
-        float: right;
+          float: right;
 
         //              .help {
         //                  margin-left: 1em;
