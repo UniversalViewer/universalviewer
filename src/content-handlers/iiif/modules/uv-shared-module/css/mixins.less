@@ -413,8 +413,8 @@
     &.active,
     .open .dropdown-toggle& {
         color: @color;
-        background-color: darken(@background, 8%);
-        border-color: darken(@border, 12%);
+        background-color: if((iscolor(@background)), darken(@background, 8%), @border);
+        border-color: if((iscolor(@border)), darken(@border, 12%), @border);
     }
     &:active,
     &.active,
