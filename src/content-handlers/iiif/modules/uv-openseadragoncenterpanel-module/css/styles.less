@@ -16,6 +16,21 @@
       
           button {
             cursor: pointer;
+      
+            svg {
+              width: 30px;
+              height: 30px;
+              fill: currentColor;
+              transition: fill 0.2s ease;
+            }
+      
+            &:hover {
+              color: #00fff2;
+            }
+      
+            &:focus {
+                .tab-focus();
+            }
           }
       
           &.fade-out {
@@ -23,7 +38,7 @@
             pointer-events: none;
           }
         }
-      }
+            
 
         .content{
             position: relative;
@@ -335,3 +350,4 @@
     .openseadragon-canvas {
         outline: none;
     }
+}

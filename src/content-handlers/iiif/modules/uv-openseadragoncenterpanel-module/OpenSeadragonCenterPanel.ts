@@ -88,13 +88,40 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$content.prepend(this.$pagingToggleButtons);
     this.$oneUpButton = $(`
       <button class="btn imageBtn one-up" title="${this.content.oneUp}">
-        <i class="uv-icon-one-up" aria-hidden="true"></i>
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <g>
+            <rect x="10" y="8" width="10" height="14" />
+          </g>
+        </svg>
         <span class="sr-only">${this.content.oneUp}</span>
       </button>
     `);
     this.$twoUpButton = $(`
       <button class="btn imageBtn two-up" title="${this.content.twoUp}">
-        <i class="uv-icon-two-up" aria-hidden="true"></i>
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <g>
+            <g>
+              <rect x="4" y="8" width="10" height="14" />
+            </g>
+            <g>
+              <rect x="16" y="8" width="10" height="14" />
+            </g>
+          </g>
+        </svg>
         <span class="sr-only">${this.content.twoUp}</span>
       </button>
     `);
@@ -124,12 +151,21 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
 
     this.$galleryButton = $(`
-        <button class="btn imageBtn gallery" title="${this.content.gallery}" style="display: none;">
-          <i class="uv-icon-gallery" aria-hidden="true"></i>
-          <span class="sr-only">${this.content.gallery}</span>
-        </button>
-      `);
-    this.$pagingToggleButtons.append(this.$galleryButton);
+      <button class="btn imageBtn gallery" title="${this.content.gallery}" style="display: none;">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M14,14H8V8h6V14z M22,8h-6v6h6V8z M14,16H8v6h6V16z M22,16h-6v6h6V16z" />
+        </svg>
+        <span class="sr-only">${this.content.gallery}</span>
+      </button>
+    `);
+    this.$pagingToggleButtons.append(this.$galleryButton);    
 
     this.$galleryButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
