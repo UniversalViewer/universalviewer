@@ -252,15 +252,14 @@
 
     .leftPanel.open {
         left: 0;
-        right: auto;
         width: min(95%, 25rem);
-
         transform: none;
 
         .md-mediaquery({
             transition-property: none;
             left: initial;
             right: initial;
+            width: auto;
         });
     }
 
