@@ -91,12 +91,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         this.toggle();
       }
     });
-
-    /* window.addEventListener('resize', () => {
-      if (window.innerWidth < 768 && this.isExpanded) {
-        this.toggle();
-      }
-    }); */
   }
 
   init(): void {
