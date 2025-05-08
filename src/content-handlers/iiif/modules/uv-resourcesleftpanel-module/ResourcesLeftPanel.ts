@@ -161,6 +161,7 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
 
   resize(): void {
     super.resize();
+
     this.$views.height(this.$main.height());
     this.$resources.height(this.$main.height());
   }
