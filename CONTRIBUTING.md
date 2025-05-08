@@ -93,18 +93,24 @@ After pushing your new branch to your fork, you can create a PR; see: https://gu
 
 ## Creating a release
 
-### Release Candidate Process
+### Pre-Release Planning
 
-Before a release can be made, some planning and testing are required:
+Before a release can be made, some planning is required:
 
 1. The [Universal Viewer Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) is responsible for determining when a new release is needed (for example, because a sprint has completed, or because a major fix or feature has been contributed) and for identifying a Release Manager (any Steering Group member with rights to bypass GitHub branch protection rules) to manage the technical parts of the process. The community is welcome to reach out to members of the Steering Group to propose/request a release at any time.
 2. Once a release is decided upon, its version number must be determined. The project uses [semantic versioning](https://semver.org/), so given version X.Y.Z, we will increment Z for fixes (patch release), Y for new features (minor release), or X for backward-incompatible changes (major release).
-3. If outstanding work must be completed to ensure a stable release, a milestone for the new version will be created in GitHub and all relevant outstanding issues/PRs assigned to it, so that estimation can be performed to set a realistic release date (this could be done at steering group and/or community call meetings). If work is already complete, the release can proceed immediately.
-4. When it's time to begin the release process, the Release Manager will create a `release-X.Y.Z` branch off of `dev` and then target a pull request against the new branch containing the result of running the `npm version X.Y.Z-rc1` command (where X.Y.Z is replaced with the new version determined in step 2). This PR can be merged immediately; its purpose is to create an easily accessible public preview and a public forum for discussion of the RC. The description of this pull request should highlight major changes and areas where testing is needed.
-5. The release tag created during step 4 should be pushed to the main GitHub repository to trigger publishing of the release candidate to NPM.
-6. Next, the Steering Group will announce the release candidate and offer an appropriate testing window (usually 1-2 weeks, depending on scope/complexity of changes) for community feedback. During this window, community members are encouraged to build the new version, try it out in their environments, and raise issues/pull requests if they encounter problems.
-7. If problems were found during the testing window, they will be evaluated by the Steering Group, and as soon as any critical bugs are fixed, steps 4-6 will be repeated with an incremented "rc" number (e.g. X.Y.Z-rc2) to ensure that no problems remain.
-8. Once the release candidate is deemed stable by the Steering Group, it will be promoted to the formal release. After the RC pull request is merged, the full release can be published.
+3. If outstanding work must be completed to ensure a stable release, a milestone for the new version will be created in GitHub and all relevant outstanding issues/PRs assigned to it, so that estimation can be performed to set a realistic release date (this could be done at steering group and/or community call meetings). If work is already complete, the release candidate process can begin immediately.
+
+### Release Candidate Process
+
+A series of Release Candidates should be created and tested to ensure that the final release is stable. Note that the examples in the steps below assume that Git is set up with an `upstream` remote pointing at the main Universal Viewer repository and an `origin` remote pointing at the Release Manager's fork. Replace X.Y.Z in all steps with the version determined in step 2 of Pre-Release Planning.
+
+1. When it's time to begin the release process, the Release Manager will create a `release-X.Y.Z` branch off of `dev`: `git checkout dev ; git checkout -b release-X.Y.Z ; git push --set-upstream upstream release-X.Y.Z`
+2. The Release Manager should next create a pull request against the new branch containing the result of using NPM to bump the version: `git checkout -b release-X.Y.Z-rc1 ; npm version X.Y.Z-rc1 ; git push --set-upstream origin release-X.Y.Z-rc1`. When creating the PR on GitHub, be sure that you target the appropriate release branch, not `dev`. This PR can be merged immediately; its purpose is to create an easily accessible public preview and a public forum for discussion of the RC. The description of this pull request should highlight major changes and areas where testing is needed; you can use the GitHub compare tool to review commits -- e.g. `https://github.com/UniversalViewer/universalviewer/compare/main...release-X.Y.Z` will show all commits added between the last stable release and the new release-in-progress.
+3. The release tag created during step 2 should be pushed to the main GitHub repository to trigger publishing of the release candidate to NPM: `git push upstream vX.Y.Z-rc1`
+4. Next, the Steering Group will announce the release candidate and offer an appropriate testing window (usually 1-2 weeks, depending on scope/complexity of changes) for community feedback. During this window, community members are encouraged to build the new version, try it out in their environments, and raise issues/pull requests if they encounter problems.
+5. If problems were found during the testing window, they will be evaluated by the Steering Group, and as soon as any critical bugs are fixed, steps 1-4 will be repeated with an incremented "rc" number (e.g. X.Y.Z-rc2) to ensure that no problems remain.
+6. Once the release candidate is deemed stable by the Steering Group, it will be promoted to the formal release. After the RC pull request is merged, the full release can be published.
 
 ### Making a Normal Release
 
@@ -115,6 +121,7 @@ Once a stable release is ready to be published, these steps can be followed by t
 3. Merge the `release-X.Y` branch into the `main` branch, so that `main` continues to point to the most recent stable release.
 4. All changed/deleted branches and newly-created release tags must be pushed to GitHub; e.g. `git push origin main dev v4.1.0 release-4.1 :release-4.1.0`. (Note the colon on `:release-4.1.0` -- this deletes the short-lived release branch while updating all of the long-lived branches).
 5. At this point, a GitHub action will recognize the new version tag and publish the package to NPM.
+6. Don't forget to create a release with appropriate release notes through the GitHub web interface to make the new version more visible.
 
 ### Backporting a Bug Fix
 
