@@ -4,6 +4,7 @@ import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { MediaElementExtensionEvents } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-mediaelementmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IMediaElementExtension } from "./IMediaElementExtension";
@@ -12,7 +13,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools } from "@edsilv/utils";
 import {
   ExternalResourceType,
   MediaType,
@@ -30,8 +31,10 @@ import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
 import { Config } from "./config/Config";
 
-export default class Extension extends BaseExtension<Config>
-  implements IMediaElementExtension {
+export default class Extension
+  extends BaseExtension<Config>
+  implements IMediaElementExtension
+{
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
@@ -40,6 +43,7 @@ export default class Extension extends BaseExtension<Config>
   downloadDialogue: DownloadDialogue;
   shareDialogue: ShareDialogue;
   footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
+  mobileFooterPanel: MobileFooterPanel;
   headerPanel: HeaderPanel<Config["modules"]["headerPanel"]>;
   helpDialogue: HelpDialogue;
   leftPanel: ResourcesLeftPanel;
@@ -138,6 +142,9 @@ export default class Extension extends BaseExtension<Config>
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+      this.mobileFooterPanel = new MobileFooterPanel(
+        this.shell.$mobileFooterPanel
+      );
     } else {
       this.shell.$footerPanel.hide();
     }
@@ -179,6 +186,7 @@ export default class Extension extends BaseExtension<Config>
     super.render();
 
     this.checkForTarget();
+    this.checkForMuted();
   }
 
   checkForTarget(): void {
@@ -201,6 +209,10 @@ export default class Extension extends BaseExtension<Config>
         TFragment.fromString(selector)
       );
     }
+  }
+
+  checkForMuted(): void {
+    this.extensionHost.publish(IIIFEvents.SET_MUTED, this.data.muted || false);
   }
 
   isLeftPanelEnabled(): boolean {
@@ -234,27 +246,43 @@ export default class Extension extends BaseExtension<Config>
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    const appUri: string = this.getAppUri();
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString()
-    );
-    return script;
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 
-  // todo: use canvas.getThumbnail()
-  getPosterImageUri(): string {
-    const canvas: Canvas = this.helper.getCurrentCanvas();
-    const annotations: Annotation[] = canvas.getContent();
+  getPosterImageUri(): string | null {
+    let posterUri: string | null = null;
 
-    if (annotations && annotations.length) {
-      return annotations[0].getProperty("thumbnail");
+    const canvas: Canvas = this.helper.getCurrentCanvas();
+
+    // if there's an accompanying canvas, use that.
+    const accompanyingCanvas: any = canvas.getProperty("accompanyingCanvas");
+
+    if (accompanyingCanvas) {
+      if (accompanyingCanvas.items && accompanyingCanvas.items.length) {
+        const annotationPage: any = accompanyingCanvas.items[0];
+        if (annotationPage.items && annotationPage.items.length) {
+          const annotation: any = annotationPage.items[0];
+          posterUri = annotation.body?.id;
+        }
+      }
     } else {
-      return canvas.getProperty("thumbnail");
+      const annotations: Annotation[] = canvas.getContent();
+
+      if (annotations && annotations.length) {
+        posterUri = annotations[0].getProperty("thumbnail");
+      } else {
+        posterUri = canvas.getProperty("thumbnail");
+      }
     }
+
+    return posterUri;
   }
 
   isVideoFormat(type: string): boolean {

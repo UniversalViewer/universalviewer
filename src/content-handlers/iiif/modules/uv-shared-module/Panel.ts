@@ -36,15 +36,24 @@ export class Panel {
   onAccessibleClick(
     el: JQuery,
     callback: (e: JQueryEventObject) => void,
-    withClick = true
+    withClick = true,
+    treatAsButton = false
   ) {
     if (withClick) {
       el.on("click", (e) => {
         callback(e);
       });
     }
-    el.on("keyup", (e) => {
-      if (e.keyCode === 32) {
+
+    el.on("keydown", (e) => {
+      // by passing treatAsButton  as true this will become false
+      // and so an anchor won't be excluded from Space presses
+      let isAnchor = e.target.nodeName === "A" && !treatAsButton;
+
+      // 13 = Enter, 32 = Space
+      if ((e.which === 32 && !isAnchor) || e.which === 13) {
+        // stops space scrolling the page
+        e.preventDefault();
         callback(e);
       }
     });

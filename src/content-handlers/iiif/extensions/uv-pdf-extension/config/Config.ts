@@ -4,6 +4,8 @@ import {
   CenterPanelOptions,
   DownloadDialogueContent,
   DownloadDialogueOptions,
+  FooterPanelContent,
+  FooterPanelOptions,
   HeaderPanelContent,
   HeaderPanelOptions,
   ModuleConfig,
@@ -18,7 +20,10 @@ type PDFCenterPanelOptions = CenterPanelOptions & {
   usePdfJs: boolean;
 };
 
-type PDFCenterPanelContent = CenterPanelContent & {};
+type PDFCenterPanelContent = CenterPanelContent & {
+  next: string;
+  previous: string;
+};
 
 type PDFCenterPanel = {
   options: PDFCenterPanelOptions;
@@ -70,12 +75,31 @@ type PDFSettingsDialogue = {
   content: PDFSettingsDialogueContent;
 };
 
+type MobileFooterPanelOptions = FooterPanelOptions & {};
+
+type MobileFooterPanelContent = FooterPanelContent & {
+  rotateRight: string;
+  moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
+  zoomIn: string;
+  zoomOut: string;
+};
+
+type MobileFooterPanel = ModuleConfig & {
+  options: MobileFooterPanelOptions;
+  content: MobileFooterPanelContent;
+};
+
 type Modules = {
   pdfCenterPanel: PDFCenterPanel;
   pdfHeaderPanel: PDFHeaderPanel;
   settingsDialogue: PDFSettingsDialogue;
   downloadDialogue: PDFDownloadDialogue;
   shareDialogue: PDFShareDialogue;
+  mobileFooterPanel: MobileFooterPanel;
 };
 
 export type Config = BaseConfig & {

@@ -1,4 +1,5 @@
 import {
+  AdjustImageDialogue,
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
@@ -52,8 +53,6 @@ type PagingHeaderPanelOptions = HeaderPanelOptions & {
   autoCompleteBoxEnabled: boolean;
   /** Determines if gallery button is enabled */
   galleryButtonEnabled: boolean;
-  /** Determines if help is enabled */
-  helpEnabled: boolean;
   /** Determines if image selection box is enabled */
   imageSelectionBoxEnabled: boolean;
   /** Determines if mode options is enabled */
@@ -126,21 +125,26 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   pageGap: number;
   /** Determines if home control is shown */
   showHomeControl: boolean;
+  /** Determines if adjust image control is shown */
+  showAdjustImageControl: boolean;
   /** Number of attributions to trim */
   trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
+  /** Whether to zoom in to first annotation on load */
+  zoomToInitialAnnotation: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
-  next: string;
-  previous: string;
+  nextImage: string;
+  previousImage: string;
   rotateRight: string;
   zoomIn: string;
   zoomOut: string;
+  adjustImage: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
@@ -187,13 +191,21 @@ type SearchFooterPanel = ModuleConfig & {
   content: SearchFooterPanelContent;
 };
 
-type MobileFooterPanelOptions = FooterPanelOptions & {};
+type MobileFooterPanelOptions = FooterPanelOptions & {
+  helpEnabled: boolean;
+  helpUrl: string;
+};
 
 type MobileFooterPanelContent = FooterPanelContent & {
   rotateRight: string;
   moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   zoomIn: string;
   zoomOut: string;
+  help: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {
@@ -279,6 +291,7 @@ type Modules = {
   mobileFooterPanel: MobileFooterPanel;
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
+  adjustImageDialogue: AdjustImageDialogue;
 };
 
 export type Config = BaseConfig & {

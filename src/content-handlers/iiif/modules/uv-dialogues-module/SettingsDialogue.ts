@@ -138,13 +138,32 @@ export class SettingsDialogue extends Dialogue<
 
     this.$reducedAnimation.append(this.$reducedAnimationLabel);
 
+    const settings: ISettings = this.getSettings();
+
+    if (settings.animationDuration) {
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${settings.animationDuration}ms`
+      );
+    }
+
+    if (settings.reducedAnimation) {
+      document.documentElement.style.setProperty("--uv-animation", "0");
+      this.$reducedAnimationCheckbox.prop("checked", true);
+    } else {
+      document.documentElement.style.setProperty("--uv-animation", "1");
+      this.$reducedAnimationCheckbox.removeAttr("checked");
+    }
+
     this.$reducedAnimationCheckbox.change(() => {
       const settings: ISettings = {};
 
       if (this.$reducedAnimationCheckbox.is(":checked")) {
         settings.reducedAnimation = true;
+        document.documentElement.style.setProperty("--uv-animation", "0");
       } else {
         settings.reducedAnimation = false;
+        document.documentElement.style.setProperty("--uv-animation", "1");
       }
 
       this.updateSettings(settings);

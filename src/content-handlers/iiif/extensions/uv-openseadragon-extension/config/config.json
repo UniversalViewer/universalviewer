@@ -39,6 +39,7 @@
     "rightPanelEnabled": true,
     "saveUserSettings": false,
     "clickToZoomEnabled": true,
+    "truncateThumbnailLabels": true,
     "searchWithinEnabled": true,
     "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
@@ -72,6 +73,7 @@
         "branchNodesSelectable": false,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
+        "defaultToTreeIfCollection": true,
         "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
@@ -185,7 +187,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {
@@ -210,7 +216,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -255,10 +262,12 @@
         "expandFull": "$expandGallery",
         "holdingText": "$moduleGoesHere",
         "less": "$less",
+        "lessAriaLabelTemplate": "$lessAriaLabelTemplate",
         "license": "$license",
         "logo": "$logo",
         "manifestHeader": "$aboutTheItem",
         "more": "$more",
+        "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
@@ -293,7 +302,8 @@
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
-        "helpEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io/",
         "modeOptionsEnabled": true
       },
       "content": {
@@ -332,7 +342,9 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "openSeadragonCenterPanel": {
@@ -353,20 +365,25 @@
         "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
+        "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
         "trimAttributionCount": 150,
-        "visibilityRatio": 0.5
+        "visibilityRatio": 0.5,
+        "zoomToInitialAnnotation": true
       },
       "content": {
         "attribution": "$attribution",
+        "close": "$close",
+        "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
-        "next": "$next",
-        "previous": "$previous",
+        "nextImage": "$nextImage",
+        "previousImage": "$previousImage",
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
-        "zoomOut": "$zoomOut"
+        "zoomOut": "$zoomOut",
+        "adjustImage": "$adjustImage"
       }
     },
     "searchFooterPanel": {
@@ -413,7 +430,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "settingsDialogue": {
@@ -427,6 +448,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"
@@ -435,15 +457,19 @@
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "embedPath": "/uv.html",
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareEnabled": true,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "$custom",
         "embed": "$embed",
         "embedInstructions": "$embedInstructions",
@@ -451,6 +477,7 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareLink": "$shareLink",
         "shareUrl": "$shareUrl",
         "size": "$size",
         "width": "$width"
@@ -464,6 +491,20 @@
         "cancel": "$cancel",
         "confirm": "$confirm",
         "close": "$close"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     },
     "clickThroughDialogue": {
@@ -497,7 +538,9 @@
         "moreInfoEnabled": true,
         "openEnabled": false,
         "printEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io/"
       },
       "content": {
         "rotateRight": "$rotateRight",
@@ -511,7 +554,12 @@
         "feedback": "$feedback",
         "fullScreen": "$fullScreen",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel",
+        "help": "$help"
       }
     },
     "restrictedDialogue": {

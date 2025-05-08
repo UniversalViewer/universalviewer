@@ -48,17 +48,20 @@
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
+    color: inherit;
   }
 
-  // Reset unusual Firefox-on-Android default style.
-  //
-  // See https://github.com/necolas/normalize.css/issues/214
-
-  button,
-  input,
-  select[multiple],
+  select,
   textarea {
-    background-image: none;
+    color: black;
+    background-color: white;
+  }
+
+  // Button normalization
+
+  button {
+    border: 0;
+    background-color: transparent;
   }
 
   // Links
@@ -136,7 +139,7 @@
     white-space: nowrap;
     border-width: 0;
   }
-  .not-sr-only {
+  .not-sr-only, .sr-only:focus-visible, .sr-only:active {
     position: static;
     width: auto;
     height: auto;

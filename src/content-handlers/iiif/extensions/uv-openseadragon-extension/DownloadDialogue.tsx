@@ -10,6 +10,7 @@ import {
   IExternalImageResourceData,
   Resource,
   Annotation,
+  AnnotationBody,
   ManifestResource,
   Rendering,
   LanguageMap,
@@ -78,7 +79,6 @@ const DownloadDialogue = ({
   triggerButton: HTMLElement;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-
   const [position, setPosition] = useState({ top: "0px", left: "0px" });
   const [arrowPosition, setArrowPosition] = useState("0px 0px");
   const [selectedPage, setSelectedPage] = useState<"left" | "right">("left");
@@ -109,20 +109,70 @@ const DownloadDialogue = ({
 
       setPosition({ top: `${top}px`, left: `${left}px` });
       setArrowPosition(`${arrowLeft}px 0px`);
+
+      // Focus on the first element when opened
+      const focusableElements = getFocusableElements();
+      if (focusableElements && focusableElements.length > 0) {
+        focusableElements[0]?.focus();
+      }
     }
   }, [open]);
 
-  if (!open) {
-    return null;
-  }
+  // Method to get focusable elements inside the component
+  const getFocusableElements = (): NodeListOf<HTMLElement> | null => {
+    return ref.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    ) as NodeListOf<HTMLElement>;
+  };
+
+  // Focus trapping logic
+  const handleTabKey = (e: KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const focusableElements = getFocusableElements();
+      if (!focusableElements) return;
+
+      const firstFocusableElement = focusableElements[0] as HTMLElement;
+      const lastFocusableElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
+
+      if (e.shiftKey) {
+        // If Shift + Tab is pressed and the focus is on the first element, go to the last
+        if (document.activeElement === firstFocusableElement) {
+          e.preventDefault();
+          lastFocusableElement.focus();
+        }
+      } else {
+        // If Tab is pressed and the focus is on the last element, go to the first
+        if (document.activeElement === lastFocusableElement) {
+          e.preventDefault();
+          firstFocusableElement.focus();
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener("keydown", handleTabKey);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleTabKey);
+    };
+  }, [open]);
+
+  if (!open) return null;
 
   function getCanvasDimensions(canvas: Canvas): Size | null {
     // externalResource may not have loaded yet
     if (canvas.externalResource.data) {
-      const width: number | undefined = (canvas.externalResource
-        .data as IExternalImageResourceData).width;
-      const height: number | undefined = (canvas.externalResource
-        .data as IExternalImageResourceData).height;
+      const width: number | undefined = (
+        canvas.externalResource.data as IExternalImageResourceData
+      ).width;
+      const height: number | undefined = (
+        canvas.externalResource.data as IExternalImageResourceData
+      ).height;
       if (width && height) {
         return new Size(width, height);
       }
@@ -183,7 +233,8 @@ const DownloadDialogue = ({
   }
 
   function isDownloadOptionAvailable(option: DownloadOption) {
-    const selectedResource: IExternalResourceData | null = getSelectedResource();
+    const selectedResource: IExternalResourceData | null =
+      getSelectedResource();
 
     if (!selectedResource) {
       return false;
@@ -264,11 +315,37 @@ const DownloadDialogue = ({
     return null;
   }
 
+  function getCanvasImageAnnotationBody(canvas: Canvas): AnnotationBody | null {
+    const images: Annotation[] = canvas.getContent();
+    if (images.length == 0) {
+      return null;
+    }
+
+    const bodies: AnnotationBody[] = images[0].getBody();
+    if (bodies.length == 0) {
+      return null;
+    }
+
+    return bodies[0];
+  }
+
   function getCanvasMimeType(canvas: Canvas): string | null {
+    // presentation api version 2
     const resource: Resource | null = getCanvasImageResource(canvas);
 
     if (resource) {
       const format: MediaType | null = resource.getFormat();
+
+      if (format) {
+        return format.toString();
+      }
+    }
+
+    // presentation api version 3
+    const annotationBody: AnnotationBody | null =
+      getCanvasImageAnnotationBody(canvas);
+    if (annotationBody) {
+      const format: MediaType | null = annotationBody.getFormat();
 
       if (format) {
         return format.toString();
@@ -449,12 +526,13 @@ const DownloadDialogue = ({
 
     return (
       <>
-        {canvas.ranges?.map((range: Range) => {
+        {canvas.ranges?.map((range: Range, index) => (
           <Renderings
             resource={range}
             defaultLabel={content.entireFileAsOriginal}
-          />;
-        })}
+            key={`range-rendering-${String(index)}`}
+          />
+        ))}
       </>
     );
   }
@@ -465,12 +543,13 @@ const DownloadDialogue = ({
 
     return (
       <>
-        {images.map((image: Annotation) => {
+        {images.map((image: Annotation, index) => (
           <Renderings
             resource={image.getResource()}
             defaultLabel={content.entireFileAsOriginal}
-          />;
-        })}
+            key={`image-rendering-${String(index)}`}
+          />
+        ))}
       </>
     );
   }

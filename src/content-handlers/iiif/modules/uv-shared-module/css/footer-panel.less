@@ -9,6 +9,10 @@
         .options {
             height: 42px;
 
+            .left-options {
+                min-width: 30px;
+            }
+
             .btn {
               	color: white;
                 font-size: auto;
@@ -17,16 +21,14 @@
                     display: none;
                 }
 
+                &.toggleLeftPanelButton {
+                    display: none;
+                }
+
 				&.fullScreen,
 				&.exitFullscreen {
 					float: right;
               	}
-            }
-        }
-
-        .options.minimiseButtons {
-            .btn {
-                font-size: 0;
             }
         }
     }

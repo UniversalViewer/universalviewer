@@ -18,7 +18,7 @@ export class URLAdapter extends UVAdapter {
       return defaultValue;
     }
 
-    return (hashParameter as unknown) as T;
+    return hashParameter as unknown as T;
   }
 
   public getFragment(key: string, url: string): string | null {

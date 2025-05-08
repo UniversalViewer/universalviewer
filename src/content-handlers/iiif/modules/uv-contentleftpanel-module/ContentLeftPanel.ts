@@ -2,8 +2,8 @@ const $ = require("jquery");
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import ThumbsView from "./ThumbsView";
-const ViewingDirectionEnum = require("@iiif/vocabulary/dist-commonjs/")
-  .ViewingDirection;
+const ViewingDirectionEnum =
+  require("@iiif/vocabulary/dist-commonjs/").ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
 import { Bools } from "@edsilv/utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
@@ -44,10 +44,12 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   $treeViewOptions: JQuery;
   $treeSelect: JQuery;
   $views: JQuery;
+  $keyElement: JQuery;
   expandFullEnabled: boolean = false;
   galleryView: GalleryView;
   isThumbsViewOpen: boolean = false;
   isTreeViewOpen: boolean = false;
+  keyPress: boolean = false;
   treeData: TreeNode;
   treeSortType: TreeSortType = TreeSortType.NONE;
   treeView: TreeView;
@@ -102,7 +104,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByCanvas();
       this.updateTreeTabBySelection();
     });
 
@@ -111,8 +113,18 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         this.collapseFull();
       }
 
-      this.selectCurrentTreeNode();
+      this.selectCurrentTreeNodeByRange();
       this.updateTreeTabBySelection();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.TREE_NODE_SELECTED, () => {
+      if (this.extension.isMetric("sm")) {
+        this.toggle(true);
+      }
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+      this.openThumbsView();
     });
 
     // this.extensionHost.subscribe(
@@ -209,13 +221,23 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     this.$treeViewOptions.hide();
 
-    this.onAccessibleClick(this.$treeButton, () => {
-      this.openTreeView();
-    });
+    this.onAccessibleClick(
+      this.$treeButton,
+      () => {
+        this.openTreeView();
+      },
+      true,
+      true
+    );
 
-    this.onAccessibleClick(this.$thumbsButton, () => {
-      this.openThumbsView();
-    });
+    this.onAccessibleClick(
+      this.$thumbsButton,
+      () => {
+        this.openThumbsView();
+      },
+      true,
+      true
+    );
 
     this.setTitle(this.content.title);
 
@@ -247,7 +269,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   // }
 
   createTreeView(): void {
-    this.treeView = new TreeView(this.$treeView);
+    this.treeView = new TreeView(this.$treeView, false);
     this.treeView.treeData = this.getTreeData();
     this.treeView.setup();
     this.renderTree();
@@ -283,11 +305,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     if (!treeData) {
       return;
     }
-
-    if (
-      this.isCollection() &&
-      this.extension.helper.treeHasNavDates(treeData)
-    ) {
+    if (!this.defaultToThumbsView()) {
       this.$treeViewOptions.show();
     } else {
       this.$treeViewOptions.hide();
@@ -364,9 +382,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     if (autoExpandTreeEnabled) {
       // get total number of tree nodes
-      const flatTree:
-        | TreeNode[]
-        | null = this.extension.helper.getFlattenedTree();
+      const flatTree: TreeNode[] | null =
+        this.extension.helper.getFlattenedTree();
 
       if (flatTree && flatTree.length < autoExpandTreeIfFewerThan) {
         return true;
@@ -440,7 +457,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     // let height: number;
 
     // const viewingHint: ViewingHint | null = this.getViewingHint();
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     // if (
     //   viewingDirection &&
@@ -498,7 +516,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       this.extension.helper.canvasIndex
     );
 
-    // console.log("selectedIndeces", selectedIndices);
+    const settings = this.extension.getSettings();
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
@@ -506,15 +524,21 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
+        truncateThumbnailLabels:
+          settings.truncateThumbnailLabels !== undefined
+            ? settings.truncateThumbnailLabels
+            : true,
         onClick: (thumb: Thumb) => {
+          this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
+        },
+        onKeyDown: (thumb: Thumb) => {
           this.extensionHost.publish(IIIFEvents.THUMB_SELECTED, thumb);
         },
       })
     );
   }
-
   createGalleryView(): void {
-    this.galleryView = new GalleryView(this.$galleryView);
+    this.galleryView = new GalleryView(this.$galleryView, false);
     this.galleryView.galleryData = this.getGalleryData();
     this.galleryView.setup();
     this.renderGallery();
@@ -529,8 +553,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   getGalleryData() {
     return {
       helper: this.extension.helper,
-      chunkedResizingThreshold: this.config.options
-        .galleryThumbChunkedResizingThreshold,
+      chunkedResizingThreshold:
+        this.config.options.galleryThumbChunkedResizingThreshold,
       content: this.config.content,
       debug: false,
       imageFadeInDuration: 300,
@@ -616,8 +640,20 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     );
     const defaultToTreeIfGreaterThan: number =
       this.config.options.defaultToTreeIfGreaterThan || 0;
+    const defaultToTreeIfCollection: boolean = Bools.getBool(
+      this.config.options.defaultToTreeIfCollection,
+      false
+    );
 
     const treeData: TreeNode | null = this.getTree();
+
+    if (
+      this.isCollection() &&
+      (defaultToTreeIfCollection ||
+        (treeData && this.extension.helper.treeHasNavDates(treeData)))
+    ) {
+      return false;
+    }
 
     if (defaultToTreeEnabled) {
       if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan) {
@@ -713,9 +749,11 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     this.resize();
 
     if (this.isFullyExpanded) {
-      this.$thumbsView.hide();
-      if (this.galleryView) this.galleryView.show();
-      if (this.galleryView) this.galleryView.resize();
+      setTimeout(() => {
+        this.$thumbsView.hide();
+        if (this.galleryView) this.galleryView.show();
+        if (this.galleryView) this.galleryView.resize();
+      }, 1);
     } else {
       if (this.galleryView) this.galleryView.hide();
       this.$thumbsView.show();
@@ -754,16 +792,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByRange(): void {
     if (this.treeView) {
       const range: Range | null = this.extension.helper.getCurrentRange();
-      let node: TreeNode | null = null;
-
       if (range && range.treeNode) {
-        node = this.treeView.getNodeById(range.treeNode.id);
-      }
-
-      if (node) {
-        this.treeView.selectNode(<TreeNode>node);
-      } else {
-        this.selectTreeNodeByManifest();
+        const node = this.treeView.getNodeById(range.treeNode.id);
+        if (node) {
+          this.treeView.selectNode(node);
+        } else {
+          this.selectTreeNodeByManifest();
+        }
       }
     }
   }
@@ -771,7 +806,8 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   selectCurrentTreeNodeByCanvas(): void {
     if (this.treeView) {
       let node: TreeNode | null = null;
-      const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+      const currentCanvasTopRangeIndex: number =
+        this.getCurrentCanvasTopRangeIndex();
       const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
       const usingCorrectTree: boolean =
         currentCanvasTopRangeIndex === selectedTopRangeIndex;
@@ -793,7 +829,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       // }
 
       if (node && usingCorrectTree) {
-        this.treeView.selectNode(<TreeNode>node);
+        this.treeView.selectNode(node);
       } else {
         range = this.extension.helper.getCurrentRange();
 
@@ -802,7 +838,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         }
 
         if (node) {
-          this.treeView.selectNode(<TreeNode>node);
+          this.treeView.selectNode(node);
         } else {
           this.selectTreeNodeByManifest();
         }
@@ -840,13 +876,19 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
   resize(): void {
     super.resize();
 
-    this.$tabsContent.height(
-      this.$main.height() -
-        (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
-        this.$tabsContent.verticalPadding()
-    );
-    this.$views.height(
-      this.$tabsContent.height() - this.$options.outerHeight()
-    );
+    // bit of a race condition happening
+    // timeout gives tabs time to appear and be counted
+    // so the correct height is calc'd
+    setTimeout(() => {
+      this.$tabsContent.height(
+        this.$main.height() -
+          (isVisible(this.$tabs) ? this.$tabs.height() : 0) -
+          this.$tabsContent.verticalPadding()
+      );
+
+      this.$views.height(
+        this.$tabsContent.height() - this.$options.outerHeight()
+      );
+    }, 1);
   }
 }

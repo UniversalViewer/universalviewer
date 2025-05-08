@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'mixins-extended';
+
 .uv {
 
     .leftPanel {
@@ -76,11 +79,19 @@
                 float: left;
             }
 
-            .thumbsView .thumbs .thumb .info .label {
-                float: left;
+            .thumbsView .thumbs.truncate-labels .thumb .info .label {
                 overflow-x: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                max-width: 100%;
+            }
+
+            .thumbsView .thumbs .thumb .info .label {
+                float: left;
+                overflow-x: visible;
+                text-overflow: nowrap;
+                white-space: break-spaces;
+                max-width: 100%;
             }
 
             .thumbsView .thumbs .thumb .info .searchResults {
@@ -133,7 +144,7 @@
             }
 
             .thumbsView .thumbs .thumb.twoCol .label {
-                width: 63px;
+                width: 98px;
             }
 
             .thumbsView .thumbs .thumb.twoCol .wrap {

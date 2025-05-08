@@ -1,5 +1,4 @@
 @import "overrides.less";
-@import "mediaelementplayer.less";
 
 .uv-iiif-extension-host.uv-mediaelement-extension {
   .mejs-container.mejs-uv {
@@ -11,7 +10,14 @@
       position: relative;
 
       .attribution {
-        margin-bottom: 60px !important;
+
+        .sm-mediaquery({
+          margin: 25px 20px;
+        });
+
+        .md-mediaquery({
+          margin-bottom: 60px !important;
+        });
       }
 
       .wrapper {
@@ -20,7 +26,6 @@
         overflow: hidden;
 
         .container {
-
           display: flex;
           align-items: center;
           margin: auto;

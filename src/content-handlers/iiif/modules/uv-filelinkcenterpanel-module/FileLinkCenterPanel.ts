@@ -94,9 +94,8 @@ export class FileLinkCenterPanel extends CenterPanel<
         $thumb.hide();
       }
 
-      let description: string | null = annotationBody.getProperty(
-        "description"
-      );
+      let description: string | null =
+        annotationBody.getProperty("description");
 
       if (description) {
         $description.text(sanitize(description));

@@ -1,45 +1,45 @@
 const $ = require("jquery");
-import { BaseConfig } from "../../BaseConfig";
+import { Bools, Clipboard, Numbers } from "@edsilv/utils";
+import type { ILabelValuePair } from "@iiif/manifold";
+import type { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
-import { Bools, Numbers } from "@edsilv/utils";
-import { ILabelValuePair } from "@iiif/manifold";
 
 export class ShareDialogue<
   T extends BaseConfig["modules"]["shareDialogue"]
 > extends Dialogue<T> {
-  $code: JQuery;
+  copyToClipboardEnabled = true;
+
+  $urlInput: JQuery;
+  $urlSection: JQuery;
+  isShareViewVisible = false;
+
+  $manifestInput: JQuery;
+  $manifestSection: JQuery;
+  shareManifestsEnabled = false;
+  $iiifButton: JQuery;
+
+  embedCode: string;
+  $embedCode: JQuery;
+  $embedSection: JQuery;
+  isEmbedViewVisible = false;
+
   $customSize: JQuery;
   $customSizeDropDown: JQuery;
-  $embedButton: JQuery;
-  $embedHeader: JQuery;
-  $embedView: JQuery;
-  $footer: JQuery;
-  $heightInput: JQuery;
-  $iiifButton: JQuery;
-  $shareButton: JQuery;
-  $shareFrame: JQuery;
-  $shareHeader: JQuery;
-  $shareInput: JQuery;
-  $shareLink: JQuery;
-  $shareView: JQuery;
   $size: JQuery;
-  $tabs: JQuery;
-  $tabsContent: JQuery;
-  $termsOfUseButton: JQuery;
   $widthInput: JQuery;
   $x: JQuery;
-  aspectRatio: number = 0.75;
-  code: string;
+  $heightInput: JQuery;
+
+  $termsOfUseButton: JQuery;
+
+  aspectRatio = 0.75;
   currentHeight: number;
   currentWidth: number;
-  isEmbedViewVisible: boolean = false;
-  isShareViewVisible: boolean = false;
-  maxWidth: number = 8000;
+  maxWidth = 8000;
   maxHeight: number = this.maxWidth * this.aspectRatio;
-  minWidth: number = 200;
+  minWidth = 200;
   minHeight: number = this.minWidth * this.aspectRatio;
-  shareManifestsEnabled: boolean = false;
 
   constructor($element: JQuery) {
     super($element);
@@ -49,6 +49,10 @@ export class ShareDialogue<
     this.setConfig("shareDialogue");
 
     super.create();
+
+    // Accessibility.
+    this.$element.attr("role", "region");
+    this.$element.attr("aria-label", this.content.share);
 
     this.openCommand = IIIFEvents.SHOW_SHARE_DIALOGUE;
     this.closeCommand = IIIFEvents.HIDE_SHARE_DIALOGUE;
@@ -60,12 +64,6 @@ export class ShareDialogue<
       (triggerButton: HTMLElement) => {
         lastElement = triggerButton;
         this.open(triggerButton);
-
-        if (this.isShareAvailable()) {
-          this.openShareView();
-        } else {
-          this.openEmbedView();
-        }
       }
     );
 
@@ -80,77 +78,83 @@ export class ShareDialogue<
       IIIFEvents.SHOW_EMBED_DIALOGUE,
       (triggerButton: HTMLElement) => {
         this.open(triggerButton);
-        this.openEmbedView();
+
+        if (triggerButton && $(triggerButton).is(".embed.btn")) {
+          // after setTimeout in Dialogue super class
+          setTimeout(() => {
+            this.$embedCode.focus();
+          }, 2);
+        }
       }
     );
 
-    this.$tabs = $('<div class="tabs"></div>');
-    this.$content.append(this.$tabs);
-
-    this.$shareButton = $(
-      '<a class="share tab default" tabindex="0">' + this.content.share + "</a>"
+    // Title
+    const $title = $(
+      `<div role="heading" class="heading">${this.content.share}</div>`
     );
-    if (Bools.getBool(this.config.options.shareEnabled, true)) {
-      this.$tabs.append(this.$shareButton);
-    }
+    this.$content.append($title);
 
-    this.$embedButton = $(
-      '<a class="embed tab" tabindex="0">' + this.content.embed + "</a>"
+    // Share URL
+
+    this.$urlSection = $(
+      `<div class="share__section"><label class="share__label" for="embedCode">${this.content.shareLink}</label></div>`
     );
-    if (Bools.getBool(this.config.options.embedEnabled, false)) {
-      this.$tabs.append(this.$embedButton);
-    }
 
-    this.$tabsContent = $('<div class="tabsContent"></div>');
-    this.$content.append(this.$tabsContent);
-
-    this.$footer = $('<div class="footer"></div>');
-    this.$content.append(this.$footer);
-
-    this.$shareView = $('<div class="shareView view"></div>');
-    this.$tabsContent.append(this.$shareView);
-
-    this.$shareHeader = $('<div class="header"></div>');
-    this.$shareView.append(this.$shareHeader);
-
-    this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
-    this.$shareView.append(this.$shareLink);
-
-    this.$shareInput = $(
-      `<input class="shareInput" type="text" readonly="readonly" aria-label="${this.content.shareUrl}"/>`
+    const shareUrl = this.getShareUrl();
+    this.$urlInput = $(
+      `<input class="copy-input" id="urlInput" type="text" value="${shareUrl}" readonly/>`
     );
-    this.$shareView.append(this.$shareInput);
+    this.$urlInput.focus(function () {
+      $(this).select();
+    });
+    this.$urlSection.append(this.$urlInput);
+    this.$content.append(this.$urlSection);
 
-    this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
-    this.$shareView.append(this.$shareFrame);
+    // Manifest URL
 
-    this.$embedView = $('<div class="embedView view"></div>');
-    this.$tabsContent.append(this.$embedView);
-
-    this.$embedHeader = $('<div class="header"></div>');
-    this.$embedView.append(this.$embedHeader);
-
-    // this.$link = $('<a target="_blank"></a>');
-    // this.$embedView.find('.leftCol').append(this.$link);
-
-    // this.$image = $('<img class="share" />');
-    // this.$embedView.append(this.$image);
-
-    this.$code = $(
-      `<input class="code" type="text" readonly="readonly" aria-label="${this.content.embed}"/>`
+    this.$manifestSection = $(
+      `<div class="share__section"><label class="share__label" for="manifestCode">${this.content.iiif}</label></div>`
     );
-    this.$embedView.append(this.$code);
+
+    const iiifUrl: string = this.extension.getIIIFShareUrl(
+      this.shareManifestsEnabled
+    );
+    this.$manifestInput = $(
+      `<input class="copy-input" id="manifestInput" type="text" value="${iiifUrl}" readonly/>`
+    );
+    this.$manifestInput.focus(function () {
+      $(this).select();
+    });
+    this.$manifestSection.append(this.$manifestInput);
+    this.$content.append(this.$manifestSection);
+
+    // Embed IFRAME code
+
+    this.$embedSection = $(
+      `<div class="share__section"><label class="share__label" for="embedCode">${this.content.embed}</label></div>`
+    );
+
+    this.$embedCode = $(
+      `<input class="copy-input" id="embedCode" type="text" readonly/>`
+    );
+    this.$embedCode.focus(function () {
+      $(this).select();
+    });
+    this.$embedSection.append(this.$embedCode);
+    this.$content.append(this.$embedSection);
+
+    // Embed size customization
 
     this.$customSize = $('<div class="customSize"></div>');
-    this.$embedView.append(this.$customSize);
 
-    this.$size = $('<span class="size">' + this.content.size + "</span>");
+    this.$size = $(
+      `<label for="size" class="size">${this.content.size}</label>`
+    );
     this.$customSize.append(this.$size);
 
     this.$customSizeDropDown = $(
-      '<select id="size" aria-label="' + this.content.size + '"></select>'
+      `<select class="embed-size-select" id="size" aria-label="${this.content.size}"></select>`
     );
-    this.$customSize.append(this.$customSizeDropDown);
     this.$customSizeDropDown.append(
       '<option value="small" data-width="560" data-height="420">560 x 420</option>'
     );
@@ -161,87 +165,86 @@ export class ShareDialogue<
       '<option value="large" data-width="800" data-height="600">800 x 600</option>'
     );
     this.$customSizeDropDown.append(
-      '<option value="custom">' + this.content.customSize + "</option>"
+      `<option value="custom">${this.content.customSize}</option>`
     );
-
-    this.$widthInput = $(
-      '<input class="width" type="text" maxlength="10" aria-label="' +
-        this.content.width +
-        '"/>'
-    );
-    this.$customSize.append(this.$widthInput);
-
-    this.$x = $('<span class="x">x</span>');
-    this.$customSize.append(this.$x);
-
-    this.$heightInput = $(
-      '<input class="height" type="text" maxlength="10" aria-label="' +
-        this.content.height +
-        '"/>'
-    );
-    this.$customSize.append(this.$heightInput);
-
-    const iiifUrl: string = this.extension.getIIIFShareUrl(
-      this.shareManifestsEnabled
-    );
-
-    if (this.shareManifestsEnabled) {
-      this.$iiifButton = $(
-        '<a class="imageBtn iiif" href="' +
-          iiifUrl +
-          '" title="' +
-          this.content.iiif +
-          '" target="_blank"></a>'
-      );
-      this.$footer.append(this.$iiifButton);
-    }
-
-    this.$termsOfUseButton = $(
-      '<a href="#">' + this.extension.data.config!.content.termsOfUse + "</a>"
-    );
-    this.$footer.append(this.$termsOfUseButton);
-
-    this.$widthInput.on("keydown", (e) => {
-      return Numbers.numericalInput(e);
-    });
-
-    this.$heightInput.on("keydown", (e) => {
-      return Numbers.numericalInput(e);
-    });
-
-    this.$shareInput.focus(function() {
-      $(this).select();
-    });
-
-    this.$code.focus(function() {
-      $(this).select();
-    });
-
-    this.onAccessibleClick(this.$shareButton, () => {
-      this.openShareView();
-    });
-
-    this.onAccessibleClick(this.$embedButton, () => {
-      this.openEmbedView();
-    });
-
     this.$customSizeDropDown.change(() => {
       this.update();
     });
+    this.$customSize.append(this.$customSizeDropDown);
 
+    this.$widthInput = $(
+      `<input class="width" type="text" maxlength="10" aria-label="${this.content.width}"/>`
+    );
+    this.$widthInput.on("keydown", (e) => {
+      return Numbers.numericalInput(e);
+    });
     this.$widthInput.change(() => {
       this.updateHeightRatio();
       this.update();
     });
 
+    this.$customSize.append(this.$widthInput);
+    this.$embedSection.append(this.$customSize);
+
+    // WIDTH x HEIGHT
+    this.$x = $('<span class="x">x</span>');
+    this.$customSize.append(this.$x);
+
+    this.$heightInput = $(
+      `<input class="height" type="text" maxlength="10" aria-label="${this.content.height}"/>`
+    );
+    this.$heightInput.on("keydown", (e) => {
+      return Numbers.numericalInput(e);
+    });
     this.$heightInput.change(() => {
       this.updateWidthRatio();
       this.update();
     });
+    this.$customSize.append(this.$heightInput);
+
+    // IIIF Drag and Drop
+
+    const $iiifSection = $('<div class="iiif-section"></div>');
+    this.$iiifButton = $(
+      `<a class="imageBtn iiif" href="${iiifUrl}" title="${this.content.iiif}" target="_blank"></a>`
+    );
+    $iiifSection.append(this.$iiifButton);
+    this.$content.append($iiifSection);
+
+    // Terms of Use Link
+
+    this.$termsOfUseButton = $(
+      `<a href="#">${this.extension.data.config?.content.termsOfUse}</a>`
+    );
+    $iiifSection.append(this.$termsOfUseButton);
+
+    // Options
+
+    if (this.shareManifestsEnabled) {
+      this.$manifestSection.show();
+    } else {
+      this.$manifestSection.hide();
+    }
+
+    if (Bools.getBool(this.config.options.embedEnabled, false)) {
+      this.$embedSection.show();
+    } else {
+      this.$embedSection.hide();
+    }
+
+    // Click Events
 
     this.onAccessibleClick(this.$termsOfUseButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_TERMS_OF_USE);
     });
+
+    // Copy buttons
+
+    if (Bools.getBool(this.config.options.copyToClipboardEnabled, true)) {
+      this.addCopyButton(this.$urlInput);
+      this.addCopyButton(this.$embedCode);
+      this.addCopyButton(this.$manifestInput);
+    }
 
     this.$element.hide();
     this.update();
@@ -260,11 +263,33 @@ export class ShareDialogue<
     return !!this.getShareUrl();
   }
 
+  addCopyButton($input) {
+    const $btn = $(
+      `<button class="copyBtn" aria-label="${this.content.copyToClipboard}">${this.content.copyBtn}</button>`
+    );
+
+    this.onAccessibleClick(
+      $btn,
+      () => {
+        Clipboard.copy($input.val());
+        $input.focus();
+      },
+      true,
+      true
+    );
+
+    // sleight of hand
+    const $copyBtnGroup = $('<div class="copy-group"></div>');
+    $copyBtnGroup.append($btn);
+    $copyBtnGroup.insertBefore($input);
+    $input.insertBefore($btn);
+  }
+
   update(): void {
     if (this.isShareAvailable()) {
-      this.$shareButton.show();
+      this.$urlSection.show();
     } else {
-      this.$shareButton.hide();
+      this.$urlSection.hide();
     }
 
     const $selected: JQuery = this.getSelectedSize();
@@ -283,9 +308,7 @@ export class ShareDialogue<
       this.$heightInput.val(String(this.currentHeight));
     }
 
-    this.updateInstructions();
     this.updateShareOptions();
-    this.updateShareFrame();
     this.updateTermsOfUseButton();
   }
 
@@ -293,46 +316,9 @@ export class ShareDialogue<
     const shareUrl: string | null = this.getShareUrl();
 
     if (shareUrl) {
-      this.$shareInput.val(shareUrl);
-      this.$shareLink.prop("href", shareUrl);
-      this.$shareLink.text(shareUrl);
-    }
-
-    if (this.extension.isMobile()) {
-      this.$shareInput.hide();
-      this.$shareLink.show();
-    } else {
-      this.$shareInput.show();
-      this.$shareLink.hide();
+      this.$urlInput.val(shareUrl);
     }
   }
-
-  updateInstructions(): void {
-    if (Bools.getBool(this.options.instructionsEnabled, false)) {
-      this.$shareHeader.show();
-      this.$embedHeader.show();
-      this.$shareHeader.text(this.content.shareInstructions);
-      this.$embedHeader.text(this.content.embedInstructions);
-    } else {
-      this.$shareHeader.hide();
-      this.$embedHeader.hide();
-    }
-  }
-
-  // updateThumbnail(): void {
-  //     var canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
-
-  //     if (!canvas) return;
-
-  //     var thumbnail = canvas.getProperty('thumbnail');
-
-  //     if (!thumbnail || !_.isString(thumbnail)){
-  //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config!.options.bookmarkThumbWidth);
-  //     }
-
-  //     this.$link.attr('href', thumbnail);
-  //     this.$image.attr('src', thumbnail);
-  // }
 
   getSelectedSize(): JQuery {
     return this.$customSizeDropDown.find(":selected");
@@ -364,31 +350,14 @@ export class ShareDialogue<
     this.$heightInput.val(String(this.currentHeight));
   }
 
-  updateShareFrame(): void {
-    const shareUrl: string | null = this.extension.helper.getShareServiceUrl();
-
-    if (!shareUrl) {
-      return;
-    }
-
-    if (
-      Bools.getBool(this.config.options.shareFrameEnabled, true) &&
-      shareUrl
-    ) {
-      this.$shareFrame.prop("src", shareUrl);
-      this.$shareFrame.show();
-    } else {
-      this.$shareFrame.hide();
-    }
-  }
-
   updateTermsOfUseButton(): void {
-    const requiredStatement: ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+    const requiredStatement: ILabelValuePair | null =
+      this.extension.helper.getRequiredStatement();
 
     if (
       Bools.getBool(
-        this.extension.data.config!.options.termsOfUseEnabled,
-        false
+        this.extension.data.config?.options.termsOfUseEnabled,
+        true
       ) &&
       requiredStatement &&
       requiredStatement.value
@@ -399,46 +368,11 @@ export class ShareDialogue<
     }
   }
 
-  openShareView(): void {
-    this.isShareViewVisible = true;
-    this.isEmbedViewVisible = false;
-
-    this.$embedView.hide();
-    this.$shareView.show();
-
-    this.$shareButton.addClass("on default");
-    this.$embedButton.removeClass("on default");
-
-    this.resize();
-  }
-
-  openEmbedView(): void {
-    this.isShareViewVisible = false;
-    this.isEmbedViewVisible = true;
-
-    this.$embedView.show();
-    this.$shareView.hide();
-
-    this.$shareButton.removeClass("on default");
-    this.$embedButton.addClass("on default");
-
-    this.resize();
-  }
-
   close(): void {
     super.close();
   }
 
-  getViews(): JQuery {
-    return this.$tabsContent.find(".view");
-  }
-
-  equaliseViewHeights(): void {
-    this.getViews().equaliseHeight(true);
-  }
-
   resize(): void {
-    this.equaliseViewHeights();
     this.setDockedPosition();
   }
 }

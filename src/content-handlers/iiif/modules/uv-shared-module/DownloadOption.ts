@@ -12,5 +12,5 @@ export enum DownloadOption {
   UNKNOWN = "unknown",
   WHOLE_IMAGE_HIGH_RES = "wholeImageHighRes",
   WHOLE_IMAGE_LOW_RES = "wholeImageLowRes",
-  WHOLE_IMAGES_HIGH_RES = "wholeImagesHighRes"
+  WHOLE_IMAGES_HIGH_RES = "wholeImagesHighRes",
 }

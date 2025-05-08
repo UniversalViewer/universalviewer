@@ -6,6 +6,7 @@ export interface IIIFData {
   iiif_content?: string;
   iiifManifestId?: string;
   manifestIndex?: number;
+  muted?: boolean;
   rangeId?: string;
   rotation?: number;
   xywh?: string;

@@ -1,16 +1,15 @@
+import { Bools } from "@edsilv/utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
-import { Bools } from "@edsilv/utils";
 
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
-    super($element);
+    super($element, false, false);
   }
 
   create(): void {
     super.create();
-    this.$element.width(this.options.panelCollapsedWidth);
   }
 
   init(): void {
@@ -30,6 +29,16 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
         this.collapseFull();
       } else {
         this.expandFull();
+      }
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_RIGHT_PANEL, () => {
+      this.toggle();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_LEFT_PANEL, () => {
+      if (this.extension.isMetric("sm") && this.isExpanded) {
+        this.toggle(true);
       }
     });
   }
@@ -55,15 +64,30 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
       this.extensionHost.publish(IIIFEvents.CLOSE_RIGHT_PANEL);
     }
     this.extension.updateSettings({ rightPanelOpen: this.isExpanded });
+
+    // there's a strange rendering issue due to the right panel being transformed by 100% to the right
+    // for some reason a 100ms timeout on removing open-finished solves the problem
+    // this can't be in the base panel class or the timeout interferes with test running even though it works fine
+    setTimeout(() => {
+      this.$element.toggleClass("open-finished");
+    }, 100);
   }
 
   resize(): void {
     super.resize();
+  }
 
-    this.$element.css({
-      left: Math.floor(
-        this.$element.parent().width() - this.$element.outerWidth()
-      ),
-    });
+  toggle(autoToggled?: boolean): void {
+    if (this.isExpanded) {
+      this.$element.parent().removeClass("rightPanelOpen");
+    } else {
+      this.$element.parent().addClass("rightPanelOpen");
+    }
+
+    super.toggle(autoToggled);
+  }
+
+  expandFull(): void {
+    super.expandFull();
   }
 }

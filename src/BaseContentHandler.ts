@@ -13,7 +13,8 @@ export type EventListener = {
 type EventListenerDictionaryItem = Pick<EventListener, "cb" | "ctx">;
 
 export default class BaseContentHandler<IUVData>
-  implements IContentHandler<IUVData> {
+  implements IContentHandler<IUVData>
+{
   protected _el: HTMLElement;
   private _eventListeners: {
     [key: string]: EventListenerDictionaryItem[];
@@ -24,9 +25,7 @@ export default class BaseContentHandler<IUVData>
     public adapter?: UVAdapter,
     eventListeners?: EventListener[]
   ) {
-    // console.log("create YouTubeContentHandler");
     this._el = this.options.target;
-    // this._assignedContentHandler.adapter = this.adapter; // set adapter
 
     // add event listeners
     if (eventListeners) {

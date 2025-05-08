@@ -7,17 +7,18 @@ A community-developed open source project on a mission<br/> to help you share yo
 </p>
 <br/>
 <p align="center">
-<a href="#-sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;" /></a>
+<a href="#-sponsors"><a href="https://opencollective.com/universalviewer/sponsors">
+  <img src="https://opencollective.com/universalviewer/sponsors/badge.svg" alt="Sponsors on Open Collective" />
+</a>
 <a href="https://app.netlify.com/sites/uv/deploys">
 <img src="https://api.netlify.com/api/v1/badges/91dc58e8-49dd-495f-98bb-84570a0edb7c/deploy-status" />
 </a>
-<a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
+<a href="https://github.com/UniversalViewer/universalviewer/blob/main/LICENSE.txt">
+  <img src="https://img.shields.io/npm/l/universalviewer.svg" alt="License" />
+</a>
 </p>
-
-<p align="center">
-    <a href="https://twitter.com/universalviewer"><strong>@</strong> twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow"><strong>#</strong> slack</a>
-</p>
+<p align="center"><a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow"><strong>#</strong> Slack
+</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://bsky.app/profile/universalviewer.io"> <strong>@</strong> Bluesky</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://x.com/universalviewer"> <strong>@</strong> X</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/UniversalViewer/universalviewer/wiki"> About </a> </p>
 
 <br/>
 
@@ -31,7 +32,6 @@ A community-developed open source project on a mission<br/> to help you share yo
 <br/>
 
 - [**Website**](#-website)
-- [**Scope**](#-scope)
 - [**Getting Started**](#-getting-started)
 - [**Contributing**](#-contributing)
 - [**Sponsors**](#-sponsors)
@@ -41,31 +41,26 @@ A community-developed open source project on a mission<br/> to help you share yo
 
 ## 🌐 Website
 
+- [Visit Universal Viewer website](https://universalviewer.io/)
 - [Visit the stable UV demo page](https://uv-v4.netlify.app) to try out the latest stable version of the Viewer (UV4) with sample items.
 - [Visit the dev branch UV demo page](https://universalviewer.dev) to try out the latest 'bleeding edge' dev branch code for UV4.
 - [View sample items in version 3 of the Universal Viewer](https://uv-v3.netlify.app)
-
-<!-- ## 📖 Scope
-
-Read more [about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About) -->
 
 ## 📖 Getting Started
 
 See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Examples) for how to use the UV in various scenarios.
 
-Read the [docs](https://docs.universalviewer.io/) to learn about the various UV configuration options.
+Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
 ## 💻 Contributing
 
 Read below to learn how to take part in improving the UV:
 
 - Fork the repository and [run the examples from source](#-getting-started)
-- Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/main/CODE_OF_CONDUCT.md)
-- Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/main/CONTRIBUTING.md)
-- Find an issue to work on and submit a pull request
-  - First time contributing to open source? Pick a [good first issue](https://github.com/universalviewer/universalviewer/labels/good%20first%20issue) to get you familiar with GitHub contributing process.
-  - First time contributing to the UV? Pick a [beginner friendly issue](https://github.com/universalviewer/universalviewer/labels/beginners) to get you familiar with codebase and our contributing process.
-  - Want to become a Committer? Solve an issue showing that you understand UV objectives and architecture. [Here](https://github.com/universalviewer/universalviewer/labels/help%20wanted) is a good list to start.
+- Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/dev/CODE_OF_CONDUCT.md)
+- Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/dev/CONTRIBUTING.md)
+- Read our [governance document](https://github.com/UniversalViewer/universalviewer/blob/dev/GOVERNANCE.md) to learn more about roles and responsibilities, support, membership, and the decision making process.
+- Find an [issue](https://github.com/UniversalViewer/universalviewer/issues) to work on and submit a pull request
 - Could not find an issue? Look for bugs, typos, and missing features.
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
@@ -86,7 +81,7 @@ Read our [Accessibility Statement](https://github.com/UniversalViewer/universalv
 
 ## 📣 Feedback
 
-Read below how to engage with the UV [community](https://github.com/UniversalViewer/universalviewer/blob/main/COMMUNITY_TEAM.md):
+Read below how to engage with the UV [community](https://github.com/UniversalViewer/universalviewer/blob/dev/COMMUNITY_TEAM.md):
 
 - Join the discussion on [Slack](http://universalviewer.io/#contact).
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new).

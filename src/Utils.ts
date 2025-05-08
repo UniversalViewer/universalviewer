@@ -29,7 +29,7 @@ export const isValidUrl = (value: string): boolean => {
 
 export const debounce = (callback: (args: any) => void, wait: number) => {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     const context = this;
     clearTimeout(timeout);
     timeout = setTimeout(() => callback.apply(context, args), wait);

@@ -1,7 +1,7 @@
-define(function() {
-  return function(formats: string[]) {
+define(function () {
+  return function (formats: string[]) {
     return {
-      async: ["MetadataComponent", "uv-ebook-extension.proxy"]
+      async: ["MetadataComponent", "uv-ebook-extension.proxy"],
     };
   };
 });

@@ -1,11 +1,13 @@
+import { Strings } from "@edsilv/utils";
+
 export default function jqueryPlugins($) {
-  $.fn.checkboxButton = function(onClick: (checked: boolean) => void) {
-    return this.each(function() {
+  $.fn.checkboxButton = function (onClick: (checked: boolean) => void) {
+    return this.each(function () {
       const $this: JQuery = $(this);
 
       $this.on(
         "click",
-        function(e) {
+        function (e) {
           const tagName: string = (<any>e.target).tagName;
           const $checkbox: JQuery = $(this).find(":checkbox");
 
@@ -22,8 +24,8 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.disable = function() {
-    return this.each(function() {
+  $.fn.disable = function () {
+    return this.each(function () {
       const $this: JQuery = $(this);
       $this.addClass("disabled");
       $this.data("tabindex", $this.attr("tabindex"));
@@ -31,8 +33,8 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.ellipsis = function(chars: number) {
-    return this.each(function() {
+  $.fn.ellipsis = function (chars: number) {
+    return this.each(function () {
       const $self: JQuery = $(this);
       const text: string = $self.text();
 
@@ -48,11 +50,11 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.ellipsisFill = function(text: string) {
+  $.fn.ellipsisFill = function (text: string) {
     let textPassed: boolean = true;
     if (!text) textPassed = false;
 
-    return this.each(function() {
+    return this.each(function () {
       const $self: JQuery = $(this);
 
       if (!textPassed) text = $self.text();
@@ -82,8 +84,8 @@ export default function jqueryPlugins($) {
   };
 
   // Truncates to a certain number of letters, while ignoring and preserving HTML
-  $.fn.ellipsisHtmlFixed = function(chars: number, cb: Function) {
-    return this.each(function() {
+  $.fn.ellipsisHtmlFixed = function (chars: number, cb: Function) {
+    return this.each(function () {
       const $self: JQuery = $(this);
       const expandedText: string = $self.html();
 
@@ -108,7 +110,7 @@ export default function jqueryPlugins($) {
       // Toggle function
       let expanded: boolean = false;
 
-      (<any>$self).toggle = function() {
+      (<any>$self).toggle = function () {
         $self.empty();
 
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
@@ -123,7 +125,7 @@ export default function jqueryPlugins($) {
           $toggleButton.switchClass("more", "less");
         }
 
-        $toggleButton.one("click", function(e) {
+        $toggleButton.one("click", function (e) {
           e.preventDefault();
           $self.toggle();
         });
@@ -139,27 +141,27 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.enable = function() {
-    return this.each(function() {
+  $.fn.enable = function () {
+    return this.each(function () {
       const $self: JQuery = $(this);
       $self.removeClass("disabled");
       $self.attr("tabindex", $self.data("tabindex"));
     });
   };
 
-  $.fn.equaliseHeight = function(reset: boolean, average: boolean) {
+  $.fn.equaliseHeight = function (reset: boolean, average: boolean) {
     let maxHeight: number = -1;
     let minHeight: number = Number.MAX_VALUE;
     const heights: number[] = [];
 
     // reset all heights to auto first so they can be re-measured.
     if (reset) {
-      this.each(function() {
+      this.each(function () {
         $(this).height("auto");
       });
     }
 
-    this.each(function() {
+    this.each(function () {
       const currentHeight: number = $(this).height();
       heights.push(currentHeight);
       maxHeight = maxHeight > currentHeight ? maxHeight : currentHeight;
@@ -169,7 +171,7 @@ export default function jqueryPlugins($) {
     let finalHeight: number = maxHeight;
 
     if (average) {
-      heights.sort(function(a, b) {
+      heights.sort(function (a, b) {
         return a - b;
       });
       const half = Math.floor(heights.length / 2);
@@ -181,14 +183,14 @@ export default function jqueryPlugins($) {
       }
     }
 
-    this.each(function() {
+    this.each(function () {
       $(this).height(finalHeight);
     });
 
     return this;
   };
 
-  $.fn.getVisibleElementWithGreatestTabIndex = function() {
+  $.fn.getVisibleElementWithGreatestTabIndex = function () {
     const $self: JQuery = $(this);
 
     let maxTabIndex: number = 0;
@@ -196,7 +198,7 @@ export default function jqueryPlugins($) {
 
     $self
       .find("*:visible[tabindex]")
-      .each(function(index: number, el: Element) {
+      .each(function (index: number, el: Element) {
         const $el: JQuery = $(el);
         const tabIndex: number = parseInt($el.attr("tabindex"));
         if (tabIndex > maxTabIndex) {
@@ -208,36 +210,36 @@ export default function jqueryPlugins($) {
     return $elementWithGreatestTabIndex;
   };
 
-  $.fn.horizontalMargins = function() {
+  $.fn.horizontalMargins = function () {
     const $self: JQuery = $(this);
     return (
       parseInt($self.css("marginLeft")) + parseInt($self.css("marginRight"))
     );
   };
 
-  $.fn.leftMargin = function() {
+  $.fn.leftMargin = function () {
     const $self: JQuery = $(this);
     return parseInt($self.css("marginLeft"));
   };
 
-  $.fn.rightMargin = function() {
+  $.fn.rightMargin = function () {
     const $self: JQuery = $(this);
     return parseInt($self.css("marginRight"));
   };
 
-  $.fn.horizontalPadding = function() {
+  $.fn.horizontalPadding = function () {
     const $self: JQuery = $(this);
     return (
       parseInt($self.css("paddingLeft")) + parseInt($self.css("paddingRight"))
     );
   };
 
-  $.fn.leftPadding = function() {
+  $.fn.leftPadding = function () {
     const $self: JQuery = $(this);
     return parseInt($self.css("paddingLeft"));
   };
 
-  $.fn.rightPadding = function() {
+  $.fn.rightPadding = function () {
     const $self: JQuery = $(this);
     return parseInt($self.css("paddingRight"));
   };
@@ -245,19 +247,17 @@ export default function jqueryPlugins($) {
   $.mlp = { x: 0, y: 0 }; // Mouse Last Position
   function documentHandler() {
     const $current: JQuery = this === document ? $(this) : $(this).contents();
-    $current.mousemove(function(e) {
+    $current.mousemove(function (e) {
       $.mlp = { x: e.pageX, y: e.pageY };
     });
     $current.find("iframe").on("load", documentHandler);
   }
   $(documentHandler);
-  $.fn.ismouseover = function() {
+  $.fn.ismouseover = function () {
     let result: boolean = false;
-    this.eq(0).each(function() {
+    this.eq(0).each(function () {
       const $current: JQuery = $(this).is("iframe")
-        ? $(this)
-            .contents()
-            .find("body")
+        ? $(this).contents().find("body")
         : $(this);
       const offset: JQueryCoordinates = $current.offset();
       result =
@@ -272,7 +272,7 @@ export default function jqueryPlugins($) {
   let on = $.fn.on;
   let timer: any;
 
-  $.fn.on = function() {
+  $.fn.on = function () {
     const args: any = Array.apply(null, arguments);
     const last: any = args[args.length - 1];
 
@@ -281,11 +281,11 @@ export default function jqueryPlugins($) {
     const delay: any = args.pop();
     const fn: any = args.pop();
 
-    args.push(function() {
+    args.push(function () {
       const self: any = this;
       const params: any = arguments;
       clearTimeout(timer);
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         fn.apply(self, params);
       }, delay);
     });
@@ -293,13 +293,13 @@ export default function jqueryPlugins($) {
     return on.apply(this, args);
   };
 
-  $.fn.onEnter = function(cb: Function) {
-    return this.each(function() {
+  $.fn.onEnter = function (cb: Function) {
+    return this.each(function () {
       const $this: JQuery = $(this);
 
       $this.on(
         "keyup",
-        function(e) {
+        function (e) {
           if (e.keyCode === 13) {
             e.preventDefault();
             cb();
@@ -310,13 +310,13 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.onPressed = function(cb: Function) {
-    return this.each(function() {
+  $.fn.onPressed = function (cb: Function) {
+    return this.each(function () {
       const $this: JQuery = $(this);
 
       $this.on(
         "click",
-        function(e) {
+        function (e) {
           e.preventDefault();
           cb(e);
         },
@@ -325,7 +325,7 @@ export default function jqueryPlugins($) {
 
       $this.on(
         "keydown",
-        function(e) {
+        function (e) {
           if (e.keyCode === 13) {
             e.preventDefault();
             cb(e);
@@ -337,16 +337,13 @@ export default function jqueryPlugins($) {
   };
 
   // Recursively removes the last empty element (img, audio, etc) or word in an element
-  $.fn.removeLastWord = function(chars: number = 8, depth: number = 0) {
-    return this.each(function() {
+  $.fn.removeLastWord = function (chars: number = 8, depth: number = 0) {
+    return this.each(function () {
       const $self: JQuery = $(this);
       if ($self.contents().length > 0) {
         const $lastElement: JQuery = $self.contents().last();
         if ($lastElement[0].nodeType === 3) {
-          const words: string[] = $lastElement
-            .text()
-            .trim()
-            .split(" ");
+          const words: string[] = $lastElement.text().trim().split(" ");
           if (words.length > 1) {
             words.splice(words.length - 1, 1);
             (<any>$lastElement[0]).data = words.join(" "); // textnode.data
@@ -369,29 +366,25 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.switchClass = function(class1: string, class2: string) {
-    return this.each(function() {
-      $(this)
-        .removeClass(class1)
-        .addClass(class2);
+  $.fn.switchClass = function (class1: string, class2: string) {
+    return this.each(function () {
+      $(this).removeClass(class1).addClass(class2);
     });
   };
 
-  $.fn.targetBlank = function() {
-    return this.each(function() {
-      $(this)
-        .find("a")
-        .prop("target", "_blank");
+  $.fn.targetBlank = function () {
+    return this.each(function () {
+      $(this).find("a").prop("target", "_blank");
     });
   };
 
-  $.fn.toggleExpandText = function(
+  $.fn.toggleExpandText = function (
     chars: number,
     lessText: string,
     moreText: string,
     cb: () => void
   ) {
-    return this.each(function() {
+    return this.each(function () {
       const $self: JQuery = $(this);
       const expandedText: string = $self.html();
 
@@ -405,7 +398,7 @@ export default function jqueryPlugins($) {
         Math.min(collapsedText.length, collapsedText.lastIndexOf(" "))
       );
 
-      (<any>$self).toggle = function() {
+      (<any>$self).toggle = function () {
         $self.empty();
 
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
@@ -420,7 +413,7 @@ export default function jqueryPlugins($) {
           $toggleButton.switchClass("more", "less");
         }
 
-        $toggleButton.one("click", function(e) {
+        $toggleButton.one("click", function (e) {
           e.preventDefault();
           $self.toggle();
         });
@@ -437,15 +430,20 @@ export default function jqueryPlugins($) {
   };
 
   // Toggle expansion by number of lines
-  $.fn.toggleExpandTextByLines = function(
+  $.fn.toggleExpandTextByLines = function (
     lines: number,
     lessText: string,
     moreText: string,
-    cb: () => void
+    cb: () => void,
+    lessAriaLabelTemplate: string = "Less information: Hide {0}",
+    moreAriaLabelTemplate: string = "More information: Reveal {0}"
   ) {
-    return this.each(function() {
+    return this.each(function () {
       const $self: JQuery = $(this);
-      const expandedText: string = $self.html();
+      const $label: JQuery = $self.find(".label");
+      const $value: JQuery = $self.find(".value");
+      const expandedText: string = $value.html();
+      const labelText: string = $label.html();
       // add 'pad' to account for the right margin in the sidebar
       const $buttonPad: JQuery = $(
         '<span>&hellip; <a href="#" class="toggle more">morepad</a></span>'
@@ -454,21 +452,21 @@ export default function jqueryPlugins($) {
       const stringsByLine: string[] = [expandedText];
       let lastHeight: number = $self.height();
       // Until empty
-      while ($self.text().length > 0) {
-        $self.removeLastWord();
-        const html: string = $self.html();
-        $self.append($buttonPad);
+      while ($value.text().length > 0) {
+        $value.removeLastWord();
+        const html: string = $value.html();
+        $value.append($buttonPad);
 
-        if (lastHeight > $self.height()) {
+        if (lastHeight > $value.height()) {
           stringsByLine.unshift(html);
-          lastHeight = $self.height();
+          lastHeight = $value.height();
         }
 
         $buttonPad.remove();
       }
 
       if (stringsByLine.length <= lines) {
-        $self.html(expandedText);
+        $value.html(expandedText);
         return;
       }
 
@@ -477,32 +475,42 @@ export default function jqueryPlugins($) {
       // Toggle function
       let expanded: boolean = false;
 
-      (<any>$self).toggle = function() {
-        $self.empty();
+      (<any>$value).toggle = function () {
+        $value.empty();
         const $toggleButton: JQuery = $('<a href="#" class="toggle"></a>');
         if (expanded) {
-          $self.html(expandedText + " ");
+          const lessAriaLabel: string = Strings.format(
+            lessAriaLabelTemplate,
+            labelText
+          );
+          $value.html(expandedText + " ");
           $toggleButton.text(lessText);
           $toggleButton.switchClass("less", "more");
+          $toggleButton.attr("aria-label", lessAriaLabel);
         } else {
-          $self.html(collapsedText + "&hellip; ");
+          const moreAriaLabel: string = Strings.format(
+            moreAriaLabelTemplate,
+            labelText
+          );
+          $value.html(collapsedText + "&hellip; ");
           $toggleButton.text(moreText);
           $toggleButton.switchClass("more", "less");
+          $toggleButton.attr("aria-label", moreAriaLabel);
         }
-        $toggleButton.one("click", function(e) {
+        $toggleButton.one("click", function (e) {
           e.preventDefault();
-          $self.toggle();
+          $value.toggle();
         });
         expanded = !expanded;
-        $self.append($toggleButton);
+        $value.append($toggleButton);
         if (cb) cb();
       };
-      $self.toggle();
+      $value.toggle();
     });
   };
 
-  $.fn.toggleText = function(text1: string, text2: string) {
-    return this.each(function() {
+  $.fn.toggleText = function (text1: string, text2: string) {
+    return this.each(function () {
       const $self: JQuery = $(this);
 
       if ($self.text() === text1) {
@@ -513,8 +521,12 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.updateAttr = function(attrName: string, oldVal: string, newVal: string) {
-    return this.each(function() {
+  $.fn.updateAttr = function (
+    attrName: string,
+    oldVal: string,
+    newVal: string
+  ) {
+    return this.each(function () {
       const $self: JQuery = $(this);
       let attr: string = $self.attr(attrName);
 
@@ -525,14 +537,14 @@ export default function jqueryPlugins($) {
     });
   };
 
-  $.fn.verticalMargins = function() {
+  $.fn.verticalMargins = function () {
     const $self: JQuery = $(this);
     return (
       parseInt($self.css("marginTop")) + parseInt($self.css("marginBottom"))
     );
   };
 
-  $.fn.verticalPadding = function() {
+  $.fn.verticalPadding = function () {
     const $self: JQuery = $(this);
     return (
       parseInt($self.css("paddingTop")) + parseInt($self.css("paddingBottom"))

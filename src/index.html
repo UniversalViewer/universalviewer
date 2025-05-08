@@ -6,88 +6,145 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Universal Viewer Examples</title>
-    <!-- https://tailwindcss.com/docs/installation/play-cdn -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
-    <!-- <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/aframe-1.0.3.min.js"></script>
-    <script src="https://unpkg.com/@universalviewer/aleph@0.0.15/dist/collection/assets/ami.min.js"></script> -->
+
     <%= htmlWebpackPlugin.tags.headTags %>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/modern-normalize@3.0.1/modern-normalize.css"
+    />
     <style>
-      /** First override so that desktop always visible */
-      /* #uv {
-        width: 924px;
-        height: 668px;
+      body {
+        color-scheme: light dark;
+        background-color: Canvas;
+      }
 
-        --uv-mobile-display: none;
-        --uv-mobile-visibility: hidden;
-        --uv-desktop-display: block;
-        --uv-desktop-visibility: visible;
-      } */
+      /* @apply uv w-full */
+      #uv {
+        width: 100%;
+        height: 100svh;
+      }
 
-      /** Then set custom point to enable mobile / hide desktop */
-      /* @media (max-width: 340px) {
+      /* @apply hidden mx-auto my-8 */
+      #uv-controls {
+        display: none;
+        margin-inline: auto;
+        margin-block: 2rem;
+      }
+
+      @media (min-width: 768px) {
+        /* @apply md:w-[90vw] md:mx-auto md:h-[80vh] md:mt-4 */
         #uv {
-          --uv-mobile-display: block;
-          --uv-mobile-visibility: visible;
-          --uv-desktop-display: none;
-          --uv-desktop-visibility: hidden;
+          width: 90vw;
+          height: 80vh;
+          margin-inline: auto;
+          margin-block: 1rem;
+        }
 
+        /* @apply md:!block md:w-[90vw] */
+        #uv-controls {
+          display: block;
+          width: 90vw;
+          margin-block: 1rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        /* @apply lg:w-[65vw] */
+        #uv {
+          width: 65vw;
+        }
+
+        /* @apply lg:w-[65vw] */
+        #uv-controls {
+          width: 65vw;
+        }
+      }
+
+      #uv-controls {
+        button,
+        input[type="text"],
+        select,
+        textarea {
+          appearance: none;
+          padding-inline: 0.75rem; /* px-3 */
+          padding-block: 0.5rem; /* py-2 */
+          font: inherit;
+          line-height: 24px;
+          border: 1px solid;
+          background-color: Canvas;
+        }
+        select {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+        }
+        textarea {
           width: 100%;
         }
-      } */
-      /* todo: replace with dynamic viewport units when available: https://caniuse.com/?search=svh */
-      @media only screen and (max-width: 768px) {
-        .uv {
-          /* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
-          height: 100vh;
-          /* Fallback for browsers that do not support Custom Properties */
-          height: calc(var(--vh, 1vh) * 100);
+
+        /* Controls */
+
+        .controls-button {
+          appearance: button;
+          min-width: 10rem;
+          padding-inline: 1rem;
+          padding-block: 0.5rem;
+          line-height: 26px;
+          white-space: nowrap;
+          color: white;
+          border: none;
+          background-color: black;
+        }
+
+        .controls-group {
+          padding-block: 0.5rem;
+        }
+
+        .controls-title {
+          margin-bottom: 0;
+          padding-bottom: 0.75rem;
+          font-size: 1.125rem;
+          font-weight: 600;
+        }
+
+        .controls-tab {
+          padding-inline: 1.5rem;
+          padding-block: 0.75rem;
+          font-weight: 500;
+          font-size: 1.25rem;
+          border: none;
+          background: none;
+          cursor: pointer;
+        }
+
+        .controls-tab.active {
+          background-color: ButtonFace;
+        }
+
+        .controls-tab-content {
+          padding: 1.5rem;
+          color: ButtonText;
+          background-color: ButtonFace;
         }
       }
-    </style>
-    <style type="text/tailwindcss">
-      @layer utilities {
-        .controls-button {
-          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
-        }
-        .controls-group {
-          @apply py-2;
-        }
-        .controls-title {
-          @apply text-lg font-semibold pb-3;
-        }
-        .controls-tab {
-          @apply bg-none px-6 py-3 font-medium text-xl;
-        }
-        .controls-tab.active {
-          @apply bg-gray-200;
-        }
-        .controls-tab-content {
-          @apply bg-gray-200 p-6;
-        }
+
+      /* Utilities */
+
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
-    </style>
-    <style type="text/tailwindcss">
-      @layer utilities {
-        .controls-button {
-          @apply py-2 px-4 bg-black text-white whitespace-nowrap min-w-[10rem];
-        }
-        .controls-group {
-          @apply py-2;
-        }
-        .controls-title {
-          @apply text-lg font-semibold pb-3;
-        }
-        .controls-tab {
-          @apply bg-none px-6 py-3 font-medium text-xl;
-        }
-        .controls-tab.active {
-          @apply bg-gray-200;
-        }
-        .controls-tab-content {
-          @apply bg-gray-200 p-6;
-        }
+      .flex-1 {
+        flex: 1 1 0%;
+      }
+      .flex-initial {
+        flex: 0 1 auto;
+      }
+      .mt-2 {
+        margin-top: 0.5rem;
       }
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
@@ -147,9 +204,9 @@
         <div class="controls-group">
           <h2 class="controls-title">Target</h2>
           <div class="flex">
-            <input id="target" type="text" value="" class="flex-1" />
+            <input id="iiif_target" type="text" value="" class="flex-1" />
             <button
-              id="setTargetButton"
+              id="iiif_setTargetButton"
               class="controls-button flex-initial ml-2"
             >
               Set Target
@@ -158,11 +215,16 @@
         </div>
 
         <div class="controls-group">
+          <h2 class="controls-title">Muted</h2>
+          <input type="checkbox" id="iiif_mutedCheckbox" />
+        </div>
+
+        <div class="controls-group">
           <h2 class="controls-title">Rotation</h2>
           <div class="flex">
-            <input id="rotation" type="text" value="" class="flex-1" />
+            <input id="iiif_rotation" type="text" value="" class="flex-1" />
             <button
-              id="setRotationButton"
+              id="iiif_setRotationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Rotation
@@ -172,12 +234,12 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Annotations</h2>
-          <textarea id="annotations" rows="5" class="w-full"></textarea>
+          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
           <div class="mt-2">
-            <button id="setAnnotationsButton" class="controls-button">
+            <button id="iiif_setAnnotationsButton" class="controls-button">
               Set Annotations
             </button>
-            <button id="clearAnnotationsButton" class="controls-button">
+            <button id="iiif_clearAnnotationsButton" class="controls-button">
               Clear Annotations
             </button>
           </div>
@@ -215,15 +277,20 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Muted</h2>
-          <input type="checkbox" id="mutedCheckbox" />
+          <input type="checkbox" id="youtube_mutedCheckbox" />
         </div>
 
         <div class="controls-group">
           <h2 class="controls-title">Current Time</h2>
           <div class="flex">
-            <input id="currentTime" type="text" value="" class="flex-1" />
+            <input
+              id="youtube_currentTime"
+              type="text"
+              value=""
+              class="flex-1"
+            />
             <button
-              id="setCurrentTimeButton"
+              id="youtube_setCurrentTimeButton"
               class="controls-button flex-initial ml-2"
             >
               Set Current Time
@@ -234,15 +301,20 @@
         <div class="controls-group">
           <h2 class="controls-title">Duration</h2>
           <div class="flex">
-            <input id="durationStart" type="number" value="0" class="flex-1" />
             <input
-              id="durationEnd"
+              id="youtube_durationStart"
+              type="number"
+              value="0"
+              class="flex-1"
+            />
+            <input
+              id="youtube_durationEnd"
               type="number"
               value="0"
               class="flex-1 ml-2"
             />
             <button
-              id="setDurationButton"
+              id="youtube_setDurationButton"
               class="controls-button flex-initial ml-2"
             >
               Set Duration
@@ -284,41 +356,62 @@
         });
 
         var uv, iiifManifestId, youTubeVideoId;
-        var $iiifManifestId = document.getElementById("iiifManifestId");
-        var $iiifManifestIdSelect = document.getElementById(
-          "iiifManifestIdSelect"
+
+        // iiif tab
+        var $iiifManifestId = iiifTab.querySelector("#iiifManifestId");
+        var $iiifManifestIdSelect = iiifTab.querySelector(
+          "#iiifManifestIdSelect"
         );
-        var $target = document.getElementById("target");
-        var $rotation = document.getElementById("rotation");
-        var $setIIIFManifestIdButton = document.getElementById(
-          "setIIIFManifestIdButton"
+        var $iiif_target = iiifTab.querySelector("#iiif_target");
+        var $iiif_rotation = iiifTab.querySelector("#iiif_rotation");
+        var $setIIIFManifestIdButton = iiifTab.querySelector(
+          "#setIIIFManifestIdButton"
         );
-        var $setTargetButton = document.getElementById("setTargetButton");
-        var $setRotationButton = document.getElementById("setRotationButton");
-        var $annotations = document.getElementById("annotations");
-        var $setAnnotationsButton = document.getElementById(
-          "setAnnotationsButton"
+        var $iiif_setTargetButton = iiifTab.querySelector(
+          "#iiif_setTargetButton"
         );
-        var $clearAnnotationsButton = document.getElementById(
-          "clearAnnotationsButton"
+        var $iiif_mutedCheckbox = iiifTab.querySelector("#iiif_mutedCheckbox");
+        var $iiif_setRotationButton = iiifTab.querySelector(
+          "#iiif_setRotationButton"
+        );
+        var $iiif_annotations = iiifTab.querySelector("#iiif_annotations");
+        var $iiif_setAnnotationsButton = iiifTab.querySelector(
+          "#iiif_setAnnotationsButton"
+        );
+        var $iiif_clearAnnotationsButton = iiifTab.querySelector(
+          "#iiif_clearAnnotationsButton"
+        );
+
+        // youtube tab
+        var $setYouTubeVideoIdButton = youTubeTab.querySelector(
+          "#setYouTubeVideoIdButton"
+        );
+        var $youTubeVideoId = youTubeTab.querySelector("#youTubeVideoId");
+        var $youTubeVideoIdSelect = youTubeTab.querySelector(
+          "#youTubeVideoIdSelect"
+        );
+        var $youtube_currentTime = youTubeTab.querySelector(
+          "#youtube_currentTime"
+        );
+        var $youtube_setCurrentTimeButton = youTubeTab.querySelector(
+          "#youtube_setCurrentTimeButton"
+        );
+        var $youtube_mutedCheckbox = youTubeTab.querySelector(
+          "#youtube_mutedCheckbox"
         );
         var $customConfig = document.getElementById("customConfig");
         var $setConfigButton = document.getElementById("setConfigButton");
         var $setYouTubeVideoIdButton = document.getElementById(
           "setYouTubeVideoIdButton"
+        var $youtube_durationStart = youTubeTab.querySelector(
+          "#youtube_durationStart"
         );
-        var $youTubeVideoId = document.getElementById("youTubeVideoId");
-        var $youTubeVideoIdSelect = document.getElementById(
-          "youTubeVideoIdSelect"
+        var $youtube_durationEnd = youTubeTab.querySelector(
+          "#youtube_durationEnd"
         );
-        var $currentTime = document.getElementById("currentTime");
-        var $setCurrentTimeButton = document.getElementById(
-          "setCurrentTimeButton"
+        var $youtube_setDurationButton = youTubeTab.querySelector(
+          "#youtube_setDurationButton"
         );
-        var $mutedCheckbox = document.getElementById("mutedCheckbox");
-        var $durationStart = document.getElementById("durationStart");
-        var $durationEnd = document.getElementById("durationEnd");
-        var $setDurationButton = document.getElementById("setDurationButton");
 
         var annotations = [];
         var urlAdapter;
@@ -426,7 +519,7 @@
         }
 
         function setAnnotations() {
-          annotations = JSON.parse($annotations.value);
+          annotations = JSON.parse($iiif_annotations.value);
           uv.set({
             annotations: annotations,
           });
@@ -476,25 +569,34 @@
           });
         };
 
-        $setTargetButton.onclick = function() {
-          var target = $target.value;
+        // iiif inputs
+
+        $iiif_setTargetButton.onclick = function() {
+          var target = $iiif_target.value;
           uv.set({
             target: target,
           });
         };
 
-        $setRotationButton.onclick = function() {
-          var rotation = $rotation.value;
+        $iiif_mutedCheckbox.onclick = function(e) {
+          muted = e.target.checked;
+          uv.set({
+            muted: muted,
+          });
+        };
+
+        $iiif_setRotationButton.onclick = function() {
+          var rotation = parseInt($iiif_rotation.value);
           uv.set({
             rotation: rotation,
           });
         };
 
-        $setAnnotationsButton.onclick = function() {
+        $iiif_setAnnotationsButton.onclick = function() {
           setAnnotations();
         };
 
-        $clearAnnotationsButton.onclick = function() {
+        $iiif_clearAnnotationsButton.onclick = function() {
           clearAnnotations();
           setAnnotations();
         };
@@ -502,23 +604,25 @@
         $setConfigButton.onclick = function() {
           setConfig();
         };
-        $mutedCheckbox.onclick = function(e) {
+        // youtube inputs
+
+        $youtube_mutedCheckbox.onclick = function(e) {
           muted = e.target.checked;
           uv.set({
             muted: muted,
           });
         };
 
-        $setCurrentTimeButton.onclick = function() {
-          var currentTime = $currentTime.value;
+        $youtube_setCurrentTimeButton.onclick = function() {
+          var currentTime = $youtube_currentTime.value;
           uv.set({
             currentTime: currentTime,
           });
         };
 
-        $setDurationButton.onclick = function() {
-          var durationStart = $durationStart.value;
-          var durationEnd = $durationEnd.value;
+        $youtube_setDurationButton.onclick = function() {
+          var durationStart = $youtube_durationStart.value;
+          var durationEnd = $youtube_durationEnd.value;
           uv.set({
             youTubeVideoId: youTubeVideoId,
             autoPlay: true,
@@ -528,7 +632,7 @@
 
         function clearAnnotations() {
           annotations = [];
-          $annotations.value = JSON.stringify(annotations);
+          $iiif_annotations.value = JSON.stringify(annotations);
         }
 
         function activateIIIFTab() {
@@ -659,7 +763,7 @@
           });
 
           uv.on("targetChange", function(target) {
-            $target.value = target;
+            $iiif_target.value = target;
           });
 
           uv.on("openseadragonExtension.doubleClick", function(e) {
@@ -667,7 +771,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
@@ -676,7 +780,7 @@
               target: e.target,
               bodyValue: String(annotations.length + 1),
             });
-            $annotations.value = JSON.stringify(annotations);
+            $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
 
@@ -690,6 +794,14 @@
 
           uv.on("clearAnnotations", function(e) {
             clearAnnotations();
+          });
+
+          uv.on("mediaelementExtension.mediaMuted", function() {
+            $iiif_mutedCheckbox.checked = true;
+          });
+
+          uv.on("mediaelementExtension.mediaUnmuted", function() {
+            $iiif_mutedCheckbox.checked = false;
           });
 
           // uv.on("load", function(e) {
@@ -772,9 +884,8 @@
         // data for https://www.exhibit.so/api/exhibits/Zmtdg3cwREXzNGCuHgmm
         // const annotationsJson =
         //   "http://localhost:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
-
-        const annotationsJson =
-          "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
+        // const annotationsJson =
+        // "http://192.168.1.233:3000/api/exhibits/dIVPgGD9ostBUU1ckIZZ";
 
         const annotationList = document.getElementById("annotation-list");
 
@@ -827,28 +938,28 @@
           // });
         }
 
-        function initStory() {
-          fetch(annotationsJson).then((res) => {
-            const data = res.json().then((data) => {
-              storyAnnotations = data.annotations.filter(
-                (anno) => anno.motivation === "framing"
-              );
-              storyAnnotations.forEach((anno) => {
-                const li = document.createElement("li");
-                const a = document.createElement("a");
-                a.dataset.annoId = anno.id;
-                a.href = `#${anno.id}`;
-                a.innerHTML = anno.bodyValue;
-                a.onclick = handleAnnotationClick;
-                li.appendChild(a);
-                annotationList.appendChild(li);
-              });
+        // function initStory() {
+        //   fetch(annotationsJson).then((res) => {
+        //     const data = res.json().then((data) => {
+        //       storyAnnotations = data.annotations.filter(
+        //         (anno) => anno.motivation === "framing"
+        //       );
+        //       storyAnnotations.forEach((anno) => {
+        //         const li = document.createElement("li");
+        //         const a = document.createElement("a");
+        //         a.dataset.annoId = anno.id;
+        //         a.href = `#${anno.id}`;
+        //         a.innerHTML = anno.bodyValue;
+        //         a.onclick = handleAnnotationClick;
+        //         li.appendChild(a);
+        //         annotationList.appendChild(li);
+        //       });
 
-              partOf = storyAnnotations[0].partOf;
-              target = storyAnnotations[0].target;
-            });
-          });
-        }
+        //       partOf = storyAnnotations[0].partOf;
+        //       target = storyAnnotations[0].target;
+        //     });
+        //   });
+        // }
 
         // initStory();
       });

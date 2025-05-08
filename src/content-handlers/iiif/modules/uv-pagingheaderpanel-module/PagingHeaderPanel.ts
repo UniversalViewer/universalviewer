@@ -188,9 +188,8 @@ export class PagingHeaderPanel extends HeaderPanel<
         imageIndex < this.extension.helper.getTotalCanvases();
         imageIndex++
       ) {
-        const canvas: Canvas = this.extension.helper.getCanvasByIndex(
-          imageIndex
-        );
+        const canvas: Canvas =
+          this.extension.helper.getCanvasByIndex(imageIndex);
         const label: string = sanitize(
           <string>(
             LanguageMap.getValue(
@@ -217,7 +216,7 @@ export class PagingHeaderPanel extends HeaderPanel<
     this.$search.append(this.$total);
 
     this.$searchButton = $(
-      `<a class="go btn btn-primary" tabindex="0">${this.content.go}</a>`
+      `<button class="go btn btn-primary" tabindex="0">${this.content.go}</button>`
     );
     this.$search.append(this.$searchButton);
 
@@ -403,11 +402,11 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.search(this.$searchText.val());
     });
 
-    this.$searchText.click(function() {
+    this.$searchText.click(function () {
       $(this).select();
     });
 
-    this.$searchButton.onPressed(() => {
+    this.onAccessibleClick(this.$searchButton, () => {
       if (this.options.autoCompleteBoxEnabled) {
         this.search(this.$autoCompleteBox.val());
       } else {
@@ -426,10 +425,6 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.options.autoCompleteBoxEnabled !== true
     ) {
       this.$search.hide();
-    }
-
-    if (this.options.helpEnabled === false) {
-      this.$helpButton.hide();
     }
 
     // todo: discuss on community call
@@ -699,41 +694,49 @@ export class PagingHeaderPanel extends HeaderPanel<
   disableFirstButton(): void {
     this.firstButtonEnabled = false;
     this.$firstButton.disable();
+    this.$firstButton.attr("disabled", "disabled");
   }
 
   enableFirstButton(): void {
     this.firstButtonEnabled = true;
     this.$firstButton.enable();
+    this.$firstButton.removeAttr("disabled");
   }
 
   disableLastButton(): void {
     this.lastButtonEnabled = false;
     this.$lastButton.disable();
+    this.$lastButton.attr("disabled", "disabled");
   }
 
   enableLastButton(): void {
     this.lastButtonEnabled = true;
     this.$lastButton.enable();
+    this.$lastButton.removeAttr("disabled");
   }
 
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.disable();
+    this.$prevButton.attr("disabled", "disabled");
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.enable();
+    this.$prevButton.removeAttr("disabled");
   }
 
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.disable();
+    this.$nextButton.attr("disabled", "disabled");
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.enable();
+    this.$nextButton.removeAttr("disabled");
   }
 
   modeChanged(): void {

@@ -12,6 +12,7 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 type MediaElementCenterPanelOptions = CenterPanelOptions & {
+  autoPlayOnSetTarget: boolean;
   defaultHeight: number;
   defaultWidth: number;
 };
@@ -51,7 +52,7 @@ type MediaElementSettingsDialogue = ModuleConfig & {
 };
 
 type Modules = {
-  mediaelementCenterPanel: MediaElementCenterPanel;
+  mediaElementCenterPanel: MediaElementCenterPanel;
   downloadDialogue: MediaElementDownloadDialogue;
   shareDialogue: MediaElementShareDialogue;
   settingsDialogue: MediaElementSettingsDialogue;

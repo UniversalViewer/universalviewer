@@ -83,7 +83,43 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
+      }
+    },
+    "mobileFooterPanel": {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": true,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "fullscreenEnabled": true,
+        "minimiseButtons": true,
+        "moreInfoEnabled": true,
+        "openEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": true
+      },
+      "content": {
+        "rotateRight": "$rotateRight",
+        "moreInfo": "$moreInfo",
+        "zoomIn": "$zoomIn",
+        "zoomOut": "$zoomOut",
+        "bookmark": "$add_to_bookmarks",
+        "download": "$download",
+        "embed": "$embed",
+        "exitFullScreen": "$exitFullScreen",
+        "feedback": "$feedback",
+        "fullScreen": "$fullScreen",
+        "open": "$open",
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {
@@ -108,7 +144,8 @@
       },
       "content": {
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "helpDialogue": {
@@ -119,6 +156,20 @@
         "close": "$close",
         "text": "$placeholder_text text",
         "title": "$help"
+      }
+    },
+    "adjustImageDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "title": "$adjustImage",
+        "brightness": "$brightness",
+        "contrast": "$contrast",
+        "saturation": "$saturation",
+        "close": "$close",
+        "reset": "$reset",
+        "remember": "$remember"
       }
     },
     "moreInfoRightPanel": {
@@ -153,10 +204,12 @@
         "expandFull": "$expandGallery",
         "holdingText": "$moduleGoesHere",
         "less": "$less",
+        "lessAriaLabelTemplate": "$lessAriaLabelTemplate",
         "license": "$license",
         "logo": "$logo",
         "manifestHeader": "$aboutTheItem",
         "more": "$more",
+        "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
@@ -171,7 +224,9 @@
         "requiredStatementEnabled": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close",
+        "closeAttribution": "$closeAttribution"
       }
     },
     "pdfCenterPanel": {
@@ -183,7 +238,11 @@
         "usePdfJs": true
       },
       "content": {
-        "attribution": "$attribution"
+        "attribution": "$attribution",
+        "close": "$close",
+        "closeAttribution": "$closeAttribution",
+        "next": "$next",
+        "previous": "$previous"
       }
     },
     "resourcesLeftPanel": {
@@ -250,7 +309,9 @@
       "options": {
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
+        "settingsButtonEnabled": true,
+        "helpEnabled": false,
+        "helpUrl": "https://universalviewer.io"
       },
       "content": {
         "emptyValue": "$pleaseEnterValue",
@@ -262,21 +323,26 @@
         "previous": "$previous",
         "pageSearchLabel": "$searchByPageNumber",
         "close": "$close",
-        "settings": "$settings"
+        "settings": "$settings",
+        "help": "$help"
       }
     },
     "shareDialogue": {
       "options": {
         "embedEnabled": true,
         "shareEnabled": true,
-        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>",
+        "embedPath": "/uv.html",
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "$custom",
         "embed": "$embed",
         "embedInstructions": "$embedInstructions",
@@ -284,6 +350,7 @@
         "iiif": "$iiifManifest",
         "share": "$share",
         "shareInstructions": "$shareInstructions",
+        "shareLink": "$shareLink",
         "size": "$size",
         "width": "$width",
         "shareUrl": "$shareUrl"
@@ -339,6 +406,7 @@
         "clickToZoomEnabled": "$clickToZoomEnabled",
         "pagingEnabled": "$twoPageView",
         "reducedMotion": "$reducedMotion",
+        "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
         "website": "$uvWebsite"

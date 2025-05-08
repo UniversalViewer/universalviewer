@@ -7,13 +7,11 @@ import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-modelviewermobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
-import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ModelViewerCenterPanel } from "../../modules/uv-modelviewercenterpanel-module/ModelViewerCenterPanel";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { ModelViewerExtensionEvents } from "./Events";
 import { Orbit } from "./Orbit";
@@ -27,7 +25,6 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
   $helpDialogue: JQuery;
-  $moreInfoDialogue: JQuery;
   $settingsDialogue: JQuery;
   centerPanel: ModelViewerCenterPanel;
   downloadDialogue: DownloadDialogue;
@@ -36,7 +33,6 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   helpDialogue: HelpDialogue;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: FooterPanel<Config["modules"]["footerPanel"]>;
-  moreInfoDialogue: MoreInfoDialogue;
   rightPanel: MoreInfoRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
@@ -98,12 +94,6 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
     } else {
       this.shell.$footerPanel.hide();
     }
-
-    this.$moreInfoDialogue = $(
-      '<div class="overlay moreInfo" aria-hidden="true"></div>'
-    );
-    this.shell.$overlays.append(this.$moreInfoDialogue);
-    this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
     this.$downloadDialogue = $(
       '<div class="overlay download" aria-hidden="true"></div>'
@@ -209,9 +199,8 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
     for (let i = 0; i < annotations.length; i++) {
       const annotation = annotations[i];
       const canvasId: string = annotation.target.match(/(.*)#/)[1];
-      const canvasIndex: number | null = this.helper.getCanvasIndexById(
-        canvasId
-      );
+      const canvasIndex: number | null =
+        this.helper.getCanvasIndexById(canvasId);
       const annotationGroup: AnnotationGroup = new AnnotationGroup(canvasId);
       annotationGroup.canvasIndex = canvasIndex as number;
 
@@ -256,14 +245,13 @@ export default class ModelViewerExtension extends BaseExtension<Config> {
   }
 
   getEmbedScript(template: string, width: number, height: number): string {
-    const appUri: string = this.getAppUri();
-    const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&cv=${this.helper.canvasIndex}`;
-    const script: string = Strings.format(
-      template,
-      iframeSrc,
-      width.toString(),
-      height.toString()
-    );
-    return script;
+    const hashParams = new URLSearchParams({
+      manifest: this.helper.manifestUri,
+      c: this.helper.collectionIndex.toString(),
+      m: this.helper.manifestIndex.toString(),
+      cv: this.helper.canvasIndex.toString(),
+    });
+
+    return super.buildEmbedScript(template, width, height, hashParams);
   }
 }

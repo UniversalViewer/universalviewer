@@ -1,8 +1,7 @@
 const $ = require("jquery");
-import { BaseView } from "./BaseView";
 import { Bools } from "@edsilv/utils";
-import { IIIFEvents } from "../../IIIFEvents";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
+import { BaseView } from "./BaseView";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
@@ -10,7 +9,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isUnopened: boolean = true;
   autoToggled: boolean = false;
   expandFullEnabled: boolean = true;
-  reducedAnimation = false;
 
   $closed: JQuery;
   $closedTitle: JQuery;
@@ -21,8 +19,12 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   $title: JQuery;
   $top: JQuery;
 
-  constructor($element: JQuery) {
-    super($element, false, true);
+  constructor(
+    $element: JQuery,
+    fitToParentWidth: boolean = false,
+    fitToParentHeight: boolean = true
+  ) {
+    super($element, fitToParentWidth, fitToParentHeight);
   }
 
   create(): void {
@@ -42,16 +44,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
 
     this.$collapseButton = $(
-      '<div role="button" class="collapseButton" tabindex="0"></div>'
+      '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
-    this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
     this.$expandButton = $(
-      '<a role="button" class="expandButton" tabindex="0"></a>'
+      '<button role="button" class="expandButton" tabindex="0"></button>'
     );
     this.$expandButton.prop("title", this.content.expand);
 
@@ -90,17 +91,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         this.toggle();
       }
     });
-
-    this.$top.hide();
-    this.$main.hide();
-
-    // Subscribe to settings change.
-    this.extensionHost.subscribe(
-      IIIFEvents.SETTINGS_CHANGE,
-      (args: ISettings) => {
-        this.reducedAnimation = args.reducedAnimation || false;
-      }
-    );
   }
 
   init(): void {
@@ -113,36 +103,48 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   toggle(autoToggled?: boolean): void {
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration}ms`
+      );
+    }
+
     autoToggled ? (this.autoToggled = true) : (this.autoToggled = false);
 
-    // if collapsing, hide contents immediately.
+    this.$element.toggleClass("open");
+
     if (this.isExpanded) {
       this.$top.attr("aria-hidden", "true");
       this.$main.attr("aria-hidden", "true");
       this.$closed.attr("aria-hidden", "false");
-      this.$top.hide();
-      this.$main.hide();
-      this.$closed.show();
     }
 
-    if (this.reducedAnimation) {
-      // This is reduced motion.
-      this.$element.css("width", this.getTargetWidth());
-      this.$element.css("left", this.getTargetLeft());
-      this.toggled();
-    } else {
-      // Otherwise animate.
-      this.$element.stop().animate(
-        {
-          width: this.getTargetWidth(),
-          left: this.getTargetLeft(),
-        },
-        this.options.panelAnimationDuration,
-        () => {
-          this.toggled();
-        }
-      );
+    let timeout = 0;
+    if (!isReducedAnimation) {
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
     }
+
+    setTimeout(() => {
+      this.toggled();
+
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
+      }
+    }, timeout);
   }
 
   toggled(): void {
@@ -155,9 +157,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "false");
       this.$main.attr("aria-hidden", "false");
       this.$closed.attr("aria-hidden", "true");
-      this.$closed.hide();
-      this.$top.show();
-      this.$main.show();
     }
 
     this.toggleFinish();
@@ -166,43 +165,90 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   expandFull(): void {
-    if (!this.isExpanded) {
-      this.toggled();
-    }
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
 
-    var targetWidth: number = this.getFullTargetWidth();
-    var targetLeft: number = this.getFullTargetLeft();
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration * 2}ms`
+      );
+    }
 
     this.expandFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.expandFullFinish();
+    let timeout = 0;
+
+    if (!isReducedAnimation) {
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
+
+      // double it because it's the full expand
+      timeout = timeout * 2;
+    }
+
+    setTimeout(() => {
+      if (!this.isExpanded) {
+        this.toggled();
       }
-    );
+      this.expandFullFinish();
+
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
+      }
+    }, timeout);
   }
 
   collapseFull(): void {
-    var targetWidth: number = this.getTargetWidth();
-    var targetLeft: number = this.getTargetLeft();
+    const settings = this.extension.getSettings();
+    let isReducedAnimation = settings.reducedAnimation;
+
+    const oldAnimationDuration =
+      document.documentElement.style.getPropertyValue(
+        "--uv-animation-duration"
+      );
+    if (this.options.panelAnimationDuration) {
+      document.documentElement.style.setProperty(
+        "--uv-animation-duration",
+        `${this.options.panelAnimationDuration * 2}ms`
+      );
+    }
 
     this.collapseFullStart();
 
-    this.$element.stop().animate(
-      {
-        width: targetWidth,
-        left: targetLeft,
-      },
-      this.options.panelAnimationDuration,
-      () => {
-        this.collapseFullFinish();
+    // run a timeout either way, zero just means instant(ish)
+    let timeout = 0;
+
+    // if we're not reducing animation then set the correct timeout
+    if (!isReducedAnimation) {
+      timeout =
+        (this.options.panelAnimationDuration ??
+          settings.animationDuration ??
+          250) + 50;
+
+      // double duration for full size anims
+      timeout = timeout * 2;
+    }
+
+    setTimeout(() => {
+      this.collapseFullFinish();
+
+      if (oldAnimationDuration) {
+        document.documentElement.style.setProperty(
+          "--uv-animation-duration",
+          `${oldAnimationDuration}`
+        );
       }
-    );
+    }, timeout);
   }
 
   getTargetWidth(): number {
@@ -236,8 +282,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
-
-    this.focusCollapseButton();
   }
 
   collapseFullStart(): void {}
@@ -273,8 +317,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   resize(): void {
     super.resize();
 
-    this.$main.height(
-      this.$element.parent().height() - this.$top.outerHeight(true)
-    );
+    this.$main.height(this.$element.height() - this.$top.outerHeight(true));
   }
 }

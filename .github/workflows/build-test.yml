@@ -1,6 +1,6 @@
 name: NPM build + test
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -25,3 +25,6 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+      # Disable AppArmor namespace behavior that breaks tests:
+      - run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+      - run: npm test

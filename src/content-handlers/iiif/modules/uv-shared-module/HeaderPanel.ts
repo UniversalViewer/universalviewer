@@ -51,9 +51,6 @@ export class HeaderPanel<
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
 
-    //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
-    //this.$rightOptions.append(this.$helpButton);
-
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
 
@@ -65,11 +62,18 @@ export class HeaderPanel<
     this.$settingsButton.attr("title", this.content.settings);
     this.$rightOptions.append(this.$settingsButton);
 
+    this.$helpButton = $(`
+      <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
+        <i class="uv-icon-help" aria-hidden="true"></i>
+      </a>
+    `);
+    this.$rightOptions.append(this.$helpButton);
+
     this.$informationBox = $(
       '<div class="informationBox" aria-hidden="true"> \
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
-                                    <button type="button" class="close" aria-label="Close"> \
+                                    <button type="button" class="close"> \
                                         <span aria-hidden="true">&#215;</span>\
                                     </button> \
                                   </div>'
@@ -78,8 +82,10 @@ export class HeaderPanel<
     this.$element.append(this.$informationBox);
 
     this.$informationBox.hide();
-    this.$informationBox.find(".close").attr("title", this.content.close);
-    this.$informationBox.find(".close").on("click", (e) => {
+    var $closeButton = this.$informationBox.find(".close");
+    $closeButton.attr("aria-label", this.content.close);
+    $closeButton.attr("title", this.content.close);
+    $closeButton.on("click", (e) => {
       e.preventDefault();
       this.extensionHost.publish(IIIFEvents.HIDE_INFORMATION);
     });
@@ -152,10 +158,7 @@ export class HeaderPanel<
     if (!this.information) return;
 
     var $message = this.$informationBox.find(".message");
-    $message
-      .html(this.information.message)
-      .find("a")
-      .attr("target", "_top");
+    $message.html(this.information.message).find("a").attr("target", "_top");
     var $actions = this.$informationBox.find(".actions");
     $actions.empty();
 
@@ -217,6 +220,16 @@ export class HeaderPanel<
       if (this.information) {
         $message.text(this.information.message);
       }
+    }
+
+    this.$helpButton.onPressed(() => {
+      window.open(this.options.helpUrl);
+    });
+
+    if (this.options.helpEnabled && this.options.helpUrl) {
+      this.$helpButton.show();
+    } else {
+      this.$helpButton.hide();
     }
 
     // hide toggle buttons below minimum width

@@ -42,10 +42,10 @@ import {
   Urls,
   Strings,
 } from "@edsilv/utils";
-import { isVisible } from "../../../../Utils";
+import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
-import { StoreApi } from "zustand/vanilla";
+import type { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
 import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
 
@@ -75,7 +75,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   restrictedDialogue: RestrictedDialogue;
   shell: Shell;
   shifted: boolean = false;
-  store: StoreApi<ExtensionState>;
+  store: StoreApi<ExtensionState | null>; // null for dispose()
   tabbing: boolean = false;
   browserDetect: BrowserDetect;
   locales = {};
@@ -87,7 +87,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     "pl-PL": () => import("../../../../locales/pl-PL.json"),
     "sv-SE": () => import("../../../../locales/sv-SE.json"),
   };
-  
 
   public create(): void {
     const that = this;
@@ -102,6 +101,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.$element.data("component", this.extensionHost);
 
     this._parseMetrics();
+    this._updateMetric();
     this._initLocales();
 
     // add/remove classes.
@@ -111,6 +111,9 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.$element.addClass("loading");
     if (this.data.locales) {
       this.$element.addClass(this.data.locales[0].name.toLowerCase());
+      this.$element.prop("lang", this.data.locales[0].name.substring(0, 2));
+    } else {
+      this.$element.prop("lang", defaultLocale[0].name.substring(0, 2));
     }
 
     if (this.isRightPanelEnabled()) {
@@ -171,12 +174,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
             "URL"
           );
           const a: HTMLAnchorElement = Urls.getUrlParts(dropUrl);
-          let manifestUri:
-            | string
-            | null = Urls.getQuerystringParameterFromString(
-            "manifest",
-            a.search
-          );
+          let manifestUri: string | null =
+            Urls.getQuerystringParameterFromString("manifest", a.search);
 
           if (!manifestUri) {
             // look for collection param
@@ -270,9 +269,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     });
 
     // this.$element.append('<a href="/" id="top"></a>');
-    this.$element.append(
-      '<iframe id="commsFrame" style="display:none"></iframe>'
-    );
+    this.$element.append('<iframe id="commsFrame"></iframe>');
 
     this.extensionHost.subscribeAll((event, args) => {
       // subscribe to all UV events except those handled below with their own fire() calls
@@ -429,7 +426,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       let terms: string | null = this.helper.getLicense();
 
       if (!terms) {
-        const requiredStatement: ILabelValuePair | null = this.helper.getRequiredStatement();
+        const requiredStatement: ILabelValuePair | null =
+          this.helper.getRequiredStatement();
 
         if (requiredStatement && requiredStatement.value) {
           terms = requiredStatement.value;
@@ -442,8 +440,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     });
 
     this.extensionHost.subscribe(Events.TOGGLE_FULLSCREEN, () => {
-      const overrideFullScreen: boolean = this.data.config!.options
-        .overrideFullScreen;
+      const overrideFullScreen: boolean =
+        this.data.config!.options.overrideFullScreen;
 
       this.extensionHost.isFullScreen = !this.extensionHost.isFullScreen;
 
@@ -484,7 +482,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     config: Object,
     locale: String
   ): Promise<Object> {
-    let loader = this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
+    let loader =
+      this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
     let localeStrings = (await loader()) || {};
     let conf = JSON.stringify(config);
 
@@ -614,9 +613,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _initLocales(): void {
-    const availableLocales: any[] = this.data.config!.localisation.locales.slice(
-      0
-    );
+    const availableLocales: any[] =
+      this.data.config!.localisation.locales.slice(0);
     const configuredLocales: ILocale[] | undefined = this.data.locales;
     const finalLocales: ILocale[] = [];
 
@@ -672,30 +670,28 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   private _updateMetric(): void {
-    setTimeout(() => {
-      // loop through all metrics
-      // find one that matches the current dimensions
-      // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
+    // loop through all metrics
+    // find one that matches the current dimensions
+    // when a metric is found that isn't the current metric, set it to be the current metric and publish a METRIC_CHANGE event
 
-      for (let i = this.metrics.length - 1; i >= 0; i--) {
-        const metric: Metric = this.metrics[i];
+    for (let i = this.metrics.length - 1; i >= 0; i--) {
+      const metric: Metric = this.metrics[i];
 
-        const width: number = window.innerWidth;
+      const width: number = window.innerWidth;
 
-        if (width >= metric.minWidth) {
-          if (this.metric !== metric.type) {
-            this.metric = metric.type;
-            // remove current metric class
-            for (var j = 0; j < this.metrics.length; j++) {
-              this.$element.removeClass(this.metrics[j].type);
-            }
-            this.$element.addClass(metric.type);
-            this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
+      if (width >= metric.minWidth) {
+        if (this.metric !== metric.type) {
+          this.metric = metric.type;
+          // remove current metric class
+          for (var j = 0; j < this.metrics.length; j++) {
+            this.$element.removeClass(this.metrics[j].type);
           }
-          break;
+          this.$element.addClass(metric.type);
+          this.extensionHost.publish(IIIFEvents.METRIC_CHANGE);
         }
+        break;
       }
-    }, 1);
+    }
   }
 
   resize(): void {
@@ -767,16 +763,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return parts.host;
   }
 
-  getAppUri(): string {
-    const appUri: string =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      (window.location.port ? ":" + window.location.port : "");
-
-    return appUri + "/uv.html";
-  }
-
   getSettings(): ISettings {
     if (Bools.getBool(this.data.config!.options.saveUserSettings, false)) {
       const settings: any = Storage.get("uv.settings", StorageType.LOCAL);
@@ -826,6 +812,42 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       title: title,
       image: thumbnail,
     };
+  }
+
+  getAppUri(): string {
+    const options = this.data.config!.modules.shareDialogue.options;
+
+    const host =
+      options?.embedHost ??
+      `${window.location.protocol}//${window.location.hostname}`;
+    const port = options?.embedPort ?? window.location.port;
+    const path = options?.embedPath ?? "/uv.html";
+
+    return `${host}${port ? `:${port}` : ""}${path}`;
+  }
+
+  buildEmbedScript(
+    template: string,
+    width: number,
+    height: number,
+    hashParams: URLSearchParams
+  ): string {
+    let appUri: string = this.getAppUri();
+    const title: string = this.helper.getLabel() ?? "";
+
+    if ((hashParams?.size ?? 0) > 0) {
+      appUri += `#${hashParams.toString()}`;
+    }
+
+    const script: string = Strings.format(
+      template,
+      appUri,
+      width.toString(),
+      height.toString(),
+      title
+    );
+
+    return script;
   }
 
   public getPagedIndices(
@@ -977,7 +999,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       const body: AnnotationBody = <any>{
         id: canvas.id,
         type: canvas.getType(),
-        getFormat: function() {
+        getFormat: function () {
           return "";
         },
       };
@@ -1025,6 +1047,14 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
 
   isMobileMetric(): boolean {
     return this.metric === "sm" || this.metric === "md";
+  }
+
+  isMetric(metric: string | string[]): boolean {
+    if (typeof metric === "string") {
+      return this.metric === metric;
+    }
+
+    return metric.some((item) => this.metric === item);
   }
 
   // todo: use redux in manifold to get reset state
@@ -1175,7 +1205,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   dispose(): void {
-    this.store?.destroy();
+    this.store?.setState(null);
   }
 }
 
