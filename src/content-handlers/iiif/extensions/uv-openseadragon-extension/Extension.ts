@@ -619,8 +619,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     if (state === null) {
       return;
     }
-    const { downloadDialogueOpen, dialogueTriggerButton } =
-      state as OpenSeadragonExtensionState;
+    const { downloadDialogueOpen, dialogueTriggerButton } = state;
 
     // todo: can the overlay visibility be added to the store?
     if (downloadDialogueOpen) {
