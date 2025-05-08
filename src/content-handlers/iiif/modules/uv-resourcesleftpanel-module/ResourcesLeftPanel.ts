@@ -27,7 +27,6 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
 
     super.create();
 
-
     this.setTitle(this.content.title);
 
     /*
@@ -162,7 +161,6 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
 
   resize(): void {
     super.resize();
-    console.log('resources left panel resized')
     this.$views.height(this.$main.height());
     this.$resources.height(this.$main.height());
   }
