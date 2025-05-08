@@ -240,8 +240,8 @@
     }
 
     .leftPanel {
-        left: 0;
         right: auto;
+        left: 0;
         transform: translateX(-100%);
 
         .md-mediaquery({
@@ -252,13 +252,14 @@
 
     .leftPanel.open {
         left: 0;
-        right: 2em;
         transform: none;
+        width: min(95%, 25rem);
 
         .md-mediaquery({
             transition-property: none;
             left: initial;
             right: initial;
+            width: auto;
         });
     }
 
@@ -274,8 +275,8 @@
     }
 
     .rightPanel.open {
-        
         transform: none;
+        width: min(95%, 30rem);
 
         .md-mediaquery({
             transition-property: none;
