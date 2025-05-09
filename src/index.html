@@ -244,6 +244,16 @@
             </button>
           </div>
         </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Custom Configuration</h2>
+          <textarea id="customConfig" rows="5" class="w-full"></textarea>
+          <div class="mt-2">
+            <button id="setConfigButton" class="controls-button">
+              Apply Configurations
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="youTubeTab" class="hidden controls-tab-content">
@@ -399,6 +409,10 @@
           "#youtube_setDurationButton"
         );
 
+        // config controls
+        var $customConfig = document.getElementById("customConfig");
+        var $setConfigButton = document.getElementById("setConfigButton");
+        
         var annotations = [];
         var urlAdapter;
 
@@ -511,6 +525,10 @@
           });
         }
 
+        function setConfig() {
+          // The configs are loaded as part of the IIIF initialization.
+          activateIIIFTab();
+        }
         $iiifManifestIdSelect.onchange = function() {
           var $selectedOption = document.querySelector(
             "#iiifManifestIdSelect option:checked"
@@ -583,6 +601,9 @@
           setAnnotations();
         };
 
+        $setConfigButton.onclick = function() {
+          setConfig();
+        };
         // youtube inputs
 
         $youtube_mutedCheckbox.onclick = function(e) {
@@ -727,6 +748,18 @@
                 },
               },
             });
+          });
+
+          // apply custom configs from the form
+          uv.on("configure", function({ config, cb}) {
+            try {
+              if ($customConfig.value.length > 0) {
+                var customConfig = JSON.parse($customConfig.value);
+                cb(customConfig);
+              }
+            } catch (e) {
+              console.error("Could not process user-provided JSON configuration.");
+            }
           });
 
           uv.on("targetChange", function(target) {
