@@ -366,5 +366,9 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
 
   resize(): void {
     super.resize();
+
+    setTimeout(() => {
+      this.$element.width("100%");
+    }, 1);
   }
 }
