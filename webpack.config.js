@@ -1,7 +1,9 @@
+const path = require("node:path");
 const webpack = require("webpack");
-const pkg = require("./package.json");
 const CopyPlugin = require("copy-webpack-plugin");
-const path = require("path");
+
+const pkg = require("./package.json");
+const { UVTranslationTypePlugin } = require("./webpack-type-generator-plugins.ts");
 
 function resolvePath(p) {
   return path.resolve(__dirname, p);
@@ -78,6 +80,7 @@ const config = [
       ],
     },
     plugins: [
+      new UVTranslationTypePlugin(),
       new webpack.EnvironmentPlugin({
         PACKAGE_VERSION: pkg.version,
       }),
