@@ -612,6 +612,10 @@
         };
 
         $setConfigButton.onclick = function() {
+          // const accordionContainer = document.getElementById("accordion-container");
+          // if (accordionContainer) {
+          //   accordionContainer.remove();
+          // }
           setConfig();
         };
         // youtube inputs
@@ -758,7 +762,95 @@
                 },
               },
             });
-          });
+            // console.log("config", config);
+            function createAccordionMenu(config) {
+              const accordionContainer = document.createElement("div");
+              accordionContainer.style.marginTop = "1rem";
+
+              function createAccordionItem(key, value, depth = 0) {
+              const itemContainer = document.createElement("div");
+              itemContainer.style.marginLeft = `${depth * 10}px`;
+
+              const toggleButton = document.createElement("button");
+              toggleButton.textContent = key;
+              toggleButton.style.display = "block";
+              toggleButton.style.marginBottom = "0.5rem";
+              toggleButton.style.cursor = "pointer";
+              toggleButton.style.background = "#f0f0f0";
+              toggleButton.style.border = "1px solid #ccc";
+              toggleButton.style.padding = "0.5rem";
+              toggleButton.style.textAlign = "left";
+
+              const contentContainer = document.createElement("div");
+              contentContainer.style.display = "none";
+              contentContainer.style.marginLeft = "1rem";
+
+              toggleButton.addEventListener("click", () => {
+                contentContainer.style.display =
+                contentContainer.style.display === "none" ? "block" : "none";
+              });
+
+              if (typeof value === "object" && value !== null) {
+                for (const subKey in value) {
+                contentContainer.appendChild(
+                  createAccordionItem(subKey, value[subKey], depth + 1)
+                );
+                }
+              } else {
+                const valueElement = document.createElement("div");
+                valueElement.textContent = value;
+                valueElement.style.marginBottom = "0.5rem";
+                contentContainer.appendChild(valueElement);
+              }
+
+              itemContainer.appendChild(toggleButton);
+              itemContainer.appendChild(contentContainer);
+
+              return itemContainer;
+              }
+
+              for (const key in config) {
+              accordionContainer.appendChild(createAccordionItem(key, config[key]));
+              }
+
+              const existingAccordion = document.querySelector("#accordion-container");
+              if (existingAccordion) {
+              existingAccordion.replaceWith(accordionContainer);
+              }
+               else {
+              accordionContainer.id = "accordion-container";
+              document.body.appendChild(accordionContainer);
+              }
+            }
+
+            function mergeConfigs(baseConfig, customConfig) {
+              for (const key in customConfig) {
+              if (
+                typeof customConfig[key] === "object" &&
+                customConfig[key] !== null &&
+                !Array.isArray(customConfig[key])
+              ) {
+                if (!baseConfig[key]) {
+                baseConfig[key] = {};
+                }
+                mergeConfigs(baseConfig[key], customConfig[key]);
+              } else {
+                baseConfig[key] = customConfig[key];
+              }
+              }
+            }
+
+            if ($customConfig.value.length > 0) {
+              try {
+              const customConfig = JSON.parse($customConfig.value);
+              mergeConfigs(config, customConfig);
+              } catch (e) {
+              console.error("Could not parse custom config");
+              }
+            }
+
+            createAccordionMenu(config);
+            });
 
           // apply custom configs from the form
           uv.on("configure", function({ config, cb}) {
@@ -766,11 +858,40 @@
               if ($customConfig.value.length > 0) {
                 var customConfig = JSON.parse($customConfig.value);
                 cb(customConfig);
+                // console.log("customConfig", customConfig);
+                // createAccordionMenu(customConfig);
               }
             } catch (e) {
-              console.error("Could not process user-provided JSON configuration.");
+              console.error("Could not parse custom config");
             }
           });
+
+          // function printConfigTree(config) {
+          //   function traverseTree(node, depth = 0) {
+          //     const indent = "  ".repeat(depth);
+          //     if (typeof node === "object" && node !== null) {
+          //       for (const key in node) {
+          //         console.log(`${indent}- ${key}:`);
+          //         traverseTree(node[key], depth + 1);
+          //       }
+          //     } else {
+          //       console.log(`${indent}- ${node}`);
+          //     }
+          //   }
+
+          //   try {
+          //     const parsedConfig = typeof config === "string" ? JSON.parse(config) : config;
+          //     console.log("Config Tree:");
+          //     traverseTree(parsedConfig);
+          //   } catch (error) {
+          //     console.error("Invalid JSON format:", error);
+          //   }
+          // }
+
+          // // Example usage
+          // uv.on("configure", function({ config }) {
+          //   printConfigTree(config);
+          // });
 
           uv.on("targetChange", function(target) {
             $iiif_target.value = target;
