@@ -108,6 +108,9 @@ export type Options = {
 
   /** Controls whether to have animations or not */
   reducedAnimation?: boolean;
+
+  /** A default animation duration */
+  animationDuration?: number;
 };
 
 type Locale = {
@@ -203,6 +206,10 @@ export type FooterPanelContent = {
   feedback: string;
   fullScreen: string;
   moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
   open: string;
   share: string;
 };
@@ -245,6 +252,8 @@ type SettingsDialogue = ModuleConfig & {
 };
 
 export type ShareDialogueOptions = DialogueOptions & {
+  /** Determines if copy buttons are enabled */
+  copyToClipboardEnabled: boolean;
   /** Determines if embed is enabled */
   embedEnabled: boolean;
   /** Set host for embed code (default: window.location.hostname) */
@@ -266,12 +275,15 @@ export type ShareDialogueOptions = DialogueOptions & {
 };
 
 export type ShareDialogueContent = DialogueContent & {
+  copyBtn: string;
+  copyToClipboard: string;
   customSize: string;
   embed: string;
   embedInstructions: string;
   height: string;
   iiif: string;
   share: string;
+  shareLink: string;
   shareInstructions: string;
   size: string;
   width: string;

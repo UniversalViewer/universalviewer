@@ -137,6 +137,8 @@ export class Dialogue<
   }
 
   open(triggerButton?: HTMLElement): void {
+    this.extensionHost.publish(IIIFEvents.CLOSE_ACTIVE_DIALOGUE);
+
     this.$element.attr("aria-hidden", "false");
     this.$element.show();
 

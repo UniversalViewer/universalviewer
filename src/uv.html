@@ -38,11 +38,11 @@
         if (configUrl) {
           uv.on("configure", function({ config, cb }) {
             cb(
-              new Promise(function (resolve) {
-                fetch(configUrl).then(function (response) {
-                  resolve(response.json());
-                });
-              })
+              // new Promise(function (resolve) {
+              //   fetch(configUrl).then(function (response) {
+              //     resolve(response.json());
+              //   });
+              // })
             );
           })
         }

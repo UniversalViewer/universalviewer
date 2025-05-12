@@ -9,6 +9,8 @@ import {
   SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
+  FooterPanelContent,
+  FooterPanelOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
 type AVCenterPanelOptions = CenterPanelOptions & {
@@ -70,11 +72,30 @@ type AVSettingsDialogue = ModuleConfig & {
   content: AVSettingsDialogueContent;
 };
 
+type MobileFooterPanelOptions = FooterPanelOptions & {};
+
+type MobileFooterPanelContent = FooterPanelContent & {
+  rotateRight: string;
+  moreInfo: string;
+  openLeftPanel: string;
+  closeLeftPanel: string;
+  openRightPanel: string;
+  closeRightPanel: string;
+  zoomIn: string;
+  zoomOut: string;
+};
+
+type MobileFooterPanel = ModuleConfig & {
+  options: MobileFooterPanelOptions;
+  content: MobileFooterPanelContent;
+};
+
 type Modules = {
   avCenterPanel: AVCenterPanel;
   downloadDialogue: AVDownloadDialogue;
   shareDialogue: AVShareDialogue;
   settingsDialogue: AVSettingsDialogue;
+  mobileFooterPanel: MobileFooterPanel;
 };
 
 export type Config = BaseConfig & {

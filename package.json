@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.1.0",
+  "version": "4.2.0-rc3",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=18",
@@ -25,7 +25,10 @@
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
     "docs": "typedoc --plugin typedoc-plugin-missing-exports ; echo docs.universalviewer.io > docs/CNAME",
     "test": "jest",
-    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es"
+    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
+    "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
+    "findMissingTranslations": "node scripts/validate_locale.ts missingTranslations",
+    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings"
   },
   "repository": {
     "type": "git",
@@ -90,7 +93,7 @@
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/iiif-gallery-component": "^1.1.22",
     "@iiif/iiif-metadata-component": "^1.2.1",
-    "@iiif/iiif-tree-component": "2.0.6",
+    "@iiif/iiif-tree-component": "^2.0.7",
     "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
@@ -101,7 +104,7 @@
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-less": "^1.1.5",
     "esbuild-plugin-svg": "^0.1.0",
     "jquery": "3.5.0",
@@ -109,8 +112,8 @@
     "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.2.21",
     "mediaelement": "4.2.15",
-    "mediaelement-plugins": "2.5.1",
-    "openseadragon": "4.1.1",
+    "mediaelement-plugins": "5.0.0",
+    "openseadragon": "4.0.0",
     "pdfjs-dist": "3.11.174",
     "pdfobject": "2.3.0",
     "react": "^19.0.0",

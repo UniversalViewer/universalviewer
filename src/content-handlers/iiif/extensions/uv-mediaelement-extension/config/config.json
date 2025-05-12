@@ -70,10 +70,13 @@
         "instructionsEnabled": false,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "copyToClipboardEnabled": true
       },
       "content": {
         "close": "$close",
+        "copyBtn": "$copyBtn",
+        "copyToClipboard": "$copyToClipboard",
         "customSize": "custom",
         "embed": "Embed",
         "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
@@ -81,6 +84,7 @@
         "iiif": "IIIF Manifest",
         "share": "Share",
         "shareInstructions": "To share this item, copy the URL below.",
+        "shareLink": "$shareLink",
         "size": "Size:",
         "width": "Width",
         "shareUrl": "$shareUrl"
@@ -108,7 +112,11 @@
         "fullScreen": "$fullScreen",
         "moreInfo": "$moreInfo",
         "open": "$open",
-        "share": "$share"
+        "share": "$share",
+        "openLeftPanel": "$openLeftPanel",
+        "closeLeftPanel": "$closeLeftPanel",
+        "openRightPanel": "$openRightPanel",
+        "closeRightPanel": "$closeRightPanel"
       }
     },
     "genericDialogue": {

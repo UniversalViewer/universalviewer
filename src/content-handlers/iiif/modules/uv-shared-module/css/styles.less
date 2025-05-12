@@ -18,6 +18,14 @@
 @import 'lg';
 @import 'xl';
 
+:root {
+    --uv-grid-left-width-open: 271px;
+    --uv-grid-right-width-open: 271px;
+
+    --uv-grid-left-width: 30px;
+    --uv-grid-main-width: minmax(0, 1fr);
+    --uv-grid-right-width: 30px;
+}
 
 .hidden {
     .hidden();
@@ -100,20 +108,182 @@
         background: @body-bg; // important, otherwise you see two spinners
     }
 
-    .leftPanel {
-        position: absolute;
-        background: @panel-dark-bg;
-        border: @panel-border;
+    .mainPanel {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+
+        .md-mediaquery({
+            padding: 0.5rem;
+            display: grid;
+            grid-template-columns: 
+                [left] var(--uv-grid-left-width) 
+                [center] var(--uv-grid-main-width)
+                [right] var(--uv-grid-right-width);
+            grid-template-areas: "left center right";
+
+            transition-property: grid-template-columns;
+            transition-timing-function: linear;
+            transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
+        });
+    }
+
+    .mainPanel.leftPanelOpen {
+        --uv-grid-left-width: var(--uv-grid-left-width-open);
+    }
+
+    .mainPanel.rightPanelOpen {
+        --uv-grid-right-width: var(--uv-grid-right-width-open);
+    }
+
+    .mainPanel.leftPanelOpenFull {
+        --uv-grid-left-width: 100%;
+        --uv-grid-main-width: 0;
+        --uv-grid-right-width: 0;
+
+        transition-property: grid-template-columns;
+        transition-timing-function: linear;
+        transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
     }
 
     .centerPanel {
         position: absolute;
+        overflow: hidden;
+        width: 100%;
+
+        .md-mediaquery({
+            z-index: 15;
+            grid-area: center;
+        });
     }
 
-    .rightPanel {
+    .leftPanel, .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
+
+        overflow: hidden;
+        z-index: 20;
+        
+        transition-property: all;
+        transition-timing-function: linear;
+        transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
+
+        position: absolute;
+        top: calc(5em + 8px);
+        right: 0;
+        bottom: 2em;
+        left: 0;
+
+        width: 100%;
+        height: auto;
+
+        .md-mediaquery({
+            display: block;
+            position: relative;
+
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            width: auto;
+            height: auto;
+        });
+
+        // by default top and main are shown, as on mobile the panel is transformed to off-screen
+        // but on md they're hidden, just in case
+        .top,
+        .main {
+            display: block;
+
+            .md-mediaquery({
+                display: none;
+            });
+        }
+
+        // by default closed is hidden unless on md and up
+        // when it serves as a tab to click
+        .closed {
+            display: none;
+
+            .md-mediaquery({
+                display: block;
+            });
+        }
+
+        // open-finished hides the .closed tab on md+
+        &.open-finished {
+            
+            .closed {
+                display: none;
+
+                .md-mediaquery({
+                    display: none;
+                });
+            }
+        }
+
+        // only when the container has open & open-finished can top and main display on md+
+        // this prevents the content getting squished when the panels contract when the grid changes
+        &.open.open-finished {
+            .md-mediaquery({
+                .top,
+                .main {
+                    display: block;
+                }
+                .closed {
+                    display: none;
+                }
+            });
+        }
+    }
+
+    .leftPanel {
+        right: auto;
+        left: 0;
+        transform: translateX(-100%);
+
+        .md-mediaquery({
+            grid-area: left;
+            transform: none;
+        });
+    }
+
+    .leftPanel.open {
+        left: 0;
+        transform: none;
+        width: min(95%, 25rem);
+
+        .md-mediaquery({
+            transition-property: none;
+            left: initial;
+            right: initial;
+            width: auto;
+        });
+    }
+
+    .rightPanel {
+        right: 0;
+        left: auto;
+        transform: translateX(100%);
+        
+        .md-mediaquery({
+            grid-area: right;
+            transform: none;
+        });
+    }
+
+    .rightPanel.open {
+        transform: none;
+        width: min(95%, 30rem);
+
+        .md-mediaquery({
+            transition-property: none;
+            left: initial;
+            right: initial;
+            width: auto;
+        });
     }
 
     .footerPanel {
