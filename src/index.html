@@ -248,6 +248,10 @@
         <div class="controls-group">
           <h2 class="controls-title">Custom Configuration</h2>
           <textarea id="customConfig" rows="5" class="w-full"></textarea>
+            <div class="mt-2">
+              <input type="checkbox" id="clearStorageCheckbox" />
+              <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
+            </div>
           <div class="mt-2">
             <button id="setConfigButton" class="controls-button">
               Apply Configurations
@@ -526,8 +530,14 @@
         }
 
         function setConfig() {
-          // The configs are loaded as part of the IIIF initialization.
-          activateIIIFTab();
+            // Test if the "Clear saved viewer state" checkbox is checked
+            const clearStorage = document.getElementById("clearStorageCheckbox").checked;
+            if (clearStorage) {
+              localStorage.clear();
+              sessionStorage.clear();
+            }
+
+            activateIIIFTab();
         }
         $iiifManifestIdSelect.onchange = function() {
           var $selectedOption = document.querySelector(
