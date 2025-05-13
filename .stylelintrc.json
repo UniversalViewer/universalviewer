@@ -1,0 +1,9 @@
+{
+  "customSyntax": "postcss-less",
+  "extends": ["stylelint-config-standard-less"],
+  "rules": {
+    "block-no-empty": true,
+    "at-rule-no-unknown": null,
+    "less/color-no-invalid-hex": null
+  }
+}
