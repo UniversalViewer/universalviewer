@@ -8,7 +8,7 @@ import { Bools } from "@edsilv/utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class CenterPanel<
-  T extends BaseConfig["modules"]["centerPanel"]
+  T extends BaseConfig["modules"]["centerPanel"],
 > extends BaseView<T> {
   title: string | null;
   subtitle: string | null;

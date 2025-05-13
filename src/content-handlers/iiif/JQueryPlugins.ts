@@ -196,16 +196,17 @@ export default function jqueryPlugins($) {
     let maxTabIndex: number = 0;
     let $elementWithGreatestTabIndex: JQuery | null = null;
 
-    $self
-      .find("*:visible[tabindex]")
-      .each(function (index: number, el: Element) {
-        const $el: JQuery = $(el);
-        const tabIndex: number = parseInt($el.attr("tabindex"));
-        if (tabIndex > maxTabIndex) {
-          maxTabIndex = tabIndex;
-          $elementWithGreatestTabIndex = $el;
-        }
-      });
+    $self.find("*:visible[tabindex]").each(function (
+      index: number,
+      el: Element
+    ) {
+      const $el: JQuery = $(el);
+      const tabIndex: number = parseInt($el.attr("tabindex"));
+      if (tabIndex > maxTabIndex) {
+        maxTabIndex = tabIndex;
+        $elementWithGreatestTabIndex = $el;
+      }
+    });
 
     return $elementWithGreatestTabIndex;
   };
