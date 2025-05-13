@@ -258,6 +258,19 @@
             </button>
           </div>
         </div>
+
+        <div class="controls-group">
+          <h2 class="controls-title">Configuration builder</h2>
+          <div class="mt-2" id="config-builder">
+            
+          </div>
+          <div class="mt-2">
+            <button id="buildConfigButton" class="controls-button">
+              Build Configuration
+            </button>
+          </div>
+        </div>
+        
       </div>
 
       <div id="youTubeTab" class="hidden controls-tab-content">
@@ -739,27 +752,27 @@
           });
 
           // test inline config, enable doubleclick annotation
-          uv.on("configure", function({ config, cb }) {
+            uv.on("configure", function({ config, cb }) {
             cb({
               modules: {
-                modelViewerCenterPanel: {
-                  options: {
-                    doubleClickAnnotationEnabled: true,
-                  },
+              modelViewerCenterPanel: {
+                options: {
+                doubleClickAnnotationEnabled: true,
                 },
-                avCenterPanel: {
-                  options: {
-                    // autoAdvanceRanges: false,
-                    // limitToRange: true,
-                    enableFastRewind: true,
-                    enableFastForward: true,
-                  },
+              },
+              avCenterPanel: {
+                options: {
+                // autoAdvanceRanges: false,
+                // limitToRange: true,
+                enableFastRewind: true,
+                enableFastForward: true,
                 },
-                openSeadragonCenterPanel: {
-                  options: {
-                    doubleClickAnnotationEnabled: true,
-                  },
+              },
+              openSeadragonCenterPanel: {
+                options: {
+                doubleClickAnnotationEnabled: true,
                 },
+              },
               },
             });
             // console.log("config", config);
@@ -776,31 +789,56 @@
               toggleButton.style.display = "block";
               toggleButton.style.marginBottom = "0.5rem";
               toggleButton.style.cursor = "pointer";
-              toggleButton.style.background = "#f0f0f0";
-              toggleButton.style.border = "1px solid #ccc";
-              toggleButton.style.padding = "0.5rem";
+              toggleButton.style.backgroundColor = "Canvas";
+              toggleButton.style.border = "1px solid";
+              toggleButton.style.paddingInline = "0.75rem"; /* px-3 */
+              toggleButton.style.paddingBlock = "0.5rem"; /* py-2 */
+              toggleButton.style.font = "inherit";
+              toggleButton.style.lineHeight = "24px";
               toggleButton.style.textAlign = "left";
+              toggleButton.style.width = "100%";
 
               const contentContainer = document.createElement("div");
               contentContainer.style.display = "none";
               contentContainer.style.marginLeft = "1rem";
 
               toggleButton.addEventListener("click", () => {
-                contentContainer.style.display =
-                contentContainer.style.display === "none" ? "block" : "none";
+              contentContainer.style.display =
+              contentContainer.style.display === "none" ? "block" : "none";
               });
 
               if (typeof value === "object" && value !== null) {
-                for (const subKey in value) {
-                contentContainer.appendChild(
-                  createAccordionItem(subKey, value[subKey], depth + 1)
-                );
-                }
+              for (const subKey in value) {
+              contentContainer.appendChild(
+                createAccordionItem(subKey, value[subKey], depth + 1)
+              );
+              }
               } else {
-                const valueElement = document.createElement("div");
-                valueElement.textContent = value;
-                valueElement.style.marginBottom = "0.5rem";
-                contentContainer.appendChild(valueElement);
+              const valueElement = document.createElement("div");
+              if (typeof value === "boolean") {
+              const select = document.createElement("select");
+              const trueOption = document.createElement("option");
+              trueOption.value = "true";
+              trueOption.textContent = "true";
+              const falseOption = document.createElement("option");
+              falseOption.value = "false";
+              falseOption.textContent = "false";
+
+              select.appendChild(trueOption);
+              select.appendChild(falseOption);
+              select.value = value.toString();
+              select.style.width = "50%"; // Set select box width to match input box
+              valueElement.appendChild(select);
+              } else {
+              const input = document.createElement("input");
+              input.type = "text";
+              input.value = value;
+              input.style.width = "50%"; // Ensure input box width is consistent
+              valueElement.appendChild(input);
+              }
+              valueElement.style.marginBottom = "0.5rem";
+              valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
+              contentContainer.appendChild(valueElement);
               }
 
               itemContainer.appendChild(toggleButton);
@@ -813,29 +851,26 @@
               accordionContainer.appendChild(createAccordionItem(key, config[key]));
               }
 
-              const existingAccordion = document.querySelector("#accordion-container");
-              if (existingAccordion) {
-              existingAccordion.replaceWith(accordionContainer);
-              }
-               else {
-              accordionContainer.id = "accordion-container";
-              document.body.appendChild(accordionContainer);
+              const configBuilder = document.querySelector("#config-builder");
+              if (configBuilder) {
+              configBuilder.innerHTML = ""; // Clear existing content
+              configBuilder.appendChild(accordionContainer);
               }
             }
 
             function mergeConfigs(baseConfig, customConfig) {
               for (const key in customConfig) {
               if (
-                typeof customConfig[key] === "object" &&
-                customConfig[key] !== null &&
-                !Array.isArray(customConfig[key])
+              typeof customConfig[key] === "object" &&
+              customConfig[key] !== null &&
+              !Array.isArray(customConfig[key])
               ) {
-                if (!baseConfig[key]) {
-                baseConfig[key] = {};
-                }
-                mergeConfigs(baseConfig[key], customConfig[key]);
+              if (!baseConfig[key]) {
+              baseConfig[key] = {};
+              }
+              mergeConfigs(baseConfig[key], customConfig[key]);
               } else {
-                baseConfig[key] = customConfig[key];
+              baseConfig[key] = customConfig[key];
               }
               }
             }
@@ -865,33 +900,6 @@
               console.error("Could not parse custom config");
             }
           });
-
-          // function printConfigTree(config) {
-          //   function traverseTree(node, depth = 0) {
-          //     const indent = "  ".repeat(depth);
-          //     if (typeof node === "object" && node !== null) {
-          //       for (const key in node) {
-          //         console.log(`${indent}- ${key}:`);
-          //         traverseTree(node[key], depth + 1);
-          //       }
-          //     } else {
-          //       console.log(`${indent}- ${node}`);
-          //     }
-          //   }
-
-          //   try {
-          //     const parsedConfig = typeof config === "string" ? JSON.parse(config) : config;
-          //     console.log("Config Tree:");
-          //     traverseTree(parsedConfig);
-          //   } catch (error) {
-          //     console.error("Invalid JSON format:", error);
-          //   }
-          // }
-
-          // // Example usage
-          // uv.on("configure", function({ config }) {
-          //   printConfigTree(config);
-          // });
 
           uv.on("targetChange", function(target) {
             $iiif_target.value = target;
