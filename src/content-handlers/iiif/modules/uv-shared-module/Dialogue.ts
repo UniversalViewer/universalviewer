@@ -5,7 +5,7 @@ import { Maths } from "@edsilv/utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class Dialogue<
-  T extends BaseConfig["modules"]["dialogue"],
+  T extends BaseConfig["modules"]["dialogue"]
 > extends BaseView<T> {
   allowClose: boolean = true;
   isActive: boolean = false;

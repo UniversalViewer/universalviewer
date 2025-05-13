@@ -11,7 +11,7 @@ import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class HeaderPanel<
-  T extends BaseConfig["modules"]["headerPanel"],
+  T extends BaseConfig["modules"]["headerPanel"]
 > extends BaseView<T> {
   $centerOptions: JQuery;
   $helpButton: JQuery;

@@ -1,6 +1,6 @@
 html.ios {
-  --ion-default-font:
-    -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+  --ion-default-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Roboto", sans-serif;
 }
 html.md {
   --ion-default-font: "Roboto", "Helvetica Neue", sans-serif;
@@ -212,12 +212,9 @@ html.plt-ios.plt-pwa {
 }
 .md .menu-content-push,
 .md .menu-content-reveal {
-  -webkit-box-shadow:
-    0 2px 22px 0 rgba(0, 0, 0, 0.09),
+  -webkit-box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09),
     4px 0 16px 0 rgba(0, 0, 0, 0.18);
-  box-shadow:
-    0 2px 22px 0 rgba(0, 0, 0, 0.09),
-    4px 0 16px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09), 4px 0 16px 0 rgba(0, 0, 0, 0.18);
 }
 audio,
 canvas,

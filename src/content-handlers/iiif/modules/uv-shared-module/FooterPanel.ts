@@ -6,7 +6,7 @@ import { Events } from "../../../../Events";
 import { BaseConfig } from "../../BaseConfig";
 
 export class FooterPanel<
-  T extends BaseConfig["modules"]["footerPanel"],
+  T extends BaseConfig["modules"]["footerPanel"]
 > extends BaseView<T> {
   $feedbackButton: JQuery;
   $bookmarkButton: JQuery;

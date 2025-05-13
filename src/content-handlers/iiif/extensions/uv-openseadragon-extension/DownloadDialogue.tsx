@@ -450,8 +450,9 @@ const DownloadDialogue = ({
 
   function getCurrentViewLabel() {
     let label: string = content.currentViewAsJpg;
-    const dimensions: CroppedImageDimensions | null =
-      getCroppedImageDimensions(getSelectedCanvas());
+    const dimensions: CroppedImageDimensions | null = getCroppedImageDimensions(
+      getSelectedCanvas()
+    );
 
     // dimensions
     if (dimensions) {
@@ -663,8 +664,9 @@ const DownloadDialogue = ({
               <li className="option single">
                 <button
                   onClick={() => {
-                    const imageUri: string | null =
-                      getConfinedImageUri(getSelectedCanvas());
+                    const imageUri: string | null = getConfinedImageUri(
+                      getSelectedCanvas()
+                    );
 
                     if (imageUri) {
                       window.open(imageUri);
