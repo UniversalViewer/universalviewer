@@ -867,11 +867,15 @@
                 input.style.width = "50%"; // Ensure input box width is consistent
                 input.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
 
-                // Add event listener to update #customConfig on change
-                input.addEventListener("input", (event) => {
+                const updateButton = document.createElement("button");
+                updateButton.textContent = "Update";
+                updateButton.style.marginLeft = "0.5rem";
+
+                // Add event listener to update #customConfig on button click
+                updateButton.addEventListener("click", () => {
                 const customConfigTextarea = document.getElementById("customConfig");
                 const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
-                const pathParts = event.target.id.replace(/^cb-/, "").split("^");
+                const pathParts = input.id.replace(/^cb-/, "").split("^");
                 let configPointer = currentConfig;
 
                 // Traverse the path to set the value
@@ -882,12 +886,13 @@
                   configPointer = configPointer[pathParts[i]];
                 }
 
-                configPointer[pathParts[pathParts.length - 1]] = event.target.value;
+                configPointer[pathParts[pathParts.length - 1]] = input.value;
 
                 customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
                 });
 
                 valueElement.appendChild(input);
+                valueElement.appendChild(updateButton);
               }
               valueElement.style.marginBottom = "0.5rem";
               valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
