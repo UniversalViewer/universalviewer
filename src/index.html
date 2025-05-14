@@ -752,202 +752,203 @@
           });
 
           // test inline config, enable doubleclick annotation
-            uv.on("configure", function({ config, cb }) {
+          uv.on("configure", function({ config, cb }) {
             cb({
               modules: {
-              modelViewerCenterPanel: {
-                options: {
-                doubleClickAnnotationEnabled: true,
+                modelViewerCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true,
+                  },
                 },
-              },
-              avCenterPanel: {
-                options: {
-                // autoAdvanceRanges: false,
-                // limitToRange: true,
-                enableFastRewind: true,
-                enableFastForward: true,
+                avCenterPanel: {
+                  options: {
+                    // autoAdvanceRanges: false,
+                    // limitToRange: true,
+                    enableFastRewind: true,
+                    enableFastForward: true,
+                  },
                 },
-              },
-              openSeadragonCenterPanel: {
-                options: {
-                doubleClickAnnotationEnabled: true,
+                openSeadragonCenterPanel: {
+                  options: {
+                    doubleClickAnnotationEnabled: true,
+                  },
                 },
-              },
               },
             });
+
             // console.log("config", config);
-            function createAccordionMenu(config) {
+            function createConfigBuilderAccordion(config) {
               const accordionContainer = document.createElement("div");
 
               function createAccordionItem(key, value, depth = 0, path = "") {
-              const itemContainer = document.createElement("div");
-              itemContainer.style.marginLeft = `${depth * 10}px`;
+                const itemContainer = document.createElement("div");
+                itemContainer.style.marginLeft = `${depth * 10}px`;
 
-              const toggleButton = document.createElement("button");
-              toggleButton.textContent = key;
-              toggleButton.style.display = "block";
-              toggleButton.style.marginBottom = "0.5rem";
-              toggleButton.style.cursor = "pointer";
-              toggleButton.style.backgroundColor = "Canvas";
-              toggleButton.style.border = "1px solid";
-              toggleButton.style.paddingInline = "0.75rem"; /* px-3 */
-              toggleButton.style.paddingBlock = "0.5rem"; /* py-2 */
-              toggleButton.style.font = "inherit";
-              toggleButton.style.lineHeight = "24px";
-              toggleButton.style.textAlign = "left";
-              toggleButton.style.width = "100%";
-              toggleButton.style.backgroundImage =
-                "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
-              toggleButton.style.backgroundPosition = "right 0.5rem center";
-              toggleButton.style.backgroundRepeat = "no-repeat";
-              toggleButton.style.backgroundSize = "1.5em 1.5em";
+                const toggleButton = document.createElement("button");
+                toggleButton.textContent = key;
+                toggleButton.style.display = "block";
+                toggleButton.style.marginBottom = "0.5rem";
+                toggleButton.style.cursor = "pointer";
+                toggleButton.style.backgroundColor = "Canvas";
+                toggleButton.style.border = "1px solid";
+                toggleButton.style.paddingInline = "0.75rem";
+                toggleButton.style.paddingBlock = "0.5rem";
+                toggleButton.style.font = "inherit";
+                toggleButton.style.lineHeight = "24px";
+                toggleButton.style.textAlign = "left";
+                toggleButton.style.width = "100%";
+                toggleButton.style.backgroundImage =
+                  "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
+                toggleButton.style.backgroundPosition = "right 0.5rem center";
+                toggleButton.style.backgroundRepeat = "no-repeat";
+                toggleButton.style.backgroundSize = "1.5em 1.5em";
 
-              const contentContainer = document.createElement("div");
-              contentContainer.style.display = "none";
-              contentContainer.style.marginLeft = "1rem";
+                const contentContainer = document.createElement("div");
+                contentContainer.style.display = "none";
+                contentContainer.style.marginLeft = "1rem";
 
-              toggleButton.addEventListener("click", () => {
-              const isHidden = contentContainer.style.display === "none";
-              contentContainer.style.display = isHidden ? "block" : "none";
-                toggleButton.style.backgroundImage = isHidden
-                ? "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e')"
-                : "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
-              });
-
-              const currentPath = path ? `${path}^${key}` : key;
-
-              if (typeof value === "object" && value !== null) {
-              for (const subKey in value) {
-              contentContainer.appendChild(
-              createAccordionItem(subKey, value[subKey], depth + 1, currentPath)
-              );
-              }
-              } else {
-              const valueElement = document.createElement("div");
-              if (typeof value === "boolean") {
-                const select = document.createElement("select");
-                const trueOption = document.createElement("option");
-                trueOption.value = "true";
-                trueOption.textContent = "true";
-                const falseOption = document.createElement("option");
-                falseOption.value = "false";
-                falseOption.textContent = "false";
-
-                select.appendChild(trueOption);
-                select.appendChild(falseOption);
-                select.value = value.toString();
-                select.style.width = "50%"; // Set select box width to match input box
-                select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
-
-                // Add event listener to update #customConfig on change
-                select.addEventListener("change", (event) => {
-                const customConfigTextarea = document.getElementById("customConfig");
-                const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
-                const pathParts = event.target.id.replace(/^cb-/, "").split("^");
-                let configPointer = currentConfig;
-
-                // Traverse the path to set the value
-                for (let i = 0; i < pathParts.length - 1; i++) {
-                  if (!configPointer[pathParts[i]]) {
-                  configPointer[pathParts[i]] = {};
-                  }
-                  configPointer = configPointer[pathParts[i]];
-                }
-
-                configPointer[pathParts[pathParts.length - 1]] = event.target.value === "true";
-
-                customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                toggleButton.addEventListener("click", () => {
+                  const isHidden = contentContainer.style.display === "none";
+                  contentContainer.style.display = isHidden ? "block" : "none";
+                  toggleButton.style.backgroundImage = isHidden
+                    ? "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e')"
+                    : "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
                 });
 
-              valueElement.appendChild(select);
-              } else {
-                const input = document.createElement("input");
-                input.type = "text";
-                input.value = value;
-                input.style.width = "50%"; // Ensure input box width is consistent
-                input.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
+                const currentPath = path ? `${path}^${key}` : key;
 
-                const updateButton = document.createElement("button");
-                updateButton.textContent = "Update";
-                updateButton.style.marginLeft = "0.5rem";
-
-                // Add event listener to update #customConfig on button click
-                updateButton.addEventListener("click", () => {
-                const customConfigTextarea = document.getElementById("customConfig");
-                const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
-                const pathParts = input.id.replace(/^cb-/, "").split("^");
-                let configPointer = currentConfig;
-
-                // Traverse the path to set the value
-                for (let i = 0; i < pathParts.length - 1; i++) {
-                  if (!configPointer[pathParts[i]]) {
-                  configPointer[pathParts[i]] = {};
+                if (typeof value === "object" && value !== null) {
+                  for (const subKey in value) {
+                    contentContainer.appendChild(
+                      createAccordionItem(subKey, value[subKey], depth + 1, currentPath)
+                    );
                   }
-                  configPointer = configPointer[pathParts[i]];
+                } else {
+                  const valueElement = document.createElement("div");
+                  if (typeof value === "boolean") {
+                    const select = document.createElement("select");
+                    const trueOption = document.createElement("option");
+                    trueOption.value = "true";
+                    trueOption.textContent = "true";
+                    const falseOption = document.createElement("option");
+                    falseOption.value = "false";
+                    falseOption.textContent = "false";
+
+                    select.appendChild(trueOption);
+                    select.appendChild(falseOption);
+                    select.value = value.toString();
+                    select.style.width = "50%"; // Set select box width to match input box
+                    select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
+
+                    // Add event listener to update #customConfig on change
+                    select.addEventListener("change", (event) => {
+                      const customConfigTextarea = document.getElementById("customConfig");
+                      const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
+                      const pathParts = event.target.id.replace(/^cb-/, "").split("^");
+                      let configPointer = currentConfig;
+
+                      // Traverse the path to set the value
+                      for (let i = 0; i < pathParts.length - 1; i++) {
+                        if (!configPointer[pathParts[i]]) {
+                          configPointer[pathParts[i]] = {};
+                        }
+                        configPointer = configPointer[pathParts[i]];
+                      }
+
+                      configPointer[pathParts[pathParts.length - 1]] = event.target.value === "true";
+
+                      customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                    });
+
+                  valueElement.appendChild(select);
+                } else {
+                  const input = document.createElement("input");
+                  input.type = "text";
+                  input.value = value;
+                  input.style.width = "50%"; // Ensure input box width is consistent
+                  input.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
+
+                  const updateButton = document.createElement("button");
+                  updateButton.textContent = "Update";
+                  updateButton.style.marginLeft = "0.5rem";
+
+                  // Add event listener to update #customConfig on button click
+                  updateButton.addEventListener("click", () => {
+                    const customConfigTextarea = document.getElementById("customConfig");
+                    const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
+                    const pathParts = input.id.replace(/^cb-/, "").split("^");
+                    let configPointer = currentConfig;
+
+                    // Traverse the path to set the value
+                    for (let i = 0; i < pathParts.length - 1; i++) {
+                      if (!configPointer[pathParts[i]]) {
+                        configPointer[pathParts[i]] = {};
+                      }
+                      configPointer = configPointer[pathParts[i]];
+                    }
+
+                    configPointer[pathParts[pathParts.length - 1]] = input.value;
+
+                    customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                  });
+
+                  valueElement.appendChild(input);
+                  valueElement.appendChild(updateButton);
                 }
-
-                configPointer[pathParts[pathParts.length - 1]] = input.value;
-
-                customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
-                });
-
-                valueElement.appendChild(input);
-                valueElement.appendChild(updateButton);
-              }
-              valueElement.style.marginBottom = "0.5rem";
-              valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
-              contentContainer.appendChild(valueElement);
+                valueElement.style.marginBottom = "0.5rem";
+                valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
+                contentContainer.appendChild(valueElement);
               }
 
               itemContainer.appendChild(toggleButton);
               itemContainer.appendChild(contentContainer);
 
-              return itemContainer;
-              }
+                return itemContainer;
+            }
 
-              for (const key in config) {
+            for (const key in config) {
               accordionContainer.appendChild(createAccordionItem(key, config[key]));
-              }
+            }
 
-              const configBuilder = document.querySelector("#config-builder");
-              if (configBuilder) {
+            const configBuilder = document.querySelector("#config-builder");
+            if (configBuilder) {
               configBuilder.innerHTML = ""; // Clear existing content
               configBuilder.appendChild(accordionContainer);
-              }
             }
+          }
 
             function mergeConfigs(baseConfig, customConfig) {
               for (const key in customConfig) {
-              if (
-              typeof customConfig[key] === "object" &&
-              customConfig[key] !== null &&
-              !Array.isArray(customConfig[key])
-              ) {
-              if (!baseConfig[key]) {
-              baseConfig[key] = {};
-              }
-              mergeConfigs(baseConfig[key], customConfig[key]);
-              } else {
-              baseConfig[key] = customConfig[key];
-              }
+                if (
+                  typeof customConfig[key] === "object" &&
+                  customConfig[key] !== null &&
+                  !Array.isArray(customConfig[key])
+                ) {
+                  if (!baseConfig[key]) {
+                    baseConfig[key] = {};
+                  }
+                  mergeConfigs(baseConfig[key], customConfig[key]);
+                } else {
+                  baseConfig[key] = customConfig[key];
+                }
               }
             }
 
             if ($customConfig.value.length > 0) {
               try {
-              const customConfig = JSON.parse($customConfig.value);
-              mergeConfigs(config, customConfig);
+                const customConfig = JSON.parse($customConfig.value);
+                mergeConfigs(config, customConfig);
               } catch (e) {
-              console.error("Could not parse custom config");
+                console.error("Could not parse custom config");
               }
             }
 
             if (config && typeof config === "object") {
-              createAccordionMenu(config);
+              createConfigBuilderAccordion(config);
             } else {
-              console.error("Invalid config object passed to createAccordionMenu:", config);
+              console.error("Invalid config object passed to createConfigBuilderAccordion:", config);
             }
-            });
+          });
 
           // apply custom configs from the form
           uv.on("configure", function({ config, cb}) {
@@ -955,8 +956,6 @@
               if ($customConfig.value.length > 0) {
                 var customConfig = JSON.parse($customConfig.value);
                 cb(customConfig);
-                // console.log("customConfig", customConfig);
-                // createAccordionMenu(customConfig);
               }
             } catch (e) {
               console.error("Could not parse custom config");
@@ -970,8 +969,8 @@
           uv.on("openseadragonExtension.doubleClick", function(e) {
             annotations.push({
               target: e.target,
-              bodyValue: String(annotations.length + 1),
-            });
+                bodyValue: String(annotations.length + 1),
+              });
             $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
@@ -1123,7 +1122,7 @@
             cb(
               new Promise(function(resolve) {
                 fetch(`uv-${type}-config.json`).then(function(response) {
-                  resolve(response.json());
+                    resolve(response.json());
                 });
               })
             );
