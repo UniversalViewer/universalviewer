@@ -256,6 +256,12 @@
             <button id="setConfigButton" class="controls-button">
               Apply Configurations
             </button>
+            <button id="resetConfigButton" class="controls-button">
+              Reset to Default Configuration
+            </button>
+            <script>
+                document.getElementById("resetConfigButton").addEventListener("click", resetConfig);
+            </script>
           </div>
         </div>
 
@@ -625,10 +631,6 @@
         };
 
         $setConfigButton.onclick = function() {
-          // const accordionContainer = document.getElementById("accordion-container");
-          // if (accordionContainer) {
-          //   accordionContainer.remove();
-          // }
           setConfig();
         };
         // youtube inputs
@@ -948,6 +950,12 @@
             } else {
               console.error("Invalid config object passed to createConfigBuilderAccordion:", config);
             }
+          });
+
+          document.getElementById("resetConfigButton").addEventListener("click", function() {
+            document.getElementById("customConfig").value = "";
+            document.getElementById("clearStorageCheckbox").checked = true;
+            setConfig();
           });
 
           // apply custom configs from the form
