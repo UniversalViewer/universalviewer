@@ -796,14 +796,22 @@
               toggleButton.style.lineHeight = "24px";
               toggleButton.style.textAlign = "left";
               toggleButton.style.width = "100%";
+              toggleButton.style.backgroundImage =
+                "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
+              toggleButton.style.backgroundPosition = "right 0.5rem center";
+              toggleButton.style.backgroundRepeat = "no-repeat";
+              toggleButton.style.backgroundSize = "1.5em 1.5em";
 
               const contentContainer = document.createElement("div");
               contentContainer.style.display = "none";
               contentContainer.style.marginLeft = "1rem";
 
               toggleButton.addEventListener("click", () => {
-              contentContainer.style.display =
-              contentContainer.style.display === "none" ? "block" : "none";
+              const isHidden = contentContainer.style.display === "none";
+              contentContainer.style.display = isHidden ? "block" : "none";
+                toggleButton.style.backgroundImage = isHidden
+                ? "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e')"
+                : "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
               });
 
               const currentPath = path ? `${path}^${key}` : key;
@@ -851,13 +859,6 @@
                 customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
                 });
 
-                valueElement.appendChild(select);
-
-              select.appendChild(trueOption);
-              select.appendChild(falseOption);
-              select.value = value.toString();
-              select.style.width = "50%"; // Set select box width to match input box
-              select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
               valueElement.appendChild(select);
               } else {
                 const input = document.createElement("input");
