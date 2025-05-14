@@ -261,14 +261,14 @@
 
         <div class="controls-group">
           <h2 class="controls-title">Configuration builder</h2>
-          <div class="mt-2" id="config-builder">
+          <div id="config-builder">
             
           </div>
-          <div class="mt-2">
+          <!-- <div class="mt-2">
             <button id="buildConfigButton" class="controls-button">
               Build Configuration
             </button>
-          </div>
+          </div> -->
         </div>
         
       </div>
@@ -778,9 +778,8 @@
             // console.log("config", config);
             function createAccordionMenu(config) {
               const accordionContainer = document.createElement("div");
-              accordionContainer.style.marginTop = "1rem";
 
-              function createAccordionItem(key, value, depth = 0) {
+              function createAccordionItem(key, value, depth = 0, path = "") {
               const itemContainer = document.createElement("div");
               itemContainer.style.marginLeft = `${depth * 10}px`;
 
@@ -807,34 +806,87 @@
               contentContainer.style.display === "none" ? "block" : "none";
               });
 
+              const currentPath = path ? `${path}^${key}` : key;
+
               if (typeof value === "object" && value !== null) {
               for (const subKey in value) {
               contentContainer.appendChild(
-                createAccordionItem(subKey, value[subKey], depth + 1)
+              createAccordionItem(subKey, value[subKey], depth + 1, currentPath)
               );
               }
               } else {
               const valueElement = document.createElement("div");
               if (typeof value === "boolean") {
-              const select = document.createElement("select");
-              const trueOption = document.createElement("option");
-              trueOption.value = "true";
-              trueOption.textContent = "true";
-              const falseOption = document.createElement("option");
-              falseOption.value = "false";
-              falseOption.textContent = "false";
+                const select = document.createElement("select");
+                const trueOption = document.createElement("option");
+                trueOption.value = "true";
+                trueOption.textContent = "true";
+                const falseOption = document.createElement("option");
+                falseOption.value = "false";
+                falseOption.textContent = "false";
+
+                select.appendChild(trueOption);
+                select.appendChild(falseOption);
+                select.value = value.toString();
+                select.style.width = "50%"; // Set select box width to match input box
+                select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
+
+                // Add event listener to update #customConfig on change
+                select.addEventListener("change", (event) => {
+                const customConfigTextarea = document.getElementById("customConfig");
+                const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
+                const pathParts = event.target.id.replace(/^cb-/, "").split("^");
+                let configPointer = currentConfig;
+
+                // Traverse the path to set the value
+                for (let i = 0; i < pathParts.length - 1; i++) {
+                  if (!configPointer[pathParts[i]]) {
+                  configPointer[pathParts[i]] = {};
+                  }
+                  configPointer = configPointer[pathParts[i]];
+                }
+
+                configPointer[pathParts[pathParts.length - 1]] = event.target.value === "true";
+
+                customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                });
+
+                valueElement.appendChild(select);
 
               select.appendChild(trueOption);
               select.appendChild(falseOption);
               select.value = value.toString();
               select.style.width = "50%"; // Set select box width to match input box
+              select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
               valueElement.appendChild(select);
               } else {
-              const input = document.createElement("input");
-              input.type = "text";
-              input.value = value;
-              input.style.width = "50%"; // Ensure input box width is consistent
-              valueElement.appendChild(input);
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = value;
+                input.style.width = "50%"; // Ensure input box width is consistent
+                input.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
+
+                // Add event listener to update #customConfig on change
+                input.addEventListener("input", (event) => {
+                const customConfigTextarea = document.getElementById("customConfig");
+                const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
+                const pathParts = event.target.id.replace(/^cb-/, "").split("^");
+                let configPointer = currentConfig;
+
+                // Traverse the path to set the value
+                for (let i = 0; i < pathParts.length - 1; i++) {
+                  if (!configPointer[pathParts[i]]) {
+                  configPointer[pathParts[i]] = {};
+                  }
+                  configPointer = configPointer[pathParts[i]];
+                }
+
+                configPointer[pathParts[pathParts.length - 1]] = event.target.value;
+
+                customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                });
+
+                valueElement.appendChild(input);
               }
               valueElement.style.marginBottom = "0.5rem";
               valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
@@ -884,7 +936,11 @@
               }
             }
 
-            createAccordionMenu(config);
+            if (config && typeof config === "object") {
+              createAccordionMenu(config);
+            } else {
+              console.error("Invalid config object passed to createAccordionMenu:", config);
+            }
             });
 
           // apply custom configs from the form
