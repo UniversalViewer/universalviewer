@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
-import { useInView } from "react-intersection-observer";
 import cx from "classnames";
+import { Thumb } from "manifesto.js";
+import React, { useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 const ThumbImage = ({
   first,
@@ -63,7 +63,7 @@ const ThumbImage = ({
       </div>
       <div className="info">
         <span className="label" title={thumb.label}>
-          {thumb.label}&nbsp;
+          {thumb.label}
         </span>
         {thumb.data.searchResults && (
           <span className="searchResults">{thumb.data.searchResults}</span>
@@ -136,7 +136,11 @@ const Thumbnails = ({
       })}
     >
       {thumbs.map((thumb, index) => (
-        <span key={`thumb-${index}`} id={`thumb-${index}`}>
+        <span
+          key={`thumb-${index}`}
+          id={`thumb-${index}`}
+          className="thumb-container"
+        >
           <ThumbImage
             first={index === firstNonPagedIndex}
             onClick={onClick}
