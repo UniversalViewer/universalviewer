@@ -146,6 +146,28 @@
       .mt-2 {
         margin-top: 0.5rem;
       }
+
+      /* Config builder */
+      
+                .toggleButton {
+                  display: block;
+                  margin-bottom: 0.5rem;
+                  cursor: pointer;
+                  background-color: Canvas;
+                  border: 1px solid;
+                  padding-inline: 0.75rem;
+                  padding-block: 0.5rem;
+                  font: inherit;
+                  line-height: 24px;
+                  text-align: left;
+                  width: 100%;
+                }
+
+                .toggleButtonBackground {
+                  background-position: right 0.5rem center;
+                  background-repeat: no-repeat;
+                  background-size: 1.5em 1.5em;
+                }
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -270,11 +292,6 @@
           <div id="config-builder">
             
           </div>
-          <!-- <div class="mt-2">
-            <button id="buildConfigButton" class="controls-button">
-              Build Configuration
-            </button>
-          </div> -->
         </div>
         
       </div>
@@ -778,6 +795,8 @@
               },
             });
 
+            // config builder 
+
             // console.log("config", config);
             function createConfigBuilderAccordion(config) {
               const accordionContainer = document.createElement("div");
@@ -788,23 +807,10 @@
 
                 const toggleButton = document.createElement("button");
                 toggleButton.textContent = key;
-                toggleButton.style.display = "block";
-                toggleButton.style.marginBottom = "0.5rem";
-                toggleButton.style.cursor = "pointer";
-                toggleButton.style.backgroundColor = "Canvas";
-                toggleButton.style.border = "1px solid";
-                toggleButton.style.paddingInline = "0.75rem";
-                toggleButton.style.paddingBlock = "0.5rem";
-                toggleButton.style.font = "inherit";
-                toggleButton.style.lineHeight = "24px";
-                toggleButton.style.textAlign = "left";
-                toggleButton.style.width = "100%";
-                toggleButton.style.backgroundImage =
-                  "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
-                toggleButton.style.backgroundPosition = "right 0.5rem center";
-                toggleButton.style.backgroundRepeat = "no-repeat";
-                toggleButton.style.backgroundSize = "1.5em 1.5em";
-
+                toggleButton.className = "toggleButton";
+                toggleButton.classList.add("toggleButtonBackground");
+                toggleButton.style.backgroundImage = "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
+                
                 const contentContainer = document.createElement("div");
                 contentContainer.style.display = "none";
                 contentContainer.style.marginLeft = "1rem";
