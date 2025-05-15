@@ -149,25 +149,25 @@
 
       /* Config builder */
       
-                .toggleButton {
-                  display: block;
-                  margin-bottom: 0.5rem;
-                  cursor: pointer;
-                  background-color: Canvas;
-                  border: 1px solid;
-                  padding-inline: 0.75rem;
-                  padding-block: 0.5rem;
-                  font: inherit;
-                  line-height: 24px;
-                  text-align: left;
-                  width: 100%;
-                }
+      .toggleButton {
+        display: block;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        background-color: Canvas;
+        border: 1px solid;
+        padding-inline: 0.75rem;
+        padding-block: 0.5rem;
+        font: inherit;
+        line-height: 24px;
+        text-align: left;
+        width: 100%;
+      }
 
-                .toggleButtonBackground {
-                  background-position: right 0.5rem center;
-                  background-repeat: no-repeat;
-                  background-size: 1.5em 1.5em;
-                }
+      .toggleButtonBackground {
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+      }
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -845,7 +845,7 @@
                     select.appendChild(trueOption);
                     select.appendChild(falseOption);
                     select.value = value.toString();
-                    select.style.width = "50%"; // Set select box width to match input box
+                    select.style.width = "50%";
                     select.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
 
                     // Add event listener to update #customConfig on change
@@ -873,7 +873,7 @@
                   const input = document.createElement("input");
                   input.type = "text";
                   input.value = value;
-                  input.style.width = "50%"; // Ensure input box width is consistent
+                  input.style.width = "50%";
                   input.id = `cb-${currentPath}`; // Set ID based on tree path with prefix
 
                   const updateButton = document.createElement("button");
@@ -904,7 +904,7 @@
                   valueElement.appendChild(updateButton);
                 }
                 valueElement.style.marginBottom = "0.5rem";
-                valueElement.style.marginLeft = `${(depth + 1) * 10}px`; // Indent values
+                valueElement.style.marginLeft = `${(depth + 1) * 10}px`;
                 contentContainer.appendChild(valueElement);
               }
 
@@ -920,7 +920,7 @@
 
             const configBuilder = document.querySelector("#config-builder");
             if (configBuilder) {
-              configBuilder.innerHTML = ""; // Clear existing content
+              configBuilder.innerHTML = "";
               configBuilder.appendChild(accordionContainer);
             }
           }
@@ -950,6 +950,23 @@
                 console.error("Could not parse custom config");
               }
             }
+
+            function sortConfigAlphabetically(config) {
+              if (typeof config !== "object" || config === null) {
+                return config;
+              }
+
+              const sortedConfig = {};
+              const keys = Object.keys(config).sort();
+
+              keys.forEach((key) => {
+                sortedConfig[key] = sortConfigAlphabetically(config[key]);
+              });
+
+              return sortedConfig;
+            }
+
+            config = sortConfigAlphabetically(config);
 
             if (config && typeof config === "object") {
               createConfigBuilderAccordion(config);
