@@ -150,8 +150,9 @@ export class AdjustImageDialogue extends Dialogue<
         this.rememberSettings = settings.rememberSettings;
       }
     }
-    this.shell.$overlays.css("background", "none");
+
     super.open();
+    this.shell.$overlays.css("background", "none");
   }
 
   close(): void {
@@ -173,6 +174,7 @@ export class AdjustImageDialogue extends Dialogue<
       this.extension.updateSettings({ brightnessPercent: 100 });
       this.extension.updateSettings({ saturationPercent: 100 });
     }
+
     this.shell.$overlays.css("background", "");
     super.close();
 
@@ -184,5 +186,7 @@ export class AdjustImageDialogue extends Dialogue<
 
   resize(): void {
     super.resize();
+
+    this.$element.css({ top: 16, left: 16 });
   }
 }
