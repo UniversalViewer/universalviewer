@@ -6,6 +6,10 @@
     "block-no-empty": true,
     "at-rule-no-unknown": null,
     "color-no-invalid-hex": true,
-    "less/color-no-invalid-hex": null
+    "less/color-no-invalid-hex": null,
+    "rule-empty-line-before": null,
+    "selector-class-pattern": null,
+    "declaration-empty-line-before": null,
+    "property-no-vendor-prefix": null
   }
 }
