@@ -10,6 +10,9 @@
   },
   "typescript.check.workspaceVersion": false,
   "typescript.tsdk": "node_modules\\typescript\\lib",
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
   "stylelint.customSyntax": "postcss-less",
   "stylelint.validate": ["css", "less"]
 }
