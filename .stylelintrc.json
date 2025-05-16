@@ -9,7 +9,10 @@
     "less/color-no-invalid-hex": null,
     "rule-empty-line-before": null,
     "selector-class-pattern": null,
+    "selector-id-pattern": null,
     "declaration-empty-line-before": null,
-    "property-no-vendor-prefix": null
+    "property-no-vendor-prefix": null,
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null
   }
 }
