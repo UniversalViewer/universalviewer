@@ -15,16 +15,16 @@
     "source.fixAll": "explicit",
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ],
   "prettier.requireConfig": true,
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "css.validate": false,
-  "less.validate": false,
-  "scss.validate": false,
-  "stylelint.customSyntax": "postcss-less",
-  "stylelint.validate": ["css", "less"]
+  }
 }
