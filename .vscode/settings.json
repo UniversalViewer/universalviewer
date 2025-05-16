@@ -9,5 +9,9 @@
     "**/*.js.map": true
   },
   "typescript.check.workspaceVersion": false,
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.codeActionsOnSave": {
+    "source.sortImports": "never",
+    "source.organizeImports": "never"
+  }
 }
