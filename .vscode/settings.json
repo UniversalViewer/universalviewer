@@ -9,5 +9,7 @@
     "**/*.js.map": true
   },
   "typescript.check.workspaceVersion": false,
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "stylelint.customSyntax": "postcss-less",
+  "stylelint.validate": ["css", "less"]
 }
