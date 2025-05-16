@@ -6,7 +6,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ShareDialogue<
-  T extends BaseConfig["modules"]["shareDialogue"]
+  T extends BaseConfig["modules"]["shareDialogue"],
 > extends Dialogue<T> {
   copyToClipboardEnabled = true;
 
