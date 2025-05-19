@@ -126,6 +126,16 @@
             transition-timing-function: linear;
             transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
         });
+
+        /* hide empty panels */
+
+        &:has(.leftPanel:empty) {
+            --uv-grid-left-width: auto;
+        }
+
+        &:has(.rightPanel:empty) {
+            --uv-grid-right-width: auto;
+        }
     }
 
     .mainPanel.leftPanelOpen {
