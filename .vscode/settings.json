@@ -10,6 +10,10 @@
   },
   "typescript.check.workspaceVersion": false,
   "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.sortImports": "never"
+  },
   "eslint.validate": [
     "typescript",
     "typescriptreact",
