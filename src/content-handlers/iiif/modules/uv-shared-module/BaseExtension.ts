@@ -80,7 +80,8 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   browserDetect: BrowserDetect;
   locales = {};
   defaultConfig: T = {} as any;
-  localeLoaders: Record<string, () => Promise<any>> = {
+  translations: Translations;
+  localeLoaders: Record<string, () => Promise<object>> = {
     "en-GB": () => import("../../../../locales/en-GB.json"),
     "cy-GB": () => import("../../../../locales/cy-GB.json"),
     "fr-FR": () => import("../../../../locales/fr-FR.json"),
@@ -474,28 +475,29 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     }, 1);
   }
 
-  public async loadConfig(locale: string, extension: string): Promise<any> {
-    return this.translateLocale(this.defaultConfig, locale);
-  }
+  public async translateConfig(locale: string): Promise<any> {
+    const loader = this.localeLoaders[locale] || this.localeLoaders["en-GB"];
+    const localeStrings = (await loader()) || {};
 
-  private async translateLocale(
-    config: Object,
-    locale: String
-  ): Promise<Object> {
-    let loader =
-      this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
-    let localeStrings = (await loader()) || {};
-    let conf = JSON.stringify(config);
+    // Remove $ from tokens
+    this.translations = Object.fromEntries(
+      Object.entries(localeStrings).map(([token, str]) => [
+        token.replace(/^\$/, ""),
+        str,
+      ])
+    ) as Translations;
 
+    // This replaces $tokens with translation strings.
+    // Almost exclusively in the "content" sections of config JSONs.
+    let configStr = JSON.stringify(this.defaultConfig);
     for (let str in localeStrings) {
       let replaceStr = str.replace("$", "");
       let re = new RegExp(`\\$${replaceStr}\\b`, "g");
-      conf = conf.replace(re, localeStrings[str]);
+      configStr = configStr.replace(re, localeStrings[str]);
     }
 
-    conf = JSON.parse(conf);
-
-    return conf;
+    console.log(configStr);
+    return JSON.parse(configStr);
   }
 
   createModules(): void {

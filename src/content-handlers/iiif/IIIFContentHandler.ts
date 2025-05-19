@@ -272,15 +272,8 @@ export default class IIIFContentHandler
     extension: any
   ): Promise<void> {
     // import the config file
-    if (!data.locales) {
-      data.locales = [];
-      data.locales.push(defaultLocale);
-    }
-    let config = await extension.loadConfig(
-      data.locales[0].name,
-      extension?.type.name
-    );
-
+    const locale = data.locales ? data.locales[0].name : defaultLocale;
+    const config = await extension.translateConfig(locale);
     data.config = await that.configure(config);
   }
 

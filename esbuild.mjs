@@ -1,9 +1,10 @@
 import path from "path";
 import { build } from "esbuild";
 import { lessLoader } from "esbuild-plugin-less";
+import fs from "node:fs";
 import svg from "esbuild-plugin-svg";
-import fs from "fs";
 import LessPluginCleanCSS from "less-plugin-clean-css";
+import JSONtoTS from "json-to-ts";
 
 const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
 
@@ -33,6 +34,19 @@ let resolveMediaElement = {
 };
 
 async function main() {
+  // Generate translation types
+
+  const enJSONStr = fs.readFileSync("./src/locales/en-GB.json").toString();
+  const enJSON = JSON.parse(enJSONStr.replace(/"\$/g, '"'));
+
+  const defs = JSONtoTS(enJSON);
+  fs.writeFileSync(
+    "./translations.d.ts",
+    defs.join("\n\n").replace("RootObject", "Translations")
+  );
+
+  // Build UV
+
   await build({
     // Enables code splitting, similar to webpack.
     splitting: true,
