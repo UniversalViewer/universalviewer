@@ -23,7 +23,7 @@ module.exports = defineConfig([
     },
     rules: {
       semi: "error",
-      "prefer-const": "error",
+      "prefer-const": "off",
     },
     settings: {
       react: {
