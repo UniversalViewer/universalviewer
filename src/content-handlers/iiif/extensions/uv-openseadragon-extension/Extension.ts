@@ -614,8 +614,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     // todo: can this be added to store?
     const paged = this.isPagingSettingEnabled();
 
-    const { downloadDialogueOpen, dialogueTriggerButton } =
-      this.store.getState() as OpenSeadragonExtensionState;
+    // Try to initialize using the stored state; exit early if the state is not ready yet:
+    const state: null | OpenSeadragonExtensionState = this.store.getState();
+    if (state === null) {
+      return;
+    }
+    const { downloadDialogueOpen, dialogueTriggerButton } = state;
 
     // todo: can the overlay visibility be added to the store?
     if (downloadDialogueOpen) {
