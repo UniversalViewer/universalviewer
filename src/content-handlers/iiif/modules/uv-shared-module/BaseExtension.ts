@@ -481,9 +481,10 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
 
     // Remove $ from tokens
     this.translations = Object.fromEntries(
-      Object.entries(localeStrings).map(
-        ([token, str]) => [token.replace(/^\$/, ""), str]
-      )
+      Object.entries(localeStrings).map(([token, str]) => [
+        token.replace(/^\$/, ""),
+        str,
+      ])
     ) as Translations;
 
     // This replaces $tokens with translation strings.
