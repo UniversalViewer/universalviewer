@@ -924,7 +924,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   zoomToInitialAnnotation(): void {
-    const annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+    const annotationRect: AnnotationRect | null =
+      this.getInitialAnnotationRect();
 
     (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
     (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
