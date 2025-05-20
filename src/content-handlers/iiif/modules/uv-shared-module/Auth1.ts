@@ -68,7 +68,7 @@ export class Auth1 {
   }
 
   static getCookieServiceUrl(service: Service): string {
-    let cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
+    const cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
     return cookieServiceUrl;
   }
 

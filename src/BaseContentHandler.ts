@@ -68,7 +68,7 @@ export default class BaseContentHandler<IUVData>
   }
 
   public async configure(config: any): Promise<any> {
-    let promises: Promise<any>[] = [] as any;
+    const promises: Promise<any>[] = [] as any;
 
     this.fire(Events.CONFIGURE, {
       config,

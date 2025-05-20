@@ -276,7 +276,7 @@ export default class IIIFContentHandler
       data.locales = [];
       data.locales.push(defaultLocale);
     }
-    let config = await extension.loadConfig(
+    const config = await extension.loadConfig(
       data.locales[0].name,
       extension?.type.name
     );

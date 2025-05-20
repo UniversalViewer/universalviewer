@@ -378,7 +378,7 @@ export class ExternalResource implements IExternalResource {
 
         xhr.onload = () => {
           const data = JSON.parse(xhr.responseText);
-          let contentLocation: string = unescape(data.contentLocation);
+          const contentLocation: string = unescape(data.contentLocation);
 
           that.status = xhr.status;
 
