@@ -14,5 +14,15 @@
   "less.validate": false,
   "scss.validate": false,
   "stylelint.customSyntax": "postcss-less",
-  "stylelint.validate": ["css", "less"]
+  "stylelint.validate": ["css", "less"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.sortImports": "never"
+  },
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ]
 }

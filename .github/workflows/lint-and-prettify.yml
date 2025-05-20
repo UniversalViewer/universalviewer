@@ -1,10 +1,10 @@
-name: Lint code
+name: Lint and Prettify code
 
 on: [push, pull_request]
 
 jobs:
-  lint:
-    name: Lint
+  lint-and-prettify:
+    name: Lint and Prettify
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +21,9 @@ jobs:
 
       - name: Lint code
         run: npm run lint
+
+      - name: Prettify code
+        run: npm run prettify
 
       - name: Auto-commit fixes
         uses: EndBug/add-and-commit@v9
