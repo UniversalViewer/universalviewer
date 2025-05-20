@@ -1010,7 +1010,7 @@ Determines if PDF.js should be used for PDF rendering - uses the UV's interface 
 ##### autoPlayOnSetTarget  
 **Type**: `boolean`  
 **Default**: `false`  
-When the target setting is changed, should the media automatically begin playing? Useful for externally triggering playback of specific clips; see PR #1113 for details/examples.
+When the target setting is changed, should the media automatically begin playing? Useful for externally triggering playback of specific clips; see [PR #1113](https://github.com/UniversalViewer/universalviewer/pull/1113) for details/examples.
 
 ##### defaultHeight  
 **Type**: `number`  
