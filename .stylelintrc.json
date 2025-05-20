@@ -13,6 +13,7 @@
     "declaration-empty-line-before": null,
     "property-no-vendor-prefix": null,
     "no-duplicate-selectors": null,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "media-feature-range-notation": "prefix"
   }
 }
