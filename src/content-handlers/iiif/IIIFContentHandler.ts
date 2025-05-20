@@ -36,71 +36,70 @@ const Extension: IExtensionRegistry = {
     name: "uv-av-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-av-extension/Extension"
-      ),
+      "./extensions/uv-av-extension/Extension"
+    ),
   },
   ALEPH: {
     name: "uv-aleph-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-aleph-extension/Extension"
-      ),
+      "./extensions/uv-aleph-extension/Extension"
+    ),
   },
   DEFAULT: {
     name: "uv-default-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-default-extension/Extension"
-      ),
+      "./extensions/uv-default-extension/Extension"
+    ),
   },
   EBOOK: {
     name: "uv-ebook-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-ebook-extension/Extension"
-      ),
+      "./extensions/uv-ebook-extension/Extension"
+    ),
   },
   MEDIAELEMENT: {
     name: "uv-mediaelement-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-mediaelement-extension/Extension"
-      ),
+      "./extensions/uv-mediaelement-extension/Extension"
+    ),
   },
   MODELVIEWER: {
     name: "uv-model-viewer-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-model-viewer-extension/Extension"
-      ),
+      "./extensions/uv-model-viewer-extension/Extension"
+    ),
   },
   OSD: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      "./extensions/uv-openseadragon-extension/Extension"
+    ),
   },
   PDF: {
     name: "uv-pdf-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-pdf-extension/Extension"
-      ),
+      "./extensions/uv-pdf-extension/Extension"
+    ),
   },
   SLIDEATLAS: {
     name: "uv-openseadragon-extension",
     loader: () =>
       /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      "./extensions/uv-openseadragon-extension/Extension"
+    ),
   },
 };
 
 export default class IIIFContentHandler
   extends BaseContentHandler<IIIFData>
-  implements IIIFExtensionHost, IContentHandler<IIIFData>
-{
+  implements IIIFExtensionHost, IContentHandler<IIIFData> {
   private _extensionRegistry: IExtensionRegistry;
   private _pubsub: PubSub;
   public extension: IExtension | undefined;
@@ -323,9 +322,7 @@ export default class IIIFContentHandler
         window.trackingLabel = trackingLabel;
       }
 
-      let canvas: Canvas | undefined;
-
-      canvas = helper.getCurrentCanvas();
+      const canvas: Canvas | undefined = helper.getCurrentCanvas();
 
       if (!canvas) {
         that._error(`Canvas ${data.canvasIndex} not found.`);

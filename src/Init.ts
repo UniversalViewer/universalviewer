@@ -2,7 +2,6 @@ import { Events } from "./Events";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
-  let uv;
   let isFullScreen = false;
   let overrideFullScreen = false;
   const container = typeof el === "string" ? document.getElementById(el) : el;
@@ -17,6 +16,11 @@ export const init = (el: string | HTMLDivElement, data) => {
   // extra div is needed for safari full screen
   const uvDiv = document.createElement("div");
   parent.appendChild(uvDiv);
+
+  const uv = new UniversalViewer({
+    target: uvDiv,
+    data: data,
+  });
 
   const resize = () => {
     if (uv) {
@@ -41,11 +45,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     setTimeout(function () {
       resize();
     }, 100);
-  });
-
-  uv = new UniversalViewer({
-    target: uvDiv,
-    data: data,
   });
 
   // todo: can we remove the following two event listeners
