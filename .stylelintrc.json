@@ -14,6 +14,13 @@
     "property-no-vendor-prefix": null,
     "no-duplicate-selectors": null,
     "no-descending-specificity": null,
+    "font-family-no-duplicate-names": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "selector-pseudo-element-no-unknown": null,
+    "selector-pseudo-class-no-unknown": null,
+    "declaration-block-no-duplicate-custom-properties": null,
+    "function-linear-gradient-no-nonstandard-direction": null,
+    "media-feature-name-no-unknown": null,
     "media-feature-range-notation": "prefix"
   }
 }
