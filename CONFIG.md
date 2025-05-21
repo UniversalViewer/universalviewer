@@ -263,7 +263,7 @@ Theme string.
 ##### tokenStorage
 **Type**: `string`  
 **Default**: `session`                     
-Storage for tokens.
+Storage strategy to use for authentication tokens (value comes from `StorageType` enum: must be `memory` or `session` or `local`).
 
 ##### useArrowKeysToNavigate
 **Type**: `boolean`  
