@@ -485,7 +485,8 @@ sub {
   --padding-end: var(--ion-padding, 16px);
   --padding-top: var(--ion-padding, 16px);
   --padding-bottom: var(--ion-padding, 16px);
-  padding: var(--ion-padding, 16px) var(--ion-padding, 16px) var(--ion-padding, 16px) var(--ion-padding, 16px);
+  padding: var(--ion-padding, 16px) var(--ion-padding, 16px)
+    var(--ion-padding, 16px) var(--ion-padding, 16px);
 }
 
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
@@ -579,7 +580,8 @@ sub {
   --margin-end: var(--ion-margin, 16px);
   --margin-top: var(--ion-margin, 16px);
   --margin-bottom: var(--ion-margin, 16px);
-  margin: var(--ion-margin, 16px) var(--ion-margin, 16px) var(--ion-margin, 16px) var(--ion-margin, 16px);
+  margin: var(--ion-margin, 16px) var(--ion-margin, 16px)
+    var(--ion-margin, 16px) var(--ion-margin, 16px);
 }
 
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
