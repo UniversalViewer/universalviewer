@@ -482,14 +482,14 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     config: Object,
     locale: String
   ): Promise<Object> {
-    let loader =
+    const loader =
       this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
-    let localeStrings = (await loader()) || {};
+    const localeStrings = (await loader()) || {};
     let conf = JSON.stringify(config);
 
-    for (let str in localeStrings) {
-      let replaceStr = str.replace("$", "");
-      let re = new RegExp(`\\$${replaceStr}\\b`, "g");
+    for (const str in localeStrings) {
+      const replaceStr = str.replace("$", "");
+      const re = new RegExp(`\\$${replaceStr}\\b`, "g");
       conf = conf.replace(re, localeStrings[str]);
     }
 

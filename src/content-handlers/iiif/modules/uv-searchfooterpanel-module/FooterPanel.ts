@@ -404,14 +404,14 @@ export class FooterPanel extends BaseFooterPanel<
   getFirstSearchResultCanvasIndex(): number {
     const searchResults: AnnotationGroup[] | null = this.getSearchResults();
     if (!searchResults || !searchResults.length) return -1;
-    let firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
+    const firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
     return firstSearchResultCanvasIndex;
   }
 
   getLastSearchResultCanvasIndex(): number {
     const searchResults: AnnotationGroup[] | null = this.getSearchResults();
     if (!searchResults || !searchResults.length) return -1;
-    let lastSearchResultCanvasIndex: number =
+    const lastSearchResultCanvasIndex: number =
       searchResults[searchResults.length - 1].canvasIndex;
     return lastSearchResultCanvasIndex;
   }
@@ -650,8 +650,8 @@ export class FooterPanel extends BaseFooterPanel<
         );
       }
 
-      let instanceFoundText: string = that.content.instanceFound;
-      let instancesFoundText: string = that.content.instancesFound;
+      const instanceFoundText: string = that.content.instanceFound;
+      const instancesFoundText: string = that.content.instancesFound;
       let text: string = "";
 
       if (result.rects.length === 1) {
@@ -669,7 +669,7 @@ export class FooterPanel extends BaseFooterPanel<
 
     const pos: any = $placemarker.position();
 
-    let top: number = pos.top - that.$placemarkerDetails.height();
+    const top: number = pos.top - that.$placemarkerDetails.height();
     let left: number = pos.left;
 
     if (left < that.$placemarkerDetails.width() / 2) {

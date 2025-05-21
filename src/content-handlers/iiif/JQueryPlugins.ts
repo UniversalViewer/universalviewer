@@ -270,7 +270,7 @@ export default function jqueryPlugins($) {
     return result;
   };
 
-  let on = $.fn.on;
+  const on = $.fn.on;
   let timer: any;
 
   $.fn.on = function () {

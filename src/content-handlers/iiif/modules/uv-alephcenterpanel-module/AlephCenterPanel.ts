@@ -231,7 +231,7 @@ export class AlephCenterPanel extends CenterPanel<
 
   async openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(async () => {
-      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
       const annotations: Annotation[] = canvas.getContent();
 

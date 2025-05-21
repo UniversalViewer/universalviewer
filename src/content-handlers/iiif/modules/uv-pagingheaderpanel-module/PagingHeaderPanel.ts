@@ -310,7 +310,7 @@ export class PagingHeaderPanel extends HeaderPanel<
     this.setNavigationTitles();
     this.setTotal();
 
-    let viewingDirection: ViewingDirection =
+    const viewingDirection: ViewingDirection =
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
 

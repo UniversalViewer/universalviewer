@@ -118,7 +118,7 @@ export class EbookCenterPanel extends CenterPanel<
 
   openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(() => {
-      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
       const annotations: Annotation[] = canvas.getContent();
 

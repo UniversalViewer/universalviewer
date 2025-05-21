@@ -495,13 +495,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         const searchResult: AnnotationGroup = searchResults[i];
 
         // find the thumb with the same canvasIndex and add the searchResult
-        let thumb: Thumb = thumbs.filter(
+        const thumb: Thumb = thumbs.filter(
           (t) => t.index === searchResult.canvasIndex
         )[0];
 
         if (thumb) {
           // clone the data so searchResults isn't persisted on the canvas.
-          let data = Object.assign({}, thumb.data);
+          const data = Object.assign({}, thumb.data);
           data.searchResults = searchResult.rects.length;
           thumb.data = data;
         }

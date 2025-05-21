@@ -104,7 +104,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   toggle(autoToggled?: boolean): void {
     const settings = this.extension.getSettings();
-    let isReducedAnimation = settings.reducedAnimation;
+    const isReducedAnimation = settings.reducedAnimation;
 
     const oldAnimationDuration =
       document.documentElement.style.getPropertyValue(
@@ -166,7 +166,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   expandFull(): void {
     const settings = this.extension.getSettings();
-    let isReducedAnimation = settings.reducedAnimation;
+    const isReducedAnimation = settings.reducedAnimation;
 
     const oldAnimationDuration =
       document.documentElement.style.getPropertyValue(
@@ -210,7 +210,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   collapseFull(): void {
     const settings = this.extension.getSettings();
-    let isReducedAnimation = settings.reducedAnimation;
+    const isReducedAnimation = settings.reducedAnimation;
 
     const oldAnimationDuration =
       document.documentElement.style.getPropertyValue(

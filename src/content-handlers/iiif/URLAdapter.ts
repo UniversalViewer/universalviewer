@@ -45,7 +45,7 @@ export class URLAdapter extends UVAdapter {
     const locales = this.get<string>("locales", "");
     if (locales) {
       const names = locales.split(",");
-      for (let i in names) {
+      for (const i in names) {
         const parts = String(names[i]).split(":");
         formattedLocales[i] = { name: parts[0], label: parts[1] };
       }

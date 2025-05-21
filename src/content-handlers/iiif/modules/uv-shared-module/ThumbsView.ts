@@ -154,7 +154,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     if (!this.thumbs) return;
 
     // get median height
-    let heights: number[] = [];
+    const heights: number[] = [];
 
     for (let i = 0; i < this.thumbs.length; i++) {
       const thumb: Thumb = this.thumbs[i];
