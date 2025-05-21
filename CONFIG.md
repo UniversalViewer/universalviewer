@@ -730,7 +730,7 @@ Determines if the gallery button is enabled.
 ##### imageSelectionBoxEnabled  
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if the image selection box is enabled.
+Determines if the drop-down list of available pages should be displayed in the paging header panel; only applies if `autoCompleteBoxEnabled` is set to `false`.
 
 ##### pageModeEnabled  
 **Type**: `boolean`  
