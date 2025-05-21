@@ -16,7 +16,7 @@
   "web": "dist/umd/UV.js",
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
-    "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
+    "lint-code": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,json,css,less,ts,tsx}\"",
     "dev": "npm run start",
