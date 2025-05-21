@@ -177,8 +177,7 @@ Determines if double click to annotate is enabled.
 ##### metrics
 **Type**: `number`  
 **Default**: `sm: 0, md: 768, lg: 1024, xl: 1280`             
-Metrics array. 
-
+Object mapping "metric" names to display pixel widths for the purpose of responsive adaptation to screen size.
 
 ##### multiSelectionMimeType
 **Type**: `string`  
