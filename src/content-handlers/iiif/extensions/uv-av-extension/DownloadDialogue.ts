@@ -64,7 +64,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
       const id: string = $selectedOption.attr("id");
       const label: string = $selectedOption.attr("title");
-      let type: string = DownloadOption.UNKNOWN;
+      const type: string = DownloadOption.UNKNOWN;
 
       if (this.renderingUrls[<any>id]) {
         window.open(this.renderingUrls[<any>id]);

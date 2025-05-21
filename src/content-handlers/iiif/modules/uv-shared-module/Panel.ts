@@ -48,7 +48,7 @@ export class Panel {
     el.on("keydown", (e) => {
       // by passing treatAsButton  as true this will become false
       // and so an anchor won't be excluded from Space presses
-      let isAnchor = e.target.nodeName === "A" && !treatAsButton;
+      const isAnchor = e.target.nodeName === "A" && !treatAsButton;
 
       // 13 = Enter, 32 = Space
       if ((e.which === 32 && !isAnchor) || e.which === 13) {

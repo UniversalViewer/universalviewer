@@ -276,7 +276,7 @@ export default class IIIFContentHandler
       data.locales = [];
       data.locales.push(defaultLocale);
     }
-    let config = await extension.loadConfig(
+    const config = await extension.loadConfig(
       data.locales[0].name,
       extension?.type.name
     );
@@ -323,9 +323,7 @@ export default class IIIFContentHandler
         window.trackingLabel = trackingLabel;
       }
 
-      let canvas: Canvas | undefined;
-
-      canvas = helper.getCurrentCanvas();
+      const canvas: Canvas | undefined = helper.getCurrentCanvas();
 
       if (!canvas) {
         that._error(`Canvas ${data.canvasIndex} not found.`);

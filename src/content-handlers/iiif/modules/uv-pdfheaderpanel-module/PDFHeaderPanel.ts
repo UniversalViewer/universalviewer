@@ -191,7 +191,7 @@ export class PDFHeaderPanel extends HeaderPanel<
       return;
     }
 
-    let index: number = parseInt(this.$searchText.val(), 10);
+    const index: number = parseInt(this.$searchText.val(), 10);
 
     if (isNaN(index)) {
       this.extension.showMessage(

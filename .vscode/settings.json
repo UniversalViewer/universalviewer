@@ -15,6 +15,11 @@
   "scss.validate": false,
   "stylelint.customSyntax": "postcss-less",
   "stylelint.validate": ["css", "less"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never",
     "source.sortImports": "never"

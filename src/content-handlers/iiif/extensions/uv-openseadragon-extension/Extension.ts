@@ -1111,20 +1111,20 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     width = Math.min(width, resourceWidth);
     height = Math.min(height, resourceHeight);
-    let regionWidth: number = width;
-    let regionHeight: number = height;
+    const regionWidth: number = width;
+    const regionHeight: number = height;
 
     const maxDimensions: Size | null = canvas.getMaxDimensions();
 
     if (maxDimensions) {
       if (width > maxDimensions.width) {
-        let newWidth: number = maxDimensions.width;
+        const newWidth: number = maxDimensions.width;
         height = Math.round(newWidth * (height / width));
         width = newWidth;
       }
 
       if (height > maxDimensions.height) {
-        let newHeight: number = maxDimensions.height;
+        const newHeight: number = maxDimensions.height;
         width = Math.round((width / height) * newHeight);
         height = newHeight;
       }
@@ -1531,7 +1531,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     let index: number;
 
     if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
+      const indices: number[] = this.getPagedIndices(canvasIndex);
 
       if (this.helper.isRightToLeft()) {
         index = indices[indices.length - 1] - 1;
@@ -1551,7 +1551,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     // const canvas: Canvas | null = this.helper.getCanvasByIndex(canvasIndex);
 
     if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
+      const indices: number[] = this.getPagedIndices(canvasIndex);
 
       if (this.helper.isRightToLeft()) {
         index = indices[0] + 1;
