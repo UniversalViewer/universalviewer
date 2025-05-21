@@ -484,7 +484,7 @@ If the top button is enabled, add an additional close button for consistency.
 ##### confinedImageSize
 **Type**: `number`  
 **Default**: `1000`  
-Size of the confined image.
+Controls the size of the longest edge on the size-constrained download option (e.g. scale down to at most 1000 pixels on the longest edge). If this value is larger than the longest edge of the image, the constrained size option will be hidden.
 
 ##### currentViewDisabledPercentage
 **Type**: `number`  
