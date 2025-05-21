@@ -809,7 +809,7 @@ Determines if the parent is included in the title.
 ##### posterImageRatio  
 **Type**: `number`  
 **Default**: `0.3`  
-Specifies the ratio of the poster image.
+Specifies the ratio of the poster image displayed by the AV component.
 
 ##### subtitleMetadataField  
 **Type**: `string`  
