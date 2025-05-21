@@ -971,7 +971,7 @@ Number of attributions to trim.
 ##### visibilityRatio  
 **Type**: `number`  
 **Default**: `0.5`  
-Ratio of visibility.
+Controls the percentage of the canvas OpenSeadragon will allow to be empty based on user panning. Represented as a number between 0 and 1, with 0 allowing the image to go completely out of view, and 1 forcing the whole image to stay visible. Scrolling beyond this value will cause OSD to "snap the image back."
 
 ##### zoomToInitialAnnotation  
 **Type**: `boolean`  
