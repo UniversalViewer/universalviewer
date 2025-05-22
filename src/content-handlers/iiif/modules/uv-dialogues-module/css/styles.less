@@ -441,11 +441,13 @@
   /* Focus state styles */
   .btn.close:focus {
     outline: none;
-    box-shadow:
-      0 0 0 4px rgb(37 99 235 / 100%),
-      /* Darker blue (ring-blue-700 equivalent) */ 0 0 0 6px white;
+
+    /* Darker blue (ring-blue-700 equivalent) */
 
     /* Equivalent to ring-offset-2 (creates an offset ring) */
+    box-shadow:
+      0 0 0 4px rgb(37 99 235 / 100%),
+      0 0 0 6px white;
   }
 }
 
