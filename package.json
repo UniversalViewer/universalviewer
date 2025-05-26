@@ -87,7 +87,7 @@
     "webpack": "^5.59.1",
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "4.15.2"
+    "webpack-dev-server": "5.2.1"
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
