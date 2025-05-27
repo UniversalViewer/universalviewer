@@ -1000,8 +1000,9 @@
           uv.on("openseadragonExtension.doubleClick", function(e) {
             annotations.push({
               target: e.target,
-                bodyValue: String(annotations.length + 1),
-              });
+              bodyValue: String(annotations.length + 1),
+            });
+
             $iiif_annotations.value = JSON.stringify(annotations);
             setAnnotations();
           });
