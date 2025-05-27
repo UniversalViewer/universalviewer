@@ -168,6 +168,14 @@
         background-repeat: no-repeat;
         background-size: 1.5em 1.5em;
       }
+
+      .toggleButton.caret-up {
+        background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e');
+      }
+
+      .toggleButton.caret-down {
+        background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');
+      }
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -281,9 +289,6 @@
             <button id="resetConfigButton" class="controls-button">
               Reset to Default Configuration
             </button>
-            <script>
-                document.getElementById("resetConfigButton").addEventListener("click", resetConfig);
-            </script>
           </div>
         </div>
 
@@ -806,7 +811,7 @@
                 toggleButton.textContent = key;
                 toggleButton.className = "toggleButton";
                 toggleButton.classList.add("toggleButtonBackground");
-                toggleButton.style.backgroundImage = "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
+                toggleButton.classList.add("caret-down");
                 
                 const contentContainer = document.createElement("div");
                 contentContainer.style.display = "none";
@@ -815,9 +820,8 @@
                 toggleButton.addEventListener("click", () => {
                   const isHidden = contentContainer.style.display === "none";
                   contentContainer.style.display = isHidden ? "block" : "none";
-                  toggleButton.style.backgroundImage = isHidden
-                    ? "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e')"
-                    : "url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')";
+                  toggleButton.classList.toggle("caret-down");
+                  toggleButton.classList.toggle("caret-up");
                 });
 
                 const currentPath = path ? `${path}^${key}` : key;
