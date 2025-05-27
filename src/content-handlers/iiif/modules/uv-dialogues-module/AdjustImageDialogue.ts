@@ -114,7 +114,7 @@ export class AdjustImageDialogue extends Dialogue<
       this.$contrastInput.val(this.contrastPercent);
       this.$brightnessInput.val(this.brightnessPercent);
       this.$saturationInput.val(this.saturationPercent);
-      let canvas = <HTMLCanvasElement>(
+      const canvas = <HTMLCanvasElement>(
         (<OpenSeadragonExtension>this.extension).centerPanel.$canvas[0]
           .children[0]
       );
@@ -126,7 +126,7 @@ export class AdjustImageDialogue extends Dialogue<
   }
 
   filter(): void {
-    let canvas = <HTMLCanvasElement>(
+    const canvas = <HTMLCanvasElement>(
       (<OpenSeadragonExtension>this.extension).centerPanel.$canvas[0]
         .children[0]
     );
@@ -135,7 +135,7 @@ export class AdjustImageDialogue extends Dialogue<
 
   open(): void {
     // Check if we have saved setings
-    let settings = this.extension.getSettings();
+    const settings = this.extension.getSettings();
     if (settings.rememberSettings) {
       this.contrastPercent = Number(settings.contrastPercent);
       this.brightnessPercent = Number(settings.brightnessPercent);
@@ -150,8 +150,9 @@ export class AdjustImageDialogue extends Dialogue<
         this.rememberSettings = settings.rememberSettings;
       }
     }
-    this.shell.$overlays.css("background", "none");
+
     super.open();
+    this.shell.$overlays.css("background", "none");
   }
 
   close(): void {
@@ -173,6 +174,7 @@ export class AdjustImageDialogue extends Dialogue<
       this.extension.updateSettings({ brightnessPercent: 100 });
       this.extension.updateSettings({ saturationPercent: 100 });
     }
+
     this.shell.$overlays.css("background", "");
     super.close();
 
@@ -184,5 +186,7 @@ export class AdjustImageDialogue extends Dialogue<
 
   resize(): void {
     super.resize();
+
+    this.$element.css({ top: 16, left: 16 });
   }
 }

@@ -287,7 +287,7 @@ export class DownloadDialogue extends Dialogue<
   }
 
   getFileExtension(fileUri: string): string | null {
-    let extension: string = <string>fileUri.split(".").pop();
+    const extension: string = <string>fileUri.split(".").pop();
 
     // if it's not a valid file extension
     if (extension.length > 5 || extension.indexOf("/") !== -1) {

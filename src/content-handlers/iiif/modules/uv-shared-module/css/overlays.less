@@ -1,183 +1,162 @@
 .uv {
+  .overlays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: @overlay-modal-bg;
+    background-image: data-uri("../img/modal_bg.gif");
+    z-index: 30;
+  }
 
-    .overlays {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: @overlay-modal-bg;
-        background-image: data-uri('../img/modal_bg.gif');
-        z-index: 30;
+  .overlay {
+    position: absolute;
+
+    a {
+      color: @brand-primary; // for links on white background
     }
 
-    .overlay {
-        position: absolute;
+    .top {
+      width: 100%;
+      overflow: auto;
 
-        .top {
-            width: 100%;
-            overflow: auto;
-
-            .close {
-                .hide-text();
-                background-image: data-uri('../img/close.png');
-                width: 24px;
-                height: 24px;
-                float: right;
-                background-color: @brand-primary;
-            }
-        }
-
-        .middle {
-            width: 100%;
-            background: @overlay-bg;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-
-            .share__section {
-                margin-block-end: 1.5em;
-
-                label {
-                    font-weight: 700;
-                    color: @gray;
-
-                    .share__label {
-                        display: block;
-                    }
-                }
-            }
-            .copy-input,
-            .embed-size-select {
-                color: black;
-                background-color: white;
-                border: 1px solid black;
-            }
-            .copy-input {
-                width: 100%;
-                padding: 2px;
-                background-color: @gray-lighter;
-            }
-
-            .copy-group {
-                display: grid;
-                grid-template-columns: 1fr auto;
-            }
-
-            .copyBtn {
-                padding-inline: @padding-small-horizontal;
-                height: 100%;
-                color: white;
-                background-color: black;
-                cursor: pointer;
-
-                &.imageBtn {
-                    width: 2em;
-                    background-image: data-uri('../../../modules/uv-shared-module/img/copy.png');
-                    background-size: 15px;
-                }
-            }
-
-            .buttons {
-                padding: @padding-medium-vertical;
-                float: right;
-
-                .btn {
-                    margin: 0 0 0 @margin-medium-horizontal;
-                }
-            }
-
-            .content {
-                padding-inline: @padding-medium-horizontal;
-                padding-block: @padding-medium-vertical;
-
-                overflow: auto;
-                text-overflow: ellipsis;
-
-                h1 {
-                    color: @headings-color;
-                    font-size: @headings-size-large;
-                    font-weight: @headings-font-weight;
-                    margin: @margin-large-vertical 0px 0px 0px;
-                    padding: 0 0 @padding-medium-vertical 0;
-                }
-
-                h2 {
-                    color: @headings-color;
-                    font-size: @headings-size-small;
-                    font-weight: @headings-font-weight;
-                    margin: 0;
-                    padding: @padding-large-vertical 0 @padding-medium-vertical 0;
-                }
-
-                p {
-                    margin: 0;
-                    padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
-                    overflow-wrap: break-word;
-                    hyphens: auto;
-                }
-
-                ol.options {
-                    list-style-image: none;
-                    list-style-position: inside;
-                    list-style-type: none;
-                    margin: 0;
-
-                    li {
-                        //background: @gray-lighter;
-                        margin: 2px 0 0 0;
-                        padding: 4px;
-
-                        input {
-                            margin: 0;
-                            padding: 0;
-                            width: 12px;
-                            height: 12px;
-                            display: inline-block;
-                        }
-
-                        label {
-                            display: inline;
-                            margin: 0 0 0 @margin-small-horizontal;
-                            padding: 0;
-                            float: none;
-                            clear: none;
-                            line-height: 0.9em;
-                            text-align: left;
-                            width: 200px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .bottom {
-            height: 11px;
-            background-image: data-uri('../img/dialogue_arrow.png');
-            background-repeat: no-repeat;
-            margin-top: -1px;
-        }
-
-        &.genericDialogue {
-            width: fit-content;
-            min-width: 250px;
-            max-width: 400px;
-
-            .bottom {
-                background: none;
-            }
-
-            .message {
-                color: #000;
-                padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
-            }
-
-            .accept {
-                float: right;
-            }
-        }
-
-        .scroll {
-            margin: @margin-medium-vertical 0 0 0;
-            padding: 0 @padding-medium-horizontal 0 0;
-            overflow: auto;
-        }
+      .close {
+        .hide-text();
+        background-image: data-uri("../img/close.png");
+        width: 24px;
+        height: 24px;
+        float: right;
+        background-color: @brand-primary;
+      }
     }
+
+    .middle {
+      width: 100%;
+      background: @overlay-bg;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
+      .share__section {
+        margin-block-end: 1.5em;
+
+        label {
+          font-weight: 700;
+          color: @gray;
+
+          .share__label {
+            display: block;
+          }
+        }
+      }
+      .copy-input,
+      .embed-size-select {
+        color: black;
+        background-color: white;
+        border: 1px solid black;
+      }
+      .copy-input {
+        width: 100%;
+        padding: 2px;
+        background-color: @gray-lighter;
+      }
+
+      .copy-group {
+        display: grid;
+        grid-template-columns: 1fr auto;
+      }
+
+      .copyBtn {
+        padding-inline: @padding-small-horizontal;
+        height: 100%;
+        color: white;
+        background-color: black;
+        cursor: pointer;
+
+        &.imageBtn {
+          width: 2em;
+          background-image: data-uri(
+            "../../../modules/uv-shared-module/img/copy.png"
+          );
+          background-size: 15px;
+        }
+      }
+
+      .buttons {
+        padding: @padding-medium-vertical;
+        float: right;
+
+        .btn {
+          margin: 0 0 0 @margin-medium-horizontal;
+        }
+      }
+
+      .content {
+        padding-inline: @padding-medium-horizontal;
+        padding-block: @padding-medium-vertical;
+
+        overflow: auto;
+        text-overflow: ellipsis;
+
+        h1 {
+          color: @headings-color;
+          font-size: @headings-size-large;
+          font-weight: @headings-font-weight;
+          margin: @margin-large-vertical 0px 0px 0px;
+          padding: 0 0 @padding-medium-vertical 0;
+        }
+
+        h2 {
+          color: @headings-color;
+          font-size: @headings-size-small;
+          font-weight: @headings-font-weight;
+          margin: 0;
+          padding: @padding-large-vertical 0 @padding-medium-vertical 0;
+        }
+
+        p {
+          margin: 0;
+          padding-block: 0 @padding-medium-vertical;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        ol.options {
+          list-style-image: none;
+          list-style-position: inside;
+          list-style-type: none;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    height: 11px;
+    background-image: data-uri("../img/dialogue_arrow.png");
+    background-repeat: no-repeat;
+    margin-top: -1px;
+  }
+
+  &.genericDialogue {
+    width: 250px;
+
+    .bottom {
+      background: none;
+    }
+
+    .message {
+      color: #000;
+      padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+    }
+
+    .accept {
+      float: right;
+    }
+  }
+
+  .scroll {
+    margin: @margin-medium-vertical 0 0 0;
+    padding: 0 @padding-medium-horizontal 0 0;
+    overflow: auto;
+  }
 }

@@ -171,7 +171,7 @@ export class ModelViewerCenterPanel extends CenterPanel<
     await this.extension.getExternalResources(resources);
 
     let mediaUri: string | null = null;
-    let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+    const canvas: Canvas = this.extension.helper.getCurrentCanvas();
     const formats: AnnotationBody[] | null =
       this.extension.getMediaFormats(canvas);
 
