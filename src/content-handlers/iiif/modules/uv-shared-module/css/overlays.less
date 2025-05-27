@@ -114,10 +114,15 @@
 
         p {
           margin: 0;
-          padding-block: 0 @padding-medium-vertical;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          p {
+            padding-top: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
 
         ol.options {
@@ -125,38 +130,65 @@
           list-style-position: inside;
           list-style-type: none;
           margin: 0;
+
+          li {
+            //background: @gray-lighter;
+            margin: 2px 0 0 0;
+            padding: 4px;
+
+            input {
+              margin: 0;
+              padding: 0;
+              width: 12px;
+              height: 12px;
+              display: inline-block;
+            }
+
+            label {
+              display: inline;
+              margin: 0 0 0 @margin-small-horizontal;
+              padding: 0;
+              float: none;
+              clear: none;
+              line-height: 0.9em;
+              text-align: left;
+              width: 200px;
+            }
+          }
         }
       }
     }
-  }
-
-  .bottom {
-    height: 11px;
-    background-image: data-uri("../img/dialogue_arrow.png");
-    background-repeat: no-repeat;
-    margin-top: -1px;
-  }
-
-  &.genericDialogue {
-    width: 250px;
 
     .bottom {
-      background: none;
+      height: 11px;
+      background-image: data-uri("../img/dialogue_arrow.png");
+      background-repeat: no-repeat;
+      margin-top: -1px;
     }
 
-    .message {
-      color: #000;
-      padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+    &.genericDialogue {
+      width: fit-content;
+      min-width: 250px;
+      max-width: 400px;
+
+      .bottom {
+        background: none;
+      }
+
+      .message {
+        color: #000;
+        padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+      }
+
+      .accept {
+        float: right;
+      }
     }
 
-    .accept {
-      float: right;
+    .scroll {
+      margin: @margin-medium-vertical 0 0 0;
+      padding: 0 @padding-medium-horizontal 0 0;
+      overflow: auto;
     }
-  }
-
-  .scroll {
-    margin: @margin-medium-vertical 0 0 0;
-    padding: 0 @padding-medium-horizontal 0 0;
-    overflow: auto;
   }
 }
