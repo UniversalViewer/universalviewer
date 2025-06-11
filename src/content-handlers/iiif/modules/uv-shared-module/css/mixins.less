@@ -302,12 +302,8 @@
   }
 
   .directional(@start-color: #555; @end-color: #333; @deg: 45deg) {
-    background-repeat: repeat-x; // Safari 5.1+, Chrome 10+ // FF 3.6+
-    background-image: linear-gradient(
-      @deg,
-      @start-color,
-      @end-color
-    ); // Standard, IE10
+    background-repeat: repeat-x;
+    background-image: linear-gradient(@deg, @start-color, @end-color);
   }
   .horizontal-three-colors(@start-color: #00b3ee; @mid-color: #7a43b6; @color-stop: 50%; @end-color: #c3325f) {
     background-image: -webkit-gradient(
