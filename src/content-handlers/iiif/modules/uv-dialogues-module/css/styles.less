@@ -1,13 +1,13 @@
-﻿.uv {
+.uv {
   .overlay {
     .middle {
       .content {
         .heading {
-          color: #000000;
+          color: #000;
           font-size: 18px;
           font-weight: bold;
-          margin: 15px 0px 0px 0px;
-          padding: 0 0 10px 0;
+          margin: 15px 0 0;
+          padding: 0 0 10px;
         }
       }
     }
@@ -35,7 +35,7 @@
         }
 
         .x {
-          padding: 0 @padding-small-horizontal 0 @padding-small-horizontal;
+          padding: 0 @padding-small-horizontal;
         }
 
         select {
@@ -79,7 +79,7 @@
           overflow: auto;
 
           .items {
-            padding-left: 0px;
+            padding-left: 0;
 
             .item .value {
               color: @text-secondary-color;
@@ -104,7 +104,7 @@
           }
 
           > h2:nth-of-type(1) {
-            padding-top: 0px;
+            padding-top: 0;
           }
 
           h2 {
@@ -113,7 +113,7 @@
           }
 
           .pages {
-            margin: 0.5rem 0 1rem 0;
+            margin: 0.5rem 0 1rem;
             display: flex;
             justify-content: center;
 
@@ -154,7 +154,7 @@
 
             li {
               margin: 0;
-              padding: 2px 0 2px 0;
+              padding: 2px 0;
 
               button {
                 width: 100%;
@@ -422,14 +422,17 @@
   }
 
   .btn.close {
-    padding: 0.5rem 1rem;
     /* Equivalent to Tailwind's px-4 py-2 */
-    background-color: black;
+    padding: 0.5rem 1rem;
+
     /* bg-black */
-    color: white;
+    background-color: black;
+
     /* text-white */
-    white-space: nowrap;
+    color: white;
+
     /* Prevent text from wrapping */
+    white-space: nowrap;
 
     /* Remove default outline on focus */
     outline: none;
@@ -438,10 +441,13 @@
   /* Focus state styles */
   .btn.close:focus {
     outline: none;
-    box-shadow:
-      0 0 0 4px rgba(37, 99, 235, 1),
-      /* Darker blue (ring-blue-700 equivalent) */ 0 0 0 6px white;
+
+    /* Darker blue (ring-blue-700 equivalent) */
+
     /* Equivalent to ring-offset-2 (creates an offset ring) */
+    box-shadow:
+      0 0 0 4px rgb(37 99 235 / 100%),
+      0 0 0 6px white;
   }
 }
 
