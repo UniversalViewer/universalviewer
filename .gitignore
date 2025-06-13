@@ -50,6 +50,7 @@ node_modules
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
 !src/extensions/*/config.js
+!docs/assets/*.js
 
 #################
 ## Misc
