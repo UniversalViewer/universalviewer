@@ -192,7 +192,7 @@ Determines if the navigator is enabled - user can override this from the setting
 ##### openTemplate
 **Type**: `string`  
 **Default**: `http://universalviewer.io?manifest={0}`                
-Template for opening.
+Sets the URL that opens when the 'open' button is clicked (enabled with the openEnabled config option).
 
 ##### overrideFullScreen
 **Type**: `boolean`  
@@ -560,7 +560,7 @@ Determines if more information is enabled.
 ##### openEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if opening is enabled.
+Footer button that when clicked, opens the URL set in openTemplate.
 
 ##### printEnabled
 **Type**: `boolean`  
