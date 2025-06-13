@@ -192,7 +192,7 @@ Determines if the navigator is enabled - user can override this from the setting
 ##### openTemplate
 **Type**: `string`  
 **Default**: `http://universalviewer.io?manifest={0}`                
-Sets the URL that opens when the 'open' button is clicked (enabled with the openEnabled config option).
+Sets the URL that opens when the 'open' button is clicked (which  is only visible when the viewer is embedded in an iframe and the openEnabled option is also set to true). The {0} placeholder is dynamically replaced with the manifest URL. This setting enables the user to link back to the original website when the viewer has been embedded into another page.
 
 ##### overrideFullScreen
 **Type**: `boolean`  
@@ -560,7 +560,7 @@ Determines if more information is enabled.
 ##### openEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Footer button that when clicked, opens the URL set in openTemplate.
+Enables the 'open' button in the viewer footer. This button is only displayed when the viewer is embedded in an iframe. When clicked, it opens the URL defined in the openTemplate option.
 
 ##### printEnabled
 **Type**: `boolean`  
