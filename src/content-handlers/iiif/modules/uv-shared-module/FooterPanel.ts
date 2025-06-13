@@ -271,7 +271,7 @@ export class FooterPanel<
       false
     );
 
-    if (configEnabled && Documents.isInIFrame()) {
+    if (configEnabled) {
       this.$openButton.show();
     } else {
       this.$openButton.hide();
