@@ -21,8 +21,6 @@ import {
 import { ContentLeftPanel } from "../../config/ContentLeftPanel";
 
 type MultiSelectDialogueOptions = DialogueOptions & {
-  /** Determines if chunked resizing is enabled for gallery thumbnails */
-  galleryThumbChunkedResizingEnabled: boolean;
   /** Threshold for chunked resizing of gallery thumbnails */
   galleryThumbChunkedResizingThreshold: number;
   /** Height of the gallery thumbnail */

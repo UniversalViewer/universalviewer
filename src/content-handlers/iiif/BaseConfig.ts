@@ -64,12 +64,6 @@ export type Options = {
   /** Determines if paging is enabled */
   pagingEnabled?: boolean;
 
-  /** Determines if paging option is enabled */
-  pagingOptionEnabled?: boolean;
-
-  /** Determines if access control is pessimistic */
-  pessimisticAccessControl?: boolean;
-
   /** Determines if the mediaelement extension should be preferred */
   preferMediaElementExtension?: boolean;
 
@@ -93,9 +87,6 @@ export type Options = {
 
   /** Determines if terms of use are enabled */
   termsOfUseEnabled: boolean;
-
-  /** Theme string */
-  theme: string;
 
   /** Storage for tokens */
   tokenStorage: string | StorageType;
