@@ -3,13 +3,15 @@
 > This document provides a detailed explanation of the configuration options available within the Universal Viewer. Each option is described with its purpose, data type, and default value, helping users customise and optimise the viewer's behaviour and appearance for specific needs.
 >
 ## Example Manifests:
-> AV manifest: https://iiif.io/api/cookbook/recipe/0026-toc-opera/manifest.json
+> [AV manifest](https://iiif.io/api/cookbook/recipe/0026-toc-opera/manifest.json)
 > 
-> Default extension: https://edsilv.github.io/test-manifests/defaultextension.json
+> [Default extension](https://edsilv.github.io/test-manifests/defaultextension.json)
 >
-> Simple collection: https://iiif.io/api/cookbook/recipe/0032-collection/collection.json
+> [Simple collection](https://iiif.io/api/cookbook/recipe/0032-collection/collection.json)
 >
-> Model viewer: https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json
+> [Model viewer](https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json)
+>
+> [Nested required statements](https://gist.githubusercontent.com/Saira-A/57601a87f97a31420f75c1bab14dfb8d/raw/f1db4469cd6e043b5a62542f4b07dc1a8c837dfb/mostspecificrequiredstatement.json)
 
 ## uv-iiif-config.json
 
@@ -71,9 +73,10 @@ Determines if settings that have been changed from the default e.g reduce motion
 
 #### avCenterPanel
 
-##### mostSpecificRequiredStatement
+##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
 
 #### downloadDialogue
 
@@ -755,12 +758,12 @@ Determines if the subtitle is enabled.
 ##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the most specific required statement is displayed.
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
 
 ##### requiredStatementEnabled  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the required statement is enabled.
+Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
 #### avCenterPanel
 
@@ -797,12 +800,12 @@ Determines if subtitles are enabled.
 ##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the most specific required statement is used.
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
 
 ##### requiredStatementEnabled  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the required statement is enabled.
+Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
 ##### posterImageExpanded  
 **Type**: `boolean`  
@@ -894,7 +897,12 @@ Maximum pixel ratio for zoom.
 ##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the most specific required statement is displayed.
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
+
+##### requiredStatementEnabled  
+**Type**: `boolean`  
+**Default**: `true`  
+Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
 ##### navigatorPosition  
 **Type**: `string`  
@@ -905,11 +913,6 @@ Position of the navigator.
 **Type**: `number`  
 **Default**: `50`  
 Gap between pages.
-
-##### requiredStatementEnabled  
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if the required statement is enabled.
 
 ##### showHomeControl  
 **Type**: `boolean`  
@@ -961,12 +964,12 @@ Determines if subtitles are enabled.
 ##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the most specific required statement is used.
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
 
 ##### requiredStatementEnabled  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the required statement is enabled.
+Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
 ##### usePdfJs  
 **Type**: `boolean`  
@@ -1003,12 +1006,12 @@ Determines if subtitles are enabled.
 ##### mostSpecificRequiredStatement  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the most specific required statement is used.
+Determines whether the most specific (deeply nested) requiredStatement is displayed, such as one defined at the canvas level instead of the higher manifest level, when multiple requiredStatements exist within the manifest. requiredStatementEnabled must also be set to true for this to show. 
 
 ##### requiredStatementEnabled  
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if the required statement is enabled.
+Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
 #### modelViewerCenterPanel
 
