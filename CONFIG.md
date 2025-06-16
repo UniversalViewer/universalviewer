@@ -204,16 +204,6 @@ Determines if full screen is overridden.
 **Default**: `true`  
 Determines if paging is enabled.
 
-##### pagingOptionEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if paging option is enabled.
-
-##### pessimisticAccessControl
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if access control is pessimistic.
-
 ##### preserveViewport
 **Type**: `boolean`  
 **Default**: `false`  
@@ -253,11 +243,6 @@ Determines if seealso content is enabled.
 **Type**: `boolean`  
 **Default**: `true`  
 Determines if terms of use are enabled.
-
-##### theme
-**Type**: `string`  
-**Default**: `uv-en-GB-theme`          
-Theme string.
 
 ##### tokenStorage
 **Type**: `string`  
@@ -348,21 +333,10 @@ Number of items to default to tree view (when defaultToTreeEnabled = true; defau
 **Default**: `true`  
 Determines if collection should default to tree view (even if defaultToTreeEnabled = false).
 
-##### elideCount
-**Type**: `number`  
-**Default**: `40`  
-Number of characters to elide at.
-
 ##### expandFullEnabled
 **Type**: `boolean`  
 **Default**: `true`  
 Determines if expand full is enabled.
-
-##### galleryThumbChunkedResizingEnabled
-**Type**: `boolean`  
-**Default**: `true`                         
-**Compatible file types**: Openseadragon only.                    
-Determines if chunked resizing is enabled for gallery thumbnails.
 
 ##### galleryThumbChunkedResizingThreshold
 **Type**: `number`  
@@ -673,11 +647,6 @@ Type of the text limit (e.g., lines or characters).
 Determines if the top close button is enabled.
 
 #### MultiSelectDialogue
-
-##### galleryThumbChunkedResizingEnabled  
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if chunked resizing is enabled for gallery thumbnails.
 
 ##### galleryThumbChunkedResizingThreshold  
 **Type**: `number`  
