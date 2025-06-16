@@ -80,7 +80,7 @@ Determines if settings that have been changed from the default e.g reduce motion
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if selection is enabled. 
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view. 
 
 #### headerPanel
 
@@ -518,7 +518,7 @@ Determines if explanatory text for options is enabled.
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if selection is enabled.
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view.
 
 #### footerPanel
 
