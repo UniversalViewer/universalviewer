@@ -174,7 +174,7 @@
         "fullscreenEnabled": true,
         "minimiseButtons": true,
         "moreInfoEnabled": true,
-        "openEnabled": true,
+        "openEnabled": false,
         "printEnabled": false,
         "shareEnabled": true
       },
@@ -401,7 +401,7 @@
         "fullscreenEnabled": true,
         "minimiseButtons": true,
         "moreInfoEnabled": true,
-        "openEnabled": true,
+        "openEnabled": false,
         "printEnabled": false,
         "shareEnabled": true
       },
@@ -536,7 +536,7 @@
         "fullscreenEnabled": true,
         "minimiseButtons": true,
         "moreInfoEnabled": true,
-        "openEnabled": true,
+        "openEnabled": false,
         "printEnabled": false,
         "shareEnabled": true,
         "helpEnabled": false,
