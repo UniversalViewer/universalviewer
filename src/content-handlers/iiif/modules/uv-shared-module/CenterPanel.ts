@@ -212,7 +212,7 @@ export class CenterPanel<
     }
 
     $attributionText.toggleExpandText(this.options.trimAttributionCount, () => {
-        this.resize();
+      this.resize();
     });
 
     //if (license){
