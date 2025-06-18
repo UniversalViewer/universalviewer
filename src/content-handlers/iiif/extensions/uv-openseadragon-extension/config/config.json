@@ -363,7 +363,7 @@
         "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
-        "trimAttributionCount": 150,
+        "trimAttributionCount": 500,
         "visibilityRatio": 0.5,
         "zoomToInitialAnnotation": true
       },

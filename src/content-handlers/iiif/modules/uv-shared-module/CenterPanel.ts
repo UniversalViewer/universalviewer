@@ -211,9 +211,9 @@ export class CenterPanel<
       $attributionText.targetBlank();
     }
 
-    // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
-    //     this.resize();
-    // });
+    $attributionText.toggleExpandText(this.options.trimAttributionCount, () => {
+        this.resize();
+    });
 
     //if (license){
     //    $license.append('<a href="' + license + '">' + license + '</a>');
