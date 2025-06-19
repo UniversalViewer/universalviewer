@@ -125,8 +125,6 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   showHomeControl: boolean;
   /** Determines if adjust image control is shown */
   showAdjustImageControl: boolean;
-  /** Number of attributions to trim */
-  trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
   /** Whether to zoom in to first annotation on load */
