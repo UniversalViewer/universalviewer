@@ -156,7 +156,6 @@ export type CenterPanelOptions = {
   subtitleEnabled: boolean;
   mostSpecificRequiredStatement: boolean;
   requiredStatementEnabled: boolean;
-  trimAttributionCount?: number;
 };
 
 export type CenterPanelContent = {

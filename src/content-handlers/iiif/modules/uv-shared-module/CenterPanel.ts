@@ -211,10 +211,6 @@ export class CenterPanel<
       $attributionText.targetBlank();
     }
 
-    $attributionText.toggleExpandText(this.options.trimAttributionCount, () => {
-        this.resize();
-    });
-
     //if (license){
     //    $license.append('<a href="' + license + '">' + license + '</a>');
     //} else {
