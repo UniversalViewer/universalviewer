@@ -224,8 +224,6 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
-  /** Determines if explanatory text for options is enabled */
-  optionsExplanatoryTextEnabled: boolean;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };

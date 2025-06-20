@@ -130,7 +130,6 @@
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
-        "optionsExplanatoryTextEnabled": false,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -454,7 +453,6 @@
         "embedEnabled": true,
         "embedPath": "/uv.html",
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
-        "instructionsEnabled": false,
         "shareEnabled": true,
         "shareFrameEnabled": true,
         "shareManifestsEnabled": true,

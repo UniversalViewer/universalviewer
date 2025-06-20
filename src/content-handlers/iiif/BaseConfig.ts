@@ -258,8 +258,6 @@ export type ShareDialogueOptions = DialogueOptions & {
   embedPath: string;
   /** Template for embedding */
   embedTemplate: string;
-  /** Determines if instructions are enabled */
-  instructionsEnabled: boolean;
   /** Determines if sharing is enabled */
   shareEnabled: boolean;
   /** Determines if sharing frame is enabled */
