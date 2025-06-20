@@ -934,11 +934,6 @@ Determines if the subtitle is enabled.
 **Default**: `true`  
 Determines if the title is enabled.
 
-##### trimAttributionCount  
-**Type**: `number`  
-**Default**: `150`  
-Number of attributions to trim.
-
 ##### visibilityRatio  
 **Type**: `number`  
 **Default**: `0.5`  
