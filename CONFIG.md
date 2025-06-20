@@ -245,7 +245,7 @@ Determines if seealso content is enabled.
 ##### termsOfUseEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if terms of use are enabled.
+Determines if a terms of use link is included in the share and download dialogues.
 
 ##### tokenStorage
 **Type**: `string`  
