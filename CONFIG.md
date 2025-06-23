@@ -237,11 +237,6 @@ Determines if setting to truncate long thumbnail labels is enabled.
 **Default**: `true`  
 Determines if search within is enabled.
 
-##### seeAlsoEnabled
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if seealso content is enabled.
-
 ##### termsOfUseEnabled
 **Type**: `boolean`  
 **Default**: `true`  
@@ -486,11 +481,6 @@ Determines if download of whole image in low resolution is enabled.
 **Type**: `number`  
 **Default**: `5000`  
 Maximum width of the image.
-
-##### optionsExplanatoryTextEnabled
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if explanatory text for options is enabled.
 
 ##### selectionEnabled
 **Type**: `boolean`  
@@ -1130,11 +1120,6 @@ Determines if embed is enabled.
 **Type**: `string`  
 **Default**: `"<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>"`  
 Template for embedding.
-
-##### instructionsEnabled  
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if instructions are enabled.
 
 ##### shareEnabled  
 **Type**: `boolean`  
