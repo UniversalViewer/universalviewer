@@ -82,9 +82,6 @@ export type Options = {
   /** Determines if search within is enabled */
   searchWithinEnabled?: boolean;
 
-  /** Determines if seealso content is enabled */
-  seeAlsoEnabled?: boolean;
-
   /** Determines if terms of use are enabled */
   termsOfUseEnabled: boolean;
 

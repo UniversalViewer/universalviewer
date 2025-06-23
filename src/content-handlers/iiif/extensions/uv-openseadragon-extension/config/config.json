@@ -39,7 +39,6 @@
     "clickToZoomEnabled": true,
     "truncateThumbnailLabels": true,
     "searchWithinEnabled": true,
-    "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
