@@ -704,10 +704,6 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.extensionHost.publish(Events.RELOAD, data);
   }
 
-  isSeeAlsoEnabled(): boolean {
-    return this.data.config!.options.seeAlsoEnabled !== false;
-  }
-
   getShareUrl(): string | null {
     // If not embedded on an external domain (this causes CORS errors when fetching parent url)
     if (!this.data.embedded) {
