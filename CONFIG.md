@@ -52,7 +52,7 @@ Determines if full-screen behavior is overridden - setting to true disables abil
 ##### pagingEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if paging is enabled - use "pagingToggleEnabled" instead.
+Determines if paging is enabled - when true, defaults to 2-up view if supported by the IIIF manifest; when false, defaults to 1-up view.
 
 ##### rightPanelEnabled
 **Type**: `boolean`  
@@ -205,7 +205,7 @@ Determines if full screen is overridden.
 ##### pagingEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if paging is enabled.
+Determines if paging is enabled - when true, defaults to 2-up view if supported by the IIIF manifest; when false, defaults to 1-up view. Set in uv-iiif-config.json file.
 
 ##### preserveViewport
 **Type**: `boolean`  
