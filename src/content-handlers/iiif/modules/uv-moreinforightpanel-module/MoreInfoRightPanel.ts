@@ -5,7 +5,10 @@ import { sanitize } from "../../../../Utils";
 import { Bools, Urls } from "@edsilv/utils";
 import { Range } from "manifesto.js";
 import { UriLabeller } from "@iiif/manifold";
-import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
+import {
+  MetadataComponent,
+  LimitType,
+} from "../uv-shared-module/MetadataComponent";
 import { MoreInfoRightPanel as MoreInfoRightPanelConfig } from "../../BaseConfig";
 
 export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
