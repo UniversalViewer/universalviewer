@@ -1126,11 +1126,6 @@ Template for embedding.
 **Default**: `true`  
 Determines if sharing is enabled.
 
-##### shareFrameEnabled  
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if sharing frame is enabled.
-
 ##### shareManifestsEnabled  
 **Type**: `boolean`  
 **Default**: `true`  
