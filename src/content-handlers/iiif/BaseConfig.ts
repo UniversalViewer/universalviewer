@@ -229,7 +229,7 @@ export type SettingsDialogueContent = DialogueContent & {
   locale: string;
   navigatorEnabled: string;
   clickToZoomEnabled: string;
-  pagingEnabled: string;
+  pagingEnabled?: string;
   reducedMotion: string;
   truncateThumbnailLabels: string;
   preserveViewport: string;
