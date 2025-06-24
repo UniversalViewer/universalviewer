@@ -15,7 +15,7 @@
 
 ## uv-iiif-config.json
 
-The uv-iiif-config.json file part of the examples page and is not part of the application when it is deployed in other ways. It contains global options and modules settings that override the same settings in individual configuration files for all formats.
+The uv-iiif-config.json file is part of the examples page and is not part of the application when it is deployed in other ways. It contains global options and modules settings that override the same settings in individual configuration files for all formats.
 
 ### options:
 
