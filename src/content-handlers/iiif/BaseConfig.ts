@@ -257,8 +257,6 @@ export type ShareDialogueOptions = DialogueOptions & {
   embedTemplate: string;
   /** Determines if sharing is enabled */
   shareEnabled: boolean;
-  /** Determines if sharing frame is enabled */
-  shareFrameEnabled: boolean;
   /** Determines if sharing manifests is enabled */
   shareManifestsEnabled: boolean;
 };
