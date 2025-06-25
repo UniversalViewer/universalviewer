@@ -83,7 +83,7 @@ Determines whether the most specific (deeply nested) requiredStatement is displa
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view. 
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view.[^1]
 
 #### headerPanel
 
@@ -185,7 +185,7 @@ Object mapping "metric" names to display pixel widths for the purpose of respons
 ##### multiSelectionMimeType
 **Type**: `string`  
 **Default**: `application/zip`  
-MIME type for multi selection.
+MIME type for multi selection.[^1]
 
 ##### navigatorEnabled
 **Type**: `boolean`  
@@ -485,7 +485,7 @@ Maximum width of the image.
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view.
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view.[^1]
 
 #### footerPanel
 
@@ -582,7 +582,7 @@ Determines if the expand full feature is enabled.
 ##### limitToRange  
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if download is limited to a specific range.
+Determines if download is limited to a specific range.[^1]
 
 ##### manifestDisplayOrder  
 **Type**: `string`  
@@ -820,7 +820,7 @@ Determines if fast rewind is enabled.
 ##### limitToRange  
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if playback is limited to a specified range.
+Determines if playback is limited to a specified range.[^1]
 
 ##### autoAdvanceRanges  
 **Type**: `boolean`  
@@ -1187,3 +1187,5 @@ Determines if printing is enabled.
 **Type**: `boolean`  
 **Default**: `true`  
 Determines if sharing is enabled.
+
+[^1]: This option is documented based on its intended functionality, but a working example or environment to confirm its behaviour is yet to be identified.
