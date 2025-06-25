@@ -168,7 +168,7 @@ Determines if the right panel is enabled.
 ##### saveUserSettings
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if settings that have been changed from the default e.g reduce motion are saved on refresh.
+Determines if settings that have been changed from the default e.g reduce motion are saved on refresh.[^2]
 
 ##### clickToZoomEnabled
 **Type**: `boolean`  
@@ -203,7 +203,7 @@ Determines if arrow keys can be used to navigate across pages.
 ##### zoomToSearchResultEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if zoom to search result is enabled.
+Determines if zoom to search result is enabled.[^2]
 
 ##### zoomToBoundsEnabled
 **Type**: `boolean`  
@@ -408,7 +408,7 @@ Controls the size of the longest edge on the size-constrained download option (e
 ##### currentViewDisabledPercentage
 **Type**: `number`  
 **Default**: `90`  
-Percentage of the current view that is disabled.
+Percentage of the current view that is disabled.[^2]
 
 ##### downloadCurrentViewEnabled
 **Type**: `boolean`  
@@ -488,7 +488,7 @@ Determines if printing is enabled.
 Determines if sharing is enabled.
 
 #### headerPanel
-Modify these options from within pagingHeaderPanel instead. 
+For OSD, these options may need to be modified from within pagingHeaderPanel instead. 
 
 ##### centerOptionsEnabled
 **Type**: `boolean`  
@@ -995,7 +995,7 @@ Number of terms to elide in results.
 ##### forceImageMode  
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if image mode is forced.
+Determines if image mode is forced.[^2]
 
 ##### pageModeEnabled  
 **Type**: `boolean`  
@@ -1137,3 +1137,4 @@ Determines if printing is enabled.
 Determines if sharing is enabled.
 
 [^1]: This option is documented based on its intended functionality, but a working example or environment to confirm its behaviour is yet to be identified.
+[^2]: There may be known issues with this setting; it is in the process of being reviewed and its behaviour may be revised in the future.
