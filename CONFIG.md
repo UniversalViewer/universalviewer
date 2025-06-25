@@ -168,7 +168,7 @@ Determines if the right panel is enabled.
 ##### saveUserSettings
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if settings that have been changed from the default e.g reduce motion are saved on refresh.[^2]
+Determines if settings that have been changed from the default e.g reduce motion are saved on refresh. Also provides a "Remember my settings" checkbox within the adjust image dialogue box. 
 
 ##### clickToZoomEnabled
 **Type**: `boolean`  
