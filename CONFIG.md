@@ -83,7 +83,7 @@ Determines whether the most specific (deeply nested) requiredStatement is displa
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if selection is enabled. 
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view. 
 
 #### headerPanel
 
@@ -485,7 +485,7 @@ Maximum width of the image.
 ##### selectionEnabled
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if selection is enabled.
+Determines if selection of multiple images for download is enabled.  Allows for user to download a selection of images.  Selection feature is visible when in the gallery view.
 
 #### footerPanel
 
