@@ -13,61 +13,9 @@
 >
 > [Nested required statements](https://gist.githubusercontent.com/Saira-A/57601a87f97a31420f75c1bab14dfb8d/raw/f1db4469cd6e043b5a62542f4b07dc1a8c837dfb/mostspecificrequiredstatement.json)
 
-## uv-iiif-config.json
+### uv-iiif-config.json
 
-The uv-iiif-config.json file is part of the examples page and is not part of the application when it is deployed in other ways. It contains global options and modules settings that override the same settings in individual configuration files for all formats.
-
-### options:
-
-##### dropEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if [drag and drop](https://iiif.io/guides/using_iiif_resources/) is enabled - the IIIF logo is located in the share dialogue box.
-
-##### footerPanelEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if the footer panel is enabled.
-
-##### headerPanelEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if the header panel is enabled.
-
-##### leftPanelEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if the left panel is enabled.
-
-##### limitLocales
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if locales are limited - setting to true removes option to change language in settings dialogue.
-
-##### overrideFullScreen
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if full-screen behavior is overridden - setting to true disables ability to make UV full-screen. 
-
-##### pagingEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if paging is enabled - when true, defaults to 2-up view if supported by the IIIF manifest; when false, defaults to 1-up view.
-
-##### rightPanelEnabled
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if the right panel is enabled.
-
-##### clickToZoomEnabled
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if click to zoom is enabled.
-
-##### saveUserSettings
-**Type**: `boolean`  
-**Default**: `true`  
-Determines if settings that have been changed from the default e.g reduce motion are saved on refresh.
+The uv-iiif-config.json file is part of the examples page and is not part of the application when it is deployed in other ways. It contains global options and modules settings that override equivalent settings in individual configuration files for all formats.
 
 ### modules:
 
@@ -170,7 +118,7 @@ Determines if left panel is enabled.
 ##### limitLocales
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if locales are limited.
+Determines if locales are limited - setting to true removes option to change language in settings dialogue.
 
 ##### doubleClickAnnotationEnabled
 **Type**: `boolean`  
@@ -200,7 +148,7 @@ Sets the URL that opens when the 'open' button is clicked (which  is only visibl
 ##### overrideFullScreen
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if full screen is overridden.
+Determines if full-screen behavior is overridden - setting to true disables ability to make UV full-screen.
 
 ##### pagingEnabled
 **Type**: `boolean`  
@@ -220,7 +168,7 @@ Determines if the right panel is enabled.
 ##### saveUserSettings
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if user settings are saved.
+Determines if settings that have been changed from the default e.g reduce motion are saved on refresh.
 
 ##### clickToZoomEnabled
 **Type**: `boolean`  
