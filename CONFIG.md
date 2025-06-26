@@ -994,7 +994,7 @@ Number of terms to elide in results.
 ##### forceImageMode  
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if image mode is forced.[^2]
+Displays the number of images instead of pages in the search footer panel. [^2]
 
 ##### pageModeEnabled  
 **Type**: `boolean`  
