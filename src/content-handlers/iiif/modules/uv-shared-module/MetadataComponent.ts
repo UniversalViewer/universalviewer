@@ -412,15 +412,20 @@ export class MetadataComponent extends BaseComponent {
 
         if (this._data.limit && this._data.content) {
           if (this._data.limitType === LimitType.LINES) {
-            toggleExpandTextByLines(
+            const args = [
               $items,
               this._data.limit,
               this._data.content.less,
               this._data.content.more,
               () => {},
               this._data.content.lessAriaLabelTemplate,
-              this._data.content.moreAriaLabelTemplate
-            );
+              this._data.content.moreAriaLabelTemplate,
+            ];
+
+            // allow time for the sidebar to render
+            setTimeout(() => {
+              toggleExpandTextByLines.apply(this, args);
+            }, 100);
           } else if (this._data.limitType === LimitType.CHARS) {
             $value.ellipsisHtmlFixed(this._data.limit, () => {});
           }
