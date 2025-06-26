@@ -989,7 +989,7 @@ Number of terms to elide in results.
 ##### forceImageMode  
 **Type**: `boolean`  
 **Default**: `false`  
-Displays the number of images instead of pages in the search footer panel. [^2]
+Displays the image index number within the search footer panel, replacing the page label from the manifest.[^2]
 
 ##### pageModeEnabled  
 **Type**: `boolean`  
