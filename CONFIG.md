@@ -203,13 +203,12 @@ Determines if arrow keys can be used to navigate across pages.
 ##### zoomToSearchResultEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-Determines if zoom to search result is enabled.[^2]
+Determines whether the viewer zooms into a selected search result. 
 
 ##### zoomToBoundsEnabled
 **Type**: `boolean`  
 **Default**: `true`  
-When true, activating an annotation (e.g. clicking on a search result) will zoom in on the annotation; when false, the annotation will be moved into view but the zoom level will not change.
-
+Defines how zoom behaves when zoomToSearchResultEnabled is also set to true. When true, the viewer zooms in to the search result's bounds. When false, the viewer pans to the result without changing the current zoom level — unless the current zoom is greater than the result’s bounds, in which case it zooms out to fit the bounds.
 
 ## Modules
 
