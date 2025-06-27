@@ -3,6 +3,7 @@ interface ISettings {
   pagingEnabled?: boolean;
   leftPanelOpen?: boolean;
   rightPanelOpen?: boolean;
+  textRightPanelOpen?: boolean;
   preserveViewport?: boolean;
   clickToZoomEnabled?: boolean;
   reducedAnimation?: boolean;
