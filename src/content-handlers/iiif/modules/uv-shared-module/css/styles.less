@@ -12,6 +12,7 @@
 @import "center-panel";
 @import "footer-panel";
 @import "overlays";
+@import "iiif-gallery-component";
 @import "catch-all";
 @import "sm";
 @import "md";
@@ -294,6 +295,11 @@
             right: initial;
             width: auto;
         });
+  }
+
+  .iiif-gallery-component .main {
+    overflow: auto;
+    overflow-x: hidden;
   }
 
   .footerPanel {
