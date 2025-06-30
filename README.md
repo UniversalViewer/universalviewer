@@ -20,6 +20,10 @@ A community-developed open source project on a mission<br/> to help you share yo
 <p align="center"><a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow"><strong>#</strong> Slack
 </a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://bsky.app/profile/universalviewer.io"> <strong>@</strong> Bluesky</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://x.com/universalviewer"> <strong>@</strong> X</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://glammr.us/@universalviewer"> <strong>@</strong> Mastodon </a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/UniversalViewer/universalviewer/wiki"> About </a> </p>
 
+# The Universal Viewer (UV) is a community-developed open source project. Our mission is to help you share your content with the world
+
+The UV software can display images, 3D files and PDFs, play audio and video files, and more. 
+
 <br/>
 
     npm install universalviewer --save
@@ -54,9 +58,13 @@ Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn
 
 ## 💻  📣 Contributing and Giving Feedback
 
+A community of testers, developers and institutional users has grown around the Universal Viewer. Read this [blog post about a recent 'community sprint'](https://blogs.bl.uk/digital-scholarship/2024/11/working-together-the-community-sprint-experience-.html) to find out more.
+
 Talking to active contributors and sponsors is a great way to find out what the community is currently focusing on, and where help is needed:
 
 - Join the discussion on [Slack](http://universalviewer.io/#contact)
+- There is an [active Slack channel](https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform) and regular community calls.
+- You can view discussions and post on our [Google Group](https://groups.google.com/forum/#!forum/universalviewer)
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new)
 - Engage with the UV Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) and [community team](https://github.com/UniversalViewer/universalviewer/blob/dev/COMMUNITY_TEAM.md)
 - Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/dev/CODE_OF_CONDUCT.md)
