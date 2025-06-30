@@ -57,7 +57,7 @@ Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn
 
 ## 📣 Contributing and Giving Feedback
 
-A community of testers, developers and institutional users has grown around the Universal Viewer. Read this [blog post about a recent 'community sprint'](https://blogs.bl.uk/digital-scholarship/2024/11/working-together-the-community-sprint-experience-.html) to find out more.
+An active, collaborative community of testers, developers and institutional users has grown around the Universal Viewer. Read this [blog post about a recent 'community sprint'](https://blogs.bl.uk/digital-scholarship/2024/11/working-together-the-community-sprint-experience-.html) to find out more about how we're working together.
 
 Talking to active contributors and sponsors is a great way to find out what the community is currently focusing on, and where help is needed:
 
