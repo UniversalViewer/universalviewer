@@ -84,7 +84,7 @@ If you want to dive into code, you can learn how to take part in improving the U
 ## 🏅 Contributors and Sponsors
 
 ### Individual contributors
-<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
+[![Individual contributors](https://opencollective.com/universalviewer/contributors.svg?width=890&button=false "Individual contributors")](https://github.com/UniversalViewer/universalviewer/graphs/contributors)
 
 ### Institutional contributors
 [Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
