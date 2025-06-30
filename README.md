@@ -55,6 +55,8 @@ See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Ex
 
 Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
+<a id="feedback"></a>
+<a id="contributing"></a>
 ## 📣 Contributing and Giving Feedback
 
 An active, collaborative community of testers, developers and institutional users has grown around the Universal Viewer. Read this [blog post about a recent 'community sprint'](https://blogs.bl.uk/digital-scholarship/2024/11/working-together-the-community-sprint-experience-.html) to find out more about how we're working together.
@@ -78,6 +80,7 @@ If you want to dive into code, you can learn how to take part in improving the U
 - Star the repository to show your support ⭐
 - Could not find an issue? Look for bugs, typos, and missing features.
 
+<a id="sponsors"></a>
 ## 🏅 Contributors and Sponsors
 
 ### Individual contributors
