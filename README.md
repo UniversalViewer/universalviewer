@@ -18,7 +18,7 @@ A community-developed open source project on a mission<br/> to help you share yo
 </a>
 </p>
 <p align="center"><a href="https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform" rel="nofollow"><strong>#</strong> Slack
-</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://bsky.app/profile/universalviewer.io"> <strong>@</strong> Bluesky</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://x.com/universalviewer"> <strong>@</strong> X</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://glammr.us/@universalviewer"> <strong>@</strong> Mastodon </a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/UniversalViewer/universalviewer/wiki"> About </a> </p>
+</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://bsky.app/profile/universalviewer.io"> <strong>@</strong> Bluesky</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://x.com/universalviewer"> <strong>@</strong> X</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://glammr.us/@universalviewer"> <strong>@</strong> Mastodon </a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/UniversalViewer/universalviewer/wiki"> History of the UV </a> </p>
 
 # The Universal Viewer (UV) is a community-developed open source project. Our mission is to help you share your content with the world
 
@@ -37,11 +37,10 @@ The UV software can display images, 3D files and PDFs, play audio and video file
 
 - [**Website**](#-website)
 - [**Getting Started**](#-getting-started)
-- [**Contributing**](#-contributing)
-- [**Sponsors**](#-sponsors)
-- [**License**](#-license)
+- [**Contributing and Giving Feedback**](#-contributing-and-giving-feedback)
+- [**Contributors and Sponsors**](#-contributors-and-sponsors)
 - [**Accessibility Statement**](#-accessibility-statement)
-- [**Feedback**](#-feedback)
+- [**License**](#-license)
 
 ## 🌐 Website
 
@@ -56,7 +55,7 @@ See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Ex
 
 Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
-## 💻  📣 Contributing and Giving Feedback
+## 📣 Contributing and Giving Feedback
 
 A community of testers, developers and institutional users has grown around the Universal Viewer. Read this [blog post about a recent 'community sprint'](https://blogs.bl.uk/digital-scholarship/2024/11/working-together-the-community-sprint-experience-.html) to find out more.
 
@@ -79,15 +78,13 @@ If you want to dive into code, you can learn how to take part in improving the U
 - Star the repository to show your support ⭐
 - Could not find an issue? Look for bugs, typos, and missing features.
 
-## Contributors
+## 🏅 Contributors and Sponsors
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
-<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
-
-## 🏅 Sponsors
-
 [Become a sponsor](https://opencollective.com/universalviewer#sponsor) and join our [Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) to help guide how our sponsorship funds are allocated.
+
+<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
 ## 📖 Accessibility Statement
 
