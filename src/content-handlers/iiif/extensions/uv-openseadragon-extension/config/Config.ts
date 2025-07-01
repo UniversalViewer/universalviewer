@@ -212,8 +212,6 @@ type MobileFooterPanel = ModuleConfig & {
 type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   /** Size of the confined image */
   confinedImageSize: number;
-  /** Percentage of the current view that is disabled */
-  currentViewDisabledPercentage: number;
   /** Determines if download of current view is enabled */
   downloadCurrentViewEnabled: boolean;
   /** Determines if download of whole image in high resolution is enabled */

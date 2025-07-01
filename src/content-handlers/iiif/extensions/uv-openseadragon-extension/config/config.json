@@ -124,7 +124,6 @@
     "downloadDialogue": {
       "options": {
         "confinedImageSize": 1000,
-        "currentViewDisabledPercentage": 90,
         "downloadCurrentViewEnabled": true,
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,

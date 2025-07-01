@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=20",
@@ -104,6 +104,7 @@
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/iiif-gallery-component": "^1.1.23",
+    "@iiif/iiif-metadata-component": "^1.2.2",
     "@iiif/iiif-tree-component": "^2.0.7",
     "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",
