@@ -423,15 +423,17 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     });
 
     this.extensionHost.subscribe(IIIFEvents.SHOW_TERMS_OF_USE, () => {
-      let terms: string | null = this.helper.getLicense();
+      let terms: string | null = null;
+
+      const requiredStatement: ILabelValuePair | null =
+        this.helper.getRequiredStatement();
+      if (requiredStatement?.value) {
+        terms = requiredStatement.value;
+      }
 
       if (!terms) {
-        const requiredStatement: ILabelValuePair | null =
-          this.helper.getRequiredStatement();
-
-        if (requiredStatement && requiredStatement.value) {
-          terms = requiredStatement.value;
-        }
+        const license = this.helper.getLicense();
+        terms = `<a href="${license}">${license}</a>`;
       }
 
       if (terms) {
