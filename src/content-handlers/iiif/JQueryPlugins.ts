@@ -558,13 +558,11 @@ interface JQuery {
   css: any;
   append: any;
   text: any;
-  link: any;
   toggle: any;
   html: any;
   empty: any;
   one: any;
   remove: any;
-  render: any;
   height: any;
   contents: any;
   outerWidth: any;
