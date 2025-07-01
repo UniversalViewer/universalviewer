@@ -98,6 +98,7 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "1.0.3",
+    "@edsilv/jquery-plugins": "^1.0.9",
     "@edsilv/key-codes": "1.0.0",
     "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^4.0.0",
