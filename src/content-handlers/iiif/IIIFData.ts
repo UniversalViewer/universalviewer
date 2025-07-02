@@ -10,4 +10,6 @@ export interface IIIFData {
   rangeId?: string;
   rotation?: number;
   xywh?: string;
+  q?: string;
+  hi?: number;
 }

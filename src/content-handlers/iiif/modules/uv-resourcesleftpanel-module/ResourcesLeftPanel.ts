@@ -59,6 +59,14 @@ export class ResourcesLeftPanel extends LeftPanel<ResourcesLeftPanelConfig> {
 
     this.thumbsView = new ThumbsView(this.$thumbsView);
     this.dataBind();
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+      if (this.isFullyExpanded) {
+        this.collapseFull();
+      } else {
+        this.expandFull();
+      }
+    });
   }
 
   dataBind(): void {

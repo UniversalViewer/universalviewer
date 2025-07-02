@@ -125,7 +125,7 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
               this.currentAnnotationRect = currentRect;
             }
             // we need to clear these
-            this.hi = 0;
+            this.hi = undefined;
             this.q = "";
           }
           this.extensionHost.publish(Events.SEARCH_HIT_CHANGED, [
@@ -154,7 +154,7 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
 
     this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE, (e) => {
       const canvasIndex = e;
-      const index = this.currentAnnotationRect?.index ?? 0;
+      const index = this.currentAnnotationRect?.index ?? 1;
       this.extensionHost.publish(Events.SEARCH_HIT_CHANGED, [
         {
           hitIndex: this.currentHitIndex,
@@ -202,7 +202,7 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
       this.$clearButton.hide();
       this.$searchText.focus();
       // we need to clear these
-      this.hi = 0;
+      this.hi = undefined;
       this.q = "";
     });
 
