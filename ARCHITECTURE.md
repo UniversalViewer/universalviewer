@@ -11,6 +11,7 @@ uv.on("openseadragonExtension.animationFinish", function (someArg) {
 Sometimes events are also 'pushed' outside by having .fire called inside an extension. This calls fire() function in BaseExtension which in turns calls it in the Extension Host aka BaseContentHandler which has access to the events array set by its on() function.
 
 <!-- omit in toc -->
+
 # Architectural Overview of the Universal Viewer
 
 - [1. Major Architectural Components](#1-major-architectural-components)
@@ -45,15 +46,17 @@ Sometimes events are also 'pushed' outside by having .fire called inside an exte
   - [3.8 PDF](#38-pdf)
 
 <!-- omit in toc -->
+
 ## High-Level Summary
 
-The Universal Viewer (UV) is designed to facilitate the presentation of diverse multimedia content types (images, videos, PDFs, IIIF manifests, etc.). Its architecture emphasizes support for multiple content handlers. 
+The Universal Viewer (UV) is designed to facilitate the presentation of diverse multimedia content types (images, videos, PDFs, IIIF manifests, etc.). Its architecture emphasizes support for multiple content handlers.
 
 The core system is built around a central `UniversalViewer` class orchestrating content handling, user interface panels, and external resource interactions.
 
 ## 1. Major Architectural Components
 
 ### 1.1 Core: `UniversalViewer`
+
 - **Role:** Core class for the entire system.
 - **Responsibilities:**
   - Determining content type and loading the appropriate `ContentHandler`.
@@ -64,7 +67,8 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Extends `BaseContentHandler`, inheriting event management and lifecycle.
   - Receives `target` HTMLElement and configuration `data` from the `init` function
 
-### 1.2 Content Handling: `BaseContentHandler` 
+### 1.2 Content Handling: `BaseContentHandler`
+
 - **Role:** Abstract class for loading the content handler and firing external events.
 - **Design Pattern:** Lazy-loaded modules via dynamic `import()` statements.
 - **Responsibilities:**
@@ -72,6 +76,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Communicate with the core container via events (`Events`, `IIIFEvents`, `YouTubeEvents`).
 
 #### 1.2.1 `YouTubeContentHandler`
+
 - **Role:** Loads a YouTube player iframe.
 - **Responsibilities:**
   - Load the YouTube iframe API script if not already present.
@@ -81,6 +86,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Provide YouTube player specific implementations of `resize` and `dispose`.
 
 #### 1.2.2 `IIIFContentHandler`
+
 - **Role:** Parse the IIIF manifest and load & configure the correct Content Extension
 - **Design Pattern:** Lazy-loaded modules via dynamic `import()` statements.
 - **Responsibilities:**
@@ -93,6 +99,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 ### 1.3 Content Extensions
 
 #### 1.3.1 `BaseExtension`
+
 - **Role:** Abstract Extension class.
 - **Responsibilities:**
   - Locale loading and replacement of locale string in default config.
@@ -100,6 +107,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Creation of Shell and common Modules
 
 #### 1.3.2 Content Specific `Extension`
+
 - **Role:** Content-type specific implementation of a 'Viewer'
 - **Responsibilities:**
   - Load and display specific content types.
@@ -107,6 +115,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Provision of events to interact with content viewer.
 
 ### 1.4 Modules / UI Panels
+
 - **Role:** Provide interface elements related to displayed content or UV settings.
 - **Panel types:**
   - UV Shared Panels.
@@ -118,6 +127,23 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - `Shell` class creates panel and dialogue containers and adds them to the `target` element.
 
 #### 1.4.1 Dialogues
+
+- **Role:** Provide pop-up dialogue boxes (a.k.a. 'overlays') in the UI displaying various features and information
+- **Dialogue types:**
+  - genericDialogue: displays messages e.g. the authorisation failed message
+  - adjustImage: shows image adjustment settings: contrast, brightness, saturation
+  - auth: redirects user to an external auth page, e.g. this manifest: https://iiifauth.digtest.co.uk/manifest/01_standard-login; dialogue content is provided by the auth service
+  - download: displays options for downloading content
+  - clickthrough: displays terms and conditions the user must acknowledge; determined by the auth service via the Auth09 module
+  - login: shows a login window defined by the login service in Auth09
+  - help: displays a title and text content that can be set in the config
+  - restricted: shows restrictions put on the content
+  - multiselect: select multiple images for download
+  - share: provides URLs for the current viewer state, the manifest, and an embed snippet
+  - settings: provides user settings for the viewer
+  - externalContent: displays an iframe allowing external content to be rendered in the viewer
+- **Details:**
+  - Most dialogues are common to the Extensions and found in modules/uv-dialogues-module; Share and Settings are specific to each Extension and so are found in the relevant extensions folder; the multiSelect dialogue has its own folder in the modules.
 
 ### 1.5 Event Handling
 
@@ -157,7 +183,7 @@ TODO: Separate docs for these, similar to Options
 - PAUSED
 - BUFFERING
 - CUED -->
-  
+
 ##### 2.3.2.2 IIIFEvents
 
 <!-- - ACCEPT_TERMS
@@ -287,6 +313,7 @@ TODO: Details on each extension, any specific dependencies it uses, refs to ext.
 ### 3.1 Aleph (3D)
 
 <!--omit in toc -->
+
 #### 3.1.1 Aleph Config
 
 ### 3.2 AV
@@ -302,6 +329,3 @@ TODO: Details on each extension, any specific dependencies it uses, refs to ext.
 ### 3.7 Open Seagdraon
 
 ### 3.8 PDF
-
-
-
