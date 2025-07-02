@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Read in parameters to choose which type of validation to run
-let args = process.argv.slice(2);
-let runType = args[0];
+const args = process.argv.slice(2);
+const runType = args[0];
 
 // Define primary locale
 const primaryLocale = 'en-GB.json';
@@ -13,19 +13,19 @@ const checkLocaleUsage = () => {
     const uvExtensions = getUVExtensions();
 
     // Read primary locale file.
-    let localeData = readLocaleFile(primaryLocale);
+    const localeData = readLocaleFile(primaryLocale);
     // replace all values with a 0
     // we will increment the value for each key found in the extension config files
-    let localeKeys = Object.keys(localeData).reduce((acc, key) => {
+    const localeKeys = Object.keys(localeData).reduce((acc, key) => {
         acc[key] = 0;
         return acc;
     }, {});
 
     // Loop through all UV extensions.
     uvExtensions.forEach(extension => {
-        let config = readExtensionConfig(extension);
+        const config = readExtensionConfig(extension);
         // Recursively extract all locale values from any "content" objects.
-        let contentLocaleValues = extractContentLocaleValues(config);
+        const contentLocaleValues = extractContentLocaleValues(config);
         // For each locale value found, if it exists in the primary locale keys, increment its count.
         contentLocaleValues.forEach(val => {
             if (val in localeKeys) {
@@ -40,19 +40,19 @@ const checkLocaleUsage = () => {
 
 
 const checkHardCodedStrings = () => {
-    let missing = [];
+    const missing = [];
     // get a list of all UV extensions
     const uvExtensions = getUVExtensions();
 
     // Loop through all UV extensions.
     uvExtensions.forEach(extension => {
-        let config = readExtensionConfig(extension);
+        const config = readExtensionConfig(extension);
         // Recursively extract all locale values from any "content" objects.
-        let contentLocaleValues = extractContentLocaleValues(config);
+        const contentLocaleValues = extractContentLocaleValues(config);
         // For each locale value found, if it exists in the primary locale keys, increment its count.
         contentLocaleValues.forEach(val => {
             // if val does not start with $
-            let hasStartingDelimiter = keyStartsWithDollar(val);
+            const hasStartingDelimiter = keyStartsWithDollar(val);
             if (!hasStartingDelimiter) {
                 missing.push({ extension: extension, key: val });
             }
@@ -71,7 +71,7 @@ const keyStartsWithDollar = (val) => {
 };
 
 const getUVExtensions = () => {
-    let extensions = [];
+    const extensions = [];
     // get a list of all UV extensions
     const directoryPath = path.join(__dirname, '../src/content-handlers/iiif/extensions/');
 
@@ -79,7 +79,7 @@ const getUVExtensions = () => {
         const files = fs.readdirSync(directoryPath);
 
         files.forEach(function (file) {
-            let dir = file.substring(0, 2);
+            const dir = file.substring(0, 2);
             // only get directories that start with 'uv'
             if (dir === 'uv') {
                 extensions.push(file);
@@ -140,14 +140,14 @@ const missingTranslations = () => {
     const primaryLocaleData = readLocaleFile(primaryLocale);
     const allLocales = getUVLocales();
 
-    for (let locale of allLocales) {
+    for (const locale of allLocales) {
         if (locale === primaryLocale) {
             continue;
         }
         const localeData = readLocaleFile(locale);
         // Compare primary locale keys with each other locale's keys.
         // If a key is missing in the other locale, log an error.
-        for (let key of Object.keys(primaryLocaleData)) {
+        for (const key of Object.keys(primaryLocaleData)) {
             if (!(key in localeData)) {
                 console.error(`Key "${key}" missing in locale "${locale}"`);
             }
