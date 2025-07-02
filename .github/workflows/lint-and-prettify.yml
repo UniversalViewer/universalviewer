@@ -11,7 +11,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "20"
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,7 +20,10 @@ jobs:
         run: npm install
 
       - name: Lint code
-        run: npm run lint
+        run: npm run lint-code
+
+      - name: Lint styles
+        run: npm run lint-styles
 
       - name: Prettify code
         run: npm run prettify

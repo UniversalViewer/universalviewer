@@ -16,12 +16,12 @@
 // 2. The use of `table` rather than `block` is only necessary if using
 //    `:before` to contain the top-margins of child elements.
 .clearfix() {
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: " "; /* 1 */
     display: table; /* 2 */
   }
-  &:after {
+  &::after {
     clear: both;
   }
 }
@@ -54,16 +54,16 @@
 
 // Placeholder text
 .placeholder(@color: @input-color-placeholder) {
-  &:-moz-placeholder {
+  &:placeholder {
     color: @color;
   } // Firefox 4-18
-  &::-moz-placeholder {
+  &::placeholder {
     color: @color;
   } // Firefox 19+
-  &:-ms-input-placeholder {
+  &:input-placeholder {
     color: @color;
   } // Internet Explorer 10+
-  &::-webkit-input-placeholder {
+  &::input-placeholder {
     color: @color;
   } // Safari and Chrome
 }
@@ -79,6 +79,7 @@
 // CSS image replacement
 // Source: https://github.com/h5bp/html5-boilerplate/commit/aa0396eae757
 .hide-text() {
+  /* stylelint-disable-next-line font-family-name-quotes */
   font: ~"0/0" a;
   color: transparent;
   text-shadow: none;
@@ -236,12 +237,12 @@
       from(@start-color),
       to(@end-color)
     ); // Safari 4+, Chrome 2+
-    background-image: -webkit-linear-gradient(
+    background-image: linear-gradient(
       left,
       color-stop(@start-color @start-percent),
       color-stop(@end-color @end-percent)
     ); // Safari 5.1+, Chrome 10+
-    background-image: -moz-linear-gradient(
+    background-image: linear-gradient(
       left,
       @start-color @start-percent,
       @end-color @end-percent
@@ -273,14 +274,14 @@
       from(@start-color),
       to(@end-color)
     ); // Safari 4+, Chrome 2+
-    background-image: -webkit-linear-gradient(
+    background-image: linear-gradient(
       top,
       @start-color,
       @start-percent,
       @end-color,
       @end-percent
     ); // Safari 5.1+, Chrome 10+
-    background-image: -moz-linear-gradient(
+    background-image: linear-gradient(
       top,
       @start-color @start-percent,
       @end-color @end-percent
@@ -302,21 +303,7 @@
 
   .directional(@start-color: #555; @end-color: #333; @deg: 45deg) {
     background-repeat: repeat-x;
-    background-image: -webkit-linear-gradient(
-      @deg,
-      @start-color,
-      @end-color
-    ); // Safari 5.1+, Chrome 10+
-    background-image: -moz-linear-gradient(
-      @deg,
-      @start-color,
-      @end-color
-    ); // FF 3.6+
-    background-image: linear-gradient(
-      @deg,
-      @start-color,
-      @end-color
-    ); // Standard, IE10
+    background-image: linear-gradient(@deg, @start-color, @end-color);
   }
   .horizontal-three-colors(@start-color: #00b3ee; @mid-color: #7a43b6; @color-stop: 50%; @end-color: #c3325f) {
     background-image: -webkit-gradient(
@@ -328,13 +315,13 @@
       color-stop(@color-stop, @mid-color),
       to(@end-color)
     );
-    background-image: -webkit-linear-gradient(
+    background-image: linear-gradient(
       left,
       @start-color,
       @mid-color @color-stop,
       @end-color
     );
-    background-image: -moz-linear-gradient(
+    background-image: linear-gradient(
       left,
       @start-color,
       @mid-color @color-stop,
@@ -364,12 +351,12 @@
       color-stop(@color-stop, @mid-color),
       to(@end-color)
     );
-    background-image: -webkit-linear-gradient(
+    background-image: linear-gradient(
       @start-color,
       @mid-color @color-stop,
       @end-color
     );
-    background-image: -moz-linear-gradient(
+    background-image: linear-gradient(
       top,
       @start-color,
       @mid-color @color-stop,
@@ -399,12 +386,8 @@
       from(@inner-color),
       to(@outer-color)
     );
-    background-image: -webkit-radial-gradient(
-      circle,
-      @inner-color,
-      @outer-color
-    );
-    background-image: -moz-radial-gradient(circle, @inner-color, @outer-color);
+    background-image: radial-gradient(circle, @inner-color, @outer-color);
+    background-image: radial-gradient(circle, @inner-color, @outer-color);
     background-image: radial-gradient(circle, @inner-color, @outer-color);
     background-repeat: no-repeat;
   }
@@ -413,41 +396,41 @@
       linear,
       0 100%,
       100% 0,
-      color-stop(0.25, rgba(255, 255, 255, 0.15)),
+      color-stop(0.25, rgb(255 255 255 / 15%)),
       color-stop(0.25, transparent),
       color-stop(0.5, transparent),
-      color-stop(0.5, rgba(255, 255, 255, 0.15)),
-      color-stop(0.75, rgba(255, 255, 255, 0.15)),
+      color-stop(0.5, rgb(255 255 255 / 15%)),
+      color-stop(0.75, rgb(255 255 255 / 15%)),
       color-stop(0.75, transparent),
       to(transparent)
     );
-    background-image: -webkit-linear-gradient(
+    background-image: linear-gradient(
       @angle,
-      rgba(255, 255, 255, 0.15) 25%,
+      rgb(255 255 255 / 15%) 25%,
       transparent 25%,
       transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-image: -moz-linear-gradient(
-      @angle,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
+      rgb(255 255 255 / 15%) 50%,
+      rgb(255 255 255 / 15%) 75%,
       transparent 75%,
       transparent
     );
     background-image: linear-gradient(
       @angle,
-      rgba(255, 255, 255, 0.15) 25%,
+      rgb(255 255 255 / 15%) 25%,
       transparent 25%,
       transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
+      rgb(255 255 255 / 15%) 50%,
+      rgb(255 255 255 / 15%) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-image: linear-gradient(
+      @angle,
+      rgb(255 255 255 / 15%) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgb(255 255 255 / 15%) 50%,
+      rgb(255 255 255 / 15%) 75%,
       transparent 75%,
       transparent
     );
@@ -469,9 +452,9 @@
 .img-retina(@file-1x; @file-2x; @width-1x; @height-1x) {
   background-image: url("@{file-1x}");
 
-  @media only screen and (-webkit-min-device-pixel-ratio: 2),
-    only screen and (min--moz-device-pixel-ratio: 2),
-    only screen and (-o-min-device-pixel-ratio: 2/1),
+  @media only screen and (min-device-pixel-ratio: 2),
+    only screen and (min-device-pixel-ratio: 2),
+    only screen and (min-device-pixel-ratio: 2/1),
     only screen and (min-device-pixel-ratio: 2),
     only screen and (min-resolution: 192dpi),
     only screen and (min-resolution: 2dppx) {

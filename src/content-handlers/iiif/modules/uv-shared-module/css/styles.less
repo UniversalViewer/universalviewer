@@ -1,4 +1,4 @@
-﻿@import "variables";
+@import "variables";
 @import "mixins";
 @import "mixins-extended";
 @import "icons";
@@ -112,7 +112,7 @@
     position: relative;
     padding-top: @panel-margin;
     margin-right: @panel-margin;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-left: @panel-margin;
     background: @body-bg; // important, otherwise you see two spinners
   }
@@ -216,10 +216,7 @@
     );
 
     position: absolute;
-    top: calc(5em + 8px);
-    right: 0;
-    bottom: 2em;
-    left: 0;
+    inset: calc(5em + 8px) 0 2em;
 
     width: 100%;
     height: auto;
@@ -353,10 +350,7 @@
 
   .footerPanel {
     position: relative;
-    margin-top: 0;
-    margin-right: @panel-margin;
-    margin-bottom: 0px;
-    margin-left: @panel-margin;
+    margin: 0 @panel-margin;
   }
 }
 

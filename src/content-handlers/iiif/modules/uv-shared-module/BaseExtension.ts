@@ -836,7 +836,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     const title: string = this.helper.getLabel() ?? "";
 
     if ((hashParams?.size ?? 0) > 0) {
-      appUri += `#${hashParams.toString()}`;
+      appUri += `#?${hashParams.toString()}`;
     }
 
     const script: string = Strings.format(

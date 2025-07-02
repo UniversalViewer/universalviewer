@@ -33,8 +33,6 @@
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
     "pagingEnabled": true,
-    "pagingOptionEnabled": true,
-    "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,
     "saveUserSettings": false,
@@ -43,7 +41,6 @@
     "searchWithinEnabled": true,
     "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
-    "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
@@ -126,7 +123,6 @@
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
         "defaultToTreeIfCollection": true,
-        "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
@@ -373,7 +369,6 @@
     },
     "multiSelectDialogue": {
       "options": {
-        "galleryThumbChunkedResizingEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,

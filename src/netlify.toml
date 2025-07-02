@@ -10,4 +10,4 @@
 
 [build.environment]
   SHOW_NETLIFY_BADGE = "true"
-  NODE_VERSION = "14"
+  NODE_VERSION = "20"

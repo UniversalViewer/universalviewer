@@ -1,9 +1,9 @@
 {
   "name": "universalviewer",
-  "version": "4.2.0-rc3",
+  "version": "4.2.0",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
-    "node": ">=18",
+    "node": ">=20",
     "npm": ">=8.1.1"
   },
   "files": [
@@ -16,8 +16,11 @@
   "web": "dist/umd/UV.js",
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
-    "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
+    "lint-code": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
+    "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
+    "lint": "npm run lint-code && npm run lint-styles",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,json,css,less,ts,tsx}\"",
+    "fix": "npm run lint && npm run prettify",
     "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build": "webpack -c webpack.config.js",
@@ -51,7 +54,7 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
-    "@eslint/js": "9.27.0",
+    "@eslint/js": "9.28.0",
     "@types/jest": "^29",
     "@types/jquery": "^3.5.14",
     "@types/node": "^22.9.0",
@@ -72,11 +75,15 @@
     "less": "4.1.2",
     "less-loader": "10.1.0",
     "lodash": "4.17.21",
+    "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
     "prettier-check": "^2.0.0",
     "puppeteer": "^23",
     "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
+    "stylelint": "16.19.1",
+    "stylelint-config-standard-less": "3.0.1",
+    "stylelint-less": "3.0.1",
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
     "typedoc": "^0.27.2",
