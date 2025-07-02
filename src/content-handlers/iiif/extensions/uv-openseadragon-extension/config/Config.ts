@@ -21,8 +21,6 @@ import {
 import { ContentLeftPanel } from "../../config/ContentLeftPanel";
 
 type MultiSelectDialogueOptions = DialogueOptions & {
-  /** Determines if chunked resizing is enabled for gallery thumbnails */
-  galleryThumbChunkedResizingEnabled: boolean;
   /** Threshold for chunked resizing of gallery thumbnails */
   galleryThumbChunkedResizingThreshold: number;
   /** Height of the gallery thumbnail */
@@ -127,8 +125,6 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   showHomeControl: boolean;
   /** Determines if adjust image control is shown */
   showAdjustImageControl: boolean;
-  /** Number of attributions to trim */
-  trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
   /** Whether to zoom in to first annotation on load */
@@ -216,8 +212,6 @@ type MobileFooterPanel = ModuleConfig & {
 type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   /** Size of the confined image */
   confinedImageSize: number;
-  /** Percentage of the current view that is disabled */
-  currentViewDisabledPercentage: number;
   /** Determines if download of current view is enabled */
   downloadCurrentViewEnabled: boolean;
   /** Determines if download of whole image in high resolution is enabled */
@@ -226,8 +220,6 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
-  /** Determines if explanatory text for options is enabled */
-  optionsExplanatoryTextEnabled: boolean;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };

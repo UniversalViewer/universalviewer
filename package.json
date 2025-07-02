@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=20",
@@ -16,10 +16,10 @@
   "web": "dist/umd/UV.js",
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
-    "lint-code": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
+    "lint-code": "eslint --fix \"./{__tests__,scripts,src}/**/*.{js,jsx,ts,tsx}\"",
     "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
     "lint": "npm run lint-code && npm run lint-styles",
-    "prettify": "prettier --write \"./src/**/*.{js,jsx,json,css,less,ts,tsx}\"",
+    "prettify": "prettier --write \"./{__tests__,scripts,src}/**/*.{js,jsx,json,css,less,ts,tsx}\" --ignore-path .prettierignore",
     "fix": "npm run lint && npm run prettify",
     "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
@@ -86,7 +86,7 @@
     "stylelint-less": "3.0.1",
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
-    "typedoc": "^0.27.2",
+    "typedoc": "^0.28.5",
     "typedoc-plugin-missing-exports": "^3.1.0",
     "typescript": "^5",
     "typescript-eslint": "8.32.1",
@@ -104,7 +104,6 @@
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/iiif-gallery-component": "^1.1.23",
-    "@iiif/iiif-metadata-component": "^1.2.1",
     "@iiif/iiif-tree-component": "^2.0.7",
     "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",

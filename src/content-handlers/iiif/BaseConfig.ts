@@ -64,12 +64,6 @@ export type Options = {
   /** Determines if paging is enabled */
   pagingEnabled?: boolean;
 
-  /** Determines if paging option is enabled */
-  pagingOptionEnabled?: boolean;
-
-  /** Determines if access control is pessimistic */
-  pessimisticAccessControl?: boolean;
-
   /** Determines if the mediaelement extension should be preferred */
   preferMediaElementExtension?: boolean;
 
@@ -88,14 +82,8 @@ export type Options = {
   /** Determines if search within is enabled */
   searchWithinEnabled?: boolean;
 
-  /** Determines if seealso content is enabled */
-  seeAlsoEnabled?: boolean;
-
   /** Determines if terms of use are enabled */
   termsOfUseEnabled: boolean;
-
-  /** Theme string */
-  theme: string;
 
   /** Storage for tokens */
   tokenStorage: string | StorageType;
@@ -241,7 +229,7 @@ export type SettingsDialogueContent = DialogueContent & {
   locale: string;
   navigatorEnabled: string;
   clickToZoomEnabled: string;
-  pagingEnabled: string;
+  pagingEnabled?: string;
   reducedMotion: string;
   truncateThumbnailLabels: string;
   preserveViewport: string;
@@ -267,12 +255,8 @@ export type ShareDialogueOptions = DialogueOptions & {
   embedPath: string;
   /** Template for embedding */
   embedTemplate: string;
-  /** Determines if instructions are enabled */
-  instructionsEnabled: boolean;
   /** Determines if sharing is enabled */
   shareEnabled: boolean;
-  /** Determines if sharing frame is enabled */
-  shareFrameEnabled: boolean;
   /** Determines if sharing manifests is enabled */
   shareManifestsEnabled: boolean;
 };

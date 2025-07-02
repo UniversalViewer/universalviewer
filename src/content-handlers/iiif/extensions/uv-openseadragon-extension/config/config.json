@@ -33,17 +33,13 @@
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
     "pagingEnabled": true,
-    "pagingOptionEnabled": true,
-    "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,
     "saveUserSettings": false,
     "clickToZoomEnabled": true,
     "truncateThumbnailLabels": true,
     "searchWithinEnabled": true,
-    "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
-    "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
@@ -74,7 +70,6 @@
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
         "defaultToTreeIfCollection": true,
-        "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
@@ -129,12 +124,10 @@
     "downloadDialogue": {
       "options": {
         "confinedImageSize": 1000,
-        "currentViewDisabledPercentage": 90,
         "downloadCurrentViewEnabled": true,
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
-        "optionsExplanatoryTextEnabled": false,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -276,7 +269,6 @@
     },
     "multiSelectDialogue": {
       "options": {
-        "galleryThumbChunkedResizingEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
@@ -368,7 +360,6 @@
         "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
-        "trimAttributionCount": 150,
         "visibilityRatio": 0.5,
         "zoomToInitialAnnotation": true
       },
@@ -459,9 +450,7 @@
         "embedEnabled": true,
         "embedPath": "/uv.html",
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
-        "instructionsEnabled": false,
         "shareEnabled": true,
-        "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
         "topCloseButtonEnabled": false,
         "copyToClipboardEnabled": true
