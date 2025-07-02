@@ -39,7 +39,6 @@
     "clickToZoomEnabled": true,
     "truncateThumbnailLabels": true,
     "searchWithinEnabled": true,
-    "seeAlsoEnabled": false,
     "termsOfUseEnabled": true,
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
@@ -177,12 +176,10 @@
     "downloadDialogue": {
       "options": {
         "confinedImageSize": 1000,
-        "currentViewDisabledPercentage": 90,
         "downloadCurrentViewEnabled": true,
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
-        "optionsExplanatoryTextEnabled": false,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -460,7 +457,6 @@
         "showAdjustImageControl": true,
         "subtitleEnabled": true,
         "titleEnabled": true,
-        "trimAttributionCount": 150,
         "visibilityRatio": 0.5,
         "zoomToInitialAnnotation": true
       },
@@ -551,9 +547,7 @@
         "embedEnabled": true,
         "embedPath": "/uv.html",
         "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\" title=\"{3}\"></iframe>",
-        "instructionsEnabled": false,
         "shareEnabled": true,
-        "shareFrameEnabled": true,
         "shareManifestsEnabled": true,
         "topCloseButtonEnabled": false,
         "copyToClipboardEnabled": true
