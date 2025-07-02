@@ -16,10 +16,10 @@
   "web": "dist/umd/UV.js",
   "scripts": {
     "e2eserve": "npx serve dist -p 4444",
-    "lint-code": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
+    "lint-code": "eslint --fix \"./{scripts,src}/**/*.{js,jsx,ts,tsx}\"",
     "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
     "lint": "npm run lint-code && npm run lint-styles",
-    "prettify": "prettier --write \"./src/**/*.{js,jsx,json,css,less,ts,tsx}\"",
+    "prettify": "prettier --write \"./{scripts,src}/**/*.{js,jsx,json,css,less,ts,tsx}\"",
     "fix": "npm run lint && npm run prettify",
     "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
