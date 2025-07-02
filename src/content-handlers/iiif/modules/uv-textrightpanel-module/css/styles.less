@@ -1,4 +1,4 @@
-﻿@import "@iiif/iiif-metadata-component/dist-css/styles.less";
+@import "@iiif/iiif-metadata-component/dist-css/styles.less";
 
 .uv {
   .textRightPanel {
@@ -86,8 +86,7 @@
       }
 
       .noData {
-        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2)
-          @padding-medium-horizontal;
+        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2);
       }
 
       .groups {
@@ -138,16 +137,16 @@
         border-top-color: transparent;
         border-left-color: transparent;
         border-right-color: transparent;
-        box-shadow: 1px 2px 0px @gray-light;
+        box-shadow: 1px 2px 0 @gray-light;
         animation: cssload-spin 690ms infinite linear;
         -o-animation: cssload-spin 690ms infinite linear;
         -ms-animation: cssload-spin 690ms infinite linear;
         -webkit-animation: cssload-spin 690ms infinite linear;
         -moz-animation: cssload-spin 690ms infinite linear;
       }
+
       @keyframes cssload-spin {
         100% {
-          transform: rotate(360deg);
           transform: rotate(360deg);
         }
       }

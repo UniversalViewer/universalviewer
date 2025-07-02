@@ -1,4 +1,4 @@
-﻿@import "@iiif/iiif-metadata-component/dist-css/styles.less";
+@import "@iiif/iiif-metadata-component/dist-css/styles.less";
 
 .uv {
   .searchLeftPanel {
@@ -21,8 +21,7 @@
       }
 
       .noData {
-        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2)
-          @padding-medium-horizontal;
+        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2);
       }
 
       .groups {
@@ -70,7 +69,7 @@
         flex-wrap: wrap;
         background-color: @panel-dark-bg;
         top: 0;
-        margin: 0 10px 10px 10px;
+        margin: 0 10px 10px;
         padding-bottom: 10px;
         height: auto;
 
@@ -155,16 +154,15 @@
             width: 270px;
             border: 2px solid @brand-primary-lighter;
             list-style-type: none;
-            -webkit-margin-before: 0px;
-            -webkit-margin-after: 0px;
-            -webkit-margin-start: 0px;
-            -webkit-margin-end: 0px;
-            -webkit-padding-start: 0px;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            -webkit-margin-start: 0;
+            -webkit-margin-end: 0;
+            -webkit-padding-start: 0;
             margin: 0;
             padding: 0;
             max-height: 300px;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden auto;
 
             .result {
               padding: 4px;
@@ -220,7 +218,7 @@
             border-top-color: transparent;
             border-left-color: transparent;
             border-right-color: transparent;
-            box-shadow: 1px 2px 0px @gray-light;
+            box-shadow: 1px 2px 0 @gray-light;
             animation: cssload-spin 690ms infinite linear;
             -o-animation: cssload-spin 690ms infinite linear;
             -ms-animation: cssload-spin 690ms infinite linear;
@@ -231,32 +229,31 @@
           @keyframes cssload-spin {
             100% {
               transform: rotate(360deg);
-              transform: rotate(360deg);
             }
           }
 
-          @-o-keyframes cssload-spin {
+          @keyframes cssload-spin {
             100% {
               -o-transform: rotate(360deg);
               transform: rotate(360deg);
             }
           }
 
-          @-ms-keyframes cssload-spin {
+          @keyframes cssload-spin {
             100% {
               -ms-transform: rotate(360deg);
               transform: rotate(360deg);
             }
           }
 
-          @-webkit-keyframes cssload-spin {
+          @keyframes cssload-spin {
             100% {
               -webkit-transform: rotate(360deg);
               transform: rotate(360deg);
             }
           }
 
-          @-moz-keyframes cssload-spin {
+          @keyframes cssload-spin {
             100% {
               -moz-transform: rotate(360deg);
               transform: rotate(360deg);
@@ -337,11 +334,11 @@
       .searchResult {
         height: auto;
         width: auto;
-        margin: 10px 10px 10px 10px;
+        margin: 10px;
 
         .searchHit {
-          margin: 10px 0 10px 0;
-          padding: 5px 5px 5px 5px;
+          margin: 10px 0;
+          padding: 5px;
           border: 2px solid @panel-dark-bg;
           cursor: pointer;
 
@@ -363,7 +360,7 @@
           .searchHitNumberSpan {
             border: none;
             color: #fff;
-            margin: 0 0 5px 0;
+            margin: 0 0 5px;
             display: block;
             font-size: 12px;
           }
