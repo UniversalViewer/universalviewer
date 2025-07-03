@@ -1,0 +1,70 @@
+.iiif-tree-component {
+  overflow: auto;
+  color: @text-color;
+
+  .toggle {
+    cursor: pointer;
+    margin-top: 3px;
+    margin-right: @margin-small-horizontal;
+    display: block;
+    float: left;
+    height: 10px;
+    width: 10px;
+    background-image: data-uri("../img/plus.png");
+
+    &.expanded {
+      background-image: data-uri("../img/minus.png");
+    }
+
+    &.multiSelect {
+      margin-left: @margin-small-horizontal;
+    }
+  }
+
+  .spacer {
+    margin-top: 3px;
+    margin-right: @margin-small-horizontal;
+    display: block;
+    float: left;
+    height: 10px;
+    width: 10px;
+  }
+
+  input.multiSelect {
+    margin-top: 0;
+    margin-right: @margin-small-horizontal;
+    display: block;
+    float: left;
+    height: 13px;
+    width: 13px;
+  }
+
+  ul.tree,
+  ul.tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.tree ul {
+    margin-left: @margin-large-horizontal;
+  }
+
+  ul.tree li {
+    margin: 0;
+    padding: 2px 0;
+    overflow: hidden;
+    a {
+      display: block;
+      overflow: hidden;
+    }
+  }
+
+  ul li[dir="rtl"] {
+    text-align: right;
+  }
+
+  ul li a.selected {
+    color: @brand-secondary !important;
+  }
+}

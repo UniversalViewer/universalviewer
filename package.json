@@ -104,7 +104,6 @@
     "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
-    "@iiif/iiif-tree-component": "^2.0.7",
     "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.23",
