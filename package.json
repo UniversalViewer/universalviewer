@@ -77,7 +77,6 @@
     "lodash": "4.17.21",
     "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
-    "prettier-check": "^2.0.0",
     "puppeteer": "^23",
     "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
