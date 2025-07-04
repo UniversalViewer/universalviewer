@@ -1045,6 +1045,10 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return this.metric === "sm" || this.metric === "md";
   }
 
+  isSmMetric(): boolean {
+    return this.metric === "sm";
+  }
+
   isMetric(metric: string | string[]): boolean {
     if (typeof metric === "string") {
       return this.metric === metric;
@@ -1105,8 +1109,36 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return false;
   }
 
+  isSearchLeftPanelEnabled(): boolean {
+    if (
+      !Bools.getBool(this.data.config!.options.searchLeftPanelEnabled, false)
+    ) {
+      return false;
+    }
+
+    if (!this.helper.getSearchService()) {
+      return false;
+    }
+
+    return true;
+  }
+
   isRightPanelEnabled(): boolean {
     return Bools.getBool(this.data.config!.options.rightPanelEnabled, true);
+  }
+
+  isTextRightPanelEnabled(): boolean {
+    if (
+      !Bools.getBool(this.data.config!.options.textRightPanelEnabled, false)
+    ) {
+      return false;
+    }
+
+    if (!this.helper.getSearchService()) {
+      return false;
+    }
+
+    return true;
   }
 
   isFooterPanelEnabled(): boolean {

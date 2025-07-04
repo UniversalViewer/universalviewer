@@ -1,0 +1,153 @@
+.uv {
+  .textRightPanel {
+    .top {
+      .copyText {
+        position: absolute;
+        background-image: data-uri("../img/copy.png") !important;
+        width: 15px;
+        height: 15px;
+        right: 40px;
+        top: 10px;
+        cursor: pointer;
+      }
+
+      .copiedText {
+        color: @text-color !important;
+        position: absolute;
+        top: 18px;
+        right: -10px;
+        white-space: nowrap;
+        padding: 4px;
+        text-transform: none;
+        background-color: #343434;
+        z-index: 1;
+        border: 1px solid #9a9a9a;
+        border-radius: 2px;
+      }
+
+      .title {
+        text-transform: uppercase;
+        position: relative;
+      }
+    }
+
+    .main {
+      overflow: auto;
+      color: @text-color;
+
+      .transcribed-text {
+        padding: 5px 5px 5px 7px;
+
+        div {
+          padding: 5px;
+          margin: 0;
+        }
+
+        p {
+          padding: 5px;
+        }
+
+        .lineAnnotation {
+          &.current {
+            color: #000;
+            @col: rgb(120, 251, 185);
+            background-color: saturate(@col, 100%);
+          }
+
+          .searchHitSpan {
+            font-weight: bold;
+            background-color: #10819a;
+            padding: 3px;
+
+            &.current {
+              background-color: #11d4ff;
+              color: #000;
+            }
+          }
+
+          &:hover {
+            color: #000;
+            @col: lighten(rgb(120, 251, 185), 20%);
+            background-color: saturate(@col, 80%);
+          }
+        }
+
+        .label {
+          color: #9a9a9a;
+          border-bottom: 1px solid #343434;
+          margin: 0 10px 10px 0;
+        }
+      }
+
+      &.loading {
+        .loading(@loader-black-bg);
+      }
+
+      .noData {
+        padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2);
+      }
+
+      .groups {
+        padding: @padding-medium-vertical @padding-medium-horizontal
+          (@padding-medium-vertical * 2) @padding-medium-horizontal;
+
+        .group {
+          .header {
+            text-transform: uppercase;
+          }
+        }
+
+        .items {
+          .header {
+            font-size: @font-size-small;
+            text-transform: uppercase;
+          }
+
+          .item {
+            .header {
+              font-size: @font-size-small;
+              text-transform: uppercase;
+            }
+
+            .value {
+              color: @text-color;
+            }
+          }
+        }
+
+        [data-uv-navigate] {
+          color: @link-secondary-color;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+            color: @link-secondary-hover-color;
+          }
+        }
+      }
+
+      .spinner {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        left: 120px;
+        border-radius: 50%;
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        box-shadow: 1px 2px 0 @gray-light;
+        animation: cssload-spin 690ms infinite linear;
+        -o-animation: cssload-spin 690ms infinite linear;
+        -ms-animation: cssload-spin 690ms infinite linear;
+        -webkit-animation: cssload-spin 690ms infinite linear;
+        -moz-animation: cssload-spin 690ms infinite linear;
+      }
+
+      @keyframes cssload-spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+}

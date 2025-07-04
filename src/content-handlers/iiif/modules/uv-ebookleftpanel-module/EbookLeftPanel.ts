@@ -38,6 +38,14 @@ export class EbookLeftPanel extends LeftPanel<
 
     this.setTitle(this.content.title);
 
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
+      if (this.isFullyExpanded) {
+        this.collapseFull();
+      } else {
+        this.expandFull();
+      }
+    });
+
     this.extensionHost.subscribe(
       EbookExtensionEvents.LOADED_NAVIGATION,
       (navigation: any) => {

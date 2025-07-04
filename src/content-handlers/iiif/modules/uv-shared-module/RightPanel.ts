@@ -15,10 +15,12 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   init(): void {
     super.init();
 
-    const shouldOpenPanel: boolean = Bools.getBool(
+    let shouldOpenPanel: boolean = Bools.getBool(
       this.extension.getSettings().rightPanelOpen,
       this.options.panelOpen
     );
+
+    if (this.extension.isSmMetric()) shouldOpenPanel = false;
 
     if (shouldOpenPanel) {
       this.toggle(true);
@@ -79,9 +81,26 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   toggle(autoToggled?: boolean): void {
     if (this.isExpanded) {
-      this.$element.parent().removeClass("rightPanelOpen");
+      if (this.$element.hasClass("textRightPanel")) {
+        this.$element.parent().removeClass("textRightPanelOpen");
+      } else {
+        this.$element.parent().removeClass("rightPanelOpen");
+      }
     } else {
-      this.$element.parent().addClass("rightPanelOpen");
+      const panelWidth = this.options.panelExpandedWidth ?? 271;
+      if (this.$element.hasClass("textRightPanel")) {
+        document.documentElement.style.setProperty(
+          "--uv-grid-text-right-width-open",
+          `${panelWidth}px`
+        );
+        this.$element.parent().addClass("textRightPanelOpen");
+      } else {
+        document.documentElement.style.setProperty(
+          "--uv-grid-right-width-open",
+          `${panelWidth}px`
+        );
+        this.$element.parent().addClass("rightPanelOpen");
+      }
     }
 
     super.toggle(autoToggled);

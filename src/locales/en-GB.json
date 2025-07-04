@@ -107,6 +107,7 @@
   "$zoomOut": "Zoom Out",
   "$adjustImage": "Adjust image",
   "$clearSearch": "Clear",
+  "$doSearch": "Search",
   "$displaying_A_of_B": "{0} {1} of {2}",
   "$enterKeyword": "Enter Keyword",
   "$imageLowercase": "image",
@@ -160,5 +161,15 @@
   "$contrast": "Contrast",
   "$saturation": "Saturation",
   "$reset": "Reset",
-  "$remember": "Remember my settings"
+  "$remember": "Remember my settings",
+  "$transcribedText": "Text",
+  "$expandTranscribedText": "Expand text",
+  "$collapseTranscribedText": "Collapse text",
+  "$transcribedTextLeftPage": "Left page",
+  "$transcribedTextRightPage": "Right page",
+  "$noTranscribedTextFound": "Couldn't find any text for this page.",
+  "$search": "Search",
+  "$expandSearch": "Expand Search",
+  "$collapseSearch": "Collapse Search",
+  "$searchHitOf": "{0} of {1}"
 }

@@ -4,11 +4,13 @@
     "footerPanelEnabled": true,
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
+    "searchLeftPanelEnabled": false,
     "limitLocales": false,
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "preferMediaElementExtension": false,
     "rightPanelEnabled": true,
+    "textRightPanelEnabled": false,
     "clickToZoomEnabled": false,
     "saveUserSettings": true,
     "animationDuration": 250
