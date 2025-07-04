@@ -11,7 +11,6 @@ uv.on("openseadragonExtension.animationFinish", function (someArg) {
 Sometimes events are also 'pushed' outside by having .fire called inside an extension. This calls fire() function in BaseExtension which in turns calls it in the Extension Host aka BaseContentHandler which has access to the events array set by its on() function.
 
 <!-- omit in toc -->
-
 # Architectural Overview of the Universal Viewer
 
 - [1. Major Architectural Components](#1-major-architectural-components)
@@ -25,6 +24,8 @@ Sometimes events are also 'pushed' outside by having .fire called inside an exte
   - [1.4 Modules / UI Panels](#14-modules--ui-panels)
     - [1.4.1 Dialogues](#141-dialogues)
   - [1.5 Event Handling](#15-event-handling)
+    - [1.5.1 External Events](#151-external-events)
+    - [1.5.2 Internal Events](#152-internal-events)
   - [1.6 Localisation](#16-localisation)
 - [2. Source Code Structure \& Execution Flow](#2-source-code-structure--execution-flow)
   - [2.1 Initialisation](#21-initialisation)
@@ -46,7 +47,6 @@ Sometimes events are also 'pushed' outside by having .fire called inside an exte
   - [3.8 PDF](#38-pdf)
 
 <!-- omit in toc -->
-
 ## High-Level Summary
 
 The Universal Viewer (UV) is designed to facilitate the presentation of diverse multimedia content types (images, videos, PDFs, IIIF manifests, etc.). Its architecture emphasizes support for multiple content handlers.
@@ -73,7 +73,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 - **Design Pattern:** Lazy-loaded modules via dynamic `import()` statements.
 - **Responsibilities:**
   - Handle content lifecycle: set, resize, dispose.
-  - Communicate with the core container via events (`Events`, `IIIFEvents`, `YouTubeEvents`).
+  - Communicate with the core container via events (`Events`, `IIIFEvents`, `YouTubeEvents`, extension-specific events).
 
 #### 1.2.1 `YouTubeContentHandler`
 
@@ -124,7 +124,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 - **Center Panel:**
   - Key panel, contains content viewer.
 - **Details:**
-  - `Shell` class creates panel and dialogue containers and adds them to the `target` element.
+  - `Shell` class creates panel containers and the dialogue container (named 'overlays') and adds them to the `target` element.
 
 #### 1.4.1 Dialogues
 
@@ -147,6 +147,35 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 
 ### 1.5 Event Handling
 
+The event system in the UV is divided into two parts, internal and external:
+
+#### 1.5.1 External Events
+
+- **Role:** Enable external applications or embedding pages to listen to and react to events within the Universal Viewer.
+- **Core methods:**
+  - `UnniversalViewer.on(name: string, cb: Function)`: Registers an event listener for a specific event. Used by the consuming page / application.
+  - `BaseContentHandler.fire(name: string, ...args: any[])`: Calls `apply()` on all assigned callback functions for the given event.
+- **Details:**
+  - Events passed to `UniversalViewer.on()` are added to its `__externalEventListeners` array.
+  - When creating a `IIIFContentHandler`, `__externalEventListeners` is passed to its constructor and in turn to parent class `BaseContentHandler`.
+  - `BaseContentHandler` iterates and adds each event to the `_eventListeners` property.
+  - `BaseContentHandler.fire()` is used to trigger the callbacks when the relevant event occurs. 
+
+#### 1.5.2 Internal Events
+
+- **Role:** Allow communication between components in a decoupled manner.
+- **Design pattern:** Publish-Subscribe (PubSub)
+- **Details:** 
+  - Allows system components to broadcast (publish) an event so that subscribers may respond appropriately. The broadcaster doesn't need to know who the subscribers are and vice-versa.
+  - Extension Host (`IIIFContentHandler`) serves as the 'Event Bus' providing the `subscribe` and `publish` methods.
+  - Uses the `PubSub` class to store and fire event callbacks.
+
+The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
+
+This means that components don't directly call each other; they communicate indirectly through events.
+
+In UV, the Extension Host, usually referenced as `this.extensionHost` and which is currently always `IIIFContentHandler`, is typically the central event bus that uses the PubSub pattern. Components like extensions, UI panels, and dialogues use it to communicate.
+
 ### 1.6 Localisation
 
 ## 2. Source Code Structure & Execution Flow
@@ -157,7 +186,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 
 ### 2.3 Events
 
-TODO: Separate docs for these, similar to Options
+TODO: Separate docs for these, similar to Options - see Events.md
 
 #### 2.3.1 External Events
 
@@ -313,7 +342,6 @@ TODO: Details on each extension, any specific dependencies it uses, refs to ext.
 ### 3.1 Aleph (3D)
 
 <!--omit in toc -->
-
 #### 3.1.1 Aleph Config
 
 ### 3.2 AV
