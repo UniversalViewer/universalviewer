@@ -4,7 +4,7 @@ import { Dialogue } from "../uv-shared-module/Dialogue";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { Bools } from "@edsilv/utils";
-import { GalleryComponent } from "@iiif/iiif-gallery-component";
+import { GalleryComponent } from "../uv-shared-module/GalleryComponent";
 // import { GalleryComponent } from "../../GalleryComponent";
 import { MultiSelectState } from "@iiif/manifold";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
