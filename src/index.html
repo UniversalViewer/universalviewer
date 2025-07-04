@@ -258,12 +258,10 @@
     const slider = document.getElementById('iiif_rotation');
     const valueDisplay = document.getElementById('iiif_rotationValue');
 
-
     slider.addEventListener('input', () => {
       valueDisplay.textContent = slider.value;
     });
   </script>
-
 
   <!-- AV -->
   <div id="av" class="tabcontent" style="display:none">
@@ -293,7 +291,9 @@
 
   <!-- Configuration -->
   <div id="config" class="tabcontent" style="display:none">
+    <p>The Universal Viewer can be configured using a JSON file. The controls below allow you to easily test changes to your configuration, or to generate a new configuration file by browsing the available settings.</p>
     <h2 class="controls-title">Custom Configuration</h2>
+    <p>Enter your configuration here (in JSON format) to see a preview of how the Universal Viewer will look and behave. Since UV uses browser storage to remember some settings, you may need to check the 'Clear saved state' checkbox to ensure that your changes are immediately visible.</p>
     <textarea id="customConfig" rows="5" class="w-full"></textarea>
     <div class="mt-2">
       <input type="checkbox" id="clearStorageCheckbox" />
@@ -306,6 +306,7 @@
 
     <div class="controls-group">
       <h2 class="controls-title">Configuration builder</h2>
+      <p>Use the dropdown menus to customise the Universal Viewer. Your selections will automatically populate the custom configuration box above. You will have to click the Apply Configurations button when you are ready to put your changes into effect.</p>
       <div id="config-builder"></div>
     </div>
   </div>
