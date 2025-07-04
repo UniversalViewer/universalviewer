@@ -128,6 +128,19 @@
           color: ButtonText;
           background-color: ButtonFace;
         }
+
+        .tab button.active {
+          background-color: #000000;
+          color: #ffffff;
+        }
+
+        .tabcontent {
+          display: none;
+        }
+
+        #general {
+          display: block;
+        }
       }
 
       /* Utilities */
@@ -210,95 +223,106 @@
       </button>
       <button id="youTubeTabButton" class="controls-tab">YouTube</button>
 
-      <div id="iiifTab" class="controls-tab-content">
-        <div class="controls-group">
-          <h2 class="controls-title">Manifest Id</h2>
-          <div class="flex">
-            <select
-              id="iiifManifestIdSelect"
-              class="py-2 px-3 mr-2 flex-1"
-            ></select>
-            <input id="iiifManifestId" type="text" value="" class="flex-1" />
-          </div>
-          <div class="mt-2">
-            <button
-              id="setIIIFManifestIdButton"
-              class="controls-button"
-              href="#"
-            >
-              Set IIIF Manifest Id
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Target</h2>
-          <div class="flex">
-            <input id="iiif_target" type="text" value="" class="flex-1" />
-            <button
-              id="iiif_setTargetButton"
-              class="controls-button flex-initial ml-2"
-            >
-              Set Target
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Muted</h2>
-          <input type="checkbox" id="iiif_mutedCheckbox" />
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Rotation</h2>
-          <div class="flex">
-            <input id="iiif_rotation" type="text" value="" class="flex-1" />
-            <button
-              id="iiif_setRotationButton"
-              class="controls-button flex-initial ml-2"
-            >
-              Set Rotation
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Annotations</h2>
-          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
-          <div class="mt-2">
-            <button id="iiif_setAnnotationsButton" class="controls-button">
-              Set Annotations
-            </button>
-            <button id="iiif_clearAnnotationsButton" class="controls-button">
-              Clear Annotations
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Custom Configuration</h2>
-          <textarea id="customConfig" rows="5" class="w-full"></textarea>
-            <div class="mt-2">
-              <input type="checkbox" id="clearStorageCheckbox" />
-              <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
-            </div>
-          <div class="mt-2">
-            <button id="setConfigButton" class="controls-button">
-              Apply Configurations
-            </button>
-            <button id="resetConfigButton" class="controls-button">
-              Reset to Default Configuration
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Configuration builder</h2>
-          <div id="config-builder">
-          </div>
-        </div>
-        
+     <div id="iiifTab" class="controls-tab-content">
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'general')">General</button>
+        <button class="tablinks" onclick="openTab(event, 'av')">AV</button>
+        <button class="tablinks" onclick="openTab(event, 'annotations')">Annotations</button>
+        <button class="tablinks" onclick="openTab(event, 'config')">Configuration</button>
       </div>
+
+  <!-- General -->
+  <div id="general" class="tabcontent">
+    <h2 class="controls-title">Manifest Id</h2>
+    <div class="flex">
+      <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
+      <input id="iiifManifestId" type="text" value="" class="flex-1" />
+    </div>
+    <div class="mt-2">
+      <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
+    </div>
+
+    <div class="controls-group">
+      <h2 class="controls-title">Set degrees of rotation</h2>
+      <div class="flex">
+        <input id="iiif_rotation" type="text" value="" class="flex-1" />
+        <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
+          Set Rotation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AV -->
+  <div id="av" class="tabcontent" style="display:none">
+    <h2 class="controls-title">Target</h2>
+    <div class="flex">
+      <input id="iiif_target" type="text" value="" class="flex-1" />
+      <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
+        Set Target
+      </button>
+    </div>
+
+    <div class="controls-group">
+      <h2 class="controls-title">Mute sound</h2>
+      <input type="checkbox" id="iiif_mutedCheckbox" />
+    </div>
+  </div>
+
+  <!-- Annotations -->
+  <div id="annotations" class="tabcontent" style="display:none">
+    <h2 class="controls-title">Annotations</h2>
+    <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
+    <div class="mt-2">
+      <button id="iiif_setAnnotationsButton" class="controls-button">Set Annotations</button>
+      <button id="iiif_clearAnnotationsButton" class="controls-button">Clear Annotations</button>
+    </div>
+  </div>
+
+  <!-- Configuration -->
+  <div id="config" class="tabcontent" style="display:none">
+    <h2 class="controls-title">Custom Configuration</h2>
+    <textarea id="customConfig" rows="5" class="w-full"></textarea>
+    <div class="mt-2">
+      <input type="checkbox" id="clearStorageCheckbox" />
+      <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
+    </div>
+    <div class="mt-2">
+      <button id="setConfigButton" class="controls-button">Apply Configurations</button>
+      <button id="resetConfigButton" class="controls-button">Reset to Default Configuration</button>
+    </div>
+
+    <div class="controls-group">
+      <h2 class="controls-title">Configuration builder</h2>
+      <div id="config-builder"></div>
+    </div>
+  </div>
+</div>
+
+  <script>
+  function openTab(evt, tabName) {
+    document.addEventListener("DOMContentLoaded", function () {
+  document.querySelector(".tablinks").click(); // Clicks the first tab ("General")
+});
+
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    const tablinks = document.getElementsByClassName("tablinks");
+    for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("active");
+    }
+
+    document.getElementById(tabName).style.display = "block";
+
+    evt.currentTarget.classList.add("active");
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".tablinks").click();  
+});
+
+  }
+  </script>
 
       <div id="youTubeTab" class="hidden controls-tab-content">
         <div class="controls-group">
