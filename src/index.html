@@ -245,13 +245,25 @@
     <div class="controls-group">
       <h2 class="controls-title">Set degrees of rotation</h2>
       <div class="flex">
-        <input id="iiif_rotation" type="text" value="" class="flex-1" />
+         <input id="iiif_rotation" type="range" value="0" min="-180" max="180" class="mr-2"/>
+         <span id="iiif_rotationValue" class="mr-2">0</span>
         <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
           Set Rotation
         </button>
       </div>
     </div>
   </div>
+
+  <script>
+    const slider = document.getElementById('iiif_rotation');
+    const valueDisplay = document.getElementById('iiif_rotationValue');
+
+
+    slider.addEventListener('input', () => {
+      valueDisplay.textContent = slider.value;
+    });
+  </script>
+
 
   <!-- AV -->
   <div id="av" class="tabcontent" style="display:none">
@@ -302,7 +314,7 @@
   <script>
   function openTab(evt, tabName) {
     document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".tablinks").click(); // Clicks the first tab ("General")
+    document.querySelector(".tablinks").click(); 
 });
 
     const tabcontent = document.getElementsByClassName("tabcontent");
