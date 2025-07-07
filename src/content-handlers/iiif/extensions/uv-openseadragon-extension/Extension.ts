@@ -54,6 +54,9 @@ import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 import { AdjustImageDialogue } from "../../modules/uv-dialogues-module/AdjustImageDialogue";
+import { TextRightPanel } from "../../modules/uv-textrightpanel-module/TextRightPanel";
+import { SearchLeftPanel } from "../../modules/uv-searchleftpanel-module/SearchLeftPanel";
+import { SearchHit } from "../../modules/uv-shared-module/SearchHit";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -74,14 +77,17 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   adjustImageDialogue: AdjustImageDialogue;
   isAnnotating: boolean = false;
   leftPanel: ContentLeftPanel;
+  searchLeftPanel: SearchLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
   mode: Mode;
   multiSelectDialogue: MultiSelectDialogue;
   previousAnnotationRect: AnnotationRect | null;
   rightPanel: MoreInfoRightPanel;
+  textRightPanel: TextRightPanel;
   settingsDialogue: SettingsDialogue;
   shareDialogue: ShareDialogue;
   defaultConfig: Config = defaultConfig;
+  searchHits: SearchHit[];
 
   create(): void {
     super.create();
@@ -191,6 +197,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       () => {
         if (this.isDesktopMetric()) {
           this.shell.$rightPanel.show();
+          this.shell.$textRightPanel.show();
+          this.shell.$searchLeftPanel.show();
         }
       }
     );
@@ -202,6 +210,13 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         this.resize();
       }
     );
+
+    this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+      this.shell.$centerPanel.hide();
+      this.shell.$rightPanel.hide();
+      this.shell.$textRightPanel.hide();
+      this.shell.$searchLeftPanel.hide();
+    });
 
     this.extensionHost.subscribe(IIIFEvents.MINUS, () => {
       this.centerPanel.setFocus();
@@ -417,6 +432,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       (terms: string) => {
         this.fire(OpenSeadragonExtensionEvents.SEARCH, terms);
         this.search(terms);
+        this.data.target = terms;
+        this.fire(IIIFEvents.SEARCH_CHANGED, this.data.target);
       }
     );
 
@@ -520,12 +537,27 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.shell.$leftPanel.hide();
     }
 
+    if (this.isSearchLeftPanelEnabled()) {
+      this.searchLeftPanel = new SearchLeftPanel(this.shell.$searchLeftPanel);
+    } else {
+      this.shell.$searchLeftPanel.hide();
+    }
+
     this.centerPanel = new OpenSeadragonCenterPanel(this.shell.$centerPanel);
 
     if (this.isRightPanelEnabled()) {
       this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
     } else {
       this.shell.$rightPanel.hide();
+    }
+
+    if (this.isTextRightPanelEnabled()) {
+      this.textRightPanel = new TextRightPanel(
+        this.shell.$textRightPanel,
+        this.shell
+      );
+    } else {
+      this.shell.$textRightPanel.hide();
     }
 
     if (this.isFooterPanelEnabled()) {
@@ -762,9 +794,20 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     }
   }
 
-  annotate(annotations: AnnotationGroup[], terms?: string): void {
-    this.annotations = annotations;
+  annotate(
+    annotations: AnnotationGroup[],
+    terms?: string,
+    searchHits?: SearchHit[]
+  ): void {
+    if (searchHits !== undefined) {
+      this.searchHits = searchHits;
+      // sort the search hits by canvasIndex
+      this.searchHits = searchHits.sort((a: SearchHit, b: SearchHit) => {
+        return a.canvasIndex - b.canvasIndex;
+      });
+    }
 
+    this.annotations = annotations;
     // sort the annotations by canvasIndex
     this.annotations = annotations.sort(
       (a: AnnotationGroup, b: AnnotationGroup) => {
@@ -775,6 +818,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     const annotationResults: AnnotationResults = new AnnotationResults();
     annotationResults.terms = terms;
     annotationResults.annotations = <AnnotationGroup[]>this.annotations;
+    annotationResults.searchHits = <SearchHit[]>this.searchHits;
 
     this.extensionHost.publish(IIIFEvents.ANNOTATIONS, annotationResults);
 
@@ -840,6 +884,57 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     });
 
     return groupedAnnotations;
+  }
+
+  groupSearchHitsByTarget(searchHits: any): SearchHit[] {
+    const groupedSearchHits: SearchHit[] = [];
+    let currentIndex = 0;
+    let oldCanvasIndex: number | null = null;
+
+    // loop all hits, match annotation on resource id and check on for canvasid
+
+    for (let i = 0; i < searchHits.hits.length; i++) {
+      const hit: any = searchHits.hits[i];
+
+      for (let x = 0; x < hit.annotations.length; x++) {
+        const canvasId = searchHits.resources
+          .find((e) => {
+            return e["@id"] == hit.annotations[x];
+          })
+          .on.match(/(.*)#/)[1];
+        const canvasIndex: number | null =
+          this.helper.getCanvasIndexById(canvasId);
+
+        if (canvasIndex !== oldCanvasIndex) {
+          currentIndex = 0;
+          oldCanvasIndex = canvasIndex;
+        } else {
+          currentIndex++;
+        }
+
+        const matches = hit.match.split(" ");
+        const searchHit: SearchHit = new SearchHit();
+        searchHit.canvasId = canvasId;
+        searchHit.canvasIndex = canvasIndex as number;
+        searchHit.before = "";
+        searchHit.after = "";
+        if (hit.before !== undefined) {
+          searchHit.before = hit.before;
+        }
+        if (hit.after !== undefined) {
+          searchHit.after = hit.after;
+        }
+        searchHit.match = matches[x];
+        searchHit.index = currentIndex;
+        groupedSearchHits.push(searchHit);
+      }
+    }
+
+    groupedSearchHits.sort((a, b) => {
+      return a.canvasIndex - b.canvasIndex;
+    });
+
+    return groupedSearchHits;
   }
 
   checkForSearchParam(): void {
@@ -1436,6 +1531,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     // clear search results
     this.annotations = [];
+    this.searchHits = [];
 
     const that = this;
 
@@ -1451,12 +1547,13 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       searchUri,
       terms,
       this.annotations,
-      (annotations: AnnotationGroup[]) => {
+      this.searchHits,
+      (annotations: AnnotationGroup[], searchHits: SearchHit[]) => {
         that.isAnnotating = false;
-
         if (annotations.length) {
-          that.annotate(annotations, terms);
+          that.annotate(annotations, terms, searchHits);
         } else {
+          this.extensionHost.publish(IIIFEvents.CLEAR_ANNOTATIONS);
           that.showMessage(
             that.data.config!.modules.genericDialogue.content.noMatches,
             () => {
@@ -1472,7 +1569,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     searchUri: string,
     terms: string,
     searchResults: AnnotationGroup[],
-    cb: (results: AnnotationGroup[]) => void
+    searchHits: SearchHit[],
+    cb: (results: AnnotationGroup[], searchHits: SearchHit[]) => void
   ): void {
     fetch(searchUri)
       .then((response) => response.json())
@@ -1481,12 +1579,19 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           searchResults = searchResults.concat(
             this.groupOpenAnnotationsByTarget(results)
           );
+          searchHits = searchHits.concat(this.groupSearchHitsByTarget(results));
         }
 
         if (results.next) {
-          this.getSearchResults(results.next, terms, searchResults, cb);
+          this.getSearchResults(
+            results.next,
+            terms,
+            searchResults,
+            searchHits,
+            cb
+          );
         } else {
-          cb(searchResults);
+          cb(searchResults, searchHits);
         }
       });
   }

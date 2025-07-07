@@ -12,23 +12,17 @@ export class LeftPanel<
 
   create(): void {
     super.create();
-
-    this.extensionHost.subscribe(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
-      if (this.isFullyExpanded) {
-        this.collapseFull();
-      } else {
-        this.expandFull();
-      }
-    });
   }
 
   init(): void {
     super.init();
 
-    const shouldOpenPanel: boolean = Bools.getBool(
+    let shouldOpenPanel: boolean = Bools.getBool(
       this.extension.getSettings().leftPanelOpen,
       this.options.panelOpen && !this.extension.isMetric("sm")
     );
+
+    if (this.extension.isSmMetric()) shouldOpenPanel = false;
 
     if (shouldOpenPanel) {
       this.toggle(true);
@@ -60,7 +54,7 @@ export class LeftPanel<
   }
 
   getFullTargetWidth(): number {
-    return this.$element.parent().width();
+    return this.$element.parent().parent().width();
   }
 
   toggleFinish(): void {
@@ -82,9 +76,26 @@ export class LeftPanel<
 
   toggle(autoToggled?: boolean): void {
     if (this.isExpanded) {
-      this.$element.parent().removeClass("leftPanelOpen");
+      if (this.$element.hasClass("searchLeftPanel")) {
+        this.$element.parent().removeClass("searchLeftPanelOpen");
+      } else {
+        this.$element.parent().removeClass("leftPanelOpen");
+      }
     } else {
-      this.$element.parent().addClass("leftPanelOpen");
+      const panelWidth = this.options.panelExpandedWidth ?? 271;
+      if (this.$element.hasClass("searchLeftPanel")) {
+        document.documentElement.style.setProperty(
+          "--uv-grid-search-left-width-open",
+          `${panelWidth}px`
+        );
+        this.$element.parent().addClass("searchLeftPanelOpen");
+      } else {
+        document.documentElement.style.setProperty(
+          "--uv-grid-left-width-open",
+          `${panelWidth}px`
+        );
+        this.$element.parent().addClass("leftPanelOpen");
+      }
     }
 
     super.toggle(autoToggled);

@@ -19,6 +19,10 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 import { ContentLeftPanel } from "../../config/ContentLeftPanel";
+import {
+  ExpandPanelContent,
+  ExpandPanelOptions,
+} from "../../config/ExpandPanel";
 
 type MultiSelectDialogueOptions = DialogueOptions & {
   /** Threshold for chunked resizing of gallery thumbnails */
@@ -148,6 +152,123 @@ type OpenSeadragonCenterPanel = ModuleConfig & {
   content: OpenSeadragonCenterPanelContent;
 };
 
+type SearchLeftPanelOptions = DialogueOptions &
+  ExpandPanelOptions & {
+    /** Order in which canvases are displayed */
+    canvasDisplayOrder: string;
+    /** Canvases to exclude from display */
+    canvasExclude: string;
+    /** Determines if copying to clipboard is enabled */
+    copyToClipboardEnabled: boolean;
+    /** Determines if download is enabled */
+    limitToRange: boolean;
+    /** Order in which manifests are displayed */
+    manifestDisplayOrder: string;
+    /** Manifests to exclude from display */
+    manifestExclude: string;
+    /** Language codes for right-to-left languages */
+    rtlLanguageCodes: string;
+    /** Determines if all languages should be shown */
+    showAllLanguages: boolean;
+    /** Limit for the text */
+    textLimit: number;
+    /** Type of the text limit */
+    textLimitType: string;
+  };
+
+type SearchLeftPanelContent = DialogueContent &
+  ExpandPanelContent & {
+    attribution: string;
+    canvasHeader: string;
+    collapse: string;
+    collapseFull: string;
+    copiedToClipboard: string;
+    copyToClipboard: string;
+    description: string;
+    expand: string;
+    expandFull: string;
+    holdingText: string;
+    less: string;
+    license: string;
+    logo: string;
+    manifestHeader: string;
+    more: string;
+    noData: string;
+    page: string;
+    rangeHeader: string;
+    title: string;
+    enterKeyword: string;
+    searchWithin: string;
+    clearSearch: string;
+    doSearch: string;
+    instanceFound: string;
+    instancesFound: string;
+    noMatches: string;
+    nextResult: string;
+    previousResult: string;
+    searchHitOf: string;
+  };
+
+export type SearchLeftPanel = ModuleConfig & {
+  options: SearchLeftPanelOptions;
+  content: SearchLeftPanelContent;
+};
+
+type TextRightPanelOptions = DialogueOptions &
+  ExpandPanelOptions & {
+    /** Order in which canvases are displayed */
+    canvasDisplayOrder: string;
+    /** Canvases to exclude from display */
+    canvasExclude: string;
+    /** Determines if copying to clipboard is enabled */
+    copyToClipboardEnabled: boolean;
+    /** Determines if download is enabled */
+    limitToRange: boolean;
+    /** Order in which manifests are displayed */
+    manifestDisplayOrder: string;
+    /** Manifests to exclude from display */
+    manifestExclude: string;
+    /** Language codes for right-to-left languages */
+    rtlLanguageCodes: string;
+    /** Determines if all languages should be shown */
+    showAllLanguages: boolean;
+    /** Limit for the text */
+    textLimit: number;
+    /** Type of the text limit */
+    textLimitType: string;
+  };
+
+type TextRightPanelContent = DialogueContent &
+  ExpandPanelContent & {
+    attribution: string;
+    canvasHeader: string;
+    collapse: string;
+    collapseFull: string;
+    copiedToClipboard: string;
+    copyToClipboard: string;
+    description: string;
+    expand: string;
+    expandFull: string;
+    holdingText: string;
+    less: string;
+    license: string;
+    logo: string;
+    manifestHeader: string;
+    more: string;
+    noData: string;
+    page: string;
+    rangeHeader: string;
+    title: string;
+    leftPage: string;
+    rightPage: string;
+    textNotFound: string;
+  };
+
+export type TextRightPanel = ModuleConfig & {
+  options: TextRightPanelOptions;
+  content: TextRightPanelContent;
+};
+
 type SearchFooterPanelOptions = FooterPanelOptions & {
   /** Determines if autocomplete for words is allowed */
   autocompleteAllowWords: boolean;
@@ -275,6 +396,8 @@ type OSDSettingsDialogue = ModuleConfig & {
 
 type Modules = {
   contentLeftPanel: ContentLeftPanel;
+  searchLeftPanel: SearchLeftPanel;
+  textRightPanel: TextRightPanel;
   downloadDialogue: OSDDownloadDialogue;
   multiSelectDialogue: MultiSelectDialogue;
   pagingHeaderPanel: PagingHeaderPanel;

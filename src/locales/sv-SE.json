@@ -107,6 +107,7 @@
   "$zoomOut": "Zooma ut",
   "$adjustImage": "Justera bild",
   "$clearSearch": "Rensa sökning",
+  "$doSearch": "Sök",
   "$displaying_A_of_B": "{0} {1} av {2}",
   "$enterKeyword": "Ange sökord",
   "$imageLowercase": "bild",
@@ -160,5 +161,15 @@
   "$contrast": "Kontrast",
   "$saturation": "Färgmättnad",
   "$reset": "Återställ",
-  "$remember": "Kom ihåg mina inställningar"
+  "$remember": "Kom ihåg mina inställningar",
+  "$transcribedText": "Text",
+  "$expandTranscribedText": "Expandera text",
+  "$collapseTranscribedText": "Fäll ihop text",
+  "$transcribedTextLeftPage": "Vänstra sidan",
+  "$transcribedTextRightPage": "Högra sidan",
+  "$noTranscribedTextFound": "Hittade ingen text för denna sida.",
+  "$search": "Sök",
+  "$expandSearch": "Expandera sök",
+  "$collapseSearch": "Fäll ihop sök",
+  "$searchHitOf": "{0} av {1}"
 }

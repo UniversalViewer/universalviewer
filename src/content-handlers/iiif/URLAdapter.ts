@@ -5,6 +5,7 @@ import { IUVData } from "../../IUVData";
 import { IIIFEvents } from "./IIIFEvents";
 import { defaultLocale } from "../../Utils";
 import { parseContentStateParameter } from "./helpers";
+import { Events } from "../../Events";
 
 export class URLAdapter extends UVAdapter {
   constructor(readonly: boolean = false) {
@@ -131,6 +132,8 @@ export class URLAdapter extends UVAdapter {
       rotation: Number(this.get<number>("r", 0)),
       rangeId: this.get<string>("rid", ""),
       xywh: this.get<string>("xywh", ""),
+      q: this.get<string>("search", ""),
+      hi: this.get<number>("hi", 0),
       target: this.get<string>("target", ""),
       // cfi: this.get<string>("cfi", ""),
       // youTubeVideoId: this.get<string>("youTubeVideoId", ""),
@@ -199,6 +202,34 @@ export class URLAdapter extends UVAdapter {
       IIIFEvents.TARGET_CHANGE,
       (target) => {
         this.set("xywh", this.getFragment("xywh", target));
+      },
+      false
+    );
+
+    uv.on(
+      IIIFEvents.SEARCH_CHANGED,
+      (terms) => {
+        this.set("q", terms); // search term
+      },
+      false
+    );
+
+    uv.on(
+      IIIFEvents.CLEAR_ANNOTATIONS,
+      () => {
+        this.set("q", ""); // clear search term
+        this.set("hi", undefined); // clear search hit index
+      },
+      false
+    );
+
+    uv.on(
+      Events.SEARCH_HIT_CHANGED,
+      (searchHit) => {
+        const hitIndex = searchHit[0].hitIndex;
+        if (hitIndex !== undefined) {
+          this.set("hi", hitIndex); // search hit index
+        }
       },
       false
     );

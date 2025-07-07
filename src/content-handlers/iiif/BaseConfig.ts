@@ -40,6 +40,9 @@ export type Options = {
   /** Determines if the left panel is enabled */
   leftPanelEnabled?: boolean;
 
+  /** Determines if the search left panel is enabled */
+  searchLeftPanelEnabled?: boolean;
+
   /** Determines if locales are limited */
   limitLocales?: boolean;
 
@@ -72,6 +75,9 @@ export type Options = {
 
   /** Determines if the right panel is enabled */
   rightPanelEnabled?: boolean;
+
+  /** Determines if the text right panel is enabled */
+  textRightPanelEnabled?: boolean;
 
   /** Determines if user settings are saved */
   saveUserSettings?: boolean;
