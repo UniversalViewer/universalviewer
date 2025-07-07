@@ -153,28 +153,30 @@ The event system in the UV is divided into two parts, internal and external:
 
 - **Role:** Enable external applications or embedding pages to listen to and react to events within the Universal Viewer.
 - **Core methods:**
-  - `UnniversalViewer.on(name: string, cb: Function)`: Registers an event listener for a specific event. Used by the consuming page / application.
-  - `BaseContentHandler.fire(name: string, ...args: any[])`: Calls `apply()` on all assigned callback functions for the given event.
+  - `UnniversalViewer#on(name: string, cb: Function)`: Registers an event listener for a specific event. Used by the consuming page / application.
+  - `BaseContentHandler#fire(name: string, ...args: any[])`: Calls `apply()` on all assigned callback functions for the given event.
+  - `BaseExtension#fire(name: string, ...args: any[])`: Gives extensions access to `fire()` on the extension host.
 - **Details:**
-  - Events passed to `UniversalViewer.on()` are added to its `__externalEventListeners` array.
-  - When creating a `IIIFContentHandler`, `__externalEventListeners` is passed to its constructor and in turn to parent class `BaseContentHandler`.
+  - Events passed to `UniversalViewer#on()` are added to its `__externalEventListeners` array.
+  - When creating a content handler, `__externalEventListeners` is passed to its constructor and in turn to parent class `BaseContentHandler`.
   - `BaseContentHandler` iterates and adds each event to the `_eventListeners` property.
-  - `BaseContentHandler.fire()` is used to trigger the callbacks when the relevant event occurs. 
+  - `BaseContentHandler#fire()` is used to trigger the callbacks when the relevant event occurs.
 
 #### 1.5.2 Internal Events
 
 - **Role:** Allow communication between components in a decoupled manner.
 - **Design pattern:** Publish-Subscribe (PubSub)
 - **Details:** 
+  - Currently only used in IIIF content.
   - Allows system components to broadcast (publish) an event so that subscribers may respond appropriately. The broadcaster doesn't need to know who the subscribers are and vice-versa.
-  - Extension Host (`IIIFContentHandler`) serves as the 'Event Bus' providing the `subscribe` and `publish` methods.
+  - Extension Host (`this.extensionHost` aka `IIIFContentHandler`) serves as the 'Event Bus' providing the `subscribe` and `publish` methods.
   - Uses the `PubSub` class to store and fire event callbacks.
 
-The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
+<!-- The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
 
 This means that components don't directly call each other; they communicate indirectly through events.
 
-In UV, the Extension Host, usually referenced as `this.extensionHost` and which is currently always `IIIFContentHandler`, is typically the central event bus that uses the PubSub pattern. Components like extensions, UI panels, and dialogues use it to communicate.
+In UV, the Extension Host, usually referenced as `this.extensionHost` and which is currently always `IIIFContentHandler`, is typically the central event bus that uses the PubSub pattern. Components like extensions, UI panels, and dialogues use it to communicate. -->
 
 ### 1.6 Localisation
 
