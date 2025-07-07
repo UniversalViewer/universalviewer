@@ -226,6 +226,7 @@
      <div id="iiifTab" class="controls-tab-content">
       <div class="tab">
         <button class="tablinks active" onclick="openTab(event, 'general')">General</button>
+        <button class="tablinks" onclick="openTab(event, 'osd')">OpenSeadragon</button>
         <button class="tablinks" onclick="openTab(event, 'av')">AV</button>
         <button class="tablinks" onclick="openTab(event, 'annotations')">Annotations</button>
         <button class="tablinks" onclick="openTab(event, 'config')">Configuration</button>
@@ -241,7 +242,17 @@
     <div class="mt-2">
       <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
     </div>
+    <h2 class="controls-title">Target</h2>
+    <div class="flex">
+      <input id="iiif_target" type="text" value="" class="flex-1" />
+      <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
+        Set Target
+      </button>
+    </div>
+  </div>
 
+  <!-- OSD -->
+  <div id="osd" class="tabcontent">
     <div class="controls-group">
       <h2 class="controls-title">Set degrees of rotation</h2>
       <div class="flex">
@@ -251,7 +262,7 @@
           Set Rotation
         </button>
       </div>
-    </div>
+      </div>
   </div>
 
   <script>
@@ -265,14 +276,6 @@
 
   <!-- AV -->
   <div id="av" class="tabcontent" style="display:none">
-    <h2 class="controls-title">Target</h2>
-    <div class="flex">
-      <input id="iiif_target" type="text" value="" class="flex-1" />
-      <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
-        Set Target
-      </button>
-    </div>
-
     <div class="controls-group">
       <h2 class="controls-title">Mute sound</h2>
       <input type="checkbox" id="iiif_mutedCheckbox" />
