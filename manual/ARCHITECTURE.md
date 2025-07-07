@@ -180,6 +180,16 @@ In UV, the Extension Host, usually referenced as `this.extensionHost` and which 
 
 ### 1.6 Localisation
 
+- **Role:** Allow all interface text to be available in a variety of languages, and for users to be able to change language as needed.
+- **Design pattern:** Key-based localisation
+- **Details:** 
+  - Translation strings are stored files named with the relevant language tag e.g. `en-GB.json`.
+  - These contain an object consisting of key-value pairs of text strings.
+  - Each key begins with a `$` to serve as a marker for replacement and config contains matching markers.
+  - After config is loaded, `BaseExtension.ts#translateLocale()` handles replacement.
+  - Values are then generally available in `this.content`.
+- **Note:** Substitution of language strings into config takes place before the 'configure' event fires, so user-supplied config cannot make use of `$markers` and must provide literal values.
+
 ## 2. Source Code Structure & Execution Flow
 
 ### 2.1 Initialisation
