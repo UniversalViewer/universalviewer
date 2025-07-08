@@ -1,10 +1,7 @@
-/* eslint-disable no-debugger */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 const $ = require("jquery");
 require("jquery-ui-dist/jquery-ui");
 require("jquery-ui-dist/jquery-ui.css");
+require("../../../../../../../node_modules/dashjs/dist/modern/umd/dash.all.min.js");
 import { Canvas, Range, Utils } from "manifesto.js";
 import { Behavior } from "@iiif/vocabulary/dist-commonjs";
 import { CanvasInstanceEvents } from "../events/canvas-instance-events";
@@ -19,7 +16,6 @@ import { getFirstTargetedCanvasId } from "../helpers/get-first-targeted-canvas-i
 import { Events } from "../events/av-component-events";
 import { TimelineTime } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
-import "dashjs/dist/modern/umd/dash.all.min.js";
 import "../css/styles.less";
 
 export class AVComponent extends BaseComponent {
@@ -99,7 +95,6 @@ export class AVComponent extends BaseComponent {
   }
 
   public set(data: IAVComponentData): void {
-    // eslint-disable-next-line no-debugger
     Logger.groupCollapsed("AVComponent.set()");
     Logger.log("Data", data);
 

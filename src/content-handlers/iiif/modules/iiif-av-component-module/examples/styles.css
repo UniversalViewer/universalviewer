@@ -26,7 +26,7 @@ hr {
 .title,
 .description {
   width: 77%;
-  margin: 0px 0px 10px 0;
+  margin: 0 0 10px;
 }
 
 .title {
@@ -48,7 +48,7 @@ hr {
   position: fixed;
   bottom: 10px;
   right: 10px;
-  border: 4px solid rgba(20, 20, 20, 0.4);
+  border: 4px solid rgb(20 20 20 / 40%);
   width: 30%;
   height: 80%;
   font-size: 10px;
@@ -62,7 +62,7 @@ hr {
   width: 100%;
   box-sizing: border-box;
   height: 100%;
-  padding: 0px 10px;
+  padding: 0 10px;
   border: none;
   outline: none;
 }
@@ -78,7 +78,7 @@ hr {
 * Media Queries
 *******************/
 
-@media (min-width: 1220px) and (max-width: 2000px) {
+/* @media (min-width: 1220px) and (max-width: 2000px) {
 }
 
 @media (min-width: 1010px) and (max-width: 1220px) {
@@ -91,7 +91,7 @@ hr {
 }
 
 @media screen and (max-width: 480px) {
-}
+} */
 
 /*******************
 * Tree
@@ -130,7 +130,7 @@ hr {
   width: 10px;
 }
 .iiif-tree-component input.multiSelect {
-  margin-top: 0px;
+  margin-top: 0;
   margin-right: 5px;
   display: block;
   float: left;
@@ -148,7 +148,7 @@ hr {
 }
 .iiif-tree-component ul.tree li {
   margin: 0;
-  padding: 2px 0 2px 0;
+  padding: 2px 0;
   overflow: hidden;
 }
 .iiif-tree-component ul.tree li a {

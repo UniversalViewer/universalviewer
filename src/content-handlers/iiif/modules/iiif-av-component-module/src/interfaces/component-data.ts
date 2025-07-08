@@ -1,7 +1,5 @@
 import { Helper } from "@iiif/manifold";
 import { IAVComponentContent } from "./component-content";
-
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export interface IAVComponentData {
   [key: string]: any;
   adaptiveAuthEnabled?: boolean;

@@ -11,7 +11,6 @@ export function debounce(fn: any, debounceDuration: number): any {
 
   return function () {
     if (!fn.debouncing) {
-      // eslint-disable-next-line prefer-rest-params
       const args: any = Array.prototype.slice.apply(arguments);
       fn.lastReturnVal = fn.apply(window, args);
       fn.debouncing = true;

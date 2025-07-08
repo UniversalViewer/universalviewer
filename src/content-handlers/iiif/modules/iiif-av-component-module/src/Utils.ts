@@ -59,11 +59,14 @@ export class AVComponentUtils {
     canvases: Canvas[],
     target: string
   ): string | undefined {
-    let t: number[] | null = Utils.getTemporalComponent(target);
+    const t: number[] | null = Utils.getTemporalComponent(target);
 
     if (t) {
       let offset: number = 0;
-      let targetWithoutTemporal: string = target.substr(0, target.indexOf("#"));
+      const targetWithoutTemporal: string = target.substr(
+        0,
+        target.indexOf("#")
+      );
 
       // loop through canvases adding up their durations until we reach the targeted canvas
       for (let i = 0; i < canvases.length; i++) {

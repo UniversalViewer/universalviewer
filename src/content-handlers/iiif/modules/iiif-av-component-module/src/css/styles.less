@@ -42,12 +42,12 @@
 
   .canvas-container .working-indicator {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 10000;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgb(0 0 0 / 70%);
     color: #fff;
     text-align: center;
     padding-top: 30%;
@@ -57,7 +57,8 @@
 
   .canvas-container .anno {
     position: absolute;
-    /*border: 1px solid rgba(0,255,0,.4);*/
+
+    /* border: 1px solid rgba(0,255,0,.4); */
     background: transparent;
     font-size: 14px;
     font-weight: bold;
@@ -75,7 +76,7 @@
   .canvas-timeline-container {
     background: #afafaf;
     height: 4px;
-    width: 0px;
+    width: 0;
     border: none;
     cursor: pointer;
   }
@@ -86,7 +87,7 @@
     padding-bottom: 7px;
 
     .label {
-      background: rgba(66, 66, 66, 0.85);
+      background: rgb(66 66 66 / 85%);
       height: 25px;
       padding: 5px;
       color: #fff;
@@ -99,9 +100,9 @@
 
       .arrow {
         position: absolute;
-        top: 0px;
-        left: 0px;
-        border-top: 6px solid rgba(66, 66, 66, 0.85);
+        top: 0;
+        left: 0;
+        border-top: 6px solid rgb(66 66 66 / 85%);
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
       }
@@ -115,7 +116,7 @@
 
   .hover-highlight {
     position: absolute;
-    background: rgb(226, 226, 226);
+    background: rgb(226 226 226);
     height: 4px;
   }
 
@@ -137,7 +138,7 @@
     width: 100%;
     min-height: 6px;
     background: #cfcfcf;
-    top: 0px;
+    top: 0;
     padding-bottom: 3px;
   }
 
@@ -201,8 +202,8 @@
 
   .controls-container .time-display {
     float: left;
-    padding: 10px 0px 0 10px;
-    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 0 0 10px;
+    color: rgb(255 255 255 / 50%);
     min-width: 150px;
     font-size: 14px;
 
@@ -218,7 +219,7 @@
 
   .controls-container .volume .volume-mute {
     float: left;
-    padding-left: 0px;
+    padding-left: 0;
     padding-right: 2px;
   }
 
@@ -229,7 +230,7 @@
     height: 6px;
     border: none;
     border-radius: 0;
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgb(255 255 255 / 25%);
 
     .ui-slider-handle {
       width: 1px;
@@ -308,9 +309,8 @@
 // mixins
 
 .ui-slider-range-scrub() {
-  background: rgba(66, 66, 66, 0.5);
+  background: rgb(66 66 66 / 50%);
   box-sizing: border-box;
-  border-radius: 0;
   cursor: pointer;
   left: 0;
   top: 0;
@@ -345,7 +345,7 @@
 }
 
 .ui-slider-handle-hidden() {
-  top: 0px;
+  top: 0;
   height: 100%;
   width: 1px;
   margin-left: -8px;

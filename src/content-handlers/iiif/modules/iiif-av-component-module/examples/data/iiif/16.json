@@ -1,82 +1,82 @@
 {
-    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16.json",
-    "type": "Manifest",
-    "label": "One video file, segments of file associated with different canvases",
-    "description": "Example - divide a performance up into scenes on different canvases.",
-    "sequences": [
+  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16.json",
+  "type": "Manifest",
+  "label": "One video file, segments of file associated with different canvases",
+  "description": "Example - divide a performance up into scenes on different canvases.",
+  "sequences": [
+    {
+      "type": "Sequence",
+      "canvases": [
         {
-            "type": "Sequence",
-            "canvases": [
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/1",
+          "duration": 30,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/1",
+              "type": "AnnotationPage",
+              "items": [
                 {
-                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/1",
-                    "duration": 30,
-                    "content": [
-                        {
-                            "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/1",
-                            "type": "AnnotationPage",
-                            "items": [
-                                {
-                                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/1",
-                                    "type": "Annotation",
-                                    "motivation": "painting",
-                                    "body": {
-                                        "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=0,30",
-                                        "type": "Video",
-                                        "format": "video/mp4"
-                                    },
-                                    "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/1"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/2",
-                    "duration": 30,
-                    "content": [
-                        {
-                            "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/2",
-                            "type": "AnnotationPage",
-                            "items": [
-                                {
-                                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/2",
-                                    "type": "Annotation",
-                                    "motivation": "painting",
-                                    "body": {
-                                        "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=30,60",
-                                        "type": "Video",
-                                        "format": "video/mp4"
-                                    },
-                                    "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/2"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/3",
-                    "duration": 30,
-                    "content": [
-                        {
-                            "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/3",
-                            "type": "AnnotationPage",
-                            "items": [
-                                {
-                                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/3",
-                                    "type": "Annotation",
-                                    "motivation": "painting",
-                                    "body": {
-                                        "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=60,90",
-                                        "type": "Video",
-                                        "format": "video/mp4"
-                                    },
-                                    "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/3"
-                                }
-                            ]
-                        }
-                    ]
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/1",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=0,30",
+                    "type": "Video",
+                    "format": "video/mp4"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/1"
                 }
-            ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/2",
+          "duration": 30,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/2",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/2",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=30,60",
+                    "type": "Video",
+                    "format": "video/mp4"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/canvas/3",
+          "duration": 30,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/3",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/anno/3",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-green.mp4#t=60,90",
+                    "type": "Video",
+                    "format": "video/mp4"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16/content/page/3"
+                }
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

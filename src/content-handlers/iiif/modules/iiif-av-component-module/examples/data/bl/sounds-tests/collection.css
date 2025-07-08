@@ -20,8 +20,8 @@ ul.range li {
 }
 #footer {
   position: fixed;
-  left: 0px;
-  bottom: 0px;
+  left: 0;
+  bottom: 0;
   background: #777;
   color: #fff;
   padding: 10px;
