@@ -1,0 +1,174 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_single_canvas.json",
+  "type": "Manifest",
+  "label": { "en": ["C1685/98 Loose ends 17/7/99 Single Canvas"] },
+  "metadata": [
+    {
+      "label": { "en": ["Title"] },
+      "value": { "en": ["Loose ends 17/7/99"] }
+    },
+    {
+      "label": { "en": ["Details"] },
+      "value": {
+        "en": [
+          "<p>Here, both sides of the tape are annotated onto a single canvas, to give a single scrub experience.</p>"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000001",
+      "type": "Sequence",
+      "canvases": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004",
+          "type": "Canvas",
+          "label": { "en": ["Tape 1 Side 1 and 2"] },
+          "duration": 7446.8,
+          "content": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno/",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,3723.4",
+                  "timeMode": "trim",
+                  "body": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C1685_98/vdc_100052359795.0x000019.mp4",
+                      "type": "Audio"
+                    }
+                  ]
+                },
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005/anno/",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=3723.4,7446.8",
+                  "timeMode": "trim",
+                  "body": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C1685_98/vdc_100052359795.0x00001b.mp4",
+                      "type": "Audio"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/top",
+      "type": "Range",
+      "label": { "en": ["Loose ends 17/7/99"] },
+      "members": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,7446.8",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000006",
+          "type": "Range",
+          "label": { "en": ["Loose ends"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,2504.64",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007",
+              "type": "Range",
+              "label": { "en": ["There's a touch"] },
+              "members": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=560,741.28",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000008",
+              "type": "Range",
+              "label": { "en": ["Song of dreams"] },
+              "members": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=1700.36,1914.84",
+                  "type": "Canvas"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000c",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2504.64,2661.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000e",
+          "type": "Range",
+          "label": { "en": ["Saturday review"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2661.56,5308.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000011",
+          "type": "Range",
+          "label": { "en": ["My dear Jim - Letters to a friend [2]"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=5308.56,6225.2",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000013",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=6225.2,6343.84",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000015",
+          "type": "Range",
+          "label": { "en": ["The archive hour: Humph at 80"] },
+          "members": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=6343.84,7446.8",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/collection.json",
+  "type": "Collection",
+  "label": { "en": ["Loose Ends: variants"] },
+  "items": [
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_1.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 - prettified manifest"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_targets.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 Explicit Targets"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_targets_duration.json",
+      "type": "Manifest",
+      "label": {
+        "en": [
+          "C1685/98 Loose ends 17/7/99 Explicit Targets, fixed side 1 duration"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_auto_advance.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 Auto-Advance"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_simpler_single_canvas.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 Single Canvas"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_no_nav.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 No-Nav"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 Presentation 3 Correct"] }
+    }
+  ]
+}

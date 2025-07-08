@@ -1,0 +1,124 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8_expt.json",
+  "type": "Manifest",
+  "metadata": [
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C308/8"] }
+    },
+    {
+      "label": { "en": ["Title"] },
+      "value": { "en": ["Brian Hayes programme"] }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004",
+      "type": "Canvas",
+      "label": { "en": ["Canvas 1"] },
+      "duration": 3279.16,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004_annos",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004_t_162_64_3441_8",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004#t=162.64,3441.8",
+              "timeMode": "trim",
+              "body": {
+                "format": "audio/mp4",
+                "id": "https://resources.digirati.com/bl/C308_8/vdc_100050889733.0x00000c.mp4",
+                "type": "Audio"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005",
+      "type": "Canvas",
+      "label": { "en": ["Canvas 2"] },
+      "duration": 223.32,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005_annos",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005_t_0_223_32",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005#t=0,223.32",
+              "timeMode": "trim",
+              "body": {
+                "format": "audio/mp4",
+                "id": "https://resources.digirati.com/bl/C308_8/vdc_100050889733.0x00000e.mp4",
+                "type": "Audio"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000002",
+      "label": { "en": ["Brian Hayes programme"] },
+      "type": "Range",
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000006",
+          "type": "Range",
+          "label": { "en": ["Recording"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004#t=162.64,3441.8",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Brian Hayes programme"] }
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000008",
+          "label": { "en": ["Recording"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005#t=0,223.32",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["[News]; excerpt"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005",
+          "type": "Canvas"
+        }
+      ]
+    }
+  ]
+}

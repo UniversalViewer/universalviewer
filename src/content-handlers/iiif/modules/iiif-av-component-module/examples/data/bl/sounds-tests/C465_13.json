@@ -1,0 +1,1553 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "C465/13/01-14 F5574 F5575 F5576 F5577 F5578 F5579 F5580 F5581 F5582 F5583 F5584 F5585 F5586 F5587 Jocelyn Herbert interviewed by Cathy Courtney"
+    ]
+  },
+  "metadata": [
+    {
+      "label": { "en": ["Full title"] },
+      "value": { "en": ["Jocelyn Herbert interviewed by Cathy Courtney"] }
+    },
+    {
+      "label": { "en": ["Creator"] },
+      "value": { "en": ["Courtney, Cathy (sound recordist)"] }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["NSA: General"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["14 compact cassettes stereo"] }
+    },
+    {
+      "label": { "en": ["Usage"] },
+      "value": { "en": ["<span>Rights unassigned - staff access only</span>"] }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Digitised by"] },
+      "value": { "en": ["The British Library, 2018"] }
+    },
+    {
+      "label": { "en": ["Digitisation funded by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C465/13"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["C465/13/01-14"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5584094>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "logo": [
+    { "id": "https://www.bl.uk/images/bl_logo_100.gif", "type": "Image" }
+  ],
+  "posterCanvas": {
+    "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/c/poster",
+    "type": "Canvas",
+    "label": { "en": ["world"] },
+    "width": 962,
+    "height": 962,
+    "items": [
+      {
+        "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/c/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/c/poster/p1/a1",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/c/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "width": 962,
+              "height": 962,
+              "format": "image/jpeg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "homepage": {
+    "id": "http://access.bl.uk/item/viewer/ark:/81055/vdc_100054358191.0x000002",
+    "type": "Text",
+    "label": { "en": ["View at the British Library"] },
+    "format": "text/html"
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000004",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 1"] },
+      "duration": 1859.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000004#t=0,1859.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000049/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000049/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000048.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000005",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 2"] },
+      "duration": 1730.08,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000005#t=0,1730.08",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00004a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000007",
+      "type": "Canvas",
+      "label": { "en": ["Tape 2 Side 1"] },
+      "duration": 1863.48,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000007/anno3",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000007/anno3/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000007#t=0,1863.48",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004d/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004d/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00004c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000008",
+      "type": "Canvas",
+      "label": { "en": ["Tape 2 Side 2"] },
+      "duration": 1859.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000008/anno4",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000008/anno4/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000008#t=0,1859.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004f/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00004f/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00004e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000a",
+      "type": "Canvas",
+      "label": { "en": ["Tape 3 Side 1"] },
+      "duration": 1857.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000a/anno5",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000a/anno5/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000a#t=0,1857.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000051/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000051/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000050.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000b",
+      "type": "Canvas",
+      "label": { "en": ["Tape 3 Side 2"] },
+      "duration": 1855.2,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000b/anno6",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000b/anno6/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000b#t=0,1855.2",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000053/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000053/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000052.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000d",
+      "type": "Canvas",
+      "label": { "en": ["Tape 4 Side 1"] },
+      "duration": 1857,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000d/anno7",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000d/anno7/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000d#t=0,1857",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000055/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000055/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000054.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000e",
+      "type": "Canvas",
+      "label": { "en": ["Tape 4 Side 2"] },
+      "duration": 1856.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000e/anno8",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000e/anno8/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000e#t=0,1856.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000057/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000057/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000056.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000010",
+      "type": "Canvas",
+      "label": { "en": ["Tape 5 Side 1"] },
+      "duration": 1858.76,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000010/anno9",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000010/anno9/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000010#t=0,1858.76",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000059/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000059/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000058.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000011",
+      "type": "Canvas",
+      "label": { "en": ["Tape 5 Side 2"] },
+      "duration": 1862.36,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000011/anno10",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000011/anno10/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000011#t=0,1862.36",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00005a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000013",
+      "type": "Canvas",
+      "label": { "en": ["Tape 6 Side 1"] },
+      "duration": 1972.92,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000013/anno11",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000013/anno11/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000013#t=0,1972.92",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005d/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005d/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00005c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000014",
+      "type": "Canvas",
+      "label": { "en": ["Tape 6 Side 2"] },
+      "duration": 1859.76,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000014/anno12",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000014/anno12/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000014#t=0,1859.76",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005f/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00005f/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00005e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000016",
+      "type": "Canvas",
+      "label": { "en": ["Tape 7 Side 1"] },
+      "duration": 1864.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000016/anno13",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000016/anno13/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000016#t=0,1864.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000061/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000061/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000060.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000017",
+      "type": "Canvas",
+      "label": { "en": ["Tape 7 Side 2"] },
+      "duration": 1863.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000017/anno14",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000017/anno14/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000017#t=0,1863.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000063/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000063/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000062.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000019",
+      "type": "Canvas",
+      "label": { "en": ["Tape 8 Side 1"] },
+      "duration": 1862.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000019/anno15",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000019/anno15/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000019#t=0,1862.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000065/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000065/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000064.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001a",
+      "type": "Canvas",
+      "label": { "en": ["Tape 8 Side 2"] },
+      "duration": 1866,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001a/anno16",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001a/anno16/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001a#t=0,1866",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000067/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000067/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000066.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001c",
+      "type": "Canvas",
+      "label": { "en": ["Tape 9 Side 1"] },
+      "duration": 1858.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001c/anno17",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001c/anno17/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001c#t=0,1858.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000069/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000069/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000068.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001d",
+      "type": "Canvas",
+      "label": { "en": ["Tape 9 Side 2"] },
+      "duration": 1856.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001d/anno18",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001d/anno18/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001d#t=0,1856.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00006a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001f",
+      "type": "Canvas",
+      "label": { "en": ["Tape 10 Side 1"] },
+      "duration": 1862,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001f/anno19",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001f/anno19/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001f#t=0,1862",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006d/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006d/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00006c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000020",
+      "type": "Canvas",
+      "label": { "en": ["Tape 10 Side 2"] },
+      "duration": 1858.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000020/anno20",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000020/anno20/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000020#t=0,1858.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006f/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00006f/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00006e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000022",
+      "type": "Canvas",
+      "label": { "en": ["Tape 11 Side 1"] },
+      "duration": 1862.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000022/anno21",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000022/anno21/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000022#t=0,1862.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000071/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000071/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000070.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000023",
+      "type": "Canvas",
+      "label": { "en": ["Tape 11 Side 2"] },
+      "duration": 1860,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000023/anno22",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000023/anno22/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000023#t=0,1860",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000073/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000073/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000072.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000025",
+      "type": "Canvas",
+      "label": { "en": ["Tape 12 Side 1"] },
+      "duration": 1858.16,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000025/anno23",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000025/anno23/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000025#t=0,1858.16",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000075/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000075/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000074.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000026",
+      "type": "Canvas",
+      "label": { "en": ["Tape 12 Side 2"] },
+      "duration": 1870,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000026/anno24",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000026/anno24/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000026#t=0,1870",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000077/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000077/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000076.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000028",
+      "type": "Canvas",
+      "label": { "en": ["Tape 13 Side 1"] },
+      "duration": 1858.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000028/anno25",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000028/anno25/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000028#t=0,1858.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000079/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x000079/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x000078.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000029",
+      "type": "Canvas",
+      "label": { "en": ["Tape 13 Side 2"] },
+      "duration": 1864.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000029/anno26",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000029/anno26/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000029#t=0,1864.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00007a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002",
+      "type": "Canvas",
+      "label": { "en": ["Tape 14 Side 1"] },
+      "duration": 3720.96,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002/anno27",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002/anno27/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002#t=0,1863",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007d/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007d/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00007c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002/anno27/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002#t=1863,3720.96",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007f/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100054358191.0x00007f/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100054358191.0x00007e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000002/top",
+      "type": "Range",
+      "label": { "en": ["Jocelyn Herbert interviewed by Cathy Courtney"] },
+      "metadata": [
+        {
+          "label": { "en": ["Full title"] },
+          "value": { "en": ["Jocelyn Herbert interviewed by Cathy Courtney"] }
+        },
+        {
+          "label": { "en": ["Creator"] },
+          "value": { "en": ["Courtney, Cathy (sound recordist)"] }
+        },
+        {
+          "label": { "en": ["Collection"] },
+          "value": { "en": ["NSA: General"] }
+        },
+        {
+          "label": { "en": ["Format"] },
+          "value": { "en": ["14 compact cassettes stereo"] }
+        },
+        {
+          "label": { "en": ["Usage"] },
+          "value": {
+            "en": ["<span>Rights unassigned - staff access only</span>"]
+          }
+        },
+        {
+          "label": { "en": ["Held by"] },
+          "value": { "en": ["The British Library"] }
+        },
+        {
+          "label": { "en": ["Digitised by"] },
+          "value": { "en": ["The British Library, 2018"] }
+        },
+        {
+          "label": { "en": ["Digitisation funded by"] },
+          "value": { "en": ["The British Library"] }
+        },
+        {
+          "label": { "en": ["Identifier"] },
+          "value": { "en": ["C465/13"] }
+        },
+        {
+          "label": { "en": ["Shelfmark"] },
+          "value": { "en": ["C465/13/01-14"] }
+        },
+        {
+          "label": { "en": ["Link to catalogue"] },
+          "value": {
+            "en": [
+              "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5584094>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100054358191.0x000002/ark:/81055/vdc_100054358191.0x000002/top",
+          "type": "Sound",
+          "label": { "en": ["Download this recording"] },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00002a",
+          "type": "Range",
+          "label": { "en": ["Jocelyn Herbert interviewed by Cathy Courtney"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": {
+                "en": ["Jocelyn Herbert interviewed by Cathy Courtney"]
+              }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Herbert, Jocelyn, 1917-2003 (speaker, female; interviewee)",
+                  "Courtney, Cathy, 1954- (speaker, female; interviewer)",
+                  "British Library (sound recordist)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-05-19 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": ["interviewee's homes in London and Hampshire (recorded)"]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["14 C60 compact cassettes"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["NSA: General"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C465/13/01-14"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C465/13/01-14"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5584104>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Summary"] },
+              "value": {
+                "en": [
+                  "Track 1 [Tape 1 (F5574) Side A] [Session one: 1992] [Recording in JH’s London home] Names of Jocelyn Herbert [JH] siblings, Crystal, Lavender and John. JH’s grandparents, of which she knew only her maternal grandmother. Mentions JH’s father [A.P. Herbert, Alan Herbert] was looked after as a child by a housekeeper, Miss Deacon. Details maternal grandmother; upbringing of JH’s mother [Gwendolyn Quilter, Gwendolyn Herbert [QH]] and her siblings. Marriage of JH’s parents. JH’s maternal grandfather, Harry Quilter. JH’s maternal and paternal aunts and uncles. Impact of First World War on A.P. Herbert. QH’s upbringing. JH and siblings having a nanny as children. Painter, Edward Wadsworth, a family friend, his daughter Barbara Wadsworth. A.P. Herbert’s play written for his children, Fat King Mellon and Princess Caraway. Actors rehearsing A.P. Herbert’s plays coming to house in JH’s childhood. JH learning piano; mentions music at St Paul’s school, where JH was a pupil. JH left school aged fifteen, went to Paris. Track 2 [Tape 1 (F5574) Side B] Miss Deacon in JH’s childhood. A.P. Herbert. JH being sent to boarding school in Lincolnshire; writer, Richard Hughes, visiting JH there. Wadsworth’s house in Sussex. Wadsworth; GQ and painting. JH’s childhood home on the Thames at Hammersmith. Artist, Eric Kennington, family friend, his drawing of JH. JH wanting to be a boy. GQ’s car crash. A.P. Herbert and driving. Kennington and his wife. JH’s childhood, nursery life, maid. Parents’ parties, guests including actors Elsa Lanchester, Charles Laughton, painters, John Armstrong and [Mark]Gertler (who painted JH). Mentions Malcolm Sargent used to play duets with A.P. Herbert. Track 3 [Tape 2 (F5575) Side A] Further details parents’ friends who came to the house when JH growing up. QH, A.P. Herbert. JH and John Armstrong. Boat Race parties in childhood. Neighbours, artist Julian Trevelyan, Ursula Mommens, their son, Philip. Mary Fedden, second wife of Julian Trevelyan, who JH met at Slade when JH doing scene painting course with [Vladimir] Polunin. JH mentions meeting Julian Trevelyan when she was fifteen; going to Surrealist exhibition, meeting [Roland] Penrose, [Paul] Eluard, Man Ray and [Stanley William] Hayter, with whom JH later studied in Paris. Neighbours included Robert Graves, Laura Riding, Norma Guinness. Mentions knowing artist Gertrude Hermes, filmmaker, Len Lye, photographer, Douglas Glass. GQ’s lover. A.P. Herbert’s attitude to women. JH and sex education. JH being shy as an adolescent. Beginning to sense herself as an individual separate from her family during time in Paris after leaving school. Becoming politically aware with the rise of Hitler. Track 4 [Tape 2 (F5575) Side B] JH’s time in Vienna aged approx. eighteen, politics. In childhood, become aware of people with little money; the Polunin family. A.P. Herbert and Chamberlain, 1938l; Suez Crisis, 1956. Barbara Wadsworth. [Rest of tape blank.] Track 5 [Tape 3 (F5576) Side A] [Session two: 1992] Portmeirion in childhood. Childhood adventures with Richard Hughes (known as Dickon); sister, Crystal being one of the children on which a character in Hughes’ A High Wind in Jamaica is based. Mentions Dylan Thomas would visit JH’s childhood home. John Pudney, JH’s brother in law. Mentions poet George Barker was a neighbour of JH’s parents. Track 6 [Tape 3 (F5576) Side B] Further mention of George Barker. Dylan Thomas. References to Anthony [Anthony Lousada, JH’s husband] Friendship with Victor Pasmore. JH mentions her pregnancy, having children, living in Essex during the Second World War. Being the mother of twins [Olivia and Julian]. JH’s daughters, Sandra and Jenny. JH’s family Christmases in childhood; Christmas in Hever Castle with Astor family. Wanting to be a boy; playing with Mecanno. Some memories of infancy. JH’s siblings. Sailing when growing up. Track 7 [Tape 4 (F5577) Side A] Mentions attending rehearsals at Lyric theatre, Hammersmith. Singing in childhood, The Beggars’ Opera. Attending a [Charles B] Cochran production with A.P. Herbert. Wells Coates lights in family basement, GQ’s mural; anecdote about flooding. Going to Peter Pan as a child, J.M. Barrie coming back to tea. Play in childhood about St George. Mentions Peggy Ashcroft being asked to do a sequel to Peter Pan and JH encouraging her to turn it down. Nigel Playfair being a neighbour, his productions at the Lyric, Hammersmith. Naomi Mitchison, Geoff Mitchison and their children, neighbours. [Reference to Rossetti is to Rossetti Studios where JH lived with George Devine.] Seeing A.P. Herbert’s musicals when growing up. May Playfair trying to keep the Lyric going after Nigel’s death; later going to see the theatre with George Devine and Michel St-Denis in the hope they could take it over. Seeing rehearsals as a child. Track 8 [Tape 4 (F5577) Side B] [Session three: 19 May 1992] JH’s friends prior to living in Paris after leaving school. Staying with friends in QH’s cottage in Sussex. Period when family had a chauffeur. JH learning to drive. Crystal, John Pudney and their circle; JH being shy. During marriage to Anthony Lousada, he and JH went to Ischia, stayed with Arthur Koestler, met [W.H.] Auden. Koestler; Anthony Lousada. Story of having to go to Rome many years later when JH working on the film, Isadora, having to collect a wig for Vanessa Redgrave. Louis MacNeice and his wife. John Pudney. JH nearly joining the Communist Party. Working at Unity Theatre. Track 9 [Tape 5 (F5578) Side A] Unity Theatre continued. JH and the Group Theatre, production of [Jean-Paul Sartre’s] The Flies. QH’s friend Betty [Elizabeth Carver], her marriage to [Field Marshall Bernard] Montgomery [Viscount Montgomery of Alamein]; Montgomery’s friendship with A.P. Herbert. Polunin teaching at the Slade, his work with Colonel de Basil; JH’s time at the Slade; mention of JH’s friendship with Mary Fedden, with Annette Brinkworth, mother of Vicki Hallam, JH’s godchild. After Paris, JH studied at Leon Underwood’s school at Brook Green. Reference to LTS, London Theatre Studio. Memories of Blair Hughes-Stanton and Gertrude Hermes. JH mentioned having her painting hung with the London Group. Memories of Roland Penrose; mentions Man Ray took photographs of JH. Comments on the work of the Surrealists. Opinion of work of various artists whose work interested JH as she grew up; parents’ social circle. Julian Trevelyan and Mary Fedden. David Gascoyne. Track 10 [Tape 5 (F5578) Side B] Theatre when growing up. Childhood holiday on a barge. GQ’s character; her expectations for her daughters. JH being sent to Paris to learn French. Revelation of seeing the Compagnie des Quinze at the Vieux Columbier; later seeing the Compagnie in London. Seeing Richard of Bordeaux in London, designed by Motley. Motley as designers of Shakespeare. Seeing Peggy Ashcroft as a young actress; later hearing George Devine’s description of theatre in the 1930s. Seeing plays at the Old Vic. Michel St-Denis’ production of Chekov’s Three Sisters. Seeing Chekov performed by Russian company in London. JH’s experience of studying painting in Paris; Grand Chaumiere; learning with Andre L’Hote. Track 11 [Tape 6 (F5579) Side A] Andre L’Hote. Comments about Cubism. Impact of living in Paris on JH. Further reference to tudying with Leon Underwood. Time in Vienna aged approx. eighteen. [Recording January 11 1993] Early romantic experiences. Further references to staying in GQ’s Sussex cottage, falling in love. References to Desmond Hawkins, to Ruth and Tony Barlow. JH’s sister Crystal; John Pudney; Lionel Hale. Period when JH saw less of her family; taking GQ to stay at ‘the farm’ [JH’s home in Hampshire, not a farm] after A.P. Herbert died; JH’s relationship with siblings in adulthood; wife of JH’s brother, John. Mentions period when JH was painting scenery at the Royal Court theatre. Track 12 [Tape 6 Side B] JH’s siblings. Describes Rossetti Studios, home of JH and George Devine; Laurence Olivier and Joan Plowright when courting used Rossetti Studios. JH explains how she came to have a print of [Henri} Matisse’s The Snail. Memories of living at Rossetti Studios while working at the Royal Court. Houses where JH lived when married to Anthony Lousada. JH realising she was unhappy in her marriage to Anthony Lousada, leaving him to live with George Devine. Track 13 [F5580A] [Recording made at JH’s Hampshire home, ‘the farm’] GQ wanting Crystal and JH to be presented at Court. JH and living in Vienna; becoming aware of anti-Semitism. Anthony Lousada’s family background. JH’s children and church. Further details Vienna; love affair. Relationship with Turkish man (unclear chronology). On return from Vienna, JH studied with Leon Underwood, followed by Slade. Further reference to impact of seeing Compagnie des Quinze. Mention of love affair. Writing to Michel St-Denis to ask to join London Theatre Studio (LTS). Track 14 [F5580B] Applying to LTS; Michel St-Denis, George Devine, their aims. Details joining LTS as a student and experience there. References to [Edward[] Gordon Craig, [Adolphe] Appia. Reference to different disciplines re being a painter and being a theatre designer; reference to David Hockney’s theatre work. Reference to JH being offered job as window dresser at Jaeger and asking advice from Percy [Percy Harris, Margaret Harris, one of the three women who made up the design group Motley] about whether JH had a future as a theatre designer. George Devine’s role at LTS. JH’s memories of being pregnant and designing LTS The Disasters of War; Michel St-Denis. Track 15 [F5581A] JH’s time as student at LTS. The Disasters of War. Comments on the word ‘style’ in relation to theatre design, including comments on working on David Storey plays; refers to The March on Russia, Stages, The Changing Room. Working with Michel St-Michel and George Devine. Learning about lighting at LTS. Lighting at the Royal Court when JH worked there. LTS teaching. Painters whose work JH admires. JH’s wish at Slade to do a course on architectures. Refers to her later set for [Jean-Paul Sartre’s] The Devil and the Good Lord. Track 16 [F5581B] What JH learnt at LTS. Michel St-Denis and George Devine and masks; reference to Percy Harris; reference to Suria St-Denis. Being taught by Motley [Sophie Harris, Margaret ‘Percy’ Harris, Elizabeth Montgomery and by Michel St-Denis. Working with ground plans. Refers to aspects when JH later designed Square Rounds [by Tony Harrison]. LTS, Percy Harris. JH mentions teaching herself later at the Old Vic School. LTS and budgets for productions. Further comments on Motley, George Devine, Michel St-Denis. Track 17 [F5582A] Reference to Marius Goring. Robert Medley and Rupert Doone; JH designing costumes for The Flies for the Group Theatre. Michel St-Denis’ production of Chekov’s Three Sisters. Vera Poliakoff, Michel St-Denis; Suria St-Denis. Percy Harris, personal life and career. Sophie Harris, marriage to George Devine. Percy and Elizabeth Montgomery war years in America. JH first knowing Peggy Ashcroft as friend of JH’s parents; later friendship. Track 18 [F5582, Side B] Brief further comments on Ashcroft. Degree to which JH’s parents followed her career. A.P. Herbert’s work with Cochran. JH’s attitude to her family. JH’s siblings whilst JH was at LTS; further details Herbert family. JH joining the Labour Party; helping to build Unity Theatre; being turned out of Labour Party. Meeting Anthony Lousada. [Recording February 5 1995 at JH’s home in Hampshire] Relationship with Anthony Lousada; his family and profession. Herbert family finances when JH growing up. JH expectations of her adult future. Track 19 [F5583A] Anthony Lousada’s background. JH becoming engaged while at LTS; trip to Russia during engagement. Theatre seen in Russia. Attitude to [Konstantin] Stanislavski. Involvements with others which might have caused JH not to marry Lousada. Sexual advances from parents’ friends. Relationship with Lousada. Track 20 [F5583B] Relationship with Lousada. Friendship with George Devine leading end of JH’s marriage. Honeymoon with Lousada. JH bringing up her children; JH’s war work. Birth of JH’s twins. Julian Lousada as a child. JH and London home when first child, Sandra Lousada, a baby. JH and river Thames in childhood. Early married life with young children; friendship with Anthony West (son of H.G. Wells) Kitty Church. Track 21 [F5584A] Anthony West cont. Mention of meeting Rebecca West. Mention of JH’s work with Suria St-Denis at Toynbee Hall, The Magic Bat. JH teaching at Old Vic School. Alec Guinness, Merula Guinness. Comparison LTS and Old Vic School; Young Vic. Glen Byam Shaw, Angela Baddeley. Further details A.P. Herbert’s play, Fat King Mellon and Princess Caraway’; further reference to Barbara Wadsworth. Glen Byam Shaw, Angela Baddeley. Old Vic School, George Devine, Michel St-Denis, Motley, Litz Pisk; Laurence Olivier and future National Theatre. Hugh Hunt, mention of Lord Esher, ending of Old Vic School. JH and Stratford on Avon Shakespeare theatre; anecdote about canal boat trip home from Stratford. Sharing Mill with Dick Guyatt’s family [Richard Guyatt] during marriage to Lousada. Further memories Stratford productions JH saw. Track 22 [F5584] B Leslie Hurry’s theatre designs. JH’s Richard 111 at Stratford on Avon, directed by Bill Gaskill [William Gaskill]. Details Andrews Farm, JH and George Devine’s home in Hampshire; details paintings JH has hung. Paintings in parents’ house when JH was growing up. Victor Pasmore’s work; Wendy Pasmore’s work. Further details paintings JH has. Anthony Lousada as painter. The Tides, JH’s home with Lousada; development of her own paintings during this period. Lists homes after leaving parents’ home. Mary Potter, her paintings. Paintings Anthony Lousada inherited from his parents. Meeting Leslie Hurry when JH was working on Richard 111 at Stratford on Avon. Track 23 [F5585A] JH working at Stratford on Avon. [Isamu] Noguchi’s King Lear; George Devine. JH seeing Berliner Ensemble Bertolt Brecht productions, London 1956. JH meeting Helene Weigel when JH designed Baal, directed by Bill Gaskill [William Gaskill]; Peter O’Toole. Details JH later designing Brecht’s Mother Courage, directed by Gaskill. JH’s storyboards. Working with Gaskill on Richard 111, Stratford on Avon; Christopher Plummer, Edith Evans. Track 24 [F5585B] JH working with Edith Evans on film, Tom Jones, directed by Tony Richardson. No teaching for working with film at LTS; working on Tom Jones. Relationship Tony Richardson and John Osborne. First meeting Tony Richardson; Bill Gaskill. Track 25 [F5586A] JH beginning to work at Royal Court theatre as scene painter, beginnings of English Stage Company [ESC]; references to Oscar Lewenstein and Neville Blonde. Early ESC productions. JH’s friendship with John Minton. JH and Royal College of Art. Hugh Casson; his designs for William Walton’s Troilus and Cressida directed by George Devine. JH mentions designing Force of Destiny for Paris Opera House, and The Rise and Fall of the City of Mahagonny for the Metropolitan Opera House, New York. JH and working on productions with Devine. Memories of the Festival of Britain. Track 26 [F5586B] Leonard Rosoman, Jocelyn Rickards. Rosoman’s paintings of John Osborne’s play A Patriot for Me; his friendship with Jill Bennett. Kenneth Tynan. Working with John Osborne, his marriage to Penelope [Gilliatt]. Aftermath of George Devine’s death, JH to Paris and on return stayed with Osborne and Gilliatt; Osborne leaving Gilliatt for Jill Bennett. JH deciding not to work at the Royal Court for period after Devine’s death. Osborne; Irving Wardle’s book about George Devine. Development of JH’s relationship with George Devine. Description Rossetti Studios. Anthony Lousada’s marriage to Pat [Patricia McBride]. Track 27 [F5587A] George Devine’s aims for ESC at the Royal Court theatre. John Osborne’s plays; Osborne and Gilliatt. JH and painting the Court auditorium brown. Cards of Identity by Nigel Dennis; Laurence Olivier, Joan Plowright; Dennis’ The Making of Moo. Peggy Ashcroft in Brecht’s The Good Woman of Stezuan; JH interpreting Teo Otto’s design. ESC’s The Country Wife. Excitement of designing first productions of new plays. Further comment early ESC productions not designed by JH. JH and Devine’s disagreements about Tony Richardson. JH first meeting Samuel Beckett. Track 28 [F5587B] JH and set for Roger Blin’s Endgame at Royal Court. Comments about Samuel Beckett; about his support of JH when George Devine died. Being in Paris with Devine, JH’s daughter, Jenny, and Beckett and [Eugene] Ionesco."
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100054358191.0x000002/ark:/81055/vdc_100054358191.0x00002a",
+              "type": "Sound",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000004#t=0,1859.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000005#t=0,1730.08",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000007#t=0,1863.48",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000008#t=0,1859.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000a#t=0,1857.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000b#t=0,1855.2",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000d#t=0,1857",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00000e#t=0,1856.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000010#t=0,1858.76",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000011#t=0,1862.36",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000013#t=0,1972.92",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000014#t=0,1859.76",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000016#t=0,1864.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000017#t=0,1863.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000019#t=0,1862.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001a#t=0,1866",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001c#t=0,1858.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001d#t=0,1856.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x00001f#t=0,1862",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000020#t=0,1858.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000022#t=0,1862.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000023#t=0,1860",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000025#t=0,1858.16",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000026#t=0,1870",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000028#t=0,1858.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054358191.0x000029#t=0,1864.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002#t=0,1863",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100054464130.0x000002#t=1863,3720.96",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

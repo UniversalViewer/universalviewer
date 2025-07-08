@@ -1,0 +1,517 @@
+<!doctype html>
+<html>
+  <head>
+    <title>iiif-av-component: examples</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsviews/0.9.76/jsviews.min.js"></script>
+    <!-- <script src="https://unpkg.com/proxy-observe@0.0.21/browser/proxy-observe.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+    <script src="https://unpkg.com/@iiif/iiif-tree-component/dist-umd/IIIFTreeComponent.js"></script>
+    <script src="https://unpkg.com/manifesto.js/dist-umd/manifesto.js"></script>
+    <script src="https://unpkg.com/@iiif/manifold/dist-umd/manifold.js"></script>
+
+    <%= htmlWebpackPlugin.tags.headTags %>
+
+    <style>
+      .playerContainer {
+        background: #333333;
+      }
+
+      #options {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testFixtureSelection">
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
+      >
+        Loose ends
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/lunchroom-manners.json"
+      >
+        Lunchroom Manners
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/recipes/0064-opera-one-canvas.json"
+      >
+        Opera One Canvas
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio.json"
+      >
+        Test 1
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/02_gapless_video.json"
+      >
+        Test 2
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/03_synchronised_video.json"
+      >
+        Test 3
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av.json"
+      >
+        Test 4
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text.json"
+      >
+        Test 5
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/fire.json"
+      >
+        Test 6
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/mahler-symphony.json"
+      >
+        Symphony no. 3 - Mahler, Gustav
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://britishlibrary.github.io/iiif-av-samples/symphony/manifest.json"
+      >
+        Test 9
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02.json"
+      >
+        Test 10
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16.json"
+      >
+        Test 11
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/no-poster-canvas.json?adsf"
+      >
+        No Poster Canvas (accompanyingCanvas)
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8.json"
+      >
+        C308_8 Brian Hayes programme
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241.json"
+      >
+        C728_241 [Demo]
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1132_116.json"
+      >
+        C1132_116 Cliff Richard interview (Heathcliff)
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003.json"
+      >
+        WS0003 Aburria aburri r1
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6.json"
+      >
+        Ire Ekiti, Ògún festival
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_dash.json"
+      >
+        mpg dash
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_hls.json"
+      >
+        HLS
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C733_48.json"
+      >
+        Arabic/Soqotri
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA.json"
+      >
+        Winter Hymn
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C465_13.json"
+      >
+        Jocelyn Herbert
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/riksarkivet/audio-with-posterCanvas.json"
+      >
+        Riksarkivet Audio With Poster
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C615_70.json"
+      >
+        Tamas Vasary piano
+      </button>
+      <button
+        class="testFixture"
+        data-json="https://edsilv.github.io/biiif-test-manifests/sound-manifest/index.json"
+      >
+        Somali Love Song
+      </button>
+    </div>
+
+    <input type="text" name="manifestInput" id="manifestInput" />
+    <button id="parseManifestButton">Parse Manifest</button>
+    <button id="viewManifestButton">View Manifest</button>
+
+    <hr />
+
+    <h3 class="title"></h3>
+    <div class="description"></div>
+
+    <div class="canvasNavigationContainer"></div>
+
+    <div id="av" class="playerContainer iiif-av-component">loading...</div>
+
+    <div id="options">
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <input id="limitToRangeCheckbox" type="checkbox" /><label
+        for="limitToRangeCheckbox"
+        >Limit to Range</label
+      >
+      <input id="constrainNavigationToRangeCheckbox" type="checkbox" /><label
+        for="constrainNavigationToRangeCheckbox"
+        >Constrain Navigation To Range</label
+      >
+      <input id="autoSelectRangeCheckbox" type="checkbox" /><label
+        for="autoSelectRangeCheckbox"
+        >Auto Select Range</label
+      >
+    </div>
+
+    <div id="tree" class="iiif-tree-component"></div>
+
+    <button id="toggleLogsButton">Show / Hide Logs</button>
+    <div class="logContainer">
+      <textarea></textarea>
+      <button id="clearLogsButton">Clear</button>
+    </div>
+
+    <script>
+      var helper, avcomponent, treecomponent;
+
+      var canvasready = false;
+
+      function updateOptions() {
+        $("#limitToRangeCheckbox").prop("checked", state.limitToRange);
+        $("#autoSelectRangeCheckbox").prop("checked", state.autoSelectRange);
+        $("#constrainNavigationToRangeCheckbox").prop(
+          "checked",
+          state.constrainNavigationToRange
+        );
+        $("#virtualCanvasCheckbox").prop("checked", state.virtualCanvasEnabled);
+      }
+
+      var state = {
+        limitToRange: false,
+        autoSelectRange: true,
+        constrainNavigationToRange: true,
+        virtualCanvasEnabled: true,
+      };
+
+      if (Object.observe) {
+        state = Object.observe(state, function (changeset) {
+          console.log(changeset);
+          updateOptions();
+        });
+      }
+
+      updateOptions();
+
+      function resize() {
+        var $playerContainer = $(".playerContainer");
+        $playerContainer.height($playerContainer.width() * 0.75);
+        avcomponent.resize();
+      }
+
+      window.onresize = function () {
+        resize();
+      };
+
+      function loadManifest(manifest, successcb, errorcb) {
+        manifold
+          .loadManifest({
+            manifestUri: manifest,
+            collectionIndex: 0,
+            manifestIndex: 0,
+            sequenceIndex: 0,
+            canvasIndex: 0,
+          })
+          .then(function (h) {
+            helper = h;
+
+            avcomponent.set({
+              helper: helper,
+              limitToRange: state.limitToRange,
+              autoSelectRange: state.autoSelectRange,
+              constrainNavigationToRange: state.constrainNavigationToRange,
+              virtualCanvasEnabled: state.virtualCanvasEnabled,
+            });
+
+            treecomponent.set({
+              autoExpand: false,
+              branchNodesExpandOnClick: false,
+              branchNodesSelectable: true,
+              helper: helper,
+            });
+
+            successcb(helper);
+
+            resize();
+          })
+          .catch(function (e) {
+            errorcb(e);
+          });
+      }
+
+      $(function () {
+        avcomponent = new IIIFAVComponent.AVComponent({
+          target: document.querySelector("#av"),
+        });
+
+        avcomponent.on("log", function (message) {
+          logMessage(message);
+        });
+
+        avcomponent.on("canvasready", function () {
+          if (canvasready) return;
+          console.log("canvas ready");
+          canvasready = true;
+          //avcomponent.playRange('https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000013');
+          //avcomponent.playRange('https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000015');
+          //avcomponent.playRange('https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000011');
+          //avcomponent.playRange('https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007');
+          //avcomponent.playRange('https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100055540263.0x000011');
+        });
+
+        avcomponent.on("rangechanged", function (rangeid) {
+          helper.rangeId = rangeid;
+          console.log("range changed", rangeid);
+
+          var range = helper.getRangeById(rangeid);
+          var node = null;
+
+          if (range && range.treeNode) {
+            node = this.treecomponent.getNodeById(range.treeNode.id);
+          }
+
+          if (node) {
+            this.treecomponent.selectNode(node);
+          } else {
+            this.treecomponent.deselectCurrentNode();
+          }
+        });
+
+        treecomponent = new IIIFTreeComponent.TreeComponent({
+          target: document.querySelector("#tree"),
+        });
+
+        function initCanvasNavigation(canvases) {
+          $(".canvasNavigationContainer").empty();
+
+          for (var i = 0; i < canvases.length; i++) {
+            var canvasLabel = i + 1;
+            var canvasNavigationButton = $(
+              '<button class="canvasNavigationButton" data-canvas-id="' +
+                canvases[i].id +
+                '">Canvas ' +
+                canvasLabel +
+                "</button>"
+            );
+
+            canvasNavigationButton.click(function () {
+              state.virtualCanvasEnabled = false;
+              avcomponent.set({
+                virtualCanvasEnabled: state.virtualCanvasEnabled,
+              });
+
+              avcomponent.showCanvas($(this).attr("data-canvas-id"));
+            });
+
+            $(".canvasNavigationContainer").append(canvasNavigationButton);
+            $(".canvasNavigationContainer").show();
+          }
+
+          // window.setTimeout(function() {
+          //     var firstID = avcomponent.canvasInstances[0].options.data.canvas.id;
+          //     avcomponent.showCanvas(firstID);
+          // }, 10);
+        }
+
+        function showWorkingIndicator(targetElement) {
+          var workingIndicator = $(
+            '<div class="workingIndicator">Waiting ...</div>'
+          );
+          if (targetElement.find(".workingIndicator").length == 0) {
+            targetElement.append(workingIndicator);
+          }
+          //console.log('show working');
+        }
+
+        function hideWorkingIndicator() {
+          $(".workingIndicator").remove();
+          //console.log('hide working');
+        }
+
+        function logMessage(message, logObj) {
+          if (logObj) {
+            //console.log(message, logObj);
+          } else {
+            //console.log(message);
+          }
+
+          $(".logContainer textarea")[0].value = $(
+            ".logContainer textarea"
+          )[0].value += "\n" + message;
+        }
+
+        function clearLogs() {
+          $(".logContainer textarea")[0].value = "";
+        }
+
+        $("#manifestInput").val("");
+
+        $("#clearLogsButton").click(clearLogs);
+
+        $("#toggleLogsButton").click(function () {
+          $(".logContainer").toggle();
+        });
+
+        $(".testFixture").click(function () {
+          $("#manifestInput").val($(this).data("json"));
+          $("#parseManifestButton").click();
+        });
+
+        $("#play").click(function () {
+          avcomponent.play();
+        });
+
+        $("#pause").click(function () {
+          avcomponent.pause();
+        });
+
+        $("#viewManifestButton").click(function () {
+          var absoluteManifestURL = $("#manifestInput").val();
+          window.open(
+            absoluteManifestURL,
+            "_blank",
+            "location=yes,height=600,width=580,scrollbars=yes,status=yes"
+          );
+        });
+
+        $("#parseManifestButton").click(function () {
+          var manifestURL = $("#manifestInput").val();
+
+          loadManifest(
+            manifestURL,
+            function (helper) {
+              clearLogs();
+
+              $(".title").text(helper.getLabel());
+              $(".description").text(helper.getDescription());
+
+              logMessage("SUCCESS: Manifest data loaded.", helper.manifest);
+
+              var canvases = helper.getCanvases();
+
+              if (canvases.length > 1) {
+                initCanvasNavigation(canvases);
+              } else {
+                $(".canvasNavigationContainer").hide();
+              }
+            },
+            function (error) {
+              $(".title").text("ERROR: Could not load manifest data.");
+              $(".description").text("");
+
+              logMessage("ERROR: Could not load manifest data.", error);
+            }
+          );
+        });
+
+        $("#limitToRangeCheckbox").change(function () {
+          state.limitToRange = this.checked;
+          avcomponent.set({
+            limitToRange: state.limitToRange,
+          });
+        });
+
+        $("#autoSelectRangeCheckbox").change(function () {
+          state.autoSelectRange = this.checked;
+          avcomponent.set({
+            autoSelectRange: state.autoSelectRange,
+          });
+        });
+
+        $("#constrainNavigationToRangeCheckbox").change(function () {
+          state.constrainNavigationToRange = this.checked;
+          avcomponent.set({
+            constrainNavigationToRange: state.constrainNavigationToRange,
+          });
+        });
+
+        $("#virtualCanvasCheckbox").change(function () {
+          state.virtualCanvasEnabled = this.checked;
+          avcomponent.set({
+            virtualCanvasEnabled: state.virtualCanvasEnabled,
+          });
+        });
+
+        treecomponent.on("treeNodeSelected", function (node) {
+          console.log("selected: " + node.label);
+          //avcomponent.playRange(node.data.id);
+          avcomponent.viewRange(node.data.id);
+        });
+
+        // loadManifest("https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+        // function(msg){
+        //     console.log(msg);
+        // }, function(msg){
+        //     console.log(msg);
+        // });
+      });
+    </script>
+  </body>
+</html>

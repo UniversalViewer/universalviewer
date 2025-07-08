@@ -1,0 +1,168 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8.json",
+  "type": "Manifest",
+  "label": { "en": ["C308/8 Brian Hayes programme"] },
+  "metadata": [
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C308/8"] }
+    },
+    {
+      "label": { "en": ["Title"] },
+      "value": { "en": ["Brian Hayes programme"] }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004",
+      "label": { "en": ["Tape 1 Side 1"] },
+      "type": "Canvas",
+      "duration": 3441.8,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004/anno",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004/anno/",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004",
+              "timeMode": "trim",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C308_8/vdc_100050889733.0x00000c.mp4",
+                      "type": "Audio"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005",
+      "label": { "en": ["Tape 1 Side 2"] },
+      "type": "Canvas",
+      "duration": 223.32,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005/anno",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005/anno/",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005",
+              "timeMode": "trim",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C308_8/vdc_100050889733.0x00000e.mp4",
+                      "type": "Audio"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000002/top",
+      "type": "Range",
+      "label": { "en": ["Brian Hayes programme"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000002.nn1",
+          "type": "Range",
+          "behavior": ["no-nav"],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004#t=0,162.64",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000006",
+          "type": "Range",
+          "label": { "en": ["Brian Hayes programme"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000004#t=162.64,3441.8",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C308/8"] }
+            },
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Brian Hayes programme"] }
+            },
+            {
+              "label": { "en": ["Contributor"] },
+              "value": {
+                "en": ["Hayes, Brian, 1937- (speaker, male; presenter)"]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1987-05-19"] }
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000008",
+          "type": "Range",
+          "label": { "en": ["[News]; excerpt"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100050889733.0x000005#t=0,223.32",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C308/8"] }
+            },
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["[News]; excerpt"] }
+            },
+            {
+              "label": { "en": ["Contributor"] },
+              "value": { "en": ["unidentified speaker, male (newsreader)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1987-05-19?"] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02.json",
+  "type": "Manifest",
+  "label": "Temporal Fragment of a Canvas",
+  "description": "Intent is to show the full jpg for the first 30 seconds of the canvas's duration",
+  "sequences": [
+    {
+      "type": "Sequence",
+      "canvases": [
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02/canvas/1",
+          "type": "Canvas",
+          "label": "Temporal Fragment of a Canvas",
+          "description": "Intent is to show the full jpg for the first 30 seconds of the canvas's duration",
+          "width": 1920,
+          "height": 1255,
+          "duration": 40,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02/content/page/1",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/01/content/anno/1",
+                  "type": "Annotation",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/weather.jpg",
+                    "type": "Image",
+                    "format": "image/jpeg",
+                    "width": 1920,
+                    "height": 1255
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02/canvas/1#t=0,30"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

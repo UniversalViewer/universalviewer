@@ -1,0 +1,884 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": { "en": ["<span>Rights unassigned - staff access only</span>"] }
+  },
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6.json",
+  "label": { "en": ["C1074/6 Igbo Iwin overlays"] },
+  "behavior": ["auto-advance"],
+  "logo": [
+    {
+      "id": "https://www.bl.uk/images/bl_logo_100.gif",
+      "type": "Image"
+    }
+  ],
+  "posterCanvas": {
+    "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6/poster",
+    "type": "Canvas",
+    "height": 962,
+    "width": 962,
+    "items": [
+      {
+        "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6/poster/p1/anno",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/oral-history.jpg",
+              "type": "Image",
+              "format": "image/jpeg",
+              "width": 962,
+              "height": 962
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": [
+    {
+      "label": { "en": ["Full title"] },
+      "value": { "en": ["Igbo Iwin overlays"] }
+    },
+    {
+      "label": { "en": ["Creator"] },
+      "value": { "en": ["Harper, Peggy, 1923-2009, (sound recordist)"] }
+    },
+    {
+      "label": { "en": ["Place of creation"] },
+      "value": { "en": ["Nigeria (place of origin)"] }
+    },
+    {
+      "label": { "en": ["Culture"] },
+      "value": { "en": ["Yoruba"] }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["Peggy Harper African Recordings"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["1 tape 18 cm reel 9.5 cm/sec mono"] }
+    },
+    {
+      "label": { "en": ["Usage"] },
+      "value": { "en": ["<span>Rights unassigned - staff access only</span>"] }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Digitised by"] },
+      "value": { "en": ["The British Library, 2017"] }
+    },
+    {
+      "label": { "en": ["Digitisation funded by"] },
+      "value": {
+        "en": [
+          "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+        ]
+      }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C1074/6"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["C1074/6"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6845496>View the catalogue record</a>"
+        ]
+      }
+    },
+    {
+      "label": { "en": ["Contents"] },
+      "value": {
+        "en": [
+          "A series of interviews about the Ògún festival of Ire Ekiti [title on tape box does not correspond to content]."
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004/anno",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C1074_6/vdc_100053724382.0x000014.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100053724382.0x000013.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004/anno/",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 3008.062,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004",
+      "label": "Tape 1 Side 1",
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000005/anno",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C1074_6/vdc_100053724382.0x000016.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100053724382.0x000015.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000005/anno/",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000005",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 60.931,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000005",
+      "label": "Tape 1 Side 2",
+      "type": "Canvas"
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000002/top",
+      "label": { "en": ["Igbo Iwin overlays"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000006",
+          "label": { "en": ["Ire Ekiti, Ògún festival"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Ire Ekiti, Ògún festival"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Ọba Adéyẹyè II (speaker, male; interviewee)",
+                  "Ibigbami, R. K. (speaker, male; interviewer)",
+                  "unidentified speakers, male",
+                  "Harper, Peggy, 1923-2009 (sound recordist / speaker, female; interviewer)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1973-07-29 to 1973-07-30 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": ["Ire Ekiti, Western State, Nigeria (recorded)"]
+              }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Nigeria (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["50 min. 08 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": {
+                "en": ["Accents and dialects - English language, Nigerian"]
+              }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Yoruba"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Peggy Harper African Recordings"] }
+            },
+            {
+              "label": { "en": ["Usage"] },
+              "value": {
+                "en": ["<span>Rights unassigned - staff access only</span>"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Digitised by"] },
+              "value": { "en": ["The British Library, 2017"] }
+            },
+            {
+              "label": { "en": ["Digitisation funded by"] },
+              "value": {
+                "en": [
+                  "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1074/6 C1-4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1074/6"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8056293>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Three interviews about the Ògún festival in Ire Ekiti, and some fragments of music recorded during the festival. Ire Ekiti is currently part of Ekiti State, Nigeria Individual items listed separately"
+                ]
+              }
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000006.nn1",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=0,9.44",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000007",
+              "label": {
+                "en": [
+                  "Ire Ekiti, Ògún festival - Interview with the Onire of Ire Ekiti Ọba Adéyẹyè II"
+                ]
+              },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=9.44,2100.32",
+                  "type": "Canvas"
+                }
+              ],
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": {
+                    "en": [
+                      "Ire Ekiti, Ògún festival - Interview with the Onire of Ire Ekiti Ọba Adéyẹyè II"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "Ọba Adéyẹyè II (speaker, male; interviewee)",
+                      "Ibigbami, R. K. (speaker, male; interviewer)",
+                      "Harper, Peggy, 1923-2009 (sound recordist / speaker, female; interviewer)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1973-07-29 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": {
+                    "en": ["Ire Ekiti, Western State, Nigeria (recorded)"]
+                  }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Nigeria (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["34 min. 51 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": {
+                    "en": ["Accents and dialects - English language, Nigerian"]
+                  }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Yoruba"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Peggy Harper African Recordings"] }
+                },
+                {
+                  "label": { "en": ["Usage"] },
+                  "value": {
+                    "en": ["<span>Rights unassigned - staff access only</span>"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Digitised by"] },
+                  "value": { "en": ["The British Library, 2017"] }
+                },
+                {
+                  "label": { "en": ["Digitisation funded by"] },
+                  "value": {
+                    "en": [
+                      "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1074/6 C1"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1074/6"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8048725>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Interview about the Ògún festival. First in English language, then switches to Yoruba at 28 min. 13 sec., after a short recording interruption. Ire Ekiti is currently part of Ekiti State, Nigeria"
+                    ]
+                  }
+                }
+              ],
+              "type": "Range"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000006.nn2",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=2100.32,2105.84",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000008",
+              "label": {
+                "en": [
+                  "Ire Ekiti, Ògún festival - Interview with unidentified participant"
+                ]
+              },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=2105.84,2481.68",
+                  "type": "Canvas"
+                }
+              ],
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": {
+                    "en": [
+                      "Ire Ekiti, Ògún festival - Interview with unidentified participant"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "unidentified (speaker, male; interviewee)",
+                      "Ibigbami, R. K. (speaker, male; interviewer)",
+                      "Harper, Peggy, 1923-2009 (sound recordist)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1973-07-29 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": {
+                    "en": ["Ire Ekiti, Western State, Nigeria (recorded)"]
+                  }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Nigeria (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["6 min. 09 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["yor"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Yoruba"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Peggy Harper African Recordings"] }
+                },
+                {
+                  "label": { "en": ["Usage"] },
+                  "value": {
+                    "en": ["<span>Rights unassigned - staff access only</span>"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Digitised by"] },
+                  "value": { "en": ["The British Library, 2017"] }
+                },
+                {
+                  "label": { "en": ["Digitisation funded by"] },
+                  "value": {
+                    "en": [
+                      "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1074/6 C2"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1074/6"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8048747>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Interview in Yoruba language, recorded during the Ògún festival in Ire Ekiti Ire Ekiti is currently part of Ekiti State, Nigeria"
+                    ]
+                  }
+                }
+              ],
+              "type": "Range"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000006.nn3",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=2481.68,2481.72",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000009",
+              "label": {
+                "en": ["Ire Ekiti, Ògún festival - Recording fragments"]
+              },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=2481.72,2615.68",
+                  "type": "Canvas"
+                }
+              ],
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": {
+                    "en": ["Ire Ekiti, Ògún festival - Recording fragments"]
+                  }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "Harper, Peggy, 1923-2009 (sound recordist / speaker, female)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1973-07-29 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": {
+                    "en": ["Ire Ekiti, Western State, Nigeria (recorded)"]
+                  }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Nigeria (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["2 min. 14 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["yor"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Yoruba"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Peggy Harper African Recordings"] }
+                },
+                {
+                  "label": { "en": ["Usage"] },
+                  "value": {
+                    "en": ["<span>Rights unassigned - staff access only</span>"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Digitised by"] },
+                  "value": { "en": ["The British Library, 2017"] }
+                },
+                {
+                  "label": { "en": ["Digitisation funded by"] },
+                  "value": {
+                    "en": [
+                      "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1074/6 C3"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1074/6"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8048753>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Two short unidentified recordings, most probably taken during the Ògún festival in Ire Ekiti. First is a 26-second-long drumming fragment, followed by a recording of an aerophone [probably a horn or natural trumpet], metal rattles and men's voices. The second recording was presumably taken at night, as crickets can be heard in the background. Ire Ekiti is currently part of Ekiti State, Nigeria"
+                    ]
+                  }
+                }
+              ],
+              "type": "Range"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x00000a",
+              "label": {
+                "en": [
+                  "Ire Ekiti, Ògún festival - Interview about the history of the festival"
+                ]
+              },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=2615.68,3008",
+                  "type": "Canvas"
+                }
+              ],
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": {
+                    "en": [
+                      "Ire Ekiti, Ògún festival - Interview about the history of the festival"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "unidentified (speaker, male; interviewee)",
+                      "Harper, Peggy, 1923-2009 (sound recordist / speaker, female; interviewer)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1973-07-29 or 1973-07-30 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": {
+                    "en": ["Ire Ekiti, Western State, Nigeria (recorded)"]
+                  }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Nigeria (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["6 min. 33 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": {
+                    "en": ["Accents and dialects - English language, Nigerian"]
+                  }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Yoruba"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Peggy Harper African Recordings"] }
+                },
+                {
+                  "label": { "en": ["Usage"] },
+                  "value": {
+                    "en": ["<span>Rights unassigned - staff access only</span>"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Digitised by"] },
+                  "value": { "en": ["The British Library, 2017"] }
+                },
+                {
+                  "label": { "en": ["Digitisation funded by"] },
+                  "value": {
+                    "en": [
+                      "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1074/6 C4"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1074/6"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8048764>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "The interviewee is named at the beginning of the recording, but spelling of his name is unclear. Ire Ekiti is currently part of Ekiti State, Nigeria"
+                    ]
+                  }
+                }
+              ],
+              "type": "Range"
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000010",
+          "label": {
+            "en": ["Unidentified recording with voices and street noise"]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000005#t=0,60.88",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": {
+                "en": ["Unidentified recording with voices and street noise"]
+              }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Harper, Peggy, 1923-2009 (sound recordist)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["not after 2003-06-05 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Nigeria (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["1 min. 01 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Peggy Harper African Recordings"] }
+            },
+            {
+              "label": { "en": ["Usage"] },
+              "value": {
+                "en": ["<span>Rights unassigned - staff access only</span>"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Digitised by"] },
+              "value": { "en": ["The British Library, 2017"] }
+            },
+            {
+              "label": { "en": ["Digitisation funded by"] },
+              "value": {
+                "en": [
+                  "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1074/6 C5"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1074/6"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8048773>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Fragment of 4-track tape; two channels can be heard simultaneously, one of which playing in reverse (the two channels could not be separated due to technical reasons). Sound recordist assumed to be Peggy Harper Recording date based on accession date"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000006.nn4",
+          "type": "Range",
+          "behavior": ["no-nav"],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100053724382.0x000004#t=60.88,60.931",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ],
+      "type": "Range"
+    }
+  ],
+  "type": "Manifest"
+}

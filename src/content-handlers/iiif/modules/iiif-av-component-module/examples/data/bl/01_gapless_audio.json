@@ -1,0 +1,58 @@
+{
+  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio.json",
+  "type": "Manifest",
+  "label": "Gapless audio playback",
+  "description": "One IIIF canvas with three annotations with audio content, that must be played in sequence with no gap.",
+  "sequences": [
+    {
+      "type": "Sequence",
+      "canvases": [
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/canvas/1",
+          "duration": 60,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/content/page/1",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/content/anno/1",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/canvas/1#t=0,20"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/content/anno/2",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/canvas/1#t=20,40"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/content/anno/3",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio/canvas/1#t=40,60"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

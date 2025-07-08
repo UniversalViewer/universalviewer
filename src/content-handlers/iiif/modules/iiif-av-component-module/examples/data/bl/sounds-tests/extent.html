@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Range Extent calculator</title>
+    <link rel="stylesheet" href="collection.css" />
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        var qs = /manifest=(.*)/g.exec(window.location.search);
+        if (qs && qs[1]) {
+          $.getJSON(qs[1], function (manifest) {
+            processItems(manifest.structures);
+          });
+        }
+      });
+
+      function processItems(items) {
+        for (var i = 0; i < items.length; i++) {
+          var range = items[i];
+          if (range.type == "Range") {
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

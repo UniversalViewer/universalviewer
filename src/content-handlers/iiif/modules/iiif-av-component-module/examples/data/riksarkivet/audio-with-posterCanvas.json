@@ -1,0 +1,294 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296/manifest",
+  "type": "Manifest",
+  "label": {
+    "sv": ["Riksarkivet Audio With Poster"]
+  },
+  "metadata": [
+    {
+      "label": {
+        "sv": ["Titel"],
+        "en-GB": ["Title"]
+      },
+      "value": {
+        "sv": ["Ljud med omslag"]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Innehåll"],
+        "en-GB": ["Content"]
+      },
+      "value": {
+        "sv": ["Test-musik."]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Arkiv"],
+        "en-GB": ["Archive"]
+      },
+      "value": {
+        "sv": ["Test DIANA"]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Serie"],
+        "en-GB": ["Serie"]
+      },
+      "value": {
+        "sv": ["Video/ljud med dokumentation"]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Referenskod"],
+        "en-GB": ["Reference Code"]
+      },
+      "value": {
+        "sv": ["SE/RA/919191919/XVAD/1"]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Datering"],
+        "en-GB": ["Date"]
+      },
+      "value": {
+        "sv": ["2017"]
+      }
+    },
+    {
+      "label": {
+        "sv": ["Källhänvisning"],
+        "en-GB": ["Source Reference"]
+      },
+      "value": {
+        "sv": [
+          "Test DIANA, Video/ljud med dokumentation, SE/RA/919191919/XVAD/1 (2017)"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "sv": [null]
+  },
+  "posterCanvas": {
+    "id": "https://github.com/Riksarkivet/test-media/iiif!generic-audio-cover/canvas",
+    "type": "Canvas",
+    "items": [
+      {
+        "id": "https://github.com/Riksarkivet/test-media/iiif!generic-audio-cover/annotationpage",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://github.com/Riksarkivet/test-media/iiif!generic-audio-cover/annotation",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://github.com/Riksarkivet/test-media/iiif!generic-audio-cover/canvas",
+            "body": {
+              "id": "https://raw.githubusercontent.com/Riksarkivet/test-media/master/img/c60-tape.jpg",
+              "type": "Image",
+              "format": "image/jpeg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/canvas",
+      "type": "Canvas",
+      "label": {
+        "sv": ["Sound 1"]
+      },
+      "metadata": [
+        {
+          "label": {
+            "sv": ["filid"],
+            "en-GB": ["file id"]
+          },
+          "value": {
+            "sv": ["T0000296_00002"]
+          }
+        },
+        {
+          "label": {
+            "sv": ["Källhänvisning"],
+            "en-GB": ["Source Reference"]
+          },
+          "value": {
+            "sv": [
+              "Test DIANA, Video/ljud med dokumentation, SE/RA/919191919/XVAD/1 (2017) , videoid: T0000296_00002"
+            ]
+          }
+        }
+      ],
+      "duration": 343.222,
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/annotationpage",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/canvas",
+              "body": {
+                "id": "https://raw.githubusercontent.com/Riksarkivet/test-media/master/audio/bensound-anewbeginning.mp3",
+                "type": "Audio",
+                "format": "audio/mp3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/canvas",
+      "type": "Canvas",
+      "label": {
+        "sv": ["Sound 2"]
+      },
+      "metadata": [
+        {
+          "label": {
+            "sv": ["filid"],
+            "en-GB": ["file id"]
+          },
+          "value": {
+            "sv": ["T0000296_00003"]
+          }
+        },
+        {
+          "label": {
+            "sv": ["Källhänvisning"],
+            "en-GB": ["Source Reference"]
+          },
+          "value": {
+            "sv": [
+              "Test DIANA, Video/ljud med dokumentation, SE/RA/919191919/XVAD/1 (2017) , videoid: T0000296_00003"
+            ]
+          }
+        }
+      ],
+      "duration": 264.986,
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/annotationpage",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/canvas",
+              "body": {
+                "id": "https://raw.githubusercontent.com/Riksarkivet/test-media/master/audio/bensound-creativeminds.mp3",
+                "type": "Audio",
+                "format": "audio/mp3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/canvas",
+      "type": "Canvas",
+      "label": {
+        "sv": ["Sound 3"]
+      },
+      "metadata": [
+        {
+          "label": {
+            "sv": ["filid"],
+            "en-GB": ["file id"]
+          },
+          "value": {
+            "sv": ["T0000296_00004"]
+          }
+        },
+        {
+          "label": {
+            "sv": ["Källhänvisning"],
+            "en-GB": ["Source Reference"]
+          },
+          "value": {
+            "sv": [
+              "Test DIANA, Video/ljud med dokumentation, SE/RA/919191919/XVAD/1 (2017) , videoid: T0000296_00004"
+            ]
+          }
+        }
+      ],
+      "duration": 234.527,
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/annotationpage",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/canvas",
+              "body": {
+                "id": "https://raw.githubusercontent.com/Riksarkivet/test-media/master/audio/bensound-summer.mp3",
+                "type": "Audio",
+                "format": "audio/mp3"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/range",
+      "type": "Range",
+      "label": {
+        "@none": ["Sound 1"]
+      },
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00002/canvas",
+          "type": "Canvas"
+        }
+      ]
+    },
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/range",
+      "type": "Range",
+      "label": {
+        "@none": ["Sound 2"]
+      },
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00003/canvas",
+          "type": "Canvas"
+        }
+      ]
+    },
+    {
+      "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/range",
+      "type": "Range",
+      "label": {
+        "@none": ["Sound 3"]
+      },
+      "items": [
+        {
+          "id": "https://github.com/Riksarkivet/test-media/arkis!T0000296_00004/canvas",
+          "type": "Canvas"
+        }
+      ]
+    }
+  ]
+}

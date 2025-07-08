@@ -1,0 +1,59 @@
+{
+  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av.json",
+  "type": "Manifest",
+  "label": "Synchronised video example",
+  "description": "Videos playing at the same time. The source videos contain markers to demonstrate the synchronisation points. One IIIF canvas annotated with three videos.",
+  "sequences": [
+    {
+      "type": "Sequence",
+      "canvases": [
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/canvas/1",
+          "duration": 120,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/content/page/1",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/content/anno/1",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-blue.mp4",
+                    "type": "Video",
+                    "format": "video/mp4",
+                    "duration": 120
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/canvas/1"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/content/anno/2",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/canvas/1#t=0,60"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/content/anno/3",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av/canvas/1#t=60,120"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

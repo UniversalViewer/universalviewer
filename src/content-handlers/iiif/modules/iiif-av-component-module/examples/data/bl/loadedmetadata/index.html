@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      #audioEls {
+        width: 40%;
+        float: left;
+      }
+      #callbacks {
+        width: 40%;
+        float: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>loadedmetadata event experiment</h2>
+
+    <select id="manifestList">
+      <option value="">Choose...</option>
+      <option
+        value="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json"
+      >
+        Loose Ends (Digirati)
+      </option>
+      <option
+        value="https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C465_13.json"
+      >
+        Jocelyn Herbert (Digirati)
+      </option>
+      <option
+        value="https://s3-eu-west-1.amazonaws.com/tom-bl-samples-public/mf/C1685_98_P3.json"
+      >
+        Loose Ends (S3)
+      </option>
+      <option
+        value="https://s3-eu-west-1.amazonaws.com/tom-bl-samples-public/mf/C465_13.json"
+      >
+        Jocelyn Herbert (S3)
+      </option>
+    </select>
+    Preload:
+    <select id="preload">
+      <option value="auto">auto</option>
+      <option value="metadata">metadata</option>
+      <option value="none">none</option>
+    </select>
+    <hr />
+    <div id="audioEls"></div>
+    <div id="callbacks"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        $("#manifestList").change(function () {
+          var callbacks = document.getElementById("callbacks");
+          var audioELs = document.getElementById("audioEls");
+          var preload = $("#preload").val();
+          callbacks.innerHTML = "";
+          audioELs.innerHTML = "";
+          var counter = 1;
+          $.getJSON($(this).val(), function (manifest) {
+            $.each(manifest.items, function (index, canvas) {
+              $.each(canvas.items, function (index, page) {
+                $.each(page.items, function (index, anno) {
+                  $.each(anno.body, function (index, body) {
+                    if (body.type == "Choice") {
+                      audioBody = body.items[0];
+                    }
+                    if (audioBody.type == "Audio") {
+                      var idcpt = "-n" + counter++;
+                      var pae = document.createElement("p");
+                      pae.style.cssText = "color: red";
+                      pae.innerText = audioBody.id;
+                      callbacks.appendChild(pae);
+                      var audioElement = document.createElement("audio");
+                      audioElement.id = "ae" + idcpt;
+                      audioElement.controls = "controls";
+                      audioElement.src = audioBody.id;
+                      audioElement.preload = preload;
+                      audioElement.onloadedmetadata = function () {
+                        pae.style.cssText = "color: green";
+                      };
+                      audioELs.appendChild(audioElement);
+                    }
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

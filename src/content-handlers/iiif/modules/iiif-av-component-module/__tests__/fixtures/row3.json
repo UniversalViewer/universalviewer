@@ -1,0 +1,1042 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Cool jazz with Joe"]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full title"]
+      },
+      "value": {
+        "en": ["Cool jazz with Joe"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Creator"]
+      },
+      "value": {
+        "en": ["Joe Harriott Quartet"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Label"]
+      },
+      "value": {
+        "en": ["MELODISC"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["1 disc 2 sides 17 cm 45 rpm mono"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Usage"]
+      },
+      "value": {
+        "en": [
+          "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Held by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitised by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitisation funded by"]
+      },
+      "value": {
+        "en": [
+          "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["1SE0088632"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Shelfmark"]
+      },
+      "value": {
+        "en": ["1SE0088632"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Link to catalogue"]
+      },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5163825'>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": ["Copyright and Usage"]
+    },
+    "value": {
+      "en": [
+        "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5163825\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The British Library"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The British Library"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+      "type": "AuthCookieService1",
+      "profile": "http://iiif.io/api/auth/1/login",
+      "description": {
+        "en": [
+          "Some portions of this recording may be unavailable due to rights restrictions."
+        ]
+      },
+      "header": {
+        "en": ["Please Log-In"]
+      },
+      "label": {
+        "en": ["Login to The British Library"]
+      },
+      "service": [
+        {
+          "id": "http://apiirc.ad.bl.uk/auth/iiif/token",
+          "type": "AuthTokenService1",
+          "profile": "http://iiif.io/api/auth/1/token"
+        }
+      ]
+    },
+    {
+      "id": "http://access.bl.uk/item/share/ark:/81055/tvdc_100005114787.0x000002",
+      "type": "Service",
+      "profile": "https://universalviewer.io/share-extensions-profile"
+    }
+  ],
+  "homepage": [
+    {
+      "id": "http://access.bl.uk/item/viewer/ark:/81055/tvdc_100005114787.0x000002",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["View at the British Library"]
+      }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 1"]
+      },
+      "duration": 396.92000000000002,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=00.00,396.92",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114787.0x000010/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/dash/ark:/81055/tvdc_100005114787.0x000010/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114787.0x000010/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/hls/ark:/81055/tvdc_100005114787.0x000010/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114787.0x000010.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 2"]
+      },
+      "duration": 375.72000000000003,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=00.00,375.72",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114787.0x000012/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/dash/ark:/81055/tvdc_100005114787.0x000012/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114787.0x000012/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/hls/ark:/81055/tvdc_100005114787.0x000012/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114787.0x000012.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+      "type": "Range",
+      "label": {
+        "en": ["Cool jazz with Joe"]
+      },
+      "metadata": [
+        {
+          "label": {
+            "en": ["Full title"]
+          },
+          "value": {
+            "en": ["Cool jazz with Joe"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Creator"]
+          },
+          "value": {
+            "en": ["Joe Harriott Quartet"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Label"]
+          },
+          "value": {
+            "en": ["MELODISC"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Format"]
+          },
+          "value": {
+            "en": ["1 disc 2 sides 17 cm 45 rpm mono"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Usage"]
+          },
+          "value": {
+            "en": [
+              "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Held by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitised by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitisation funded by"]
+          },
+          "value": {
+            "en": [
+              "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Identifier"]
+          },
+          "value": {
+            "en": ["1SE0088632"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Shelfmark"]
+          },
+          "value": {
+            "en": ["1SE0088632"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Link to catalogue"]
+          },
+          "value": {
+            "en": [
+              "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5163825'>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "requiredStatement": {
+        "label": {
+          "en": ["Copyright and Usage"]
+        },
+        "value": {
+          "en": [
+            "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA5163825\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+          ]
+        }
+      },
+      "rendering": [
+        {
+          "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114787.0x000002/ark:/81055/tvdc_100005114787.0x000002/top",
+          "type": "Audio",
+          "label": {
+            "en": ["Download this recording"]
+          },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+          "type": "Range",
+          "label": {
+            "en": ["Summertime/Gershwin (03:32)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Summertime/Gershwin"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "Joe Harriott Quartet",
+                  "Harriott, Joe, 1928-1973 (alto saxophone)",
+                  "Jones, Dill, 1923-1984 (piano)",
+                  "Fallon, Jack, 1915-2006 (double bass)",
+                  "Seamen, Phil, 1926-1972 (drums)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1954-02 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["London, England, UK (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Jazz"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1SE0088632 S1 BD1 MELODISC"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1SE0088632"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688586'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688586\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114787.0x000002/ark:/81055/tvdc_100005114787.0x000006",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=5.48,216.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+          "type": "Range",
+          "label": {
+            "en": ["April in Paris/Duke (03:01)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["April in Paris/Duke"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "Joe Harriott Quartet",
+                  "Harriott, Joe, 1928-1973 (alto saxophone)",
+                  "Jones, Dill, 1923-1984 (piano)",
+                  "Fallon, Jack, 1915-2006 (double bass)",
+                  "Seamen, Phil, 1926-1972 (drums)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1954-02 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["London, England, UK (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Jazz"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1SE0088632 S1 BD2 MELODISC"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1SE0088632"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688623'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688623\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114787.0x000002/ark:/81055/tvdc_100005114787.0x000008",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=216.56,396.92",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+          "type": "Range",
+          "label": {
+            "en": ["Out of nowhere/Green (03:09)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Out of nowhere/Green"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "Joe Harriott Quartet",
+                  "Harriott, Joe, 1928-1973 (alto saxophone)",
+                  "Jones, Dill, 1923-1984 (piano)",
+                  "Fallon, Jack, 1915-2006 (double bass)",
+                  "Seamen, Phil, 1926-1972 (drums)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1954-02 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["London, England, UK (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Jazz"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1SE0088632 S2 BD1 MELODISC"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1SE0088632"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688624'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688624\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114787.0x000002/ark:/81055/tvdc_100005114787.0x00000a",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=4.32,192.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+          "type": "Range",
+          "label": {
+            "en": ["Cherokee/Noble (03:04)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Cherokee/Noble"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "Joe Harriott Quartet",
+                  "Harriott, Joe, 1928-1973 (alto saxophone)",
+                  "Jones, Dill, 1923-1984 (piano)",
+                  "Fallon, Jack, 1915-2006 (double bass)",
+                  "Seamen, Phil, 1926-1972 (drums)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1954-02 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["London, England, UK (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Jazz"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1SE0088632 S2 BD2 MELODISC"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1SE0088632"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688627'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6688627\">Please read the full information about this object</a><br></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114787.0x000002/ark:/81055/tvdc_100005114787.0x00000c",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=192.56,375.72",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

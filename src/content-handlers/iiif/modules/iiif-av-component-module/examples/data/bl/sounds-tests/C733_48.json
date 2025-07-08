@@ -1,0 +1,2111 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "C733/48 C733/49 C733/50 [Recordings in Soqotri / 'Survey' recordings in English]"
+    ]
+  },
+  "metadata": [
+    {
+      "label": { "en": ["Full title"] },
+      "value": {
+        "en": ["[Recordings in Soqotri / 'Survey' recordings in English]"]
+      }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["T.M. Johnstone Middle Eastern Language recordings"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["3 tape reels 9 cm 4.75 cm/sec mono"] }
+    },
+    {
+      "label": { "en": ["Usage"] },
+      "value": { "en": ["<span>Rights unassigned - staff access only</span>"] }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Digitised by"] },
+      "value": { "en": ["The British Library, 2017"] }
+    },
+    {
+      "label": { "en": ["Digitisation funded by"] },
+      "value": { "en": ["National Lottery Heritage Fund"] }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C733/48-C733/50"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["C733/48"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "requiredStatement": {
+    "label": { "en": ["Usage"] },
+    "value": {
+      "en": [
+        "<span><a>Please read the full information about this object</a><br>Rights unassigned - staff access only</span>"
+      ]
+    }
+  },
+
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": { "en": ["The British Library"] },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": { "en": ["The British Library"] }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    }
+  ],
+  "service": [
+    {
+      "id": "https://api.bl.uk/auth/iiif/login",
+      "type": "AuthCookieService1",
+      "profile": "http://iiif.io/api/auth/1/login",
+      "description": "Some portions of this recording may be unavailable due to rights restrictions.",
+      "header": "Please Log-In",
+      "label": "Login to The British Library",
+      "service": [
+        {
+          "id": "https://api.bl.uk/auth/iiif/token",
+          "type": "AuthTokenService1",
+          "profile": "http://iiif.io/api/auth/1/token"
+        }
+      ]
+    },
+    {
+      "id": "http://access.bl.uk/item/share/ark:/81055/vdc_100052320369.0x000002",
+      "type": "Service",
+      "profile": "http://universalviewer.io/share-extensions-profile"
+    }
+  ],
+  "accompanyingCanvas": {
+    "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/c/poster",
+    "type": "Canvas",
+    "label": { "en": ["world"] },
+    "width": 962,
+    "height": 962,
+    "items": [
+      {
+        "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/c/a1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/c/a1/a1",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/c/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "width": 962,
+              "height": 962,
+              "format": "image/jpeg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "homepage": [
+    {
+      "id": "http://access.bl.uk/item/viewer/ark:/81055/vdc_100052320369.0x000002",
+      "type": "Text",
+      "format": "text/html",
+      "label": { "en": ["View at the British Library"] }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000004",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 1"] },
+      "duration": 2023.56,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000004#t=0,2023.56",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000033/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x000033/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000033/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x000033/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x000032.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000005",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 2"] },
+      "duration": 1760.04,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000005#t=0,1760.04",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000035/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x000035/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000035/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x000035/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x000034.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007",
+      "type": "Canvas",
+      "label": { "en": ["Tape 2 Side 1"] },
+      "duration": 1392.56,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007/anno3",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007/anno3/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=0,1392.56",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000037/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x000037/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000037/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x000037/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x000036.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008",
+      "type": "Canvas",
+      "label": { "en": ["Tape 2 Side 2"] },
+      "duration": 1404.92,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008/anno4",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008/anno4/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=0,1404.92",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000039/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x000039/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x000039/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x000039/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x000038.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a",
+      "type": "Canvas",
+      "label": { "en": ["Tape 3 Side 1"] },
+      "duration": 1406.32,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a/anno5",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a/anno5/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=0,1406.32",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x00003b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x00003b/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x00003b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x00003b/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x00003a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000b",
+      "type": "Canvas",
+      "label": { "en": ["Tape 3 Side 2"] },
+      "duration": 1398.84,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000b/anno6",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000b/anno6/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000b#t=0,1398.84",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x00003d/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100052320369.0x00003d/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052320369.0x00003d/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "id": "https://api.bl.uk/media/hls/ark:/81055/vdc_100052320369.0x00003d/probe.json",
+                        "type": "AuthProbeService1",
+                        "profile": "http://iiif.io/api/auth/1/probe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100052320369.0x00003c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/top",
+      "type": "Range",
+      "label": {
+        "en": ["[Recordings in Soqotri / 'Survey' recordings in English]"]
+      },
+      "metadata": [
+        {
+          "label": { "en": ["Full title"] },
+          "value": {
+            "en": ["[Recordings in Soqotri / 'Survey' recordings in English]"]
+          }
+        },
+        {
+          "label": { "en": ["Collection"] },
+          "value": {
+            "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+          }
+        },
+        {
+          "label": { "en": ["Format"] },
+          "value": { "en": ["3 tape reels 9 cm 4.75 cm/sec mono"] }
+        },
+        {
+          "label": { "en": ["Usage"] },
+          "value": {
+            "en": ["<span>Rights unassigned - staff access only</span>"]
+          }
+        },
+        {
+          "label": { "en": ["Held by"] },
+          "value": { "en": ["The British Library"] }
+        },
+        {
+          "label": { "en": ["Digitised by"] },
+          "value": { "en": ["The British Library, 2017"] }
+        },
+        {
+          "label": { "en": ["Digitisation funded by"] },
+          "value": { "en": ["National Lottery Heritage Fund"] }
+        },
+        {
+          "label": { "en": ["Identifier"] },
+          "value": { "en": ["C733/48-C733/50"] }
+        },
+        {
+          "label": { "en": ["Shelfmark"] },
+          "value": { "en": ["C733/48"] }
+        },
+        {
+          "label": { "en": ["Link to catalogue"] },
+          "value": {
+            "en": [
+              "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000002/top",
+          "type": "Audio",
+          "label": { "en": ["Download this recording"] },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000c",
+          "type": "Range",
+          "label": { "en": ["[A'raf Biladik]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[A'raf Biladik]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Wazir Al-Nubi, Ibrahim",
+                  "Botting, Douglas",
+                  "Bin Ali, Thani",
+                  "Johnstone, Thomas Muir,"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Soqotra, Aden Governorate Aden Governorate, Soqotra (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": ["Yemen (Socotra) Yemen Oman (place of origin)"]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["1 hr. 11 min. 09 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt gdq ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri Mehri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/48 S1-C733/49 S1 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/48"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Information on speakers and content was provided by Dr. Miranda Morris. Individual items described separately Ibrahim Wazir al-Nubi reads a passage called 'A'raf Biladik' [knowledge of homeland], in Soqotri and Arabic, and Thani Bin Ali reads the same extract in Mehri. The voice that can be heard introducing is likely to be Major P.G. Boxhall. Sheikh Ibrahim Wazir Al-Nubi was the minister/scribe of the Sultan at the time the recording was made. Thani Bin Ali was a medical assistant on Soqotra. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00000c",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000d",
+              "type": "Range",
+              "label": { "en": ["[A'raf Biladik, Soqotri]"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["[A'raf Biladik, Soqotri]"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": ["Wazir Al-Nubi, Ibrahim", "Johnstone, Thomas Muir,"]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": {
+                    "en": [
+                      "Soqotra, Aden Governorate Soqotra, Aden Governorate (recorded)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) Yemen (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["33 min. 44 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["sqt ara"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Soqotri"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/48 S1"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/48"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Information on speakers and content was provided by Dr. Miranda Morris. Ibrahim Wazir al-Nubi reads a passage called 'A'raf Biladik' [knowledge of homeland], in Soqotri and Arabic. The voice that can be heard introducing the recording is likely to be Major P.G. Boxhall. Sheikh Ibrahim Wazir Al-Nubi was the minister/scribe of the Sultan at the time the recording was made. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Recording location based on languages spoken Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00000d",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000004#t=0,2023.56",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000e",
+              "type": "Range",
+              "label": { "en": ["[A'raf Biladik, Mehri]"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["[A'raf Biladik, Mehri]"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": { "en": ["unidentified", "Johnstone, Thomas Muir,"] }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["29 min. 20 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["gdq"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/48 S2"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/48"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Information on speakers and content was provided by Dr. Miranda Morris. Contains recitations of 'A'raf Biladik' ['knowledge of homeland' - unidentified] in Mehri. The voice introducing the recording is likely to be Major P.G. Boxhall. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00000e",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000005#t=0,1760.04",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000c/nn3",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=0,0.36",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000f",
+              "type": "Range",
+              "label": { "en": ["[A'raf Biladik, Soqotri, page 4]"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["[A'raf Biladik, Soqotri, page 4]"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "Bin Ali, Thani",
+                      "Johnstone, Thomas Muir,",
+                      "Johnstone, Thomas Muir,"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Aden Governorate, Soqotra? (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) Yemen (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["8 min. 05 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["sqt"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Soqotri"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/49 S1 C1"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/49"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Contains a recitation of 'page 4' of 'A'raf Biladik' ['knowledge of homeland' - unidentified] in Soqotri by Thani Bin Ali, introduced by a speaker likely to be Major P.G. Boxhall. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Thani Bin Ali is a medical assistant on Soqotra. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors and content transcribed by ear Recording date based on the date written on the box for C733/48 Recording location based on languages spoken Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00000f",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=0.36,484.8",
+                  "type": "Canvas"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000016",
+          "type": "Range",
+          "label": { "en": ["[Translation of Arabic to Soqotri]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Translation of Arabic to Soqotri]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Suleiman",
+                  "Hadrami Bedouin League member",
+                  "Johnstone, Thomas Muir,",
+                  "Johnstone, Thomas Muir,"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["0 min. 39 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/49 S1 C2"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/49"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Information on contributors and content transcribed by ear Recording date based on date of Boxhall's expedition to Soqotra. Title transcribed by ear, but does not seem to match the content, which is the two men having a brief discussion in Arabic Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000016",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=487.56,526.36",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000016/nn3",
+          "type": "Range",
+          "behavior": ["no-nav"],
+
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=526.36,526.64",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000018",
+          "type": "Range",
+          "label": { "en": ["[Medical interview in Arabic and Soqotri]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Medical interview in Arabic and Soqotri]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "unidentified",
+                  "Corporal Goldberg",
+                  "unidentified",
+                  "Suleiman",
+                  "Johnstone, Thomas Muir,"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["8 min. 20 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/49 S1 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/49"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Names and content transcribed by ear Corporal Goldberg interviews a patient, a Bedouin child who is very sick. Johstone speaks in Arabic to Suleiman, one of the Sultan's bodyguards, who translates into Soqotri for the benefit of the Bedouin man and his child. There is a description of fire treatment as medicine to cure the boy. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Recording location based on languages spoken Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000018",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=526.64,1026.48",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001a",
+          "type": "Range",
+          "label": { "en": ["[Arabic to Soqotri translations]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Arabic to Soqotri translations]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": ["Suleiman", "unidentified", "Johnstone, Thomas Muir,"]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["19 min. 47 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["ara sqt"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/49 S1 C4-S2 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/49"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Individual items described separately Suleiman is described as 'one of the Sultan's bodyguards' Various recordings of Arabic - Soqotri translations made with Suleiman Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Information on contributors and content transcribed by ear from English and Arabic Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00001a",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001b",
+              "type": "Range",
+              "label": {
+                "en": ["[Single-word translation of Arabic to Soqotri]"]
+              },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": {
+                    "en": ["[Single-word translation of Arabic to Soqotri]"]
+                  }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": { "en": ["Suleiman", "Johnstone, Thomas Muir,"] }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["10 min. 25 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["ara sqt"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Soqotri"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/49 S1 C4-S2 C1"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/49"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Suleiman is described as 'one of the Sultan's bodyguards' Contains Soqotri translations of the Arabic words for 'tall', 'short', 'sea', 'eat', 'house', 'homeland', 'town', 'sun', 'walk', 'mountain', 'far', 'near', 'bread', 'daughter', 'head', 'chest', 'eye', 'eyebrow', 'tongue', 'ghee', 'milk', 'chicken', 'dog', 'camel', 'fire', 'donkey', as well as numbers, and some unidentified words. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors and content transcribed by ear from English and Arabic Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00001b",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000007#t=1027,1392.56",
+                  "type": "Canvas"
+                },
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=0,259.8",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001b/nn2",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=259.8,260",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001c",
+              "type": "Range",
+              "label": { "en": ["[Pronunciation of lateral s]"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["[Pronunciation of lateral s]"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": { "en": ["Suleiman", "Johnstone, Thomas Muir,"] }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["0 min. 17 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["sqt"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Soqotri"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/49 S2 C2"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/49"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Suleiman is described as 'one of the Sultan's bodyguards' Pronunciation of lateral s, or 'ɮ' being pronounced by Suleiman [voice identified by ear] Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey temas of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Information on contributors and content transcribed by ear Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00001c",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=260,276.24",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001c/nn3",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=276.24,277.44",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00001d",
+              "type": "Range",
+              "label": { "en": ["[Medical phrases]"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["[Medical phrases]"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "Suleiman",
+                      "Johnstone, Thomas Muir,",
+                      "Johnstone, Thomas Muir,"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": { "en": ["1967 (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+                },
+                {
+                  "label": { "en": ["Place of creation"] },
+                  "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["9 min. 04 sec."] }
+                },
+                {
+                  "label": { "en": ["Language"] },
+                  "value": { "en": ["ara sqt"] }
+                },
+                {
+                  "label": { "en": ["Culture"] },
+                  "value": { "en": ["Soqotri"] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": {
+                    "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+                  }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C733/49 S2 C3"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C733/49"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Suleiman is described as 'one of the Sultan's bodyguards' Medical phrases translated from Arabic to Soqotri Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey teams of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Information on contributors and content transcribed by ear Recording date based on date of Boxhall's expedition to Soqotra. Recording location based on language spoken Information on contributors, and location of recording is not described on the box, cassette, or documentation"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00001d",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=277.44,821.36",
+                  "type": "Canvas"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000024",
+          "type": "Range",
+          "label": {
+            "en": ["Arabic/Soqotri [Mu'allaqat of the Imru Al-Qays]"]
+          },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": {
+                "en": ["Arabic/Soqotri [Mu'allaqat of the Imru Al-Qays]"]
+              }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified", "Johnstone, Thomas Muir,"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["2 min. 51 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/49 S2 C4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/49"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "The first few lines of the Mu'allaqat of the Imru Al-Qays in Arabic and Soqotri Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey teams of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Same speaker as C733/49 C5 [identified by ear] Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000024",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=821.76,992.32",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000024/nn6",
+          "type": "Range",
+          "behavior": ["no-nav"],
+
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=992.32,992.96",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000026",
+          "type": "Range",
+          "label": { "en": ["Arabic/Soqotri [Page 121]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Arabic/Soqotri [Page 121]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified", "Johnstone, Thomas Muir,"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["6 min. 52 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/49 S2 C5"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/49"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "'Phrases from page 121 translated from Arabic into Soqotri' [transcribed by ear] Same speaker as C733/49 C4 [identified by ear] Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey teams of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000026",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000008#t=992.96,1404.92",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000028",
+          "type": "Range",
+          "label": { "en": ["[Phrases from Arabic to Soqotri]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Phrases from Arabic to Soqotri]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "unidentified",
+                  "Johnstone, Thomas Muir,",
+                  "Johnstone, Thomas Muir,"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1965-12? (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Abd Al-Kuri, Soqotra Archipelago, Aden Governorate? (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) Yemen (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["12 min. 16 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/50 S1 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/50"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "'Phrases from Arabic to Soqotri' (transcribed by ear) Recording date based on note on box for C733/48 Recording location based on languages spoken, and on note on box for C733/15 Information on contributors is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x000028",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=0,736",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000028/nn8",
+          "type": "Range",
+          "behavior": ["no-nav"],
+
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=736,736.72",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00002a",
+          "type": "Range",
+          "label": { "en": ["[Soqotri songs]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Soqotri songs]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "unidentified",
+                  "unidentified",
+                  "Johnstone, Thomas Muir,"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["7 min. 02 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["sqt ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Soqotri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/50 S1 C2"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/50"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Information on content and speakers was provided by Dr. Miranda Morris Soqotri songs and poetry with Arabic translation, and some talk. The songs/poem is followed by someone speaking in Soqotri. After he sings, he demands to be paid 20 shillings as he is a good man. He says ‘tell me! How many camels do you want?’ and says he has been with other foreigners, travelled, with a compass, been to many places, ‘I’m a good man, employ me!’. Finally, there is a brief fragment of a 'translation of an Arabic text into Mahri' [identified by ear]. Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey teams of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00002a",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=736.72,1158.84",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00002a/nn9",
+          "type": "Range",
+          "behavior": ["no-nav"],
+
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=1158.84,1159.12",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00002c",
+          "type": "Range",
+          "label": { "en": ["[Arabic/Mahri translation]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[Arabic/Mahri translation]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified", "Johnstone, Thomas Muir,"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1967 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Soqotra, Aden Governorate (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["3 min. 07 sec."] }
+            },
+            {
+              "label": { "en": ["Language"] },
+              "value": { "en": ["gdq ara"] }
+            },
+            {
+              "label": { "en": ["Culture"] },
+              "value": { "en": ["Mehri"] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/50 S1 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/50"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "A translation of an Arabic text into Mehri Recording likely to have been made during the 1967 expedition to Soqotra, of which Johnstone was a member. The expedition was led by Major P. G. Boxall, and sponsored by Admiral Sir Michael Le Fanu. The group comprised of civilian and service members, and included experts on languages, geology, entomology, botany, medicine, and archaeology, as well as military field survey teams of the Royal Navy and the Royal Engineers. They also conducted a coastal hydrographic survey [information from Doe 1992, which can be found at YK.1992.b.6319]. Recording date based on date of Boxhall's expedition to Soqotra. Information on contributors, and location recording is not described on the box, cassette, or documentation"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00002c",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=1159.12,1346.4",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x000002/top/nn9",
+          "type": "Range",
+          "behavior": ["no-nav"],
+
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=1346.4,1406.32",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00002e",
+          "type": "Range",
+          "label": { "en": ["['Survey' recordings]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["['Survey' recordings]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified", "Johnstone, Thomas Muir,"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["not before 1966-01-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Yemen (Socotra) (place of origin)"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["24 min. 18 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": {
+                "en": ["T.M. Johnstone Middle Eastern Language recordings"]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C733/50 S2 C1; S1 C4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C733/50"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "An expedition member reads his field diary, including geological information and anecdotes of the group's travels Recording date based on the dates announced in the recording"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052320369.0x000002/ark:/81055/vdc_100052320369.0x00002e",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000b#t=0,1398.84",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052320369.0x00000a#t=1346.52,1406.32",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

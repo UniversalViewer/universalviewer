@@ -1,0 +1,261 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+  "type": "Manifest",
+  "label": { "en": ["C1685/98 Loose ends 17/7/99 No Nav"] },
+  "metadata": [
+    {
+      "label": { "en": ["Title"] },
+      "value": { "en": ["Loose ends 17/7/99"] }
+    },
+    {
+      "label": { "en": ["Details"] },
+      "value": { "en": ["<p>Correct Range implementation</p>"] }
+    }
+  ],
+  "posterCanvas": {
+    "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_P3/poster",
+    "type": "Canvas",
+    "height": 400,
+    "width": 962,
+    "items": [
+      {
+        "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_P3/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_P3/poster/p1/anno",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1685_98_P3/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/pop.jpg",
+              "type": "Image",
+              "format": "image/jpeg",
+              "width": 962,
+              "height": 962
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 1"] },
+      "duration": 3723.4,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno/",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004",
+              "timeMode": "trim",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://resources.digirati.com/bl/C1685_98/vdc_100052359795.0x000019.mp4",
+                      "type": "Audio",
+                      "format": "audio/mp4"
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://edsilv.github.io/peaksjs-test/vdc_100052359795.0x000018.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 2"] },
+      "duration": 3723.4,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005/anno",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005/anno/",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005",
+              "timeMode": "trim",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C1685_98/vdc_100052359795.0x00001b.mp4",
+                      "type": "Audio"
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://edsilv.github.io/peaksjs-test/vdc_100052359795.0x00001a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/top",
+      "type": "Range",
+      "label": { "en": ["Loose ends 17/7/99"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000006",
+          "type": "Range",
+          "label": { "en": ["Loose ends"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.nn1",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,560",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007",
+              "type": "Range",
+              "label": { "en": ["There's a touch"] },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=560,741.28",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.nn2",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=741.28,1700.36",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000008",
+              "type": "Range",
+              "label": { "en": ["Song of dreams"] },
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=1700.36,1914.84",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.nn3",
+              "type": "Range",
+              "behavior": ["no-nav"],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=1914.84,2504.64",
+                  "type": "Canvas"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000c",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2504.64,2661.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000e",
+          "type": "Range",
+          "label": { "en": ["Saturday review"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2661.56,3723.4",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=0,1585.16",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000011",
+          "type": "Range",
+          "label": { "en": ["My dear Jim - Letters to a friend [2]"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=1585.16,2501.8",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000013",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=2501.8,2620.44",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000015",
+          "type": "Range",
+          "label": { "en": ["The archive hour: Humph at 80"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=2620.44,3723.4",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
