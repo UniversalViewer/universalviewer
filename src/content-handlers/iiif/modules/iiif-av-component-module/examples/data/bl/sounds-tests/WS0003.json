@@ -1,0 +1,241 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003.json",
+  "label": { "en": ["WS0003 Aburria aburri r1"] },
+  "metadata": [
+    {
+      "label": { "en": ["Full Title"] },
+      "value": { "en": ["Aburria aburri r1"] }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["Wildlife species reels"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["1 tape reel 18 cm mono"] }
+    },
+    {
+      "label": { "en": ["Usage"] },
+      "value": {
+        "en": [
+          "<span>Creative Commons Attribution licence<br/><br/><img src=\"https://i.creativecommons.org/l/by/4.0/88x31.png\"/></span>"
+        ]
+      }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Digitised by"] },
+      "value": { "en": ["The British Library, 2017"] }
+    },
+    {
+      "label": { "en": ["Digitisation funded by"] },
+      "value": {
+        "en": [
+          "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+        ]
+      }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["WS0003"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["WS0003"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4968576'>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "logo": [
+    { "id": "https://www.bl.uk/images/bl_logo_100.gif", "type": "Image" }
+  ],
+  "rights": "https://creativecommons.org/licenses/by/4.0",
+  "posterCanvas": {
+    "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003/poster",
+    "type": "Canvas",
+    "height": 962,
+    "width": 962,
+    "items": [
+      {
+        "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003/poster/p1/anno",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "format": "image/jpeg",
+              "width": 962,
+              "height": 962
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000004/anno",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/WS0003/vdc_100048002902.0x000009.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000004/anno/",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000004",
+              "timeMode": "trim",
+              "type": "Annotation",
+              "seeAlso": [
+                {
+                  "id": "http://iiif-waveforms.s3.amazonaws.com/vdc_100048002902.0x000008.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 20.84,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000004",
+      "label": "Tape 1 Side 1",
+      "type": "Canvas"
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000002/top",
+      "label": { "en": ["Aburria aburri r1"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000005",
+          "label": { "en": ["Aburria aburri : Wattled Guan - Cracidae"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100048002902.0x000004#t=0,20.84",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full Title"] },
+              "value": { "en": ["Aburria aburri : Wattled Guan - Cracidae"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Krabbe, Niels (sound recordist)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1983-09-09 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Peru San Martin Yurimaguas Road 21Km E of Tarapoto Altitude 1050 (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["0 min. 12 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Wildlife species reels"] }
+            },
+            {
+              "label": { "en": ["Wildlife Sound Category"] },
+              "value": { "en": ["calls"] }
+            },
+            {
+              "label": { "en": ["Usage"] },
+              "value": {
+                "en": [
+                  "<span>Creative Commons Attribution licence<br/><br/><img src=\"https://i.creativecommons.org/l/by/4.0/88x31.png\"/></span>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Digitised by"] },
+              "value": { "en": ["The British Library, 2017"] }
+            },
+            {
+              "label": { "en": ["Digitisation funded by"] },
+              "value": {
+                "en": [
+                  "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["WS0003 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["WS0003"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4999240'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": { "en": ["copy or original: third generation copy"] }
+            }
+          ],
+          "logo": [
+            {
+              "id": "https://www.bl.uk/images/bl_logo_100.gif",
+              "type": "Image"
+            }
+          ],
+          "type": "Range"
+        }
+      ],
+      "type": "Range"
+    }
+  ],
+  "type": "Manifest"
+}

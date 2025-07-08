@@ -1,0 +1,1716 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Ludwig van Beethoven: Four piano sonatas on period instruments"]
+  },
+  "rendering": [
+    {
+      "id": "https://api.bl.uk/download/audio/ark:/81055/tvdc_100005114784.0x000002/",
+      "type": "Audio",
+      "label": {
+        "en": ["Download this recording (Opens in new tab)"]
+      },
+      "format": "audio/mp4"
+    }
+  ],
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full title"]
+      },
+      "value": {
+        "en": ["Ludwig van Beethoven: Four piano sonatas on period instruments"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Creator"]
+      },
+      "value": {
+        "en": ["Bilson, Malcolm"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Date"]
+      },
+      "value": {
+        "en": ["2001 (published)"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Label"]
+      },
+      "value": {
+        "en": ["CLAVES"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Genre"]
+      },
+      "value": {
+        "en": ["Instrumental music"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["1 CD stereo"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Usage"]
+      },
+      "value": {
+        "en": [
+          "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Held by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitised by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitisation funded by"]
+      },
+      "value": {
+        "en": [
+          "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["1CD0187583"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Shelfmark"]
+      },
+      "value": {
+        "en": ["1CD0187583"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Link to catalogue"]
+      },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6092003'>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": ["Copyright and Usage"]
+    },
+    "value": {
+      "en": [
+        "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6092003\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The British Library"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The British Library"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "https://api.bl.uk/auth/iiif/login",
+      "type": "AuthCookieService1",
+      "profile": "http://iiif.io/api/auth/1/login",
+      "description": {
+        "en": [
+          "Some portions of this recording may be unavailable due to rights restrictions."
+        ]
+      },
+      "header": {
+        "en": ["Please Log-In"]
+      },
+      "label": {
+        "en": ["Login to The British Library"]
+      },
+      "service": [
+        {
+          "id": "http://api.bl.uk/auth/iiif/token",
+          "type": "AuthTokenService1",
+          "profile": "http://iiif.io/api/auth/1/token"
+        }
+      ]
+    },
+    {
+      "id": "http://access.bl.uk/item/share/ark:/81055/tvdc_100005114784.0x000002",
+      "type": "Service",
+      "profile": "https://universalviewer.io/share-extensions-profile"
+    }
+  ],
+  "homepage": [
+    {
+      "id": "http://access.bl.uk/item/viewer/ark:/81055/tvdc_100005114784.0x000002",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["View at the British Library"]
+      }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 1"]
+      },
+      "duration": 4425.0,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=00.00,211.04",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000018/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000018/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000018/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000018/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000018.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=211.04,484.96",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001a/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00001a/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001a/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00001a/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00001a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/3",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=484.96,702.56",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001c/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00001c/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001c/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00001c/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00001c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/4",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=702.56,967.76",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001e/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00001e/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00001e/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00001e/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00001e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/5",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=967.76,1270.16",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000020/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000020/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000020/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000020/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000020.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/6",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1270.16,1386.48",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000022/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000022/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000022/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000022/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000022.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/7",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1386.48,1825.08",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000024/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000024/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000024/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000024/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000024.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/8",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1825.08,2323.32",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000026/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000026/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000026/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000026/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000026.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/9",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=2323.32,2760.80",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000028/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000028/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000028/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000028/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000028.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/10",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=2760.80,3205.36",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002a/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00002a/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002a/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00002a/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00002a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/11",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3205.36,3419.36",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002c/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00002c/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002c/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00002c/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00002c.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/12",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3419.36,3778.24",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002e/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x00002e/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x00002e/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x00002e/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x00002e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004/anno1/13",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3778.24,4425.00",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000030/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/dash/ark:/81055/tvdc_100005114784.0x000030/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114784.0x000030/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://api.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://api.bl.uk/media/hls/ark:/81055/tvdc_100005114784.0x000030/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114784.0x000030.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000002/top",
+      "type": "Range",
+      "label": {
+        "en": ["Ludwig van Beethoven: Four piano sonatas on period instruments"]
+      },
+      "rendering": [
+        {
+          "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114784.0x000002/ark:/81055/tvdc_100005114784.0x000002/top",
+          "type": "Audio",
+          "label": {
+            "en": ["Download this recording"]
+          },
+          "format": "audio/mp4"
+        }
+      ],
+      "metadata": [
+        {
+          "label": {
+            "en": ["Full title"]
+          },
+          "value": {
+            "en": [
+              "Ludwig van Beethoven: Four piano sonatas on period instruments"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Creator"]
+          },
+          "value": {
+            "en": ["Bilson, Malcolm"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Date"]
+          },
+          "value": {
+            "en": ["2001 (published)"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Label"]
+          },
+          "value": {
+            "en": ["CLAVES"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Genre"]
+          },
+          "value": {
+            "en": ["Instrumental music"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Format"]
+          },
+          "value": {
+            "en": ["1 CD stereo"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Usage"]
+          },
+          "value": {
+            "en": [
+              "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Held by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitised by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitisation funded by"]
+          },
+          "value": {
+            "en": [
+              "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Identifier"]
+          },
+          "value": {
+            "en": ["1CD0187583"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Shelfmark"]
+          },
+          "value": {
+            "en": ["1CD0187583"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Link to catalogue"]
+          },
+          "value": {
+            "en": [
+              "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6092003'>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "requiredStatement": {
+        "label": {
+          "en": ["Copyright and Usage"]
+        },
+        "value": {
+          "en": [
+            "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA6092003\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000005",
+          "type": "Range",
+          "label": {
+            "en": ["Sonatas, piano, no.1, op.2 no.1/Beethoven (16:08)"]
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114784.0x000002/ark:/81055/tvdc_100005114784.0x000005",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Sonatas, piano, no.1, op.2 no.1/Beethoven"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Bilson, Malcolm (fortepiano)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1996 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Maria Minor Church, Utrecht, Netherlands or Masterview Sound Studio, Ithaca, New York, USA (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["16 min. 00 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Instrumental music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1CD0187583 BD1-BD4 CLAVES"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1CD0187583"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712018'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712018\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=0.00,211.04",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=211.04,484.96",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=484.96,702.56",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=702.56,967.76",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x00000a",
+          "type": "Range",
+          "label": {
+            "en": ["Sonatas, piano, no.14, op.27 no.2/Beethoven (14:18)"]
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114784.0x000002/ark:/81055/tvdc_100005114784.0x00000a",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Sonatas, piano, no.14, op.27 no.2/Beethoven"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Bilson, Malcolm (fortepiano)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1996 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Maria Minor Church, Utrecht, Netherlands or Masterview Sound Studio, Ithaca, New York, USA (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["14 min. 11 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Instrumental music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1CD0187583 BD5-BD7 CLAVES"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1CD0187583"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712050'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712050\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=967.76,1270.16",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1270.16,1386.48",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1386.48,1825.08",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x00000e",
+          "type": "Range",
+          "label": {
+            "en": ["Sonatas, piano, no.17, op.31 no.2/Beethoven (23:01)"]
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114784.0x000002/ark:/81055/tvdc_100005114784.0x00000e",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Sonatas, piano, no.17, op.31 no.2/Beethoven"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Bilson, Malcolm (fortepiano)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1996 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Maria Minor Church, Utrecht, Netherlands or Masterview Sound Studio, Ithaca, New York, USA (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["22 min. 55 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Instrumental music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1CD0187583 BD8-BD10 CLAVES"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1CD0187583"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712055'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712055\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=1825.08,2323.32",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=2323.32,2760.80",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=2760.80,3205.36",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000012",
+          "type": "Range",
+          "label": {
+            "en": ["Sonatas, piano, no.28, op.101/Beethoven (20:20)"]
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114784.0x000002/ark:/81055/tvdc_100005114784.0x000012",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Sonatas, piano, no.28, op.101/Beethoven"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Bilson, Malcolm (fortepiano)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1996 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Maria Minor Church, Utrecht, Netherlands or Masterview Sound Studio, Ithaca, New York, USA (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["20 min. 17 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Instrumental music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["1CD0187583 BD11-BD13 CLAVES"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["1CD0187583"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712057'>View the catalogue record</a>"
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8712057\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3205.36,3419.36",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3419.36,3778.24",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114784.0x000004#t=3778.24,4425.00",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

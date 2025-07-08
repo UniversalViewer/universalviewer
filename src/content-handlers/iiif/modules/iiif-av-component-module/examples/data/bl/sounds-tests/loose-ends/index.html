@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Loose Ends</title>
+    <link rel="stylesheet" href="../collection.css" />
+  </head>
+  <body>
+    <h1>Loose Ends: variants</h1>
+
+    <ul id="theList" class="manifests"></ul>
+
+    <div id="buffer"></div>
+    <div id="footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../collection_loader.js"></script>
+    <script>
+      $(function () {
+        loadCollection("collection.json", $("#theList"));
+      });
+    </script>
+  </body>
+</html>

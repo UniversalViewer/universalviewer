@@ -1,0 +1,1177 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["[No title]"]
+  },
+  "rendering": [
+    {
+      "id": "https://accessirc.ad.bl.uk/audio/download/ark:/81055/tvdc_100005096109.0x000001/",
+      "type": "Audio",
+      "label": {
+        "en": ["Download this recording (Opens in new tab)"]
+      },
+      "format": "audio/mp4"
+    }
+  ],
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full title"]
+      },
+      "value": {
+        "en": ["[No Title]"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Collection"]
+      },
+      "value": {
+        "en": ["Evolving English: VoiceBank"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["5 sound files"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Usage"]
+      },
+      "value": {
+        "en": [
+          "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Held by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["C1442/08858"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Shelfmark"]
+      },
+      "value": {
+        "en": ["C1442/08858"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Link to catalogue"]
+      },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8528424'>View the catalogue record</a>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Contents"]
+      },
+      "value": {
+        "en": [
+          "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+        ]
+      }
+    }
+  ],
+  "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": ["Copyright and Usage"]
+    },
+    "value": {
+      "en": [
+        "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8528424\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The British Library"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The British Library"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    }
+  ],
+  "homepage": [
+    {
+      "id": "https://accessirc.ad.bl.uk/UniversalViewer/ark:/81055/tvdc_100005096109.0x000001",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["View at the British Library"]
+      }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+      "type": "Canvas",
+      "label": {
+        "en": ["[No Title]"]
+      },
+      "duration": 419.56,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002#t=00.00,419.56",
+              "body": {
+                "id": "https://stephenwf.github.io/bl-manifests/row3-shortrecording-1_1.mp4",
+                "format": "audio/mp4",
+                "type": "Sound"
+              },
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005096109.0x00000e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+      "type": "Canvas",
+      "label": {
+        "en": ["[No Title]"]
+      },
+      "duration": 2.6000000000000001,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004#t=00.00,02.60",
+              "body": {
+                "id": "https://stephenwf.github.io/bl-manifests/row3-shortrecording-1_2.mp4",
+                "format": "audio/mp4",
+                "type": "Sound"
+              },
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005096109.0x000010.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+      "type": "Canvas",
+      "label": {
+        "en": ["[No Title]"]
+      },
+      "duration": 13.359999999999999,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006/anno3",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006/anno3/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006#t=00.00,13.36",
+              "body": {
+                "id": "https://stephenwf.github.io/bl-manifests/row3-shortrecording-1_3.mp4",
+                "format": "audio/mp4",
+                "type": "Sound"
+              },
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005096109.0x000012.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+      "type": "Canvas",
+      "label": {
+        "en": ["[No Title]"]
+      },
+      "duration": 2.6800000000000002,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008/anno4",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008/anno4/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008#t=00.00,02.68",
+              "body": {
+                "id": "https://stephenwf.github.io/bl-manifests/row3-shortrecording-1_4.mp4",
+                "format": "audio/mp4",
+                "type": "Sound"
+              },
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005096109.0x000014.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+      "type": "Canvas",
+      "label": {
+        "en": ["[No Title]"]
+      },
+      "duration": 3.5600000000000001,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010/anno5",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010/anno5/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010#t=00.00,03.56",
+              "body": {
+                "id": "https://stephenwf.github.io/bl-manifests/row3-shortrecording-1_5.mp4",
+                "format": "audio/mp4",
+                "type": "Sound"
+              },
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005096109.0x000016.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+      "type": "Range",
+      "label": {
+        "en": ["[No title]"]
+      },
+      "rendering": [
+        {
+          "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x000001/top",
+          "type": "Audio",
+          "label": {
+            "en": ["Download this recording"]
+          },
+          "format": "audio/mp4"
+        }
+      ],
+      "metadata": [
+        {
+          "label": {
+            "en": ["Full title"]
+          },
+          "value": {
+            "en": ["[No Title]"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Collection"]
+          },
+          "value": {
+            "en": ["Evolving English: VoiceBank"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Format"]
+          },
+          "value": {
+            "en": ["5 sound files"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Usage"]
+          },
+          "value": {
+            "en": [
+              "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Held by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Identifier"]
+          },
+          "value": {
+            "en": ["C1442/08858"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Shelfmark"]
+          },
+          "value": {
+            "en": ["C1442/08858"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Link to catalogue"]
+          },
+          "value": {
+            "en": [
+              "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8528424'>View the catalogue record</a>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Contents"]
+          },
+          "value": {
+            "en": [
+              "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+            ]
+          }
+        }
+      ],
+      "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "requiredStatement": {
+        "label": {
+          "en": ["Copyright and Usage"]
+        },
+        "value": {
+          "en": [
+            "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8528424\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+          "type": "Range",
+          "label": {
+            "en": ["Mr Tickle in a Filipino accent (06:60)"]
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x000002",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Mr Tickle in a Filipino accent"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["unnamed, 1984- (speaker, female)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["2011-03-08 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Evolving English exhibition, Paccar Gallery, British Library, London, England, UK (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["Accents and dialects - English language, Filipino"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Evolving English: VoiceBank"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": [
+                  "Accents and dialects: English as a second or foreign language"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Linguistic surveys"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["C1442/08858/1"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["C1442/08858"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530890'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "Other languages spoken at home: Tagalog",
+                  "Self-defined accent: L1 Tagalog; L2 US English at school",
+                  "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor.",
+                  "Mr Tickle' (© 1971) was written by Roger Hargreaves."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530890\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002#t=0.00,419.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+          "type": "Range",
+          "label": {
+            "en": ["Self-defined gender: female (00:03)"]
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x000004",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Self-defined gender: female"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["unnamed, 1984- (speaker, female)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["2011-03-08 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Evolving English exhibition, Paccar Gallery, British Library, London, England, UK (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Evolving English: VoiceBank"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["C1442/08858/3"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["C1442/08858"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530891'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530891\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004#t=0.00,2.60",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+          "type": "Range",
+          "label": {
+            "en": [
+              "Self-defined accent: L1 Tagalog; L2 US English at school (00:14)"
+            ]
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x000006",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": [
+                  "Self-defined accent: L1 Tagalog; L2 US English at school"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["unnamed, 1984- (speaker, female)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["2011-03-08 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Evolving English exhibition, Paccar Gallery, British Library, London, England, UK (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Evolving English: VoiceBank"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["C1442/08858/4"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["C1442/08858"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530892'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530892\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006#t=0.00,13.36",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+          "type": "Range",
+          "label": {
+            "en": ["Other languages spoken at home: Tagalog (00:03)"]
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x000008",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Other languages spoken at home: Tagalog"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["unnamed, 1984- (speaker, female)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["2011-03-08 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Evolving English exhibition, Paccar Gallery, British Library, London, England, UK (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Evolving English: VoiceBank"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["C1442/08858/5"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["C1442/08858"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530893'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530893\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008#t=0.00,2.68",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+          "type": "Range",
+          "label": {
+            "en": ["Statement of birth year: 1984 (00:04)"]
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005096109.0x000001/ark:/81055/tvdc_100005096109.0x00000a",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Statement of birth year: 1984"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["unnamed, 1984- (speaker, female)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["2011-03-08 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Evolving English exhibition, Paccar Gallery, British Library, London, England, UK (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Evolving English: VoiceBank"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["C1442/08858/6"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["C1442/08858"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530894'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "From a linguistic survey comprising up to 6 elements recorded separately. Each shelfmark represents the recordings archived from a single contributor."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8530894\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010#t=0.00,3.56",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

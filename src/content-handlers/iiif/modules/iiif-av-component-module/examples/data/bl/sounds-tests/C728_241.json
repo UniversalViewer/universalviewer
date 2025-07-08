@@ -1,0 +1,793 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241.json",
+  "label": { "en": ["C728/241 [Demo]"] },
+  "behavior": ["auto-advance"],
+  "metadata": [
+    {
+      "label": { "en": ["Full title"] },
+      "value": { "en": ["[Demo]"] }
+    },
+    {
+      "label": { "en": ["Creator"] },
+      "value": { "en": ["Brian Melvin Quartet"] }
+    },
+    {
+      "label": { "en": ["Date"] },
+      "value": { "en": ["1992-11-16 (recorded)"] }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["Serious Speakout Demo Tape collection"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["1 compact cassette"] }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C728/241"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["C728/241"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8005515>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "posterCanvas": {
+    "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241/poster",
+    "type": "Canvas",
+    "height": 962,
+    "width": 962,
+    "items": [
+      {
+        "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241/poster/p1/anno",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/wildlife.jpg",
+              "type": "Image",
+              "format": "image/jpeg",
+              "width": 962,
+              "height": 962
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004/anno",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C728_241/vdc_100049349428.0x00001a.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100049349428.0x000019.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004/anno/",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 1006.84,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004",
+      "label": "Tape 1 Side 1",
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005/anno",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/C728_241/vdc_100049349428.0x00001c.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100049349428.0x00001b.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005/anno/",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 1591.12,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005",
+      "label": "Tape 1 Side 2",
+      "type": "Canvas"
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000002/top",
+      "label": { "en": ["[Demo]"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000006",
+          "label": { "en": ["Dania"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004#t=0,243.32",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Dania"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["4 min. 04 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S1 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020732>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by J. Pastorius. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000008",
+          "label": { "en": ["A short life"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004#t=243.32,464.08",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["A short life"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["3 min. 40 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S1 C2"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020734>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by Wayne DeSilva. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x00000a",
+          "label": { "en": ["Remembrant"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004#t=464.08,748.6",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Remembrant"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["4 min. 44 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S1 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020735>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by Brian Melvin. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x00000c",
+          "label": { "en": ["[No title]"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000004#t=748.6,1006.84",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Blue Jay Way/Harrison"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["4 min. 17 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S1 C4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020736>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Written by George Harrison. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x00000e",
+          "label": { "en": ["Teen town"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005#t=0,230.48",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Teen town"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["3 min. 51 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S2 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020738>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by J. Pastorius. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000010",
+          "label": { "en": ["Toys"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005#t=230.48,655.52",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Toys"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["7 min. 05 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S2 C2"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020740>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by H. Hancock. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000012",
+          "label": { "en": ["What is there to say"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005#t=655.52,974",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["What is there to say"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["5 min. 18 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S2 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020742>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by 'Harbor and Duke'. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000014",
+          "label": { "en": ["203"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005#t=974,1209.68",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["203"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["3 min. 55 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S2 C4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020744>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by Wayne DeSilva. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000016",
+          "label": { "en": ["Three views of a secret"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100049349428.0x000005#t=1209.68,1591.12",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Three views of a secret"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Brian Melvin Quartet"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": { "en": ["1992-11-16 (recorded)"] }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": {
+                "en": [
+                  "Tarpon Studios, San Anselmo, California, United States (recorded)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["6 min. 20 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Serious Speakout Demo Tape collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C728/241 S2 C5"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C728/241"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8020745>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Personnel: Brian Melvin (Drums), Wayne DeSilva (Saxophone), Gary Fisher (Keyboards), Tim Hauff (Bass) Composition by J. Pastorius. Produced by Brian Melvin"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        }
+      ],
+      "type": "Range"
+    }
+  ],
+  "type": "Manifest"
+}

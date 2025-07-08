@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>BL Sounds Tests</title>
+    <link rel="stylesheet" href="collection.css" />
+  </head>
+  <body>
+    <h1>AV test manifests</h1>
+
+    <ul id="theList" class="manifests"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="collection_loader.js"></script>
+    <script>
+      $(function () {
+        loadCollection("collection.json", $("#theList"));
+      });
+    </script>
+  </body>
+</html>

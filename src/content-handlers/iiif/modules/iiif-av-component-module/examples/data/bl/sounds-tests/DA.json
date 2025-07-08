@@ -1,0 +1,1164 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "<span>Except as otherwise permitted under your national copyright law this material may not be copied or distributed further.</span>"
+      ]
+    }
+  },
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA.json",
+  "label": { "en": ["The Winter Hymn (Ambient Version)"] },
+  "behavior": ["auto-advance"],
+  "logo": [
+    {
+      "id": "https://www.bl.uk/images/bl_logo_100.gif",
+      "type": "Image"
+    }
+  ],
+  "posterCanvas": {
+    "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA/poster",
+    "type": "Canvas",
+    "height": 4000,
+    "width": 4000,
+    "items": [
+      {
+        "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA/poster/p1/anno",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/winter-hymn-vdc_100047313296.0x000001.jpg",
+              "type": "Image",
+              "format": "image/jpeg",
+              "width": 4000,
+              "height": 4000
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": [
+    {
+      "label": { "en": ["Title"] },
+      "value": { "en": ["The Winter Hymn (Ambient Version)"] }
+    },
+    {
+      "label": { "en": ["Contributed by"] },
+      "value": { "en": ["Beggars Group"] }
+    },
+    {
+      "label": { "en": ["Provided by"] },
+      "value": { "en": ["Consolidated Independent Ltd"] }
+    }
+  ],
+  "items": [
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/2/anno2",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234296.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/2/anno2/node-id-000002",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/2",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 276.4,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/2",
+      "label": { "en": ["You What? Euphoria! (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/3/anno3",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234297.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/3/anno3/node-id-000004",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/3",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 353.08,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/3",
+      "label": { "en": ["Frau Im Mond, Sterne Laufen (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/7/anno7",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234301.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/7/anno7/node-id-000006",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/7",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 336.56,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/7",
+      "label": { "en": ["In An Open Space (Ambient Version Instrumental)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/1/anno1",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234295.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/1/anno1/node-id-000008",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/1",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 353.84,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/1",
+      "label": {
+        "en": ["Dream Yourself Awake (Ambient Version Instrumental)"]
+      },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/5/anno5",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234299.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/5/anno5/node-id-000010",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/5",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 223.16,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/5",
+      "label": { "en": ["Lichterschmaus (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/6/anno6",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234300.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/6/anno6/node-id-000012",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/6",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 234.8,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/6",
+      "label": { "en": ["Lions Love (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/8/anno8",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234302.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/8/anno8/node-id-000014",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/8",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 413.08,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/8",
+      "label": { "en": ["Islands In The Sky (Ambient Version Instrumental)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/4/anno4",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234298.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/4/anno4/node-id-000016",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/4",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 382.96,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/4",
+      "label": { "en": ["Wallflowers for Pale Saints (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/10/anno10",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234304.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/10/anno10/node-id-000018",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/10",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 302.96,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/10",
+      "label": { "en": ["The Winter Hymn (Ambient Version Instrumental)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/9/anno9",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234303.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/9/anno9/node-id-000020",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/9",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 275.32,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/9",
+      "label": { "en": ["In An Open Space (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/12/anno12",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234306.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/12/anno12/node-id-000022",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/12",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 354.52,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/12",
+      "label": { "en": ["Dream Yourself Awake (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/11/anno11",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234305.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/11/anno11/node-id-000024",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/11",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 224.08,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/11",
+      "label": { "en": ["Islands In The Sky (Ambient Version)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/14/anno14",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234308.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/14/anno14/node-id-000026",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/14",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 381.08,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/14",
+      "label": { "en": ["Lions Love (John Roberts Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/15/anno15",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234309.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/15/anno15/node-id-000028",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/15",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 207.96,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/15",
+      "label": { "en": ["Islands In the Sky (Recondite Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/16/anno16",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234310.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/16/anno16/node-id-000032",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/16",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 419.48,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/16",
+      "label": { "en": ["Dream Yourself Awake (Solomun Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/13/anno13",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234307.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/13/anno13/node-id-000034",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/13",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 461.96,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/13",
+      "label": { "en": ["Dream Yourself Awake (Shinedoe Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/17/anno17",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234311.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/17/anno17/node-id-000036",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/17",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 430.76,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/17",
+      "label": { "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/18/anno18",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234312.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/18/anno18/node-id-000038",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/18",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 413.84,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/18",
+      "label": { "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/19/anno19",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234313.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/19/anno19/node-id-000040",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/19",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 468.04,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/19",
+      "label": { "en": ["Dream Yourself Awake (Solomun Dream Version Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/20/anno20",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234314.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/20/anno20/node-id-000030",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/20",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 322.88,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/20",
+      "label": { "en": ["Dream Yourself Awake (Solomun Remix)"] },
+      "type": "Canvas"
+    },
+    {
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/21/anno21",
+          "items": [
+            {
+              "body": [
+                {
+                  "items": [
+                    {
+                      "format": "audio/mp4",
+                      "id": "https://resources.digirati.com/bl/DA/dvdc_999001234315.0x000001.mp4",
+                      "type": "Audio"
+                    }
+                  ],
+                  "type": "Choice"
+                }
+              ],
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/21/anno21/node-id-000042",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/21",
+              "timeMode": "trim",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "duration": 395.32,
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/21",
+      "label": {
+        "en": ["Frau Im Mond, Sterne Laufen (Ambarchi &amp; Sprenger Remix)"]
+      },
+      "type": "Canvas"
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/top",
+      "label": { "en": ["The Winter Hymn (Ambient Version)"] },
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000001",
+          "label": { "en": ["You What? Euphoria! (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/2#t=0,276.4",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["You What? Euphoria! (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000002",
+          "label": { "en": ["Frau Im Mond, Sterne Laufen (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/3#t=0,353.08",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Frau Im Mond, Sterne Laufen (Ambient Version)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000003",
+          "label": {
+            "en": ["In An Open Space (Ambient Version Instrumental)"]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/7#t=0,336.56",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["In An Open Space (Ambient Version Instrumental)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000004",
+          "label": {
+            "en": ["Dream Yourself Awake (Ambient Version Instrumental)"]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/1#t=0,353.84",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Dream Yourself Awake (Ambient Version Instrumental)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000005",
+          "label": { "en": ["Lichterschmaus (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/5#t=0,223.16",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Lichterschmaus (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000006",
+          "label": { "en": ["Lions Love (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/6#t=0,234.8",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Lions Love (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000007",
+          "label": {
+            "en": ["Islands In The Sky (Ambient Version Instrumental)"]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/8#t=0,413.08",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Islands In The Sky (Ambient Version Instrumental)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000008",
+          "label": { "en": ["Wallflowers for Pale Saints (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/4#t=0,382.96",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Wallflowers for Pale Saints (Ambient Version)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000009",
+          "label": { "en": ["The Winter Hymn (Ambient Version Instrumental)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/10#t=0,302.96",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["The Winter Hymn (Ambient Version Instrumental)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000a",
+          "label": { "en": ["In An Open Space (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/9#t=0,275.32",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["In An Open Space (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000b",
+          "label": { "en": ["Dream Yourself Awake (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/12#t=0,354.52",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Dream Yourself Awake (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000c",
+          "label": { "en": ["Islands In The Sky (Ambient Version)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/11#t=0,224.08",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Islands In The Sky (Ambient Version)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000d",
+          "label": { "en": ["Lions Love (John Roberts Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/14#t=0,381.08",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Lions Love (John Roberts Remix)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000e",
+          "label": { "en": ["Islands In the Sky (Recondite Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/15#t=0,207.96",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Islands In the Sky (Recondite Remix)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000010",
+          "label": { "en": ["Dream Yourself Awake (Solomun Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/16#t=0,419.48",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Dream Yourself Awake (Solomun Remix)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000011",
+          "label": { "en": ["Dream Yourself Awake (Shinedoe Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/13#t=0,461.96",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Dream Yourself Awake (Shinedoe Remix)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000012",
+          "label": { "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/17#t=0,430.76",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000013",
+          "label": { "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/18#t=0,413.84",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Frau Im Mond, Sterne Laufen (Alva Noto Remix)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000014",
+          "label": {
+            "en": ["Dream Yourself Awake (Solomun Dream Version Remix)"]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/19#t=0,468.04",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": ["Dream Yourself Awake (Solomun Dream Version Remix)"]
+              }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x00000f",
+          "label": { "en": ["Dream Yourself Awake (Solomun Remix)"] },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/20#t=0,322.88",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": { "en": ["Dream Yourself Awake (Solomun Remix)"] }
+            }
+          ],
+          "type": "Range"
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234294.0x000015",
+          "label": {
+            "en": [
+              "Frau Im Mond, Sterne Laufen (Ambarchi &amp; Sprenger Remix)"
+            ]
+          },
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/dvdc_999001234290.0x000001/sequence/canvas/21#t=0,395.32",
+              "type": "Canvas"
+            }
+          ],
+          "metadata": [
+            {
+              "label": { "en": ["Title"] },
+              "value": {
+                "en": [
+                  "Frau Im Mond, Sterne Laufen (Ambarchi &amp; Sprenger Remix)"
+                ]
+              }
+            }
+          ],
+          "type": "Range"
+        }
+      ],
+      "type": "Range"
+    }
+  ],
+  "type": "Manifest"
+}

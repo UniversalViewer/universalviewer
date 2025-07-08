@@ -1,0 +1,29 @@
+body {
+  font-family: sans-serif;
+}
+ul.manifests > li {
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+img {
+  vertical-align: bottom;
+}
+ul.range li {
+  font-weight: 300;
+}
+
+#footer,
+#buffer {
+  height: 300px;
+  width: 100%;
+  font-size: 12px;
+}
+#footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  background: #777;
+  color: #fff;
+  padding: 10px;
+  overflow: scroll;
+}

@@ -1,0 +1,16 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/collection.json",
+  "type": "Collection",
+  "label": { "en": ["Loose Ends: Canonical"] },
+  "items": [
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+      "type": "Manifest",
+      "label": { "en": ["C1685/98 Loose ends 17/7/99 Canonical"] }
+    }
+  ]
+}

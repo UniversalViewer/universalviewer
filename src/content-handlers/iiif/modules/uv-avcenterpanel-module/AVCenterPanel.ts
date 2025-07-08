@@ -11,7 +11,7 @@ import {
   Range,
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
-import { AVComponent } from "@iiif/iiif-av-component/dist-esmodule";
+import { AVComponent } from "../iiif-av-component-module/src/IiifAvComponent";
 import { Bools } from "@edsilv/utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";

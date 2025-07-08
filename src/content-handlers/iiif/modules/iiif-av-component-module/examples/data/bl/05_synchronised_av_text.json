@@ -1,0 +1,149 @@
+{
+  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text.json",
+  "type": "Manifest",
+  "label": "Video synchronised with gapless audio, text",
+  "description": "Includes gapless join of two audio tracks. Timed text annotations appear throughout including at the same time as the gap transition. They are positioned on the canvas.",
+  "sequences": [
+    {
+      "type": "Sequence",
+      "canvases": [
+        {
+          "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1",
+          "duration": 120,
+          "width": 1920,
+          "height": 1080,
+          "content": [
+            {
+              "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/page/1",
+              "type": "AnnotationPage",
+              "items": [
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/1",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m-red.mp4",
+                    "type": "Video",
+                    "format": "video/mp4",
+                    "duration": 120
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/2",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#t=0,60"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/3",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/media/sample-6m.m4a",
+                    "type": "Audio",
+                    "format": "audio/mp3"
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#t=60,120"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text01",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(10-20s) This textual annotation occurs between 10-20s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=320,180,320,180&t=10,20"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text02",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(25-35s) This textual annotation occurs between 25 and 35s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=1280,180,320,180&t=25,35"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text03",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(40-50s) This textual annotation occurs between 40-50s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=320,720,320,180&t=40,50"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text04",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(52-62s) This textual annotation occurs between 52-62s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=1280,720,320,180&t=52,62"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text05",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(60-70s) This textual annotation occurs between 60-70s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=320,180,320,180&t=60,70"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text06",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(80-110s) This textual annotation occurs between 80-110s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=1280,180,320,180&t=80,110"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text07",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(90-110s) This textual annotation occurs between 90-110s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=320,720,320,180&t=90,110"
+                },
+                {
+                  "id": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/content/anno/text08",
+                  "type": "Annotation",
+                  "motivation": "painting",
+                  "body": {
+                    "type": "TextualBody",
+                    "format": "text/plain",
+                    "value": "(100-110s) This textual annotation occurs between 100-110s."
+                  },
+                  "target": "http://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text/canvas/1#xywh=1280,720,320,180&t=100,110"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

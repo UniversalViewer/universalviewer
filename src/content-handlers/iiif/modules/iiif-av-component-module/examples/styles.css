@@ -1,0 +1,160 @@
+/*******************
+* Generic
+*******************/
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #efefef;
+  font-size: 14px;
+  padding: 10px;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.testFixtureSelection {
+  margin-bottom: 10px;
+}
+
+#manifestInput {
+  width: 600px;
+  max-width: 60%;
+}
+
+.title,
+.description {
+  width: 77%;
+  margin: 0px 0px 10px 0;
+}
+
+.title {
+  margin-top: 10px;
+}
+
+.playerContainer {
+  max-width: 800px;
+}
+
+#toggleLogsButton {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 8;
+}
+
+.logContainer {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border: 4px solid rgba(20, 20, 20, 0.4);
+  width: 30%;
+  height: 80%;
+  font-size: 10px;
+  display: none;
+}
+
+.logContainer textarea {
+  display: block;
+  background: #333;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0px 10px;
+  border: none;
+  outline: none;
+}
+
+.logContainer button {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 14px;
+}
+
+/*******************
+* Media Queries
+*******************/
+
+@media (min-width: 1220px) and (max-width: 2000px) {
+}
+
+@media (min-width: 1010px) and (max-width: 1220px) {
+}
+
+@media (min-width: 650px) and (max-width: 1010px) {
+}
+
+@media (max-width: 650px) {
+}
+
+@media screen and (max-width: 480px) {
+}
+
+/*******************
+* Tree
+*******************/
+
+#tree {
+  margin-top: 50px;
+}
+
+.iiif-tree-component {
+  overflow: auto;
+  color: auto;
+}
+.iiif-tree-component .toggle {
+  cursor: pointer;
+  margin-top: 3px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA3NCSVQICAjb4U/gAAAABlBMVEUjHyD///9mY0coAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFnRFWHRDcmVhdGlvbiBUaW1lADAzLzIzLzEysFVRHgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWSURBVAiZY/h/gAGIPoPRATCCsMHiAPy6EMmRpJhhAAAAAElFTkSuQmCC");
+}
+.iiif-tree-component .toggle.expanded {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA3NCSVQICAjb4U/gAAAABlBMVEUjHyD///9mY0coAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFnRFWHRDcmVhdGlvbiBUaW1lADAzLzIzLzEysFVRHgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAASSURBVAiZY/h/gAGODoARkggA/6IQ+fU4POkAAAAASUVORK5CYII=");
+}
+.iiif-tree-component .toggle.multiSelect {
+  margin-left: 5px;
+}
+.iiif-tree-component .spacer {
+  margin-top: 3px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+}
+.iiif-tree-component input.multiSelect {
+  margin-top: 0px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 13px;
+  width: 13px;
+}
+.iiif-tree-component ul.tree,
+.iiif-tree-component ul.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.iiif-tree-component ul.tree ul {
+  margin-left: 15px;
+}
+.iiif-tree-component ul.tree li {
+  margin: 0;
+  padding: 2px 0 2px 0;
+  overflow: hidden;
+}
+.iiif-tree-component ul.tree li a {
+  display: block;
+  overflow: hidden;
+}
+.iiif-tree-component ul li a.selected {
+  color: green !important;
+}

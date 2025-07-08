@@ -1,0 +1,774 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Time plan > Create valid timeplans > Short range contains valid canvas indexes 1`] = `
+{
+  "canvases": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+  ],
+  "duration": 441.76000000000005,
+  "end": 441.76000000000005,
+  "items": [
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+      ],
+      "duration": 419.56,
+      "end": 419.56,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 419.56,
+            "start": 0,
+          },
+          "duration": 419.56,
+          "end": 419.56,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002#t=0.00,419.56",
+          "start": 0,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+      ],
+      "start": 0,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 419.56,
+            "start": 0,
+          },
+          "duration": 419.56,
+          "end": 419.56,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002#t=0.00,419.56",
+          "start": 0,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+      ],
+      "duration": 2.6000000000000227,
+      "end": 422.16,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 2.6,
+            "start": 0,
+          },
+          "duration": 2.6,
+          "end": 422.16,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004#t=0.00,2.60",
+          "start": 419.56,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+      ],
+      "start": 419.56,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 2.6,
+            "start": 0,
+          },
+          "duration": 2.6,
+          "end": 422.16,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004#t=0.00,2.60",
+          "start": 419.56,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+      ],
+      "duration": 13.360000000000014,
+      "end": 435.52000000000004,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 13.36,
+            "start": 0,
+          },
+          "duration": 13.36,
+          "end": 435.52000000000004,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006#t=0.00,13.36",
+          "start": 422.16,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+      ],
+      "start": 422.16,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 13.36,
+            "start": 0,
+          },
+          "duration": 13.36,
+          "end": 435.52000000000004,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006#t=0.00,13.36",
+          "start": 422.16,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+      ],
+      "duration": 2.680000000000007,
+      "end": 438.20000000000005,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 2.68,
+            "start": 0,
+          },
+          "duration": 2.68,
+          "end": 438.20000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008#t=0.00,2.68",
+          "start": 435.52000000000004,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+      ],
+      "start": 435.52000000000004,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 2.68,
+            "start": 0,
+          },
+          "duration": 2.68,
+          "end": 438.20000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008#t=0.00,2.68",
+          "start": 435.52000000000004,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+      ],
+      "duration": 3.5600000000000023,
+      "end": 441.76000000000005,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 3.56,
+            "start": 0,
+          },
+          "duration": 3.56,
+          "end": 441.76000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010#t=0.00,3.56",
+          "start": 438.20000000000005,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+      ],
+      "start": 438.20000000000005,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 3.56,
+            "start": 0,
+          },
+          "duration": 3.56,
+          "end": 441.76000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010#t=0.00,3.56",
+          "start": 438.20000000000005,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+  ],
+  "noNav": false,
+  "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+  "rangeOrder": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+  ],
+  "rangeStack": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+  ],
+  "start": 0,
+  "stops": [
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
+      "canvasIndex": 0,
+      "canvasTime": {
+        "end": 419.56,
+        "start": 0,
+      },
+      "duration": 419.56,
+      "end": 419.56,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000002",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002#t=0.00,419.56",
+      "start": 0,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004",
+      "canvasIndex": 1,
+      "canvasTime": {
+        "end": 2.6,
+        "start": 0,
+      },
+      "duration": 2.6,
+      "end": 422.16,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000004",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000004#t=0.00,2.60",
+      "start": 419.56,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006",
+      "canvasIndex": 2,
+      "canvasTime": {
+        "end": 13.36,
+        "start": 0,
+      },
+      "duration": 13.36,
+      "end": 435.52000000000004,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000006",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000006#t=0.00,13.36",
+      "start": 422.16,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008",
+      "canvasIndex": 3,
+      "canvasTime": {
+        "end": 2.68,
+        "start": 0,
+      },
+      "duration": 2.68,
+      "end": 438.20000000000005,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000008",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000008#t=0.00,2.68",
+      "start": 435.52000000000004,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010",
+      "canvasIndex": 4,
+      "canvasTime": {
+        "end": 3.56,
+        "start": 0,
+      },
+      "duration": 3.56,
+      "end": 441.76000000000005,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x00000a",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000010#t=0.00,3.56",
+      "start": 438.20000000000005,
+      "type": "time-stop",
+    },
+  ],
+  "type": "time-plan",
+}
+`;
+
+exports[`Time plan > Create valid timeplans > row 3 contains valid canvas indexes 1`] = `
+{
+  "canvases": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+  ],
+  "duration": 762.8400000000001,
+  "end": 762.8400000000001,
+  "items": [
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+      ],
+      "duration": 211.08,
+      "end": 211.08,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 216.56,
+            "start": 5.48,
+          },
+          "duration": 211.08,
+          "end": 211.08,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=5.48,216.56",
+          "start": 0,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+      ],
+      "start": 0,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 216.56,
+            "start": 5.48,
+          },
+          "duration": 211.08,
+          "end": 211.08,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=5.48,216.56",
+          "start": 0,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+      ],
+      "duration": 180.36000000000004,
+      "end": 391.44000000000005,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 396.92,
+            "start": 216.56,
+          },
+          "duration": 180.36,
+          "end": 391.44000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=216.56,396.92",
+          "start": 211.08000000000004,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+      ],
+      "start": 211.08,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 396.92,
+            "start": 216.56,
+          },
+          "duration": 180.36,
+          "end": 391.44000000000005,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=216.56,396.92",
+          "start": 211.08000000000004,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+      ],
+      "duration": 188.24,
+      "end": 579.6800000000001,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 192.56,
+            "start": 4.32,
+          },
+          "duration": 188.24,
+          "end": 579.6800000000001,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=4.32,192.56",
+          "start": 391.44000000000005,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+      ],
+      "start": 391.44000000000005,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 192.56,
+            "start": 4.32,
+          },
+          "duration": 188.24,
+          "end": 579.6800000000001,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=4.32,192.56",
+          "start": 391.44000000000005,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+    {
+      "canvases": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+      ],
+      "duration": 183.16000000000008,
+      "end": 762.8400000000001,
+      "items": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 375.72,
+            "start": 192.56,
+          },
+          "duration": 183.16000000000003,
+          "end": 762.8400000000001,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=192.56,375.72",
+          "start": 579.6800000000001,
+          "type": "time-stop",
+        },
+      ],
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+      "rangeOrder": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+      ],
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+      ],
+      "start": 579.6800000000001,
+      "stops": [
+        {
+          "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+          "canvasIndex": 0,
+          "canvasTime": {
+            "end": 375.72,
+            "start": 192.56,
+          },
+          "duration": 183.16000000000003,
+          "end": 762.8400000000001,
+          "noNav": false,
+          "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+          "rangeStack": [
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+            "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+          ],
+          "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=192.56,375.72",
+          "start": 579.6800000000001,
+          "type": "time-stop",
+        },
+      ],
+      "type": "time-plan",
+    },
+  ],
+  "noNav": false,
+  "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+  "rangeOrder": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+  ],
+  "rangeStack": [
+    "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+  ],
+  "start": 0,
+  "stops": [
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+      "canvasIndex": 0,
+      "canvasTime": {
+        "end": 216.56,
+        "start": 5.48,
+      },
+      "duration": 211.08,
+      "end": 211.08,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000006",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=5.48,216.56",
+      "start": 0,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",
+      "canvasIndex": 0,
+      "canvasTime": {
+        "end": 396.92,
+        "start": 216.56,
+      },
+      "duration": 180.36,
+      "end": 391.44000000000005,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000008",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004#t=216.56,396.92",
+      "start": 211.08000000000004,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+      "canvasIndex": 1,
+      "canvasTime": {
+        "end": 192.56,
+        "start": 4.32,
+      },
+      "duration": 188.24,
+      "end": 579.6800000000001,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000a",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=4.32,192.56",
+      "start": 391.44000000000005,
+      "type": "time-stop",
+    },
+    {
+      "canvasId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005",
+      "canvasIndex": 1,
+      "canvasTime": {
+        "end": 375.72,
+        "start": 192.56,
+      },
+      "duration": 183.16000000000003,
+      "end": 762.8400000000001,
+      "noNav": false,
+      "rangeId": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+      "rangeStack": [
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000002/top",
+        "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x00000c",
+      ],
+      "rawCanvasSelector": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000005#t=192.56,375.72",
+      "start": 579.6800000000001,
+      "type": "time-stop",
+    },
+  ],
+  "type": "time-plan",
+}
+`;

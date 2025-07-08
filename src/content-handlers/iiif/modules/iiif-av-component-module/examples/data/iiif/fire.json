@@ -1,0 +1,128 @@
+{
+    "id": "https://tomcrane.github.io/fire/manifest3.json",
+    "type": "Manifest",
+    "label": "Fire",
+    "description": "An experiment with time in the Presentation API.",
+    "sequences": [
+        {
+            "id": "https://tomcrane.github.io/fire/seq1",
+            "type": "Sequence",
+            "canvases": [
+                {
+                    "id": "https://tomcrane.github.io/fire/canvas/1",
+                    "type": "Canvas",
+                    "width": 1000,
+                    "height": 750,
+                    "duration": 120,
+                    "content": [
+                        {
+                            "id": "https://tomcrane.github.io/fire/annos/page",
+                            "type": "AnnotationPage",
+                            "items": [
+                                {
+                                    "id": "https://tomcrane.github.io/fire/annos/anno1",
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/main.jpg",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "height": 1000,
+                                        "width": 750
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/small.jpg",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "width": 400,
+                                        "height": 300
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=200,200,400,300&t=2,9"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "type": "TextualBody",
+                                        "format": "text/plain",
+                                        "value": "Fire is the rapid oxidation of a material in the exothermic chemical process of combustion, releasing heat, light, and various reaction products. Slower oxidative processes like rusting or digestion are not included by this definition."
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=70,60,500,100&t=5,20"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/still.JPG",
+                                        "type": "Image",
+                                        "format": "image/jpeg",
+                                        "width": 600,
+                                        "height": 450
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=670,30,300,225&t=9,20"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/out720.mp4",
+                                        "type": "Video",
+                                        "format": "video/mp4",
+                                        "width": 720,
+                                        "height": 524,
+                                        "duration": 13
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=200,200,360,262&t=13,26"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/out2720.mp4",
+                                        "type": "Video",
+                                        "format": "video/mp4",
+                                        "width": 720,
+                                        "height": 496,
+                                        "duration": 12
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=100,200,360,248&t=26,38"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/out2720.mp4",
+                                        "type": "Video",
+                                        "format": "video/mp4",
+                                        "width": 720,
+                                        "height": 496,
+                                        "duration": 12
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=100,200,360,248&t=38,45"
+                                },
+                                {
+                                    "type": "Annotation",
+                                    "motivation": "painting",
+                                    "body": {
+                                        "id": "https://tomcrane.github.io/fire/content/out2722.mp4",
+                                        "type": "Video",
+                                        "format": "video/mp4",
+                                        "width": 720,
+                                        "height": 410,
+                                        "duration": 18
+                                    },
+                                    "target": "https://tomcrane.github.io/fire/canvas/1#xywh=600,420,360,210&t=29,48"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

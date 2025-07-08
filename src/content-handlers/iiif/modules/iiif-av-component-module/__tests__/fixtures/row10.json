@@ -1,0 +1,1041 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "(a) Must I go bound ? (b) I will walk with my love / An old sacred lullaby"
+    ]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full title"]
+      },
+      "value": {
+        "en": [
+          "(a) Must I go bound ? (b) I will walk with my love / An old sacred lullaby"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Collection"]
+      },
+      "value": {
+        "en": ["The Duncan Morison Audio Collection"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["sound file(s)"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Usage"]
+      },
+      "value": {
+        "en": [
+          "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Held by"]
+      },
+      "value": {
+        "en": [
+          "Leabharlannan nan Eilean Siar [Western Isles Library Service] (WILS)"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitised by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitisation funded by"]
+      },
+      "value": {
+        "en": [
+          "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["UNLS010/27"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Shelfmark"]
+      },
+      "value": {
+        "en": ["UNLS010/27"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Link to catalogue"]
+      },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8360707'>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": ["Copyright and Usage"]
+    },
+    "value": {
+      "en": [
+        "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8360707\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The British Library"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The British Library"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    },
+    {
+      "id": "https://www.nls.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The National Library of Scotland"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.nls.uk",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The National Library of Scotland"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "concat( $hostname , '/hub-logo/06-National-Library-of-Scotland-Logo-Masters-LINEAR-CMYK.jpg') concat( $hostname , '/hub-logo/06-Scotlands-Sounds-Logo-Landscape.jpg')",
+          "type": "Image",
+          "format": "image/jpeg image/jpeg"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "https://api.bl.uk/auth/iiif/login",
+      "type": "AuthCookieService1",
+      "profile": "http://iiif.io/api/auth/1/login",
+      "description": {
+        "en": [
+          "Some portions of this recording may be unavailable due to rights restrictions."
+        ]
+      },
+      "header": {
+        "en": ["Please Log-In"]
+      },
+      "label": {
+        "en": ["Login to The British Library"]
+      },
+      "service": [
+        {
+          "id": "http://api.bl.uk/auth/iiif/token",
+          "type": "AuthTokenService1",
+          "profile": "http://iiif.io/api/auth/1/token"
+        }
+      ]
+    },
+    {
+      "id": "http://access.bl.uk/item/share/ark:/81055/tvdc_100005114848.0x000002",
+      "type": "Service",
+      "profile": "https://universalviewer.io/share-extensions-profile"
+    }
+  ],
+  "homepage": [
+    {
+      "id": "http://access.bl.uk/item/viewer/ark:/81055/tvdc_100005114848.0x000002",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["View at the British Library"]
+      }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 1"]
+      },
+      "duration": 345.36000000000001,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004#t=00.00,224.68",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x00000e/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound"
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x00000e/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound"
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114848.0x00000e.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004/anno1/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004#t=224.68,345.36",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x000010/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound"
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x000010/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound"
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114848.0x000010.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000005",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 2"]
+      },
+      "duration": 173.63999999999999,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000005#t=00.00,173.64",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x000012/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound"
+                    },
+                    {
+                      "id": "https://api.bl.uk/media/iiif/ark:/81055/tvdc_100005114848.0x000012/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound"
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114848.0x000012.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000002/top",
+      "type": "Range",
+      "label": {
+        "en": [
+          "(a) Must I go bound ? (b) I will walk with my love / An old sacred lullaby"
+        ]
+      },
+      "metadata": [
+        {
+          "label": {
+            "en": ["Full title"]
+          },
+          "value": {
+            "en": [
+              "(a) Must I go bound ? (b) I will walk with my love / An old sacred lullaby"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Collection"]
+          },
+          "value": {
+            "en": ["The Duncan Morison Audio Collection"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Format"]
+          },
+          "value": {
+            "en": ["sound file(s)"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Usage"]
+          },
+          "value": {
+            "en": [
+              "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Held by"]
+          },
+          "value": {
+            "en": [
+              "Leabharlannan nan Eilean Siar [Western Isles Library Service] (WILS)"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitised by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitisation funded by"]
+          },
+          "value": {
+            "en": [
+              "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Identifier"]
+          },
+          "value": {
+            "en": ["UNLS010/27"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Shelfmark"]
+          },
+          "value": {
+            "en": ["UNLS010/27"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Link to catalogue"]
+          },
+          "value": {
+            "en": [
+              "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8360707'>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "requiredStatement": {
+        "label": {
+          "en": ["Copyright and Usage"]
+        },
+        "value": {
+          "en": [
+            "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8360707\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+          ]
+        }
+      },
+      "rendering": [
+        {
+          "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114848.0x000002/ark:/81055/tvdc_100005114848.0x000002/top",
+          "type": "Audio",
+          "label": {
+            "en": ["Download this recording"]
+          },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000006",
+          "type": "Range",
+          "label": {
+            "en": ["Must I go bound? (03:45)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Must I go bound?"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "O'Duffy, Michael, 1928-2003 (tenor)",
+                  "Morison, Duncan Matheson 'Major', 1906-1998 (piano)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["not after 1946 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["[unknown] (recorded)", "Ireland (place of origin)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["3 min. 44 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Culture"]
+              },
+              "value": {
+                "en": ["Irish"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["The Duncan Morison Audio Collection"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": ["World and traditional music: Europe"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Folk songs and music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "Leabharlannan nan Eilean Siar [Western Isles Library Service] (WILS)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["UNLS010/27 S1 BD1"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["UNLS010/27"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361028'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "A recording of Michael Duffy performing 'Must I Go Bound?' and 'I Will Walk with My Love' with accompaniment by Duncan Morison."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361028\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114848.0x000002/ark:/81055/tvdc_100005114848.0x000006",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004#t=0.00,224.68",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000008",
+          "type": "Range",
+          "label": {
+            "en": ["I will walk with my love (02:01)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["I will walk with my love"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "O'Duffy, Michael, 1928-2003 (tenor)",
+                  "Morison, Duncan Matheson 'Major', 1906-1998 (piano)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["not after 1946 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["[unknown] (recorded)", "Ireland (place of origin)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["2 min."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Culture"]
+              },
+              "value": {
+                "en": ["Irish"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["The Duncan Morison Audio Collection"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": ["World and traditional music: Europe"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Folk songs and music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "Leabharlannan nan Eilean Siar [Western Isles Library Service] (WILS)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["UNLS010/27 S1 BD2"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["UNLS010/27"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361029'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "A recording of Michael Duffy performing 'I Will Walk with My Love' with accompaniment by Duncan Morison."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361029\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114848.0x000002/ark:/81055/tvdc_100005114848.0x000008",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000004#t=224.68,345.36",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x00000a",
+          "type": "Range",
+          "label": {
+            "en": ["An old sacred lullaby (02:54)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["An old sacred lullaby"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": [
+                  "O'Duffy, Michael, 1928-2003 (tenor)",
+                  "Morison, Duncan Matheson 'Major', 1906-1998 (piano)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["not after 1946 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": ["[unknown] (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["2 min. 53 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Language"]
+              },
+              "value": {
+                "en": ["English"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["The Duncan Morison Audio Collection"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": ["World and traditional music: Europe"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Popular music"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "Leabharlannan nan Eilean Siar [Western Isles Library Service] (WILS)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["UNLS010/27 S2"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["UNLS010/27"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361030'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "A recording of Michael Duffy performing 'An Old Sacred Lullaby' with accompaniment by Duncan Morison."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8361030\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/tvdc_100005114848.0x000002/ark:/81055/tvdc_100005114848.0x00000a",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114848.0x000005#t=0.00,173.64",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

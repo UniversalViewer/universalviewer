@@ -1,0 +1,81 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/collection.json",
+  "type": "Collection",
+  "label": { "en": ["BL Sounds tests"] },
+  "items": [
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8.json",
+      "type": "Manifest",
+      "label": { "en": ["C308/8 Brian Hayes programme"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C465_13.json",
+      "type": "Manifest",
+      "label": {
+        "en": ["C465/13/01-14 Jocelyn Herbert interviewed by Cathy Courtney"]
+      }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241.json",
+      "type": "Manifest",
+      "label": { "en": ["C728/241 [Demo]"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C733_48.json",
+      "type": "Manifest",
+      "label": {
+        "en": [
+          "C733/48 C733/49 C733/50 [Recordings in Soqotri / 'Survey' recordings in English]"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1074_6.json",
+      "type": "Manifest",
+      "label": { "en": ["C1074/6 Igbo Iwin overlays"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1132_116.json",
+      "type": "Manifest",
+      "label": { "en": ["C1132/116 Cliff Richard (Heathcliff)"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
+      "type": "Manifest",
+      "label": { "en": ["Loose ends"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3_no_autoadvance.json?asdf",
+      "type": "Manifest",
+      "label": { "en": ["Loose ends no autoadvance"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/DA.json",
+      "type": "Manifest",
+      "label": { "en": ["The Winter Hymn (Ambient Version)"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003.json",
+      "type": "Manifest",
+      "label": { "en": ["WS0003"] }
+    },
+    {
+      "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C615_70.json",
+      "type": "Manifest",
+      "label": { "en": ["C615/70 C615/71 Tamas Vasary piano"] }
+    },
+    {
+      "id": "https://stephenwf.github.io/C615_70.json",
+      "type": "Manifest",
+      "label": {
+        "en": [
+          "C615/70 C615/71 Tamas Vasary piano (modified with extra rendering)"
+        ]
+      }
+    }
+  ]
+}

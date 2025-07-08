@@ -1,0 +1,982 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": { "en": ["C1685/98 Loose ends 17/7/99"] },
+  "metadata": [
+    {
+      "label": { "en": ["Full title"] },
+      "value": { "en": ["Loose ends 17/7/99"] }
+    },
+    {
+      "label": { "en": ["Collection"] },
+      "value": { "en": ["Ian Gardhouse Collection"] }
+    },
+    {
+      "label": { "en": ["Format"] },
+      "value": { "en": ["1 compact cassette stereo"] }
+    },
+    {
+      "label": { "en": ["Usage"] },
+      "value": { "en": ["<span>Rights unassigned - staff access only</span>"] }
+    },
+    {
+      "label": { "en": ["Held by"] },
+      "value": { "en": ["The British Library"] }
+    },
+    {
+      "label": { "en": ["Digitised by"] },
+      "value": { "en": ["The British Library, 2017"] }
+    },
+    {
+      "label": { "en": ["Digitisation funded by"] },
+      "value": {
+        "en": [
+          "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+        ]
+      }
+    },
+    {
+      "label": { "en": ["Identifier"] },
+      "value": { "en": ["C1685/98"] }
+    },
+    {
+      "label": { "en": ["Shelfmark"] },
+      "value": { "en": ["C1685/98"] }
+    },
+    {
+      "label": { "en": ["Link to catalogue"] },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8030616>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "requiredStatement": {
+    "label": { "en": ["Important information"] },
+    "value": {
+      "en": [
+        "<span>Please read the <a href='https://bl.uk'>full information</a> about this object.</span>"
+      ]
+    }
+  },
+  "logo": [
+    { "id": "https://www.bl.uk/images/bl_logo_100.gif", "type": "Image" }
+  ],
+  "posterCanvas": {
+    "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster",
+    "type": "Canvas",
+    "label": { "en": ["world"] },
+    "width": 962,
+    "height": 962,
+    "items": [
+      {
+        "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster/p1/a1",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "width": 962,
+              "height": 962,
+              "format": "image/jpeg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "accompanyingCanvas": {
+    "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster",
+    "type": "Canvas",
+    "label": { "en": ["world"] },
+    "width": 962,
+    "height": 962,
+    "items": [
+      {
+        "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster/p1",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster/p1/a1",
+            "type": "Annotation",
+            "motivation": "painting",
+            "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/c/poster",
+            "body": {
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "width": 962,
+              "height": 962,
+              "format": "image/jpeg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "homepage": {
+    "id": "http://access.bl.uk/item/viewer/ark:/81055/vdc_100052359795.0x000002",
+    "type": "Text",
+    "label": { "en": ["View at the British Library"] },
+    "format": "text/html"
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 1"] },
+      "duration": 3723.4,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,3723.4",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052359795.0x000019/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052359795.0x000019/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100052359795.0x000018.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005",
+      "type": "Canvas",
+      "label": { "en": ["Tape 1 Side 2"] },
+      "duration": 3723.4,
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=0,3723.4",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052359795.0x00001b/manifest.mpd",
+                    "format": "application/dash+xml",
+                    "type": "Audio"
+                  },
+                  {
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100052359795.0x00001b/index.m3u8",
+                    "format": "vnd.apple.mpegURL",
+                    "type": "Audio"
+                  }
+                ]
+              },
+              "seeAlso": [
+                {
+                  "id": "https://iiif-waveforms.s3.eu-west-2.amazonaws.com/vdc_100052359795.0x00001a.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000002/top",
+      "type": "Range",
+      "label": { "en": ["Loose ends 17/7/99"] },
+      "metadata": [
+        {
+          "label": { "en": ["Full title"] },
+          "value": { "en": ["Loose ends 17/7/99"] }
+        },
+        {
+          "label": { "en": ["Collection"] },
+          "value": { "en": ["Ian Gardhouse Collection"] }
+        },
+        {
+          "label": { "en": ["Format"] },
+          "value": { "en": ["1 compact cassette stereo"] }
+        },
+        {
+          "label": { "en": ["Usage"] },
+          "value": {
+            "en": ["<span>Rights unassigned - staff access only</span>"]
+          }
+        },
+        {
+          "label": { "en": ["Held by"] },
+          "value": { "en": ["The British Library"] }
+        },
+        {
+          "label": { "en": ["Digitised by"] },
+          "value": { "en": ["The British Library, 2017"] }
+        },
+        {
+          "label": { "en": ["Digitisation funded by"] },
+          "value": {
+            "en": [
+              "<span>Heritage Lottery Fund<br/><br/><img src=\"https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg\"/></span>"
+            ]
+          }
+        },
+        {
+          "label": { "en": ["Identifier"] },
+          "value": { "en": ["C1685/98"] }
+        },
+        {
+          "label": { "en": ["Shelfmark"] },
+          "value": { "en": ["C1685/98"] }
+        },
+        {
+          "label": { "en": ["Link to catalogue"] },
+          "value": {
+            "en": [
+              "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8030616>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000002/top",
+          "type": "Audio",
+          "label": { "en": ["Download this recording"] },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000006",
+          "type": "Range",
+          "label": { "en": ["Loose ends"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Loose ends"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Sherrin, Ned, 1931-2007 (speaker, male; presenter / interviewer)",
+                  "Glover, Julian, 1935- (speaker, male; interviewee)",
+                  "Windsor, Barbara, 1937- (speaker, female; interviewee)",
+                  "The Proclaimers (speakers, male; interviewees / performers)",
+                  "Frisby, Dominic (speaker, male)",
+                  "Jupitus, Phil (speaker, male / interviewee)",
+                  "Taylor, Becky (speaker, female; interviewee / singer)",
+                  "Brown, Errol (speaker, male; interviewee)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 1999-07-17 (recorded)",
+                  "BBC Radio 4 1999-07-17 10:00 (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Place of creation"] },
+              "value": { "en": ["Royal Albert Hall, London (recorded)"] }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 1999-07-17 10:00"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["41 min. 44 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S1 C1-C5"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045244>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "<span>Starts abruptly. First few seconds missing Chat show. Guests talk about their jobs and latest developments in their career. Includes <a class='iiif-viewer-link' href='#?rid=https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007'>live music performances (catalogued separately)</a></span>"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000006",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000006/nn1",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=0,560",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007",
+              "type": "Range",
+              "label": { "en": ["There's a touch"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["There's a touch"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": { "en": ["The Proclaimers"] }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": {
+                    "en": [
+                      "not after 1999-07-17 (recorded)",
+                      "BBC Radio 4 1999-07-17 (broadcast)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Broadcaster"] },
+                  "value": { "en": ["BBC Radio 4 1999-07-17"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["3 min. 01 sec."] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Ian Gardhouse Collection"] }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1685/98 S1 C2"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1685/98"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045259>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Song performed during radio programme 'Loose ends' (see entry C1685/98 S1 C1-C5)"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000007",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=560,741.28",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000007/nn2",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=741.28,1700.36",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000008",
+              "type": "Range",
+              "label": { "en": ["Song of dreams"] },
+              "metadata": [
+                {
+                  "label": { "en": ["Full title"] },
+                  "value": { "en": ["Song of dreams"] }
+                },
+                {
+                  "label": { "en": ["Creator"] },
+                  "value": {
+                    "en": [
+                      "Taylor, Becky (singer, female)",
+                      "unidentified orchestra"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Date"] },
+                  "value": {
+                    "en": [
+                      "not after 1999-07-17 (recorded)",
+                      "BBC Radio 4 1999-07-17 (broadcast)"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Broadcaster"] },
+                  "value": { "en": ["BBC Radio 4 1999-07-17"] }
+                },
+                {
+                  "label": { "en": ["Duration"] },
+                  "value": { "en": ["3 min. 34 sec."] }
+                },
+                {
+                  "label": { "en": ["Collection"] },
+                  "value": { "en": ["Ian Gardhouse Collection"] }
+                },
+                {
+                  "label": { "en": ["Held by"] },
+                  "value": { "en": ["The British Library"] }
+                },
+                {
+                  "label": { "en": ["Identifier"] },
+                  "value": { "en": ["C1685/98 S1 C4"] }
+                },
+                {
+                  "label": { "en": ["Shelfmark"] },
+                  "value": { "en": ["C1685/98"] }
+                },
+                {
+                  "label": { "en": ["Link to catalogue"] },
+                  "value": {
+                    "en": [
+                      "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045265>View the catalogue record</a>"
+                    ]
+                  }
+                },
+                {
+                  "label": { "en": ["Description"] },
+                  "value": {
+                    "en": [
+                      "Song performed during radio programme 'Loose ends' (see entry C1685/98 S1 C1-C5)"
+                    ]
+                  }
+                }
+              ],
+              "rendering": [
+                {
+                  "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000008",
+                  "type": "Audio",
+                  "label": { "en": ["Download this recording"] },
+                  "format": "audio/mp4"
+                }
+              ],
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=1700.36,1914.84",
+                  "type": "Canvas"
+                }
+              ]
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000006/nn2",
+              "type": "Range",
+              "behavior": ["no-nav"],
+
+              "items": [
+                {
+                  "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=1914.84,2504.64",
+                  "type": "Canvas"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000c",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[News May 2001]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified speaker, female (newsreader)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 2001-05-19 (recorded)",
+                  "BBC Radio 4 2001-05-19 19:00 (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 2001-05-19 19:00"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["2 min. 36 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S1 C6"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045274>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Israeli-Palestinian conflict.- UK: Prime Minister accuses Conservatives of wanting to privatize basic state pension.- Poland: authorities give permision for remains of Jews to be exumed from mass grave.- Operation to rescue 8 Swiss postholers in cave delayed by high water levels.- Concerns at plans for police to implement compulsory targets to catch drivers committing minor offences Preceded by announcement of programmes of week ahead."
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x00000c",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2504.64,2661.56",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x00000e",
+          "type": "Range",
+          "label": { "en": ["Saturday review"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["Saturday review"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Sutcliffe, Thomas, 1956- (speaker, male; presenter)",
+                  "Roberts, Michèle, 1949- (speaker, female)",
+                  "White, Jim, speaker (speaker, male)",
+                  "Whittam Smith, Andreas, 1937- (speaker, male)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 2001-05-19 (recorded)",
+                  "BBC Radio 4 2001-05-19 19:00 (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 2001-05-19 19:00"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["44 min. 07 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S1 C7; S2 C1"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045312>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Includes announcement of programme Reviews of films, plays, and books around the topic of: 'better behaved residents'. Guests talk about novel 'How to be good' (N. Hornby), film 'Amores Perros' (A. Gonzalez), play 'The Lieutant of Inishmore' (M. McDonagh), Mark Wallinger's works and installations"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x00000e",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000004#t=2661.56,3723.4",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=0,1585.16",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000011",
+          "type": "Range",
+          "label": { "en": ["My dear Jim - Letters to a friend [2]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["My dear Jim - Letters to a friend [2]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["Rietti, Robert, 1923-2015 (speaker, male)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 2001-05-19 (recorded)",
+                  "BBC Radio 4 2001-05-19 19:00 (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 2001-05-19 19:00"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["15 min. 16 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S2 C2"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045367>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Includes announement of programme. Followed by announcements of next programmes Robert Rietti, veteran actor and author, was born in London in 1923 to a Jewish-Italian family. Following Italy's entry into the Second World War on Germany's side, Italian nationals living in Britain were interned on the Isle of Man, Rietti's father among them. As they were British born, Rietti and his brother were detained and then transferred to a camp at Ascot. Rietti was befriended by a highly strung Irishman, an enthusiastic Nazi-lover who was unaware that his new friend was Jewish. Once he learned this, his reaction was so disturbing that Rietti worried for years and was later prompted to write his 16 'Letters to a Friend'."
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000011",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=1585.16,2501.8",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000013",
+          "type": "Range",
+          "label": { "en": ["[News May 2001]"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["[News May 2001]"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": { "en": ["unidentified speaker, female (newsreader)"] }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 1999-05-19 (recorded)",
+                  "BBC Radio 4 1999-05-19 20:00 (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 1999-05-19 20:00"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["1 min. 58 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S2 C3"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045378>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "8 Swiss postholers trapped in cave brought to the surface.- Break off of political contacts between Arab countries and Israel.- Policies for pensioners during election campaign.- Police officers compulsory targets policy: concerns from motorist associations"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000013",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=2501.8,2620.44",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000015",
+          "type": "Range",
+          "label": { "en": ["The archive hour: Humph at 80"] },
+          "metadata": [
+            {
+              "label": { "en": ["Full title"] },
+              "value": { "en": ["The archive hour: Humph at 80"] }
+            },
+            {
+              "label": { "en": ["Creator"] },
+              "value": {
+                "en": [
+                  "Lyttelton, Humphrey, 1921-2008 (speaker, male; presenter)",
+                  "unidentified speakers"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Date"] },
+              "value": {
+                "en": [
+                  "not after 2001-05-19 (recorded)",
+                  "BBC Radio 4 2001-05-19 20:00? (broadcast)"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Broadcaster"] },
+              "value": { "en": ["BBC Radio 4 2001-05-19 20:00?"] }
+            },
+            {
+              "label": { "en": ["Duration"] },
+              "value": { "en": ["18 min. 22 sec."] }
+            },
+            {
+              "label": { "en": ["Collection"] },
+              "value": { "en": ["Ian Gardhouse Collection"] }
+            },
+            {
+              "label": { "en": ["Held by"] },
+              "value": { "en": ["The British Library"] }
+            },
+            {
+              "label": { "en": ["Identifier"] },
+              "value": { "en": ["C1685/98 S2 C4"] }
+            },
+            {
+              "label": { "en": ["Shelfmark"] },
+              "value": { "en": ["C1685/98"] }
+            },
+            {
+              "label": { "en": ["Link to catalogue"] },
+              "value": {
+                "en": [
+                  "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA8045385>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": { "en": ["Description"] },
+              "value": {
+                "en": [
+                  "Includes announcement of programme and programmes ahead Incomplete. Ends abruptly Humphrey Lyttelton is a legendary jazz musician, but to Radio 4 listeners he is also the incomparable chairman of I'm Sorry I Haven 't a Clue. With contributions from team members, fans and producers, Graeme Garden presents an archive celebration of Lyttelton's 80th birthday"
+                ]
+              }
+            }
+          ],
+          "rendering": [
+            {
+              "id": "https://api.bl.uk/item/download/ark:/81055/vdc_100052359795.0x000002/ark:/81055/vdc_100052359795.0x000015",
+              "type": "Audio",
+              "label": { "en": ["Download this recording"] },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100052359795.0x000005#t=2620.44,3723.4",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

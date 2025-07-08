@@ -1,0 +1,894 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000002/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Aix galericulata r1-2"]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full title"]
+      },
+      "value": {
+        "en": ["Aix galericulata r1-2"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Collection"]
+      },
+      "value": {
+        "en": ["Wildlife species reels"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["2 tape reels 18 cm"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Usage"]
+      },
+      "value": {
+        "en": [
+          "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Held by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitised by"]
+      },
+      "value": {
+        "en": [
+          "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Digitisation funded by"]
+      },
+      "value": {
+        "en": [
+          "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["WS0177-WS0178"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Shelfmark"]
+      },
+      "value": {
+        "en": ["WS0177", "WS0178"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Link to catalogue"]
+      },
+      "value": {
+        "en": [
+          "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA7962895'>View the catalogue record</a>"
+        ]
+      }
+    }
+  ],
+  "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": ["Copyright and Usage"]
+    },
+    "value": {
+      "en": [
+        "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA7962895\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+      ]
+    }
+  },
+  "provider": [
+    {
+      "id": "https://www.bl.uk/about-us",
+      "type": "Agent",
+      "label": {
+        "en": ["The British Library"]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bl.uk/",
+          "type": "Text",
+          "format": "text/html",
+          "label": {
+            "en": ["The British Library"]
+          }
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bl.uk/images/bl_logo_100.gif",
+          "type": "Image",
+          "format": "image/gif"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+      "type": "AuthCookieService1",
+      "profile": "http://iiif.io/api/auth/1/login",
+      "description": {
+        "en": [
+          "Some portions of this recording may be unavailable due to rights restrictions."
+        ]
+      },
+      "header": {
+        "en": ["Please Log-In"]
+      },
+      "label": {
+        "en": ["Login to The British Library"]
+      },
+      "service": [
+        {
+          "id": "http://apiirc.ad.bl.uk/auth/iiif/token",
+          "type": "AuthTokenService1",
+          "profile": "http://iiif.io/api/auth/1/token"
+        }
+      ]
+    },
+    {
+      "id": "http://access.bl.uk/item/share/ark:/81055/tvdc_100005114858.0x000002",
+      "type": "Service",
+      "profile": "https://universalviewer.io/share-extensions-profile"
+    }
+  ],
+  "homepage": [
+    {
+      "id": "http://access.bl.uk/item/viewer/ark:/81055/tvdc_100005114858.0x000002",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["View at the British Library"]
+      }
+    }
+  ],
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 1"]
+      },
+      "duration": 1815.04,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004/anno1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004/anno1/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004#t=00.00,88.12",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x00000d/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/dash/ark:/81055/tvdc_100005114858.0x00000d/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x00000d/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/hls/ark:/81055/tvdc_100005114858.0x00000d/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114858.0x00000d.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            },
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004/anno1/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004#t=88.12,1815.04",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x00000f/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/dash/ark:/81055/tvdc_100005114858.0x00000f/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x00000f/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/hls/ark:/81055/tvdc_100005114858.0x00000f/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114858.0x00000f.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000005",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 2"]
+      },
+      "duration": 852.75999999999999,
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000005/anno2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000005/anno2/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000005#t=00.00,852.76",
+              "body": [
+                {
+                  "type": "Choice",
+                  "items": [
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x000011/manifest.mpd",
+                      "format": "application/dash+xml",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/dash/ark:/81055/tvdc_100005114858.0x000011/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "https://apiirc.ad.bl.uk/media/iiif/ark:/81055/tvdc_100005114858.0x000011/index.m3u8",
+                      "format": "application/vnd.apple.mpegURL",
+                      "type": "Sound",
+                      "service": [
+                        {
+                          "id": "https://apiirc.ad.bl.uk/auth/iiif/login",
+                          "type": "AuthCookieService1"
+                        },
+                        {
+                          "id": "https://apiirc.ad.bl.uk/media/hls/ark:/81055/tvdc_100005114858.0x000011/probe.json",
+                          "type": "AuthProbeService1",
+                          "profile": "http://iiif.io/api/auth/1/probe"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "seeAlso": [
+                {
+                  "id": "https://v19b-uvweb1nle.ad.bl.uk/Waveforms/waveform/tvdc_100005114858.0x000011.dat",
+                  "type": "Dataset",
+                  "format": "application/octet-stream",
+                  "profile": "http://waveform.prototyping.bbc.co.uk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000002/top",
+      "type": "Range",
+      "label": {
+        "en": ["Aix galericulata r1-2"]
+      },
+      "metadata": [
+        {
+          "label": {
+            "en": ["Full title"]
+          },
+          "value": {
+            "en": ["Aix galericulata r1-2"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Collection"]
+          },
+          "value": {
+            "en": ["Wildlife species reels"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Format"]
+          },
+          "value": {
+            "en": ["2 tape reels 18 cm"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Usage"]
+          },
+          "value": {
+            "en": [
+              "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Held by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitised by"]
+          },
+          "value": {
+            "en": [
+              "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Digitisation funded by"]
+          },
+          "value": {
+            "en": [
+              "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+            ]
+          }
+        },
+        {
+          "label": {
+            "en": ["Identifier"]
+          },
+          "value": {
+            "en": ["WS0177-WS0178"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Shelfmark"]
+          },
+          "value": {
+            "en": ["WS0177", "WS0178"]
+          }
+        },
+        {
+          "label": {
+            "en": ["Link to catalogue"]
+          },
+          "value": {
+            "en": [
+              "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA7962895'>View the catalogue record</a>"
+            ]
+          }
+        }
+      ],
+      "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "requiredStatement": {
+        "label": {
+          "en": ["Copyright and Usage"]
+        },
+        "value": {
+          "en": [
+            "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA7962895\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+          ]
+        }
+      },
+      "rendering": [
+        {
+          "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114858.0x000002/ark:/81055/tvdc_100005114858.0x000002/top",
+          "type": "Audio",
+          "label": {
+            "en": ["Download this recording"]
+          },
+          "format": "audio/mp4"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000006",
+          "type": "Range",
+          "label": {
+            "en": ["Mandarin, England, 1975 (01:29)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Mandarin, England, 1975"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Hollom, Philip A. D. (sound recordist)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Species"]
+              },
+              "value": {
+                "en": ["Aix galericulata : Mandarin Duck - Anatidae"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1975-01-01 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Altitude 170, Longitude 0 30'W, Latitude 51 16'N, East Clandon, Surrey, England (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["1 min. 38 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Wildlife species reels"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": [
+                  "Nature and environment: Birds",
+                  "Package Wildlife Tape Library"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Birds"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Sound type"]
+              },
+              "value": {
+                "en": ["calls"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["WS0177 C1"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["WS0177"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4964983'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": [
+                  "The mandarins were shy, flushing more readily than the mallard. A sharp 'ECK' is given by both sexes settled and from flock on wing.  Male also gave &quot;wreep&quot; note on water. V. quiet &quot;preff&quot; call comes from displaying female."
+                ]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4964983\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114858.0x000002/ark:/81055/tvdc_100005114858.0x000006",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004#t=0.00,88.12",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000008",
+          "type": "Range",
+          "label": {
+            "en": ["Mandarin, France (in captivity), 1989 (42:60)"]
+          },
+          "metadata": [
+            {
+              "label": {
+                "en": ["Full title"]
+              },
+              "value": {
+                "en": ["Mandarin, France (in captivity), 1989"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Creator"]
+              },
+              "value": {
+                "en": ["Roché, Jean-Claude, 1931- (sound recordist)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Species"]
+              },
+              "value": {
+                "en": ["Aix galericulata : Mandarin Duck - Anatidae"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Date"]
+              },
+              "value": {
+                "en": ["1989-04-22 (recorded)"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Place of creation"]
+              },
+              "value": {
+                "en": [
+                  "Dombes Zoo (Parc des Oiseaux), Ain, Auvergne-Rhône-Alpes, France (in captivity) (recorded)"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Duration"]
+              },
+              "value": {
+                "en": ["42 min. 59 sec."]
+              }
+            },
+            {
+              "label": {
+                "en": ["Collection"]
+              },
+              "value": {
+                "en": ["Wildlife species reels"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Category"]
+              },
+              "value": {
+                "en": [
+                  "Nature and environment: Birds",
+                  "Package Wildlife Tape Library"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Genre"]
+              },
+              "value": {
+                "en": ["Birds"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Sound type"]
+              },
+              "value": {
+                "en": ["calls"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Usage"]
+              },
+              "value": {
+                "en": [
+                  "<span>Public domain<br/><br/><a href='https://creativecommons.org/publicdomain/mark/1.0/'><img src='https://i.creativecommons.org/p/mark/1.0/88x31.png' alt='Public Domain Mark 1.0 License logo'/></a></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Held by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitised by"]
+              },
+              "value": {
+                "en": [
+                  "<span>The British Library, 2022<br><br><img src='https://www.bl.uk/britishlibrary/resources/global/images/bl_logo_100.gif' alt='British Library Logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Digitisation funded by"]
+              },
+              "value": {
+                "en": [
+                  "<span>National Lottery Heritage Fund<br><br><img src='https://www.heritagefund.org.uk/sites/default/files/media/attachments/TNLHLF_Colour_Logo_English_RGB_0_0.jpg' alt='National Lottery Heritage Fund logo'/></span>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Identifier"]
+              },
+              "value": {
+                "en": ["WS0177 C2-WS0178 C1"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Shelfmark"]
+              },
+              "value": {
+                "en": ["WS0177", "WS0178"]
+              }
+            },
+            {
+              "label": {
+                "en": ["Link to catalogue"]
+              },
+              "value": {
+                "en": [
+                  "<a href='http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4991933'>View the catalogue record</a>"
+                ]
+              }
+            },
+            {
+              "label": {
+                "en": ["Description"]
+              },
+              "value": {
+                "en": ["Calls &amp; displays of several males &amp; females"]
+              }
+            }
+          ],
+          "rights": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "requiredStatement": {
+            "label": {
+              "en": ["Copyright and Usage"]
+            },
+            "value": {
+              "en": [
+                "<span><a href=\"http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA4991933\">Please read the full information about this object</a><br>Public domain<br/><br/><a href=\"https://creativecommons.org/publicdomain/mark/1.0/\"><img src=\"https://i.creativecommons.org/p/mark/1.0/88x31.png\" alt=\"Public Domain Mark 1.0 License logo\"/></a></span>"
+              ]
+            }
+          },
+          "rendering": [
+            {
+              "id": "https://apiirc.ad.bl.uk/item/download/ark:/81055/tvdc_100005114858.0x000002/ark:/81055/tvdc_100005114858.0x000008",
+              "type": "Audio",
+              "label": {
+                "en": ["Download this recording"]
+              },
+              "format": "audio/mp4"
+            }
+          ],
+          "items": [
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000004#t=88.12,1815.04",
+              "type": "Canvas"
+            },
+            {
+              "id": "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114858.0x000005#t=0.00,852.76",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
