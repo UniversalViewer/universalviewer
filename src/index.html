@@ -189,6 +189,37 @@
       .toggleButton.caret-down {
         background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');
       }
+
+      .collapsible-heading {
+      padding: 0;
+      margin: 0 0 0.5rem 0;
+      font: inherit;
+      font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .collapsible-heading::after {
+      content: '';
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      background-size: contain;
+      background-repeat: no-repeat;
+      transition: transform 0.2s ease;
+    }
+
+    .collapsible-heading.caret-down::after {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    }
+
+    .collapsible-heading.caret-up::after {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 12l4-4 4 4'/%3e%3c/svg%3e");
+    }
+
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -232,88 +263,129 @@
         <button class="tablinks" onclick="openTab(event, 'config')">Configuration</button>
       </div>
 
-  <!-- General -->
-  <div id="general" class="tabcontent">
-    <h2 class="controls-title">Manifest Id</h2>
-    <div class="flex">
-      <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
-      <input id="iiifManifestId" type="text" value="" class="flex-1" />
-    </div>
+    <!-- General -->
+    <div id="general" class="tabcontent">
+      <h2 class="controls-title">Manifest Id</h2>
+      <div class="flex">
+        <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
+        <input id="iiifManifestId" type="text" value="" class="flex-1" />
+      </div>
+      <div class="mt-2">
+        <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
+      </div>
+    <div class="controls-group">
+      <h2 class="controls-title">Set Target</h2>
+      <div class="flex mb-2">
+        <input id="iiif_target" type="text" value="" class="flex-1" />
+        <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
+          Set Target
+        </button>
+      </div>
     <div class="mt-2">
-      <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
-    </div>
-    <h2 class="controls-title">Target</h2>
-    <div class="flex">
-      <input id="iiif_target" type="text" value="" class="flex-1" />
-      <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
-        Set Target
-      </button>
+      For OpenSeadragon manifests, edit the 'xywh' values at the end of the URL to modify the view of the image.
+      For AV manifests, modify the number after 't' to set the timestamp.
     </div>
   </div>
+  </div>
 
-  <!-- OSD -->
-  <div id="osd" class="tabcontent">
+    <!-- OSD -->
+    <div id="osd" class="tabcontent">
     <div class="controls-group">
       <h2 class="controls-title">Set degrees of rotation</h2>
       <div class="flex">
-         <input id="iiif_rotation" type="range" value="0" min="-180" max="180" class="mr-2"/>
-         <span id="iiif_rotationValue" class="mr-2">0</span>
+        <input id="iiif_rotation" type="range" value="0" min="-180" max="180" class="mr-2" />
+        <span id="iiif_rotationValue" class="mr-2">0</span>
         <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
           Set Rotation
         </button>
+        <button id="iiif_resetRotationButton" class="controls-button flex-initial ml-2" style="padding: 0.5rem 0.5rem; font-size: 1rem; min-width: 0;">
+        Reset
+      </button>
       </div>
-      </div>
+    </div>
   </div>
 
-  <script>
+    <script>
     const slider = document.getElementById('iiif_rotation');
     const valueDisplay = document.getElementById('iiif_rotationValue');
-
+    const setRotationButton = document.getElementById('iiif_setRotationButton');
+    const resetButton = document.getElementById('iiif_resetRotationButton');
     slider.addEventListener('input', () => {
       valueDisplay.textContent = slider.value;
     });
+
+    resetButton.addEventListener('click', () => {
+      slider.value = 0.5;
+      valueDisplay.textContent = '0';
+      setRotationButton.click();
+    });
   </script>
 
-  <!-- AV -->
-  <div id="av" class="tabcontent" style="display:none">
-    <div class="controls-group">
-      <h2 class="controls-title">Mute sound</h2>
-      <input type="checkbox" id="iiif_mutedCheckbox" />
+    <!-- AV -->
+    <div id="av" class="tabcontent" style="display:none">
+      <div class="controls-group">
+        <h2 class="controls-title">Mute sound</h2>
+        <input type="checkbox" id="iiif_mutedCheckbox" />
+      </div>
     </div>
-  </div>
 
-  <!-- Annotations -->
-  <div id="annotations" class="tabcontent" style="display:none">
-    <h2 class="controls-title">Annotations</h2>
-    <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
-    <div class="mt-2">
-      <button id="iiif_setAnnotationsButton" class="controls-button">Set Annotations</button>
-      <button id="iiif_clearAnnotationsButton" class="controls-button">Clear Annotations</button>
+    <!-- Annotations -->
+    <div id="annotations" class="tabcontent" style="display:none">
+      <h2 class="controls-title">Annotations</h2>
+      <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
+      <div class="mt-2">
+        <button id="iiif_setAnnotationsButton" class="controls-button">Set Annotations</button>
+        <button id="iiif_clearAnnotationsButton" class="controls-button">Clear Annotations</button>
+      </div>
     </div>
-  </div>
 
-  <!-- Configuration -->
+    <!-- Configuration -->
   <div id="config" class="tabcontent" style="display:none">
     <p>The Universal Viewer can be configured using a JSON file. The controls below allow you to easily test changes to your configuration, or to generate a new configuration file by browsing the available settings.</p>
-    <h2 class="controls-title">Custom Configuration</h2>
-    <p>Enter your configuration here (in JSON format) to see a preview of how the Universal Viewer will look and behave. Since UV uses browser storage to remember some settings, you may need to check the 'Clear saved state' checkbox to ensure that your changes are immediately visible.</p>
-    <textarea id="customConfig" rows="5" class="w-full"></textarea>
-    <div class="mt-2">
-      <input type="checkbox" id="clearStorageCheckbox" />
-      <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
-    </div>
-    <div class="mt-2">
-      <button id="setConfigButton" class="controls-button">Apply Configurations</button>
-      <button id="resetConfigButton" class="controls-button">Reset to Default Configuration</button>
+
+    <div class="collapsible-section">
+      <button class="collapsible-heading collapsible-icon caret-down"><strong>Custom configuration</strong></button>
+      <div class="collapsible-content" style="display: none;">
+        <p>Enter your configuration here (in JSON format) to see a preview of how the Universal Viewer will look and behave. Since UV uses browser storage to remember some settings, you may need to check the 'Clear saved state' checkbox to ensure that your changes are immediately visible.</p>
+      </div>
+      <textarea id="customConfig" rows="5" class="w-full"></textarea>
+      <div class="mt-2">
+        <input type="checkbox" id="clearStorageCheckbox" />
+        <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
+      </div>
+      <div class="mt-2">
+        <button id="setConfigButton" class="controls-button">Apply Configurations</button>
+        <button id="resetConfigButton" class="controls-button">Reset to Default Configuration</button>
+      </div>
     </div>
 
-    <div class="controls-group">
-      <h2 class="controls-title">Configuration builder</h2>
-      <p>Use the dropdown menus to customise the Universal Viewer. Your selections will automatically populate the custom configuration box above. You will have to click the Apply Configurations button when you are ready to put your changes into effect.</p>
-      <div id="config-builder"></div>
+    <!-- Configuration Builder -->
+    <div class="controls-group collapsible-section">
+      <button class="collapsible-heading collapsible-icon caret-down"><strong>Configuration builder</strong></button>
+      <div class="collapsible-content" style="display: none;">
+        <p>Use the dropdown menus to customise the Universal Viewer. Your selections will automatically populate the custom configuration box above. You will have to click the Apply Configurations button when you are ready to put your changes into effect.</p>
+      </div>
+        <div id="config-builder"></div>
+      </div>
     </div>
-  </div>
-</div>
+    <script>
+      document.querySelectorAll('.collapsible-heading').forEach(button => {
+        button.addEventListener('click', () => {
+        const isOpen = button.classList.contains('caret-up');
+        const content = button.nextElementSibling;
+
+        if (isOpen) {
+          button.classList.remove('caret-up');
+          button.classList.add('caret-down');
+          content.style.display = 'none';
+        } else {
+          button.classList.remove('caret-down');
+          button.classList.add('caret-up');
+          content.style.display = 'block';
+        }
+      });
+    });
+    </script>
 
   <script>
   function openTab(evt, tabName) {
