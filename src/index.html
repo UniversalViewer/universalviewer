@@ -190,7 +190,8 @@
         background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');
       }
 
-      .collapsible-heading {
+    .collapsible-heading {
+
       padding: 0;
       margin: 0 0 0.5rem 0;
       font: inherit;
@@ -299,8 +300,8 @@
           Set Rotation
         </button>
         <button id="iiif_resetRotationButton" class="controls-button flex-initial ml-2" style="padding: 0.5rem 0.5rem; font-size: 1rem; min-width: 0;">
-        Reset
-      </button>
+          Reset
+        </button>
       </div>
     </div>
   </div>
@@ -390,8 +391,8 @@
   <script>
   function openTab(evt, tabName) {
     document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".tablinks").click(); 
-});
+      document.querySelector(".tablinks").click();
+    });
 
     const tabcontent = document.getElementsByClassName("tabcontent");
     const tablinks = document.getElementsByClassName("tablinks");
@@ -406,9 +407,8 @@
 
     evt.currentTarget.classList.add("active");
     document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".tablinks").click();  
-});
-
+      document.querySelector(".tablinks").click();  
+    });
   }
   </script>
 
