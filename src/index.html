@@ -293,7 +293,7 @@
     <div class="controls-group">
       <h2 class="controls-title">Set degrees of rotation</h2>
       <div class="flex">
-        <input id="iiif_rotation" type="range" value="0" min="-180" max="180" class="mr-2" />
+        <input id="iiif_rotation" type="range" value="0" min="0" max="360" class="mr-2" />
         <span id="iiif_rotationValue" class="mr-2">0</span>
         <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
           Set Rotation
@@ -315,8 +315,8 @@
     });
 
     resetButton.addEventListener('click', () => {
-      slider.value = 0.5;
-      valueDisplay.textContent = '0';
+      slider.value = 360;
+      valueDisplay.textContent = '360';
       setRotationButton.click();
     });
   </script>
