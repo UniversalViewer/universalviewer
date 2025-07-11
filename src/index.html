@@ -292,17 +292,17 @@
 
      <div id="iiifTab" class="controls-tab-content">
       <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'general')">General</button>
-        <button class="tablinks" onclick="openTab(event, 'osd')">OpenSeadragon</button>
-        <button class="tablinks" onclick="openTab(event, 'av')">AV</button>
-        <button class="tablinks" onclick="openTab(event, 'annotations')">Annotations</button>
-        <button class="tablinks" onclick="openTab(event, 'config')">Configuration</button>
+        <button class="tablinks active" aria-label="General settings tab" onclick="openTab(event, 'general')">General</button>
+        <button class="tablinks" aria-label="Open Seadragon settings tab" onclick="openTab(event, 'osd')">OpenSeadragon</button>
+        <button class="tablinks" aria-label="AV settings tab" onclick="openTab(event, 'av')">AV</button>
+        <button class="tablinks" aria-label="Annotation settings tab" onclick="openTab(event, 'annotations')">Annotations</button>
+        <button class="tablinks" aria-label="Configuration settings tab" onclick="openTab(event, 'config')">Configuration</button>
         <div class="flex-spacer"></div>
       </div>
 
     <!-- General -->
     <div id="general" class="tabcontent">
-      <h2 class="controls-title">Manifest Id</h2>
+      <h2 class="controls-title">Manifest ID</h2>
       <div class="flex">
         <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
         <input id="iiifManifestId" type="text" value="" class="flex-1" />
