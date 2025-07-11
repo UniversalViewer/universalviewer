@@ -38,7 +38,7 @@
           width: 90vw;
           height: 80vh;
           margin-inline: auto;
-          margin-block: 1rem;
+          margin-block: 0;
         }
 
         /* @apply md:!block md:w-[90vw] */
@@ -60,6 +60,24 @@
           width: 65vw;
         }
       }
+
+      #uv-tabs {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      #uv-tabs {
+        width: 90vw;
+        margin-inline: auto;
+        margin-block: 0.25rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      #uv-tabs {
+        width: 65vw;
+      }
+    }
 
       #uv-controls {
         button,
@@ -109,25 +127,73 @@
           font-weight: 600;
         }
 
-        .controls-tab {
-          padding-inline: 1.5rem;
-          padding-block: 0.75rem;
-          font-weight: 500;
-          font-size: 1.25rem;
-          border: none;
-          background: none;
-          cursor: pointer;
-        }
-
-        .controls-tab.active {
-          background-color: ButtonFace;
-        }
-
         .controls-tab-content {
           padding: 1.5rem;
           color: ButtonText;
           background-color: ButtonFace;
         }
+
+        .tab {
+          display: flex;
+          gap: 0.1rem; 
+        }
+
+        .flex-spacer {
+          flex-grow: 1;  
+          background-color: white;
+          min-width: 0;
+          position: relative;
+          top: -1.5rem; 
+          left: -1.5rem;
+          min-width: 300px;
+          margin-left: -1.5px;
+        }
+
+        .tab button {
+          padding-inline: 1.5rem;
+          padding-block: 0.75rem;
+          font-weight: 500;
+          font-size: 1rem;
+          border: none;
+          background: none;
+          cursor: pointer;
+          background-color: white;
+          position: relative;
+          top: -1.5rem; 
+          left: -1.5rem;
+        }
+
+        .tab button.active {
+          background-color: ButtonFace;
+        }
+
+        .tabcontent {
+          display: none;
+        }
+
+      #general {
+        display: block;
+      }
+    }
+
+    .controls-tab {
+        padding-inline: 1.5rem;
+        padding-block: 0.75rem;
+        font-weight: 400;
+        font-size: 1.25rem;
+        color: rgba(0, 0, 0, 0.73);
+        border: none;
+        background: ButtonFace;
+        cursor: pointer;
+      }
+
+      .controls-tab.active {
+        background-color: white;
+        border-left: ButtonFace 3px solid;
+        border-top: ButtonFace 3px solid;
+        border-right: ButtonFace 3px solid;
+        font-weight: 500;
+        color: black;
       }
 
       /* Utilities */
@@ -176,6 +242,23 @@
       .toggleButton.caret-down {
         background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');
       }
+
+      /* Explanatory text */
+
+      details > summary {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      details > summary::after {
+        content: url("data:image/svg+xml,%3Csvg fill='black' xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 400 400'%3E%3Cpath d='M199.996,0C89.719,0,0,89.72,0,200c0,110.279,89.719,200,199.996,200C310.281,400,400,310.279,400,200C400,89.72,310.281,0,199.996,0z M199.996,373.77C104.187,373.77,26.23,295.816,26.23,200c0-95.817,77.957-173.769,173.766-173.769c95.816,0,173.772,77.953,173.772,173.769C373.769,295.816,295.812,373.77,199.996,373.77z'/%3E%3Cpath d='M199.996,91.382c-35.176,0-63.789,28.616-63.789,63.793c0,7.243,5.871,13.115,13.113,13.115c7.246,0,13.117-5.873,13.117-13.115c0-20.71,16.848-37.562,37.559-37.562c20.719,0,37.566,16.852,37.566,37.562c0,20.714-16.849,37.566-37.566,37.566c-7.242,0-13.113,5.873-13.113,13.114v45.684c0,7.243,5.871,13.115,13.113,13.115s13.117-5.872,13.117-13.115v-33.938c28.905-6.064,50.68-31.746,50.68-62.427C263.793,119.998,235.176,91.382,199.996,91.382z'/%3E%3Cpath d='M200.004,273.738c-9.086,0-16.465,7.371-16.465,16.462s7.379,16.465,16.465,16.465c9.094,0,16.457-7.374,16.457-16.465S209.098,273.738,200.004,273.738z'/%3E%3C/svg%3E");
+        margin-left: 0.5em;
+        vertical-align: middle;
+        position: relative;
+        top: 2px;
+      }
+
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -192,6 +275,14 @@
   </head>
 
   <body>
+
+    <div id="uv-tabs">
+      <button id="iiifTabButton" class="controls-tab active">
+          IIIF
+        </button>
+        <button id="youTubeTabButton" class="controls-tab">YouTube</button>
+      </div>
+
     <div
       id="uv"
       class="uv w-full md:w-[90vw] lg:w-[65vw] md:mx-auto md:h-[80vh] md:mt-4"
@@ -205,100 +296,144 @@
         <ul id="annotation-list"></ul>
       </div>
 
-      <button id="iiifTabButton" class="controls-tab active">
-        IIIF
-      </button>
-      <button id="youTubeTabButton" class="controls-tab">YouTube</button>
-
-      <div id="iiifTab" class="controls-tab-content">
-        <div class="controls-group">
-          <h2 class="controls-title">Manifest Id</h2>
-          <div class="flex">
-            <select
-              id="iiifManifestIdSelect"
-              class="py-2 px-3 mr-2 flex-1"
-            ></select>
-            <input id="iiifManifestId" type="text" value="" class="flex-1" />
-          </div>
-          <div class="mt-2">
-            <button
-              id="setIIIFManifestIdButton"
-              class="controls-button"
-              href="#"
-            >
-              Set IIIF Manifest Id
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Target</h2>
-          <div class="flex">
-            <input id="iiif_target" type="text" value="" class="flex-1" />
-            <button
-              id="iiif_setTargetButton"
-              class="controls-button flex-initial ml-2"
-            >
-              Set Target
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Muted</h2>
-          <input type="checkbox" id="iiif_mutedCheckbox" />
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Rotation</h2>
-          <div class="flex">
-            <input id="iiif_rotation" type="text" value="" class="flex-1" />
-            <button
-              id="iiif_setRotationButton"
-              class="controls-button flex-initial ml-2"
-            >
-              Set Rotation
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Annotations</h2>
-          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
-          <div class="mt-2">
-            <button id="iiif_setAnnotationsButton" class="controls-button">
-              Set Annotations
-            </button>
-            <button id="iiif_clearAnnotationsButton" class="controls-button">
-              Clear Annotations
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Custom Configuration</h2>
-          <textarea id="customConfig" rows="5" class="w-full"></textarea>
-            <div class="mt-2">
-              <input type="checkbox" id="clearStorageCheckbox" />
-              <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
-            </div>
-          <div class="mt-2">
-            <button id="setConfigButton" class="controls-button">
-              Apply Configurations
-            </button>
-            <button id="resetConfigButton" class="controls-button">
-              Reset to Default Configuration
-            </button>
-          </div>
-        </div>
-
-        <div class="controls-group">
-          <h2 class="controls-title">Configuration builder</h2>
-          <div id="config-builder">
-          </div>
-        </div>
-        
+     <div id="iiifTab" class="controls-tab-content">
+      <div class="tab">
+        <button class="tablinks active" aria-label="General settings tab" onclick="openTab(event, 'general')">General</button>
+        <button class="tablinks" aria-label="Open Seadragon settings tab" onclick="openTab(event, 'osd')">OpenSeadragon</button>
+        <button class="tablinks" aria-label="AV settings tab" onclick="openTab(event, 'av')">AV</button>
+        <button class="tablinks" aria-label="Annotation settings tab" onclick="openTab(event, 'annotations')">Annotations</button>
+        <button class="tablinks" aria-label="Configuration settings tab" onclick="openTab(event, 'config')">Configuration</button>
+        <div class="flex-spacer"></div>
       </div>
+
+    <!-- General -->
+    <div id="general" class="tabcontent">
+      <h2 class="controls-title">Manifest ID</h2>
+      <div class="flex">
+        <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
+        <input id="iiifManifestId" type="text" value="" class="flex-1" />
+      </div>
+      <div class="mt-2">
+        <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
+      </div>
+    <div class="controls-group">
+      <h2 class="controls-title"></h2>
+      <div class="mt-2">
+      <details><summary aria-label="More information about using target"><b>Set Target</b></summary><i>For OpenSeadragon manifests, edit the 'xywh' values at the end of the URL to modify the view of the image.
+      For AV manifests, modify the number after 't' to set the timestamp.</i></details>
+    </div>
+    <br>
+      <div class="flex mb-2">
+        <input id="iiif_target" type="text" value="" class="flex-1" />
+        <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
+          Set Target
+        </button>
+      </div>
+  </div>
+  </div>
+
+    <!-- OSD -->
+    <div id="osd" class="tabcontent">
+    <div class="controls-group">
+      <h2 class="controls-title">Set degrees of rotation</h2>
+      <div class="flex">
+        <input id="iiif_rotation" type="range" value="0" min="0" max="360" class="mr-2" />
+        <span id="iiif_rotationValue" class="mr-2">0</span>
+        <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
+          Set Rotation
+        </button>
+        <button id="iiif_resetRotationButton" class="controls-button flex-initial ml-2" style="padding: 0.5rem 0.5rem; font-size: 1rem; min-width: 0;">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <script>
+    const slider = document.getElementById('iiif_rotation');
+    const valueDisplay = document.getElementById('iiif_rotationValue');
+    const setRotationButton = document.getElementById('iiif_setRotationButton');
+    const resetButton = document.getElementById('iiif_resetRotationButton');
+    slider.addEventListener('input', () => {
+      valueDisplay.textContent = slider.value;
+    });
+
+    resetButton.addEventListener('click', () => {
+      slider.value = 360;
+      valueDisplay.textContent = '360';
+      setRotationButton.click();
+    });
+  </script>
+
+    <!-- AV -->
+    <div id="av" class="tabcontent" style="display:none">
+      <div class="controls-group">
+        <h2 class="controls-title">Mute sound</h2>
+        <input type="checkbox" id="iiif_mutedCheckbox" />
+      </div>
+    </div>
+
+    <!-- Annotations -->
+    <div id="annotations" class="tabcontent" style="display:none">
+      <h2 class="controls-title">Annotations</h2>
+      <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
+      <div class="mt-2">
+        <button id="iiif_setAnnotationsButton" class="controls-button">Set Annotations</button>
+        <button id="iiif_clearAnnotationsButton" class="controls-button">Clear Annotations</button>
+      </div>
+    </div>
+
+    <!-- Configuration -->
+   <div id="config" class="tabcontent" style="display:none">
+    <p><i>The Universal Viewer can be configured using a JSON file. The controls below allow you to easily test changes to your configuration, or to generate a new configuration file by browsing the available settings.</i></p>
+    <h2 class="controls-title"></h2><details>
+      <summary aria-label="More information about custom configuration" style="cursor: pointer;"><b>Custom configuration</b></summary>
+      <i>Enter your configuration here (in JSON format) to see a preview of how the Universal Viewer will look and behave. Since UV uses browser storage to remember some settings, you may need to check the 'Clear saved state' checkbox to ensure that your changes are immediately visible.</i>
+    </details>
+    <br>
+    <textarea id="customConfig" rows="5" class="w-full"></textarea>
+    <div class="mt-2">
+      <input type="checkbox" id="clearStorageCheckbox" />
+      <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
+    </div>
+    <div class="mt-2">
+      <button id="setConfigButton" class="controls-button">Apply Configurations</button>
+      <button id="resetConfigButton" class="controls-button">Reset to Default Configuration</button>
+    </div>
+
+    <div class="controls-group">
+      <h2 class="controls-title"></h2><details>
+        <summary aria-label="More information about using the configuration builder" style="cursor: pointer;"><b>Configuration builder</b></summary>
+        <i>Use the dropdown menus to customise the Universal Viewer. Your selections will automatically populate the custom configuration box above. You will have to click the Apply Configurations button when you are ready to put your changes into effect.</i></details>
+        <br>
+        <div id="config-builder"></div>
+    </div>
+  </div>
+</div>
+
+  <script>
+  function openTab(evt, tabName) {
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelector(".tablinks").click();
+    });
+
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    const tablinks = document.getElementsByClassName("tablinks");
+    for (let i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    for (let i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("active");
+    }
+
+    document.getElementById(tabName).style.display = "block";
+
+    evt.currentTarget.classList.add("active");
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelector(".tablinks").click();  
+    });
+  }
+  </script>
 
       <div id="youTubeTab" class="hidden controls-tab-content">
         <div class="controls-group">
