@@ -36,15 +36,6 @@ Sometimes events are also 'pushed' outside by having .fire called inside an exte
       - [2.3.2.1 YouTubeEvents](#2321-youtubeevents)
       - [2.3.2.2 IIIFEvents](#2322-iiifevents)
 - [3. Extensions](#3-extensions)
-  - [3.1 Aleph (3D)](#31-aleph-3d)
-    - [3.1.1 Aleph Config](#311-aleph-config)
-  - [3.2 AV](#32-av)
-  - [3.3 Default](#33-default)
-  - [3.4 Ebook](#34-ebook)
-  - [3.5 Media Element](#35-media-element)
-  - [3.6 Model Viewer](#36-model-viewer)
-  - [3.7 Open Seagdraon](#37-open-seagdraon)
-  - [3.8 PDF](#38-pdf)
 
 <!-- omit in toc -->
 ## High-Level Summary
@@ -147,7 +138,9 @@ The core system is built around a central `UniversalViewer` class orchestrating 
 
 ### 1.5 Event Handling
 
-The event system in the UV is divided into two parts, internal and external:
+The event system in the UV is divided into two parts, internal and external.
+
+For a full list of events see [EVENTS.md](EVENTS.md)
 
 #### 1.5.1 External Events
 
@@ -171,6 +164,10 @@ The event system in the UV is divided into two parts, internal and external:
   - Allows system components to broadcast (publish) an event so that subscribers may respond appropriately. The broadcaster doesn't need to know who the subscribers are and vice-versa.
   - Extension Host (`this.extensionHost` aka `IIIFContentHandler`) serves as the 'Event Bus' providing the `subscribe` and `publish` methods.
   - Uses the `PubSub` class to store and fire event callbacks.
+- **Passing internal events outside**
+  - The `subscribeAll` functions in `IIIFContentHandler` and `PubSub` allow for a single handler to be fire when any internal event happens. 
+  - This is currently used in `BaseExtension` to pass almost all events to external handlers.
+  - So external handlers can be attached for events such as `openseadragonExtension.open`.
 
 <!-- The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
 
@@ -188,6 +185,7 @@ In UV, the Extension Host, usually referenced as `this.extensionHost` and which 
   - Each key begins with a `$` to serve as a marker for replacement and config contains matching markers.
   - After config is loaded, `BaseExtension.ts#translateLocale()` handles replacement.
   - Values are then generally available in `this.content`.
+  - When a user changes locale, the selected locale is moved to the beginning of the locales array and the extension is reloaded, which causes the new locale to be the one used.
 - **Note:** Substitution of language strings into config takes place before the 'configure' event fires, so user-supplied config cannot make use of `$markers` and must provide literal values.
 
 ## 2. Source Code Structure & Execution Flow
@@ -218,154 +216,8 @@ TODO: Separate docs for these, similar to Options - see Events.md
 
 ##### 2.3.2.1 YouTubeEvents
 
-<!-- - UNSTARTED
-- ENDED
-- PLAYING
-- PAUSED
-- BUFFERING
-- CUED -->
+<!--  -->
 
 ##### 2.3.2.2 IIIFEvents
 
-<!-- - ACCEPT_TERMS
-- ANNOTATION_CANVAS_CHANGE
-- ANNOTATION_CHANGE
-- ANNOTATIONS_CLEARED
-- ANNOTATIONS_EMPTY
-- ANNOTATIONS
-- BOOKMARK
-- CANVAS_INDEX_CHANGE_FAILED
-- CANVAS_INDEX_CHANGE
-- CLEAR_ANNOTATIONS
-- CLICKTHROUGH
-- CLOSE_ACTIVE_DIALOGUE
-- CLOSE_LEFT_PANEL
-- CLOSE_RIGHT_PANEL
-- COLLECTION_INDEX_CHANGE
-- CREATE
-- CURRENT_TIME_CHANGE
-- RANGE_TIME_CHANGE
-- DOWN_ARROW
-- DOWNLOAD
-- END
-- ESCAPE
-- EXTERNAL_LINK_CLICKED
-- FEEDBACK
-- FIRST
-- FORBIDDEN
-- GALLERY_DECREASE_SIZE
-- GALLERY_INCREASE_SIZE
-- GALLERY_THUMB_SELECTED
-- HIDE_AUTH_DIALOGUE
-- HIDE_CLICKTHROUGH_DIALOGUE
-- HIDE_DOWNLOAD_DIALOGUE
-- HIDE_EMBED_DIALOGUE
-- HIDE_EXTERNALCONTENT_DIALOGUE
-- HIDE_GENERIC_DIALOGUE
-- HIDE_HELP_DIALOGUE
-- HIDE_INFORMATION
-- HIDE_LOGIN_DIALOGUE
-- HIDE_MULTISELECT_DIALOGUE
-- HIDE_OVERLAY
-- HIDE_RESTRICTED_DIALOGUE
-- HIDE_SETTINGS_DIALOGUE
-- HIDE_SHARE_DIALOGUE
-- HOME
-- LAST
-- LEFT_ARROW
-- LEFTPANEL_COLLAPSE_FULL_FINISH
-- LEFTPANEL_COLLAPSE_FULL_START
-- LEFTPANEL_EXPAND_FULL_FINISH
-- LEFTPANEL_EXPAND_FULL_START
-- LOGIN_FAILED
-- LOGIN
-- LOGOUT
-- MANIFEST_INDEX_CHANGE
-- METRIC_CHANGE
-- MINUS
-- MULTISELECT_CHANGE
-- MULTISELECTION_MADE
-- NEXT
-- NOT_FOUND
-- OPEN_EXTERNAL_RESOURCE
-- OPEN_LEFT_PANEL
-- OPEN_RIGHT_PANEL
-- OPEN_THUMBS_VIEW
-- OPEN_TREE_VIEW
-- OPEN
-- PAGE_DOWN
-- PAGE_UP
-- PAUSE
-- PINPOINT_ANNOTATION_CLICKED
-- PLUS
-- PREV
-- RANGE_CHANGE
-- REDIRECT
-- REFRESH
-- RESOURCE_DEGRADED
-- RETRY
-- RETURN
-- RIGHT_ARROW
-- RIGHTPANEL_COLLAPSE_FULL_FINISH
-- RIGHTPANEL_COLLAPSE_FULL_START
-- RIGHTPANEL_EXPAND_FULL_FINISH
-- RIGHTPANEL_EXPAND_FULL_START
-- SET_ROTATION
-- SET_TARGET
-- SET_MUTED
-- SETTINGS_CHANGE
-- SHOW_AUTH_DIALOGUE
-- SHOW_CLICKTHROUGH_DIALOGUE
-- SHOW_DOWNLOAD_DIALOGUE
-- SHOW_EMBED_DIALOGUE
-- SHOW_EXTERNALCONTENT_DIALOGUE
-- SHOW_GENERIC_DIALOGUE
-- SHOW_HELP_DIALOGUE
-- SHOW_INFORMATION
-- SHOW_LOGIN_DIALOGUE
-- SHOW_MESSAGE
-- MESSAGE_DISPLAYED
-- SHOW_MULTISELECT_DIALOGUE
-- SHOW_OVERLAY
-- SHOW_RESTRICTED_DIALOGUE
-- SHOW_SETTINGS_DIALOGUE
-- SHOW_SHARE_DIALOGUE
-- SHOW_TERMS_OF_USE
-- TARGET_CHANGE
-- TOGGLE_RIGHT_PANEL
-- TOGGLE_LEFT_PANEL
-- THUMB_MULTISELECTED
-- THUMB_SELECTED
-- TOGGLE_EXPAND_LEFT_PANEL
-- TOGGLE_EXPAND_RIGHT_PANEL
-- TREE_NODE_MULTISELECTED
-- TREE_NODE_SELECTED
-- UP_ARROW
-- UPDATE_SETTINGS
-- VIEW_FULL_TERMS
-- WINDOW_UNLOAD
-- SHOW_ADJUSTIMAGE_DIALOGUE
-- HIDE_ADJUSTIMAGE_DIALOGUE -->
-
-## 3. Extensions
-
-TODO: Details on each extension, any specific dependencies it uses, refs to ext. specific config options, how they affect things, and how to use.
-
-### 3.1 Aleph (3D)
-
-<!--omit in toc -->
-#### 3.1.1 Aleph Config
-
-### 3.2 AV
-
-### 3.3 Default
-
-### 3.4 Ebook
-
-### 3.5 Media Element
-
-### 3.6 Model Viewer
-
-### 3.7 Open Seagdraon
-
-### 3.8 PDF
+## 3. [Extensions](EXTENSIONS.md)
