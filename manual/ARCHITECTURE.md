@@ -1,4 +1,4 @@
-Notes:
+<!-- Notes:
 
 In IIIFContentHandler:153 Events.CREATED is given a handler, but it appears to never be called via the on/fire mechanism. In fact it's called through the PubSub system's subscribeAll which is set up in BaseExtension:274 to basically try and handle any internal event (PubSub) if an external handler has been provided for it e.g.
 
@@ -8,7 +8,7 @@ uv.on("openseadragonExtension.animationFinish", function (someArg) {
 });
 ```
 
-Sometimes events are also 'pushed' outside by having .fire called inside an extension. This calls fire() function in BaseExtension which in turns calls it in the Extension Host aka BaseContentHandler which has access to the events array set by its on() function.
+Sometimes events are also 'pushed' outside by having .fire called inside an extension. This calls fire() function in BaseExtension which in turns calls it in the Extension Host aka BaseContentHandler which has access to the events array set by its on() function. -->
 
 <!-- omit in toc -->
 # Architectural Overview of the Universal Viewer
@@ -21,16 +21,25 @@ Sometimes events are also 'pushed' outside by having .fire called inside an exte
   - [1.3 Content Extensions](#13-content-extensions)
     - [1.3.1 `BaseExtension`](#131-baseextension)
     - [1.3.2 Content Specific `Extension`](#132-content-specific-extension)
-  - [1.4 Modules / UI Panels](#14-modules--ui-panels)
+  - [1.4 Modules / UI Panels / Dialogues](#14-modules--ui-panels--dialogues)
     - [1.4.1 Dialogues](#141-dialogues)
   - [1.5 Event Handling](#15-event-handling)
     - [1.5.1 External Events](#151-external-events)
     - [1.5.2 Internal Events](#152-internal-events)
   - [1.6 Localisation](#16-localisation)
 - [2. Source Code Structure \& Execution Flow](#2-source-code-structure--execution-flow)
-  - [2.1 Initialisation](#21-initialisation)
-  - [2.2 Configuration loading \& passing](#22-configuration-loading--passing)
-  - [2.3 Events](#23-events)
+  - [2.1 Entry](#21-entry)
+  - [2.2 Initialisation](#22-initialisation)
+    - [Resizing](#resizing)
+    - [Fullscreen](#fullscreen)
+  - [2.3 UniversalViewer](#23-universalviewer)
+  - [2.4 Content Handler \& Extension](#24-content-handler--extension)
+    - [2.4.1 Choosing the Content Handler](#241-choosing-the-content-handler)
+    - [2.4.2 Loading the Extension](#242-loading-the-extension)
+      - [2.4.2.1 Extension default config](#2421-extension-default-config)
+    - [2.4.3 Config loading \& localisation](#243-config-loading--localisation)
+    - [2.4.4 YouTubeContentHandler](#244-youtubecontenthandler)
+  - [2.5 The Event System](#25-the-event-system)
     - [2.3.1 External Events](#231-external-events)
     - [2.3.2 Internal Events](#232-internal-events)
       - [2.3.2.1 YouTubeEvents](#2321-youtubeevents)
@@ -105,7 +114,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Manage content-specific UI and controls.
   - Provision of events to interact with content viewer.
 
-### 1.4 Modules / UI Panels
+### 1.4 Modules / UI Panels / Dialogues
 
 - **Role:** Provide interface elements related to displayed content or UV settings.
 - **Panel types:**
@@ -113,7 +122,8 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Header, Footer, Left, Right, Center main layout panels.
   - Extension-specific panels.
 - **Center Panel:**
-  - Key panel, contains content viewer.
+  - Key panel, contains content viewer. 
+  - Each extension has an implementation specific version.
 - **Details:**
   - `Shell` class creates panel containers and the dialogue container (named 'overlays') and adds them to the `target` element.
 
@@ -190,13 +200,158 @@ In UV, the Extension Host, usually referenced as `this.extensionHost` and which 
 
 ## 2. Source Code Structure & Execution Flow
 
-### 2.1 Initialisation
+The following makes the assumption that your implementation of the viewer matches the example HTML file i.e. UV loaded via `<script>` and `UV.init(<elementId>, { configJSON })` is called, with added config coming from the URL Adapter and/or callback(s) via the "configure" event.
 
-### 2.2 Configuration loading & passing
+```
+<script>
+  var urlAdapter = new UV.IIIFURLAdapter(true);
 
-### 2.3 Events
+  const data = urlAdapter.getInitialData({
+    embedded: true,
+  });
 
-TODO: Separate docs for these, similar to Options - see Events.md
+  uv = UV.init("uv", data);
+
+  uv.on("configure", function({ config, cb }) {
+    cb({
+      modules: {
+        openSeadragonCenterPanel: {
+          options: {
+            doubleClickAnnotationEnabled: true,
+          },
+        },
+      },
+    });
+  });
+</script>
+```
+### 2.1 Entry
+
+The entrypoint file `index.ts` loads `shim-jquery` to import jQuery, and puts the `jQuery` and `$` objects in the global namespace `window`.
+
+It then exports the following classes/enums:
+
+1. ContentType
+2. Events
+3. IIIFEvents
+4. YouTubeEvents
+
+and also exports the `URLAdapater` (as `IIIFURLAdapter`), `UniversalViewer` (as `Viewer`) and finally, `init`.
+
+### 2.2 Initialisation
+
+Init is a function in `init.ts` that initialises and embeds the viewer into a target container DOM element, handles resizing, fullscreen toggling, and error handling.
+
+It returns an instance of [UniversalViewer](#universalviewer)
+
+`init = (el: string | HTMLDivElement, data)`
+
+If `el` is a string it will be assumed to be the `id` attribute of the element the viewer will be contained in.
+
+This element is then emptied and pair of parent/child `div`s are added with the inner one being the `uvDiv` that the viewer loads in:
+
+`el > div (parent) > div (uvDiv)`
+
+This structure is required for fullscreen functionality to work in Safari browsers.
+
+A new UniversalViewer instance is then created with `uvDiv` and `data` as args passed as a JSON object matching the `IUVOptions` type.
+
+#### Resizing
+
+A resize function is defined that changes the width and height of div (parent) to match either the container (`el`) div or `window` if the viewer is fullscreen.
+
+This function is assigned as the handler for the standard `resize` and `orientationchange` events on `window` and is also called when handling the following from the `Events` enum:
+
+- **CREATED**: Triggers a resize once the viewer is initialized.
+- **EXTERNAL_RESOURCE_OPENED**: Resizes 100ms after resources are opened.
+- **TOGGLE_FULLSCREEN**: A delayed resize is called after handling fullscreen events.
+
+#### Fullscreen
+
+Handler functions are defined and bound to standard fullscreen events depending on the specific browser being used.
+
+### 2.3 UniversalViewer
+
+*extends BaseContentHandler*
+
+The UniversalViewer class is primarily responsible for determining the content type to be viewed and creating the relevant Content Handler class.
+
+Currently the following content handlers exist:
+
+- IIIFContentHandler
+- YouTubeContentHandler
+
+It dynamically imports the relevant handler (using Webpack's lazy-loading) from the `ContentHandler: IContentHandlerRegistry` constant and instantiates its `default` export, passing the `IUVOptions`, a `UVAdapter` instance (usually null, may be a `URLAdapater` instance), and any externally registered event handlers.
+
+These external handlers are set via the `on()` function, e.g.
+
+```
+const configUrl = urlAdapter.get('config');
+if (configUrl) {
+  uv.on("configure", function({ config, cb }) {
+    cb(
+      new Promise(function (resolve) {
+        fetch(configUrl).then(function (response) {
+          resolve(response.json());
+        });
+      });
+    );
+  })
+}
+```
+
+It also provides access to the following public functions. Calls to these functions are passed along to the equivalent function in the assigned Content Handler.
+
+- exitFullScreen
+- resize
+- dispose
+- set: one of two paths
+  1. Content type has changed - creates a new handler
+  2. Content type is the same - calls `set()` on the Content Handler
+   
+### 2.4 Content Handler & Extension
+
+Content Handlers *extend BaseContentHandler* 
+
+This section will mainly focus on the `IIIFContentHandler` class. 
+
+It also covers the creation and configuration of Extensions, as the code for these is quite tightly coupled.
+
+#### 2.4.1 Choosing the Content Handler
+
+The constructor calls `_init()`, which in turn calls `set()`, which then (if first load) calls `_reload()`.
+
+After `set()`, `resize()` is called which calls `extension.resize()`.
+
+`_reload()` uses Manifold and Manifesto to parse the manifest, and based on the media type, rendering format, or external resource type found in the IIIF manifest, selects an appropriate UV extension (e.g., OpenSeadragon, PDF, etc.) to load.
+
+#### 2.4.2 Loading the Extension
+
+The relevant Extension class is dynamically imported and instantiated.
+
+##### 2.4.2.1 Extension default config
+
+Each extension has its own `./config/config.json` file. These configs cover most of the basics required to configure the UV, plus anything relevant as a default for that extension and the modules/components it uses.
+
+#### 2.4.3 Config loading & localisation
+
+After the extension is created, `_loadAndApplyConfigToExtension()` is called. 
+
+This first calls `BaseExtension#loadConfig()` which then calls `BaseExtension#translateLocale()` to load the relevant locale file from `src/locales` and replace translation markers with the correct language strings in the extension's default config.
+
+This config is then returned to the Content Handler which then passes it to `BaseExtension#configure()` which resolves any configs passed externally via the "**configure**" event and merges them with config, overwriting any existing values.
+
+Finally, in `_createExtension`, the `IIIFContentHandler` is assigned as the extension's `extensionHost`, the `data` variable that now contains the full config is set in the extension, as is the Manifesto `Helper` object.
+
+Config is now available in the extension as `this.data.config.options|modules`.
+
+#### 2.4.4 YouTubeContentHandler
+
+TODO: Any differences between this and IIIFContentHandler apart from the obvious (manifest)
+
+### 2.5 The Event System
+
+For a full list of events and how the events system functions, see [EVENTS.md](EVENTS.md)
 
 #### 2.3.1 External Events
 
