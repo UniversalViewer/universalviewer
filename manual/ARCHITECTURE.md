@@ -105,6 +105,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Each extension has an implementation specific version.
 - **Details:**
   - `Shell` class creates panel containers and the dialogue container (named 'overlays') and adds them to the `target` element.
+  - All modules call `setConfig(<moduleName>)` which causes the relevant section of `config.modules` to be loaded into the module.
 
 ### Dialogues
 
@@ -156,9 +157,8 @@ For a detailed overview of how the Event system works see [Execution - Events](E
   - Extension Host (`this.extensionHost` aka `IIIFContentHandler`) serves as the 'Event Bus' providing the `subscribe` and `publish` methods.
   - Uses the `PubSub` class to store and fire event callbacks.
 - **Passing internal events outside**
-  - The `subscribeAll` functions in `IIIFContentHandler` and `PubSub` allow for a single handler to be fire when any internal event happens. 
-  - This is currently used in `BaseExtension` to pass almost all events to external handlers.
-  - So external handlers can be attached for events such as `openseadragonExtension.open`.
+  - The `subscribeAll` functions in `IIIFContentHandler` and `PubSub` allow for a single handler to be fired when any internal event happens. 
+  - This is currently used in `BaseExtension` to pass almost all events outside i.e. external handlers can be attached for events such as `openseadragonExtension.open`.
 
 <!-- The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
 
@@ -168,7 +168,7 @@ In UV, the Extension Host, usually referenced as `this.extensionHost` and which 
 
 ## Localisation
 
-- **Role:** Allow all interface text to be available in a variety of languages, and for users to be able to change language as needed.
+- **Role:** Allow all interface text to be available in a variety of languages, and for end users to be able to change language as needed.
 - **Design pattern:** Key-based localisation
 - **Details:** 
   - Translation strings are stored files named with the relevant language tag e.g. `en-GB.json`.
