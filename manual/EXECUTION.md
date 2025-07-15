@@ -6,19 +6,16 @@
   - [Resizing](#resizing)
   - [Fullscreen](#fullscreen)
 - [3. The UniversalViewer Class](#3-the-universalviewer-class)
-- [4. Content Handler \& Extension](#4-content-handler--extension)
+- [4. Content Handler \& Extension Creation](#4-content-handler--extension-creation)
   - [Choosing the Content Handler](#choosing-the-content-handler)
   - [Loading the Extension](#loading-the-extension)
+  - [Config loading \& localisation](#config-loading--localisation)
   - [4.1 YouTubeContentHandler](#41-youtubecontenthandler)
 - [5. Extensions](#5-extensions)
   - [Extension default config](#extension-default-config)
-  - [Config loading \& localisation](#config-loading--localisation)
-    - [2.5 The Event System](#25-the-event-system)
-      - [2.3.1 External Events](#231-external-events)
-      - [2.3.2 Internal Events](#232-internal-events)
-        - [2.3.2.1 YouTubeEvents](#2321-youtubeevents)
-        - [2.3.2.2 IIIFEvents](#2322-iiifevents)
-  - [3. Extensions](#3-extensions)
+  - [Extension rendering](#extension-rendering)
+    - [subscribeAll](#subscribeall)
+    - [Extension modules](#extension-modules)
 
 
 The following makes the assumption that your implementation of the viewer matches the example HTML file i.e. UV loaded via `<script>` and `UV.init(<targetElementId>, { configJSON })` is called, with config coming from plain JSON, the URL Adapter, and/or callback(s) via the "configure" event.
@@ -46,6 +43,7 @@ The following makes the assumption that your implementation of the viewer matche
   });
 </script>
 ```
+
 # 1. Entrypoint - index.ts
 
 The entrypoint file `index.ts` loads `shim-jquery` to import jQuery, and puts the `jQuery` and `$` objects in the global namespace `window`.
@@ -130,7 +128,7 @@ It also provides access to the following public functions. Calls to these functi
   1. Content type has changed - creates a new handler
   2. Content type is the same - calls `set()` on the Content Handler
    
-# 4. Content Handler & Extension
+# 4. Content Handler & Extension Creation
 
 Content Handlers *extend BaseContentHandler* 
 
@@ -150,6 +148,20 @@ After `set()`, `resize()` is called which calls `extension.resize()`.
 
 The relevant Extension class is dynamically imported and instantiated.
 
+## Config loading & localisation
+
+After the extension is created, `_loadAndApplyConfigToExtension()` is called. 
+
+This first calls the extension's `loadConfig()`function which then calls `translateLocale()` to load the relevant locale file from `src/locales` and replace translation markers with the correct language strings in the extension's [default config](#extension-default-config).
+
+This config is then returned to the Content Handler which then passes it to `configure()` which resolves any configs passed externally via the "**configure**" event and merges them with config, overwriting any existing values.
+
+Finally, in `_createExtension()`:
+- the `IIIFContentHandler` is assigned as the extension's `extensionHost`,
+- the `data` variable that now contains the full config is set in the extension, accessible via `this.data.config.options|modules`, 
+- the Manifesto `Helper` object is set as `helper` in the extension,
+- the extension's `create()` function is called
+
 ## 4.1 YouTubeContentHandler
 
 TODO: Any differences between this and IIIFContentHandler apart from the obvious (manifest)
@@ -158,46 +170,37 @@ TODO: Any differences between this and IIIFContentHandler apart from the obvious
 
 ## Extension default config
 
-Each extension has its own `./config/config.json` file. These configs cover most of the basics required to configure the UV, plus anything relevant as a default for that extension and the modules/components it uses.
+Each extension has its own `./config/config.json` file. This file covers most of the basics required to configure the UV, plus anything relevant as a default for that extension and the modules/components it uses.
 
-## Config loading & localisation
+A corresponding `./config/Config.ts` file defines the type for the extension in relation to its parent `BaseExtension` class, so entries in the JSON need to match this type definition.
 
-After the extension is created, `_loadAndApplyConfigToExtension()` is called. 
+## Extension rendering
 
-This first calls `BaseExtension#loadConfig()` which then calls `BaseExtension#translateLocale()` to load the relevant locale file from `src/locales` and replace translation markers with the correct language strings in the extension's default config.
+The majority of what happens after an extension is created is beyond the scope of this document because it is very specific to that extension, however the following  most relevant code happens in all extensions via their parent `BaseExtension` class:
 
-This config is then returned to the Content Handler which then passes it to `BaseExtension#configure()` which resolves any configs passed externally via the "**configure**" event and merges them with config, overwriting any existing values.
+- `$element` is set by getting the target element from the extension host
+- Locales initialised
+- Various state classes set on the host e.g. `left-panel-enabled`, `mobile`, `fullscreen` etc.
+- Keypress events bound to the host which are `publish()`ed upon activation
+- Subscription to top-level IIIF Events
+- Assignment of a handler to the host's `subscribeAll` function
+- Creation of the `Shell`
+- Module creation - `createModules()`
 
-Finally, in `_createExtension`, the `IIIFContentHandler` is assigned as the extension's `extensionHost`, the `data` variable that now contains the full config is set in the extension, as is the Manifesto `Helper` object.
+### subscribeAll
 
-Config is now available in the extension as `this.data.config.options|modules`.
+The subscribe all function allows for all internal events to be passed outside of the application so that implementations can react to them with their own handlers. For more information see [Events](EVENTS.md)
+
+### Extension modules
+
+Only a few very common dialogue modules are created in `BaseExtension`.
+
+Each extension is responsible for creating the other modules it requires, such as the header, side panels, footer etc.
+
+One module that all extensions use is a center panel, because this contains the viewer needed to display the extension's content.
+
+Each extension has its own center panel class e.g. the PDF extension creates a `PDFCenterPanel`.
+
+For extension-specific information see [Extensions](EXTENSIONS.md)
 
 
-
-### 2.5 The Event System
-
-For a full list of events and how the events system functions, see [EVENTS.md](EVENTS.md)
-
-#### 2.3.1 External Events
-
-<!-- - CONFIGURE
-- CREATED
-- DROP
-- ERROR
-- EXIT_FULLSCREEN
-- EXTERNAL_RESOURCE_OPENED
-- LOAD
-- LOAD_FAILED
-- RELOAD
-- RESIZE
-- TOGGLE_FULLSCREEN -->
-
-#### 2.3.2 Internal Events
-
-##### 2.3.2.1 YouTubeEvents
-
-<!--  -->
-
-##### 2.3.2.2 IIIFEvents
-
-## 3. [Extensions](EXTENSIONS.md)
