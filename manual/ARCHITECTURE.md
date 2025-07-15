@@ -1,3 +1,5 @@
+[&larr; Manual](MANUAL.md)
+
 <!-- omit in toc -->
 # Architectural Overview of the Universal Viewer
 

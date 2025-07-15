@@ -1,3 +1,5 @@
+[&larr; Manual](MANUAL.md)
+
 # Source Code Structure & Execution Flow
 
 - [Source Code Structure \& Execution Flow](#source-code-structure--execution-flow)
@@ -195,11 +197,11 @@ The subscribe all function allows for all internal events to be passed outside o
 
 Only a few very common dialogue modules are created in `BaseExtension`.
 
-Each extension is responsible for creating the other modules it requires, such as the header, side panels, footer etc.
+Each extension is responsible for creating the other modules it requires, such as the header, side panels, footer etc. which allows them to control which are displayed for their content type, and also to use extension-specific sub-classed versions.
 
 One module that all extensions use is a center panel, because this contains the viewer needed to display the extension's content.
 
-Each extension has its own center panel class e.g. the PDF extension creates a `PDFCenterPanel`.
+Each extension has its own center panel sub-class e.g. the PDF extension creates a `PDFCenterPanel`.
 
 For extension-specific information see [Extensions](EXTENSIONS.md)
 
