@@ -1,15 +1,3 @@
-<!-- Notes:
-
-In IIIFContentHandler:153 Events.CREATED is given a handler, but it appears to never be called via the on/fire mechanism. In fact it's called through the PubSub system's subscribeAll which is set up in BaseExtension:274 to basically try and handle any internal event (PubSub) if an external handler has been provided for it e.g.
-
-```
-uv.on("openseadragonExtension.animationFinish", function (someArg) {
-    console.log("Handling openseadragonExtension.animationFinish with someArg", someArg);
-});
-```
-
-Sometimes events are also 'pushed' outside by having .fire called inside an extension. This calls fire() function in BaseExtension which in turns calls it in the Extension Host aka BaseContentHandler which has access to the events array set by its on() function. -->
-
 <!-- omit in toc -->
 # Architectural Overview of the Universal Viewer
 
@@ -159,12 +147,6 @@ For a detailed overview of how the Event system works see [Execution - Events](E
 - **Passing internal events outside**
   - The `subscribeAll` functions in `IIIFContentHandler` and `PubSub` allow for a single handler to be fired when any internal event happens. 
   - This is currently used in `BaseExtension` to pass almost all events outside i.e. external handlers can be attached for events such as `openseadragonExtension.open`.
-
-<!-- The UV internal event system uses the Publish–Subscribe (PubSub) pattern to manage communication between different components in a decoupled and modular way i.e. it allows one part of the application (the publisher) to broadcast an event, and other parts (the subscribers) to respond to that event without the publisher needing to know who the subscribers are.
-
-This means that components don't directly call each other; they communicate indirectly through events.
-
-In UV, the Extension Host, usually referenced as `this.extensionHost` and which is currently always `IIIFContentHandler`, is typically the central event bus that uses the PubSub pattern. Components like extensions, UI panels, and dialogues use it to communicate. -->
 
 ## Localisation
 
