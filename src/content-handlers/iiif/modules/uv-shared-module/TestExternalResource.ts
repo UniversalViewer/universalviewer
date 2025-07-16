@@ -1,5 +1,5 @@
 import { ServiceProfile } from "@iiif/vocabulary/dist-commonjs";
-import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import { HTTPStatusCode } from "../../HTTPStatusCodes";
 import {
   Annotation,
   AnnotationBody,
