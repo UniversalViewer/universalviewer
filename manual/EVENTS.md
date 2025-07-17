@@ -42,7 +42,7 @@ Add passed information developers need.
 - Fired by a ContentHandler (IIIF, YouTube) before setting the config of an Extension.
 - Passes an object to the event handler: ({ config, cb }).
 - config: the extension's default config
-- cb: a callback accepts a Promise<object>. The object is treated as a Config and merged into the loaded config and used to configure the Extension.
+- cb: a callback accepts a Promise&lt;object&gt;. The object is treated as a Config and merged into the loaded config and used to configure the Extension.
 
 <!-- omit in toc -->
 ### CREATED
