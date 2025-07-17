@@ -1,4 +1,4 @@
-[&larr; Manual](MANUAL.md)
+[&larr; Manual Index](index.md)
 
 # Configuration Options
 

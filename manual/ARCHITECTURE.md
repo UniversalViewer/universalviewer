@@ -1,4 +1,4 @@
-[&larr; Manual](MANUAL.md)
+[&larr; Manual Index](index.md)
 
 <!-- omit in toc -->
 # Architectural Overview of the Universal Viewer
@@ -66,6 +66,7 @@ The core system is built around a central `UniversalViewer` class orchestrating 
   - Provides `publish` and `subscribe` API functions to give Extensions access to PubSub.
 
 ## Content Extensions
+**Note:** Content Extensions are only used by the IIIFContentHandler
 
 ### `BaseExtension`
 

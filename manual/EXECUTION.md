@@ -1,10 +1,10 @@
-[&larr; Manual](MANUAL.md)
+[&larr; Manual Index](index.md)
 
 # Source Code Structure & Execution Flow
 
 - [Source Code Structure \& Execution Flow](#source-code-structure--execution-flow)
-- [1. Entrypoint - index.ts](#1-entrypoint---indexts)
-- [2. Initialisation - init.ts](#2-initialisation---initts)
+- [1. Entrypoint](#1-entrypoint)
+- [2. Initialisation](#2-initialisation)
   - [Resizing](#resizing)
   - [Fullscreen](#fullscreen)
 - [3. The UniversalViewer Class](#3-the-universalviewer-class)
@@ -46,9 +46,9 @@ The following makes the assumption that your implementation of the viewer matche
 </script>
 ```
 
-# 1. Entrypoint - index.ts
+# 1. Entrypoint
 
-The entrypoint file `index.ts` loads `shim-jquery` to import jQuery, and puts the `jQuery` and `$` objects in the global namespace `window`.
+The entrypoint file [index.ts](https://github.com/UniversalViewer/universalviewer/blob/dev/src/index.ts) loads `shim-jquery` to import jQuery, and puts the `jQuery` and `$` objects in the global namespace `window`.
 
 It then exports the following classes/enums:
 
@@ -57,13 +57,13 @@ It then exports the following classes/enums:
 3. IIIFEvents
 4. YouTubeEvents
 
-and also exports the `URLAdapater` (as `IIIFURLAdapter`), `UniversalViewer` (as `Viewer`) and finally, `init`.
+and also exports the `URLAdapter` (as `IIIFURLAdapter`), `UniversalViewer` (as `Viewer`) and finally, `init`.
  
-# 2. Initialisation - init.ts
+# 2. Initialisation
 
-Init is a function in `init.ts` that initialises and embeds the viewer into a target container DOM element, handles resizing, fullscreen toggling, and error handling.
+`init` is a function in [Init.ts](https://github.com/UniversalViewer/universalviewer/blob/dev/src/Init.ts) that initialises and embeds the viewer into a target container DOM element, handles resizing, fullscreen toggling, and error handling.
 
-It returns an instance of [UniversalViewer](#universalviewer)
+It returns an instance of [UniversalViewer](#3-the-universalviewer-class)
 
 `init = (el: string | HTMLDivElement, data)`
 
@@ -102,7 +102,7 @@ Currently the following content handlers exist:
 - IIIFContentHandler
 - YouTubeContentHandler
 
-It dynamically imports the relevant handler (using Webpack's lazy-loading) from the `ContentHandler: IContentHandlerRegistry` constant and instantiates its `default` export, passing the `IUVOptions`, a `UVAdapter` instance (usually null, may be a `URLAdapater` instance), and any externally registered event handlers.
+It dynamically imports the relevant handler (using Webpack's lazy-loading) from the `ContentHandler: IContentHandlerRegistry` constant and instantiates its `default` export, passing the `IUVOptions`, a `UVAdapter` instance (usually null, may be a `URLAdapter` instance), and any externally registered event handlers.
 
 These external handlers are set via the `on()` function, e.g.
 
