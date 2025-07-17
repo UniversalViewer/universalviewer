@@ -55,6 +55,8 @@ See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Ex
 
 Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
+Read the [manual](https://github.com/UniversalViewer/universalviewer/blob/dev/manual/index.md) for information on using, configuring, and developing for the UV.
+
 <a id="feedback"></a>
 <a id="contributing"></a>
 ## 📣 Contributing and Giving Feedback
