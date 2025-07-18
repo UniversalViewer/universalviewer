@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Async, Bools, Dimensions } from "@edsilv/utils";
+import { Async, Bools, Dimensions } from "../../Utils";
 import {
   Canvas,
   IExternalResource,

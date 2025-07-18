@@ -3,7 +3,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { Config } from "../../extensions/uv-pdf-extension/config/Config";
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
-import { Strings } from "@edsilv/utils";
+import { Strings } from "../../Utils";
 
 export class PDFHeaderPanel extends HeaderPanel<
   Config["modules"]["pdfHeaderPanel"]

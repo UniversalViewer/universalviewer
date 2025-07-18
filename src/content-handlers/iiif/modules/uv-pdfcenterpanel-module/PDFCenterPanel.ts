@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { Events } from "../../../../Events";
 import { loadScripts } from "../../../../Utils";

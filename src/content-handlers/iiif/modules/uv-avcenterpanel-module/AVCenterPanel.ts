@@ -12,7 +12,7 @@ import {
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
 import { AVComponent } from "@iiif/iiif-av-component/dist-esmodule";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";
 

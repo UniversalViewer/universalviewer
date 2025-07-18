@@ -3,7 +3,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { GalleryComponent } from "../uv-shared-module/GalleryComponent";
 // import { GalleryComponent } from "../../GalleryComponent";
 import { MultiSelectState } from "@iiif/manifold";

@@ -11,7 +11,7 @@ import {
   StatusCode,
   Utils,
 } from "manifesto.js";
-import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
+import { Storage, StorageType, StorageItem, Urls } from "../../Utils";
 import { HTTPStatusCode } from "../../HTTPStatusCodes";
 
 export class Auth1 {

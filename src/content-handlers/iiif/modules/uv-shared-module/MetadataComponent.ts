@@ -7,7 +7,7 @@ import {
   UriLabeller,
 } from "@iiif/manifold";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
-import { Clipboard, Device, Strings } from "@edsilv/utils";
+import { Clipboard, Device, Strings } from "../../Utils";
 import toggleExpandTextByLines from "./toggleExpandTextByLines";
 
 type csvvalue = string | null;

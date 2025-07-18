@@ -11,6 +11,7 @@ const config = [
   {
     entry: {
       UV: ["./src/index.ts"],
+      Utils: ["./src/content-handlers/iiif/Utils.ts"],
     },
     mode: "production",
     output: {
@@ -20,6 +21,7 @@ const config = [
       library: "UV",
       umdNamedDefine: true,
       chunkFilename: "[name].[contenthash].js",
+      filename: "[name].js",
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],

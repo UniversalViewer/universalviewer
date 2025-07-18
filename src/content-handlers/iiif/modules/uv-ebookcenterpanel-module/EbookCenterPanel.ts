@@ -1,4 +1,4 @@
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { EbookExtensionEvents } from "../../extensions/uv-ebook-extension/Events";

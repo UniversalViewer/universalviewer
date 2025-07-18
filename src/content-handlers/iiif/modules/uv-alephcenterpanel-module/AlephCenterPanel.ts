@@ -6,7 +6,7 @@ import { Orientation } from "./Orientation";
 import { Position } from "../uv-shared-module/Position";
 import { Units } from "./Units";
 import { ControlsType } from "./ControlsType";
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import {
   IExternalResource,
   Canvas,

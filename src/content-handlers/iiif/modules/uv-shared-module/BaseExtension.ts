@@ -41,7 +41,7 @@ import {
   StorageType,
   Urls,
   Strings,
-} from "@edsilv/utils";
+} from "../../Utils";
 import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";

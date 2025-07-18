@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { Bools, Clipboard, Numbers } from "@edsilv/utils";
+import { Bools, Clipboard, Numbers } from "../../Utils";
 import type { ILabelValuePair } from "@iiif/manifold";
 import type { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";

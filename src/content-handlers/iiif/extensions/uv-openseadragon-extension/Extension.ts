@@ -20,7 +20,7 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Bools, Maths, Strings } from "@edsilv/utils";
+import { Bools, Maths, Strings } from "../../Utils";
 import {
   IIIFResourceType,
   ExternalResourceType,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Files, Maths, Strings } from "@edsilv/utils";
+import { Files, Maths, Strings } from "../../Utils";
 import {
   Canvas,
   Size,

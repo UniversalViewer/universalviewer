@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { BaseView } from "./BaseView";
 

@@ -3,7 +3,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
-import { Bools, Files, Strings } from "@edsilv/utils";
+import { Bools, Files, Strings } from "../../Utils";
 import {
   Annotation,
   AnnotationBody,
