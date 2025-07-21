@@ -18,7 +18,9 @@ const config = [
       path: resolvePath("dist/umd"),
       publicPath: "auto",
       libraryTarget: "umd",
-      library: "UV",
+        library: (pathData) => {
+        return pathData.chunk.name === "Utils" ? "utils" : "UV";
+      },
       umdNamedDefine: true,
       chunkFilename: "[name].[contenthash].js",
       filename: "[name].js",
