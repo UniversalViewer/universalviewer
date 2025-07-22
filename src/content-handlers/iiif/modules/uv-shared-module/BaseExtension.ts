@@ -32,7 +32,7 @@ import {
   Range,
 } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
-import * as KeyCodes from "@edsilv/key-codes";
+import * as KeyCodes from "../../KeyCodes";
 import {
   Bools,
   Documents,
