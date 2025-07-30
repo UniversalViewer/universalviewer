@@ -39,24 +39,20 @@ export class PDFCenterPanel extends CenterPanel<
     super($element);
   }
 
-  private _getDecreasedScale(): number
-  {
+  private _getDecreasedScale(): number {
     return this._scale > 0.5 ? this._scale - 0.5 : this._scale / 1.5;
   }
 
-  private _getIncreasedScale(): number
-  {
+  private _getIncreasedScale(): number {
     return this._scale >= 0.5 ? this._scale + 0.5 : this._scale * 1.5;
   }
 
-  private _getMinScale(): number
-  {
+  private _getMinScale(): number {
     const minScale = Number(this.options.minScale);
     return minScale > 0 ? minScale : 0.7;
   }
 
-  private _getMaxScale(): number
-  {
+  private _getMaxScale(): number {
     const maxScale = Number(this.options.maxScale);
     return maxScale > 0 ? maxScale : 5;
   }
