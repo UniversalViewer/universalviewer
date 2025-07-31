@@ -1,6 +1,6 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Time plan > Create valid timeplans > Short range contains valid canvas indexes 1`] = `
+exports[`Time plan Create valid timeplans Short range contains valid canvas indexes 1`] = `
 {
   "canvases": [
     "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005096109.0x000001/canvas/node-id-000002",
@@ -428,7 +428,7 @@ exports[`Time plan > Create valid timeplans > Short range contains valid canvas 
 }
 `;
 
-exports[`Time plan > Create valid timeplans > row 3 contains valid canvas indexes 1`] = `
+exports[`Time plan Create valid timeplans row 3 contains valid canvas indexes 1`] = `
 {
   "canvases": [
     "https://apiirc.ad.bl.uk/metadata/iiif/ark:/81055/tvdc_100005114787.0x000004",

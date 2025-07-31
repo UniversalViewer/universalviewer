@@ -1,4 +1,7 @@
-import { describe, test, expect } from "vitest";
+/**
+ * @jest-environment jsdom
+ */
+
 import { TimePlanPlayer } from "../src/elements/timeplan-player";
 import { CompositeMediaElement } from "../src/elements/composite-media-element";
 import { timelineTime } from "../src/helpers/relative-time";

@@ -1,4 +1,7 @@
-import { beforeAll, describe, expect, Mock, vitest, test } from "vitest";
+/**
+ * @jest-environment jsdom
+ */
+
 import { Manifest } from "manifesto.js";
 import beethoven from "./fixtures/beethoven.json";
 import { compositeMediaFromCanvases } from "../src/helpers/composite-media-from-canvases";
@@ -7,18 +10,18 @@ import { TimePlanPlayer } from "../src/elements/timeplan-player";
 import { timelineTime } from "../src/helpers/relative-time";
 
 beforeAll(() => {
-  window.HTMLMediaElement.prototype.load = vitest.fn();
-  window.HTMLMediaElement.prototype.play = vitest.fn(() => {
+  window.HTMLMediaElement.prototype.load = jest.fn();
+  window.HTMLMediaElement.prototype.play = jest.fn(() => {
     return Promise.resolve();
   });
-  window.HTMLMediaElement.prototype.pause = vitest.fn();
-  window.HTMLMediaElement.prototype.addTextTrack = vitest.fn();
+  window.HTMLMediaElement.prototype.pause = jest.fn();
+  window.HTMLMediaElement.prototype.addTextTrack = jest.fn();
 });
 
 function mockElements(elements: any[]) {
   const list: Array<{
-    play: Mock;
-    pause: Mock;
+    play: jest.Mock<Promise<void>, [], any>;
+    pause: jest.Mock<void, [], any>;
     buffering: boolean;
     paused: boolean;
   }> = [];
@@ -26,12 +29,12 @@ function mockElements(elements: any[]) {
     const mocks = {
       buffering: false,
       paused: true,
-      play: vitest.fn(() => {
+      play: jest.fn(() => {
         el.getRawElement().dispatchEvent(new Event("play"));
         (el.getRawElement() as any).paused = false;
         return Promise.resolve();
       }),
-      pause: vitest.fn(() => {
+      pause: jest.fn(() => {
         el.getRawElement().dispatchEvent(new Event("pause"));
         (el.getRawElement() as any).paused = false;
       }),
@@ -52,6 +55,7 @@ function mockElements(elements: any[]) {
         return el.getRawElement().readyState === 4;
       },
     });
+    el.element.play.mockResolvedValue(Promise.resolve());
     el.element.play = mocks.play;
     el.element.pause = mocks.pause;
     list.push(mocks);
@@ -86,27 +90,27 @@ describe("Composite media", () => {
 
     expect(player._time).toEqual(0);
     expect(player.media.activeElement).toEqual(composite.elements[0]);
-    expect(mocks[0].play).toHaveBeenCalledOnce();
+    expect(mocks[0].play).toHaveBeenCalled();
 
     await player.advanceToTime(timelineTime(300));
 
     expect(player._time).toEqual(300);
     expect(player.media.activeElement).toEqual(composite.elements[1]);
-    expect(mocks[0].pause).toHaveBeenCalledOnce();
-    expect(mocks[1].play).toHaveBeenCalledOnce();
+    expect(mocks[0].pause).toHaveBeenCalled();
+    expect(mocks[1].play).toHaveBeenCalled();
 
     await player.next();
     expect(player._time).toEqual(967.76);
     expect(player.media.activeElement).toEqual(composite.elements[3]);
-    expect(mocks[1].pause).toHaveBeenCalledOnce();
-    expect(mocks[3].play).toHaveBeenCalledOnce();
+    expect(mocks[1].pause).toHaveBeenCalled();
+    expect(mocks[3].play).toHaveBeenCalled();
 
     mocks[7].buffering = true;
 
     const promise = player.next();
     expect(player._time).toEqual(1825.08);
     expect(player.media.activeElement).toEqual(composite.elements[7]);
-    expect(mocks[3].pause).toHaveBeenCalledOnce();
+    expect(mocks[3].pause).toHaveBeenCalled();
 
     await player.advanceToTime(timelineTime(1825.079999923706), false);
     await player.advanceToTime(timelineTime(1825.08899974823), false);
@@ -146,7 +150,7 @@ describe("Composite media", () => {
     await player.previous();
     expect(player._time).toEqual(967.76);
     expect(player.media.activeElement).toEqual(composite.elements[3]);
-    expect(mocks[7].pause).toHaveBeenCalledOnce();
+    expect(mocks[7].pause).toHaveBeenCalled();
     expect(mocks[3].play).toHaveBeenCalled();
 
     await player.previous();

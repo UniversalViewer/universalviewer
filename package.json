@@ -10,6 +10,9 @@
     "dist/",
     "webpack-helpers.js"
   ],
+  "globals": {
+    "window": {}
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "typings": "dist/cjs/index.d.ts",
@@ -29,8 +32,6 @@
     "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
     "docs": "typedoc --plugin typedoc-plugin-missing-exports ; echo docs.universalviewer.io > docs/CNAME",
     "test": "jest",
-    "test:vitest": "vitest",
-    "vitest:test:reporter": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
     "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
     "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
     "findMissingTranslations": "node scripts/validate_locale.ts missingTranslations",
@@ -73,6 +74,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "5.6.3",
     "jest": "^29",
+    "jest-environment-jsdom": "^30.0.4",
     "jest-puppeteer": "^10",
     "less": "4.1.2",
     "less-loader": "10.1.0",
@@ -134,8 +136,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.13.0",
-    "vite": "^6.3.5",
-    "vitest": "^3.2.4",
     "waveform-panel": "^1.2.0",
     "xss": "1.0.15",
     "zustand": "^5.0.3"
@@ -156,7 +156,8 @@
       ]
     },
     "testPathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/src/content-handlers/iiif/modules/iiif-av-component-module/__tests__/fixtures/"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [

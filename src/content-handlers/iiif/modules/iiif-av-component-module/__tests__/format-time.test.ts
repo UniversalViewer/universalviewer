@@ -1,4 +1,7 @@
-import { describe, expect, test } from "vitest";
+/**
+ * @jest-environment jsdom
+ */
+
 import { formatTime } from "../src/helpers/format-time";
 
 describe("format time", () => {
