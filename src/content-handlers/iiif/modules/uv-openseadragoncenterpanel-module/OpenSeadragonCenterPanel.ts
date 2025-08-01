@@ -951,20 +951,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     let navigatorWidth: number;
     let navigatorHeight: number;
 
-    if (this.extension.helper.isHorizontallyAligned()) {
-      navigatorWidth = viewportWidth;
-      navigatorHeight = navigatorWidth / contentAspectRatio;
-
-      // Enforce max height
-      if (navigatorHeight > maxNavigatorHeight) {
-        navigatorHeight = maxNavigatorHeight;
-      }
-
-      // Enforce min height
-      if (navigatorHeight < minHorizontalNavigatorHeight) {
-        navigatorHeight = minHorizontalNavigatorHeight;
-      }
-    } else {
+    if (this.extension.helper.isVerticallyAligned()) {
       navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
       navigatorWidth = navigatorHeight * contentAspectRatio;
 
@@ -976,6 +963,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       // Enforce min width
       if (navigatorWidth < minVerticalNavigatorWidth) {
         navigatorWidth = minVerticalNavigatorWidth;
+      }
+    } else {
+      navigatorWidth = viewportWidth;
+      navigatorHeight = navigatorWidth / contentAspectRatio;
+
+      // Enforce max height
+      if (navigatorHeight > maxNavigatorHeight) {
+        navigatorHeight = maxNavigatorHeight;
+      }
+
+      // Enforce min height
+      if (navigatorHeight < minHorizontalNavigatorHeight) {
+        navigatorHeight = minHorizontalNavigatorHeight;
       }
     }
 
