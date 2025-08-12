@@ -8,7 +8,7 @@ import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
 import { sanitize } from "../../../../Utils";
 import { Bools, Strings } from "@edsilv/utils";
-import * as KeyCodes from "@edsilv/key-codes";
+import * as KeyCodes from "../../KeyCodes";
 import { AnnotationGroup } from "@iiif/manifold";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";

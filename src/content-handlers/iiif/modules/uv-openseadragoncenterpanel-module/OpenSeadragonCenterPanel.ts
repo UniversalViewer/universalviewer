@@ -321,6 +321,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           DOWN: pixel,
         },
       },
+      // The max number of milliseconds that an image job may take to complete.
+      timeout: this.config.options.tileTimeout || 30_000,
     });
 
     const that = this;

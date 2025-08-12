@@ -6,7 +6,7 @@ import {
   ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
-import * as KeyCodes from "@edsilv/key-codes";
+import * as KeyCodes from "../../KeyCodes";
 import { Dates, Keyboard, Maths, Strings } from "@edsilv/utils";
 import { ExtendedLeftPanel } from "../../extensions/config/ExtendedLeftPanel";
 
