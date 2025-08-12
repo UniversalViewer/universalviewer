@@ -339,9 +339,9 @@ export class CanvasInstance extends BaseComponent {
     // @todo make the buttons for FF and FR configurable.
     this._$controlsContainer.append(
       this._$prevButton,
-      this._data.enableFastRewind ? this._$fastRewind : null,
+      this._data.enableFastRewind ? this._$fastRewind : "true",
       this._$playButton,
-      this._data.enableFastForward ? this._$fastForward : null,
+      this._data.enableFastForward ? this._$fastForward : "true",
       this._$nextButton,
       this._$timeDisplay,
       $volume
@@ -393,10 +393,11 @@ export class CanvasInstance extends BaseComponent {
                 if (clonedRange.canvases && clonedRange.canvases.length) {
                   for (let i = 0; i < clonedRange.canvases.length; i++) {
                     if (isVirtual(this._data.canvas)) {
-                      clonedRange.canvases[i] = retargetTemporalComponent(
-                        this._data.canvas.canvases,
-                        clonedRange.__jsonld.items[i].id
-                      );
+                      clonedRange.canvases[i] =
+                        retargetTemporalComponent(
+                          this._data.canvas.canvases,
+                          clonedRange.__jsonld.items[i].id
+                        ) ?? "";
                     }
                   }
                 }
@@ -422,7 +423,7 @@ export class CanvasInstance extends BaseComponent {
     const canvasHeight: number = this._data.canvas.getHeight();
 
     if (!canvasWidth) {
-      this._canvasWidth = this.$playerElement.parent().width(); // this._data.defaultCanvasWidth;
+      this._canvasWidth = this.$playerElement.parent().width() ?? 1100; // this._data.defaultCanvasWidth;
     } else {
       this._canvasWidth = canvasWidth;
     }
@@ -1095,7 +1096,7 @@ export class CanvasInstance extends BaseComponent {
       }
 
       const ratio =
-        this._$canvasTimelineContainer.width() /
+        (this._$canvasTimelineContainer.width() ?? 1100) /
         this.timePlanPlayer.getDuration();
       this._$durationHighlight.show();
 
@@ -1149,7 +1150,8 @@ export class CanvasInstance extends BaseComponent {
         const totalDuration: number = this._getDuration();
 
         // get the length of the timeline container
-        const timelineLength: number = this._$canvasTimelineContainer.width();
+        const timelineLength: number =
+          this._$canvasTimelineContainer.width() ?? 400;
 
         // get the ratio of seconds to length
         const ratio: number = timelineLength / totalDuration;
@@ -1232,12 +1234,12 @@ export class CanvasInstance extends BaseComponent {
 
     $hoverHighlight.width(x);
 
-    const fullWidth: number = $container.width();
+    const fullWidth: number = $container.width() ?? 1100;
     const ratio: number = x / fullWidth;
     const seconds: number = Math.min(duration * ratio);
     $hoverPreview.find(".label").text(formatTime(seconds));
-    const hoverPreviewWidth: number = $hoverPreview.outerWidth();
-    const hoverPreviewHeight: number = $hoverPreview.outerHeight();
+    const hoverPreviewWidth: number = $hoverPreview.outerWidth() ?? 250;
+    const hoverPreviewHeight: number = $hoverPreview.outerHeight() ?? 250;
 
     let left: number = x - hoverPreviewWidth * 0.5;
     let arrowLeft: number = hoverPreviewWidth * 0.5 - 6;
@@ -2310,14 +2312,16 @@ export class CanvasInstance extends BaseComponent {
         // room between buttons
         if (
           this._data.halveAtWidth !== undefined &&
-          this.$playerElement.parent().width() < this._data.halveAtWidth
+          (this.$playerElement.parent().width() ?? 1100) <
+            this._data.halveAtWidth
         ) {
           this._$canvasContainer.height(
-            this.$playerElement.parent().height() / 2
+            (this.$playerElement.parent().height() ?? 650) / 2
           );
         } else {
           this._$canvasContainer.height(
-            this.$playerElement.parent().height() - $options.height()
+            (this.$playerElement.parent().height() ?? 650) -
+              ($options.height() ?? 450)
           );
         }
       }

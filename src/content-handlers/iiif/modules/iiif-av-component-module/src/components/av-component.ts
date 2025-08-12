@@ -768,12 +768,11 @@ export class AVComponent extends BaseComponent {
     if (currentCanvas) {
       const $options: JQuery =
         currentCanvas.$playerElement.find(".options-container");
-      const containerWidth: number = currentCanvas.$playerElement
-        .parent()
-        .width();
+      const containerWidth: number =
+        currentCanvas.$playerElement.parent().width() ?? 1100;
       const containerHeight: number =
-        currentCanvas.$playerElement.parent().height() -
-        ($options.height() as number);
+        currentCanvas.$playerElement.parent().height() ??
+        500 - ($options.height() as number);
 
       if (expanded) {
         return {

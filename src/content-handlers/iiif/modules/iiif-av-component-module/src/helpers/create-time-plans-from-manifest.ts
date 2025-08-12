@@ -8,8 +8,12 @@ import {
   TimelineTime,
   timelineTime,
 } from "./relative-time";
+import { MediaElement } from "../elements/media-element";
 
-export function createTimePlansFromManifest(manifest: Manifest) {
+export function createTimePlansFromManifest(
+  manifest: Manifest,
+  mediaElements?: MediaElement[]
+) {
   const parseRange = (
     range: Range,
     _rangeStack: string[] = [],

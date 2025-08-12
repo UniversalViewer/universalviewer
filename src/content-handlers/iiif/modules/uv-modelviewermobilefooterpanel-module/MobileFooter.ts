@@ -20,7 +20,9 @@ export class FooterPanel<
     setTimeout(() => {
       this.$options.css(
         "left",
-        Math.floor(this.$element.width() / 2 - this.$options.width() / 2)
+        Math.floor(
+          (this.$element.width() ?? 250) / 2 - (this.$options.width() ?? 25) / 2
+        )
       );
     }, 100);
   }

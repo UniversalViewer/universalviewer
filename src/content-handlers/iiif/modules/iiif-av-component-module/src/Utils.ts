@@ -105,7 +105,7 @@ export class AVComponentUtils {
     seconds = Math.floor((seconds % (60 * 60)) % 60);
     seconds = seconds >= 10 ? seconds : "0" + seconds;
 
-    if (hours >= 1) {
+    if (+hours >= 1) {
       hourValue = hours + ":";
     } else {
       hourValue = "";

@@ -120,7 +120,7 @@ export class FileLinkCenterPanel extends CenterPanel<
     }
 
     this.$scroll.height(
-      this.$content.height() - this.$scroll.verticalMargins()
+      (this.$content.height() ?? 650) - this.$scroll.verticalMargins()
     );
   }
 }

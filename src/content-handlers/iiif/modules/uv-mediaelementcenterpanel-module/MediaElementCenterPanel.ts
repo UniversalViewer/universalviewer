@@ -459,8 +459,8 @@ export class MediaElementCenterPanel extends CenterPanel<
     const size = Dimensions.fitRect(
       this.mediaWidth,
       this.mediaHeight,
-      this.$content.width(),
-      this.$content.height()
+      this.$content.width() ?? 1100,
+      this.$content.height() ?? 650
     );
 
     this.$container.height(size.height);

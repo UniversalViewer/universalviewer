@@ -317,6 +317,8 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   resize(): void {
     super.resize();
 
-    this.$main.height(this.$element.height() - this.$top.outerHeight(true));
+    this.$main.height(
+      (this.$element.height() ?? 650) - (this.$top.outerHeight(true) ?? 550)
+    );
   }
 }

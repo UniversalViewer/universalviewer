@@ -393,7 +393,7 @@ export class AVCenterPanel extends CenterPanel<
     super.resize();
 
     if (resizeAVComponent && this.avcomponent) {
-      this.$avcomponent.height(this.$content.height());
+      this.$avcomponent.height(this.$content.height() ?? 650);
       this.avcomponent.resize();
     }
   }

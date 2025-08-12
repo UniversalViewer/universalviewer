@@ -95,7 +95,7 @@ export class Dialogue<
 
   setDockedPosition(): void {
     let top: number = Math.floor(
-      this.extension.height() - this.$element.outerHeight(true)
+      this.extension.height() - (this.$element.outerHeight(true) ?? 100)
     );
     let left: number = 0;
     let arrowLeft: number = 0;
@@ -108,7 +108,7 @@ export class Dialogue<
       const a: number = (<any>this.$triggerButton.offset()).top;
       const b: number = (<JQueryCoordinates>this.extension.$element.offset())
         .top;
-      const d: number = this.$element.outerHeight(true);
+      const d: number = this.$element.outerHeight(true) ?? 100;
       const e: number = a - b - d;
 
       top = e + verticalPadding;
@@ -123,9 +123,9 @@ export class Dialogue<
       left =
         Math.floor(
           this.extension.width() * normalisedPos -
-            this.$element.width() * normalisedPos
+            (this.$element.width() ?? 75) * normalisedPos
         ) + horizontalPadding;
-      arrowLeft = Math.floor(this.$element.width() * normalisedPos);
+      arrowLeft = Math.floor((this.$element.width() ?? 75) * normalisedPos);
     }
 
     this.$bottom.css("backgroundPosition", arrowLeft + "px 0px");
@@ -203,8 +203,12 @@ export class Dialogue<
     super.resize();
 
     this.$element.css({
-      top: Math.floor(this.extension.height() / 2 - this.$element.height() / 2),
-      left: Math.floor(this.extension.width() / 2 - this.$element.width() / 2),
+      top: Math.floor(
+        this.extension.height() / 2 - (this.$element.height() ?? 100) / 2
+      ),
+      left: Math.floor(
+        this.extension.width() / 2 - (this.$element.width() ?? 75) / 2
+      ),
     });
   }
 

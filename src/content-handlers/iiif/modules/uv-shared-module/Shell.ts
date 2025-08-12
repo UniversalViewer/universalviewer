@@ -93,14 +93,20 @@ export class Shell extends BaseView<BaseConfig> {
       this.$overlays.height(this.extension.height());
     }, 1);
 
+    const headerVisible: boolean = isVisible(this.$headerPanel) ?? true;
+    const footerVisible: boolean = isVisible(this.$footerPanel) ?? true;
+    const mobileFooterVisible: boolean =
+      isVisible(this.$mobileFooterPanel) ?? true;
+    const headerHeight: number = this.$headerPanel.height() ?? 50;
+    const footerHeight: number = this.$footerPanel.height() ?? 50;
+    const mobileFooterHeight: number = this.$mobileFooterPanel.height() ?? 50;
     const mainHeight: number =
-      this.$element.height() -
-      parseInt(this.$mainPanel.css("paddingTop")) -
-      (isVisible(this.$headerPanel) ? this.$headerPanel.height() : 0) -
-      (isVisible(this.$footerPanel) ? this.$footerPanel.height() : 0) -
-      (isVisible(this.$mobileFooterPanel)
-        ? this.$mobileFooterPanel.height()
-        : 0);
+      this.$element.height() ??
+      500 -
+        parseInt(this.$mainPanel.css("paddingTop")) -
+        (headerVisible ? headerHeight : 0) -
+        (footerVisible ? footerHeight : 0) -
+        (mobileFooterVisible ? mobileFooterHeight : 0);
 
     this.$mainPanel.height(mainHeight);
   }

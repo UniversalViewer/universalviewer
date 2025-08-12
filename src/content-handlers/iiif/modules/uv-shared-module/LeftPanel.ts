@@ -60,7 +60,7 @@ export class LeftPanel<
   }
 
   getFullTargetWidth(): number {
-    return this.$element.parent().width();
+    return this.$element.parent().width() ?? 1100;
   }
 
   toggleFinish(): void {

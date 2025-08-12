@@ -28,7 +28,7 @@ export default function jqueryPlugins($) {
     return this.each(function () {
       const $this: JQuery = $(this);
       $this.addClass("disabled");
-      $this.data("tabindex", $this.attr("tabindex"));
+      $this.data("tabindex", `${$this.attr("tabindex")}`);
       $this.removeAttr("tabindex");
     });
   };
@@ -69,10 +69,10 @@ export default function jqueryPlugins($) {
 
       // get the width of the span.
       // if it's wider than the container, remove a word until it's not.
-      if ($spanElem.width() > $self.width()) {
+      if (($spanElem.width() ?? 215) > ($self.width() ?? 200)) {
         let lastText: string | null = null;
 
-        while ($spanElem.width() > $self.width()) {
+        while (($spanElem.width() ?? 215) > ($self.width() ?? 200)) {
           let t: string = $spanElem.html();
           t = t.substring(0, t.lastIndexOf(" ")) + "&hellip;";
           if (t === lastText) break;
@@ -201,7 +201,7 @@ export default function jqueryPlugins($) {
       el: Element
     ) {
       const $el: JQuery = $(el);
-      const tabIndex: number = parseInt($el.attr("tabindex"));
+      const tabIndex: number = parseInt(`${$el.attr("tabindex")}`);
       if (tabIndex > maxTabIndex) {
         maxTabIndex = tabIndex;
         $elementWithGreatestTabIndex = $el;
@@ -260,12 +260,13 @@ export default function jqueryPlugins($) {
       const $current: JQuery = $(this).is("iframe")
         ? $(this).contents().find("body")
         : $(this);
-      const offset: JQueryCoordinates = $current.offset();
+      const offset: JQueryCoordinates =
+        $current.offset() ?? $current.position();
       result =
         offset.left <= $.mlp.x &&
-        offset.left + $current.outerWidth() > $.mlp.x &&
+        offset.left + ($current.outerWidth() ?? 1100) > $.mlp.x &&
         offset.top <= $.mlp.y &&
-        offset.top + $current.outerHeight() > $.mlp.y;
+        offset.top + ($current.outerHeight() ?? 650) > $.mlp.y;
     });
     return result;
   };
@@ -342,7 +343,9 @@ export default function jqueryPlugins($) {
     return this.each(function () {
       const $self: JQuery = $(this);
       if ($self.contents().length > 0) {
-        const $lastElement: JQuery = $self.contents().last();
+        const $lastElement: JQuery<Element | Text | Comment | Document> = $self
+          .contents()
+          .last();
         if ($lastElement[0].nodeType === 3) {
           const words: string[] = $lastElement.text().trim().split(" ");
           if (words.length > 1) {
@@ -451,16 +454,16 @@ export default function jqueryPlugins($) {
       );
       // when height changes, store string, then pick from line counts
       const stringsByLine: string[] = [expandedText];
-      let lastHeight: number = $self.height();
+      let lastHeight: number = $self.height() ?? 40;
       // Until empty
       while ($value.text().length > 0) {
         $value.removeLastWord();
         const html: string = $value.html();
         $value.append($buttonPad);
 
-        if (lastHeight > $value.height()) {
+        if (lastHeight > ($value.height() ?? 40)) {
           stringsByLine.unshift(html);
-          lastHeight = $value.height();
+          lastHeight = $value.height() ?? 40;
         }
 
         $buttonPad.remove();
@@ -529,7 +532,7 @@ export default function jqueryPlugins($) {
   ) {
     return this.each(function () {
       const $self: JQuery = $(this);
-      let attr: string = $self.attr(attrName);
+      let attr: string = $self.attr(attrName) ?? "";
 
       if (attr && attr.indexOf(oldVal) === 0) {
         attr = attr.replace(oldVal, newVal);
@@ -553,70 +556,203 @@ export default function jqueryPlugins($) {
   };
 }
 
-interface JQuery {
-  attr: any;
-  css: any;
-  append: any;
-  text: any;
-  toggle: any;
-  html: any;
-  empty: any;
-  one: any;
-  remove: any;
-  height: any;
-  contents: any;
-  outerWidth: any;
-  outerHeight: any;
-  offset: any;
-  mousemove: any;
-  find: any;
-  data: any;
-  addClass: any;
-  removeClass: any;
-  width: any;
-  removeAttr: any;
-  prop: any;
-  is: any;
-  checkboxButton(onClicked: (checked: boolean) => void): void;
-  disable(): void;
-  ellipsis(chars: number): string;
-  ellipsisFill(text?: string): any;
-  ellipsisFixed(chars: number, buttonText: string): any;
-  ellipsisHtmlFixed(chars: number, callback: () => void): any;
-  enable(): void;
-  equaliseHeight(reset?: boolean, average?: boolean): any;
-  getVisibleElementWithGreatestTabIndex(): any;
-  horizontalMargins(): number;
-  horizontalPadding(): number;
-  ismouseover(): boolean;
-  leftMargin(): number;
-  leftPadding(): number;
-  on(
-    events: string,
-    handler: (eventObject: JQueryEventObject, ...args: any[]) => any,
-    wait: Number
-  ): JQuery;
-  onEnter(callback: () => void): any;
-  onPressed(callback: (e: any) => void): any;
-  removeLastWord(chars?: number, depth?: number): any;
-  rightMargin(): number;
-  rightPadding(): number;
-  switchClass(class1: string, class2: string): any;
-  targetBlank(): void;
-  toggleExpandText(
-    chars: number,
-    lessText: string,
-    moreText: string,
-    cb: () => void
-  ): any;
-  toggleExpandTextByLines(
-    lines: number,
-    lessText: string,
-    moreText: string,
-    cb: () => void
-  ): any;
-  toggleText(text1: string, text2: string): any;
-  updateAttr(attrName: string, oldVal: string, newVal: string): void;
-  verticalMargins(): number;
-  verticalPadding(): number;
+declare global {
+  interface JQuery {
+    attr(
+      attributeName: string,
+      value_function:
+        | string
+        | number
+        | null
+        | ((
+            this: Element,
+            index: number,
+            attr: string
+          ) => string | number | void | undefined)
+    ): this;
+    css(
+      propertyName: string,
+      value_function:
+        | string
+        | number
+        | ((
+            this: Element,
+            index: number,
+            value: string
+          ) => string | number | void | undefined)
+    ): this;
+    append(
+      ...contents: Array<
+        | JQuery.htmlString
+        | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>
+      >
+    ): this;
+    text(
+      text_function:
+        | string
+        | number
+        | boolean
+        | ((
+            this: Element,
+            index: number,
+            text: string
+          ) => string | number | boolean)
+    ): this;
+    toggle(
+      duration: JQuery.Duration,
+      easing: string,
+      complete?: (this: Element) => void
+    ): this;
+    html(
+      htmlString_function:
+        | JQuery.htmlString
+        | JQuery.Node
+        | ((
+            this: Element,
+            index: number,
+            oldhtml: JQuery.htmlString
+          ) => JQuery.htmlString | JQuery.Node)
+    ): this;
+    empty(): this;
+    one<TType extends string, TData>(
+      events: TType,
+      selector: JQuery.Selector,
+      data: TData,
+      handler: JQuery.TypeEventHandler<Element, TData, any, any, TType>
+    ): this;
+    remove(selector?: string): this;
+    height(
+      value_function:
+        | string
+        | number
+        | ((this: Element, index: number, height: number) => string | number)
+    ): this;
+    contents(): JQuery<Element | Text | Comment | Document>;
+    outerWidth(
+      value_function:
+        | string
+        | number
+        | ((this: Element, index: number, width: number) => string | number),
+      includeMargin?: boolean
+    ): this;
+    outerHeight(
+      value_function:
+        | string
+        | number
+        | ((this: Element, index: number, height: number) => string | number),
+      includeMargin?: boolean
+    ): this;
+    offset(
+      coordinates_function:
+        | JQuery.CoordinatesPartial
+        | ((
+            this: Element,
+            index: number,
+            coords: JQuery.Coordinates
+          ) => JQuery.CoordinatesPartial)
+    ): this;
+    mousemove<TData>(
+      eventData: TData,
+      handler: JQuery.TypeEventHandler<
+        Element,
+        TData,
+        Element,
+        Element,
+        "mousemove"
+      >
+    ): this;
+    find<K extends keyof HTMLElementTagNameMap>(
+      selector_element: K | JQuery<K>
+    ): JQuery<HTMLElementTagNameMap[K]>;
+    data(
+      key: string,
+      value: string | number | boolean | symbol | object | null
+    ): this;
+    addClass(
+      className_function:
+        | string
+        | Array<string>
+        | ((this: Element, index: number, currentClassName: string) => string)
+    ): this;
+    removeClass(
+      className_function?:
+        | string
+        | Array<string>
+        | ((this: Element, index: number, className: string) => string)
+        | undefined
+    ): this;
+    width(
+      value_function:
+        | string
+        | number
+        | ((this: Element, index: number, value: number) => string | number)
+    ): this;
+    removeAttr(attributeName: string): this;
+    prop(
+      propertyName: string,
+      value_function:
+        | string
+        | number
+        | boolean
+        | symbol
+        | object
+        | ((this: Element, index: number, oldPropertyValue: any) => any)
+        | null
+        | undefined
+    ): any;
+    is(
+      selector_function_selection_elements:
+        | string
+        | JQuery<HTMLElement>
+        | Element
+        | Array<Element>
+        | ((this: Element, index: number, element: Element) => boolean)
+    ): boolean;
+    checkboxButton(onClicked: (checked: boolean) => void): void;
+    disable(): void;
+    ellipsis(chars: number): string;
+    ellipsisFill(text?: string): any;
+    ellipsisFixed(chars: number, buttonText: string): any;
+    ellipsisHtmlFixed(chars: number, callback: () => void): any;
+    enable(): void;
+    equaliseHeight(reset?: boolean, average?: boolean): any;
+    getVisibleElementWithGreatestTabIndex(): any;
+    horizontalMargins(): number;
+    horizontalPadding(): number;
+    ismouseover(): boolean;
+    leftMargin(): number;
+    leftPadding(): number;
+    on(
+      events: string,
+      handler: (eventObject: JQueryEventObject, ...args: any[]) => any,
+      wait: Number
+    ): JQuery;
+    onEnter(callback: () => void): any;
+    onPressed(callback: (e: any) => void): any;
+    removeLastWord(chars?: number, depth?: number): any;
+    rightMargin(): number;
+    rightPadding(): number;
+    slider(...args: any): any;
+    switchClass(class1: string, class2: string): any;
+    targetBlank(): void;
+    toggleExpandText(
+      chars: number,
+      lessText: string,
+      moreText: string,
+      cb: () => void
+    ): any;
+    toggleExpandTextByLines(
+      lines: number,
+      lessText: string,
+      moreText: string,
+      cb: () => void
+    ): any;
+    toggleText(text1: string, text2: string): any;
+    updateAttr(attrName: string, oldVal: string, newVal: string): void;
+    verticalMargins(): number;
+    verticalPadding(): number;
+  }
+  interface HTMLAnchorElement {
+    extensionHost(): any;
+  }
 }

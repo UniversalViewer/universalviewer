@@ -35,7 +35,11 @@ export class Panel {
 
   onAccessibleClick(
     el: JQuery,
-    callback: (e: JQueryEventObject) => void,
+    callback: (
+      e:
+        | JQuery.ClickEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
+        | JQuery.KeyDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
+    ) => void,
     withClick = true,
     treatAsButton = false
   ) {
@@ -63,11 +67,11 @@ export class Panel {
     const $parent: JQuery = this.$element.parent();
 
     if (this.fitToParentWidth) {
-      this.$element.width($parent.width());
+      this.$element.width($parent.width() ?? 1100);
     }
 
     if (this.fitToParentHeight) {
-      this.$element.height($parent.height());
+      this.$element.height($parent.height() ?? 650);
     }
 
     this.isResized = true;

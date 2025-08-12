@@ -195,11 +195,11 @@ export class ModelViewerCenterPanel extends CenterPanel<
 
     this.$spinner.css(
       "top",
-      this.$content.height() / 2 - this.$spinner.height() / 2
+      (this.$content.height() ?? 650) / 2 - (this.$spinner.height() ?? 50) / 2
     );
     this.$spinner.css(
       "left",
-      this.$content.width() / 2 - this.$spinner.width() / 2
+      (this.$content.width() ?? 1100) / 2 - (this.$spinner.width() ?? 50) / 2
     );
 
     if (this.title) {
@@ -207,8 +207,8 @@ export class ModelViewerCenterPanel extends CenterPanel<
     }
 
     if (this.$modelviewer) {
-      this.$modelviewer.width(this.$content.width());
-      this.$modelviewer.height(this.$content.height());
+      this.$modelviewer.width(this.$content.width() ?? 1100);
+      this.$modelviewer.height(this.$content.height() ?? 650);
     }
   }
 }

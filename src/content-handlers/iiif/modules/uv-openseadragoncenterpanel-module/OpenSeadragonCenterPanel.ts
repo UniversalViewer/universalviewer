@@ -1424,10 +1424,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     super.resize();
 
     this.$viewer.height(
-      this.$content.height() - this.$viewer.verticalMargins()
+      (this.$content.height() ?? 650) - this.$viewer.verticalMargins()
     );
     this.$viewer.width(
-      this.$content.width() - this.$viewer.horizontalMargins()
+      (this.$content.width() ?? 1100) - this.$viewer.horizontalMargins()
     );
 
     if (!this.isCreated) return;
@@ -1438,11 +1438,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$spinner.css(
       "top",
-      this.$content.height() / 2 - this.$spinner.height() / 2
+      (this.$content.height() ?? 650) / 2 - (this.$spinner.height() ?? 50) / 2
     );
     this.$spinner.css(
       "left",
-      this.$content.width() / 2 - this.$spinner.width() / 2
+      (this.$content.width() ?? 1100) / 2 - (this.$spinner.width() ?? 50) / 2
     );
 
     const viewingDirection: ViewingDirection =
@@ -1460,7 +1460,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$prevButton &&
       this.$nextButton
     ) {
-      const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
+      const verticalButtonPos: number = Math.floor(
+        (this.$content.width() ?? 1100) / 2
+      );
 
       switch (viewingDirection) {
         case ViewingDirection.BOTTOM_TO_TOP:
@@ -1468,39 +1470,43 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           this.$nextButton.addClass("up");
           this.$prevButton.css(
             "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
+            verticalButtonPos - (this.$prevButton.outerWidth() ?? 30) / 2
           );
           this.$prevButton.css(
             "top",
-            this.$content.height() - this.$prevButton.height()
+            (this.$content.height() ?? 650) - (this.$prevButton.height() ?? 15)
           );
           this.$nextButton.css(
             "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
+            verticalButtonPos * -1 - (this.$nextButton.outerWidth() ?? 30) / 2
           );
           break;
         case ViewingDirection.TOP_TO_BOTTOM:
           this.$prevButton.css(
             "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
+            verticalButtonPos - (this.$prevButton.outerWidth() ?? 30) / 2
           );
           this.$nextButton.css(
             "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
+            verticalButtonPos * -1 - (this.$nextButton.outerWidth() ?? 30) / 2
           );
           this.$nextButton.css(
             "top",
-            this.$content.height() - this.$nextButton.height()
+            (this.$content.height() ?? 650) - (this.$nextButton.height() ?? 15)
           );
           break;
         default:
           this.$prevButton.css(
             "top",
-            (this.$content.height() - this.$prevButton.height()) / 2
+            ((this.$content.height() ?? 650) -
+              (this.$prevButton.height() ?? 15)) /
+              2
           );
           this.$nextButton.css(
             "top",
-            (this.$content.height() - this.$nextButton.height()) / 2
+            ((this.$content.height() ?? 650) -
+              (this.$nextButton.height() ?? 15)) /
+              2
           );
           break;
       }
@@ -1511,10 +1517,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       if (this.extension.helper.isContinuous()) {
         if (this.extension.helper.isHorizontallyAligned()) {
           const width: number =
-            this.$viewer.width() - this.$viewer.rightMargin();
+            (this.$viewer.width() ?? 1100) - this.$viewer.rightMargin();
           this.$navigator.width(width);
         } else {
-          this.$navigator.height(this.$viewer.height());
+          this.$navigator.height(this.$viewer.height() ?? 650);
         }
       }
     }, 100);

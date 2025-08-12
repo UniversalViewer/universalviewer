@@ -243,7 +243,7 @@ export class CenterPanel<
     ) {
       titleHeight = 0;
     } else {
-      titleHeight = this.$title.outerHeight(true);
+      titleHeight = this.$title.outerHeight(true) ?? 25;
     }
 
     if (
@@ -252,11 +252,13 @@ export class CenterPanel<
     ) {
       subtitleHeight = 0;
     } else {
-      subtitleHeight = this.$subtitle.outerHeight(true);
+      subtitleHeight = this.$subtitle.outerHeight(true) ?? 20;
     }
 
-    this.$content.height(this.$element.height() - titleHeight - subtitleHeight);
-    this.$content.width(this.$element.width());
+    this.$content.height(
+      (this.$element.height() ?? 650) - titleHeight - subtitleHeight
+    );
+    this.$content.width(this.$element.width() ?? 1100);
     const $text = this.$attribution.find(".attribution-text");
 
     $text.css("maxHeight", `calc(${this.$content.height()}px - 100px)`);
@@ -275,7 +277,9 @@ export class CenterPanel<
       }
 
       // hide the attribution if there's no room for it
-      if (this.$content.width() <= this.$attribution.width()) {
+      if (
+        (this.$content.width() ?? 400) <= (this.$attribution.width() ?? 100)
+      ) {
         this.$attribution.hide();
       } else {
         this.$attribution.show();
@@ -290,9 +294,9 @@ export class CenterPanel<
       this.$subtitle.show();
       this.$subtitleWrapper.css(
         "max-height",
-        this.$content.height() + this.$subtitle.outerHeight()
+        (this.$content.height() ?? 20) + (this.$subtitle.outerHeight() ?? 5)
       );
-      this.$subtitleWrapper.width(this.$content.width());
+      this.$subtitleWrapper.width(this.$content.width() ?? 400);
 
       if (!this.subtitleExpanded) {
         this.$subtitleText.width("auto");
@@ -303,19 +307,23 @@ export class CenterPanel<
         // and set its width to that of the container
         // this will make it appear elided.
         // show the expand button
-        if (this.$subtitleText.width() > this.$content.width()) {
+        if (
+          (this.$subtitleText.width() ?? 350) > (this.$content.width() ?? 400)
+        ) {
           this.$subtitleExpand.show();
           this.$subtitleText.addClass("elided");
           this.$subtitleText.width(
-            this.$content.width() -
-              (this.$subtitleExpand.outerWidth() +
+            (this.$content.width() ?? 400) -
+              ((this.$subtitleExpand.outerWidth() ?? 425) +
                 this.$subtitleText.horizontalMargins())
           );
         }
       } else {
         // subtitle expanded
         this.$subtitleText.width(
-          this.$content.width() - this.$subtitleText.horizontalMargins() - 2
+          (this.$content.width() ?? 400) -
+            this.$subtitleText.horizontalMargins() -
+            2
         );
       }
     } else {
