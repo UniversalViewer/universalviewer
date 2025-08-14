@@ -907,7 +907,7 @@ Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-
 
 ##### maxScale
 **Type**: `number`  
-**Default**: 0.7  
+**Default**: 5  
 Minimum scale factor to apply to PDFs when using PDF.js.
 
 ##### minScale
