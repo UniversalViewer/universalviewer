@@ -264,12 +264,12 @@ const DownloadDialogue = ({
         }
 
         return !paged;
-      case DownloadOption.CANVAS_RENDERINGS:
-      case DownloadOption.IMAGE_RENDERINGS:
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
         if (!downloadWholeImageHighResEnabled) {
           return false;
         }
+      case DownloadOption.CANVAS_RENDERINGS:
+      case DownloadOption.IMAGE_RENDERINGS:
 
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
