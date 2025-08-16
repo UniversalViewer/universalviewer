@@ -265,6 +265,7 @@ const DownloadDialogue = ({
 
         return !paged;
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
+        // If high-res download is disabled, bail out now; otherwise drop into cases below.
         if (!downloadWholeImageHighResEnabled) {
           return false;
         }
