@@ -270,7 +270,6 @@ const DownloadDialogue = ({
         }
       case DownloadOption.CANVAS_RENDERINGS:
       case DownloadOption.IMAGE_RENDERINGS:
-
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
