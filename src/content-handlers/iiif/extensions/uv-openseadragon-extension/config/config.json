@@ -361,7 +361,9 @@
         "subtitleEnabled": true,
         "titleEnabled": true,
         "visibilityRatio": 0.5,
-        "zoomToInitialAnnotation": true
+        "zoomToInitialAnnotation": true,
+        "trimAttributionCount": 150,
+        "tileTimeout": 30000
       },
       "content": {
         "attribution": "$attribution",

@@ -24,8 +24,6 @@ export class PDFCenterPanel extends CenterPanel<
   private _canvas: HTMLCanvasElement;
   private _ctx: any;
   private _lastMediaUri: string | null = null;
-  private _maxScale = 5;
-  private _minScale = 0.7;
   private _nextButtonEnabled: boolean = false;
   private _pageIndex: number = 1;
   private _pageIndexPending: number | null = null;
@@ -39,6 +37,24 @@ export class PDFCenterPanel extends CenterPanel<
 
   constructor($element: JQuery) {
     super($element);
+  }
+
+  private _getDecreasedScale(): number {
+    return this._scale > 0.5 ? this._scale - 0.5 : this._scale / 1.5;
+  }
+
+  private _getIncreasedScale(): number {
+    return this._scale >= 0.5 ? this._scale + 0.5 : this._scale * 1.5;
+  }
+
+  private _getMinScale(): number {
+    const minScale = Number(this.options.minScale);
+    return minScale > 0 ? minScale : 0.7;
+  }
+
+  private _getMaxScale(): number {
+    const maxScale = Number(this.options.maxScale);
+    return maxScale > 0 ? maxScale : 5;
   }
 
   create(): void {
@@ -170,24 +186,24 @@ export class PDFCenterPanel extends CenterPanel<
     );
 
     this.extensionHost.subscribe(PDFExtensionEvents.ZOOM_IN, () => {
-      const newScale: number = this._scale + 0.5;
-
-      if (newScale < this._maxScale) {
+      const newScale: number = this._getIncreasedScale();
+      const maxScale: number = this._getMaxScale();
+      if (newScale < maxScale) {
         this._scale = newScale;
       } else {
-        this._scale = this._maxScale;
+        this._scale = maxScale;
       }
 
       this._render(this._pageIndex);
     });
 
     this.extensionHost.subscribe(PDFExtensionEvents.ZOOM_OUT, () => {
-      const newScale: number = this._scale - 0.5;
-
-      if (newScale > this._minScale) {
+      const newScale: number = this._getDecreasedScale();
+      const minScale: number = this._getMinScale();
+      if (newScale > minScale) {
         this._scale = newScale;
       } else {
-        this._scale = this._minScale;
+        this._scale = minScale;
       }
 
       this._render(this._pageIndex);
@@ -214,27 +230,11 @@ export class PDFCenterPanel extends CenterPanel<
     this.disableNextButton();
 
     this.onAccessibleClick(this._$zoomInButton, () => {
-      const newScale: number = this._scale + 0.5;
-
-      if (newScale < this._maxScale) {
-        this._scale = newScale;
-      } else {
-        this._scale = this._maxScale;
-      }
-
-      this._render(this._pageIndex);
+      this.extensionHost.publish(PDFExtensionEvents.ZOOM_IN);
     });
 
     this.onAccessibleClick(this._$zoomOutButton, () => {
-      const newScale: number = this._scale - 0.5;
-
-      if (newScale > this._minScale) {
-        this._scale = newScale;
-      } else {
-        this._scale = this._minScale;
-      }
-
-      this._render(this._pageIndex);
+      this.extensionHost.publish(PDFExtensionEvents.ZOOM_OUT);
     });
   }
 
@@ -362,12 +362,12 @@ export class PDFCenterPanel extends CenterPanel<
     this._$zoomInButton.enable();
 
     //disable zoom if not possible
-    const lowScale: number = this._scale - 0.5;
-    const highScale: number = this._scale + 0.5;
-    if (lowScale < this._minScale) {
+    const lowScale: number = this._getDecreasedScale();
+    const highScale: number = this._getIncreasedScale();
+    if (lowScale < this._getMinScale()) {
       this._$zoomOutButton.disable();
     }
-    if (highScale > this._maxScale) {
+    if (highScale > this._getMaxScale()) {
       this._$zoomInButton.disable();
     }
 

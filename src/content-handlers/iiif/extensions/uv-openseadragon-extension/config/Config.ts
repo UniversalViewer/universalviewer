@@ -127,6 +127,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   showAdjustImageControl: boolean;
   /** Ratio of visibility */
   visibilityRatio: number;
+  /** The maximum amount of time in milliseconds an image operation can take */
+  tileTimeout: number;
   /** Whether to zoom in to first annotation on load */
   zoomToInitialAnnotation: boolean;
 };
