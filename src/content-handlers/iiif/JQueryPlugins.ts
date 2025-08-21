@@ -752,7 +752,4 @@ declare global {
     verticalMargins(): number;
     verticalPadding(): number;
   }
-  interface HTMLAnchorElement {
-    extensionHost(): any;
-  }
 }

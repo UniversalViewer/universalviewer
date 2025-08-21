@@ -101,9 +101,10 @@ export class AuthDialogue extends Dialogue<
       this.$message.html(sanitize(description));
       this.$message.targetBlank();
 
+      var that = this;
       this.$message.find("a").on("click", function () {
         const url: string = $(this).attr("href");
-        this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
+        that.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
       });
     }
 
