@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Maths } from "@edsilv/utils";
+import { Maths } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class Dialogue<

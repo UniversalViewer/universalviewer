@@ -9,7 +9,7 @@ import {
   MultiSelectableRange,
 } from "@iiif/manifold";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
-import { Strings, Maths } from "@edsilv/utils";
+import { Strings, Maths } from "../../Utils";
 
 export interface IGalleryComponentContent {
   searchResult: string;

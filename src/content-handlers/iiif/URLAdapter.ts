@@ -1,5 +1,5 @@
 import { UVAdapter } from "../../UVAdapter";
-import { Urls } from "@edsilv/utils";
+import { Urls } from "../iiif/Utils";
 import { UniversalViewer } from "../../UniversalViewer";
 import { IUVData } from "../../IUVData";
 import { IIIFEvents } from "./IIIFEvents";

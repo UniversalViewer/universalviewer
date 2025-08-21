@@ -1,5 +1,5 @@
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import { Events } from "../../../../Events";
 
 export class Panel {

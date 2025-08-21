@@ -905,6 +905,16 @@ Determines whether the most specific (deeply nested) requiredStatement is displa
 **Default**: `true`  
 Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-rights/) is enabled.
 
+##### maxScale
+**Type**: `number`  
+**Default**: 5  
+Maximum scale factor to apply to PDFs when using PDF.js.
+
+##### minScale
+**Type**: `number`  
+**Default**: 0.7  
+Minimum scale factor to apply to PDFs when using PDF.js.
+
 ##### usePdfJs  
 **Type**: `boolean`  
 **Default**: `true`  

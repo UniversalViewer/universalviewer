@@ -4,7 +4,7 @@ const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../../../Utils";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class CenterPanel<

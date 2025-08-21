@@ -8,7 +8,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { ModelViewerExtensionEvents } from "../../extensions/uv-model-viewer-extension/Events";
 import { Orbit } from "../../extensions/uv-model-viewer-extension/Orbit";
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import ModelViewerExtension from "../../extensions/uv-model-viewer-extension/Extension";
 import { Events } from "../../../../Events";

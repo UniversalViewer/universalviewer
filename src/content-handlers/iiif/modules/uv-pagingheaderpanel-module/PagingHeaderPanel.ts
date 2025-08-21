@@ -7,7 +7,7 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 

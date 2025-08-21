@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Files, Maths, Strings } from "@edsilv/utils";
+import { Files, Maths, Strings } from "../../Utils";
 import {
   Canvas,
   Size,
@@ -264,13 +264,13 @@ const DownloadDialogue = ({
         }
 
         return !paged;
-      case DownloadOption.CANVAS_RENDERINGS:
-      case DownloadOption.IMAGE_RENDERINGS:
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
+        // If high-res download is disabled, bail out now; otherwise drop into cases below.
         if (!downloadWholeImageHighResEnabled) {
           return false;
         }
-
+      case DownloadOption.CANVAS_RENDERINGS:
+      case DownloadOption.IMAGE_RENDERINGS:
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
