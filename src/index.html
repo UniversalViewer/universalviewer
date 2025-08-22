@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta
@@ -62,29 +62,28 @@
       }
 
       #uv-tabs {
-      width: 100%;
-    }
-
-
-    @media (max-width: 767px) {
-      #uv-tabs {
-        display: none;
+        width: 100%;
       }
-    }
 
-    @media (min-width: 768px) {
-      #uv-tabs {
-        width: 90vw;
-        margin-inline: auto;
-        margin-block: 0.25rem;
+      @media (max-width: 767px) {
+        #uv-tabs {
+          display: none;
+        }
       }
-    }
 
-    @media (min-width: 1024px) {
-      #uv-tabs {
-        width: 65vw;
+      @media (min-width: 768px) {
+        #uv-tabs {
+          width: 90vw;
+          margin-inline: auto;
+          margin-block: 0.25rem;
+        }
       }
-    }
+
+      @media (min-width: 1024px) {
+        #uv-tabs {
+          width: 65vw;
+        }
+      }
 
       #uv-controls {
         button,
@@ -142,15 +141,15 @@
 
         .tab {
           display: flex;
-          gap: 0.1rem; 
+          gap: 0.1rem;
         }
 
         .flex-spacer {
-          flex-grow: 1;  
+          flex-grow: 1;
           background-color: white;
           min-width: 0;
           position: relative;
-          top: -1.5rem; 
+          top: -1.5rem;
           left: -1.5rem;
           min-width: 300px;
           margin-left: -1.5px;
@@ -165,30 +164,32 @@
           background: none;
           cursor: pointer;
           background-color: white;
+          color: ButtonFace;
           position: relative;
-          top: -1.5rem; 
+          top: -1.5rem;
           left: -1.5rem;
         }
 
         .tab button.active {
           background-color: ButtonFace;
+          color: ButtonText;
         }
 
         .tabcontent {
           display: none;
         }
 
-      #general {
-        display: block;
+        #general {
+          display: block;
+        }
       }
-    }
 
-    .controls-tab {
+      .controls-tab {
         padding-inline: 1.5rem;
         padding-block: 0.75rem;
         font-weight: 400;
         font-size: 1.25rem;
-        color: rgba(0, 0, 0, 0.73);
+        color: ButtonText;
         border: none;
         background: ButtonFace;
         cursor: pointer;
@@ -221,7 +222,7 @@
       }
 
       /* Config builder */
-      
+
       .toggleButton {
         display: block;
         margin-bottom: 0.5rem;
@@ -243,11 +244,11 @@
       }
 
       .toggleButton.caret-up {
-        background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e');
+        background-image: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 12l4-4 4 4%27/%3e%3c/svg%3e");
       }
 
       .toggleButton.caret-down {
-        background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e');
+        background-image: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e");
       }
 
       /* Explanatory text */
@@ -265,7 +266,6 @@
         position: relative;
         top: 2px;
       }
-
     </style>
     <!-- https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ -->
     <script>
@@ -282,13 +282,10 @@
   </head>
 
   <body>
-
     <div id="uv-tabs">
-      <button id="iiifTabButton" class="controls-tab active">
-          IIIF
-        </button>
-        <button id="youTubeTabButton" class="controls-tab">YouTube</button>
-      </div>
+      <button id="iiifTabButton" class="controls-tab active">IIIF</button>
+      <button id="youTubeTabButton" class="controls-tab">YouTube</button>
+    </div>
 
     <div
       id="uv"
@@ -303,144 +300,250 @@
         <ul id="annotation-list"></ul>
       </div>
 
-     <div id="iiifTab" class="controls-tab-content">
-      <div class="tab">
-        <button class="tablinks active" aria-label="General settings tab" onclick="openTab(event, 'general')">General</button>
-        <button class="tablinks" aria-label="Open Seadragon settings tab" onclick="openTab(event, 'osd')">OpenSeadragon</button>
-        <button class="tablinks" aria-label="AV settings tab" onclick="openTab(event, 'av')">AV</button>
-        <button class="tablinks" aria-label="Annotation settings tab" onclick="openTab(event, 'annotations')">Annotations</button>
-        <button class="tablinks" aria-label="Configuration settings tab" onclick="openTab(event, 'config')">Configuration</button>
-        <div class="flex-spacer"></div>
+      <div id="iiifTab" class="controls-tab-content">
+        <div class="tab">
+          <button
+            class="tablinks active"
+            aria-label="General settings tab"
+            onclick="openTab(event, 'general')"
+          >
+            General
+          </button>
+          <button
+            class="tablinks"
+            aria-label="Open Seadragon settings tab"
+            onclick="openTab(event, 'osd')"
+          >
+            OpenSeadragon
+          </button>
+          <button
+            class="tablinks"
+            aria-label="AV settings tab"
+            onclick="openTab(event, 'av')"
+          >
+            AV
+          </button>
+          <button
+            class="tablinks"
+            aria-label="Annotation settings tab"
+            onclick="openTab(event, 'annotations')"
+          >
+            Annotations
+          </button>
+          <button
+            class="tablinks"
+            aria-label="Configuration settings tab"
+            onclick="openTab(event, 'config')"
+          >
+            Configuration
+          </button>
+          <div class="flex-spacer"></div>
+        </div>
+
+        <!-- General -->
+        <div id="general" class="tabcontent">
+          <h2 class="controls-title">Manifest ID</h2>
+          <div class="flex">
+            <select
+              id="iiifManifestIdSelect"
+              class="py-2 px-3 mr-2 flex-1"
+            ></select>
+            <input id="iiifManifestId" type="text" value="" class="flex-1" />
+          </div>
+          <div class="mt-2">
+            <button id="setIIIFManifestIdButton" class="controls-button">
+              Set IIIF Manifest ID
+            </button>
+          </div>
+          <div class="controls-group">
+            <h2 class="controls-title"></h2>
+            <div class="mt-2">
+              <details>
+                <summary aria-label="More information about using target">
+                  <b>Set Target</b>
+                </summary>
+                <i
+                  >For OpenSeadragon manifests, edit the 'xywh' values at the
+                  end of the URL to modify the view of the image. For AV
+                  manifests, modify the number after 't' to set the
+                  timestamp.</i
+                >
+              </details>
+            </div>
+            <br />
+            <div class="flex mb-2">
+              <input id="iiif_target" type="text" value="" class="flex-1" />
+              <button
+                id="iiif_setTargetButton"
+                class="controls-button flex-initial ml-2"
+              >
+                Set Target
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OSD -->
+        <div id="osd" class="tabcontent">
+          <div class="controls-group">
+            <h2 class="controls-title">Set degrees of rotation</h2>
+            <div class="flex">
+              <input
+                id="iiif_rotation"
+                type="range"
+                value="0"
+                min="0"
+                max="360"
+                class="mr-2"
+              />
+              <span id="iiif_rotationValue" class="mr-2">0</span>
+              <button
+                id="iiif_setRotationButton"
+                class="controls-button flex-initial ml-2"
+              >
+                Set Rotation
+              </button>
+              <button
+                id="iiif_resetRotationButton"
+                class="controls-button flex-initial ml-2"
+                style="padding: 0.5rem 0.5rem; font-size: 1rem; min-width: 0"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          const slider = document.getElementById("iiif_rotation");
+          const valueDisplay = document.getElementById("iiif_rotationValue");
+          const setRotationButton = document.getElementById(
+            "iiif_setRotationButton"
+          );
+          const resetButton = document.getElementById(
+            "iiif_resetRotationButton"
+          );
+          slider.addEventListener("input", () => {
+            valueDisplay.textContent = slider.value;
+          });
+
+          resetButton.addEventListener("click", () => {
+            slider.value = 360;
+            valueDisplay.textContent = "360";
+            setRotationButton.click();
+          });
+        </script>
+
+        <!-- AV -->
+        <div id="av" class="tabcontent" style="display: none">
+          <div class="controls-group">
+            <h2 class="controls-title">Mute sound</h2>
+            <input type="checkbox" id="iiif_mutedCheckbox" />
+          </div>
+        </div>
+
+        <!-- Annotations -->
+        <div id="annotations" class="tabcontent" style="display: none">
+          <h2 class="controls-title">Annotations</h2>
+          <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
+          <div class="mt-2">
+            <button id="iiif_setAnnotationsButton" class="controls-button">
+              Set Annotations
+            </button>
+            <button id="iiif_clearAnnotationsButton" class="controls-button">
+              Clear Annotations
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuration -->
+        <div id="config" class="tabcontent" style="display: none">
+          <p>
+            <i
+              >The Universal Viewer can be configured using a JSON file. The
+              controls below allow you to easily test changes to your
+              configuration, or to generate a new configuration file by browsing
+              the available settings.</i
+            >
+          </p>
+          <h2 class="controls-title"></h2>
+          <details>
+            <summary
+              aria-label="More information about custom configuration"
+              style="cursor: pointer"
+            >
+              <b>Custom configuration</b>
+            </summary>
+            <i
+              >Enter your configuration here (in JSON format) to see a preview
+              of how the Universal Viewer will look and behave. Since UV uses
+              browser storage to remember some settings, you may need to check
+              the 'Clear saved state' checkbox to ensure that your changes are
+              immediately visible.</i
+            >
+          </details>
+          <br />
+          <textarea id="customConfig" rows="5" class="w-full"></textarea>
+          <div class="mt-2">
+            <input type="checkbox" id="clearStorageCheckbox" />
+            <label for="clearStorageCheckbox"
+              >Clear saved viewer state before applying</label
+            >
+          </div>
+          <div class="mt-2">
+            <button id="setConfigButton" class="controls-button">
+              Apply Configurations
+            </button>
+            <button id="resetConfigButton" class="controls-button">
+              Reset to Default Configuration
+            </button>
+          </div>
+
+          <div class="controls-group">
+            <h2 class="controls-title"></h2>
+            <details>
+              <summary
+                aria-label="More information about using the configuration builder"
+                style="cursor: pointer"
+              >
+                <b>Configuration builder</b>
+              </summary>
+              <i
+                >Use the dropdown menus to customise the Universal Viewer. Your
+                selections will automatically populate the custom configuration
+                box above. You will have to click the Apply Configurations
+                button when you are ready to put your changes into effect.</i
+              >
+            </details>
+            <br />
+            <div id="config-builder"></div>
+          </div>
+        </div>
       </div>
 
-    <!-- General -->
-    <div id="general" class="tabcontent">
-      <h2 class="controls-title">Manifest ID</h2>
-      <div class="flex">
-        <select id="iiifManifestIdSelect" class="py-2 px-3 mr-2 flex-1"></select>
-        <input id="iiifManifestId" type="text" value="" class="flex-1" />
-      </div>
-      <div class="mt-2">
-        <button id="setIIIFManifestIdButton" class="controls-button">Set IIIF Manifest ID</button>
-      </div>
-    <div class="controls-group">
-      <h2 class="controls-title"></h2>
-      <div class="mt-2">
-      <details><summary aria-label="More information about using target"><b>Set Target</b></summary><i>For OpenSeadragon manifests, edit the 'xywh' values at the end of the URL to modify the view of the image.
-      For AV manifests, modify the number after 't' to set the timestamp.</i></details>
-    </div>
-    <br>
-      <div class="flex mb-2">
-        <input id="iiif_target" type="text" value="" class="flex-1" />
-        <button id="iiif_setTargetButton" class="controls-button flex-initial ml-2">
-          Set Target
-        </button>
-      </div>
-  </div>
-  </div>
+      <script>
+        function openTab(evt, tabName) {
+          document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector(".tablinks").click();
+          });
 
-    <!-- OSD -->
-    <div id="osd" class="tabcontent">
-    <div class="controls-group">
-      <h2 class="controls-title">Set degrees of rotation</h2>
-      <div class="flex">
-        <input id="iiif_rotation" type="range" value="0" min="0" max="360" class="mr-2" />
-        <span id="iiif_rotationValue" class="mr-2">0</span>
-        <button id="iiif_setRotationButton" class="controls-button flex-initial ml-2">
-          Set Rotation
-        </button>
-        <button id="iiif_resetRotationButton" class="controls-button flex-initial ml-2" style="padding: 0.5rem 0.5rem; font-size: 1rem; min-width: 0;">
-          Reset
-        </button>
-      </div>
-    </div>
-  </div>
+          const tabcontent = document.getElementsByClassName("tabcontent");
+          const tablinks = document.getElementsByClassName("tablinks");
+          for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+          }
 
-    <script>
-    const slider = document.getElementById('iiif_rotation');
-    const valueDisplay = document.getElementById('iiif_rotationValue');
-    const setRotationButton = document.getElementById('iiif_setRotationButton');
-    const resetButton = document.getElementById('iiif_resetRotationButton');
-    slider.addEventListener('input', () => {
-      valueDisplay.textContent = slider.value;
-    });
+          document.getElementById(tabName).style.display = "block";
 
-    resetButton.addEventListener('click', () => {
-      slider.value = 360;
-      valueDisplay.textContent = '360';
-      setRotationButton.click();
-    });
-  </script>
-
-    <!-- AV -->
-    <div id="av" class="tabcontent" style="display:none">
-      <div class="controls-group">
-        <h2 class="controls-title">Mute sound</h2>
-        <input type="checkbox" id="iiif_mutedCheckbox" />
-      </div>
-    </div>
-
-    <!-- Annotations -->
-    <div id="annotations" class="tabcontent" style="display:none">
-      <h2 class="controls-title">Annotations</h2>
-      <textarea id="iiif_annotations" rows="5" class="w-full"></textarea>
-      <div class="mt-2">
-        <button id="iiif_setAnnotationsButton" class="controls-button">Set Annotations</button>
-        <button id="iiif_clearAnnotationsButton" class="controls-button">Clear Annotations</button>
-      </div>
-    </div>
-
-    <!-- Configuration -->
-   <div id="config" class="tabcontent" style="display:none">
-    <p><i>The Universal Viewer can be configured using a JSON file. The controls below allow you to easily test changes to your configuration, or to generate a new configuration file by browsing the available settings.</i></p>
-    <h2 class="controls-title"></h2><details>
-      <summary aria-label="More information about custom configuration" style="cursor: pointer;"><b>Custom configuration</b></summary>
-      <i>Enter your configuration here (in JSON format) to see a preview of how the Universal Viewer will look and behave. Since UV uses browser storage to remember some settings, you may need to check the 'Clear saved state' checkbox to ensure that your changes are immediately visible.</i>
-    </details>
-    <br>
-    <textarea id="customConfig" rows="5" class="w-full"></textarea>
-    <div class="mt-2">
-      <input type="checkbox" id="clearStorageCheckbox" />
-      <label for="clearStorageCheckbox">Clear saved viewer state before applying</label>
-    </div>
-    <div class="mt-2">
-      <button id="setConfigButton" class="controls-button">Apply Configurations</button>
-      <button id="resetConfigButton" class="controls-button">Reset to Default Configuration</button>
-    </div>
-
-    <div class="controls-group">
-      <h2 class="controls-title"></h2><details>
-        <summary aria-label="More information about using the configuration builder" style="cursor: pointer;"><b>Configuration builder</b></summary>
-        <i>Use the dropdown menus to customise the Universal Viewer. Your selections will automatically populate the custom configuration box above. You will have to click the Apply Configurations button when you are ready to put your changes into effect.</i></details>
-        <br>
-        <div id="config-builder"></div>
-    </div>
-  </div>
-</div>
-
-  <script>
-  function openTab(evt, tabName) {
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelector(".tablinks").click();
-    });
-
-    const tabcontent = document.getElementsByClassName("tabcontent");
-    const tablinks = document.getElementsByClassName("tablinks");
-    for (let i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    for (let i = 0; i < tablinks.length; i++) {
-      tablinks[i].classList.remove("active");
-    }
-
-    document.getElementById(tabName).style.display = "block";
-
-    evt.currentTarget.classList.add("active");
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelector(".tablinks").click();  
-    });
-  }
-  </script>
+          evt.currentTarget.classList.add("active");
+          document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector(".tablinks").click();
+          });
+        }
+      </script>
 
       <div id="youTubeTab" class="hidden controls-tab-content">
         <div class="controls-group">
@@ -525,18 +628,18 @@
         return option;
       }
 
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         var iiifTabButton = document.getElementById("iiifTabButton");
         var iiifTab = document.getElementById("iiifTab");
         var youTubeTabButton = document.getElementById("youTubeTabButton");
         var youTubeTab = document.getElementById("youTubeTab");
 
-        iiifTabButton.addEventListener("click", function(e) {
+        iiifTabButton.addEventListener("click", function (e) {
           e.preventDefault();
           activateIIIFTab();
         });
 
-        youTubeTabButton.addEventListener("click", function(e) {
+        youTubeTabButton.addEventListener("click", function (e) {
           e.preventDefault();
           activateYouTubeTab();
         });
@@ -598,7 +701,7 @@
         // config controls
         var $customConfig = document.getElementById("customConfig");
         var $setConfigButton = document.getElementById("setConfigButton");
-        
+
         var annotations = [];
         var urlAdapter;
 
@@ -642,20 +745,20 @@
             fetch("iiif-collection.json"),
             fetch("youtube-collection.json"),
           ])
-            .then(function(responses) {
+            .then(function (responses) {
               // Get a JSON object from each of the responses
               return Promise.all(
-                responses.map(function(response) {
+                responses.map(function (response) {
                   return response.json();
                 })
               );
             })
-            .then(function(data) {
+            .then(function (data) {
               parseIIIFCollection(data[0]);
               parseYouTubeCollection(data[1]);
               cb();
             })
-            .catch(function(error) {
+            .catch(function (error) {
               // if there's an error, log it
               console.log(error);
             });
@@ -712,16 +815,18 @@
         }
 
         function setConfig() {
-            // Test if the "Clear saved viewer state" checkbox is checked
-            const clearStorage = document.getElementById("clearStorageCheckbox").checked;
-            if (clearStorage) {
-              localStorage.clear();
-              sessionStorage.clear();
-            }
+          // Test if the "Clear saved viewer state" checkbox is checked
+          const clearStorage = document.getElementById(
+            "clearStorageCheckbox"
+          ).checked;
+          if (clearStorage) {
+            localStorage.clear();
+            sessionStorage.clear();
+          }
 
-            activateIIIFTab();
+          activateIIIFTab();
         }
-        $iiifManifestIdSelect.onchange = function() {
+        $iiifManifestIdSelect.onchange = function () {
           var $selectedOption = document.querySelector(
             "#iiifManifestIdSelect option:checked"
           );
@@ -730,7 +835,7 @@
           urlAdapter.set("iiifManifestId", iiifManifestId);
         };
 
-        $setIIIFManifestIdButton.onclick = function() {
+        $setIIIFManifestIdButton.onclick = function () {
           iiifManifestId = $iiifManifestId.value;
           urlAdapter.set("iiifManifestId", iiifManifestId);
           clearAnnotations();
@@ -742,7 +847,7 @@
           });
         };
 
-        $youTubeVideoIdSelect.onchange = function() {
+        $youTubeVideoIdSelect.onchange = function () {
           var $selectedOption = document.querySelector(
             "#youTubeVideoIdSelect option:checked"
           );
@@ -751,7 +856,7 @@
           urlAdapter.set("youTubeVideoId", youTubeVideoId);
         };
 
-        $setYouTubeVideoIdButton.onclick = function() {
+        $setYouTubeVideoIdButton.onclick = function () {
           clearAnnotations();
           uv.set({
             iiifManifestId: undefined,
@@ -763,56 +868,56 @@
 
         // iiif inputs
 
-        $iiif_setTargetButton.onclick = function() {
+        $iiif_setTargetButton.onclick = function () {
           var target = $iiif_target.value;
           uv.set({
             target: target,
           });
         };
 
-        $iiif_mutedCheckbox.onclick = function(e) {
+        $iiif_mutedCheckbox.onclick = function (e) {
           muted = e.target.checked;
           uv.set({
             muted: muted,
           });
         };
 
-        $iiif_setRotationButton.onclick = function() {
+        $iiif_setRotationButton.onclick = function () {
           var rotation = parseInt($iiif_rotation.value);
           uv.set({
             rotation: rotation,
           });
         };
 
-        $iiif_setAnnotationsButton.onclick = function() {
+        $iiif_setAnnotationsButton.onclick = function () {
           setAnnotations();
         };
 
-        $iiif_clearAnnotationsButton.onclick = function() {
+        $iiif_clearAnnotationsButton.onclick = function () {
           clearAnnotations();
           setAnnotations();
         };
 
-        $setConfigButton.onclick = function() {
+        $setConfigButton.onclick = function () {
           setConfig();
         };
         // youtube inputs
 
-        $youtube_mutedCheckbox.onclick = function(e) {
+        $youtube_mutedCheckbox.onclick = function (e) {
           muted = e.target.checked;
           uv.set({
             muted: muted,
           });
         };
 
-        $youtube_setCurrentTimeButton.onclick = function() {
+        $youtube_setCurrentTimeButton.onclick = function () {
           var currentTime = $youtube_currentTime.value;
           uv.set({
             currentTime: currentTime,
           });
         };
 
-        $youtube_setDurationButton.onclick = function() {
+        $youtube_setDurationButton.onclick = function () {
           var durationStart = $youtube_durationStart.value;
           var durationEnd = $youtube_durationEnd.value;
           uv.set({
@@ -855,7 +960,7 @@
           uv = UV.init("uv", data);
           urlAdapter.bindTo(uv);
 
-          uv.on("configure", function({ config, cb }) {
+          uv.on("configure", function ({ config, cb }) {
             const manifest = urlAdapter.get("iiifManifestId");
             if (
               manifest ===
@@ -910,14 +1015,14 @@
             }
 
             cb(
-              fetch("uv-iiif-config.json").then(function(resp) {
+              fetch("uv-iiif-config.json").then(function (resp) {
                 return resp.json();
               })
             );
           });
 
           // test inline config, enable doubleclick annotation
-          uv.on("configure", function({ config, cb }) {
+          uv.on("configure", function ({ config, cb }) {
             cb({
               modules: {
                 modelViewerCenterPanel: {
@@ -941,7 +1046,7 @@
               },
             });
 
-            // config builder 
+            // config builder
             function createConfigBuilderAccordion(config) {
               const accordionContainer = document.createElement("div");
 
@@ -954,7 +1059,7 @@
                 toggleButton.className = "toggleButton";
                 toggleButton.classList.add("toggleButtonBackground");
                 toggleButton.classList.add("caret-down");
-                
+
                 const contentContainer = document.createElement("div");
                 contentContainer.style.display = "none";
                 contentContainer.style.marginLeft = "1rem";
@@ -971,7 +1076,12 @@
                 if (typeof value === "object" && value !== null) {
                   for (const subKey in value) {
                     contentContainer.appendChild(
-                      createAccordionItem(subKey, value[subKey], depth + 1, currentPath)
+                      createAccordionItem(
+                        subKey,
+                        value[subKey],
+                        depth + 1,
+                        currentPath
+                      )
                     );
                   }
                 } else {
@@ -993,9 +1103,14 @@
 
                     // Add event listener to update #customConfig on change
                     select.addEventListener("change", (event) => {
-                      const customConfigTextarea = document.getElementById("customConfig");
-                      const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
-                      const pathParts = event.target.id.replace(/^cb-/, "").split("^");
+                      const customConfigTextarea =
+                        document.getElementById("customConfig");
+                      const currentConfig = customConfigTextarea.value
+                        ? JSON.parse(customConfigTextarea.value)
+                        : {};
+                      const pathParts = event.target.id
+                        .replace(/^cb-/, "")
+                        .split("^");
                       let configPointer = currentConfig;
 
                       // Traverse the path to set the value
@@ -1006,9 +1121,14 @@
                         configPointer = configPointer[pathParts[i]];
                       }
 
-                      configPointer[pathParts[pathParts.length - 1]] = event.target.value === "true";
+                      configPointer[pathParts[pathParts.length - 1]] =
+                        event.target.value === "true";
 
-                      customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                      customConfigTextarea.value = JSON.stringify(
+                        currentConfig,
+                        null,
+                        2
+                      );
                     });
 
                     valueElement.appendChild(select);
@@ -1025,8 +1145,11 @@
 
                     // Add event listener to update #customConfig on button click
                     updateButton.addEventListener("click", () => {
-                      const customConfigTextarea = document.getElementById("customConfig");
-                      const currentConfig = customConfigTextarea.value ? JSON.parse(customConfigTextarea.value) : {};
+                      const customConfigTextarea =
+                        document.getElementById("customConfig");
+                      const currentConfig = customConfigTextarea.value
+                        ? JSON.parse(customConfigTextarea.value)
+                        : {};
                       const pathParts = input.id.replace(/^cb-/, "").split("^");
                       let configPointer = currentConfig;
 
@@ -1038,9 +1161,14 @@
                         configPointer = configPointer[pathParts[i]];
                       }
 
-                      configPointer[pathParts[pathParts.length - 1]] = input.value;
+                      configPointer[pathParts[pathParts.length - 1]] =
+                        input.value;
 
-                      customConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
+                      customConfigTextarea.value = JSON.stringify(
+                        currentConfig,
+                        null,
+                        2
+                      );
                     });
 
                     valueElement.appendChild(input);
@@ -1058,7 +1186,9 @@
               }
 
               for (const key in config) {
-                accordionContainer.appendChild(createAccordionItem(key, config[key]));
+                accordionContainer.appendChild(
+                  createAccordionItem(key, config[key])
+                );
               }
 
               const configBuilder = document.querySelector("#config-builder");
@@ -1114,18 +1244,23 @@
             if (config && typeof config === "object") {
               createConfigBuilderAccordion(config);
             } else {
-              console.error("Invalid config object passed to createConfigBuilderAccordion:", config);
+              console.error(
+                "Invalid config object passed to createConfigBuilderAccordion:",
+                config
+              );
             }
           });
 
-          document.getElementById("resetConfigButton").addEventListener("click", function() {
-            document.getElementById("customConfig").value = "";
-            document.getElementById("clearStorageCheckbox").checked = true;
-            setConfig();
-          });
+          document
+            .getElementById("resetConfigButton")
+            .addEventListener("click", function () {
+              document.getElementById("customConfig").value = "";
+              document.getElementById("clearStorageCheckbox").checked = true;
+              setConfig();
+            });
 
           // apply custom configs from the form
-          uv.on("configure", function({ config, cb}) {
+          uv.on("configure", function ({ config, cb }) {
             try {
               if ($customConfig.value.length > 0) {
                 var customConfig = JSON.parse($customConfig.value);
@@ -1136,11 +1271,11 @@
             }
           });
 
-          uv.on("targetChange", function(target) {
+          uv.on("targetChange", function (target) {
             $iiif_target.value = target;
           });
 
-          uv.on("openseadragonExtension.doubleClick", function(e) {
+          uv.on("openseadragonExtension.doubleClick", function (e) {
             annotations.push({
               target: e.target,
               bodyValue: String(annotations.length + 1),
@@ -1150,7 +1285,7 @@
             setAnnotations();
           });
 
-          uv.on("modelviewerExtension.doubleClick", function(e) {
+          uv.on("modelviewerExtension.doubleClick", function (e) {
             annotations.push({
               target: e.target,
               bodyValue: String(annotations.length + 1),
@@ -1159,23 +1294,23 @@
             setAnnotations();
           });
 
-          uv.on("multiSelectionMade", function(e) {
+          uv.on("multiSelectionMade", function (e) {
             console.log("multiSelectionMade", e);
           });
 
-          uv.on("pinpointAnnotationClicked", function(index) {
+          uv.on("pinpointAnnotationClicked", function (index) {
             console.log("pinpointAnnotationClicked", index);
           });
 
-          uv.on("clearAnnotations", function(e) {
+          uv.on("clearAnnotations", function (e) {
             clearAnnotations();
           });
 
-          uv.on("mediaelementExtension.mediaMuted", function() {
+          uv.on("mediaelementExtension.mediaMuted", function () {
             $iiif_mutedCheckbox.checked = true;
           });
 
-          uv.on("mediaelementExtension.mediaUnmuted", function() {
+          uv.on("mediaelementExtension.mediaUnmuted", function () {
             $iiif_mutedCheckbox.checked = false;
           });
 
@@ -1208,37 +1343,37 @@
             youTubeVideoId: youTubeVideoId,
           });
 
-          uv.on("configure", function({ config, cb }) {
+          uv.on("configure", function ({ config, cb }) {
             cb(
-              new Promise(function(resolve) {
-                fetch("uv-youtube-config.json").then(function(response) {
+              new Promise(function (resolve) {
+                fetch("uv-youtube-config.json").then(function (response) {
                   resolve(response.json());
                 });
               })
             );
           });
 
-          uv.on("load", function(e) {
+          uv.on("load", function (e) {
             console.log("load", e);
           });
 
-          uv.on("unstarted", function() {
+          uv.on("unstarted", function () {
             console.log("unstarted");
           });
 
-          uv.on("ended", function() {
+          uv.on("ended", function () {
             console.log("ended");
           });
 
-          uv.on("playing", function() {
+          uv.on("playing", function () {
             console.log("playing");
           });
 
-          uv.on("paused", function() {
+          uv.on("paused", function () {
             console.log("paused");
           });
 
-          uv.on("error", function(e) {
+          uv.on("error", function (e) {
             console.log("error", e);
           });
 
@@ -1248,7 +1383,7 @@
           // });
         }
 
-        loadCollections(function() {
+        loadCollections(function () {
           activateIIIFTab();
         });
 
@@ -1288,15 +1423,15 @@
             muted: muted,
           });
 
-          uv.on("load", function(args) {
+          uv.on("load", function (args) {
             // console.log("load", args);
             // args.player.mute();
           });
 
-          uv.on("configure", function({ config, cb }) {
+          uv.on("configure", function ({ config, cb }) {
             cb(
-              new Promise(function(resolve) {
-                fetch(`uv-${type}-config.json`).then(function(response) {
+              new Promise(function (resolve) {
+                fetch(`uv-${type}-config.json`).then(function (response) {
                   resolve(response.json());
                 });
               })
