@@ -1,6 +1,7 @@
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
@@ -690,6 +691,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         },
         onClose: () => {
           this.closeActiveDialogue();
+        },
+        onDownload: (type: DownloadOption, label: string) => {
+          this.extensionHost.publish(IIIFEvents.DOWNLOAD, {
+            type: type,
+            label: label,
+          });
         },
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
