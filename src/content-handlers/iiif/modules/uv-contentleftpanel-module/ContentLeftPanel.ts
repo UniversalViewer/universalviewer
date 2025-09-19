@@ -5,7 +5,7 @@ import ThumbsView from "./ThumbsView";
 const ViewingDirectionEnum =
   require("@iiif/vocabulary/dist-commonjs/").ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { IIIFEvents } from "../../IIIFEvents";
 import { GalleryView } from "./GalleryView";

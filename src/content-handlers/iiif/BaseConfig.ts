@@ -1,10 +1,10 @@
-import { StorageType } from "@edsilv/utils";
+import { StorageType } from "../iiif/Utils";
 import {
   ExpandPanel,
   ExpandPanelContent,
   ExpandPanelOptions,
 } from "./extensions/config/ExpandPanel";
-export { StorageType } from "@edsilv/utils";
+export { StorageType } from "../iiif/Utils";
 
 export type MetricType = string | "sm" | "md" | "lg" | "xl";
 

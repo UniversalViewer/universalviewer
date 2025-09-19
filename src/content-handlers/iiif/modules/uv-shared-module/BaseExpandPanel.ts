@@ -1,5 +1,5 @@
 const $ = require("jquery");
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { BaseView } from "./BaseView";
 
@@ -46,6 +46,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     this.$collapseButton = $(
       '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
+    this.$collapseButton.prop("title", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');

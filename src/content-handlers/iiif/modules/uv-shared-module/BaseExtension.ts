@@ -32,7 +32,7 @@ import {
   Range,
 } from "manifesto.js";
 import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
-import * as KeyCodes from "@edsilv/key-codes";
+import * as KeyCodes from "../../KeyCodes";
 import {
   Bools,
   Documents,
@@ -41,7 +41,7 @@ import {
   StorageType,
   Urls,
   Strings,
-} from "@edsilv/utils";
+} from "../../Utils";
 import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";

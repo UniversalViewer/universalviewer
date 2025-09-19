@@ -48,6 +48,8 @@ UV source code lives inside the `/src/` folder.
 
 Here is a [diagram](https://docs.google.com/drawings/d/1i484Jd32FoLwtE5uvkBA6l5LV-DioSOZDIWD0WfhWl8/edit?usp=sharing) showing the overall architecture of the project.
 
+For more in-depth information on the application structure please see the [manual](https://github.com/UniversalViewer/universalviewer/blob/dev/manual/index.md).
+
 ## Running the test suite
 
 Before commiting your changes make sure tests are passing:

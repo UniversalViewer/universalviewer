@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
-import { Bools, Documents } from "@edsilv/utils";
+import { Bools, Documents } from "../../Utils";
 import { Events } from "../../../../Events";
 import { BaseConfig } from "../../BaseConfig";
 

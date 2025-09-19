@@ -55,6 +55,8 @@ See the [examples](https://github.com/UniversalViewer/universalviewer/wiki/UV-Ex
 
 Read the technical [docs](https://docs.universalviewer.io/modules.html) to learn more about the code and available configuration options.
 
+Read the [manual](https://github.com/UniversalViewer/universalviewer/blob/dev/manual/index.md) for information on using, configuring, and developing for the UV.
+
 <a id="feedback"></a>
 <a id="contributing"></a>
 ## 📣 Contributing and Giving Feedback
@@ -67,7 +69,7 @@ Talking to active contributors and sponsors is a great way to find out what the 
 - There is an [active Slack channel](https://docs.google.com/forms/d/e/1FAIpQLSeHLD0kng5aXvGFsNN_tJGsZMTnp08Hv2F6kdGsJRb6bT0NWw/viewform) and regular community calls.
 - You can view discussions and post on our [Google Group](https://groups.google.com/forum/#!forum/universalviewer)
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/universalviewer/universalviewer/issues/new)
-- Engage with the UV Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) and [community team](https://github.com/UniversalViewer/universalviewer/blob/dev/COMMUNITY_TEAM.md)
+- Engage with the [UV Steering Group](https://github.com/UniversalViewer/universalviewer/wiki/Steering-Group) and [community team](https://github.com/UniversalViewer/universalviewer/blob/dev/COMMUNITY_TEAM.md)
 - Get familiar with [Code of Conduct](https://github.com/UniversalViewer/universalviewer/blob/dev/CODE_OF_CONDUCT.md)
 - Read our [guide to contributing](https://github.com/UniversalViewer/universalviewer/blob/dev/CONTRIBUTING.md)
 - Read our [governance document](https://github.com/UniversalViewer/universalviewer/blob/dev/GOVERNANCE.md) to learn more about roles and responsibilities, support, membership, and the decision making process.

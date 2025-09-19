@@ -11,7 +11,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { Thumb, TreeNode, Range } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";

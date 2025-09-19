@@ -13,8 +13,7 @@ const bundledPackages = [
   "jquery",
   "jsviews",
   "xss",
-  "@iiif/vocabulary",
-  "@edsilv/jquery-plugins",
+  "@iiif/vocabulary"
 ];
 
 // This plugin will ensure that mediaelement css is loaded correctly. It's currently using a webpack specific

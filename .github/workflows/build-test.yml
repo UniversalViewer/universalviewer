@@ -11,7 +11,7 @@ jobs:
 
     name: Node ${{ matrix.node }} build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -19,7 +19,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
 

@@ -10,8 +10,8 @@ import {
   StatusCode,
   Utils,
 } from "manifesto.js";
-import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
-import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import { Storage, StorageType, StorageItem, Urls } from "../../Utils";
+import { HTTPStatusCode } from "../../HTTPStatusCodes";
 import { Events } from "../../../../Events";
 
 export class Auth09 {

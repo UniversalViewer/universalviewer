@@ -1,4 +1,4 @@
-import { Strings } from "@edsilv/utils";
+import { Strings } from "../iiif/Utils";
 
 export default function jqueryPlugins($) {
   $.fn.checkboxButton = function (onClick: (checked: boolean) => void) {

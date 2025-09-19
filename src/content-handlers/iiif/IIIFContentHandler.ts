@@ -142,9 +142,11 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
+    this._extensionRegistry[MediaType.MPEG] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
     this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
+    this._extensionRegistry[MediaType.PNG] = Extension.OSD;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
     this._extensionRegistry[MediaType.WAV] = Extension.AV;

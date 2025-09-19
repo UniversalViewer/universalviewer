@@ -1,4 +1,4 @@
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";

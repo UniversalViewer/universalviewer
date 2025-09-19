@@ -6,8 +6,8 @@ import {
   ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
-import * as KeyCodes from "@edsilv/key-codes";
-import { Dates, Keyboard, Maths, Strings } from "@edsilv/utils";
+import * as KeyCodes from "../../KeyCodes";
+import { Dates, Keyboard, Maths, Strings } from "../../Utils";
 import { ExtendedLeftPanel } from "../../extensions/config/ExtendedLeftPanel";
 
 export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
