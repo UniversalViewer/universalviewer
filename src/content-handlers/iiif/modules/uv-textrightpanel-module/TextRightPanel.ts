@@ -4,7 +4,7 @@ import { TextRightPanel as TextRightPanelConfig } from "../../extensions/uv-open
 import { Events } from "../../../../Events";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import OpenSeadragon from "openseadragon";
-import { Bools, Clipboard } from "@edsilv/utils";
+import { Bools, Clipboard } from "../../Utils";
 import { IExternalImageResourceData } from "manifesto.js";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { Shell } from "../uv-shared-module/Shell";
