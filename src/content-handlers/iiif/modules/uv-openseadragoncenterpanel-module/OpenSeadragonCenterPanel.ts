@@ -374,7 +374,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
-      this.zoomIn();
+        this.zoomIn();
     });
 
     const $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
@@ -388,7 +388,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
-      this.zoomOut();
+        this.zoomOut();
     });
 
     const $oldGoHome = this.$viewer.find('div[title="Go home"]');
