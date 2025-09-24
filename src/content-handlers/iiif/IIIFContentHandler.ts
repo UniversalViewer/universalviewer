@@ -134,6 +134,7 @@ export default class IIIFContentHandler
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
@@ -149,6 +150,7 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.PNG] = Extension.OSD;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.VIDEO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.WAV] = Extension.AV;
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;

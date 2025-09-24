@@ -101,7 +101,7 @@
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",
-    "@iiif/vocabulary": "^1.0.29",
+    "@iiif/vocabulary": "^1.0.31",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
