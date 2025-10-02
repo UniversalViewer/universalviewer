@@ -27,6 +27,8 @@ type PDFCenterPanelOptions = CenterPanelOptions & {
 type PDFCenterPanelContent = CenterPanelContent & {
   next: string;
   previous: string;
+  zoomIn: string;
+  zoomOut: string;
 };
 
 type PDFCenterPanel = {
