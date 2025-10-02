@@ -365,7 +365,7 @@ export class PDFCenterPanel extends CenterPanel<
     this._$zoomOutButton.enable();
     this._$zoomInButton.enable();
 
-    //disable zoom if not possible
+    // disable zoom if not possible
     const lowScale: number = this._getDecreasedScale();
     const highScale: number = this._getIncreasedScale();
     if (lowScale < this._getMinScale()) {
