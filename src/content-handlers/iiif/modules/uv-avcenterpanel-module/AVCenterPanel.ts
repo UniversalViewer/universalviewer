@@ -11,10 +11,11 @@ import {
   Range,
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
-import { AVComponent } from "@iiif/iiif-av-component/dist-esmodule";
+import AVView from "./AVView";
 import { Bools } from "../../Utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";
+import "@samvera/ramp/dist/ramp.css";
 
 export class AVCenterPanel extends CenterPanel<
   Config["modules"]["avCenterPanel"]
@@ -157,19 +158,10 @@ export class AVCenterPanel extends CenterPanel<
   }
 
   private _createAVComponent(): void {
-    this.$avcomponent = $('<div class="iiif-av-component"></div>');
+    this.$avcomponent = $('<div class="av-component"></div>');
     this.$content.prepend(this.$avcomponent);
 
-    // @ts-ignore
-    this.avcomponent = new AVComponent({
-      target: <HTMLElement>this.$avcomponent[0],
-      // @ts-ignore
-      data: {
-        posterImageExpanded: this.options.posterImageExpanded,
-        enableFastForward: true,
-        enableFastRewind: true,
-      },
-    });
+    this.avcomponent = new AVView();
 
     this.avcomponent.on("mediaerror", (err) => {
       if (!this.config.options.hideMediaError) {
