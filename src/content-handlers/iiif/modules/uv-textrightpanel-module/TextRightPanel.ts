@@ -110,6 +110,79 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
       return (intersectionArea / rect1Area) * 100;
     }
 
+    function highlightSearchHit(
+      element: Element,
+      searchText: string,
+      index: string | number,
+      canvasIndex: string | number
+    ): void {
+      // traverse only text nodes
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (node: Node): number {
+          // skip text nodes that are already inside searchHitSpan elements
+          const parent = node.parentElement;
+          if (parent && parent.classList.contains("searchHitSpan")) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      });
+
+      let currentNode: Node | null;
+      const textNodes: Text[] = [];
+
+      // collect all valid text nodes
+      while ((currentNode = walker.nextNode())) {
+        textNodes.push(currentNode as Text);
+      }
+
+      // find the first occurrence of search hit
+      for (const textNode of textNodes) {
+        const textContent = textNode.textContent || "";
+        const hitIndex = textContent.indexOf(searchText);
+
+        if (hitIndex !== -1) {
+          // split the text node and wrap the match
+          const beforeText = textContent.substring(0, hitIndex);
+          const matchText = textContent.substring(
+            hitIndex,
+            hitIndex + searchText.length
+          );
+          const afterText = textContent.substring(hitIndex + searchText.length);
+
+          // create highlight span
+          const highlightSpan = document.createElement("span");
+          highlightSpan.className = "searchHitSpan";
+          highlightSpan.setAttribute("data-index", String(index));
+          highlightSpan.setAttribute("data-canvas-index", String(canvasIndex));
+          highlightSpan.textContent = matchText;
+
+          const parent = textNode.parentNode;
+
+          if (parent) {
+            // replace original text node with the parts
+            if (beforeText) {
+              const beforeNode = document.createTextNode(beforeText);
+              parent.insertBefore(beforeNode, textNode);
+            }
+
+            parent.insertBefore(highlightSpan, textNode);
+
+            if (afterText) {
+              const afterNode = document.createTextNode(afterText);
+              parent.insertBefore(afterNode, textNode);
+            }
+
+            // remove the original text node
+            parent.removeChild(textNode);
+          }
+
+          // stop after finding and wrapping the first occurrence
+          break;
+        }
+      }
+    }
+
     this.extensionHost.on(Events.SEARCH_HIT_CHANGED, (e) => {
       this.currentRectIndex = e[0].rectIndex;
       const canvasIndex = this.extension.helper.canvasIndex;
@@ -253,25 +326,17 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
 
               const p = getIntersectionPercentage(rect, lineRect);
               if (p > 50) {
-                let text = $(
+                const lineElement = $(
                   "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
-                ).text();
-                text = text.replace(
-                  annotationRect.chars,
-                  '<span class="searchHitSpan" data-index="' +
-                    annotationRect.index +
-                    '" data-canvas-index="' +
-                    annotationRect.canvasIndex +
-                    '">' +
-                    annotationRect.chars +
-                    "</span>"
                 );
-                $(
-                  "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
-                ).html("");
-                $(
-                  "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
-                ).html(text);
+                if (lineElement[0]) {
+                  highlightSearchHit(
+                    lineElement[0],
+                    annotationRect.chars,
+                    annotationRect.index,
+                    annotationRect.canvasIndex
+                  );
+                }
               }
             }
           );
