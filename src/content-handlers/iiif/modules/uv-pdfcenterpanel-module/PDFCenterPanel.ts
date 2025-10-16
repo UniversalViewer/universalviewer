@@ -454,8 +454,8 @@ export class PDFCenterPanel extends CenterPanel<
   resize() {
     super.resize();
 
-    this._$pdfContainer.width(this.$content.width()!)
-    this._$pdfContainer.height(this.$content.height()!)
+    this._$pdfContainer.width(this.$content.width()!);
+    this._$pdfContainer.height(this.$content.height()!);
 
     // this._$spinner.css(
     //   "top",

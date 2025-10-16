@@ -140,7 +140,9 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
     super.resize();
 
     this.$main.height(
-      this.$element.height()! - this.$top.height()! - this.$main.verticalMargins()
+      this.$element.height()! -
+        this.$top.height()! -
+        this.$main.verticalMargins()
     );
 
     // always put tabindex on, so the main is focusable,

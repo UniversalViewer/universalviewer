@@ -1515,7 +1515,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       if (this.extension.helper.isContinuous()) {
         if (this.extension.helper.isHorizontallyAligned()) {
           const width: number =
-            (this.$viewer.width()!) - this.$viewer.rightMargin();
+            this.$viewer.width()! - this.$viewer.rightMargin();
           this.$navigator.width(width);
         } else {
           this.$navigator.height(this.$viewer.height()!);

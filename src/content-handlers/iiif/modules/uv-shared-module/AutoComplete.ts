@@ -167,7 +167,7 @@ export class AutoComplete {
 
   private _getTerms(): string {
     const term: string | undefined = this._$element.val()?.toString() ?? "";
-    return term.trim(); 
+    return term.trim();
   }
 
   private _setSelectedResultIndex(direction: number): void {

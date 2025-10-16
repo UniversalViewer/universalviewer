@@ -35,10 +35,10 @@ export class Panel {
 
   onAccessibleClick(
     el: JQuery,
-callback: (
-    e:
-      | JQuery.ClickEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
-      | JQuery.KeyDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
+    callback: (
+      e:
+        | JQuery.ClickEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
+        | JQuery.KeyDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>
     ) => void,
     withClick = true,
     treatAsButton = false

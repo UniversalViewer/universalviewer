@@ -260,7 +260,8 @@ export default function jqueryPlugins($) {
       const $current: JQuery = $(this).is("iframe")
         ? $(this).contents().find("body")
         : $(this);
-      const offset: JQueryCoordinates = $current.offset()?? $current.position();
+      const offset: JQueryCoordinates =
+        $current.offset() ?? $current.position();
       result =
         offset.left <= $.mlp.x &&
         offset.left + $current.outerWidth()! > $.mlp.x &&
@@ -342,7 +343,9 @@ export default function jqueryPlugins($) {
     return this.each(function () {
       const $self: JQuery = $(this);
       if ($self.contents().length > 0) {
-        const $lastElement: JQuery<Element | Text | Comment | Document> = $self.contents().last();
+        const $lastElement: JQuery<Element | Text | Comment | Document> = $self
+          .contents()
+          .last();
         if ($lastElement[0].nodeType === 3) {
           const words: string[] = $lastElement.text().trim().split(" ");
           if (words.length > 1) {
@@ -554,7 +557,6 @@ export default function jqueryPlugins($) {
 }
 
 declare global {
-
   interface JQuery {
     attr(
       attributeName: string,

@@ -114,9 +114,9 @@ export class MultiSelectDialogue extends Dialogue<
     const $header: JQuery = this.$gallery.find(".header");
     $main.height(
       this.$content.height()! -
-      this.$title.outerHeight()! -
-      this.$title.verticalMargins() -
-      $header.height()!
+        this.$title.outerHeight()! -
+        this.$title.verticalMargins() -
+        $header.height()!
     );
   }
 }
