@@ -133,7 +133,7 @@ export class PDFHeaderPanel extends HeaderPanel<
 
     this.$searchText.onEnter(() => {
       this.$searchText.blur();
-      this.search(this.$searchText.val());
+      this.search(`${this.$searchText.val()}`);
     });
 
     this.$searchText.click(function () {
@@ -141,7 +141,7 @@ export class PDFHeaderPanel extends HeaderPanel<
     });
 
     this.onAccessibleClick(this.$searchButton, () => {
-      this.search(this.$searchText.val());
+      this.search(`${this.$searchText.val()}`);
     });
   }
 
@@ -191,7 +191,7 @@ export class PDFHeaderPanel extends HeaderPanel<
       return;
     }
 
-    const index: number = parseInt(this.$searchText.val(), 10);
+    const index: number = parseInt(`${this.$searchText.val()}`, 10);
 
     if (isNaN(index)) {
       this.extension.showMessage(

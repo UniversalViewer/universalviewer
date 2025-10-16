@@ -535,11 +535,11 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   width(): number {
-    return this.$element.width();
+    return this.$element.width()!;
   }
 
   height(): number {
-    return this.$element.height();
+    return this.$element.height()!;
   }
 
   exitFullScreen(): void {

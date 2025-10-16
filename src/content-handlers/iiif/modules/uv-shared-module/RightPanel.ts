@@ -51,8 +51,8 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   getTargetLeft(): number {
     return this.isExpanded
-      ? this.$element.parent().width() - this.options.panelCollapsedWidth
-      : this.$element.parent().width() - this.options.panelExpandedWidth;
+      ? this.$element.parent().width()! - this.options.panelCollapsedWidth
+      : this.$element.parent().width()! - this.options.panelExpandedWidth;
   }
 
   toggleFinish(): void {

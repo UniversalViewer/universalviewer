@@ -1,3 +1,4 @@
+import React from "react";
 import { IIIFPlayer, MediaPlayer, StructuredNavigation, Transcript } from "@samvera/ramp";
 import { Manifest } from "manifesto.js";
 

@@ -140,7 +140,7 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
     super.resize();
 
     this.$main.height(
-      this.$element.height() - this.$top.height() - this.$main.verticalMargins()
+      this.$element.height()! - this.$top.height()! - this.$main.verticalMargins()
     );
 
     // always put tabindex on, so the main is focusable,
@@ -151,7 +151,7 @@ export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
 
     // if metadata's height lte main's, no scroll, so no focus needed
     // and no aria label either
-    if (this.$metadata.height() <= this.$main.height()) {
+    if (this.$metadata.height()! <= this.$main.height()!) {
       this.$main.removeAttr("tabindex");
       this.$main.removeAttr("aria-label");
     }

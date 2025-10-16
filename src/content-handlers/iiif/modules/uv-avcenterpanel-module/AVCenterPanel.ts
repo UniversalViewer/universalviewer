@@ -161,7 +161,7 @@ export class AVCenterPanel extends CenterPanel<
     this.$avcomponent = $('<div class="av-component"></div>');
     this.$content.prepend(this.$avcomponent);
 
-    this.avcomponent = new AVView();
+    this.avcomponent = AVView;
 
     this.avcomponent.on("mediaerror", (err) => {
       if (!this.config.options.hideMediaError) {
@@ -385,7 +385,7 @@ export class AVCenterPanel extends CenterPanel<
     super.resize();
 
     if (resizeAVComponent && this.avcomponent) {
-      this.$avcomponent.height(this.$content.height());
+      this.$avcomponent.height(this.$content.height()!);
       this.avcomponent.resize();
     }
   }

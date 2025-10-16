@@ -166,7 +166,8 @@ export class AutoComplete {
   }
 
   private _getTerms(): string {
-    return this._$element.val().trim();
+    const term: string | undefined = this._$element.val()?.toString() ?? "";
+    return term.trim(); 
   }
 
   private _setSelectedResultIndex(direction: number): void {
@@ -194,7 +195,7 @@ export class AutoComplete {
 
     $selectedItem.addClass("selected");
 
-    const top = $selectedItem.outerHeight(true) * this._selectedResultIndex;
+    const top = $selectedItem.outerHeight(true)! * this._selectedResultIndex;
 
     this._$searchResultsList.scrollTop(top);
   }
@@ -231,11 +232,11 @@ export class AutoComplete {
   private _updateListPosition(): void {
     if (this._positionAbove) {
       this._$searchResultsList.css({
-        top: this._$searchResultsList.outerHeight(true) * -1,
+        top: this._$searchResultsList.outerHeight(true)! * -1,
       });
     } else {
       this._$searchResultsList.css({
-        top: this._$element.outerHeight(true),
+        top: this._$element.outerHeight(true)!,
       });
     }
   }

@@ -204,7 +204,7 @@ export class PagingHeaderPanel extends HeaderPanel<
       }
 
       this.$imageSelectionBox.change(() => {
-        const imageIndex: number = parseInt(this.$imageSelectionBox.val());
+        const imageIndex: number = parseInt(`${this.$imageSelectionBox.val()}`);
         this.extensionHost.publish(
           OpenSeadragonExtensionEvents.IMAGE_SEARCH,
           imageIndex
@@ -399,7 +399,7 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.$searchText.onEnter(() => {
       this.$searchText.blur();
-      this.search(this.$searchText.val());
+      this.search(`${this.$searchText.val()}`);
     });
 
     this.$searchText.click(function () {
@@ -408,9 +408,9 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     this.onAccessibleClick(this.$searchButton, () => {
       if (this.options.autoCompleteBoxEnabled) {
-        this.search(this.$autoCompleteBox.val());
+        this.search(`${this.$autoCompleteBox.val()}`);
       } else {
-        this.search(this.$searchText.val());
+        this.search(`${this.$searchText.val()}`);
       }
     });
 
@@ -608,9 +608,9 @@ export class PagingHeaderPanel extends HeaderPanel<
       let index: number;
 
       if (this.options.autoCompleteBoxEnabled) {
-        index = parseInt(this.$autoCompleteBox.val(), 10);
+        index = parseInt(`${this.$autoCompleteBox.val()}`, 10);
       } else {
-        index = parseInt(this.$searchText.val(), 10);
+        index = parseInt(`${this.$searchText.val()}`, 10);
       }
 
       index -= 1;

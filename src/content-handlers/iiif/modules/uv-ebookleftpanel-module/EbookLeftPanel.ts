@@ -96,7 +96,7 @@ export class EbookLeftPanel extends LeftPanel<
   resize(): void {
     super.resize();
     this._$container.height(
-      this.$main.height() - this._$container.verticalPadding()
+      this.$main.height()! - this._$container.verticalPadding()
     );
   }
 }

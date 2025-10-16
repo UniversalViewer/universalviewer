@@ -38,7 +38,7 @@ export class ExternalContentDialogue extends Dialogue<
   resize(): void {
     super.resize();
 
-    this.$iframe.width(this.$content.width());
-    this.$iframe.height(this.$content.height());
+    this.$iframe.width(this.$content.width()!);
+    this.$iframe.height(this.$content.height()!);
   }
 }
