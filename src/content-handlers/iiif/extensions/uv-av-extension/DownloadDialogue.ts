@@ -62,8 +62,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
       const $selectedOption: JQuery = that.getSelectedOption();
 
-      const id: string = $selectedOption.attr("id");
-      const label: string = $selectedOption.attr("title");
+      const id: string = $selectedOption.attr("id")!;
+      const label: string = $selectedOption.attr("title")!;
       const type: string = DownloadOption.UNKNOWN;
 
       if (this.renderingUrls[<any>id]) {

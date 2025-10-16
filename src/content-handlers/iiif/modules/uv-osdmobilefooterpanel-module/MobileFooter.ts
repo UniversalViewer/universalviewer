@@ -81,7 +81,7 @@ export class FooterPanel extends BaseFooterPanel<
     setTimeout(() => {
       this.$options.css(
         "left",
-        Math.floor(this.$element.width() / 2 - this.$options.width() / 2)
+        Math.floor(this.$element.width()! / 2 - this.$options.width()! / 2)
       );
     }, 1);
   }

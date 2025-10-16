@@ -202,7 +202,7 @@ export class FooterPanel extends BaseFooterPanel<
 
     this.$searchButton.on("click", (e: any) => {
       e.preventDefault();
-      this.search(this.$searchText.val());
+      this.search(`${this.$searchText.val()}`);
     });
 
     this.$searchText.on("focus", () => {
@@ -302,7 +302,7 @@ export class FooterPanel extends BaseFooterPanel<
     } else {
       this.$searchText.on("keyup", (e) => {
         if (e.keyCode === KeyCodes.KeyDown.Enter) {
-          that.search(that.$searchText.val());
+          that.search(`${that.$searchText.val()}`);
         }
       });
     }
@@ -557,8 +557,8 @@ export class FooterPanel extends BaseFooterPanel<
 
       this.$searchResultsContainer.append($placemarker);
 
-      const top: number = lineTop - $placemarker.height();
-      const left: number = lineLeft + distance - $placemarker.width() / 2;
+      const top: number = lineTop - $placemarker.height()!;
+      const left: number = lineLeft + distance - $placemarker.width()! / 2;
 
       $placemarker.css({
         top: top,
@@ -598,7 +598,7 @@ export class FooterPanel extends BaseFooterPanel<
 
     $placemarker.addClass("hover");
 
-    const canvasIndex: number = parseInt($placemarker.attr("data-index"));
+    const canvasIndex: number = parseInt($placemarker.attr("data-index")!);
 
     that.extensionHost.publish(
       OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
@@ -673,7 +673,7 @@ export class FooterPanel extends BaseFooterPanel<
     let left: number = pos.left;
 
     if (left < that.$placemarkerDetails.width() / 2) {
-      left = 0 - $placemarker.width() / 2;
+      left = 0 - $placemarker.width()! / 2;
     } else if (
       left >
       that.$line.width() - that.$placemarkerDetails.width() / 2
@@ -681,7 +681,7 @@ export class FooterPanel extends BaseFooterPanel<
       left =
         that.$line.width() -
         that.$placemarkerDetails.width() +
-        $placemarker.width() / 2;
+        $placemarker.width()! / 2;
     } else {
       left -= that.$placemarkerDetails.width() / 2;
     }
@@ -728,10 +728,10 @@ export class FooterPanel extends BaseFooterPanel<
 
     // if the remaining distance to the right is less than the width of the label
     // shift it to the left.
-    const lineWidth: number = this.$line.width();
+    const lineWidth: number = this.$line.width()!;
 
-    if (left + this.$pagePositionLabel.outerWidth(true) > lineWidth) {
-      left -= this.$pagePositionLabel.outerWidth(true);
+    if (left + this.$pagePositionLabel.outerWidth(true)! > lineWidth) {
+      left -= this.$pagePositionLabel.outerWidth(true)!;
       this.$pagePositionLabel.removeClass("right");
       this.$pagePositionLabel.addClass("left");
     } else {
@@ -766,7 +766,7 @@ export class FooterPanel extends BaseFooterPanel<
   }
 
   getPageLineRatio(): number {
-    const lineWidth: number = this.$line.width();
+    const lineWidth: number = this.$line.width()!;
 
     // find page/width ratio by dividing the line width by the number of pages in the book.
     if (this.extension.helper.getTotalCanvases() === 1) return 0;
@@ -892,18 +892,18 @@ export class FooterPanel extends BaseFooterPanel<
 
     this.setPageMarkerPosition();
 
-    this.$searchPagerContainer.width(this.$element.width());
+    this.$searchPagerContainer.width(this.$element.width()!);
 
-    const center: number = this.$element.width() / 2;
+    const center: number = this.$element.width()! / 2;
 
     // position search pager controls.
     this.$searchPagerControls.css({
-      left: center - this.$searchPagerControls.width() / 2,
+      left: center - this.$searchPagerControls.width()! / 2,
     });
 
     // position search input.
     this.$searchOptions.css({
-      left: center - this.$searchOptions.outerWidth() / 2,
+      left: center - this.$searchOptions.outerWidth()! / 2,
     });
   }
 }

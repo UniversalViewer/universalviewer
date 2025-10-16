@@ -114,9 +114,10 @@ export class LoginDialogue extends Dialogue<
     this.$message.html(message);
     this.$message.targetBlank();
 
+    var that = this;
     this.$message.find("a").on("click", function () {
       var url: string = $(this).attr("href");
-      this.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
+      that.extensionHost.publish(IIIFEvents.EXTERNAL_LINK_CLICKED, url);
     });
 
     if (this.options.showCancelButton) {

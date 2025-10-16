@@ -113,7 +113,7 @@ export class SettingsDialogue extends Dialogue<
     }
 
     this.$localeDropDown.change(() => {
-      this.extension.changeLocale(this.$localeDropDown.val());
+      this.extension.changeLocale(`${this.$localeDropDown.val()}`);
     });
   }
 

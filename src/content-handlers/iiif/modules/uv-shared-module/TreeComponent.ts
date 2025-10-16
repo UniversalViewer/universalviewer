@@ -168,7 +168,7 @@ export class TreeComponent extends BaseComponent {
     ) as MultiSelectableTreeNode;
     this._flattenedTree = null; // delete cache
     this._multiSelectableNodes = null; // delete cache
-    this._$tree.link($.templates.pageTemplate, this._rootNode);
+    this._$tree.load($.templates.pageTemplate, this._rootNode);
 
     const multiSelectState: MultiSelectState | null =
       this._getMultiSelectState();

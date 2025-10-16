@@ -168,7 +168,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
       thumb.height = medianHeight;
     }
 
-    this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
+    this.$thumbs.load($.templates.thumbsTemplate, this.thumbs);
 
     this.$thumbs.undelegate(".thumb", "click");
 
@@ -181,19 +181,23 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     });
 
     // Support keyboard navigation (spacebar / enter)
-    this.$thumbs.delegate(".thumb", "keydown", function (e: JQueryEventObject) {
-      const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
-      const charCode: number = Keyboard.getCharCode(originalEvent);
-      if (
-        charCode === KeyCodes.KeyDown.Spacebar ||
-        charCode === KeyCodes.KeyDown.Enter
-      ) {
-        e.preventDefault();
-        const data = $.view(this).data;
-        that.lastThumbClickedIndex = data.index;
-        that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, data);
+    this.$thumbs.delegate(
+      ".thumb",
+      "keydown",
+      function (event: JQuery.KeyboardEventBase) {
+        const originalEvent: KeyboardEvent = <KeyboardEvent>event.target;
+        const charCode: number = Keyboard.getCharCode(originalEvent);
+        if (
+          charCode === KeyCodes.KeyDown.Spacebar ||
+          charCode === KeyCodes.KeyDown.Enter
+        ) {
+          event.preventDefault();
+          const data = $.view(this).data;
+          that.lastThumbClickedIndex = data.index;
+          that.extensionHost.publish(IIIFEvents.THUMB_SELECTED, data);
+        }
       }
-    });
+    );
 
     this.setLabel();
     this.isCreated = true;
@@ -202,8 +206,8 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
   scrollStop(): void {
     let scrollPos: number =
       1 /
-      ((this.$thumbs.height() - this.$element.height()) /
-        this.$element.scrollTop());
+      ((this.$thumbs.height()! - this.$element.height()!) /
+        this.$element.scrollTop()!);
     if (scrollPos > 1) scrollPos = 1;
     const thumbRangeMid: number = Math.floor(
       (this.thumbs.length - 1) * scrollPos
@@ -254,7 +258,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
 
       // if no img has been added yet
       if (!$wrap.hasClass("loading") && !$wrap.hasClass("loaded")) {
-        const visible: string = $thumb.attr("data-visible");
+        const visible: string = $thumb.attr("data-visible")!;
 
         if (visible !== "false") {
           $wrap.removeClass("loadingFailed");
@@ -264,7 +268,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
             $wrap.addClass(thumbType);
           }
 
-          let src: string = $thumb.attr("data-src");
+          let src: string = $thumb.attr("data-src")!;
           if (
             that.config.options.thumbsCacheInvalidation &&
             that.config.options.thumbsCacheInvalidation.enabled
@@ -341,7 +345,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     // scroll to thumb if the index change didn't originate
     // within the thumbs view.
     if (!~indices.indexOf(this.lastThumbClickedIndex)) {
-      this.$element.scrollTop(this.$selectedThumb.position().top);
+      this.$element.scrollTop(this.$selectedThumb.position()!.top);
     }
 
     // make sure visible images are loaded.

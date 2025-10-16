@@ -85,7 +85,7 @@ export class GalleryView extends BaseView<ContentLeftPanel> {
     super.resize();
     const $main: JQuery = this.$gallery.find(".main");
     const $header: JQuery = this.$gallery.find(".header");
-    $main.height(this.$element.height() - $header.height());
+    $main.height(this.$element.height()! - $header.height()!);
   }
 
   public applyExtendedLabelsStyles(): void {

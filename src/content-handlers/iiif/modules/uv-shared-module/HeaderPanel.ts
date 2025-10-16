@@ -198,9 +198,9 @@ export class HeaderPanel<
   resize(): void {
     super.resize();
 
-    const headerWidth: number = this.$element.width();
+    const headerWidth: number = this.$element.width()!;
     const center: number = headerWidth / 2;
-    const containerWidth: number = this.$centerOptions.outerWidth();
+    const containerWidth: number = this.$centerOptions.outerWidth()!;
     const pos: number = center - containerWidth / 2;
 
     this.$centerOptions.css({
@@ -211,10 +211,10 @@ export class HeaderPanel<
       const $actions: JQuery = this.$informationBox.find(".actions");
       const $message: JQuery = this.$informationBox.find(".message");
       $message.width(
-        Math.floor(this.$element.width()) -
+        Math.floor(this.$element.width()!) -
           Math.ceil($message.horizontalMargins()) -
-          Math.ceil($actions.outerWidth(true)) -
-          Math.ceil(this.$informationBox.find(".close").outerWidth(true)) -
+          Math.ceil($actions.outerWidth(true)!) -
+          Math.ceil(this.$informationBox.find(".close").outerWidth(true)!) -
           2
       );
       if (this.information) {

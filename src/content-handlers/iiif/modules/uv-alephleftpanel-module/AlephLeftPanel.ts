@@ -285,7 +285,7 @@ export class AlephLeftPanel extends LeftPanel<
     super.resize();
 
     if (this._alControlPanel) {
-      this._alControlPanel.tabContentHeight = this.$main.height() - 68 + "px";
+      this._alControlPanel.tabContentHeight = this.$main.height()! - 68 + "px";
     }
   }
 }

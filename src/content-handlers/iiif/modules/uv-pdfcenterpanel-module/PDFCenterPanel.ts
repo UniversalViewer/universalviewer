@@ -458,8 +458,8 @@ export class PDFCenterPanel extends CenterPanel<
   resize() {
     super.resize();
 
-    this._$pdfContainer.width(this.$content.width());
-    this._$pdfContainer.height(this.$content.height());
+    this._$pdfContainer.width(this.$content.width()!);
+    this._$pdfContainer.height(this.$content.height()!);
 
     // this._$spinner.css(
     //   "top",
@@ -472,23 +472,23 @@ export class PDFCenterPanel extends CenterPanel<
 
     this._$progress.css(
       "top",
-      this.$content.height() / 2 - this._$progress.height() / 2
+      this.$content.height()! / 2 - this._$progress.height()! / 2
     );
     this._$progress.css(
       "left",
-      this.$content.width() / 2 - this._$progress.width() / 2
+      this.$content.width()! / 2 - this._$progress.width()! / 2
     );
 
     this._$prevButton.css({
-      top: (this.$content.height() - this._$prevButton.height()) / 2,
+      top: (this.$content.height()! - this._$prevButton.height()!) / 2,
       left: this._$prevButton.horizontalMargins(),
     });
 
     this._$nextButton.css({
-      top: (this.$content.height() - this._$nextButton.height()) / 2,
+      top: (this.$content.height()! - this._$nextButton.height()!) / 2,
       left:
-        this.$content.width() -
-        (this._$nextButton.width() + this._$nextButton.horizontalMargins()),
+        this.$content.width()! -
+        (this._$nextButton.width()! + this._$nextButton.horizontalMargins()),
     });
 
     if (!this._viewport) {

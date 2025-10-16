@@ -94,12 +94,12 @@ export class Shell extends BaseView<BaseConfig> {
     }, 1);
 
     const mainHeight: number =
-      this.$element.height() -
+      this.$element.height()! -
       parseInt(this.$mainPanel.css("paddingTop")) -
-      (isVisible(this.$headerPanel) ? this.$headerPanel.height() : 0) -
-      (isVisible(this.$footerPanel) ? this.$footerPanel.height() : 0) -
-      (isVisible(this.$mobileFooterPanel)
-        ? this.$mobileFooterPanel.height()
+      (isVisible(this.$headerPanel)! ? this.$headerPanel.height()! : 0) -
+      (isVisible(this.$footerPanel)! ? this.$footerPanel.height()! : 0) -
+      (isVisible(this.$mobileFooterPanel)!
+        ? this.$mobileFooterPanel.height()!
         : 0);
 
     this.$mainPanel.height(mainHeight);
