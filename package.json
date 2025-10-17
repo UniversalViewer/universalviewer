@@ -96,6 +96,7 @@
     "webpack-dev-server": "5.2.1"
   },
   "dependencies": {
+    "@edsilv/utils": "^1.0.2",
     "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
