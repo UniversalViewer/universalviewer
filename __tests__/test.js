@@ -67,16 +67,16 @@ describe("Universal Viewer", () => {
     expect(labelOverflowAfterToggle).toBe("visible");
   });
 
-  // it('settings button is visible', async () => {
+  it('settings button is visible', async () => {
 
-  //   await page.waitForSelector('.btn.imageBtn.settings');
+    await page.waitForSelector('.btn.imageBtn.settings');
 
-  //   const isSettingsButtonVisible = await page.evaluate(() => {
-  //     const settingsButton = document.querySelector('.btn.imageBtn.settings');
-  //     const style = window.getComputedStyle(settingsButton);
-  //     return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
-  //   });
+    const isSettingsButtonVisible = await page.evaluate(() => {
+      const settingsButton = document.querySelector('.btn.imageBtn.settings');
+      const style = window.getComputedStyle(settingsButton);
+      return style.getPropertyValue('visibility') !== 'hidden' && style.getPropertyValue('display') !== 'none';
+    });
 
-  //   expect(isSettingsButtonVisible).toBe(true);
-  // });
+    expect(isSettingsButtonVisible).toBe(true);
+  });
 });
