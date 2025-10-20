@@ -1576,19 +1576,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         }, 200);
       }
     }
-
-    // stretch navigator, allowing time for OSD to resize
-    // setTimeout(() => {
-    //   if (this.extension.helper.isContinuous()) {
-    //     if (this.extension.helper.isHorizontallyAligned()) {
-    //       const width: number =
-    //         this.$viewer.width() - this.$viewer.rightMargin();
-    //       this.$navigator.width(width);
-    //     } else {
-    //       this.$navigator.height(this.$viewer.height());
-    //     }
-    //   }
-    // }, 100);
   }
 
   setFocus(): void {
