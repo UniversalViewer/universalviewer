@@ -31,7 +31,6 @@ import {
   Manifest,
   Range,
 } from "manifesto.js";
-// import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "../../KeyCodes";
 import {
   Bools,
