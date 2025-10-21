@@ -31,7 +31,6 @@ import {
   Manifest,
   Range,
 } from "manifesto.js";
-import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
 import * as KeyCodes from "../../KeyCodes";
 import {
   Bools,
@@ -1091,12 +1090,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       if (this.helper.hasParentCollection()) {
         return true;
       } else if (this.helper.isMultiCanvas()) {
-        const viewingHint: ViewingHint | null = this.helper.getViewingHint();
-
-        if (
-          !viewingHint ||
-          (viewingHint && viewingHint !== ViewingHint.CONTINUOUS)
-        ) {
+        if (!this.helper.isContinuous()) {
           return true;
         }
       }

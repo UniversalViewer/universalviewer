@@ -373,10 +373,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition:
-        this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+      navigatorPosition: this.extension.helper.isContinuous()
+        ? "BOTTOM_LEFT"
+        : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
       navigatorHeight: "100px",
       navigatorWidth: "100px",
+      navigatorMaintainSizeRatio: false,
+      navigatorAutoResize: false,
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
@@ -1135,6 +1138,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.setNavigatorVisible();
 
+    // resize navigator for continuous manifests
+    if (this.extension.helper.isContinuous()) {
+      setTimeout(() => {
+        this.resizeNavigatorForContinuous();
+      }, 200);
+    }
+
     this.overlayAnnotations();
 
     this.updateBounds();
@@ -1146,6 +1156,58 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     }
 
     this.isFirstLoad = false;
+  }
+
+  private resizeNavigatorForContinuous(): void {
+    if (!this.viewer || !this.viewer.navigator) return;
+
+    const homeBounds = this.viewer.world.getHomeBounds();
+    const contentAspectRatio = homeBounds.width / homeBounds.height;
+
+    const viewportWidth = this.$viewer.width();
+    const viewportHeight = this.$viewer.height();
+    const maxNavigatorWidth = 100;
+    const maxNavigatorHeight = 100;
+    const minVerticalNavigatorWidth = 60;
+    const minHorizontalNavigatorHeight = 40;
+
+    let navigatorWidth: number;
+    let navigatorHeight: number;
+
+    if (this.extension.helper.isVerticallyAligned()) {
+      navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
+      navigatorWidth = navigatorHeight * contentAspectRatio;
+
+      // Enforce max width
+      if (navigatorWidth > maxNavigatorWidth) {
+        navigatorWidth = maxNavigatorWidth;
+      }
+
+      // Enforce min width
+      if (navigatorWidth < minVerticalNavigatorWidth) {
+        navigatorWidth = minVerticalNavigatorWidth;
+      }
+    } else {
+      navigatorWidth = viewportWidth;
+      navigatorHeight = navigatorWidth / contentAspectRatio;
+
+      // Enforce max height
+      if (navigatorHeight > maxNavigatorHeight) {
+        navigatorHeight = maxNavigatorHeight;
+      }
+
+      // Enforce min height
+      if (navigatorHeight < minHorizontalNavigatorHeight) {
+        navigatorHeight = minHorizontalNavigatorHeight;
+      }
+    }
+
+    const navigatorElement = this.viewer.navigator.element;
+    navigatorElement.style.width = `${navigatorWidth}px`;
+    navigatorElement.style.height = `${navigatorHeight}px`;
+
+    this.viewer.navigator.viewport.fitBounds(homeBounds, true);
+    this.viewer.navigator.updateSize();
   }
 
   zoomToInitialAnnotation(): void {
@@ -1729,20 +1791,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           );
           break;
       }
-    }
 
-    // stretch navigator, allowing time for OSD to resize
-    setTimeout(() => {
+      // resize navigator for continuous manifests
       if (this.extension.helper.isContinuous()) {
-        if (this.extension.helper.isHorizontallyAligned()) {
-          const width: number =
-            this.$viewer.width() - this.$viewer.rightMargin();
-          this.$navigator.width(width);
-        } else {
-          this.$navigator.height(this.$viewer.height());
-        }
+        setTimeout(() => {
+          this.resizeNavigatorForContinuous();
+        }, 200);
       }
-    }, 100);
+    }
   }
 
   setFocus(): void {

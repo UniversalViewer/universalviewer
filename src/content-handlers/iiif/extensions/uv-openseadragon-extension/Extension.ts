@@ -1580,7 +1580,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     let indices: number[] = [];
 
     // if it's a continuous manifest, get all resources.
-    if (sequence.getViewingHint() === ViewingHint.CONTINUOUS) {
+    if (this.helper.isContinuous()) {
       // get all canvases to be displayed inline
       indices = canvases.map((_canvas: Canvas, index: number) => {
         return index;
