@@ -3,7 +3,7 @@ import HeaderButton from "../uv-shared-module/HeaderButton";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
-import { Search as SearchIcon } from "../../../../icons/icons"
+import { Search as SearchIcon } from "../../../../icons/icons";
 
 interface SearchProps {
   extension: OpenSeadragonExtension;
@@ -13,7 +13,7 @@ interface SearchProps {
 }
 
 export const Search: React.FC<SearchProps> = ({
-    extension,
+  extension,
   extensionHost,
   content,
   options,
@@ -22,7 +22,7 @@ export const Search: React.FC<SearchProps> = ({
   const [maxWidth, setMaxWidth] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
-  
+
   const [autoCompleteOptions, setAutoCompleteOptions] = useState<string[]>([]);
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
@@ -30,7 +30,7 @@ export const Search: React.FC<SearchProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
-  
+
   //dev only, set width
   const inputWidth = "20ch";
 
@@ -54,7 +54,7 @@ export const Search: React.FC<SearchProps> = ({
       const results = await response.json();
       const matches = results.terms.map((result: any) => result.match);
       setAutoCompleteOptions(matches);
-      setShowAutoComplete(matches.length > 0)
+      setShowAutoComplete(matches.length > 0);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       setAutoCompleteOptions([]);
@@ -65,7 +65,7 @@ export const Search: React.FC<SearchProps> = ({
     const value = e.target.value;
     setSearchTerm(value);
     setFocusedOptionIndex(-1);
-    setShowAutoComplete(false)
+    setShowAutoComplete(false);
 
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
@@ -76,7 +76,7 @@ export const Search: React.FC<SearchProps> = ({
         fetchSuggestions(value);
       }, 300);
     } else {
-        setAutoCompleteOptions([]);
+      setAutoCompleteOptions([]);
     }
   };
 
@@ -86,7 +86,7 @@ export const Search: React.FC<SearchProps> = ({
       setAutoCompleteOptions([]);
       setShowAutoComplete(false);
     }, 150);
-  }
+  };
 
   useEffect(() => {
     if (focusedOptionIndex >= 0 && dropdownRef.current) {
@@ -94,8 +94,8 @@ export const Search: React.FC<SearchProps> = ({
       const highlightedItem = suggestionItems[focusedOptionIndex];
       if (highlightedItem) {
         highlightedItem.scrollIntoView({
-            behavior: "instant",
-            block: "nearest",
+          behavior: "instant",
+          block: "nearest",
         });
       }
     }
@@ -112,10 +112,10 @@ export const Search: React.FC<SearchProps> = ({
       }
     };
 
-    window.addEventListener('scroll', handleScroll, true);
+    window.addEventListener("scroll", handleScroll, true);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll, true);
+      window.removeEventListener("scroll", handleScroll, true);
     };
   }, [showAutoComplete]);
 
@@ -135,11 +135,11 @@ export const Search: React.FC<SearchProps> = ({
         case "Tab":
           e.preventDefault();
           if (e.shiftKey) {
-              setFocusedOptionIndex(prev => prev > 0 ? prev - 1 : 0);
+            setFocusedOptionIndex((prev) => (prev > 0 ? prev - 1 : 0));
           } else {
-              setFocusedOptionIndex(prev => 
+            setFocusedOptionIndex((prev) =>
               prev < autoCompleteOptions.length - 1 ? prev + 1 : prev
-              );
+            );
           }
           break;
         case "Enter":
@@ -170,7 +170,7 @@ export const Search: React.FC<SearchProps> = ({
       clearTimeout(debounceTimer.current);
       debounceTimer.current = null;
     }
-    
+
     handleSearchSubmit(term);
     setSearchTerm("");
     toggleSearch();
@@ -189,25 +189,21 @@ export const Search: React.FC<SearchProps> = ({
 
   function positionDropdown(triggerElement, dropdownElement) {
     if (!triggerElement || !dropdownElement) return;
-  
+
     const rect = triggerElement.getBoundingClientRect();
     dropdownElement.style.top = `${rect.bottom}px`;
     dropdownElement.style.left = `${rect.left}px`;
   }
-  
+
   useEffect(() => {
-    const input = document.querySelector('#text-search');
-    const portal = document.querySelector('#text-dropdown-portal');
+    const input = document.querySelector("#text-search");
+    const portal = document.querySelector("#text-dropdown-portal");
     positionDropdown(input, portal);
   }, [showAutoComplete]);
 
   return (
     <>
-      <HeaderButton
-        onClick={toggleSearch}
-        title="Search"
-        label="Search"
-      >
+      <HeaderButton onClick={toggleSearch} title="Search" label="Search">
         <SearchIcon />
       </HeaderButton>
       <div
@@ -221,62 +217,63 @@ export const Search: React.FC<SearchProps> = ({
         }}
       >
         <div className="search-new">
-            <div className="search-input-container">
-              <input
-                type="text"
-                className="search-input"
-                id="text-search"
-                ref={inputRef}
-                placeholder={content.enterKeyword}
-                value={searchTerm}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                onBlur={handleInputBlur}
-                maxLength={30}
-                style={{ width: inputWidth }}
-                aria-label="Search text"
-                aria-expanded={showAutoComplete}
-                aria-autocomplete="list"
-                aria-controls={showAutoComplete ? "autocomplete-list" : undefined}
-                aria-activedescendant={
-                  focusedOptionIndex >= 0
-                    ? `option-${focusedOptionIndex}`
-                    : undefined
-                }
-              />
-            </div>
+          <div className="search-input-container">
+            <input
+              type="text"
+              className="search-input"
+              id="text-search"
+              ref={inputRef}
+              placeholder={content.enterKeyword}
+              value={searchTerm}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onBlur={handleInputBlur}
+              maxLength={30}
+              style={{ width: inputWidth }}
+              aria-label="Search text"
+              aria-expanded={showAutoComplete}
+              aria-autocomplete="list"
+              aria-controls={showAutoComplete ? "autocomplete-list" : undefined}
+              aria-activedescendant={
+                focusedOptionIndex >= 0
+                  ? `option-${focusedOptionIndex}`
+                  : undefined
+              }
+            />
+          </div>
         </div>
       </div>
       {showAutoComplete && options.autoCompleteBoxEnabled && (
-      <div className="dropdown-portal" id="text-dropdown-portal">
-            {options.autoCompleteBoxEnabled && (
-              <ul
-                id="autocomplete-list"
-                ref={dropdownRef}
-                className="autocomplete-dropdown"
-                style={{ width: inputWidth }}
-                role="listbox"
-              >
-                {autoCompleteOptions.map((option, index) => (
-                  <li
-                    key={index}
-                    id={`option-${index}`}
-                    role="option"
-                    aria-selected={focusedOptionIndex === index}
-                    className={
-                      focusedOptionIndex === index ? "focused-option" : ""
-                    }
-                    onMouseDown={() => {
-                      handleAutoCompleteSelect(option);
-                    }}
-                    onMouseEnter={() => setFocusedOptionIndex(index)}
-                  >
-                    {option}
-                  </li>
-                ))}
-              </ul>
-            )}
-      </div>)}
+        <div className="dropdown-portal" id="text-dropdown-portal">
+          {options.autoCompleteBoxEnabled && (
+            <ul
+              id="autocomplete-list"
+              ref={dropdownRef}
+              className="autocomplete-dropdown"
+              style={{ width: inputWidth }}
+              role="listbox"
+            >
+              {autoCompleteOptions.map((option, index) => (
+                <li
+                  key={index}
+                  id={`option-${index}`}
+                  role="option"
+                  aria-selected={focusedOptionIndex === index}
+                  className={
+                    focusedOptionIndex === index ? "focused-option" : ""
+                  }
+                  onMouseDown={() => {
+                    handleAutoCompleteSelect(option);
+                  }}
+                  onMouseEnter={() => setFocusedOptionIndex(index)}
+                >
+                  {option}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </>
   );
 };

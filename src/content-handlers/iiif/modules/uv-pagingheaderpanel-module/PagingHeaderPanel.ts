@@ -61,7 +61,7 @@ export class PagingHeaderPanel extends HeaderPanel<
       }
     );
 
-      this.$galleryButton = $(`
+    this.$galleryButton = $(`
           <button class="btn imageBtn gallery" title="${this.content.gallery}">
             <i class="uv-icon-gallery" aria-hidden="true"></i>
             <span class="sr-only">${this.content.gallery}</span>
@@ -146,7 +146,6 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
     });
 
-
     // todo: discuss on community call
     // Get visible element in centerOptions with greatest tabIndex
     // var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
@@ -192,7 +191,7 @@ export class PagingHeaderPanel extends HeaderPanel<
     );
   }
 
-    updatePagingToggle(): void {
+  updatePagingToggle(): void {
     if (!this.pagingToggleIsVisible()) {
       this.$pagingToggleButtons.hide();
       return;

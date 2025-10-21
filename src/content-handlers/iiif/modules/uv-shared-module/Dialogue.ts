@@ -90,10 +90,10 @@ export class Dialogue<
   }
 
   setDockedPosition(): void {
-    let top: number = Math.floor(
+    const top: number = Math.floor(
       (this.extension.height() - this.$element.outerHeight(true)) / 2
     );
-    let left: number = Math.floor(
+    const left: number = Math.floor(
       (this.extension.width() - this.$element.outerWidth(true)) / 2
     );
 

@@ -5,7 +5,16 @@ import { Events } from "../../../../Events";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { HeaderPanelContent, HeaderPanelOptions } from "../../BaseConfig";
-import { Download, Share, Print, Mail, Bookmark, FullScreen, ExitFullScreen, Settings} from "../../../../icons/icons"
+import {
+  Download,
+  Share,
+  Print,
+  Mail,
+  Bookmark,
+  FullScreen,
+  ExitFullScreen,
+  Settings,
+} from "../../../../icons/icons";
 
 interface Props {
   extensionHost: IIIFExtensionHost;
@@ -13,7 +22,11 @@ interface Props {
   content: HeaderPanelContent;
 }
 
-const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, content }) => {
+const HeaderPanelRightOptions: React.FC<Props> = ({
+  extensionHost,
+  options,
+  content,
+}) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleFullScreenClick = () => {
@@ -48,7 +61,10 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
       {options.downloadEnabled && (
         <HeaderButton
           onClick={(event) =>
-            extensionHost.publish(IIIFEvents.SHOW_DOWNLOAD_DIALOGUE, event.currentTarget)
+            extensionHost.publish(
+              IIIFEvents.SHOW_DOWNLOAD_DIALOGUE,
+              event.currentTarget
+            )
           }
           title={content.download || "Download"}
           label={""}
@@ -61,7 +77,10 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
       {options.shareEnabled && (
         <HeaderButton
           onClick={(event) =>
-            extensionHost.publish(IIIFEvents.SHOW_SHARE_DIALOGUE, event.currentTarget)
+            extensionHost.publish(
+              IIIFEvents.SHOW_SHARE_DIALOGUE,
+              event.currentTarget
+            )
           }
           title={content.share}
           label={""}
@@ -86,9 +105,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
 
       {options.bookmarkEnabled && (
         <HeaderButton
-          onClick={() =>
-            extensionHost.publish(IIIFEvents.BOOKMARK)
-          }
+          onClick={() => extensionHost.publish(IIIFEvents.BOOKMARK)}
           title={content.bookmark}
           label={""}
         >
@@ -99,9 +116,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
 
       {options.feedbackEnabled && (
         <HeaderButton
-          onClick={() =>
-            extensionHost.publish(IIIFEvents.FEEDBACK)
-          }
+          onClick={() => extensionHost.publish(IIIFEvents.FEEDBACK)}
           title={content.feedback}
           label={""}
         >
@@ -113,7 +128,10 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
       {options.settingsButtonEnabled && (
         <HeaderButton
           onClick={(event) =>
-            extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE, event.currentTarget)
+            extensionHost.publish(
+              IIIFEvents.SHOW_SETTINGS_DIALOGUE,
+              event.currentTarget
+            )
           }
           title={content.settings}
           label={""}
@@ -125,19 +143,19 @@ const HeaderPanelRightOptions: React.FC<Props> = ({ extensionHost, options, cont
 
       {options.fullscreenEnabled && (
         <HeaderButton
-        onClick={handleFullScreenClick}
-        title={isFullScreen ? content.exitFullScreen : content.fullScreen}
-        label={""}
-      >
-        {isFullScreen ? (
-          <ExitFullScreen aria-hidden="true" />
-        ) : (
-          <FullScreen aria-hidden="true" />
-        )}
-        <span className="sr-only">
-          {isFullScreen ? content.exitFullScreen : content.fullScreen}
-        </span>
-      </HeaderButton>      
+          onClick={handleFullScreenClick}
+          title={isFullScreen ? content.exitFullScreen : content.fullScreen}
+          label={""}
+        >
+          {isFullScreen ? (
+            <ExitFullScreen aria-hidden="true" />
+          ) : (
+            <FullScreen aria-hidden="true" />
+          )}
+          <span className="sr-only">
+            {isFullScreen ? content.exitFullScreen : content.fullScreen}
+          </span>
+        </HeaderButton>
       )}
     </div>
   );

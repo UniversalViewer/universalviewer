@@ -1,47 +1,45 @@
-﻿@import "mobile";
+@import "mobile";
 
 .uv-iiif-extension-host.uv-openseadragon-extension {
   @search-result: @brand-secondary;
 
-    .centerPanel {
+  .centerPanel {
+    .pagingToggleButtons {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      background: black;
+      transition: opacity 0.3s ease;
 
-        .pagingToggleButtons {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          z-index: 1000;
-          display: flex;
-          background: black;
-          transition: opacity 0.3s ease;
-      
-          button {
-            cursor: pointer;
-      
-            svg {
-              width: 30px;
-              height: 30px;
-              fill: currentColor;
-              transition: fill 0.2s ease;
-            }
-      
-            &:hover {
-              color: #00fff2;
-            }
-      
-            &:focus {
-                .tab-focus();
-            }
-          }
-      
-          &.fade-out {
-            opacity: 0;
-            pointer-events: none;
-          }
+      button {
+        cursor: pointer;
+
+        svg {
+          width: 30px;
+          height: 30px;
+          fill: currentcolor;
+          transition: fill 0.2s ease;
         }
-            
 
-        .content{
-            position: relative;
+        &:hover {
+          color: #00fff2;
+        }
+
+        &:focus {
+          .tab-focus();
+        }
+      }
+
+      &.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .content {
+      position: relative;
 
       .displayregion {
         border: 2px solid #fff !important;
@@ -142,7 +140,7 @@
         .zoomIn {
           display: none !important;
 
-                    .xl-mediaquery({
+          .xl-mediaquery({
                         display: inline-flex !important;
                         align-items: center;
                         justify-content: center;
@@ -173,7 +171,7 @@
         .zoomOut {
           display: none !important;
 
-                    .xl-mediaquery({
+          .xl-mediaquery({
                         display: inline-flex !important;
                         align-items: center;
                         justify-content: center;
@@ -227,7 +225,7 @@
         .rotate {
           display: none !important;
 
-                    .xl-mediaquery({
+          .xl-mediaquery({
                         display: inline-flex !important;
                         align-items: center;
                         justify-content: center;
@@ -256,7 +254,7 @@
         .adjustImage {
           display: none !important;
 
-                    .xl-mediaquery({
+          .xl-mediaquery({
                         display: inline-flex !important;
                         align-items: center;
                         justify-content: center;
@@ -324,15 +322,15 @@
         z-index: 10;
       }
 
-            .annotationPin{
-                // background-color: white;
-                background-image: data-uri('../img/pin.svg') !important;
-                width: 26px !important;
-                height: 37px !important;
-                background-position-x: 1px;
-                transform: translate(-45%, -90%);
-                overflow: hidden;
-                cursor: pointer;
+      .annotationPin {
+        // background-color: white;
+        background-image: data-uri("../img/pin.svg") !important;
+        width: 26px !important;
+        height: 37px !important;
+        background-position-x: 1px;
+        transform: translate(-45%, -90%);
+        overflow: hidden;
+        cursor: pointer;
 
         span {
           color: #2a2a2a;
@@ -347,7 +345,7 @@
     }
   }
 
-    .openseadragon-canvas {
-        outline: none;
-    }
+  .openseadragon-canvas {
+    outline: none;
+  }
 }

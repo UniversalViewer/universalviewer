@@ -53,14 +53,14 @@ export class HeaderPanel<
 
     this.$leftOptions = $('<div class="leftOptions"></div>');
     this.$options.append(this.$leftOptions);
-    this.leftOptionsRoot = createRoot(this.$leftOptions[0]) 
+    this.leftOptionsRoot = createRoot(this.$leftOptions[0]);
 
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
 
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
-    this.rightOptionsRoot = createRoot(this.$rightOptions[0])    
+    this.rightOptionsRoot = createRoot(this.$rightOptions[0]);
 
     //temporarily hide center options while transferring functionality to left options
     this.$centerOptions.hide();
@@ -73,8 +73,8 @@ export class HeaderPanel<
             <i class="uv-icon-settings" aria-hidden="true"></i>
           </button>
         `);
-   // this.$settingsButton.attr("title", this.content.settings);
-   //  this.$rightOptions.append(this.$settingsButton);
+    // this.$settingsButton.attr("title", this.content.settings);
+    //  this.$rightOptions.append(this.$settingsButton);
 
     this.$helpButton = $(`
       <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
@@ -120,8 +120,8 @@ export class HeaderPanel<
     this.rightOptionsRoot.render(
       createElement(HeaderPanelRightOptions, {
         extensionHost: this.extensionHost,
-        options: this.options,   
-        content: this.content    
+        options: this.options,
+        content: this.content,
       })
     );
 
