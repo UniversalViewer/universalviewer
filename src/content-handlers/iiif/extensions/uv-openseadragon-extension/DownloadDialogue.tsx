@@ -88,8 +88,12 @@ const DownloadDialogue = ({
   useEffect(() => {
     const updatePosition = () => {
       if (open && parent && ref.current) {
-        const top = Math.floor((parent.clientHeight - ref.current.clientHeight) / 2);
-        const left = Math.floor((parent.clientWidth - ref.current.clientWidth) / 2);
+        const top = Math.floor(
+          (parent.clientHeight - ref.current.clientHeight) / 2
+        );
+        const left = Math.floor(
+          (parent.clientWidth - ref.current.clientWidth) / 2
+        );
 
         setPosition({ top: `${top}px`, left: `${left}px` });
 

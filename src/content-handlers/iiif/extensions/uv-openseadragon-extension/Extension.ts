@@ -535,7 +535,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.shell.$footerPanel.hide();
     }
 
-
     this.$multiSelectDialogue = $(
       '<div class="overlay multiSelect" aria-hidden="true"></div>'
     );

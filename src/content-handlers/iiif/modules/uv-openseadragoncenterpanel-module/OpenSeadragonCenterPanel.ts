@@ -129,24 +129,31 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const hasPaging = (
       this.extension as OpenSeadragonExtension
     ).helper.isPagingAvailable();
-    const isPagingEnabled = (this.extension as any).getSettings().pagingEnabled ?? false;
+    const isPagingEnabled =
+      (this.extension as any).getSettings().pagingEnabled ?? false;
     if (hasPaging) {
       this.togglePagingButtons(isPagingEnabled);
     } else {
       this.$oneUpButton.remove();
       this.$twoUpButton.remove();
-    }    
+    }
     this.togglePagingButtons(isPagingEnabled);
-  
+
     this.$oneUpButton.onPressed(() => {
       this.updateSettings({ pagingEnabled: false });
-      this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, false);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        false
+      );
       this.togglePagingButtons(false);
     });
 
     this.$twoUpButton.onPressed(() => {
       this.updateSettings({ pagingEnabled: true });
-      this.extensionHost.publish(OpenSeadragonExtensionEvents.PAGING_TOGGLED, true);
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        true
+      );
       this.togglePagingButtons(true);
     });
 
@@ -165,12 +172,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         <span class="sr-only">${this.content.gallery}</span>
       </button>
     `);
-    this.$pagingToggleButtons.append(this.$galleryButton);    
+    this.$pagingToggleButtons.append(this.$galleryButton);
 
     this.$galleryButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
     });
-    }
+  }
 
   private togglePagingButtons(pagingEnabled: boolean): void {
     if (pagingEnabled) {
@@ -180,7 +187,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$oneUpButton.hide();
       this.$twoUpButton.show();
     }
-    
+
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
     });
@@ -278,7 +285,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }
     );
   }
-  
+
   updateGalleryButton(): void {
     if (!this.galleryIsVisible()) {
       this.$galleryButton.hide();
@@ -286,7 +293,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$galleryButton.show();
     }
   }
-  
+
   galleryIsVisible(): boolean {
     return (
       Bools.getBool(this.options.galleryButtonEnabled, true) &&
@@ -504,7 +511,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     fill="currentColor"
   >
     <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
-  </svg>`)
+  </svg>`);
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
@@ -528,7 +535,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 >
   <rect x="8" y="14" width="14" height="2" />
 </svg>
-`)
+`);
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
@@ -571,7 +578,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 		S16.7,22.5,15,22.5z"
       />
     </g>
-  </svg>`)
+  </svg>`);
 
     this.onAccessibleClick(this.$rotateButton, () => {
       this.rotateRight();
@@ -601,7 +608,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
       />
     </g>
-  </svg>`)
+  </svg>`);
       this.$adjustImageButton.insertAfter(this.$rotateButton);
 
       this.onAccessibleClick(this.$adjustImageButton, () => {
@@ -694,7 +701,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.config.options.controlsFadeAfterInactive
     );
 
-    const fadeDelay = 1500; 
+    const fadeDelay = 1500;
 
     let fadeButtonsTimeout: number | undefined;
 
@@ -717,7 +724,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }, fadeDelay);
     };
 
-
     this.$element.on("mousemove", () => {
       resetPagingFadeTimer();
     });
@@ -738,9 +744,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       resetPagingFadeTimer();
     });
 
-
     showPagingButtons();
-    resetPagingFadeTimer()
+    resetPagingFadeTimer();
 
     this.viewer.addHandler("tile-drawn", () => {
       this.$spinner.hide();

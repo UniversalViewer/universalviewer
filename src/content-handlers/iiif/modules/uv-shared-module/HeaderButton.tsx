@@ -37,10 +37,10 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
       >
         {children}
       </button>
-      
+
       {title && (
-        <div 
-          className={`tooltip ${showTooltip ? 'tooltip-visible' : 'tooltip-hidden'}`}
+        <div
+          className={`tooltip ${showTooltip ? "tooltip-visible" : "tooltip-hidden"}`}
           role="tooltip"
         >
           {title}

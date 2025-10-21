@@ -154,7 +154,7 @@ export class FooterPanel extends BaseFooterPanel<
 
     // ui event handlers.
     var that = this;
-    
+
     this.$placemarkerDetails.on("mouseover", () => {
       that.extensionHost.publish(
         OpenSeadragonExtensionEvents.SEARCH_PREVIEW_START,
