@@ -63,7 +63,7 @@
     "async": "0.9.0",
     "chai": "5.1.2",
     "copy-webpack-plugin": "^13.0.0",
-    "css-loader": "^5.0.1",
+    "css-loader": "^7.1.2",
     "eslint": "9.27.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.4.0",
@@ -95,11 +95,16 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "5.2.1"
   },
+  "overrides": {
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
+    "schema-utils": "^4.3.3"
+  },
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
-    "@iiif/manifold": "^2.1.7",
+    "@iiif/manifold": "^2.1.1",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.29",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
@@ -115,7 +120,7 @@
     "jquery": "3.5.0",
     "jsviews": "1.0.15",
     "less-plugin-clean-css": "^1.5.1",
-    "manifesto.js": "^4.2.24",
+    "manifesto.js": "^4.2.22",
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "5.0.0",
     "openseadragon": "4.0.0",
