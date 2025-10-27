@@ -95,23 +95,18 @@
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "5.2.1"
   },
-  "overrides": {
-    "ajv": "^8.17.1",
-    "ajv-keywords": "^5.1.0",
-    "schema-utils": "^4.3.3",
-    "@eslint/eslintrc": "^3.2.0"
-  },
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
-    "@iiif/manifold": "^2.1.1",
+    "@iiif/manifold": "^2.1.8",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.29",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
+    "ajv": "^8.17.1",
     "classnames": "^2.3.1",
     "clean-css": "^5.2.2",
     "copyfiles": "^2.4.1",
