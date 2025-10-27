@@ -1134,7 +1134,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       return false;
     }
 
-    if (!this.helper.getSearchService()) {
+    if (!this.helper.hasAnnotations()) {
       return false;
     }
 
