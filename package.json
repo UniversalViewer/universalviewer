@@ -98,7 +98,8 @@
   "overrides": {
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
-    "schema-utils": "^4.3.3"
+    "schema-utils": "^4.3.3",
+    "@eslint/eslintrc": "^3.2.0"
   },
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
