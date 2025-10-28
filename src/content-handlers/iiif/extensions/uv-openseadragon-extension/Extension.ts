@@ -9,7 +9,8 @@ import DownloadDialogue from "./DownloadDialogue";
 import { OpenSeadragonExtensionEvents } from "./Events";
 import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
-import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
+// import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
+import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
 import { Mode } from "./Mode";
@@ -72,7 +73,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   currentRotation: number = 0;
   downloadDialogueRoot: Root;
   externalContentDialogue: ExternalContentDialogue;
-  footerPanel: FooterPanel;
+  footerPanel: FooterPanel<Config["modules"]["footerPanel"]>;
   headerPanel: PagingHeaderPanel;
   helpDialogue: HelpDialogue;
   adjustImageDialogue: AdjustImageDialogue;
