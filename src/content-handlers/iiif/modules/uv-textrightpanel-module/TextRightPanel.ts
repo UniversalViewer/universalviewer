@@ -5,10 +5,7 @@ import { Events } from "../../../../Events";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import OpenSeadragon from "openseadragon";
 import { Bools, Clipboard } from "../../Utils";
-import {
-  // AnnotationBody,
-  IExternalImageResourceData,
-} from "manifesto.js";
+import { IExternalImageResourceData } from "manifesto.js";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { Shell } from "../uv-shared-module/Shell";
 import { AnnotationRect } from "@iiif/manifold";
@@ -419,12 +416,6 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     this.$main.height(
       this.$element.height() - this.$top.height() - this.$main.verticalMargins()
     );
-
-    /*     this.$element.css({
-          left: Math.floor(
-            this.$element.parent().width() - this.$element.outerWidth() - this.options.panelCollapsedWidth
-          ),
-        }); */
   }
 
   private extractAltoData(altoDoc: Document): LineData[] {
@@ -469,10 +460,7 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
         let baseX: number, y: number, width: number, height: number;
 
         if (!xywh) {
-          // Target is the whole canvas - use canvas dimensions
-          const canvas = this.extension.helper.getCurrentCanvas();
-          if (!canvas) return null;
-
+          // Target is the whole canvas - give 0 dimension.
           baseX = 0;
           y = 0;
           width = 0;
@@ -501,16 +489,16 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
       const { text, x, y, width, height } = lineData;
 
       const line = $(
-        `<div id="line-annotation-${canvasIndex}-${i}" class="lineAnnotation" tabindex="0">${text}</div>`
-      );
+        `<div id="line-annotation-${canvasIndex}-${i}" class="lineAnnotation" tabindex="0"></div>`
+      ).text(text);
 
       if (!this.extension.isMobile()) {
         // Create overlay rectangle
         const div = $(
           `<div id="line-annotation-${canvasIndex}-${i}" class="lineAnnotationRect" ` +
-            `title="${text}" data-x="${x}" data-y="${y}" ` +
+            `data-x="${x}" data-y="${y}" ` +
             `data-width="${width}" data-height="${height}" tabindex="0"></div>`
-        );
+        ).attr("title", text);
 
         this.attachLineEventHandlers(div, line);
 
