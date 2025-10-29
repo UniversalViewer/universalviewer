@@ -5,11 +5,16 @@ import { Events } from "../../../../Events";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import OpenSeadragon from "openseadragon";
 import { Bools, Clipboard } from "../../Utils";
-import { IExternalImageResourceData } from "manifesto.js";
+import {
+  // AnnotationBody,
+  IExternalImageResourceData,
+} from "manifesto.js";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { Shell } from "../uv-shared-module/Shell";
 import { AnnotationRect } from "@iiif/manifold";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
+
+import { AnnotationPage, Annotation, IManifestoOptions } from "manifesto.js";
 
 export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
   $transcribedText: JQuery;
@@ -90,100 +95,33 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
       this.$top.append(this.$copyButton);
     }
 
-    function getIntersectionArea(rect1, rect2) {
-      const xOverlap = Math.max(
-        0,
-        Math.min(rect1.x + rect1.width, rect2.x + rect2.width) -
-          Math.max(rect1.x, rect2.x)
-      );
-      const yOverlap = Math.max(
-        0,
-        Math.min(rect1.y + rect1.height, rect2.y + rect2.height) -
-          Math.max(rect1.y, rect2.y)
-      );
-      return xOverlap * yOverlap;
-    }
+    // function getIntersectionArea(rect1, rect2) {
+    //   const xOverlap = Math.max(
+    //     0,
+    //     Math.min(rect1.x + rect1.width, rect2.x + rect2.width) -
+    //       Math.max(rect1.x, rect2.x)
+    //   );
+    //   const yOverlap = Math.max(
+    //     0,
+    //     Math.min(rect1.y + rect1.height, rect2.y + rect2.height) -
+    //       Math.max(rect1.y, rect2.y)
+    //   );
+    //   return xOverlap * yOverlap;
+    // }
 
-    function getIntersectionPercentage(rect1, rect2) {
-      const intersectionArea = getIntersectionArea(rect1, rect2);
-      const rect1Area = rect1.width * rect1.height;
-      return (intersectionArea / rect1Area) * 100;
-    }
-
-    function highlightSearchHit(
-      element: Element,
-      searchText: string,
-      index: string | number,
-      canvasIndex: string | number
-    ): void {
-      // traverse only text nodes
-      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
-        acceptNode: function (node: Node): number {
-          // skip text nodes that are already inside searchHitSpan elements
-          const parent = node.parentElement;
-          if (parent && parent.classList.contains("searchHitSpan")) {
-            return NodeFilter.FILTER_REJECT;
-          }
-          return NodeFilter.FILTER_ACCEPT;
-        },
-      });
-
-      let currentNode: Node | null;
-      const textNodes: Text[] = [];
-
-      // collect all valid text nodes
-      while ((currentNode = walker.nextNode())) {
-        textNodes.push(currentNode as Text);
-      }
-
-      // find the first occurrence of search hit
-      for (const textNode of textNodes) {
-        const textContent = textNode.textContent || "";
-        const hitIndex = textContent.indexOf(searchText);
-
-        if (hitIndex !== -1) {
-          // split the text node and wrap the match
-          const beforeText = textContent.substring(0, hitIndex);
-          const matchText = textContent.substring(
-            hitIndex,
-            hitIndex + searchText.length
-          );
-          const afterText = textContent.substring(hitIndex + searchText.length);
-
-          // create highlight span
-          const highlightSpan = document.createElement("span");
-          highlightSpan.className = "searchHitSpan";
-          highlightSpan.setAttribute("data-index", String(index));
-          highlightSpan.setAttribute("data-canvas-index", String(canvasIndex));
-          highlightSpan.textContent = matchText;
-
-          const parent = textNode.parentNode;
-
-          if (parent) {
-            // replace original text node with the parts
-            if (beforeText) {
-              const beforeNode = document.createTextNode(beforeText);
-              parent.insertBefore(beforeNode, textNode);
-            }
-
-            parent.insertBefore(highlightSpan, textNode);
-
-            if (afterText) {
-              const afterNode = document.createTextNode(afterText);
-              parent.insertBefore(afterNode, textNode);
-            }
-
-            // remove the original text node
-            parent.removeChild(textNode);
-          }
-
-          // stop after finding and wrapping the first occurrence
-          break;
-        }
-      }
-    }
+    // function getIntersectionPercentage(rect1, rect2) {
+    //   const intersectionArea = getIntersectionArea(rect1, rect2);
+    //   const rect1Area = rect1.width * rect1.height;
+    //   return (intersectionArea / rect1Area) * 100;
+    // }
 
     this.extensionHost.on(Events.SEARCH_HIT_CHANGED, (e) => {
+      // this reacts to a new search hit being selected and styles the elements (rect on the canvas, span in the full text) appropriately
+
+      // the e object has hitIndex, rectIndex, and canvasIndex for the search result that was just selected.
+      // rectIndex is the index of the rect on the canvas. hit index is the result index
+      // console.log(e);
+
       this.currentRectIndex = e[0].rectIndex;
       const canvasIndex = this.extension.helper.canvasIndex;
       this.currentHitIndex = e[0].hitIndex;
@@ -231,6 +169,7 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     this.extensionHost.on(
       OpenSeadragonExtensionEvents.CANVAS_CLICK,
       (e: any) => {
+        console.log(e.originalTarget);
         var target = e.originalTarget || e.originalEvent.target;
         $(target).trigger("click");
       }
@@ -260,7 +199,11 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
       this.removeLineAnnotationRects();
       for (let i = 0; i < canvases.length; i++) {
         const c = canvases[i];
+
         const seeAlso = c.getProperty("seeAlso");
+
+        const annotations = c.getAnnotations();
+
         let header;
 
         if (i === 0 && canvases.length > 1) {
@@ -290,57 +233,60 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
           this.$transcribedText.html("");
         }
 
-        // We need to see if seeAlso contains an ALTO file and maybe allow for other HTR/OCR formats in the future
-        // and make sure which version of IIIF Presentation API is used
-        if (seeAlso.length === undefined) {
+        if (annotations.length) {
+          // Check for annotations on the canvas first
+          await this.processAnnotations(annotations, c.index, header);
+        } else if (seeAlso && seeAlso.length === undefined) {
           // This is IIIF Presentation API < 3
           if (seeAlso.profile.includes("alto")) {
             await this.processAltoFile(seeAlso["@id"], c.index, header);
           }
-        } else {
+        } else if (seeAlso && seeAlso.length > 0) {
           // This is IIIF Presentation API >= 3
           if (seeAlso[0].profile.includes("alto")) {
             await this.processAltoFile(seeAlso[0]["id"], c.index, header);
           }
         }
 
-        const annotationRects = (<OpenSeadragonExtension>this.extension)
-          .getAnnotationRects()
-          .filter((rect) => {
-            return rect["canvasIndex"] == c.index;
-          });
-        annotationRects.forEach((annotationRect) => {
-          const rect = {
-            x: annotationRect.x,
-            y: annotationRect.y,
-            width: annotationRect.width,
-            height: annotationRect.height,
-          };
-          $("div.lineAnnotationRect").each(
-            (i: Number, lineAnnotationRect: any) => {
-              const x = $(lineAnnotationRect).data("x");
-              const y = $(lineAnnotationRect).data("y");
-              const width = $(lineAnnotationRect).data("width");
-              const height = $(lineAnnotationRect).data("height");
-              const lineRect = { x: x, y: y, width: width, height: height };
+        // const annotationRects = (<OpenSeadragonExtension>this.extension)
+        //   .getAnnotationRects()
+        //   .filter((rect) => {
+        //     return rect["canvasIndex"] == c.index;
+        //   });
 
-              const p = getIntersectionPercentage(rect, lineRect);
-              if (p > 50) {
-                const lineElement = $(
-                  "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
-                );
-                if (lineElement[0]) {
-                  highlightSearchHit(
-                    lineElement[0],
-                    annotationRect.chars,
-                    annotationRect.index,
-                    annotationRect.canvasIndex
-                  );
-                }
-              }
-            }
-          );
-        });
+        // annotationRects.forEach((annotationRect) => {
+        //   const rect = {
+        //     x: annotationRect.x,
+        //     y: annotationRect.y,
+        //     width: annotationRect.width,
+        //     height: annotationRect.height,
+        //   };
+
+        //   $("div.lineAnnotationRect").each(
+        //     (i: Number, lineAnnotationRect: any) => {
+        //       const x = $(lineAnnotationRect).data("x");
+        //       const y = $(lineAnnotationRect).data("y");
+        //       const width = $(lineAnnotationRect).data("width");
+        //       const height = $(lineAnnotationRect).data("height");
+        //       const lineRect = { x: x, y: y, width: width, height: height };
+
+        //       const p = getIntersectionPercentage(rect, lineRect);
+        //       if (p > 50) {
+        //         const lineElement = $(
+        //           "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
+        //         );
+        //         if (lineElement[0]) {
+        //           this.highlightSearchHit(
+        //             lineElement[0],
+        //             annotationRect.chars,
+        //             annotationRect.index,
+        //             annotationRect.canvasIndex
+        //           );
+        //         }
+        //       }
+        //     }
+        //   );
+        // });
 
         if (
           $(
@@ -383,6 +329,79 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     this.setTitle(this.config.content.title);
     this.$top.parent().addClass("textRightPanel");
   }
+
+  // highlightSearchHit(
+  //   element: Element,
+  //   searchText: string,
+  //   index: string | number,
+  //   canvasIndex: string | number
+  // ): void {
+  //   // traverse only text nodes
+  //   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+  //     acceptNode: function (node: Node): number {
+  //       // skip text nodes that are already inside searchHitSpan elements
+  //       const parent = node.parentElement;
+  //       if (parent && parent.classList.contains("searchHitSpan")) {
+  //         return NodeFilter.FILTER_REJECT;
+  //       }
+  //       return NodeFilter.FILTER_ACCEPT;
+  //     },
+  //   });
+
+  //   let currentNode: Node | null;
+  //   const textNodes: Text[] = [];
+
+  //   // collect all valid text nodes
+  //   while ((currentNode = walker.nextNode())) {
+  //     textNodes.push(currentNode as Text);
+  //   }
+
+  //   // find the first occurrence of search hit
+  //   for (const textNode of textNodes) {
+  //     const textContent = textNode.textContent || "";
+  //     const hitIndex = textContent.indexOf(searchText);
+
+  //     if (hitIndex !== -1) {
+  //       // split the text node and wrap the match
+  //       const beforeText = textContent.substring(0, hitIndex);
+  //       const matchText = textContent.substring(
+  //         hitIndex,
+  //         hitIndex + searchText.length
+  //       );
+  //       const afterText = textContent.substring(hitIndex + searchText.length);
+
+  //       // create highlight span
+  //       const highlightSpan = document.createElement("span");
+  //       highlightSpan.className = "searchHitSpan";
+  //       highlightSpan.setAttribute("data-index", String(index));
+  //       highlightSpan.setAttribute("data-canvas-index", String(canvasIndex));
+  //       highlightSpan.textContent = matchText;
+
+  //       const parent = textNode.parentNode;
+
+  //       if (parent) {
+  //         // replace original text node with the parts
+  //         if (beforeText) {
+  //           const beforeNode = document.createTextNode(beforeText);
+  //           parent.insertBefore(beforeNode, textNode);
+  //         }
+
+  //         parent.insertBefore(highlightSpan, textNode);
+
+  //         if (afterText) {
+  //           const afterNode = document.createTextNode(afterText);
+  //           parent.insertBefore(afterNode, textNode);
+  //         }
+
+  //         // remove the original text node
+  //         parent.removeChild(textNode);
+  //       }
+
+  //       // stop after finding and wrapping the first occurrence
+  //       break;
+  //     }
+  //   }
+  // }
 
   toggleFinish(): void {
     super.toggleFinish();
@@ -430,6 +449,8 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
           x +
           this.offsetX +
           (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+
+        //JM this has a hardcoded space between tokens so only works with XML that has a space as a token delimiter. Is this all ALTO?
         const text = t.join(" ");
         this.clipboardText += text + " ";
 
@@ -550,6 +571,181 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     }
   };
 
+  // JM this function will do the same as processAltoFile but for w3c annotations
+  processAnnotations = async (
+    annotations: AnnotationPage[],
+    canvasIndex,
+    header?
+  ): Promise<void> => {
+    this.$spinner = $('<div class="spinner"></div>');
+    this.$spinner.css(
+      "top",
+      this.$main.height() / 2 - this.$spinner.height() / 2
+    );
+    this.$main.append(this.$spinner);
+    this.$spinner.show();
+
+    try {
+      // Iterate through each annotation page reference
+      //need some logic here to check whether references are embedded or referenced
+      for (const annotationPageRef of annotations) {
+        const annotationPageId = annotationPageRef.id;
+
+        if (annotationPageId) {
+          const response = await fetch(annotationPageId);
+          const annotationPageData = await response.json();
+
+          // Create an AnnotationPage instance from the incoming JSON data
+          const options: IManifestoOptions = <IManifestoOptions>{
+            locale: this.extension.helper.options.locale,
+          };
+
+          const annotationPage: AnnotationPage = new AnnotationPage(
+            annotationPageData,
+            options
+          );
+
+          const annotations: Annotation[] = annotationPage.getAnnotations();
+
+          const lines = Array.from(annotations).map((a, i) => {
+            const bodies = a.getBody();
+            if (bodies && bodies.length > 0) {
+              const body = bodies[0];
+              const text = body.getValue();
+              const [baseX, y, width, height] =
+                a?.getTarget()?.split("#xywh=")[1]?.split(",").map(Number) ||
+                [];
+              const x =
+                baseX +
+                this.offsetX +
+                (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+
+              //JM then the rest of this processAnnotations is the same as processAltoFile so can refactor this out as a function to share between them
+              const line = $(
+                '<div id="line-annotation-' +
+                  canvasIndex +
+                  "-" +
+                  i +
+                  '" class="lineAnnotation" tabindex="0">' +
+                  text +
+                  "</div>"
+              );
+
+              if (!this.extension.isMobile()) {
+                const div = $(
+                  '<div id="line-annotation-' +
+                    canvasIndex +
+                    "-" +
+                    i +
+                    '" class="lineAnnotationRect" title="' +
+                    text +
+                    '" data-x="' +
+                    x +
+                    '" data-y="' +
+                    y +
+                    '" data-width="' +
+                    width +
+                    '" data-height="' +
+                    height +
+                    '" tabindex="0"></div>'
+                );
+                $(div).on("keydown", (e: any) => {
+                  if (e.keyCode === 13) {
+                    $(e.target).trigger("click");
+                  }
+                });
+                $(div).on("click", (e: any) => {
+                  const canvasIndex = Number(
+                    e.target.getAttribute("id").split("-")[2]
+                  );
+                  // We change the current canvas index to the clicked page (if we're in two page view)
+                  if (canvasIndex !== this.currentCanvasIndex) {
+                    this.extension.helper.canvasIndex = canvasIndex;
+                    this.currentCanvasIndex = canvasIndex;
+                  }
+                  this.clearLineAnnotationRects();
+                  this.clearLineAnnotations();
+                  this.setCurrentLineAnnotation(e.target, true);
+                  this.setCurrentLineAnnotationRect(e.target);
+                });
+                // Add overlay to OpenSeadragon canvas
+                const osRect = new OpenSeadragon.Rect(x, y, width, height);
+                (<OpenSeadragonExtension>(
+                  this.extension
+                )).centerPanel.viewer.addOverlay(div[0], osRect);
+
+                line.on("keydown", (e: any) => {
+                  if (e.keyCode === 13) {
+                    $(e.target).trigger("click");
+                  }
+                });
+                // Sync line click with line annotation
+                line.on("click", (e: any) => {
+                  const target = e.currentTarget;
+                  const canvasIndex = Number(
+                    target.getAttribute("id").split("-")[2]
+                  );
+                  // We change the current canvas index to the clicked page (if we're in two page view)
+                  if (canvasIndex !== this.currentCanvasIndex) {
+                    this.extension.helper.canvasIndex = canvasIndex;
+                    this.currentCanvasIndex = canvasIndex;
+                  }
+                  this.clearLineAnnotationRects();
+                  this.clearLineAnnotations();
+                  this.setCurrentLineAnnotation(target, false);
+                  this.setCurrentLineAnnotationRect(target);
+                });
+              }
+              return line;
+            }
+          });
+
+          if (!this.$transcribedText) {
+            this.$transcribedText = $('<div class="transcribed-text"></div>');
+          }
+          if (header) {
+            this.$transcribedText.append(
+              $('<div class="label">' + header + "</div>")
+            );
+          }
+          if (lines.length > 0) {
+            this.$transcribedText.append(lines);
+            this.$transcribedText.attr(
+              "data-text",
+              this.clipboardText.trimEnd()
+            );
+          } else {
+            this.$transcribedText.append(
+              $("<div>" + this.content.textNotFound + "</div>")
+            );
+          }
+
+          if (
+            this.$transcribedText[0]?.firstElementChild?.firstChild
+              ?.toString()
+              .trim()
+          ) {
+            this.$spinner.hide();
+          }
+
+          this.$main.append(this.$transcribedText);
+
+          // If we already have a selected line annotation, make sure it's selected again after load
+          if (this.$existingAnnotation[0] !== undefined) {
+            const id = $(this.$existingAnnotation).attr("id");
+            if ($("div#" + id).length > 0) {
+              // Make sure the line annotation exists in the DOM
+              this.setCurrentLineAnnotation($("div#" + id)[0], true);
+              this.setCurrentLineAnnotationRect($("div#" + id)[0]);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching annotations:", error);
+    }
+  };
+
   copyText(text: string): void {
     Clipboard.copy(text);
 
@@ -607,6 +803,7 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     $("div.lineAnnotationRect").remove();
   }
 
+  //this styles the annotation on the OSD canvas. BUT it doesn't bring that rect into view if it's currently off screen. do we want that?
   setCurrentAnnotation(canvasIndex: any, index: any): void {
     $(".annotationRect").each((i: number, annotation: any) => {
       if ($(annotation).hasClass("current")) {
