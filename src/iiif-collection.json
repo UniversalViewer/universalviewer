@@ -1203,6 +1203,12 @@
           "@type": "sc:Manifest",
           "label": "Chemist & Druggist",
           "visible": true
+        },
+        {
+          "@id": "https://digital.lib.utk.edu/assemble/manifest/insurancena/125",
+          "@type": "sc:Manifest",
+          "label": "Letter, Elliston Perot & John Perot (full canvas annos)",
+          "visible": true
         }
       ]
     }
