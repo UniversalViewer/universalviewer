@@ -15,7 +15,13 @@ import { AnnotationRect } from "@iiif/manifold";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 
 import { AnnotationPage, Annotation, IManifestoOptions } from "manifesto.js";
-
+interface LineData {
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
   $transcribedText: JQuery;
   $spinner: JQuery;
@@ -235,7 +241,7 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
 
         if (annotations.length) {
           // Check for annotations on the canvas first
-          await this.processAnnotations(annotations, c.index, header);
+          await this.processWebAnnotations(annotations, c.index, header);
         } else if (seeAlso && seeAlso.length === undefined) {
           // This is IIIF Presentation API < 3
           if (seeAlso.profile.includes("alto")) {
@@ -421,8 +427,169 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
         }); */
   }
 
-  // Let's load the ALTO file and do some parsing
-  processAltoFile = async (altoUrl, canvasIndex, header?): Promise<void> => {
+  private extractAltoData(altoDoc: Document): LineData[] {
+    const textLines = altoDoc.querySelectorAll("TextLine");
+
+    return Array.from(textLines).map((e) => {
+      const strings = e.querySelectorAll("String");
+      const t = Array.from(strings).map((s) => s.getAttribute("CONTENT"));
+      const text = t.join(" ");
+
+      let x = Number(e.getAttribute("HPOS"));
+      const y = Number(e.getAttribute("VPOS"));
+      const width = Number(e.getAttribute("WIDTH"));
+      const height = Number(e.getAttribute("HEIGHT"));
+
+      x =
+        x +
+        this.offsetX +
+        (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+
+      this.clipboardText += text + " ";
+
+      return { text, x, y, width, height };
+    });
+  }
+
+  private extractWebAnnotationData(annotations: Annotation[]): LineData[] {
+    console.log("processing ", annotations);
+    return annotations
+      .map((a) => {
+        const bodies = a.getBody();
+        if (!bodies || bodies.length === 0) return null;
+
+        const body = bodies[0];
+        const text = body.getValue();
+        const target = a?.getTarget();
+
+        if (!target) return null;
+
+        const xywh = target.split("#xywh=")[1];
+
+        let baseX: number, y: number, width: number, height: number;
+
+        if (!xywh) {
+          // Target is the whole canvas - use canvas dimensions
+          const canvas = this.extension.helper.getCurrentCanvas();
+          if (!canvas) return null;
+
+          baseX = 0;
+          y = 0;
+          width = 0;
+          height = 0;
+        } else {
+          [baseX, y, width, height] = xywh.split(",").map(Number);
+        }
+
+        const x =
+          baseX +
+          this.offsetX +
+          (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+
+        this.clipboardText += text + " ";
+
+        return { text, x, y, width, height };
+      })
+      .filter((line): line is LineData => line !== null);
+  }
+
+  private createLineElements(
+    lineDataArray: LineData[],
+    canvasIndex: number
+  ): JQuery[] {
+    return lineDataArray.map((lineData, i) => {
+      const { text, x, y, width, height } = lineData;
+
+      const line = $(
+        `<div id="line-annotation-${canvasIndex}-${i}" class="lineAnnotation" tabindex="0">${text}</div>`
+      );
+
+      if (!this.extension.isMobile()) {
+        // Create overlay rectangle
+        const div = $(
+          `<div id="line-annotation-${canvasIndex}-${i}" class="lineAnnotationRect" ` +
+            `title="${text}" data-x="${x}" data-y="${y}" ` +
+            `data-width="${width}" data-height="${height}" tabindex="0"></div>`
+        );
+
+        this.attachLineEventHandlers(div, line);
+
+        // Add overlay to OpenSeadragon canvas
+        const osRect = new OpenSeadragon.Rect(x, y, width, height);
+        (<OpenSeadragonExtension>this.extension).centerPanel.viewer.addOverlay(
+          div[0],
+          osRect
+        );
+      }
+
+      return line;
+    });
+  }
+
+  private attachLineEventHandlers(div: JQuery, line: JQuery): void {
+    const handleClick = (target: HTMLElement) => {
+      const canvasIndex = Number(target.getAttribute("id")!.split("-")[2]);
+      if (canvasIndex !== this.currentCanvasIndex) {
+        this.extension.helper.canvasIndex = canvasIndex;
+        this.currentCanvasIndex = canvasIndex;
+      }
+
+      this.clearLineAnnotationRects();
+      this.clearLineAnnotations();
+      this.setCurrentLineAnnotation(target, true);
+      this.setCurrentLineAnnotationRect(target);
+    };
+
+    // Div (overlay) handlers
+    div.on("keydown", (e: any) => {
+      if (e.keyCode === 13) $(e.target).trigger("click");
+    });
+    div.on("click", (e: any) => handleClick(e.target));
+
+    // Line (text) handlers
+    line.on("keydown", (e: any) => {
+      if (e.keyCode === 13) $(e.target).trigger("click");
+    });
+    line.on("click", (e: any) => handleClick(e.currentTarget));
+  }
+
+  private renderTranscribedText(lines: JQuery[], header?: string): void {
+    if (!this.$transcribedText) {
+      this.$transcribedText = $('<div class="transcribed-text"></div>');
+    }
+
+    if (header) {
+      this.$transcribedText.append($(`<div class="label">${header}</div>`));
+    }
+
+    if (lines.length > 0) {
+      this.$transcribedText.append(lines);
+      this.$transcribedText.attr("data-text", this.clipboardText.trimEnd());
+    } else {
+      this.$transcribedText.append(
+        $(`<div>${this.content.textNotFound}</div>`)
+      );
+    }
+
+    if (
+      this.$transcribedText[0]?.firstElementChild?.firstChild?.toString().trim()
+    ) {
+      this.$spinner.hide();
+    }
+
+    this.$main.append(this.$transcribedText);
+
+    // Restore previously selected annotation
+    if (this.$existingAnnotation[0] !== undefined) {
+      const id = $(this.$existingAnnotation).attr("id");
+      if ($("div#" + id).length > 0) {
+        this.setCurrentLineAnnotation($("div#" + id)[0], true);
+        this.setCurrentLineAnnotationRect($("div#" + id)[0]);
+      }
+    }
+  }
+
+  private showSpinner(): void {
     this.$spinner = $('<div class="spinner"></div>');
     this.$spinner.css(
       "top",
@@ -430,319 +597,72 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     );
     this.$main.append(this.$spinner);
     this.$spinner.show();
+  }
+
+  processAltoFile = async (
+    altoUrl: string,
+    canvasIndex: number,
+    header?: string
+  ): Promise<void> => {
+    this.showSpinner();
+
     try {
       const response = await fetch(altoUrl);
       const data = await response.text();
       const altoDoc = new DOMParser().parseFromString(data, "application/xml");
-      const textLines = altoDoc.querySelectorAll("TextLine");
 
-      const lines = Array.from(textLines).map((e, i) => {
-        const strings = e.querySelectorAll("String");
-        const t = Array.from(strings).map((e, i) => {
-          return e.getAttribute("CONTENT");
-        });
-        let x = Number(e.getAttribute("HPOS"));
-        const y = Number(e.getAttribute("VPOS"));
-        const width = Number(e.getAttribute("WIDTH"));
-        const height = Number(e.getAttribute("HEIGHT"));
-        x =
-          x +
-          this.offsetX +
-          (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+      const lineDataArray = this.extractAltoData(altoDoc);
+      const lines = this.createLineElements(lineDataArray, canvasIndex);
 
-        //JM this has a hardcoded space between tokens so only works with XML that has a space as a token delimiter. Is this all ALTO?
-        const text = t.join(" ");
-        this.clipboardText += text + " ";
-
-        const line = $(
-          '<div id="line-annotation-' +
-            canvasIndex +
-            "-" +
-            i +
-            '" class="lineAnnotation" tabindex="0">' +
-            text +
-            "</div>"
-        );
-
-        if (!this.extension.isMobile()) {
-          const div = $(
-            '<div id="line-annotation-' +
-              canvasIndex +
-              "-" +
-              i +
-              '" class="lineAnnotationRect" title="' +
-              text +
-              '" data-x="' +
-              x +
-              '" data-y="' +
-              y +
-              '" data-width="' +
-              width +
-              '" data-height="' +
-              height +
-              '" tabindex="0"></div>'
-          );
-          $(div).on("keydown", (e: any) => {
-            if (e.keyCode === 13) {
-              $(e.target).trigger("click");
-            }
-          });
-          $(div).on("click", (e: any) => {
-            const canvasIndex = Number(
-              e.target.getAttribute("id").split("-")[2]
-            );
-            // We change the current canvas index to the clicked page (if we're in two page view)
-            if (canvasIndex !== this.currentCanvasIndex) {
-              this.extension.helper.canvasIndex = canvasIndex;
-              this.currentCanvasIndex = canvasIndex;
-            }
-            this.clearLineAnnotationRects();
-            this.clearLineAnnotations();
-            this.setCurrentLineAnnotation(e.target, true);
-            this.setCurrentLineAnnotationRect(e.target);
-          });
-          // Add overlay to OpenSeadragon canvas
-          const osRect = new OpenSeadragon.Rect(x, y, width, height);
-          (<OpenSeadragonExtension>(
-            this.extension
-          )).centerPanel.viewer.addOverlay(div[0], osRect);
-
-          line.on("keydown", (e: any) => {
-            if (e.keyCode === 13) {
-              $(e.target).trigger("click");
-            }
-          });
-          // Sync line click with line annotation
-          line.on("click", (e: any) => {
-            const target = e.currentTarget;
-            const canvasIndex = Number(target.getAttribute("id").split("-")[2]);
-            // We change the current canvas index to the clicked page (if we're in two page view)
-            if (canvasIndex !== this.currentCanvasIndex) {
-              this.extension.helper.canvasIndex = canvasIndex;
-              this.currentCanvasIndex = canvasIndex;
-            }
-            this.clearLineAnnotationRects();
-            this.clearLineAnnotations();
-            this.setCurrentLineAnnotation(target, false);
-            this.setCurrentLineAnnotationRect(target);
-          });
-        }
-        return line;
-      });
-
-      if (!this.$transcribedText) {
-        this.$transcribedText = $('<div class="transcribed-text"></div>');
-      }
-      if (header) {
-        this.$transcribedText.append(
-          $('<div class="label">' + header + "</div>")
-        );
-      }
-      if (lines.length > 0) {
-        this.$transcribedText.append(lines);
-        this.$transcribedText.attr("data-text", this.clipboardText.trimEnd());
-      } else {
-        this.$transcribedText.append(
-          $("<div>" + this.content.textNotFound + "</div>")
-        );
-      }
-
-      if (
-        this.$transcribedText[0]?.firstElementChild?.firstChild
-          ?.toString()
-          .trim()
-      ) {
-        this.$spinner.hide();
-      }
-
-      this.$main.append(this.$transcribedText);
-
-      // If we already have a selected line annotation, make sure it's selected again after load
-      if (this.$existingAnnotation[0] !== undefined) {
-        const id = $(this.$existingAnnotation).attr("id");
-        if ($("div#" + id).length > 0) {
-          // Make sure the line annotation exists in the DOM
-          this.setCurrentLineAnnotation($("div#" + id)[0], true);
-          this.setCurrentLineAnnotationRect($("div#" + id)[0]);
-        }
-      }
+      this.renderTranscribedText(lines, header);
     } catch (error) {
       throw new Error("Unable to fetch Alto file: " + error.message);
     }
   };
 
-  // JM this function will do the same as processAltoFile but for w3c annotations
-  processAnnotations = async (
+  processWebAnnotations = async (
     annotations: AnnotationPage[],
-    canvasIndex,
-    header?
+    canvasIndex: number,
+    header?: string
   ): Promise<void> => {
-    this.$spinner = $('<div class="spinner"></div>');
-    this.$spinner.css(
-      "top",
-      this.$main.height() / 2 - this.$spinner.height() / 2
-    );
-    this.$main.append(this.$spinner);
-    this.$spinner.show();
+    this.showSpinner();
 
     try {
-      // Iterate through each annotation page reference
-      //need some logic here to check whether references are embedded or referenced
       for (const annotationPageRef of annotations) {
-        const annotationPageId = annotationPageRef.id;
+        let annotationPage: AnnotationPage;
 
-        if (annotationPageId) {
-          const response = await fetch(annotationPageId);
+        // Check if annotations are embedded or referenced
+        const embeddedAnnotations = annotationPageRef.getAnnotations();
+
+        if (embeddedAnnotations && embeddedAnnotations.length > 0) {
+          // Annotations are embedded
+          annotationPage = annotationPageRef;
+        } else if (annotationPageRef.id) {
+          // Annotations are referenced
+          const response = await fetch(annotationPageRef.id);
           const annotationPageData = await response.json();
 
-          // Create an AnnotationPage instance from the incoming JSON data
           const options: IManifestoOptions = <IManifestoOptions>{
-            locale: this.extension.helper.options.locale,
+            locale: this.extension.helper.options.locale ?? "en-GB",
           };
 
-          const annotationPage: AnnotationPage = new AnnotationPage(
-            annotationPageData,
-            options
-          );
+          annotationPage = new AnnotationPage(annotationPageData, options);
+        } else {
+          // No annotations
+          continue;
+        }
 
-          const annotations: Annotation[] = annotationPage.getAnnotations();
+        const annotationsList = annotationPage.getAnnotations();
 
-          const lines = Array.from(annotations).map((a, i) => {
-            const bodies = a.getBody();
-            if (bodies && bodies.length > 0) {
-              const body = bodies[0];
-              const text = body.getValue();
-              const [baseX, y, width, height] =
-                a?.getTarget()?.split("#xywh=")[1]?.split(",").map(Number) ||
-                [];
-              const x =
-                baseX +
-                this.offsetX +
-                (this.index > 0 ? this.centerPanel.config.options.pageGap : 0);
+        if (annotationsList && annotationsList.length > 0) {
+          const lineDataArray = this.extractWebAnnotationData(annotationsList);
+          const lines = this.createLineElements(lineDataArray, canvasIndex);
 
-              //JM then the rest of this processAnnotations is the same as processAltoFile so can refactor this out as a function to share between them
-              const line = $(
-                '<div id="line-annotation-' +
-                  canvasIndex +
-                  "-" +
-                  i +
-                  '" class="lineAnnotation" tabindex="0">' +
-                  text +
-                  "</div>"
-              );
-
-              if (!this.extension.isMobile()) {
-                const div = $(
-                  '<div id="line-annotation-' +
-                    canvasIndex +
-                    "-" +
-                    i +
-                    '" class="lineAnnotationRect" title="' +
-                    text +
-                    '" data-x="' +
-                    x +
-                    '" data-y="' +
-                    y +
-                    '" data-width="' +
-                    width +
-                    '" data-height="' +
-                    height +
-                    '" tabindex="0"></div>'
-                );
-                $(div).on("keydown", (e: any) => {
-                  if (e.keyCode === 13) {
-                    $(e.target).trigger("click");
-                  }
-                });
-                $(div).on("click", (e: any) => {
-                  const canvasIndex = Number(
-                    e.target.getAttribute("id").split("-")[2]
-                  );
-                  // We change the current canvas index to the clicked page (if we're in two page view)
-                  if (canvasIndex !== this.currentCanvasIndex) {
-                    this.extension.helper.canvasIndex = canvasIndex;
-                    this.currentCanvasIndex = canvasIndex;
-                  }
-                  this.clearLineAnnotationRects();
-                  this.clearLineAnnotations();
-                  this.setCurrentLineAnnotation(e.target, true);
-                  this.setCurrentLineAnnotationRect(e.target);
-                });
-                // Add overlay to OpenSeadragon canvas
-                const osRect = new OpenSeadragon.Rect(x, y, width, height);
-                (<OpenSeadragonExtension>(
-                  this.extension
-                )).centerPanel.viewer.addOverlay(div[0], osRect);
-
-                line.on("keydown", (e: any) => {
-                  if (e.keyCode === 13) {
-                    $(e.target).trigger("click");
-                  }
-                });
-                // Sync line click with line annotation
-                line.on("click", (e: any) => {
-                  const target = e.currentTarget;
-                  const canvasIndex = Number(
-                    target.getAttribute("id").split("-")[2]
-                  );
-                  // We change the current canvas index to the clicked page (if we're in two page view)
-                  if (canvasIndex !== this.currentCanvasIndex) {
-                    this.extension.helper.canvasIndex = canvasIndex;
-                    this.currentCanvasIndex = canvasIndex;
-                  }
-                  this.clearLineAnnotationRects();
-                  this.clearLineAnnotations();
-                  this.setCurrentLineAnnotation(target, false);
-                  this.setCurrentLineAnnotationRect(target);
-                });
-              }
-              return line;
-            }
-          });
-
-          if (!this.$transcribedText) {
-            this.$transcribedText = $('<div class="transcribed-text"></div>');
-          }
-          if (header) {
-            this.$transcribedText.append(
-              $('<div class="label">' + header + "</div>")
-            );
-          }
-          if (lines.length > 0) {
-            this.$transcribedText.append(lines);
-            this.$transcribedText.attr(
-              "data-text",
-              this.clipboardText.trimEnd()
-            );
-          } else {
-            this.$transcribedText.append(
-              $("<div>" + this.content.textNotFound + "</div>")
-            );
-          }
-
-          if (
-            this.$transcribedText[0]?.firstElementChild?.firstChild
-              ?.toString()
-              .trim()
-          ) {
-            this.$spinner.hide();
-          }
-
-          this.$main.append(this.$transcribedText);
-
-          // If we already have a selected line annotation, make sure it's selected again after load
-          if (this.$existingAnnotation[0] !== undefined) {
-            const id = $(this.$existingAnnotation).attr("id");
-            if ($("div#" + id).length > 0) {
-              // Make sure the line annotation exists in the DOM
-              this.setCurrentLineAnnotation($("div#" + id)[0], true);
-              this.setCurrentLineAnnotationRect($("div#" + id)[0]);
-            }
-          }
+          this.renderTranscribedText(lines, header);
         }
       }
     } catch (error) {
-      console.error("Error fetching annotations:", error);
+      console.error("Error processing annotations:", error);
     }
   };
 
