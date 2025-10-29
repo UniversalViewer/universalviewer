@@ -604,7 +604,13 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
 
       this.renderTranscribedText(lines, header);
     } catch (error) {
-      throw new Error("Unable to fetch Alto file: " + error.message);
+      console.error("Unable to fetch Alto file:", error);
+      this.$spinner.hide();
+      this.$transcribedText = $('<div class="transcribed-text"></div>');
+      this.$transcribedText.append(
+        $(`<div>${this.content.textNotFound}</div>`)
+      );
+      this.$main.append(this.$transcribedText);
     }
   };
 
