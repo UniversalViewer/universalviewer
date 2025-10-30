@@ -1029,8 +1029,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     return groupedSearchHits;
   }
 
-  //JM SNA uses the function above, groupSearchHitsByTarget, to process the response from content search 1. This function below does the same thing but for content search 2
-  // groupSearchHitsByTarget currently sorts hits by canvas index only, so hits get out of order when there are multiple on a page.
   // this function uses xwyh to sort by position on canvas too, so results are in reading order (if language is top to bottom, left to right!!), so this should also be applied to groupSearchHitsByTarget
   sortWebAnnotationsSearchHits(searchResults: any): SearchHit[] {
     const groupedSearchHits: SearchHit[] = [];
@@ -1806,13 +1804,13 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       .then((response) => response.json())
       .then((results) => {
         if (results.resources && results.resources.length) {
-          // this works for content search api 1
+          // content search api 1
           searchResults = searchResults.concat(
             this.groupOpenAnnotationsByTarget(results)
           );
           searchHits = searchHits.concat(this.groupSearchHitsByTarget(results));
         } else if (results.items && results.items.length) {
-          //this will work for content search api 2
+          // content search api 2
           searchResults = searchResults.concat(
             this.groupWebAnnotationResultsByTarget(results)
           );
@@ -1821,8 +1819,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           );
         }
 
-        //JM so looks like it's here looping through all of the search pages in one request, which could be a big load
-        // would be better to request the next page when the next page of results was clicked through to?
+        // it's here looping through all of the search pages in one request, which could be a big load
+        // It would be better to properly use pagination here if available
         if (results.next) {
           this.getSearchResults(
             results.next,

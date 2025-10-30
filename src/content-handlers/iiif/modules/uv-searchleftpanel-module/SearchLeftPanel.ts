@@ -388,7 +388,6 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
     this.$searchResultContainer.html("");
     this.$searchText.blur();
     this.showSearchSpinner();
-    //JM this triggers the same search function as previus version, defined in the OSD Extension.ts
     this.extensionHost.publish(OpenSeadragonExtensionEvents.SEARCH, this.terms);
   }
 
