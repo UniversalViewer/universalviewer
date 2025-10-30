@@ -9,7 +9,6 @@ import DownloadDialogue from "./DownloadDialogue";
 import { OpenSeadragonExtensionEvents } from "./Events";
 import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
-// import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
 import { IOpenSeadragonExtensionData } from "./IOpenSeadragonExtensionData";
@@ -894,6 +893,91 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     return groupedAnnotations;
   }
 
+  groupWebAnnotationResultsByTarget(searchResults: any): AnnotationGroup[] {
+    const groupedAnnotations: AnnotationGroup[] = [];
+
+    //we need to sort the items by canvas and position first, so that they appear in reading order
+    const sortedItems = [...searchResults.items].sort((a, b) => {
+      const canvasIdA = a.target.id.match(/(.*)#/)?.[1];
+      const canvasIdB = b.target.id.match(/(.*)#/)?.[1];
+
+      if (!canvasIdA || !canvasIdB) return 0;
+
+      const canvasIndexA = this.helper.getCanvasIndexById(canvasIdA);
+      const canvasIndexB = this.helper.getCanvasIndexById(canvasIdB);
+
+      if (canvasIndexA === null || canvasIndexB === null) return 0;
+
+      // First sort by canvas index
+      const canvasDiff = canvasIndexA - canvasIndexB;
+      if (canvasDiff !== 0) return canvasDiff;
+
+      // Then sort by position within canvas
+      const boundsMatchA = a.target.id.match(/#(xywh=.+)$/);
+      const boundsMatchB = b.target.id.match(/#(xywh=.+)$/);
+
+      if (boundsMatchA && boundsMatchB) {
+        try {
+          const boundsA = XYWHFragment.fromString(boundsMatchA[1]);
+          const boundsB = XYWHFragment.fromString(boundsMatchB[1]);
+
+          const yDiff = boundsA.y - boundsB.y;
+          if (yDiff !== 0) return yDiff;
+          return boundsA.x - boundsB.x;
+        } catch (error) {
+          console.warn("Failed to parse bounds for sorting:", error);
+        }
+      }
+
+      return 0;
+    });
+
+    for (const item of sortedItems) {
+      // Extract canvas ID from the target.id (everything before the #)
+      const canvasId = item.target.id.match(/(.*)#/)?.[1];
+      if (!canvasId) continue;
+
+      // Get canvas index, skip if null
+      const canvasIndex = this.helper.getCanvasIndexById(canvasId);
+      if (canvasIndex === null) continue;
+
+      // Check if we already have an annotation group for this canvas
+      const existingGroup = groupedAnnotations.find(
+        (group) => group.canvasId === canvasId
+      );
+
+      // Transform W3C annotation to match AnnotationRect constructor expectations
+      // This is to get around Manifold's current way of handling w3c annos, which doesn't fit with content search 2 results
+      // but as it may be used elsewhere, don't want to change Manifold till looking at it properly
+      // related to this is the pre-existing groupWebAnnotationsByTarget function. groupWebAnnotationResultsByTarget could potentially
+      // replace that function but need to check it wouldn't break anything.
+      const transformedItem = {
+        target: item.target.id, // Convert object.id to string
+        bodyValue: item.body?.value || "", // Convert body.value to bodyValue
+      };
+
+      if (existingGroup) {
+        // Add rect to existing group
+        existingGroup.addRect(transformedItem);
+      } else {
+        // Create new annotation group
+        const annotationGroup = new AnnotationGroup(canvasId);
+        annotationGroup.canvasIndex = canvasIndex;
+        annotationGroup.addRect(transformedItem);
+        groupedAnnotations.push(annotationGroup);
+      }
+    }
+
+    // Sort by canvas index
+    groupedAnnotations.sort((a, b) => {
+      return a.canvasIndex - b.canvasIndex;
+    });
+
+    console.log(groupedAnnotations);
+
+    return groupedAnnotations;
+  }
+
   groupSearchHitsByTarget(searchHits: any): SearchHit[] {
     const groupedSearchHits: SearchHit[] = [];
     let currentIndex = 0;
@@ -941,6 +1025,144 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     groupedSearchHits.sort((a, b) => {
       return a.canvasIndex - b.canvasIndex;
     });
+
+    return groupedSearchHits;
+  }
+
+  //JM SNA uses the function above, groupSearchHitsByTarget, to process the response from content search 1. This function below does the same thing but for content search 2
+  // groupSearchHitsByTarget currently sorts hits by canvas index only, so hits get out of order when there are multiple on a page.
+  // this function uses xwyh to sort by position on canvas too, so results are in reading order (if language is top to bottom, left to right!!), so this should also be applied to groupSearchHitsByTarget
+  sortWebAnnotationsSearchHits(searchResults: any): SearchHit[] {
+    const groupedSearchHits: SearchHit[] = [];
+    let currentIndex = 0;
+    let oldCanvasIndex: number | null = null;
+
+    // Create a map of source annotation ID to canvas info for quick lookup
+    const sourceAnnotationMap = new Map<
+      string,
+      { canvasId: string; canvasIndex: number; bounds: XYWHFragment }
+    >();
+
+    // Process the main items to build the lookup map
+    for (const item of searchResults.items) {
+      const canvasId = item.target.id.match(/(.*)#/)?.[1];
+      const boundsMatch = item.target.id.match(/#(xywh=.+)$/);
+
+      if (canvasId && boundsMatch) {
+        const canvasIndex = this.helper.getCanvasIndexById(canvasId);
+        if (canvasIndex !== null) {
+          try {
+            const bounds = XYWHFragment.fromString(boundsMatch[1]);
+            sourceAnnotationMap.set(item.id, {
+              canvasId,
+              canvasIndex,
+              bounds,
+            });
+          } catch (error) {
+            // Skip items with invalid bounds format
+            console.warn(
+              `Invalid bounds format for annotation ${item.id}:`,
+              boundsMatch[1]
+            );
+          }
+        }
+      }
+    }
+
+    // Process highlighting annotations if they exist
+    if (searchResults.annotations && searchResults.annotations.length > 0) {
+      const highlightingAnnotations = searchResults.annotations[0].items || [];
+
+      // Sort highlighting annotations by canvas index, then coordinates to ensure correct order
+      highlightingAnnotations.sort((a, b) => {
+        const sourceA = sourceAnnotationMap.get(a.target.source);
+        const sourceB = sourceAnnotationMap.get(b.target.source);
+        if (!sourceA || !sourceB) return 0;
+
+        // sort by canvas index
+        const canvasDiff = sourceA.canvasIndex - sourceB.canvasIndex;
+        if (canvasDiff !== 0) return canvasDiff;
+
+        // sort by spatial position within canvas (top to bottom, left to right)
+        const yDiff = sourceA.bounds.y - sourceB.bounds.y;
+        if (yDiff !== 0) return yDiff;
+        return sourceA.bounds.x - sourceB.bounds.x;
+      });
+
+      for (const highlightAnnotation of highlightingAnnotations) {
+        const sourceInfo = sourceAnnotationMap.get(
+          highlightAnnotation.target.source
+        );
+
+        if (!sourceInfo) continue;
+
+        const { canvasId, canvasIndex } = sourceInfo;
+
+        // Handle canvas index tracking for grouping
+        if (canvasIndex !== oldCanvasIndex) {
+          currentIndex = 0;
+          oldCanvasIndex = canvasIndex;
+        } else {
+          currentIndex++;
+        }
+
+        // Extract match details from the TextQuoteSelector
+        const selector = highlightAnnotation.target.selector?.[0];
+        if (selector && selector.type === "TextQuoteSelector") {
+          const searchHit = new SearchHit();
+          searchHit.canvasId = canvasId;
+          searchHit.canvasIndex = canvasIndex;
+          searchHit.before = selector.prefix || "";
+          searchHit.after = selector.suffix || "";
+          searchHit.match = selector.exact || "";
+          searchHit.index = currentIndex;
+
+          groupedSearchHits.push(searchHit);
+        }
+      }
+    } else {
+      // if no highlighting annotations, process main items directly
+      // handles cases where the search service doesn't provide separate highlighting annotations
+      const sortedItems = [...searchResults.items].sort((a, b) => {
+        const canvasIdA = a.target.id.match(/(.*)#/)?.[1];
+        const canvasIdB = b.target.id.match(/(.*)#/)?.[1];
+        if (!canvasIdA || !canvasIdB) return 0;
+
+        const indexA = this.helper.getCanvasIndexById(canvasIdA);
+        const indexB = this.helper.getCanvasIndexById(canvasIdB);
+
+        // Handle null values - treat null as -1 to sort them to the beginning
+        const safeIndexA = indexA ?? -1;
+        const safeIndexB = indexB ?? -1;
+
+        return safeIndexA - safeIndexB;
+      });
+
+      for (const item of sortedItems) {
+        const canvasId = item.target.id.match(/(.*)#/)?.[1];
+        if (!canvasId) continue;
+
+        const canvasIndex = this.helper.getCanvasIndexById(canvasId);
+        if (canvasIndex === null) continue; // Skip items with invalid canvas indices
+
+        if (canvasIndex !== oldCanvasIndex) {
+          currentIndex = 0;
+          oldCanvasIndex = canvasIndex;
+        } else {
+          currentIndex++;
+        }
+
+        const searchHit = new SearchHit();
+        searchHit.canvasId = canvasId;
+        searchHit.canvasIndex = canvasIndex;
+        searchHit.before = "";
+        searchHit.after = "";
+        searchHit.match = item.body?.value || "";
+        searchHit.index = currentIndex;
+
+        groupedSearchHits.push(searchHit);
+      }
+    }
 
     return groupedSearchHits;
   }
@@ -1584,12 +1806,23 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       .then((response) => response.json())
       .then((results) => {
         if (results.resources && results.resources.length) {
+          // this works for content search api 1
           searchResults = searchResults.concat(
             this.groupOpenAnnotationsByTarget(results)
           );
           searchHits = searchHits.concat(this.groupSearchHitsByTarget(results));
+        } else if (results.items && results.items.length) {
+          //this will work for content search api 2
+          searchResults = searchResults.concat(
+            this.groupWebAnnotationResultsByTarget(results)
+          );
+          searchHits = searchHits.concat(
+            this.sortWebAnnotationsSearchHits(results)
+          );
         }
 
+        //JM so looks like it's here looping through all of the search pages in one request, which could be a big load
+        // would be better to request the next page when the next page of results was clicked through to?
         if (results.next) {
           this.getSearchResults(
             results.next,

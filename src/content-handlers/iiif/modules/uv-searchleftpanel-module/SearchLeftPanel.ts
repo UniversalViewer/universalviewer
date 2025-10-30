@@ -9,7 +9,7 @@ import { AnnotationRect } from "@iiif/manifold";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
 import { SearchHit } from "../uv-shared-module/SearchHit";
 import { Keyboard, Strings } from "../../Utils";
-import * as KeyCodes from "../../KeyCodes";
+import * as KeyCodes from "@edsilv/key-codes";
 import { URLAdapter } from "../../URLAdapter";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 
@@ -388,6 +388,7 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
     this.$searchResultContainer.html("");
     this.$searchText.blur();
     this.showSearchSpinner();
+    //JM this triggers the same search function as previus version, defined in the OSD Extension.ts
     this.extensionHost.publish(OpenSeadragonExtensionEvents.SEARCH, this.terms);
   }
 
@@ -466,10 +467,8 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
         );
 
         div.append(
-          hitNumberSpan[0].outerHTML +
-            searchHit.before +
-            searchHitSpan[0].outerHTML +
-            searchHit.after
+          // hitNumberSpan[0].outerHTML +
+          searchHit.before + searchHitSpan[0].outerHTML + searchHit.after
         );
         $(div).on("keydown", (e: any) => {
           const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
