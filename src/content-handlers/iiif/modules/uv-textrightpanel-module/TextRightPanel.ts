@@ -98,25 +98,25 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
       this.$top.append(this.$copyButton);
     }
 
-    // function getIntersectionArea(rect1, rect2) {
-    //   const xOverlap = Math.max(
-    //     0,
-    //     Math.min(rect1.x + rect1.width, rect2.x + rect2.width) -
-    //       Math.max(rect1.x, rect2.x)
-    //   );
-    //   const yOverlap = Math.max(
-    //     0,
-    //     Math.min(rect1.y + rect1.height, rect2.y + rect2.height) -
-    //       Math.max(rect1.y, rect2.y)
-    //   );
-    //   return xOverlap * yOverlap;
-    // }
+    function getIntersectionArea(rect1, rect2) {
+      const xOverlap = Math.max(
+        0,
+        Math.min(rect1.x + rect1.width, rect2.x + rect2.width) -
+          Math.max(rect1.x, rect2.x)
+      );
+      const yOverlap = Math.max(
+        0,
+        Math.min(rect1.y + rect1.height, rect2.y + rect2.height) -
+          Math.max(rect1.y, rect2.y)
+      );
+      return xOverlap * yOverlap;
+    }
 
-    // function getIntersectionPercentage(rect1, rect2) {
-    //   const intersectionArea = getIntersectionArea(rect1, rect2);
-    //   const rect1Area = rect1.width * rect1.height;
-    //   return (intersectionArea / rect1Area) * 100;
-    // }
+    function getIntersectionPercentage(rect1, rect2) {
+      const intersectionArea = getIntersectionArea(rect1, rect2);
+      const rect1Area = rect1.width * rect1.height;
+      return (intersectionArea / rect1Area) * 100;
+    }
 
     this.extensionHost.on(Events.SEARCH_HIT_CHANGED, (e) => {
       // this reacts to a new search hit being selected and styles the elements (rect on the canvas, span in the full text) appropriately
@@ -251,45 +251,45 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
           }
         }
 
-        // const annotationRects = (<OpenSeadragonExtension>this.extension)
-        //   .getAnnotationRects()
-        //   .filter((rect) => {
-        //     return rect["canvasIndex"] == c.index;
-        //   });
+        const annotationRects = (<OpenSeadragonExtension>this.extension)
+          .getAnnotationRects()
+          .filter((rect) => {
+            return rect["canvasIndex"] == c.index;
+          });
 
-        // annotationRects.forEach((annotationRect) => {
-        //   const rect = {
-        //     x: annotationRect.x,
-        //     y: annotationRect.y,
-        //     width: annotationRect.width,
-        //     height: annotationRect.height,
-        //   };
+        annotationRects.forEach((annotationRect) => {
+          const rect = {
+            x: annotationRect.x,
+            y: annotationRect.y,
+            width: annotationRect.width,
+            height: annotationRect.height,
+          };
 
-        //   $("div.lineAnnotationRect").each(
-        //     (i: Number, lineAnnotationRect: any) => {
-        //       const x = $(lineAnnotationRect).data("x");
-        //       const y = $(lineAnnotationRect).data("y");
-        //       const width = $(lineAnnotationRect).data("width");
-        //       const height = $(lineAnnotationRect).data("height");
-        //       const lineRect = { x: x, y: y, width: width, height: height };
+          $("div.lineAnnotationRect").each(
+            (i: Number, lineAnnotationRect: any) => {
+              const x = $(lineAnnotationRect).data("x");
+              const y = $(lineAnnotationRect).data("y");
+              const width = $(lineAnnotationRect).data("width");
+              const height = $(lineAnnotationRect).data("height");
+              const lineRect = { x: x, y: y, width: width, height: height };
 
-        //       const p = getIntersectionPercentage(rect, lineRect);
-        //       if (p > 50) {
-        //         const lineElement = $(
-        //           "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
-        //         );
-        //         if (lineElement[0]) {
-        //           this.highlightSearchHit(
-        //             lineElement[0],
-        //             annotationRect.chars,
-        //             annotationRect.index,
-        //             annotationRect.canvasIndex
-        //           );
-        //         }
-        //       }
-        //     }
-        //   );
-        // });
+              const p = getIntersectionPercentage(rect, lineRect);
+              if (p > 50) {
+                const lineElement = $(
+                  "div#" + $(lineAnnotationRect).attr("id") + ".lineAnnotation"
+                );
+                if (lineElement[0]) {
+                  this.highlightSearchHit(
+                    lineElement[0],
+                    annotationRect.chars,
+                    annotationRect.index,
+                    annotationRect.canvasIndex
+                  );
+                }
+              }
+            }
+          );
+        });
 
         if (
           $(
@@ -333,78 +333,78 @@ export class TextRightPanel extends RightPanel<TextRightPanelConfig> {
     this.$top.parent().addClass("textRightPanel");
   }
 
-  // highlightSearchHit(
-  //   element: Element,
-  //   searchText: string,
-  //   index: string | number,
-  //   canvasIndex: string | number
-  // ): void {
-  //   // traverse only text nodes
-  //   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
-  //     acceptNode: function (node: Node): number {
-  //       // skip text nodes that are already inside searchHitSpan elements
-  //       const parent = node.parentElement;
-  //       if (parent && parent.classList.contains("searchHitSpan")) {
-  //         return NodeFilter.FILTER_REJECT;
-  //       }
-  //       return NodeFilter.FILTER_ACCEPT;
-  //     },
-  //   });
+  highlightSearchHit(
+    element: Element,
+    searchText: string,
+    index: string | number,
+    canvasIndex: string | number
+  ): void {
+    // traverse only text nodes
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node: Node): number {
+        // skip text nodes that are already inside searchHitSpan elements
+        const parent = node.parentElement;
+        if (parent && parent.classList.contains("searchHitSpan")) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
 
-  //   let currentNode: Node | null;
-  //   const textNodes: Text[] = [];
+    let currentNode: Node | null;
+    const textNodes: Text[] = [];
 
-  //   // collect all valid text nodes
-  //   while ((currentNode = walker.nextNode())) {
-  //     textNodes.push(currentNode as Text);
-  //   }
+    // collect all valid text nodes
+    while ((currentNode = walker.nextNode())) {
+      textNodes.push(currentNode as Text);
+    }
 
-  //   // find the first occurrence of search hit
-  //   for (const textNode of textNodes) {
-  //     const textContent = textNode.textContent || "";
-  //     const hitIndex = textContent.indexOf(searchText);
+    // find the first occurrence of search hit
+    for (const textNode of textNodes) {
+      const textContent = textNode.textContent || "";
+      const hitIndex = textContent.indexOf(searchText);
 
-  //     if (hitIndex !== -1) {
-  //       // split the text node and wrap the match
-  //       const beforeText = textContent.substring(0, hitIndex);
-  //       const matchText = textContent.substring(
-  //         hitIndex,
-  //         hitIndex + searchText.length
-  //       );
-  //       const afterText = textContent.substring(hitIndex + searchText.length);
+      if (hitIndex !== -1) {
+        // split the text node and wrap the match
+        const beforeText = textContent.substring(0, hitIndex);
+        const matchText = textContent.substring(
+          hitIndex,
+          hitIndex + searchText.length
+        );
+        const afterText = textContent.substring(hitIndex + searchText.length);
 
-  //       // create highlight span
-  //       const highlightSpan = document.createElement("span");
-  //       highlightSpan.className = "searchHitSpan";
-  //       highlightSpan.setAttribute("data-index", String(index));
-  //       highlightSpan.setAttribute("data-canvas-index", String(canvasIndex));
-  //       highlightSpan.textContent = matchText;
+        // create highlight span
+        const highlightSpan = document.createElement("span");
+        highlightSpan.className = "searchHitSpan";
+        highlightSpan.setAttribute("data-index", String(index));
+        highlightSpan.setAttribute("data-canvas-index", String(canvasIndex));
+        highlightSpan.textContent = matchText;
 
-  //       const parent = textNode.parentNode;
+        const parent = textNode.parentNode;
 
-  //       if (parent) {
-  //         // replace original text node with the parts
-  //         if (beforeText) {
-  //           const beforeNode = document.createTextNode(beforeText);
-  //           parent.insertBefore(beforeNode, textNode);
-  //         }
+        if (parent) {
+          // replace original text node with the parts
+          if (beforeText) {
+            const beforeNode = document.createTextNode(beforeText);
+            parent.insertBefore(beforeNode, textNode);
+          }
 
-  //         parent.insertBefore(highlightSpan, textNode);
+          parent.insertBefore(highlightSpan, textNode);
 
-  //         if (afterText) {
-  //           const afterNode = document.createTextNode(afterText);
-  //           parent.insertBefore(afterNode, textNode);
-  //         }
+          if (afterText) {
+            const afterNode = document.createTextNode(afterText);
+            parent.insertBefore(afterNode, textNode);
+          }
 
-  //         // remove the original text node
-  //         parent.removeChild(textNode);
-  //       }
+          // remove the original text node
+          parent.removeChild(textNode);
+        }
 
-  //       // stop after finding and wrapping the first occurrence
-  //       break;
-  //     }
-  //   }
-  // }
+        // stop after finding and wrapping the first occurrence
+        break;
+      }
+    }
+  }
 
   toggleFinish(): void {
     super.toggleFinish();
