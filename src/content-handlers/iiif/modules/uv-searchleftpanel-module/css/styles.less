@@ -148,8 +148,11 @@
           align-items: flex-end;
 
           .autocomplete {
+            font-size: 12px;
+            z-index: 9999;
+            background-color: white;
             position: absolute;
-            width: 270px;
+            width: 100%;
             border: 2px solid @brand-primary-lighter;
             list-style-type: none;
             -webkit-margin-before: 0;
@@ -166,6 +169,10 @@
               padding: 4px;
               width: 270px;
               overflow: hidden;
+
+              a {
+                color: black;
+              }
 
               &.loading {
                 background-image: data-uri(@loader-white-bg);

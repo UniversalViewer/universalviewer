@@ -1179,6 +1179,36 @@
           "@type": "sc:Manifest",
           "label": "Swedish National Archives",
           "visible": true
+        },
+        {
+          "@id": "https://miiify-a58u.onrender.com/manifest/0001",
+          "@type": "sc:Manifest",
+          "label": "BL Annotations Test",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "IIIF Cookbook: Simplest Annotation (embedded)",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0269-embedded-or-referenced-annotations/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "IIIF Cookbook: Referenced Annotation",
+          "visible": true
+        },
+        {
+          "@id": "https://iiif.wellcomecollection.org/presentation/b19974760_133_0018",
+          "@type": "sc:Manifest",
+          "label": "Chemist & Druggist",
+          "visible": true
+        },
+        {
+          "@id": "https://digital.lib.utk.edu/assemble/manifest/insurancena/125",
+          "@type": "sc:Manifest",
+          "label": "Letter, Elliston Perot & John Perot (full canvas annos)",
+          "visible": true
         }
       ]
     }

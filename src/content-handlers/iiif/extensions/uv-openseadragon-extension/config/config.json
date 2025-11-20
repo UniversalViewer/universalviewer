@@ -78,7 +78,9 @@
         "showAllLanguages": false,
         "textLimit": 4,
         "textLimitType": "lines",
-        "topCloseButtonEnabled": false
+        "topCloseButtonEnabled": false,
+        "autocompleteAllowWords": true,
+        "autoCompleteBoxEnabled": true
       },
       "content": {
         "attribution": "$attribution",
@@ -479,6 +481,7 @@
     "searchFooterPanel": {
       "options": {
         "autocompleteAllowWords": false,
+        "autoCompleteBoxEnabled": true,
         "elideDetailsTermsCount": 20,
         "elideResultsTermsCount": 10,
         "forceImageMode": false,
