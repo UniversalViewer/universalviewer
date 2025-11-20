@@ -8,11 +8,11 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { AnnotationRect } from "@iiif/manifold";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
 import { SearchHit } from "../uv-shared-module/SearchHit";
-import { Keyboard, Strings } from "../../Utils";
+import { Keyboard, Strings, Bools } from "../../Utils";
 import * as KeyCodes from "@edsilv/key-codes";
 import { URLAdapter } from "../../URLAdapter";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
-
+import { AutoComplete } from "../uv-shared-module/AutoComplete";
 export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
   $searchButton: JQuery;
   $searchContainer: JQuery;
@@ -370,6 +370,44 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
         )).centerPanel.preserveViewportForQuery = false;
       }
     }, 100); // unfortunately this is needed :-(
+
+    // add autocomplete
+    var that = this;
+
+    const autocompleteService: string | null = (<OpenSeadragonExtension>(
+      this.extension
+    )).getAutoCompleteUri();
+
+    if (autocompleteService) {
+      new AutoComplete(
+        this.$searchText,
+        (terms: string, cb: (results: string[]) => void) => {
+          fetch(Strings.format(autocompleteService, terms))
+            .then((response) => response.json())
+            .then((results) => {
+              cb(results);
+            });
+        },
+        (results: any) => {
+          return $.map(results.terms, (result: any) => {
+            return result.match;
+          });
+        },
+        (terms: string) => {
+          this.search(terms);
+        },
+        300,
+        2,
+        false,
+        Bools.getBool(that.config.options.autocompleteAllowWords, true)
+      );
+    } else {
+      this.$searchText.on("keyup", (e) => {
+        if (e.keyCode === KeyCodes.KeyDown.Enter) {
+          that.search(that.$searchText.val());
+        }
+      });
+    }
   }
 
   search(terms: string): void {
@@ -466,8 +504,10 @@ export class SearchLeftPanel extends LeftPanel<SearchLeftPanelConfig> {
         );
 
         div.append(
-          // hitNumberSpan[0].outerHTML +
-          searchHit.before + searchHitSpan[0].outerHTML + searchHit.after
+          hitNumberSpan[0].outerHTML +
+            searchHit.before +
+            searchHitSpan[0].outerHTML +
+            searchHit.after
         );
         $(div).on("keydown", (e: any) => {
           const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;

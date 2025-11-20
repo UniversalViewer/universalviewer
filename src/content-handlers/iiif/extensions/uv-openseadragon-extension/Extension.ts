@@ -1733,7 +1733,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     if (!service) return null;
     return (
       service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE) ||
-      service.getService(ServiceProfile.SEARCH_1_AUTO_COMPLETE)
+      service.getService(ServiceProfile.SEARCH_1_AUTO_COMPLETE) ||
+      service.getService(ServiceProfile.SEARCH_2_AUTO_COMPLETE)
     );
   }
 
