@@ -279,10 +279,8 @@ export default class Extension
         let annotationUri = annotations[0].getProperty("thumbnail");
         if (typeof annotationUri === "string") {
           posterUri = annotationUri;
-        } else {
-          if (annotationUri.length && typeof annotationUri[0].id === "string") {
-            posterUri = annotationUri[0].id;
-          }
+        } else if (annotationUri.length && typeof annotationUri[0].id === "string") {
+          posterUri = annotationUri[0].id;
         }
       } else {
         posterUri = canvas.getProperty("thumbnail");
