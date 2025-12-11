@@ -276,7 +276,15 @@ export default class Extension
       const annotations: Annotation[] = canvas.getContent();
 
       if (annotations && annotations.length) {
-        posterUri = annotations[0].getProperty("thumbnail");
+        const annotationUri = annotations[0].getProperty("thumbnail");
+        if (typeof annotationUri === "string") {
+          posterUri = annotationUri;
+        } else if (
+          annotationUri.length &&
+          typeof annotationUri[0].id === "string"
+        ) {
+          posterUri = annotationUri[0].id;
+        }
       } else {
         posterUri = canvas.getProperty("thumbnail");
       }
