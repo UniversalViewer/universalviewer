@@ -55,4 +55,11 @@ jobs:
 
       - run: npm ci
       - run: npm run prepublishOnly
-      - run: npm publish --tag=${{ steps.tagName.outputs.tag }}
+
+      - name: Publish a release candidate
+        if: contains(steps.tagName.outputs.tag, 'rc')
+        run: npm publish --tag=rc
+
+      - name: Publish a regular release
+        if: false == contains(steps.tagName.outputs.tag, 'rc')
+        run: npm publish
