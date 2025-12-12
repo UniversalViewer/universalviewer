@@ -55,4 +55,4 @@ jobs:
 
       - run: npm ci
       - run: npm run prepublishOnly
-      - run: npm publish
+      - run: npm publish --tag=${{ steps.tagName.outputs.tag }}
