@@ -18,6 +18,7 @@ import { MultiSelectionArgs } from "./MultiSelectionArgs";
 import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
 import { Point } from "../../modules/uv-shared-module/Point";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
+import { OpenSeadragonBackgroundPanel } from "../../modules/uv-openseadragonbackgroundpanel-module/OpenSeadragonBackgroundPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools, Maths, Strings } from "../../Utils";
@@ -63,6 +64,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $shareDialogue: JQuery;
   $adjustImageDialogue: JQuery;
   centerPanel: OpenSeadragonCenterPanel;
+  backgroundPanel: OpenSeadragonBackgroundPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
   downloadDialogueRoot: Root;
@@ -355,7 +357,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION_FINISH,
       (viewer: any) => {
-        const xywh: XYWHFragment | null = this.centerPanel.getViewportBounds();
+        const xywh: XYWHFragment | null =
+          this.backgroundPanel.getViewportBounds();
         const canvas: Canvas = this.helper.getCurrentCanvas();
 
         if (this.centerPanel && xywh && canvas) {
@@ -519,6 +522,10 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     }
 
     this.centerPanel = new OpenSeadragonCenterPanel(this.shell.$centerPanel);
+
+    this.backgroundPanel = new OpenSeadragonBackgroundPanel(
+      this.shell.$backgroundPanel
+    );
 
     if (this.isRightPanelEnabled()) {
       this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
@@ -895,7 +902,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   }
 
   getViewer() {
-    return this.centerPanel.viewer;
+    return this.backgroundPanel.viewer;
   }
 
   getMode(): Mode {
@@ -913,7 +920,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
   getViewportBounds(): string | null {
     if (!this.centerPanel) return null;
-    const bounds = this.centerPanel.getViewportBounds();
+    const bounds = this.backgroundPanel.getViewportBounds();
     if (bounds) {
       return bounds.toString();
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Canvas } from "manifesto.js";
 import { ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
-import { Strings } from "@edsilv/utils";
+import { Strings } from "../../Utils";
 import HeaderButton from "../uv-shared-module/HeaderButton";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Goto, FirstPage, LastPage } from "../../../../icons/icons";

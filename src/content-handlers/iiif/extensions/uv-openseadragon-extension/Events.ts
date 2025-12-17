@@ -46,4 +46,5 @@ export class OpenSeadragonExtensionEvents {
     OpenSeadragonExtensionEvents.namespace + "xywhChange";
   static ZOOM_IN: string = OpenSeadragonExtensionEvents.namespace + "zoomIn";
   static ZOOM_OUT: string = OpenSeadragonExtensionEvents.namespace + "zoomOut";
+  static GO_HOME: string = OpenSeadragonExtensionEvents.namespace + "goHome";
 }

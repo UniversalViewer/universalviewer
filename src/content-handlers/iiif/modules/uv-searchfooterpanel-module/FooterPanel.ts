@@ -6,7 +6,7 @@ import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
 import { AnnotationResults } from "../uv-shared-module/AnnotationResults";
 import { sanitize } from "../../../../Utils";
-import { Bools, Strings } from "@edsilv/utils";
+import { Bools, Strings } from "../../Utils";
 import { AnnotationGroup } from "@iiif/manifold";
 import { Canvas, LanguageMap } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";

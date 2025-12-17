@@ -17,6 +17,8 @@ export class Shell extends BaseView<BaseConfig> {
   public $overlays: JQuery;
   public $rightPanel: JQuery;
 
+  public $backgroundPanel: JQuery;
+
   constructor($element: JQuery) {
     super($element, true, true);
   }
@@ -44,6 +46,9 @@ export class Shell extends BaseView<BaseConfig> {
 
     this.$mainPanel = $('<div class="mainPanel"></div>');
     this.$element.append(this.$mainPanel);
+
+    this.$backgroundPanel = $('<div class="backgroundPanel"></div>');
+    this.$mainPanel.append(this.$backgroundPanel);
 
     this.$centerPanel = $('<div class="centerPanel"></div>');
     this.$centerPanel.append(

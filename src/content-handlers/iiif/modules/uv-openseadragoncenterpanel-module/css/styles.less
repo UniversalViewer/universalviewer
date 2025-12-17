@@ -4,14 +4,35 @@
   @search-result: @brand-secondary;
 
   .centerPanel {
+    background-color: transparent;
+    pointer-events: none; // Make the entire center panel transparent to clicks
+
+    // Main controls container - positioned at top left with margin
+    .controlsContainer {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+
+      > * {
+        pointer-events: auto; // But buttons are clickable
+      }
+    }
+
     .pagingToggleButtons {
       position: absolute;
-      bottom: 0;
-      left: 0;
+      bottom: 10px;
+      left: 10px;
       z-index: 1000;
       display: flex;
-      background: black;
+      background: rgba(0, 0, 0, 0.7);
       transition: opacity 0.3s ease;
+      pointer-events: auto; // Buttons are clickable
 
       button {
         cursor: pointer;
@@ -40,254 +61,265 @@
 
     .content {
       position: relative;
+      pointer-events: none; // Pass through all clicks
+
+      // Make ONLY interactive elements clickable
+      .paging.btn,
+      .pagingToggleButtons,
+      .controlsContainer,
+      button {
+        pointer-events: auto;
+      }
 
       .displayregion {
         border: 2px solid #fff !important;
       }
 
-      .viewer {
-        margin: 0 8px;
+      // Prev/Next buttons - positioned on left and right, vertically centered
+      .paging.btn {
+        position: absolute !important;
+        width: 30px;
+        height: 90px;
+        background-repeat: no-repeat;
+        background-color: rgba(0, 0, 0, 0.7);
+        background-position: 0 50%;
+        cursor: pointer;
+        padding: 0;
+        border: none;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 101;
+        pointer-events: auto;
 
-        .navigator.extraMargin {
-          margin: 0 30px 0 0 !important;
+        .border-radius(0);
+
+        &.vertical {
+          height: 30px;
+          width: 90px;
+          background-position: 50% 0;
         }
 
-        .openseadragon-container > div:not(.openseadragon-canvas):first {
-          display: none;
-
-          .xl-mediaquery({
-                        display: block;
-                    });
+        &.prev {
+          background-image: data-uri("../img/left_arrow.png");
+          left: 10px;
+          &.disabled {
+            background-image: data-uri("../img/left_arrow_disabled.png");
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
 
-        .paging.btn {
-          position: absolute !important;
-          width: 30px;
-          height: 90px;
-          background-repeat: no-repeat;
-          background-color: @body-bg;
-          background-position: 0 50%;
-          cursor: pointer;
-          padding: 0;
-          border: none;
-
-          .border-radius(0);
-
-          &.vertical {
-            height: 30px;
-            width: 90px;
-            background-position: 50% 0;
+        &.prev.vertical {
+          background-image: data-uri("../img/up_arrow.png");
+          left: 50%;
+          top: 10px;
+          transform: translateX(-50%);
+          &.disabled {
+            background-image: data-uri("../img/up_arrow_disabled.png");
+            opacity: 0.5;
+            cursor: not-allowed;
           }
-
-          &.prev {
-            background-image: data-uri("../img/left_arrow.png");
-            left: 0;
-            &.disabled {
-              background-image: data-uri("../img/left_arrow_disabled.png");
-            }
-          }
-
-          &.prev.vertical {
-            background-image: data-uri("../img/up_arrow.png");
-            left: 0;
-            top: 0;
-            &.disabled {
-              background-image: data-uri("../img/up_arrow_disabled.png");
-            }
-            &.down {
-              background-image: data-uri("../img/down_arrow.png");
-              &.disabled {
-                background-image: data-uri("../img/down_arrow_disabled.png");
-              }
-            }
-          }
-
-          &.next {
-            background-image: data-uri("../img/right_arrow.png");
-            right: 0;
-            &.disabled {
-              background-image: data-uri("../img/right_arrow_disabled.png");
-            }
-
-            & .uv-icon-next {
-              background-image: none;
-            }
-          }
-
-          &.next.vertical {
+          &.down {
             background-image: data-uri("../img/down_arrow.png");
-            left: 0;
-            top: 0;
-            margin-left: 15px;
             &.disabled {
               background-image: data-uri("../img/down_arrow_disabled.png");
             }
-            &.up {
-              background-image: data-uri("../img/up_arrow.png");
-              &.disabled {
-                background-image: data-uri("../img/up_arrow_disabled.png");
-              }
-            }
+          }
+        }
+
+        &.next {
+          background-image: data-uri("../img/right_arrow.png");
+          right: 10px;
+          &.disabled {
+            background-image: data-uri("../img/right_arrow_disabled.png");
+            opacity: 0.5;
+            cursor: not-allowed;
           }
 
-          /* fixes out-of-scope iiif-tree and iiif-gallery icons */
-          &.prev .uv-icon-prev,
-          &.next .uv-icon-next {
+          & .uv-icon-next {
             background-image: none;
           }
         }
 
-        .zoomIn {
-          display: none !important;
-
-          .xl-mediaquery({
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer !important;
-                        width: 26px;
-                        height: 26px;
-                        padding: 0;
-                        // background-color: black;
-
-
-                        svg {
-                            display: block;
-                            width: 26px;
-                            height: 26px;
-                          }
-                      
-                          &:hover {
-                            color: #00fff2;
-
-                          }
-
-                        &:focus {
-                            .tab-focus();
-                        }
-                    });
+        &.next.vertical {
+          background-image: data-uri("../img/down_arrow.png");
+          left: 50%;
+          bottom: 10px;
+          top: auto;
+          transform: translateX(-50%);
+          margin-left: 0;
+          &.disabled {
+            background-image: data-uri("../img/down_arrow_disabled.png");
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+          &.up {
+            background-image: data-uri("../img/up_arrow.png");
+            &.disabled {
+              background-image: data-uri("../img/up_arrow_disabled.png");
+            }
+          }
         }
 
-        .zoomOut {
-          display: none !important;
+        /* fixes out-of-scope iiif-tree and iiif-gallery icons */
+        &.prev .uv-icon-prev,
+        &.next .uv-icon-next {
+          background-image: none;
+        }
+      }
 
-          .xl-mediaquery({
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer !important;
-                        width: 26px;
-                        height: 26px;
-                        padding: 0;
-                        // background-color: black;
+      .viewportNavButton {
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        border: none !important;
+        padding: 4px !important;
+        color: white;
 
-
-                        svg {
-                            display: block;
-                            width: 26px;
-                            height: 26px;
-                          }
-
-                      
-                          &:hover {
-                            color: #00fff2;
-
-                          }
-                        &:focus {
-                            .tab-focus();
-                        }
-                    });
+        &:hover {
+          color: #00fff2;
         }
 
-        .goHome {
-          display: none !important;
-
-          .md-mediaquery({
-                        display: inline-block !important;
-                        cursor: pointer !important;
-                        background-image: data-uri('../img/home.png') !important;
-                        width: 26px;
-                        height: 26px;
-                        // margin: 3px !important;
-                        img {
-                            display: none;
-                        }
-                        &:focus {
-                            .tab-focus();
-                        }
-                    });
+        &:focus {
+          .tab-focus();
         }
+      }
 
-        div[title="Rotate left"] {
-          display: none !important;
-        }
+      .zoomIn {
+        .xl-mediaquery({
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer !important;
+          width: 26px;
+          height: 26px;
+          padding: 0;
 
-        .rotate {
-          display: none !important;
+          svg {
+            display: block;
+            width: 26px;
+            height: 26px;
+          }
 
-          .xl-mediaquery({
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer !important;
-                        width: 26px;
-                        height: 26px;
-                        padding: 0;
-                        // background-color: black;
+          &:hover {
+            color: #00fff2;
+          }
 
-                        svg {
-                            display: block;
-                            width: 26px;
-                            height: 26px;
-                          }
-                      
-                          &:hover {
-                            color: #00fff2;
+          &:focus {
+            .tab-focus();
+          }
+        });
+      }
 
-                          }
-                        &:focus {
-                            .tab-focus();
-                        }
-                    });
-        }
+      .zoomOut {
+        .xl-mediaquery({
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer !important;
+          width: 26px;
+          height: 26px;
+          padding: 0;
 
-        .adjustImage {
-          display: none !important;
+          svg {
+            display: block;
+            width: 26px;
+            height: 26px;
+          }
 
-          .xl-mediaquery({
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer !important;
-                        width: 26px;
-                        height: 26px;
-                        padding: 0;
-                        // background-color: black;
+          &:hover {
+            color: #00fff2;
+          }
 
-                        svg {
-                            display: block;
-                            width: 26px;
-                            height: 26px;
-                          }
+          &:focus {
+            .tab-focus();
+          }
+        });
+      }
 
-                      
-                          &:hover {
-                            color: #00fff2;
+      .goHome {
+        .md-mediaquery({
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer !important;
+          background-image: data-uri("../img/home.png") !important;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          width: 26px;
+          height: 26px;
+          
+          img {
+            display: none;
+          }
+          
+          &:focus {
+            .tab-focus();
+          }
+        });
+      }
 
-                          }
-                        &:focus {
-                            .tab-focus();
-                        }
-                    });
-        }
+      div[title="Rotate left"] {
+        display: none !important;
+      }
 
-        div[title="Previous page"] {
-          display: none !important;
-        }
+      .rotate {
+        .xl-mediaquery({
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer !important;
+          width: 26px;
+          height: 26px;
+          padding: 0;
 
-        div[title="Next page"] {
-          display: none !important;
-        }
+          svg {
+            display: block;
+            width: 26px;
+            height: 26px;
+          }
+
+          &:hover {
+            color: #00fff2;
+          }
+
+          &:focus {
+            .tab-focus();
+          }
+        });
+      }
+
+      .adjustImage {
+        .xl-mediaquery({
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer !important;
+          width: 26px;
+          height: 26px;
+          padding: 0;
+
+          svg {
+            display: block;
+            width: 26px;
+            height: 26px;
+          }
+
+          &:hover {
+            color: #00fff2;
+          }
+
+          &:focus {
+            .tab-focus();
+          }
+        });
+      }
+
+      div[title="Previous page"] {
+        display: none !important;
+      }
+
+      div[title="Next page"] {
+        display: none !important;
       }
 
       .spinner {
@@ -301,8 +333,8 @@
       .annotationRect {
         background-color: desaturate(@search-result, 40%);
         .opacity(0.5);
+        pointer-events: auto;
         &.current {
-          //border: 3px solid #fff;
           @col: lighten(@search-result, 20%);
           background-color: saturate(@col, 100%);
         }
@@ -311,6 +343,7 @@
 
       .lineAnnotationRect {
         .opacity(0.5);
+        pointer-events: auto;
         &.current {
           @col: rgb(120, 251, 185);
           background-color: saturate(@col, 100%);
@@ -323,7 +356,6 @@
       }
 
       .annotationPin {
-        // background-color: white;
         background-image: data-uri("../img/pin.svg") !important;
         width: 26px !important;
         height: 37px !important;
@@ -331,6 +363,7 @@
         transform: translate(-45%, -90%);
         overflow: hidden;
         cursor: pointer;
+        pointer-events: auto;
 
         span {
           color: #2a2a2a;

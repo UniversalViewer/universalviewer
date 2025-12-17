@@ -4,7 +4,7 @@ import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-
 import { HeaderPanel } from "../uv-shared-module/HeaderPanel";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 import GoTo from "./GoTo";
 import Search from "./Search";
