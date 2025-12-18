@@ -4,12 +4,13 @@
       font-size: @headings-size-xlarge;
       color: @text-color;
       font-weight: normal;
-      margin: 5px 0 10px;
+      margin: 5px 0 0;
       padding: 0 20px 0 10px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 30px;
+      user-select: none;
 
       &.rtl {
         direction: rtl;
@@ -162,5 +163,9 @@
         }
       }
     }
+  }
+
+  .openseadragon-canvas {
+    outline: none !important;
   }
 }

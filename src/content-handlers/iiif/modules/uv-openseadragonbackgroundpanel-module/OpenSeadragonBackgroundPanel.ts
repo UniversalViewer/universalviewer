@@ -45,7 +45,6 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
   viewerId: string;
 
   $canvas: JQuery;
-  $navigator: JQuery;
   $spinner: JQuery;
   $viewer: JQuery;
   $toggleContainer: JQuery;
@@ -164,6 +163,9 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
         });
       }
     );
+
+    // temporary. this fixes the top and bottom margins on the osd viewer but title is still appearing. might need to have osd background panel not extending centerpanel
+    this.$title.hide();
   }
 
   galleryIsVisible(): boolean {
@@ -211,6 +213,7 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
       // crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
+      navigatorId: "osd-navigator-container",
       showRotationControl: true,
       showHomeControl: Bools.getBool(
         this.config.options.showHomeControl,
@@ -220,9 +223,9 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
       defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-      navigatorPosition: this.extension.helper.isContinuous()
-        ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+      // navigatorPosition: this.extension.helper.isContinuous()
+      //   ? "BOTTOM_LEFT"
+      //   : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
       navigatorHeight: "100px",
       navigatorWidth: "100px",
       navigatorMaintainSizeRatio: false,
@@ -368,9 +371,6 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
     this.$canvas.on("contextmenu", () => {
       return false;
     });
-
-    this.$navigator = this.$viewer.find(".navigator");
-    this.setNavigatorVisible();
 
     // events
 
@@ -611,15 +611,6 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
 
   openPagesHandler(): void {
     this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
-
-    if (
-      this.extension.helper.isMultiCanvas() &&
-      !this.extension.helper.isContinuous()
-    ) {
-      $(".navigator").addClass("extraMargin");
-    }
-
-    this.setNavigatorVisible();
 
     this.overlayAnnotations();
 
@@ -1127,22 +1118,6 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
     if (this.$canvas && !this.$canvas.is(":focus")) {
       if (this.extension.data.config!.options.allowStealFocus) {
         this.$canvas.focus();
-      }
-    }
-  }
-
-  setNavigatorVisible(): void {
-    const navigatorEnabled: boolean =
-      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
-      this.extension.isDesktopMetric();
-
-    if (this.viewer && this.viewer.navigator) {
-      this.viewer.navigator.setVisible(navigatorEnabled);
-
-      if (navigatorEnabled) {
-        this.$navigator.show();
-      } else {
-        this.$navigator.hide();
       }
     }
   }

@@ -5,23 +5,15 @@
 
   .centerPanel {
     background-color: transparent;
-    pointer-events: none; // Make the entire center panel transparent to clicks
+    pointer-events: none;
 
-    // Main controls container - positioned at top left with margin
     .controlsContainer {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      left: 8px;
       z-index: 100;
-      pointer-events: none;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 4px;
-
-      > * {
-        pointer-events: auto; // But buttons are clickable
-      }
     }
 
     .pagingToggleButtons {
@@ -32,7 +24,6 @@
       display: flex;
       background: rgb(0 0 0 / 70%);
       transition: opacity 0.3s ease;
-      pointer-events: auto; // Buttons are clickable
 
       button {
         cursor: pointer;
@@ -61,9 +52,7 @@
 
     .content {
       position: relative;
-      pointer-events: none; // Pass through all clicks
 
-      // Make ONLY interactive elements clickable
       .paging.btn,
       .pagingToggleButtons,
       .controlsContainer,
@@ -71,17 +60,16 @@
         pointer-events: auto;
       }
 
-      .displayregion {
-        border: 2px solid #fff !important;
-      }
-
-      // Prev/Next buttons - positioned on left and right, vertically centered
       .paging.btn {
-        position: absolute !important;
+        position: absolute;
         width: 30px;
         height: 90px;
         background-repeat: no-repeat;
+<<<<<<< HEAD
         background-color: rgb(0 0 0 / 70%);
+=======
+        background-color: rgba(0, 0, 0);
+>>>>>>> 457f9d63 (move navigator from osd background into ui  overlay component)
         background-position: 0 50%;
         cursor: pointer;
         padding: 0;
@@ -90,8 +78,6 @@
         transform: translateY(-50%);
         z-index: 101;
         pointer-events: auto;
-
-        .border-radius(0);
 
         &.vertical {
           height: 30px;
@@ -160,19 +146,31 @@
             }
           }
         }
-
-        /* fixes out-of-scope iiif-tree and iiif-gallery icons */
-        &.prev .uv-icon-prev,
-        &.next .uv-icon-next {
-          background-image: none;
-        }
       }
 
+<<<<<<< HEAD
       .viewportNavButton {
         background-color: rgb(0 0 0 / 70%) !important;
         border: none !important;
         padding: 4px !important;
+=======
+      .imageControlButton {
+        background-color: #212121;
+>>>>>>> 457f9d63 (move navigator from osd background into ui  overlay component)
         color: white;
+        width: 30px;
+        height: 30px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer !important;
+
+        svg {
+          display: block;
+          width: 30px;
+          height: 30px;
+        }
 
         &:hover {
           color: #00fff2;
@@ -183,202 +181,35 @@
         }
       }
 
-      .zoomIn {
-        .xl-mediaquery({
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer !important;
-          width: 26px;
-          height: 26px;
-          padding: 0;
-
-          svg {
-            display: block;
-            width: 26px;
-            height: 26px;
-          }
-
-          &:hover {
-            color: #00fff2;
-          }
-
-          &:focus {
-            .tab-focus();
-          }
-        });
-      }
-
-      .zoomOut {
-        .xl-mediaquery({
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer !important;
-          width: 26px;
-          height: 26px;
-          padding: 0;
-
-          svg {
-            display: block;
-            width: 26px;
-            height: 26px;
-          }
-
-          &:hover {
-            color: #00fff2;
-          }
-
-          &:focus {
-            .tab-focus();
-          }
-        });
-      }
-
       .goHome {
-        .md-mediaquery({
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer !important;
-          background-image: data-uri("../img/home.png") !important;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-          width: 26px;
-          height: 26px;
-          
-          img {
-            display: none;
-          }
-          
-          &:focus {
-            .tab-focus();
-          }
-        });
-      }
+        // hide temporarily
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer !important;
+        background-image: data-uri("../img/home.png") !important;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
 
-      div[title="Rotate left"] {
-        display: none !important;
-      }
-
-      .rotate {
-        .xl-mediaquery({
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer !important;
-          width: 26px;
-          height: 26px;
-          padding: 0;
-
-          svg {
-            display: block;
-            width: 26px;
-            height: 26px;
-          }
-
-          &:hover {
-            color: #00fff2;
-          }
-
-          &:focus {
-            .tab-focus();
-          }
-        });
-      }
-
-      .adjustImage {
-        .xl-mediaquery({
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer !important;
-          width: 26px;
-          height: 26px;
-          padding: 0;
-
-          svg {
-            display: block;
-            width: 26px;
-            height: 26px;
-          }
-
-          &:hover {
-            color: #00fff2;
-          }
-
-          &:focus {
-            .tab-focus();
-          }
-        });
-      }
-
-      div[title="Previous page"] {
-        display: none !important;
-      }
-
-      div[title="Next page"] {
-        display: none !important;
-      }
-
-      .spinner {
-        position: absolute;
-        width: 27px;
-        height: 27px;
-        border-radius: 27px;
-        .loading(@loader-black-bg);
-      }
-
-      .annotationRect {
-        background-color: desaturate(@search-result, 40%);
-        .opacity(0.5);
-        pointer-events: auto;
-        &.current {
-          @col: lighten(@search-result, 20%);
-          background-color: saturate(@col, 100%);
+        img {
+          display: none;
         }
-        z-index: 20;
+
+        &:focus {
+          .tab-focus();
+        }
       }
 
-      .lineAnnotationRect {
-        .opacity(0.5);
-        pointer-events: auto;
-        &.current {
-          @col: rgb(120, 251, 185);
-          background-color: saturate(@col, 100%);
-        }
-        &:hover {
-          @col: lighten(rgb(120, 251, 185), 20%);
-          background-color: saturate(@col, 80%);
-        }
-        z-index: 10;
-      }
-
-      .annotationPin {
-        background-image: data-uri("../img/pin.svg") !important;
-        width: 26px !important;
-        height: 37px !important;
-        background-position-x: 1px;
-        transform: translate(-45%, -90%);
-        overflow: hidden;
-        cursor: pointer;
-        pointer-events: auto;
-
-        span {
-          color: #2a2a2a;
-          user-select: none;
-          display: block;
-          width: 95%;
-          text-align: center;
-          margin-top: 8px;
-          font-size: 11px;
-        }
+      #osd-navigator-container {
+        position: absolute !important;
+        bottom: 0;
+        left: 10px;
+        width: 100px;
+        height: 100px;
+        border: 2px solid rgb(85, 85, 85);
+        background-color: black;
       }
     }
-  }
-
-  .openseadragon-canvas {
-    outline: none;
   }
 }

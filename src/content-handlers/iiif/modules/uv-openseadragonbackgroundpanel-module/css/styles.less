@@ -3,99 +3,64 @@
 .uv-iiif-extension-host.uv-openseadragon-extension {
   @search-result: @brand-secondary;
 
-  .backgroundPanel {
+  .navigator.extraMargin {
+    margin: 0 30px 0 0 !important;
+  }
+
+  .spinner {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    width: 27px;
+    height: 27px;
+    border-radius: 27px;
+    .loading(@loader-black-bg);
+  }
+
+  .annotationRect {
+    background-color: desaturate(@search-result, 40%);
+    .opacity(0.5);
+    &.current {
+      //border: 3px solid #fff;
+      @col: lighten(@search-result, 20%);
+      background-color: saturate(@col, 100%);
+    }
+    z-index: 30;
+  }
+
+  .lineAnnotationRect {
+    .opacity(0.5);
+    &.current {
+      @col: rgb(120, 251, 185);
+      background-color: saturate(@col, 100%);
+    }
+    &:hover {
+      @col: lighten(rgb(120, 251, 185), 20%);
+      background-color: saturate(@col, 80%);
+    }
     z-index: 10;
+  }
 
-    .content {
-      position: absolute; // Change to absolute
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+  .annotationPin {
+    // background-color: white;
+    background-image: data-uri("../img/pin.svg") !important;
+    width: 26px !important;
+    height: 37px !important;
+    background-position-x: 1px;
+    transform: translate(-45%, -90%);
+    overflow: hidden;
+    cursor: pointer;
 
-      .displayregion {
-        border: 2px solid #fff !important;
-      }
-
-      .viewer {
-        margin: 0;
-        width: 100% !important;
-        height: 100% !important;
-
-        .navigator.extraMargin {
-          margin: 0 30px 0 0 !important;
-        }
-
-        .openseadragon-container > div:not(.openseadragon-canvas):first {
-          display: none;
-
-          .xl-mediaquery({
-                        display: block;
-                    });
-        }
-      }
-
-      .spinner {
-        position: absolute;
-        width: 27px;
-        height: 27px;
-        border-radius: 27px;
-        .loading(@loader-black-bg);
-      }
-
-      .annotationRect {
-        background-color: desaturate(@search-result, 40%);
-        .opacity(0.5);
-        &.current {
-          //border: 3px solid #fff;
-          @col: lighten(@search-result, 20%);
-          background-color: saturate(@col, 100%);
-        }
-        z-index: 20;
-      }
-
-      .lineAnnotationRect {
-        .opacity(0.5);
-        &.current {
-          @col: rgb(120, 251, 185);
-          background-color: saturate(@col, 100%);
-        }
-        &:hover {
-          @col: lighten(rgb(120, 251, 185), 20%);
-          background-color: saturate(@col, 80%);
-        }
-        z-index: 10;
-      }
-
-      .annotationPin {
-        // background-color: white;
-        background-image: data-uri("../img/pin.svg") !important;
-        width: 26px !important;
-        height: 37px !important;
-        background-position-x: 1px;
-        transform: translate(-45%, -90%);
-        overflow: hidden;
-        cursor: pointer;
-
-        span {
-          color: #2a2a2a;
-          user-select: none;
-          display: block;
-          width: 95%;
-          text-align: center;
-          margin-top: 8px;
-          font-size: 11px;
-        }
-      }
+    span {
+      color: #2a2a2a;
+      user-select: none;
+      display: block;
+      width: 95%;
+      text-align: center;
+      margin-top: 8px;
+      font-size: 11px;
     }
   }
 
   .openseadragon-canvas {
-    outline: none;
+    outline: none !important;
   }
 }

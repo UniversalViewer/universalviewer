@@ -72,6 +72,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$controlsContainer = $('<div class="controlsContainer"></div>');
     this.$content.prepend(this.$controlsContainer);
 
+    this.makeControlsContainerDraggable();
+
     this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
     this.$content.prepend(this.$pagingToggleButtons);
     this.$oneUpButton = $(`
@@ -165,6 +167,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$galleryButton.onPressed(() => {
       this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
     });
+
+    this.$navigator = $(`<div id="osd-navigator-container"></div>`);
   }
 
   private togglePagingButtons(pagingEnabled: boolean): void {
@@ -283,13 +287,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.attr("tabindex", 0);
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
-    this.$zoomInButton.addClass("zoomIn viewportNavButton");
-    this.$zoomInButton.html(`<svg
-    width="26"
-    height="26"
-    viewBox="0 0 26 26"
+    this.$zoomInButton.addClass("zoomIn imageControlButton");
+    this.$zoomInButton.html(`  <svg
+    width=30
+    height=30
+    viewBox="0 0 30 30"
     xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
+  fill="currentColor"
+
   >
     <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
   </svg>`);
@@ -303,15 +308,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
-    this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+    this.$zoomOutButton.addClass("zoomOut imageControlButton");
     this.$zoomOutButton.html(`<svg
-  width="26"
-  height="26"
-  viewBox="0 0 26 26"
-  xmlns="http://www.w3.org/2000/svg"
+    width=30
+    height=30
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
   fill="currentColor"
->
-  <rect x="8" y="14" width="14" height="2" />
+
+  >
+    <rect x="8" y="14" width="14" height="2" />
 </svg>
 `);
 
@@ -324,7 +330,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$goHomeButton.attr("tabindex", 0);
     this.$goHomeButton.attr("title", this.content.goHome);
     this.$goHomeButton.attr("aria-label", this.content.goHome);
-    this.$goHomeButton.addClass("goHome viewportNavButton");
+    this.$goHomeButton.addClass("goHome imageControlButton");
 
     this.onAccessibleClick(this.$goHomeButton, () => {
       this.goHome();
@@ -335,13 +341,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
-    this.$rotateButton.addClass("rotate viewportNavButton");
+    this.$rotateButton.addClass("rotate imageControlButton");
     this.$rotateButton.html(`<svg
-    width="30"
-    height="30"
+    width=30
+    height=30
     viewBox="0 0 30 30"
     xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
+  fill="currentColor"
+
   >
     <g>
       <path
@@ -362,7 +369,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$controlsContainer.append(this.$adjustImageButton);
       this.$adjustImageButton.attr("title", this.content.adjustImage);
       this.$adjustImageButton.attr("aria-label", this.content.adjustImage);
-      this.$adjustImageButton.switchClass("rotate", "adjustImage");
+      this.$adjustImageButton.addClass("adjustImage imageControlButton");
       this.$adjustImageButton.attr("tabindex", 0);
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
@@ -403,6 +410,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       if (!this.controlsVisible) return;
       this.controlsVisible = false;
     });
+
+    this.$content.append(this.$navigator);
 
     this.setNavigatorVisible();
 
@@ -491,8 +500,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.title = this.extension.helper.getLabel();
 
     this.createNavigationButtons();
-    // this.hidePrevButton();
-    // this.hideNextButton();
+    this.hidePrevButton();
+    this.hideNextButton();
 
     this.isCreated = true;
     //this.resize();
@@ -833,28 +842,87 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   setNavigatorVisible(): void {
-    // TODO: sort this out with a pubsub thing when components are split
+    const navigatorEnabled: boolean =
+      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
+      this.extension.isDesktopMetric();
 
-    // const navigatorEnabled: boolean =
-    //   Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
-    //   this.extension.isDesktopMetric();
-
-    // if (this.viewer && this.viewer.navigator) {
-    //   this.viewer.navigator.setVisible(navigatorEnabled);
-
-    //   if (navigatorEnabled) {
-    //     this.$navigator.show();
-    //   } else {
-    //     this.$navigator.hide();
-    //   }
-    // }
-
-    console.log("set navigator visible");
+    if (this.$navigator) {
+      if (navigatorEnabled) {
+        this.$navigator.show();
+      } else {
+        this.$navigator.hide();
+      }
+    }
   }
 
   getControlsFadeLength(): number {
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
+  }
+
+  private makeControlsContainerDraggable(): void {
+    let isDragging = false;
+    let currentX: number;
+    let currentY: number;
+    let initialX: number;
+    let initialY: number;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    this.$controlsContainer.on("mousedown", (e) => {
+      // Only allow dragging from the container itself, not the buttons
+      if (e.target === this.$controlsContainer[0]) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        isDragging = true;
+        this.$controlsContainer.css("cursor", "grabbing");
+      }
+    });
+
+    $(document).on("mousemove", (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+
+        this.setControlsPosition(currentX, currentY);
+      }
+    });
+
+    $(document).on("mouseup", () => {
+      if (isDragging) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+        this.$controlsContainer.css("cursor", "grab");
+      }
+    });
+
+    // Add visual hint that it's draggable
+    this.$controlsContainer.css({
+      cursor: "grab",
+      padding: "8px", // Add some padding so there's space to grab
+    });
+  }
+
+  private setControlsPosition(x: number, y: number): void {
+    // Keep within bounds of parent container
+    const parentWidth = this.$content.width();
+    const parentHeight = this.$content.height();
+    const containerWidth = this.$controlsContainer.outerWidth();
+    const containerHeight = this.$controlsContainer.outerHeight();
+
+    const boundedX = Math.max(0, Math.min(x, parentWidth - containerWidth));
+    const boundedY = Math.max(0, Math.min(y, parentHeight - containerHeight));
+
+    this.$controlsContainer.css({
+      transform: `translate(${boundedX}px, ${boundedY}px)`,
+      position: "absolute",
+      top: 0,
+      left: 0,
+    });
   }
 }
