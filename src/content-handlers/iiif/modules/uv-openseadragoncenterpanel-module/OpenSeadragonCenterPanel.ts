@@ -201,6 +201,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.openPagesHandler();
       }
     );
+
+    this.extensionHost.subscribe(IIIFEvents.TOGGLE_PANEL, () => {
+      this.temporarilyHideControls();
+      console.log("panel toggle");
+    });
   }
 
   updateGalleryButton(): void {
@@ -793,5 +798,61 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
+  }
+
+  private temporarilyHideControls(): void {
+    // Don't try to hide controls if they haven't been created yet
+    if (!this.isCreated) {
+      return;
+    }
+
+    const settings = this.extension.getSettings();
+    const isReducedAnimation = settings.reducedAnimation;
+
+    // Temporarily disable transitions for immediate hide
+    const elements = [
+      this.$controlsContainer,
+      this.$pagingToggleButtons,
+      this.$galleryButton,
+      this.$navigator,
+      this.$prevButton,
+      this.$nextButton,
+    ];
+
+    elements.forEach((el) => {
+      el.css("transition", "none");
+    });
+
+    // Hide controls immediately
+    elements.forEach((el) => {
+      el.addClass("fade-out");
+    });
+
+    // Force reflow to ensure the transition:none takes effect
+    this.$controlsContainer[0].offsetHeight;
+
+    // Re-enable transitions
+    elements.forEach((el) => {
+      el.css("transition", "");
+    });
+
+    // Show again after animation completes
+    if (!isReducedAnimation) {
+      const duration =
+        (this.config.options.animationTime ??
+          settings.animationDuration ??
+          250) + 250; // Small buffer
+
+      setTimeout(() => {
+        elements.forEach((el) => {
+          el.removeClass("fade-out");
+        });
+      }, duration);
+    } else {
+      // If reduced animation, show immediately
+      elements.forEach((el) => {
+        el.removeClass("fade-out");
+      });
+    }
   }
 }

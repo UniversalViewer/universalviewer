@@ -106,6 +106,7 @@ export class IIIFEvents {
   static TARGET_CHANGE: string = "targetChange";
   static TOGGLE_RIGHT_PANEL: string = "toggleRightPanel";
   static TOGGLE_LEFT_PANEL: string = "toggleLeftPanel";
+  static TOGGLE_PANEL: string = "togglePanel";
   static THUMB_MULTISELECTED: string = "thumbMultiSelected";
   static THUMB_SELECTED: string = "thumbSelected";
   static TOGGLE_EXPAND_LEFT_PANEL: string = "toggleExpandLeftPanel";
