@@ -108,15 +108,12 @@
     padding: 0;
     overflow: hidden;
     background: @body-bg;
-
-    // Remove all the grid stuff and class modifiers from here
   }
 
-  // Move ALL the grid logic here
   .overlayPanels {
     position: absolute;
     inset: 0;
-    padding: @panel-margin;
+    padding: @panel-margin 0;
     pointer-events: none;
 
     // Add gradient if there is a title
@@ -199,7 +196,7 @@
   .centerPanel {
     position: absolute;
     overflow: hidden;
-    width: 100%;
+    inset: 0;
     pointer-events: none;
 
     .md-mediaquery({
@@ -225,7 +222,7 @@
     border: @panel-border;
 
     overflow: hidden;
-    z-index: 20;
+    z-index: 1000;
 
     transition-property: all;
     transition-timing-function: linear;

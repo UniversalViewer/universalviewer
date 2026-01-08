@@ -5,7 +5,7 @@
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
-    "footerPanelEnabled": false,
+    "footerPanelEnabled": true,
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,

@@ -538,6 +538,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.mobileFooterPanel = new MobileFooterPanel(
         this.shell.$mobileFooterPanel
       );
+      console.log("footer enabled");
     } else {
       this.shell.$footerPanel.hide();
     }

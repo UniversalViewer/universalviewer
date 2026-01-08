@@ -14,6 +14,10 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+
+      .sm-mediaquery({
+          display: none;
+        });
     }
 
     .pagingToggleButtons {
@@ -24,6 +28,10 @@
       display: flex;
       background: rgb(0 0 0 / 70%);
       transition: opacity 0.3s ease;
+
+      .sm-mediaquery({
+          display: none;
+        });
 
       button {
         cursor: pointer;
