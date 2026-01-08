@@ -36,6 +36,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm login
+
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
         run: npm publish --tag=rc
