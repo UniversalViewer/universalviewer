@@ -16,8 +16,8 @@ export class Shell extends BaseView<BaseConfig> {
   public $mobileFooterPanel: JQuery;
   public $overlays: JQuery;
   public $rightPanel: JQuery;
-
   public $backgroundPanel: JQuery;
+  public $overlayPanels: JQuery;
 
   constructor($element: JQuery) {
     super($element, true, true);
@@ -50,19 +50,22 @@ export class Shell extends BaseView<BaseConfig> {
     this.$backgroundPanel = $('<div class="backgroundPanel"></div>');
     this.$mainPanel.append(this.$backgroundPanel);
 
+    this.$overlayPanels = $('<div class="overlayPanels"></div>');
+    this.$mainPanel.append(this.$overlayPanels);
+
     this.$centerPanel = $('<div class="centerPanel"></div>');
     this.$centerPanel.append(
       '<h2 class="sr-only">' +
         this.extension.data.config!.content.mediaViewer +
         "</h2>"
     );
-    this.$mainPanel.append(this.$centerPanel);
+    this.$overlayPanels.append(this.$centerPanel);
 
     this.$leftPanel = $('<div class="leftPanel"></div>');
-    this.$mainPanel.append(this.$leftPanel);
+    this.$overlayPanels.append(this.$leftPanel);
 
     this.$rightPanel = $('<div class="rightPanel"></div>');
-    this.$mainPanel.append(this.$rightPanel);
+    this.$overlayPanels.append(this.$rightPanel);
 
     this.$footerPanel = $('<div class="footerPanel"></div>');
     this.$element.append(this.$footerPanel);

@@ -104,35 +104,60 @@
 
   .mainPanel {
     position: relative;
-    padding-top: @panel-margin;
-    margin-right: @panel-margin;
-    margin-bottom: 0;
-    margin-left: @panel-margin;
-    background: @body-bg; // important, otherwise you see two spinners
-  }
-
-  .mainPanel {
-    position: relative;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background: @body-bg;
+
+    // Remove all the grid stuff and class modifiers from here
+  }
+
+  // Move ALL the grid logic here
+  .overlayPanels {
+    position: absolute;
+    inset: 0;
+    padding: @panel-margin;
+    pointer-events: none;
+
+    // Add gradient if there is a title
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 0%,
+        transparent 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    // only show gradient when centerPanel has a title
+    &:has(.centerPanel .title:not(:empty))::before {
+      opacity: 1;
+    }
 
     .md-mediaquery({
-            padding: 0.5rem;
-            display: grid;
-            grid-template-columns: 
-                [left] var(--uv-grid-left-width) 
-                [center] var(--uv-grid-main-width)
-                [right] var(--uv-grid-right-width);
-            grid-template-areas: "left center right";
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 
+      [left] var(--uv-grid-left-width) 
+      [center] var(--uv-grid-main-width)
+      [right] var(--uv-grid-right-width);
+    grid-template-areas: "left center right";
 
-            transition-property: grid-template-columns;
-            transition-timing-function: linear;
-            transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
-        });
+    transition-property: grid-template-columns;
+    transition-timing-function: linear;
+    transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
+  });
 
     /* hide empty panels */
-
     &:has(.leftPanel:empty) {
       --uv-grid-left-width: auto;
     }
@@ -142,15 +167,15 @@
     }
   }
 
-  .mainPanel.leftPanelOpen {
+  .overlayPanels.leftPanelOpen {
     --uv-grid-left-width: var(--uv-grid-left-width-open);
   }
 
-  .mainPanel.rightPanelOpen {
+  .overlayPanels.rightPanelOpen {
     --uv-grid-right-width: var(--uv-grid-right-width-open);
   }
 
-  .mainPanel.leftPanelOpenFull {
+  .overlayPanels.leftPanelOpenFull {
     --uv-grid-left-width: 100%;
     --uv-grid-main-width: 0;
     --uv-grid-right-width: 0;
@@ -162,10 +187,20 @@
     );
   }
 
+  .backgroundPanel {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
   .centerPanel {
     position: absolute;
     overflow: hidden;
     width: 100%;
+    pointer-events: none;
 
     .md-mediaquery({
             z-index: 15;
@@ -180,15 +215,8 @@
     height: 100% !important;
     bottom: 0;
     top: 0;
-  }
-
-  .overlayPanel {
-    position: absolute;
-    overflow: hidden;
-    width: 100%;
-    height: 100% !important;
-    bottom: 0;
-    top: 0;
+    left: 0;
+    right: 0;
   }
 
   .leftPanel,
@@ -210,6 +238,8 @@
 
     width: 100%;
     height: auto;
+
+    pointer-events: auto;
 
     .md-mediaquery({
             display: block;
