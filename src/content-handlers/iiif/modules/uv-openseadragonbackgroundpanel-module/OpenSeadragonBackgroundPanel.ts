@@ -528,7 +528,6 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
               this.openPagesHandler();
             }
             this.resize();
-            this.goHome();
           },
         });
       }
@@ -721,9 +720,7 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
     rect.y = Number(bounds.y);
     rect.width = Number(bounds.w);
     rect.height = Number(bounds.h);
-    setTimeout(() => {
-      this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
-    }, 100);
+    this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
   }
 
   getCroppedImageBounds(): string | null {
