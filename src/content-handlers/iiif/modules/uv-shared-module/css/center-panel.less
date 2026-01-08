@@ -84,13 +84,14 @@
         position: absolute;
         width: 220px;
         font-size: @font-size-small;
+        z-index: 10;
 
         .sm-mediaquery({
                     margin: 25px 20px;
                 });
 
         .md-mediaquery({
-                    margin: @margin-medium-horizontal @margin-medium-horizontal @margin-medium-vertical @margin-medium-horizontal;
+                    margin: @margin-medium-horizontal @margin-medium-horizontal 0px @margin-medium-horizontal;
                 });
 
         .header {
@@ -118,7 +119,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             opacity: 0.5;
-            padding: 4px 12px 6px;
+            padding: 4px 12px 0px;
             line-height: 1;
             text-shadow: 0 1px 0 #fff;
             &:hover,
