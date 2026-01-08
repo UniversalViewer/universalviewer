@@ -280,7 +280,7 @@ export default class Extension
         if (typeof annotationUri === "string") {
           posterUri = annotationUri;
         } else if (
-          annotationUri.length &&
+          annotationUri?.length &&
           typeof annotationUri[0].id === "string"
         ) {
           posterUri = annotationUri[0].id;
