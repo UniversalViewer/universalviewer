@@ -13,7 +13,8 @@ import {
 import { debounce, sanitize } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
-import { CenterPanel } from "../uv-shared-module/CenterPanel";
+// import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { BaseView } from "../uv-shared-module/BaseView";
 import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
@@ -24,7 +25,7 @@ import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class OpenSeadragonBackgroundPanel extends CenterPanel<
+export class OpenSeadragonBackgroundPanel extends BaseView<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
   currentAnnotationRect: AnnotationRect;
@@ -65,7 +66,7 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
 
     this.viewerId = "osd" + new Date().getTime();
     this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
-    this.$content.prepend(this.$viewer);
+    this.$element.prepend(this.$viewer);
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
@@ -163,9 +164,6 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
         });
       }
     );
-
-    // temporary. this fixes the top and bottom margins on the osd viewer but title is still appearing. might need to have osd background panel not extending centerpanel
-    this.$title.hide();
   }
 
   galleryIsVisible(): boolean {
@@ -201,7 +199,7 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
 
   async createUI(): Promise<void> {
     this.$spinner = $('<div class="spinner"></div>');
-    this.$content.append(this.$spinner);
+    this.$element.append(this.$spinner);
 
     // Transparent pixel
     const pixel =
@@ -1086,32 +1084,22 @@ export class OpenSeadragonBackgroundPanel extends CenterPanel<
     super.resize();
 
     this.$viewer.height(
-      this.$content.height() - this.$viewer.verticalMargins()
+      this.$element.height() - this.$viewer.verticalMargins()
     );
     this.$viewer.width(
-      this.$content.width() - this.$viewer.horizontalMargins()
+      this.$element.width() - this.$viewer.horizontalMargins()
     );
 
     if (!this.isCreated) return;
 
-    if (this.title) {
-      this.$title.text(sanitize(this.title));
-    }
-
     this.$spinner.css(
       "top",
-      this.$content.height() / 2 - this.$spinner.height() / 2
+      this.$element.height() / 2 - this.$spinner.height() / 2
     );
     this.$spinner.css(
       "left",
-      this.$content.width() / 2 - this.$spinner.width() / 2
+      this.$element.width() / 2 - this.$spinner.width() / 2
     );
-
-    if (this.extension.helper.isRightToLeft()) {
-      this.$title.addClass("rtl");
-    } else {
-      this.$title.removeClass("rtl");
-    }
   }
 
   setFocus(): void {
