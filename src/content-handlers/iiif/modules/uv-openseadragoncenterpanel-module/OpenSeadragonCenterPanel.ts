@@ -1,12 +1,6 @@
 const $ = require("jquery");
 import { Async, Bools } from "../../Utils";
-import {
-  Canvas,
-  IExternalResource,
-  Annotation,
-  AnnotationBody,
-  Service,
-} from "manifesto.js";
+import { IExternalResource } from "manifesto.js";
 import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
@@ -71,8 +65,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$controlsContainer = $('<div class="controlsContainer"></div>');
     this.$content.prepend(this.$controlsContainer);
-
-    this.makeControlsContainerDraggable();
 
     this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
     this.$content.prepend(this.$pagingToggleButtons);
@@ -396,112 +388,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       });
     }
 
-    this.$zoomInButton
-      .add(this.$zoomOutButton)
-      .add(this.$goHomeButton)
-      .add(this.$rotateButton)
-      .add(this.$adjustImageButton)
-      .on("focus", () => {
-        if (this.controlsVisible) return;
-        this.controlsVisible = true;
-      });
-
-    this.$zoomInButton.add(this.$adjustImageButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-    });
-
     this.$content.append(this.$navigator);
 
     this.setNavigatorVisible();
-
-    // events
-
-    this.$element.on("mousemove", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-    });
-
-    this.$element.on("mouseleave", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-    });
-
-    // when mouse move stopped
-    this.$element.on(
-      //@ts-ignore
-      "mousemove",
-      () => {
-        // if over element, hide controls.
-        // When over prev/next buttons keep controls enabled
-        if (this.$prevButton.ismouseover()) {
-          return;
-        }
-        if (this.$nextButton.ismouseover()) {
-          return;
-        }
-        if (
-          !this.$nextButton.ismouseover() &&
-          !this.$prevButton.ismouseover()
-        ) {
-          if (!this.controlsVisible) return;
-          this.controlsVisible = false;
-        }
-      },
-      this.config.options.controlsFadeAfterInactive
-    );
-
-    const fadeDelay = 1500;
-
-    let fadeButtonsTimeout: number | undefined;
-
-    const showPagingButtons = () => {
-      this.$pagingToggleButtons.removeClass("fade-out");
-      this.$galleryButton.removeClass("fade-out");
-    };
-
-    const hidePagingButtons = () => {
-      this.$pagingToggleButtons.addClass("fade-out");
-      this.$galleryButton.addClass("fade-out");
-    };
-
-    const resetPagingFadeTimer = () => {
-      clearTimeout(fadeButtonsTimeout);
-      showPagingButtons();
-
-      fadeButtonsTimeout = window.setTimeout(() => {
-        hidePagingButtons();
-      }, fadeDelay);
-    };
-
-    this.$element.on("mousemove", () => {
-      resetPagingFadeTimer();
-    });
-
-    this.$pagingToggleButtons.on("mouseenter", () => {
-      showPagingButtons();
-      clearTimeout(fadeButtonsTimeout);
-    });
-    this.$galleryButton.on("mouseenter", () => {
-      showPagingButtons();
-      clearTimeout(fadeButtonsTimeout);
-    });
-
-    this.$pagingToggleButtons.on("mouseleave", () => {
-      resetPagingFadeTimer();
-    });
-    this.$galleryButton.on("mouseleave", () => {
-      resetPagingFadeTimer();
-    });
-
-    showPagingButtons();
-    resetPagingFadeTimer();
 
     this.title = this.extension.helper.getLabel();
 
     this.createNavigationButtons();
     this.hidePrevButton();
     this.hideNextButton();
+
+    this.setupControlsFade();
 
     this.isCreated = true;
     //this.resize();
@@ -594,75 +491,112 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           break;
       }
     });
-
-    // When Prev/Next buttons are focused, make sure the controls are enabled
-    this.$prevButton.add(this.$nextButton).on("focus", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-    });
-
-    this.$prevButton.add(this.$nextButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-    });
   }
 
-  async getGirderTileSource(): Promise<any> {
-    return new Promise<any>((resolve) => {
-      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-      const annotations: Annotation[] = canvas.getContent();
+  private setupControlsFade(): void {
+    const fadeDelay = this.config.options.controlsFadeAfterInactive || 3000;
+    let fadeTimeout: number | undefined;
 
-      if (annotations.length) {
-        const annotation: Annotation = annotations[0];
-        const body: AnnotationBody[] = annotation.getBody();
+    const showAllControls = () => {
+      this.$controlsContainer.removeClass("fade-out");
+      this.$pagingToggleButtons.removeClass("fade-out");
+      this.$galleryButton.removeClass("fade-out");
+      this.$navigator.removeClass("fade-out");
+      this.$prevButton.removeClass("fade-out");
+      this.$nextButton.removeClass("fade-out");
+      this.controlsVisible = true;
+    };
 
-        if (body.length) {
-          const services: Service[] = body[0].getServices();
+    const hideAllControls = () => {
+      // Don't hide if user is interacting with any controls
+      if (
+        this.$controlsContainer.is(":hover") ||
+        this.$pagingToggleButtons.is(":hover") ||
+        this.$galleryButton.is(":hover") ||
+        this.$navigator.is(":hover") ||
+        this.$prevButton.is(":hover") ||
+        this.$nextButton.is(":hover")
+      ) {
+        return;
+      }
 
-          if (services.length) {
-            let id: string = services[0].id;
-            let tileDescriptor = id;
-            if (!tileDescriptor.endsWith("/")) {
-              tileDescriptor += "/";
-            }
-            tileDescriptor += "tiles";
+      this.$controlsContainer.addClass("fade-out");
+      this.$pagingToggleButtons.addClass("fade-out");
+      this.$galleryButton.addClass("fade-out");
+      this.$navigator.addClass("fade-out");
+      this.$prevButton.addClass("fade-out");
+      this.$nextButton.addClass("fade-out");
+      this.controlsVisible = false;
+    };
 
-            if (id.endsWith("/")) {
-              id = id.substr(0, id.length - 1);
-            }
-            fetch(tileDescriptor)
-              .then((response) => response.json())
-              .then((info) => {
-                const tileSource = {
-                  height: info.sizeY,
-                  width: info.sizeX,
-                  tileWidth: info.tileWidth,
-                  tileHeight: info.tileHeight,
-                  minLevel: 0,
-                  maxLevel: info.levels - 1,
-                  units: "mm",
-                  spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function (level, x, y, query) {
-                    var url =
-                      tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
-                    if (query) {
-                      url += "?" + $.param(query);
-                    }
-                    return url;
-                  },
-                };
+    const resetFadeTimer = () => {
+      clearTimeout(fadeTimeout);
+      showAllControls();
 
-                if (!info.mm_x) {
-                  tileSource.units = "pixels";
-                  tileSource.spacing = [1, 1];
-                }
+      if (this.autoHideControls) {
+        fadeTimeout = window.setTimeout(() => {
+          hideAllControls();
+        }, fadeDelay);
+      }
+    };
 
-                resolve(tileSource);
-              });
-          }
-        }
+    const $container = this.$element.parent();
+
+    $container.on("mousemove", (e) => {
+      if (this.autoHideControls) {
+        resetFadeTimer();
       }
     });
+
+    $container.on("mouseleave", () => {
+      if (this.autoHideControls) {
+        clearTimeout(fadeTimeout);
+        fadeTimeout = window.setTimeout(() => {
+          hideAllControls();
+        }, 500);
+      }
+    });
+
+    // Keep all controls visible when hovering over any of them
+    this.$controlsContainer
+      .add(this.$pagingToggleButtons)
+      .add(this.$galleryButton)
+      .add(this.$navigator)
+      .add(this.$prevButton)
+      .add(this.$nextButton)
+      .on("mouseenter", () => {
+        showAllControls();
+        clearTimeout(fadeTimeout);
+      })
+      .on("mouseleave", () => {
+        if (this.autoHideControls) {
+          resetFadeTimer();
+        }
+      });
+
+    // Keep controls visible when buttons are focused by keyboard
+    this.$zoomInButton
+      .add(this.$zoomOutButton)
+      .add(this.$goHomeButton)
+      .add(this.$rotateButton)
+      .add(this.$adjustImageButton)
+      .add(this.$oneUpButton)
+      .add(this.$twoUpButton)
+      .add(this.$galleryButton)
+      .add(this.$prevButton)
+      .add(this.$nextButton)
+      .on("focus", () => {
+        showAllControls();
+        clearTimeout(fadeTimeout);
+      })
+      .on("blur", () => {
+        if (this.autoHideControls) {
+          resetFadeTimer();
+        }
+      });
+
+    showAllControls();
+    resetFadeTimer();
   }
 
   openPagesHandler(): void {
@@ -859,70 +793,5 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
-  }
-
-  private makeControlsContainerDraggable(): void {
-    let isDragging = false;
-    let currentX: number;
-    let currentY: number;
-    let initialX: number;
-    let initialY: number;
-    let xOffset = 0;
-    let yOffset = 0;
-
-    this.$controlsContainer.on("mousedown", (e) => {
-      // Only allow dragging from the container itself, not the buttons
-      if (e.target === this.$controlsContainer[0]) {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-        isDragging = true;
-        this.$controlsContainer.css("cursor", "grabbing");
-      }
-    });
-
-    $(document).on("mousemove", (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
-        xOffset = currentX;
-        yOffset = currentY;
-
-        this.setControlsPosition(currentX, currentY);
-      }
-    });
-
-    $(document).on("mouseup", () => {
-      if (isDragging) {
-        initialX = currentX;
-        initialY = currentY;
-        isDragging = false;
-        this.$controlsContainer.css("cursor", "grab");
-      }
-    });
-
-    // Add visual hint that it's draggable
-    this.$controlsContainer.css({
-      cursor: "grab",
-      padding: "8px", // Add some padding so there's space to grab
-    });
-  }
-
-  private setControlsPosition(x: number, y: number): void {
-    // Keep within bounds of parent container
-    const parentWidth = this.$content.width();
-    const parentHeight = this.$content.height();
-    const containerWidth = this.$controlsContainer.outerWidth();
-    const containerHeight = this.$controlsContainer.outerHeight();
-
-    const boundedX = Math.max(0, Math.min(x, parentWidth - containerWidth));
-    const boundedY = Math.max(0, Math.min(y, parentHeight - containerHeight));
-
-    this.$controlsContainer.css({
-      transform: `translate(${boundedX}px, ${boundedY}px)`,
-      position: "absolute",
-      top: 0,
-      left: 0,
-    });
   }
 }
