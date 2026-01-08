@@ -9,26 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Node build
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/cache@v5
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-      - name: Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '20.x'
-      - run: npm ci
-      - run: npm run build
-
   release:
-    needs: [build]
     runs-on: ubuntu-latest
     name: Release
     steps:
@@ -54,6 +35,7 @@ jobs:
         run: npm install -g npm@latest
 
       - run: npm ci
+      - run: npm run build
 
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
