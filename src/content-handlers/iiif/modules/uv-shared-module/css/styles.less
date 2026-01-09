@@ -131,8 +131,6 @@
       );
       opacity: 0;
       transition: opacity 0.3s ease;
-      pointer-events: none;
-      z-index: 5;
     }
 
     // only show gradient when centerPanel has a title
@@ -221,6 +219,8 @@
     overflow: hidden;
     z-index: 1000;
 
+    pointer-events: auto;
+
     transition-property: all;
     transition-timing-function: linear;
     transition-duration: calc(
@@ -232,8 +232,6 @@
 
     width: 100%;
     height: auto;
-
-    pointer-events: auto;
 
     .md-mediaquery({
             display: block;

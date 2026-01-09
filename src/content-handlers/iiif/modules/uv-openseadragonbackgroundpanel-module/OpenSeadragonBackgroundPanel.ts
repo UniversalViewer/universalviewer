@@ -164,6 +164,14 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
         });
       }
     );
+
+    this.$element.on("mousemove", (e: JQuery.MouseMoveEvent) => {
+      // Forward the event to centerPanel so it can trigger controls fade-in
+      const $centerPanel = $(".centerPanel");
+      if ($centerPanel.length) {
+        $centerPanel.trigger("mousemove");
+      }
+    });
   }
 
   galleryIsVisible(): boolean {

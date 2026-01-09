@@ -5,18 +5,18 @@
 
   .centerPanel {
     background-color: transparent;
-    pointer-events: none;
 
     .controlsContainer {
       position: absolute;
-      left: 8px;
+      left: @panel-margin;
       z-index: 100;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: flex-start;
+      pointer-events: auto;
 
-      .sm-mediaquery({
-          display: none;
+      .md-mediaquery({
+          display: flex;
         });
     }
 
@@ -54,19 +54,11 @@
 
       &.fade-out {
         opacity: 0 !important;
-        pointer-events: none;
       }
     }
 
     .content {
       position: relative;
-
-      .paging.btn,
-      .pagingToggleButtons,
-      .controlsContainer,
-      button {
-        pointer-events: auto;
-      }
 
       .paging.btn {
         position: absolute;
@@ -226,7 +218,6 @@
       .paging.prev.fade-out,
       .paging.next.fade-out {
         opacity: 0 !important;
-        pointer-events: none;
       }
     }
   }
