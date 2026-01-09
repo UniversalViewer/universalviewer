@@ -31,7 +31,7 @@
     "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
-    "preserveViewport": false,
+    "preserveViewport": true,
     "rightPanelEnabled": true,
     "saveUserSettings": false,
     "clickToZoomEnabled": true,

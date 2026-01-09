@@ -534,13 +534,9 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     }
 
     if (this.isFooterPanelEnabled()) {
-      this.footerPanel = new FooterPanel(this.shell.$footerPanel);
       this.mobileFooterPanel = new MobileFooterPanel(
         this.shell.$mobileFooterPanel
       );
-      console.log("footer enabled");
-    } else {
-      this.shell.$footerPanel.hide();
     }
 
     this.$multiSelectDialogue = $(
@@ -594,10 +590,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     if (this.isRightPanelEnabled()) {
       this.rightPanel.init();
-    }
-
-    if (this.isFooterPanelEnabled()) {
-      this.footerPanel.init();
     }
   }
 
