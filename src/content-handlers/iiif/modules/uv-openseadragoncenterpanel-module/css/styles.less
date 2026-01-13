@@ -20,43 +20,6 @@
         });
     }
 
-    .pagingToggleButtons {
-      position: absolute;
-      bottom: 112px;
-      left: 10px;
-      z-index: 1000;
-      display: flex;
-      background: rgb(0 0 0 / 70%);
-      transition: opacity 0.3s ease;
-
-      .sm-mediaquery({
-          display: none;
-        });
-
-      button {
-        cursor: pointer;
-
-        svg {
-          width: 30px;
-          height: 30px;
-          fill: currentcolor;
-          transition: fill 0.2s ease;
-        }
-
-        &:hover {
-          color: #00fff2;
-        }
-
-        &:focus {
-          .tab-focus();
-        }
-      }
-
-      &.fade-out {
-        opacity: 0 !important;
-      }
-    }
-
     .content {
       position: relative;
 
@@ -70,8 +33,6 @@
         cursor: pointer;
         padding: 0;
         border: none;
-        top: 50%;
-        transform: translateY(-50%);
         z-index: 101;
         pointer-events: auto;
 
@@ -83,7 +44,9 @@
 
         &.prev {
           background-image: data-uri("../img/left_arrow.png");
-          left: 10px;
+          left: @panel-margin;
+          top: 50vh;
+          transform: translateY(-50%);
           &.disabled {
             background-image: data-uri("../img/left_arrow_disabled.png");
             opacity: 0.5;
@@ -94,7 +57,7 @@
         &.prev.vertical {
           background-image: data-uri("../img/up_arrow.png");
           left: 50%;
-          top: 10px;
+          top: @panel-margin;
           transform: translateX(-50%);
           &.disabled {
             background-image: data-uri("../img/up_arrow_disabled.png");
@@ -111,7 +74,9 @@
 
         &.next {
           background-image: data-uri("../img/right_arrow.png");
-          right: 10px;
+          right: @panel-margin;
+          top: 50%;
+          transform: translateY(-50%);
           &.disabled {
             background-image: data-uri("../img/right_arrow_disabled.png");
             opacity: 0.5;
@@ -126,7 +91,7 @@
         &.next.vertical {
           background-image: data-uri("../img/down_arrow.png");
           left: 50%;
-          bottom: 10px;
+          bottom: @panel-margin;
           top: auto;
           transform: translateX(-50%);
           margin-left: 0;
@@ -200,6 +165,43 @@
         background-color: black;
       }
 
+      .pagingToggleButtons {
+        position: absolute;
+        bottom: 0;
+        right: @panel-margin;
+        display: none;
+        background: rgb(0 0 0 / 70%);
+        transition: opacity 0.3s ease;
+        pointer-events: auto;
+
+        .md-mediaquery({
+    display: block;
+  });
+
+        button {
+          cursor: pointer;
+
+          svg {
+            width: 30px;
+            height: 30px;
+            fill: currentcolor;
+            transition: fill 0.3s ease;
+          }
+
+          &:hover {
+            color: #00fff2;
+          }
+
+          &:focus {
+            .tab-focus();
+          }
+        }
+
+        &.fade-out {
+          opacity: 0 !important;
+        }
+      }
+
       // ui fading
       .controlsContainer,
       .pagingToggleButtons,
@@ -207,7 +209,7 @@
       #osd-navigator-container,
       .paging.prev,
       .paging.next {
-        transition: opacity 0.25s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
         opacity: 1;
       }
 

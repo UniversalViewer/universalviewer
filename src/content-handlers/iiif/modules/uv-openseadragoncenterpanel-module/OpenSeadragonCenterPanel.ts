@@ -725,6 +725,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$prevButton &&
       this.$nextButton
     ) {
+      const $overlayPanel = this.$content.parent().parent();
+      const overlayPanelHeight = $overlayPanel.height() || 0;
+
       const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
       switch (viewingDirection) {
@@ -761,11 +764,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         default:
           this.$prevButton.css(
             "top",
-            (this.$content.height() - this.$prevButton.height()) / 2
+            (overlayPanelHeight - this.$prevButton.height()) / 2
           );
           this.$nextButton.css(
             "top",
-            (this.$content.height() - this.$nextButton.height()) / 2
+            (overlayPanelHeight - this.$nextButton.height()) / 2
           );
           break;
       }
