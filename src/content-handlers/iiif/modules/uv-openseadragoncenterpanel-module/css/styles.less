@@ -174,15 +174,28 @@
         background: rgb(0 0 0 / 70%);
         transition: opacity 0.3s ease;
         pointer-events: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 5px;
 
         .md-mediaquery({
-    display: block;
+    display: flex;
   });
 
         button {
           cursor: pointer;
+          padding: 0;
+          background-color: #212121;
+          color: white;
+          width: 30px;
+          height: 30px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
 
           svg {
+            display: block;
             width: 30px;
             height: 30px;
             fill: currentcolor;
