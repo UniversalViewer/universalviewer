@@ -15,6 +15,7 @@
       flex-direction: column;
       align-items: flex-start;
       pointer-events: auto;
+
       box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.15),
         0 8px 24px rgba(0, 0, 0, 0.2);
@@ -32,7 +33,9 @@
         width: 30px;
         height: 90px;
         background-repeat: no-repeat;
-        background-color: rgb(0 0 0 / 70%);
+        background-color: rgba(26, 26, 26, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px); /* Safari */
         background-position: 0 50%;
         cursor: pointer;
         padding: 0;
@@ -58,6 +61,7 @@
             background-image: data-uri("../img/left_arrow_disabled.png");
             opacity: 0.5;
             cursor: not-allowed;
+            pointer-events: none;
           }
         }
 
@@ -70,11 +74,15 @@
             background-image: data-uri("../img/up_arrow_disabled.png");
             opacity: 0.5;
             cursor: not-allowed;
+            pointer-events: none;
           }
           &.down {
             background-image: data-uri("../img/down_arrow.png");
             &.disabled {
               background-image: data-uri("../img/down_arrow_disabled.png");
+              opacity: 0.5;
+              cursor: not-allowed;
+              pointer-events: none;
             }
           }
         }
@@ -88,6 +96,7 @@
             background-image: data-uri("../img/right_arrow_disabled.png");
             opacity: 0.5;
             cursor: not-allowed;
+            pointer-events: none;
           }
 
           & .uv-icon-next {
@@ -106,21 +115,28 @@
             background-image: data-uri("../img/down_arrow_disabled.png");
             opacity: 0.5;
             cursor: not-allowed;
+            pointer-events: none;
           }
           &.up {
             background-image: data-uri("../img/up_arrow.png");
             &.disabled {
               background-image: data-uri("../img/up_arrow_disabled.png");
+              opacity: 0.5;
+              cursor: not-allowed;
+              pointer-events: none;
             }
           }
         }
       }
 
       .imageControlButton {
-        background-color: #212121;
         color: white;
         width: 30px;
         height: 30px;
+
+        background: rgba(26, 26, 26, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px); /* Safari */
 
         display: inline-flex;
         align-items: center;
@@ -180,12 +196,10 @@
         bottom: 0;
         right: @panel-margin;
         display: none;
-        background: rgb(0 0 0 / 70%);
         transition: opacity 0.3s ease;
         pointer-events: auto;
         flex-direction: row;
         align-items: center;
-        padding: 0 5px;
         box-shadow:
           0 2px 8px rgba(0, 0, 0, 0.15),
           0 8px 24px rgba(0, 0, 0, 0.2);
@@ -197,7 +211,6 @@
         button {
           cursor: pointer;
           padding: 0;
-          background-color: #212121;
           color: white;
           width: 30px;
           height: 30px;
@@ -205,12 +218,15 @@
           align-items: center;
           justify-content: center;
           border: none;
+          border-radius: 0;
+          background: rgba(26, 26, 26, 0.6);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px); /* Safari */
 
           svg {
             display: block;
             width: 30px;
             height: 30px;
-            fill: currentcolor;
             transition: fill 0.3s ease;
           }
 
