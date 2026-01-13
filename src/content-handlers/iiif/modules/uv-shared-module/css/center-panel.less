@@ -5,19 +5,20 @@
       color: @text-color;
       font-weight: normal;
       margin: 0;
-      padding: 0 20px 0 10px;
+      padding: 0 20px 0 @panel-margin;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 30px;
       user-select: none;
+      line-height: 1;
 
       &.rtl {
         direction: rtl;
       }
 
       .xl-mediaquery({
-                padding: 0 20px 0 15px;
+                padding: 0 20px 0 @panel-margin;
             });
     }
 
