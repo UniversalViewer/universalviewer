@@ -204,7 +204,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.extensionHost.subscribe(IIIFEvents.TOGGLE_PANEL, () => {
       this.temporarilyHideControls();
-      console.log("panel toggle");
     });
   }
 
@@ -773,6 +772,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           break;
       }
     }
+    this.extensionHost.publish(IIIFEvents.VIEWPORT_RESIZED);
   }
 
   setFocus(): void {

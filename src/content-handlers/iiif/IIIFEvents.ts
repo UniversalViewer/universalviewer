@@ -119,4 +119,5 @@ export class IIIFEvents {
   static WINDOW_UNLOAD: string = "windowUnload";
   static SHOW_ADJUSTIMAGE_DIALOGUE: string = "showAdjustImageDialogue";
   static HIDE_ADJUSTIMAGE_DIALOGUE: string = "hideAdjustImageDialogue";
+  static VIEWPORT_RESIZED: string = "viewportResized";
 }

@@ -68,6 +68,15 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
     this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
     this.$element.prepend(this.$viewer);
 
+    // this.extensionHost.subscribe(IIIFEvents.VIEWPORT_RESIZED, () => {
+    //   this.whenCreated(() => {
+    //     // todo
+    //     // if (recenterImage && entire picture in frame) {
+    //     this.updateViewportMargins();
+    //     // }
+    //   });
+    // });
+
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
     });
@@ -143,7 +152,7 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        this.viewer.viewport.goHome(true);
+        this.updateViewportMargins();
       });
     });
 
@@ -214,6 +223,12 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
       "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
 
     this.viewer = OpenSeadragon({
+      viewportMargins: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      },
       // id: this.viewerId,
       element: this.$viewer[0],
       // crossOriginPolicy: "Anonymous",
@@ -709,6 +724,8 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
         this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
+      } else {
+        this.goHome();
       }
     } else if (settings.preserveViewport && this.currentBounds) {
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
@@ -1083,6 +1100,81 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
     }
 
     return newRects;
+  }
+
+  getVisibleViewportArea(): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null {
+    if (!this.viewer || !this.viewer.viewport) return null;
+
+    // Get the viewer bounds (background panel)
+    const viewerRect = this.$viewer[0].getBoundingClientRect();
+
+    // Get the content bounds (center panel with overlays)
+    const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
+    if (!centerPanel || !centerPanel.$content || !centerPanel.$content.length) {
+      return {
+        x: 0,
+        y: 0,
+        width: viewerRect.width,
+        height: viewerRect.height,
+      };
+    }
+
+    const contentRect = centerPanel.$content[0].getBoundingClientRect();
+
+    // Calculate intersection
+    const intersectionLeft = Math.max(viewerRect.left, contentRect.left);
+    const intersectionTop = Math.max(viewerRect.top, contentRect.top);
+    const intersectionRight = Math.min(viewerRect.right, contentRect.right);
+    const intersectionBottom = Math.min(viewerRect.bottom, contentRect.bottom);
+
+    // Convert to coordinates relative to the viewer element
+    const x = intersectionLeft - viewerRect.left;
+    const y = intersectionTop - viewerRect.top;
+    const width = intersectionRight - intersectionLeft;
+    const height = intersectionBottom - intersectionTop;
+
+    const result = { x, y, width, height };
+    return result;
+  }
+
+  updateViewportMargins(): void {
+    if (!this.viewer || !this.viewer.viewport) {
+      console.warn("Cannot update margins: viewer or viewport not initialized");
+      return;
+    }
+
+    const visibleArea = this.getVisibleViewportArea();
+    if (!visibleArea) {
+      console.warn("Cannot calculate visible viewport area");
+      return;
+    }
+
+    const viewerRect = this.$viewer[0].getBoundingClientRect();
+
+    // Calculate base margins from visible area
+    const baseMargins = {
+      left: visibleArea.x,
+      top: visibleArea.y,
+      right: viewerRect.width - (visibleArea.x + visibleArea.width),
+      bottom: viewerRect.height - (visibleArea.y + visibleArea.height),
+    };
+
+    // Apply adjustments: add 46px to top, left, right; make bottom equal to top
+    const margins = {
+      left: baseMargins.left + 46, // + panel margin + control buttons width + panel margin (8+30+8)
+      top: baseMargins.top + 8, // + panel margin
+      right: baseMargins.right + 46,
+      bottom: baseMargins.top + 8, //same as top
+    };
+
+    console.log("Setting viewport margins:", margins);
+    this.viewer.viewport.setMargins(margins);
+    this.viewer.viewport.goHome(true);
   }
 
   resize(): void {
