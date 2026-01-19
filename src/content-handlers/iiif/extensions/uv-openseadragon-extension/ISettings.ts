@@ -2,6 +2,7 @@ interface ISettings {
   navigatorEnabled?: boolean;
   pagingEnabled?: boolean;
   leftPanelOpen?: boolean;
+  leftPanelWidth?: number;
   rightPanelOpen?: boolean;
   preserveViewport?: boolean;
   clickToZoomEnabled?: boolean;

@@ -160,6 +160,17 @@
     &:has(.rightPanel:empty) {
       --uv-grid-right-width: auto;
     }
+
+    transition-property: grid-template-columns;
+    transition-timing-function: linear;
+    transition-duration: calc(
+      var(--uv-animation) * var(--uv-animation-duration)
+    );
+
+    // Disable transitions during resize
+    &.resizing {
+      transition: none !important;
+    }
   }
 
   .overlayPanels.leftPanelOpen {

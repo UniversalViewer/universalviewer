@@ -48,6 +48,7 @@ export class IIIFEvents {
   static LEFTPANEL_COLLAPSE_FULL_START: string = "leftPanelCollapseFullStart";
   static LEFTPANEL_EXPAND_FULL_FINISH: string = "leftPanelExpandFullFinish";
   static LEFTPANEL_EXPAND_FULL_START: string = "leftPanelExpandFullStart";
+  static LEFT_PANEL_RESIZED: string = "leftPanelResized";
   static LOGIN_FAILED: string = "loginFailed";
   static LOGIN: string = "login";
   static LOGOUT: string = "logout";

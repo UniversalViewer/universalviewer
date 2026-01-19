@@ -161,6 +161,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
 
     this.$navigator = $(`<div id="osd-navigator-container"></div>`);
+
+    this.extensionHost.subscribe(IIIFEvents.LEFT_PANEL_RESIZED, () => {
+      this.resize();
+    });
   }
 
   private togglePagingButtons(pagingEnabled: boolean): void {

@@ -77,6 +77,18 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
     //   });
     // });
 
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+      () => {
+        this.whenCreated(() => {
+          const settings: ISettings = this.extension.getSettings();
+          if (!settings.preserveViewport) {
+            this.updateViewportMargins();
+          }
+        });
+      }
+    );
+
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
     });
@@ -548,6 +560,7 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
+              console.log("all tiles added");
               this.openPagesHandler();
             }
             this.resize();
@@ -630,9 +643,16 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
   }
 
   openPagesHandler(): void {
+    console.log("openPagesHandler");
     this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
 
     this.overlayAnnotations();
+
+    const settings = this.extension.getSettings();
+
+    if (!settings.preserveViewport) {
+      this.updateViewportMargins();
+    }
 
     this.updateBounds();
 
@@ -706,8 +726,12 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
   updateBounds(): void {
     const settings: ISettings = this.extension.getSettings();
 
+    console.log("updateBounds");
     // if this is the first load and there are initial bounds, fit to those.
     if (this.isFirstLoad) {
+      this.updateViewportMargins();
+
+      console.log("update Bounds isFirstLoad");
       this.initialRotation = (<IOpenSeadragonExtensionData>(
         this.extension.data
       )).rotation;
@@ -721,6 +745,7 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
       ).xywh;
 
       if (xywh) {
+        console.log("updateBounds isFirstLoad xywh", xywh);
         this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
@@ -729,6 +754,9 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
       }
     } else if (settings.preserveViewport && this.currentBounds) {
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
+      console.log(
+        "updateBounds settings.preserveViewport&& this.currentBounds"
+      );
       this.fitToBounds(this.currentBounds);
     } else {
       this.goHome();
@@ -736,10 +764,12 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
   }
 
   goHome(): void {
+    console.log("goHome");
     this.viewer.viewport.goHome(true);
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
+    console.log("fitToBounds");
     const rect = new OpenSeadragon.Rect();
     rect.x = Number(bounds.x);
     rect.y = Number(bounds.y);
@@ -1180,12 +1210,8 @@ export class OpenSeadragonBackgroundPanel extends BaseView<
   resize(): void {
     super.resize();
 
-    this.$viewer.height(
-      this.$element.height() - this.$viewer.verticalMargins()
-    );
-    this.$viewer.width(
-      this.$element.width() - this.$viewer.horizontalMargins()
-    );
+    this.$viewer.height(this.$element.height());
+    this.$viewer.width(this.$element.width());
 
     if (!this.isCreated) return;
 
