@@ -10,10 +10,11 @@ export class LeftPanel<
     super($element, false, false);
   }
 
-  private isResizing: boolean = false;
-  private resizeStartX: number = 0;
-  private resizeStartWidth: number = 0;
-  private readonly RESIZE_EDGE_WIDTH = 8;
+  isResizing: boolean = false;
+  resizeStartX: number = 0;
+  resizeStartWidth: number = 0;
+  RESIZE_EDGE_WIDTH = 8;
+  isInitialToggle: boolean = false;
 
   create(): void {
     super.create();
@@ -117,6 +118,7 @@ export class LeftPanel<
     );
 
     if (shouldOpenPanel) {
+      this.isInitialToggle = true;
       this.toggle(true);
     }
 
@@ -171,6 +173,20 @@ export class LeftPanel<
       }
       this.$element.parent().addClass("leftPanelOpen");
     }
+
+    // Disable transition for initial toggle
+    if (this.isInitialToggle) {
+      this.$element.addClass("no-transition");
+      this.$element.parent().addClass("no-transition");
+      this.isInitialToggle = false;
+
+      // Remove the class after the toggle completes
+      setTimeout(() => {
+        this.$element.removeClass("no-transition");
+        this.$element.parent().removeClass("no-transition");
+      }, 0);
+    }
+
     super.toggle(autoToggled);
   }
 
