@@ -110,7 +110,9 @@ export class GalleryComponent extends BaseComponent {
     );
 
     this._$downloadButton = $(
-      '<a class="download" href="#">' + this.options.data.content.download + "</a>"
+      '<a class="download" href="#">' +
+        this.options.data.content.download +
+        "</a>"
     );
     this._$multiSelectOptions.append(this._$downloadButton);
 
