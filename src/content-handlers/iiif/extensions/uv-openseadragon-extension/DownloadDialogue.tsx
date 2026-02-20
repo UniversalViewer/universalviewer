@@ -574,7 +574,7 @@ const DownloadDialogue = ({
 
   function hasManifestRenderings(): boolean {
     return (
-      sequence.getRenderings().length > 0 || manifest.getRenderings.length > 0
+      sequence.getRenderings().length > 0 || manifest.getRenderings().length > 0
     );
   }
 

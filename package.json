@@ -74,7 +74,7 @@
     "jest-puppeteer": "^10",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
     "puppeteer": "^23",
