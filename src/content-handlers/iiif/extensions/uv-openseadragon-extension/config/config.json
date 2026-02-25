@@ -278,7 +278,7 @@
       },
       "content": {
         "close": "$close",
-        "select": "$download",
+        "download": "$download",
         "selectAll": "$selectAll",
         "title": "$selectPagesForDownload"
       }

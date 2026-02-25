@@ -34,7 +34,7 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
-  select: string;
+  download: string;
   selectAll: string;
   title: string;
 };
