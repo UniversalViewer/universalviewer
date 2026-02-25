@@ -201,8 +201,6 @@ export class GalleryComponent extends BaseComponent {
       content: <IGalleryComponentContent>{
         searchResult: "{0} search result",
         searchResults: "{0} search results",
-        download: "Download",
-        selectAll: "Select All &nbsp;",
       },
       debug: false,
       helper: null,
