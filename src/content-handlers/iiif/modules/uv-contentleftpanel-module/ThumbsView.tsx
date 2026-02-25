@@ -51,6 +51,9 @@ const ThumbImage = ({
         "truncate-labels": truncateThumbnailLabels,
       })}
       tabIndex={0}
+      role="option"
+      aria-selected={selected}
+      aria-label={thumb.label}
     >
       <div
         ref={ref}
@@ -134,6 +137,8 @@ const Thumbnails = ({
         paged: paged,
         "truncate-labels": truncateThumbnailLabels,
       })}
+      role="listbox"
+      aria-label="Thumbnails"
     >
       {thumbs.map((thumb, index) => (
         <span
