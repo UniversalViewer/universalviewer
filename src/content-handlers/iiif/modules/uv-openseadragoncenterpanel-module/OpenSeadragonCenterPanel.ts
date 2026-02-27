@@ -463,6 +463,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$viewportNavButtonsContainer.find(".viewportNavButton");
 
     this.$canvas = $(this.viewer.canvas);
+    this.$canvas.attr("role", "application");
+    this.$canvas.attr("aria-label", this.content.mediaViewer);
 
     // Check if we have saved settings for image adjustment
     const settings = this.extension.getSettings();

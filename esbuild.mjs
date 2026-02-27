@@ -33,6 +33,7 @@ let resolveMediaElement = {
 
 async function main() {
   await build({
+    tsconfig: "./tsconfig.json",
     // Enables code splitting, similar to webpack.
     splitting: true,
     outdir: path.resolve(process.cwd(), "dist/esm"),
