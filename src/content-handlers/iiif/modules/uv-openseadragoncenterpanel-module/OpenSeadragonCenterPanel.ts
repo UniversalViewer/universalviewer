@@ -542,10 +542,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.config.options.controlsFadeAfterInactive
     );
 
-    this.viewer.addHandler("tile-drawn", () => {
-      this.$spinner.hide();
-    });
-
     //this.viewer.addHandler("open-failed", () => {
     //});
 
@@ -812,6 +808,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             this.items.push(item);
             if (this.items.length === images.length) {
               this.openPagesHandler();
+              this.$spinner.hide();
             }
             this.resize();
             this.goHome();
