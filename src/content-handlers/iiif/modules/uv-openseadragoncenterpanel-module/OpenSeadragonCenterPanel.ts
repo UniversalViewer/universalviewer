@@ -25,6 +25,12 @@ import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
+interface AnnotationOverlayRect extends OpenSeadragon.Rect {
+  canvasIndex: number;
+  resultIndex: number;
+  chars: string;
+}
+
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
@@ -1024,7 +1030,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     for (let i = 0; i < annotations.length; i++) {
       const annotation: AnnotationGroup = annotations[i];
-      const rects: any[] = this.getAnnotationOverlayRects(annotation);
+      const rects: AnnotationOverlayRect[] =
+        this.getAnnotationOverlayRects(annotation);
 
       for (let k = 0; k < rects.length; k++) {
         const rect = rects[k];
@@ -1459,7 +1466,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     $(".annotationRect").not($rect).removeClass("current");
   }
 
-  getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
+  getAnnotationOverlayRects(
+    annotationGroup: AnnotationGroup
+  ): AnnotationOverlayRect[] {
     const newRects: any[] = [];
 
     if (!this.extension.resources) {
@@ -1487,7 +1496,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       const w: number = searchRect.width;
       const h: number = searchRect.height;
 
-      const rect = new OpenSeadragon.Rect(x, y, w, h);
+      const rect = new OpenSeadragon.Rect(x, y, w, h) as AnnotationOverlayRect;
       searchRect.viewportX = x;
       searchRect.viewportY = y;
       rect.canvasIndex = searchRect.canvasIndex;
