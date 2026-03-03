@@ -274,7 +274,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: null,
+      prefixUrl: undefined,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config!.options.clickToZoomEnabled,
