@@ -324,6 +324,18 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           HOVER: pixel,
           DOWN: pixel,
         },
+        fullpage: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
+        flip: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
       },
       // The max number of milliseconds that an image job may take to complete.
       timeout: this.config.options.tileTimeout || 30_000,
