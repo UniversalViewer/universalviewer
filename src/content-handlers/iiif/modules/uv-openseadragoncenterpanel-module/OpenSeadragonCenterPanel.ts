@@ -244,7 +244,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
       element: this.$viewer[0],
-      // crossOriginPolicy: "Anonymous",
+      drawer: "auto",
+      crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
       showRotationControl: true,
