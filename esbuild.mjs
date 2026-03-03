@@ -1,7 +1,6 @@
 import path from "path";
 import { build } from "esbuild";
 import { lessLoader } from "esbuild-plugin-less";
-import svg from "esbuild-plugin-svg";
 import fs from "fs";
 import LessPluginCleanCSS from "less-plugin-clean-css";
 
@@ -9,12 +8,7 @@ const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
 
 // These are NPM packages that don't work with external bundlers without configuration.
 // To avoid confusion, this will ensure they are included in the ESM bundle.
-const bundledPackages = [
-  "jquery",
-  "jsviews",
-  "xss",
-  "@iiif/vocabulary"
-];
+const bundledPackages = ["jquery", "jsviews", "xss", "@iiif/vocabulary"];
 
 // This plugin will ensure that mediaelement css is loaded correctly. It's currently using a webpack specific
 // format.
@@ -67,7 +61,6 @@ async function main() {
           }),
         ],
       }),
-      svg(),
     ],
     loader: {
       ".ts": "ts",
