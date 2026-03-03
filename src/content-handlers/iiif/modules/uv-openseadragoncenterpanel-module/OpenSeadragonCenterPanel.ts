@@ -766,8 +766,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       return;
     }
 
-    this.$spinner.show();
+    this.viewer.close();
     this.items = [];
+
+    // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
+    const spinnerTimeout = setTimeout(() => {
+      this.$spinner.show();
+    }, 200);
 
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
@@ -807,8 +812,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
-              this.openPagesHandler();
+              clearTimeout(spinnerTimeout);
               this.$spinner.hide();
+
+              this.openPagesHandler();
             }
             this.resize();
             this.goHome();
