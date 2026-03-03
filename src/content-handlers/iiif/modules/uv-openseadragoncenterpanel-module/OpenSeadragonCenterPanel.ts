@@ -258,7 +258,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       navigatorHeight: "100px",
       navigatorWidth: "100px",
       navigatorMaintainSizeRatio: false,
-      navigatorAutoResize: false,
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
