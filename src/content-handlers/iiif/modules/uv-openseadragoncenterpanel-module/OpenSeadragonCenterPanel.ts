@@ -251,9 +251,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition: this.extension.helper.isContinuous()
+      navigatorPosition: (this.extension.helper.isContinuous()
         ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+        : this.config.options.navigatorPosition ||
+          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
       navigatorHeight: "100px",
       navigatorWidth: "100px",
       navigatorMaintainSizeRatio: false,
