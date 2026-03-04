@@ -5,7 +5,6 @@ import { PDFExtensionEvents } from "../../extensions/uv-pdf-extension/Events";
 import { Bools } from "../../Utils";
 import { AnnotationBody, Canvas, IExternalResource } from "manifesto.js";
 import { Events } from "../../../../Events";
-import { loadScripts } from "../../../../Utils";
 import { Config } from "../../extensions/uv-pdf-extension/config/Config";
 
 // declare var PDFJS: any;
@@ -311,20 +310,13 @@ export class PDFCenterPanel extends CenterPanel<
       );
       window.PDFObject.embed(pdfUri, ".pdfContainer", { id: "PDF" });
     } else {
-      // PDFJS = await import(
-      //   /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
-      // );
-
-      // PDFJS.disableWorker = true;
-
-      // use pdfjs cdn, it just isn't working with webpack
       if (!this._pdfjsLib) {
-        await loadScripts([
-          "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
-        ]);
-        this._pdfjsLib = window["pdfjs-dist/build/pdf"];
+        const pdfjs = await import(
+          /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
+        );
+        this._pdfjsLib = pdfjs;
         this._pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+          "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.5.207/build/pdf.worker.min.mjs";
       } else {
         this._$progress[0].setAttribute("value", "0");
         this._$progress.show();
