@@ -53,13 +53,6 @@ const Extension: IExtensionRegistry = {
         "./extensions/uv-default-extension/Extension"
       ),
   },
-  EBOOK: {
-    name: "uv-ebook-extension",
-    loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-ebook-extension/Extension"
-      ),
-  },
   MEDIAELEMENT: {
     name: "uv-mediaelement-extension",
     loader: () =>
@@ -137,7 +130,6 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
     this._extensionRegistry[MediaType.GIRDER] = Extension.SLIDEATLAS;
     this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
@@ -145,7 +137,6 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
-    this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
     this._extensionRegistry[MediaType.PNG] = Extension.OSD;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
