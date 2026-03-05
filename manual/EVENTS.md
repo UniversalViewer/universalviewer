@@ -67,7 +67,7 @@ Add passed information developers need.
 
 <!-- omit in toc -->
 ### EXTERNAL_RESOURCE_OPENED
-- Fired by center panels (OpenSeadragon, ModelViewer, FileLink, Ebook, et al.) when the content is loaded. May be before displayed. In the case of OpenSeadragon, this is for a page/tile set instead of each individual tile.
+- Fired by center panels (OpenSeadragon, ModelViewer, FileLink, et al.) when the content is loaded. May be before displayed. In the case of OpenSeadragon, this is for a page/tile set instead of each individual tile.
 - Passes no data to the event handler.
 
 <!-- omit in toc -->
