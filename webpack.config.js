@@ -133,6 +133,10 @@ const config = [
             from: resolvePath("./src/uv.html"),
             to: resolvePath("./dist"),
           },
+          {
+            from: resolvePath("./node_modules/mediaelement/build/mejs-controls.svg"),
+            to: resolvePath("./dist"),
+          }
         ],
       }),
     ],
