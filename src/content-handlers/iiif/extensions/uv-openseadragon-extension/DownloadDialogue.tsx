@@ -306,10 +306,6 @@ const DownloadDialogue = ({
         return false;
       case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
         return mediaDownloadEnabled;
-
-      // JM temporarily test manifest renderings
-      case DownloadOption.MANIFEST_RENDERINGS:
-        return true;
       default:
         return true;
     }
