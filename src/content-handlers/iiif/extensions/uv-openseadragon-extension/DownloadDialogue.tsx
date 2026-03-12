@@ -230,7 +230,6 @@ const DownloadDialogue = ({
         return resources[0];
       }
     }
-
     return null;
   }
 
@@ -250,7 +249,10 @@ const DownloadDialogue = ({
       !canvas.externalResource.hasServiceDescriptor() ||
       isLevel0(canvas.externalResource.data.profile)
     ) {
-      if (option === DownloadOption.WHOLE_IMAGE_HIGH_RES) {
+      if (
+        option === DownloadOption.WHOLE_IMAGE_HIGH_RES &&
+        downloadWholeImageHighResEnabled
+      ) {
         // if in one-up mode, or in two-up mode with a single page being shown
         if (!(paged || (paged && selectedResource))) {
           return true;
@@ -304,6 +306,10 @@ const DownloadDialogue = ({
         return false;
       case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
         return mediaDownloadEnabled;
+
+      // JM temporarily test manifest renderings
+      case DownloadOption.MANIFEST_RENDERINGS:
+        return true;
       default:
         return true;
     }
@@ -607,6 +613,19 @@ const DownloadDialogue = ({
     ) : null;
   }
 
+  const hasIndividualPageOptions =
+    isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW) ||
+    isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_HIGH_RES) ||
+    isDownloadOptionAvailable(DownloadOption.WHOLE_IMAGE_LOW_RES) ||
+    isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS) ||
+    isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS) ||
+    isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS);
+
+  const hasAllPageOptions =
+    (hasManifestRenderings() &&
+      isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) ||
+    isDownloadOptionAvailable(DownloadOption.SELECTION);
+
   return (
     <div ref={ref} className={cx("overlay download")} style={position}>
       <div className="top"></div>
@@ -615,9 +634,13 @@ const DownloadDialogue = ({
           <div role="heading" className="heading">
             {content.download}
           </div>
-          {/* <div className="nonAvailable">No download options are available</div> */}
+
+          {!hasIndividualPageOptions && !hasAllPageOptions && (
+            <p>{content.noneAvailable}</p>
+          )}
+
           {/* if in two-up, show two pages next to each other to choose from */}
-          <h2>{content.individualPages}</h2>
+          {hasIndividualPageOptions && <h2>{content.individualPages}</h2>}
           {canvases.length === 2 && (
             <div className="pages">
               <div
@@ -707,10 +730,9 @@ const DownloadDialogue = ({
               <CanvasRenderings />
             )}
           </ol>
-          {(hasManifestRenderings() ||
-            isDownloadOptionAvailable(DownloadOption.SELECTION)) && (
-            <h2>{content.allPages}</h2>
-          )}
+
+          {hasAllPageOptions && <h2>{content.allPages}</h2>}
+
           <ol className="options">
             {isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && (
               <ManifestRenderings />
