@@ -614,7 +614,12 @@ const DownloadDialogue = ({
   if (isDownloadOptionAvailable(DownloadOption.CURRENT_VIEW)) {
     individualPageOptions.push(
       <li key="current-view" className="option single">
-        <button onClick={() => { onDownload(DownloadOption.CURRENT_VIEW, getCurrentViewLabel()); onDownloadCurrentView(getSelectedCanvas()); }}>
+        <button
+          onClick={() => {
+            onDownload(DownloadOption.CURRENT_VIEW, getCurrentViewLabel());
+            onDownloadCurrentView(getSelectedCanvas());
+          }}
+        >
           {getCurrentViewLabel()}
         </button>
       </li>
@@ -663,29 +668,24 @@ const DownloadDialogue = ({
   }
 
   if (isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
-    individualPageOptions.push(
-      <RangeRenderings key="range-renderings"/>
-    );
+    individualPageOptions.push(<RangeRenderings key="range-renderings" />);
   }
 
   if (isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-    individualPageOptions.push(
-      <ImageRenderings key="image-renderings"/>
-    );
+    individualPageOptions.push(<ImageRenderings key="image-renderings" />);
   }
 
   if (isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS)) {
-    individualPageOptions.push(
-      <CanvasRenderings key="canvas-renderings"/>
-    );
+    individualPageOptions.push(<CanvasRenderings key="canvas-renderings" />);
   }
 
   const allPageOptions: React.ReactNode[] = [];
 
-  if (isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) && hasManifestRenderings()) {
-    allPageOptions.push(
-      <ManifestRenderings key="manifest-renderings"/>
-    );
+  if (
+    isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS) &&
+    hasManifestRenderings()
+  ) {
+    allPageOptions.push(<ManifestRenderings key="manifest-renderings" />);
   }
 
   if (isDownloadOptionAvailable(DownloadOption.SELECTION)) {
@@ -717,7 +717,9 @@ const DownloadDialogue = ({
           )}
 
           {/* if in two-up, show two pages next to each other to choose from */}
-          {individualPageOptions.length > 0 && <h2>{content.individualPages}</h2>}
+          {individualPageOptions.length > 0 && (
+            <h2>{content.individualPages}</h2>
+          )}
           {canvases.length === 2 && (
             <div className="pages">
               <div
