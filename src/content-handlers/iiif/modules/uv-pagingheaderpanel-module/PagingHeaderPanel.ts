@@ -63,9 +63,12 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.updatePagingToggle();
     });
 
-    this.extensionHost.subscribe(OpenSeadragonExtensionEvents.PAGING_TOGGLED, () => {
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+      () => {
         this.updatePagingToggle();
-    });
+      }
+    );
 
     this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
       this.setSearchFieldValue(this.extension.helper.canvasIndex);
