@@ -9,7 +9,7 @@ describe("Universal Viewer", () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto("http://localhost:4444");
+    await page.goto("http://localhost:8080/#?xywh=-2424%2C-1%2C7415%2C3543"); //update this side to your own local host
   });
 
   afterAll(async () => {
@@ -124,4 +124,47 @@ describe("Universal Viewer", () => {
 
     expect(isSettingsButtonVisible).toBe(true);
   });
+    // navigate to next image
+  it("can naviagte to next image", async () => {
+    await page.waitForSelector(".btn.imageBtn.next");
+    await page.click(".btn.imageBtn.next");
+    expect(true).toBe(true);
+  });
+   
+    // navigate to previous image
+  it("can click previous image button", async () => {
+    await page.waitForSelector(".btn.imageBtn.prev");
+    await page.click(".btn.imageBtn.prev");
+    expect(true).toBe(true);
+  });
+
+    // zoom in and zoom out
+  it("can zoom in and zoom out", async () => {
+    await page.waitForSelector(".zoomIn.viewportNavButton");
+    await page.click(".zoomIn.viewportNavButton");
+
+    await page.waitForSelector(".zoomOut.viewportNavButton");
+    await page.click(".zoomOut.viewportNavButton");
+
+    expect(true).toBe(true);
+  }) 
+
+    // rotate image
+  it("can rotate image", async () => {
+    await page.waitForSelector(".rotate.viewportNavButton");
+    await page.click(".rotate.viewportNavButton");
+
+    expect(true).toBe(true);
+  })
+
+    // open and close adjsut image contol
+  it("can open and close adjust image control", async () => {
+    await page.waitForSelector(".viewportNavButton.adjustImage");
+    await page.click(".viewportNavButton.adjustImage");
+
+    await page.waitForSelector(".btn.btn-default.close");
+    await page.close(".btn.btn-default.close");
+
+    expect(true).toBe(true);
+  })
 });
