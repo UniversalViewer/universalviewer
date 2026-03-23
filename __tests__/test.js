@@ -9,7 +9,7 @@ describe("Universal Viewer", () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto("http://localhost:8080/#?xywh=-2424%2C-1%2C7415%2C3543"); //update this side to your own local host
+    await page.goto("http://localhost:4444"); //update this side to your own local host when manually testing in your local machine
   });
 
   afterAll(async () => {
