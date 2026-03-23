@@ -284,6 +284,7 @@ const DownloadDialogue = ({
             return false;
           }
         }
+
         return true;
       case DownloadOption.WHOLE_IMAGE_LOW_RES:
         if (!downloadWholeImageLowResEnabled) {
@@ -527,6 +528,13 @@ const DownloadDialogue = ({
   //   return resource.getRenderings().length > 0;
   // }
 
+  function hasRangeRenderings(): boolean {
+    const canvas: Canvas = getSelectedCanvas();
+    return (canvas.ranges ?? []).some(
+      (range: Range) => range.getRenderings().length > 0
+    );
+  }
+
   function RangeRenderings() {
     const canvas: Canvas = getSelectedCanvas();
 
@@ -541,6 +549,15 @@ const DownloadDialogue = ({
           />
         ))}
       </>
+    );
+  }
+
+  function hasImageRenderings() {
+    const canvas: Canvas = getSelectedCanvas();
+    const images: Annotation[] = canvas.getImages();
+
+    return images.some(
+      (image: Annotation) => image.getResource().getRenderings().length > 0
     );
   }
 
@@ -560,6 +577,11 @@ const DownloadDialogue = ({
         ))}
       </>
     );
+  }
+
+  function hasCanvasRenderings() {
+    const canvas: Canvas = getSelectedCanvas();
+    return canvas.getRenderings().length > 0;
   }
 
   function CanvasRenderings() {
@@ -667,15 +689,24 @@ const DownloadDialogue = ({
     );
   }
 
-  if (isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
+  if (
+    isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS) &&
+    hasRangeRenderings()
+  ) {
     individualPageOptions.push(<RangeRenderings key="range-renderings" />);
   }
 
-  if (isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
+  if (
+    isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS) &&
+    hasImageRenderings()
+  ) {
     individualPageOptions.push(<ImageRenderings key="image-renderings" />);
   }
 
-  if (isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS)) {
+  if (
+    isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS) &&
+    hasCanvasRenderings()
+  ) {
     individualPageOptions.push(<CanvasRenderings key="canvas-renderings" />);
   }
 
