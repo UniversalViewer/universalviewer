@@ -155,5 +155,9 @@
       "json",
       "node"
     ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
