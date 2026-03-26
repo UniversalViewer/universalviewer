@@ -74,10 +74,11 @@ export class MultiSelectDialogue extends Dialogue<
 
     this.galleryComponent = new GalleryComponent({
       target: <HTMLElement>this.$gallery[0],
+      data: this.data,
     });
 
-    const $selectButton: JQuery = this.$gallery.find("a.select");
-    $selectButton.addClass("btn btn-primary");
+    const $downloadButton: JQuery = this.$gallery.find("a.download");
+    $downloadButton.addClass("btn btn-primary");
 
     this.galleryComponent.on(
       "multiSelectionMade",

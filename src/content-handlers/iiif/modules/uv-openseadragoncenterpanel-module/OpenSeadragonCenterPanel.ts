@@ -463,6 +463,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$viewportNavButtonsContainer.find(".viewportNavButton");
 
     this.$canvas = $(this.viewer.canvas);
+    this.$canvas.attr("role", "application");
+    this.$canvas.attr("aria-label", this.content.mediaViewer);
 
     // Check if we have saved settings for image adjustment
     const settings = this.extension.getSettings();
@@ -577,6 +579,26 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.isCreated = true;
     //this.resize();
+
+    // check if initial interaction is keyboard navigation or mouse
+    // this prevents blue focus border from appearing on first mouse interaction
+    document.addEventListener(
+      "keydown",
+      (e: KeyboardEvent) => {
+        if (e.key === "Tab") {
+          this.$canvas?.addClass("keyboard-nav");
+        }
+      },
+      { capture: true }
+    );
+
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        this.$canvas?.removeClass("keyboard-nav");
+      },
+      { capture: true }
+    );
   }
 
   createNavigationButtons() {
