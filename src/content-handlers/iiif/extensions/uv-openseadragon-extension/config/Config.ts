@@ -223,6 +223,8 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
+  /** Minimum width of the downloadable image */
+  minImageWidth: number;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };

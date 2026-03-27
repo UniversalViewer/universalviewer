@@ -34,6 +34,7 @@ const DownloadDialogue = ({
   locale,
   manifest,
   maxImageWidth,
+  minImageWidth,
   mediaDownloadEnabled,
   onClose,
   onDownload,
@@ -63,6 +64,7 @@ const DownloadDialogue = ({
   locale: string;
   manifest: Manifest;
   maxImageWidth: number;
+  minImageWidth: number;
   mediaDownloadEnabled: boolean;
   onClose: () => void;
   onDownload: (type: DownloadOption, label: string) => void;
@@ -262,12 +264,16 @@ const DownloadDialogue = ({
     }
 
     switch (option) {
-      case DownloadOption.CURRENT_VIEW:
+      case DownloadOption.CURRENT_VIEW: {
         if (!downloadCurrentViewEnabled) {
           return false;
         }
 
+        const maxDimensions = canvas.getMaxDimensions();
+        if (maxDimensions && maxDimensions.width <= minImageWidth) return false;
+
         return !paged;
+      }
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
         // If high-res download is disabled, bail out now; otherwise drop into cases below.
         if (!downloadWholeImageHighResEnabled) {
@@ -278,7 +284,10 @@ const DownloadDialogue = ({
         const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
-          if (maxDimensions.width <= maxImageWidth) {
+          if (
+            maxDimensions.width <= maxImageWidth &&
+            maxDimensions.width > minImageWidth
+          ) {
             return true;
           } else {
             return false;
