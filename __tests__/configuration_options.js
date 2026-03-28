@@ -1,7 +1,7 @@
 describe("Configuration options", () => {
   describe("thumb cache invalidation", () => {
     beforeEach(async () => {
-      await page.goto("http://localhost:4444/"); // //update this side to your own local host when manually testing in your local machine
+      await page.goto("http://localhost:4444/");  
       await page.waitForSelector("#thumb0");
     });
     it.skip("when set to false does not provide timestamp", async () => {
