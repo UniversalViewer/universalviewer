@@ -6,11 +6,6 @@ describe("Universal Viewer", () => {
   let browser;
   let page;
 
-  const getXYWHArray = (url) => {
-    const match = url.match(/xywh=([^&]+)/);
-    return match ? decodeURIComponent(match[1]).split(",").map(Number) : null;
-  };
-
   const getRotValue = (url) => {
     const match =
       url.match(/[?&#]rot=([^&]+)/) ||
