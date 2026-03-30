@@ -286,7 +286,7 @@ const DownloadDialogue = ({
         if (maxDimensions) {
           if (
             maxDimensions.width <= maxImageWidth &&
-            maxDimensions.width > minImageWidth
+            maxDimensions.width >= minImageWidth
           ) {
             return true;
           } else {
