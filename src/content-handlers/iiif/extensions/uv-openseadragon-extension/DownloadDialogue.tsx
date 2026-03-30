@@ -270,7 +270,7 @@ const DownloadDialogue = ({
         }
 
         const maxDimensions = canvas.getMaxDimensions();
-        if (maxDimensions && maxDimensions.width <= minImageWidth) return false;
+        if (maxDimensions && maxDimensions.width < minImageWidth) return false;
 
         return !paged;
       }
