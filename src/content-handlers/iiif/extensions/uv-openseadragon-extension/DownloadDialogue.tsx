@@ -263,17 +263,17 @@ const DownloadDialogue = ({
       return false;
     }
 
+    const maxDimensions: Size | null = canvas.getMaxDimensions();
+
     switch (option) {
-      case DownloadOption.CURRENT_VIEW: {
+      case DownloadOption.CURRENT_VIEW:
         if (!downloadCurrentViewEnabled) {
           return false;
         }
 
-        const maxDimensions = canvas.getMaxDimensions();
         if (maxDimensions && maxDimensions.width < minImageWidth) return false;
 
         return !paged;
-      }
       case DownloadOption.WHOLE_IMAGE_HIGH_RES:
         // If high-res download is disabled, bail out now; otherwise drop into cases below.
         if (!downloadWholeImageHighResEnabled) {
@@ -281,7 +281,6 @@ const DownloadDialogue = ({
         }
       case DownloadOption.CANVAS_RENDERINGS:
       case DownloadOption.IMAGE_RENDERINGS:
-        const maxDimensions: Size | null = canvas.getMaxDimensions();
 
         if (maxDimensions) {
           if (
