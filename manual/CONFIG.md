@@ -536,7 +536,7 @@ Order in which manifests are displayed.
 ##### manifestExclude  
 **Type**: `string`  
 **Default**: `""`  
-Manifests to exclude from display.
+Excludes the field from the displayed manifest e.g "title". 
 
 ##### panelAnimationDuration  
 **Type**: `number`  
