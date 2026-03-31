@@ -281,7 +281,6 @@ const DownloadDialogue = ({
         }
       case DownloadOption.CANVAS_RENDERINGS:
       case DownloadOption.IMAGE_RENDERINGS:
-
         if (maxDimensions) {
           if (
             maxDimensions.width <= maxImageWidth &&
