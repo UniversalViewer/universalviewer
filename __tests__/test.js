@@ -10,7 +10,7 @@ describe("Universal Viewer", () => {
     const match =
       url.match(/[?&#]rot=([^&]+)/) ||
       url.match(/[?&#]rotation=([^&]+)/);
-      return match ? decodeURIComponent(match[1]): null;
+    return match ? decodeURIComponent(match[1]) : null;
   };
 
   const normalizeRot = (value) => {
@@ -18,10 +18,24 @@ describe("Universal Viewer", () => {
     return ((num % 360) + 360) % 360;
   };
 
+  const getCanvasValue = (url) => {
+    const match =
+      url.match(/(?:^|[?&#])cv=(\d+)/) ||
+      url.match(/(?:^|[?&#])canvas=(\d+)/) ||
+      url.match(/(?:^|[?&#])page=(\d+)/);
+    
+    return match ? Number(match[1]) : null;
+  };
+
+  const getXywhValue = (url) => {
+    const match = url.match(/[?&#]xywh=([^&]+)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  };
+  
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto("http://localhost:4444"); 
+    await page.goto("http://localhost:4444");
   });
 
   afterAll(async () => {
@@ -136,143 +150,171 @@ describe("Universal Viewer", () => {
 
     expect(isSettingsButtonVisible).toBe(true);
   });
-  
-   describe("viewer controls", () => {
+
+  describe("viewer controls", () => {
     afterEach(async () => {
       await page.goto("http://localhost:4444");
     });
 
     // navigate to next image
-  it("can navigate to next image", async () => {
-    await page.waitForSelector(".btn.imageBtn.next", { visible: true });
-    
-    const urlBefore = page.url();
-    
-    await page.click(".btn.imageBtn.next");
-    await page.waitForFunction(
-      (prev) => window.location.href !== prev,
-    {},
-      urlBefore
-    );
+    it("can navigate to next image", async () => {
+      await page.waitForSelector(".btn.imageBtn.next", { visible: true });
 
-    const urlAfter = page.url();
-    
-    expect(urlAfter).not.toBe(urlBefore);
-  });
-   
+      const urlBefore = page.url();
+      const before = getCanvasValue(urlBefore);
+
+      await page.click(".btn.imageBtn.next");
+      await page.waitForFunction(
+        (prev) => window.location.href !== prev,
+        {},
+        urlBefore
+      );
+      const urlAfter = page.url();
+      const after = getCanvasValue(urlAfter);
+      expect(urlAfter).not.toBe(urlBefore);
+      if (before !== null && after !== null) {
+        expect(after).toBe(before + 1);
+      }
+    });
+
     // navigate to previous image
- it("can navigate previous image", async () => {
-    await page.waitForSelector(".btn.imageBtn.next", { visible: true });
-    await page.waitForSelector(".btn.imageBtn.prev", { visible: true });
+    it("can navigate to previous image", async () => {
+      await page.waitForSelector(".btn.imageBtn.next", { visible: true });
+      await page.waitForSelector(".btn.imageBtn.prev", { visible: true });
 
-     const originalUrl = page.url();
-    
-    await page.click(".btn.imageBtn.next");
-    await page.waitForFunction(
-      (prev) => window.location.href !== prev,
-      {},
-      originalUrl
-    );
+      const startUrl = page.url();
+      const startValue = getCanvasValue(startUrl);
 
-    const nextUrl = page.url();
-    expect(nextUrl).not.toBe(originalUrl);
+      await page.click(".btn.imageBtn.next");
+      await page.waitForFunction(
+        (prev) => window.location.href !== prev,
+        {},
+        startUrl
+      );
 
-    await page.click(".btn.imageBtn.prev");
-    await page.waitForFunction(
-      (prev) => window.location.href !== prev,
-      {},
-      nextUrl
-    );
+      const nextUrl = page.url();
+      const nextValue = getCanvasValue(nextUrl);
 
-    const previousUrl = page.url();
+      await page.click(".btn.imageBtn.prev");
+      await page.waitForFunction(
+        (prev) => window.location.href !== prev,
+        {},
+        nextUrl
+      );
 
-    expect(previousUrl).not.toBe(nextUrl);
-});
+      const previousUrl = page.url();
+      const previousValue = getCanvasValue(previousUrl);
+
+      expect(previousUrl).not.toBe(nextUrl);
+
+      if (
+        startValue !== null &&
+        nextValue !== null &&
+        previousValue !== null
+      ) {
+        expect(nextValue).toBe(startValue + 1);
+        expect(previousValue).toBe(startValue);
+      }
+    });
 
     // zoom in and zoom out
-   it("can zoom in and zoom out", async () => {
-  await page.waitForSelector(".zoomIn.viewportNavButton", { visible: true });
-  await page.waitForSelector(".zoomOut.viewportNavButton", { visible: true });
+    it("can zoom in and zoom out", async () => {
+      await page.waitForSelector(".zoomIn.viewportNavButton", {
+        visible: true,
+      });
+      await page.waitForSelector(".zoomOut.viewportNavButton", {
+        visible: true,
+      });
 
-  const initialUrl = page.url();
-  
-  await page.click(".zoomIn.viewportNavButton");
-  await page.waitForFunction(
-    (prev) => window.location.href !== prev,
-    {},
-    initialUrl
-  );
+      const initialUrl = page.url();
+      const initialXywh = getXywhValue(initialUrl);
 
-  const zoomInUrl = page.url();
-  expect(zoomInUrl).not.toBe(initialUrl);
-
-  await page.click(".zoomOut.viewportNavButton");
-  await page.waitForFunction(
-    (prev) => window.location.href !== prev,
-    {},
-    zoomInUrl
-  );
-
-  const zoomOutUrl = page.url();
-  expect(zoomOutUrl).not.toBe(zoomInUrl);
-});
-
-    // rotate image
-  it("can rotate image", async () => {
-    await page.waitForSelector(".rotate.viewportNavButton", { visible: true });
-
-    const initialUrl = page.url();
-    const initialRot = getRotValue(initialUrl);
-
-    await page.click(".rotate.viewportNavButton");
-
-    await page.waitForFunction(
+      await page.click(".zoomIn.viewportNavButton");
+      await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
         initialUrl
       );
 
-    const rotatedRot = getRotValue(page.url());
+      const zoomInUrl = page.url();
+      const zoomInXywh = getXywhValue(zoomInUrl);
+
+      expect(zoomInXywh).not.toBeNull();
+      expect(zoomInXywh).not.toBe(initialXywh);
+      expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
+
+      await page.click(".zoomOut.viewportNavButton");
+      await page.waitForFunction(
+        (prev) => window.location.href !== prev,
+        {},
+        zoomInUrl
+      );
+
+      const zoomOutUrl = page.url();
+      const zoomOutXywh = getXywhValue(zoomOutUrl);
+
+      expect(zoomOutXywh).not.toBeNull();
+      expect(zoomOutXywh).not.toBe(zoomInXywh);
+      expect(zoomOutXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
+    });
+
+    // rotate image
+    it("can rotate image", async () => {
+      await page.waitForSelector(".rotate.viewportNavButton", {
+        visible: true,
+      });
+
+      const initialUrl = page.url();
+      const initialRot = getRotValue(initialUrl);
+
+      await page.click(".rotate.viewportNavButton");
+
+      await page.waitForFunction(
+        (prev) => window.location.href !== prev,
+        {},
+        initialUrl
+      );
+
+      const rotatedRot = getRotValue(page.url());
 
       if (initialRot !== null && rotatedRot !== null) {
-        expect(normalizeRot(rotatedRot)).toBe(
-          (normalizeRot(initialRot) + 90) % 360
-        );
+        expect(normalizeRot(rotatedRot)).toBe(normalizeRot(initialRot) + 90);
       }
     });
 
-    // adjust and close image control
-  it("adjust image and close image control", async () => {
-    const btn = "button.viewportNavButton.adjustImage";
-    const overlay = "div.overlay.adjustImage";
-    const heading = "div.overlay.adjustImage .content .heading";
-    const closeBtn = ".btn.btn-default.close";
+    // open and close adjust image control
+    it("can open and close adjust image control", async () => {
+      const btn = "button.viewportNavButton.adjustImage";
+      const overlay = "div.overlay.adjustImage";
+      const heading = "div.overlay.adjustImage .content .heading";
+      const closeBtn = ".btn.btn-default.close";
 
-  await page.waitForSelector(btn, { visible: true });
-  await page.click(btn);
+      await page.waitForSelector(btn, { visible: true });
+      await page.click(btn);
 
-  await page.waitForSelector(overlay, { visible: true });
+      await page.waitForSelector(overlay, { visible: true });
 
-  const text = await page.$eval(heading, el => el.textContent.trim());
-  expect(text).toBe("Adjust image");
+      const text = await page.$eval(heading, (el) => el.textContent.trim());
+      expect(text).toBe("Adjust image");
 
-  await page.evaluate((selector) => {
-  const el = document.querySelector(selector);
-  if (el) el.click();
-}, closeBtn);
+      await page.evaluate((selector) => {
+        const el = document.querySelector(selector);
+        if (el) el.click();
+      }, closeBtn);
 
-  const isOverlayVisible = await page.evaluate(() => {
-  const isOverlayVisible = document.querySelector("div.overlay.adjustImage");
-  const style = window.getComputedStyle(isOverlayVisible);
-  
-  return (
-    style.getPropertyValue("display") === "none" ||
-    style.getPropertyValue("visibility") === "hidden" 
-  );
-});
+      const isOverlayVisible = await page.evaluate(() => {
+        const isOverlayVisible = document.querySelector(
+          "div.overlay.adjustImage"
+        );
+        const style = window.getComputedStyle(isOverlayVisible);
 
-  expect(isOverlayVisible).toBe(false);
+        return (
+          style.getPropertyValue("display") === "none" ||
+          style.getPropertyValue("visibility") === "hidden"
+        );
+      });
+      
+      expect(isOverlayVisible).toBe(false);
     });
   });
 });
-
