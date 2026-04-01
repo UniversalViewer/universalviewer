@@ -274,9 +274,19 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     return 0;
   }
 
-  toggleStart(): void {}
+  toggleStart(): void { }
 
   toggleFinish(): void {
+    // if panel was auto toggled and we don't allow steal focus, 
+    // don't focus anything to prevent unexpected behaviour
+    // e.g. browser jumping page to the focused element
+    if (
+      this.autoToggled &&
+      !this.extension.data.config!.options.allowStealFocus
+    ) {
+      return;
+    }
+
     if (this.isExpanded && !this.autoToggled) {
       this.focusCollapseButton();
     } else {
@@ -284,14 +294,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
   }
 
-  expandFullStart(): void {}
+  expandFullStart(): void { }
 
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
   }
 
-  collapseFullStart(): void {}
+  collapseFullStart(): void { }
 
   collapseFullFinish(): void {
     this.isFullyExpanded = false;
