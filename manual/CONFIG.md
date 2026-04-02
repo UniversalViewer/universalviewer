@@ -502,6 +502,12 @@ Determines if download of whole image in low resolution is enabled.
 **Default**: `5000`  
 Maximum width of the image.
 
+##### minImageWidth
+
+**Type**: `number`  
+**Default**: `0`  
+Minimum width of the downloadable image.
+
 ##### selectionEnabled
 
 **Type**: `boolean`  
