@@ -268,7 +268,7 @@ Determines the duration of the panel expand/collapse animation.
 ##### panelCollapsedWidth
 
 **Type**: `number`  
-**Default**: `30`
+**Default**: `30`  
 _Repeated - edit in contentLeftPanel_.  
 Width of the collapsed panel.
 
@@ -640,7 +640,7 @@ Order in which manifests are displayed.
 
 **Type**: `string`  
 **Default**: `""`  
-Manifests to exclude from display.
+Excludes the field from the displayed manifest e.g "title". 
 
 ##### panelAnimationDuration
 
