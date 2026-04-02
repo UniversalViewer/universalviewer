@@ -23,7 +23,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Set tag
@@ -38,8 +38,8 @@ jobs:
 
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --tag=rc
+        run: npm publish --tag=rc --provenance
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish
+        run: npm publish --provenance
