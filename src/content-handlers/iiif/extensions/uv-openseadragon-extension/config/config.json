@@ -128,6 +128,7 @@
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
+        "minImageWidth": 0,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
