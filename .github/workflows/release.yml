@@ -40,10 +40,10 @@ jobs:
         if: contains(steps.tagName.outputs.tag, 'rc')
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --tag=rc --provenance
+        run: npm publish --tag=rc
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance
+        run: npm publish
