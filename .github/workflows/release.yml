@@ -36,17 +36,10 @@ jobs:
 
       - run: npm ci
 
-      # The .npmrc file can interfere with publishing:
-      - name: Clean up .npmrc file
-        run: rm .npmrc
-
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --tag=rc --provenance
+        run: NODE_AUTH_TOKEN="" npm publish --tag=rc --provenance
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --provenance
-
-      - name: Restore .npmrc file
-        run: git checkout -- .npmrc
+        run: NODE_AUTH_TOKEN="" npm publish --provenance
