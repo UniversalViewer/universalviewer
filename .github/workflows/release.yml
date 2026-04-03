@@ -36,6 +36,9 @@ jobs:
 
       - run: npm ci
 
+      # The .npmrc file can interfere with publishing:
+      - run: rm .npmrc
+
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
         run: npm publish --tag=rc --provenance
@@ -43,3 +46,6 @@ jobs:
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
         run: npm publish --provenance
+
+      # Put back .npmrc now that we are done:
+      - run: git checkout -- .npmrc
