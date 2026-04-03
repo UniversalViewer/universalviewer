@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/universalviewer/universalviewer"
+    "url": "git+https://github.com/universalviewer/universalviewer.git"
   },
   "keywords": [
     "IIIF",
