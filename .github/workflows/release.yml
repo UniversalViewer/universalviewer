@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Set tag
         id: tagName
@@ -37,8 +38,12 @@ jobs:
 
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --tag=rc --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag=rc --provenance
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance
