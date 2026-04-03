@@ -37,8 +37,8 @@ jobs:
 
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --tag=rc --provenance
+        run: npm publish --tag=rc --provenance --access public
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --provenance
+        run: npm publish --provenance --access public
