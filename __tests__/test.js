@@ -6,25 +6,48 @@ describe("Universal Viewer", () => {
   let browser;
   let page;
 
-  const getRotValue = (url) => {
-    const match =
-      url.match(/[?&#]rot=([^&]+)/) ||
-      url.match(/[?&#]rotation=([^&]+)/);
-    return match ? decodeURIComponent(match[1]) : null;
-  };
+  const getRotationFromNavigator = async () => {
+    return await page.evaluate(() => {
+      const el = document.querySelector(".displayregioncontainer");
+      if (!el) return 0;
 
-  const normalizeRot = (value) => {
-    const num = Number(value ?? 0);
-    return ((num % 360) + 360) % 360;
+      const transform = el.style.transform || "";
+      const match = transform.match(/rotate\((-?\d+(?:\.\d+)?)deg\)/);
+      if (!match) return 0;
+
+      const deg = Number(match[1]);
+      return ((deg % 360) + 360) % 360;
+    });
   };
 
   const getCanvasValue = (url) => {
-    const match =
-      url.match(/(?:^|[?&#])cv=(\d+)/) ||
-      url.match(/(?:^|[?&#])canvas=(\d+)/) ||
-      url.match(/(?:^|[?&#])page=(\d+)/);
-    
-    return match ? Number(match[1]) : null;
+    const match = url.match(/(?:^|[?&#])(cv|canvas|page)=([^&#]*)/);
+    if (!match) return 0;
+
+    const rawValue = match[2];
+    if (rawValue === "") return 0;
+
+    const value = Number(rawValue);
+    if (Number.isNaN(value)) return 0;
+
+    return value;
+  };
+
+  const waitForCanvasValue = async (page, expected) => {
+    await page.waitForFunction(
+      (expectedValue) => {
+        const match = window.location.href.match(/(?:^|[?&#])(cv|canvas|page)=([^&#]*)/);
+        if (!match) return expectedValue === 0;
+
+        const rawValue = match[2];
+        if (rawValue === "") return expectedValue === 0;
+
+        const value = Number(rawValue);
+        return value === expectedValue;
+      },
+      {},
+      expected
+    );
   };
 
   const getXywhValue = (url) => {
@@ -162,19 +185,15 @@ describe("Universal Viewer", () => {
 
       const urlBefore = page.url();
       const before = getCanvasValue(urlBefore);
-
+      
       await page.click(".btn.imageBtn.next");
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        urlBefore
-      );
+      await waitForCanvasValue(page, 1);
+
       const urlAfter = page.url();
       const after = getCanvasValue(urlAfter);
-      expect(urlAfter).not.toBe(urlBefore);
-      if (before !== null && after !== null) {
-        expect(after).toBe(before + 1);
-      }
+
+      expect(before).toBe(0);
+      expect(after).toBe(1);
     });
 
     // navigate to previous image
@@ -182,39 +201,38 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(".btn.imageBtn.next", { visible: true });
       await page.waitForSelector(".btn.imageBtn.prev", { visible: true });
 
-      const startUrl = page.url();
-      const startValue = getCanvasValue(startUrl);
+      const startValue = getCanvasValue(page.url());
 
-      await page.click(".btn.imageBtn.next");
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        startUrl
+      const isPrevDisabledInitially = await page.$eval(
+        ".btn.imageBtn.prev",
+        (btn) => btn.disabled
       );
+      expect(isPrevDisabledInitially).toBe(true);
+      
+      await page.click(".btn.imageBtn.next");
+      await waitForCanvasValue(page, 1);
 
-      const nextUrl = page.url();
-      const nextValue = getCanvasValue(nextUrl);
+      const nextValue = getCanvasValue(page.url());
+      const isPrevDisabledAfterNext = await page.$eval(
+        ".btn.imageBtn.prev",
+        (btn) => btn.disabled
+      );
+      expect(isPrevDisabledAfterNext).toBe(false);
 
       await page.click(".btn.imageBtn.prev");
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        nextUrl
+      await waitForCanvasValue(page, 0);
+
+      const previousValue = getCanvasValue(page.url());
+      const isPrevDisabledAgain = await page.$eval(
+        ".btn.imageBtn.prev",
+        (btn) => btn.disabled
       );
+      expect(isPrevDisabledAgain).toBe(true);
 
-      const previousUrl = page.url();
-      const previousValue = getCanvasValue(previousUrl);
-
-      expect(previousUrl).not.toBe(nextUrl);
-
-      if (
-        startValue !== null &&
-        nextValue !== null &&
-        previousValue !== null
-      ) {
-        expect(nextValue).toBe(startValue + 1);
-        expect(previousValue).toBe(startValue);
-      }
+      expect(startValue).toBe(0);
+      expect(nextValue).toBe(1);
+      expect(previousValue).toBe(0);
+      
     });
 
     // zoom in and zoom out
@@ -263,23 +281,26 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(".rotate.viewportNavButton", {
         visible: true,
       });
-
-      const initialUrl = page.url();
-      const initialRot = getRotValue(initialUrl);
-
+      
+      const initialRot = await getRotationFromNavigator();
+      const initialTransform = await page.evaluate(() => {
+        return (
+          document.querySelector(".displayregioncontainer")?.style.transform || ""
+        );
+      });
+      
       await page.click(".rotate.viewportNavButton");
-
       await page.waitForFunction(
-        (prev) => window.location.href !== prev,
+        (prev) => {
+          const current = document.querySelector(".displayregioncontainer")?.style.transform || "";
+          return current !== prev;
+        },
         {},
-        initialUrl
+        initialTransform
       );
-
-      const rotatedRot = getRotValue(page.url());
-
-      if (initialRot !== null && rotatedRot !== null) {
-        expect(normalizeRot(rotatedRot)).toBe(normalizeRot(initialRot) + 90);
-      }
+      const rotatedRot = await getRotationFromNavigator();
+      expect(initialRot).toBe(0);
+      expect(rotatedRot).toBe(90);
     });
 
     // open and close adjust image control
