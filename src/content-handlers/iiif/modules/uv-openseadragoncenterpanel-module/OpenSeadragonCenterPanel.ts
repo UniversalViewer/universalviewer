@@ -743,8 +743,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   createChoiceSwitch(): void {
     if (!this.extension.helper.hasChoices()) return;
 
-    const choices = this.extension.helper.getChoices();
-
     this.$choiceSwitchButton = this.$rotateButton.clone();
     this.$choiceSwitchButton.attr("title", "Switch image");
     this.$choiceSwitchButton.attr("aria-label", "Switch image");
@@ -753,39 +751,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$choiceSwitchButton.insertAfter(this.$rotateButton);
 
-    this.$choiceSwitchMenu = $(
-      '<div class="choiceSwitchMenu" role="radiogroup" aria-label="Image choices"></div>'
-    );
-    this.$choiceSwitchMenu.hide();
-    this.$viewportNavButtonsContainer.append(this.$choiceSwitchMenu);
-
-    choices.forEach((choice, index) => {
-      const label = choice.getLabel().getValue() ?? `Choice ${index + 1}`;
-      const isActive = index === this.extension.helper.choiceIndex;
-      const $item = $(`
-      <label class="choiceSwitchItem">
-        <input type="radio" name="choice" value="${index}" ${isActive ? "checked" : ""} />
-        ${label}
-      </label>
-    `);
-
-      $item.find("input").on("change", () => {
-        this.extensionHost.publish(IIIFEvents.CHOICE_CHANGE, index);
-        this.choiceSwitchMenuOpen = false;
-        this.$choiceSwitchMenu.hide();
-      });
-
-      this.$choiceSwitchMenu.append($item);
-    });
-
     this.onAccessibleClick(this.$choiceSwitchButton, () => {
-      if (this.choiceSwitchMenuOpen) {
-        this.choiceSwitchMenuOpen = false;
-        this.$choiceSwitchMenu.hide();
-      } else {
-        this.choiceSwitchMenuOpen = true;
-        this.$choiceSwitchMenu.show();
-      }
+      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
   }
 

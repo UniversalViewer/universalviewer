@@ -286,6 +286,14 @@
         "remember": "$remember"
       }
     },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close"
+      }
+    },
     "clickThroughDialogue": {
       "options": {
         "topCloseButtonEnabled": false

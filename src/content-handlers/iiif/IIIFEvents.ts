@@ -91,6 +91,7 @@ export class IIIFEvents {
   static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";
   static SHOW_CLICKTHROUGH_DIALOGUE: string = "showClickThroughDialogue";
+  static SHOW_CHOICE_SWITCH_DIALOGUE: string = "showChoiceSwitchDialogue";
   static SHOW_DOWNLOAD_DIALOGUE: string = "showDownloadDialogue";
   static SHOW_EMBED_DIALOGUE: string = "showEmbedDialogue";
   static SHOW_EXTERNALCONTENT_DIALOGUE: string = "showExternalContentDialogue";

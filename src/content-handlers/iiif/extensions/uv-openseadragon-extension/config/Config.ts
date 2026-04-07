@@ -1,5 +1,6 @@
 import {
   AdjustImageDialogue,
+  ChoiceSwitchDialogue,
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
@@ -289,6 +290,7 @@ type Modules = {
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
   adjustImageDialogue: AdjustImageDialogue;
+  choiceSwitchDialogue: ChoiceSwitchDialogue;
 };
 
 export type Config = BaseConfig & {
