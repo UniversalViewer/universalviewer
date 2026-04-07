@@ -8,6 +8,7 @@ export class IIIFEvents {
   static BOOKMARK: string = "bookmark";
   static CANVAS_INDEX_CHANGE_FAILED: string = "canvasIndexChangeFailed";
   static CANVAS_INDEX_CHANGE: string = "canvasIndexChange";
+  static CHOICE_CHANGE: string = "choiceChange";
   static CLEAR_ANNOTATIONS: string = "clearAnnotations";
   static CLICKTHROUGH: string = "clickthrough";
   static CLOSE_ACTIVE_DIALOGUE: string = "closeActiveDialogue";

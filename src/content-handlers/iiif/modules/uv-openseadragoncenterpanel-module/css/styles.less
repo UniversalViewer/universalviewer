@@ -211,6 +211,25 @@
                     });
         }
 
+        .choiceSwitch {
+          display: none !important;
+
+          .md-mediaquery({
+                display: inline-block !important;
+                cursor: pointer !important;
+                background-image: data-uri('../img/adjust.png') !important;
+                width: 28px;
+                height: 28px;
+                // margin: 3px !important;
+                img {
+                    display: none;
+                }
+                &:focus {
+                    .tab-focus();
+                }
+            });
+        }
+
         div[title="Previous page"] {
           display: none !important;
         }

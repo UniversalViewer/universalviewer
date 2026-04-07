@@ -47,6 +47,7 @@ import { Events } from "../../../../Events";
 import type { StoreApi } from "zustand/vanilla";
 import { ExtensionState } from "./ExtensionState";
 import { BaseConfig, Metric, MetricType } from "../../BaseConfig";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 
 export class BaseExtension<T extends BaseConfig> implements IExtension {
   $authDialogue: JQuery;
@@ -459,6 +460,17 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
         overrideFullScreen: overrideFullScreen,
       });
     });
+
+    this.extensionHost.subscribe(
+      IIIFEvents.CHOICE_CHANGE,
+      (choiceIndex: number) => {
+        this.helper.choiceIndex = choiceIndex;
+        this.extensionHost.publish(
+          OpenSeadragonExtensionEvents.CHOICE_CHANGE,
+          choiceIndex
+        );
+      }
+    );
 
     // create shell and shared views.
     this.shell = new Shell(this.$element);

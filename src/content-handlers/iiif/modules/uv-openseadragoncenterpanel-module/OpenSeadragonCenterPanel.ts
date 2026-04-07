@@ -53,6 +53,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   viewer: any;
   viewerId: string;
   showAdjustImageButton: boolean;
+  choiceSwitchMenuOpen: boolean;
 
   $canvas: JQuery;
   $goHomeButton: JQuery;
@@ -67,6 +68,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
+  $choiceSwitchButton: JQuery;
+  $choiceSwitchMenu: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -173,6 +176,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       (rotation: number) => {
         this.whenLoaded(() => {
           this.viewer.viewport.setRotation(rotation);
+        });
+      }
+    );
+
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.CHOICE_CHANGE,
+      (choiceIndex: number) => {
+        this.whenCreated(() => {
+          const world = this.viewer.world;
+          for (let i = 0; i < world.getItemCount(); i++) {
+            world.getItemAt(i).setOpacity(i === choiceIndex ? 1 : 0);
+          }
+          this.updateChoiceSwitch(choiceIndex);
         });
       }
     );
@@ -614,6 +630,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       },
       { capture: true }
     );
+
+    this.createChoiceSwitch();
   }
 
   createNavigationButtons() {
@@ -722,6 +740,63 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
   }
 
+  createChoiceSwitch(): void {
+    if (!this.extension.helper.hasChoices()) return;
+
+    const choices = this.extension.helper.getChoices();
+
+    this.$choiceSwitchButton = this.$rotateButton.clone();
+    this.$choiceSwitchButton.attr("title", "Switch image");
+    this.$choiceSwitchButton.attr("aria-label", "Switch image");
+    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
+    this.$choiceSwitchButton.attr("tabindex", 0);
+
+    this.$choiceSwitchButton.insertAfter(this.$rotateButton);
+
+    this.$choiceSwitchMenu = $(
+      '<div class="choiceSwitchMenu" role="radiogroup" aria-label="Image choices"></div>'
+    );
+    this.$choiceSwitchMenu.hide();
+    this.$viewportNavButtonsContainer.append(this.$choiceSwitchMenu);
+
+    choices.forEach((choice, index) => {
+      const label = choice.getLabel().getValue() ?? `Choice ${index + 1}`;
+      const isActive = index === this.extension.helper.choiceIndex;
+      const $item = $(`
+      <label class="choiceSwitchItem">
+        <input type="radio" name="choice" value="${index}" ${isActive ? "checked" : ""} />
+        ${label}
+      </label>
+    `);
+
+      $item.find("input").on("change", () => {
+        this.extensionHost.publish(IIIFEvents.CHOICE_CHANGE, index);
+        this.choiceSwitchMenuOpen = false;
+        this.$choiceSwitchMenu.hide();
+      });
+
+      this.$choiceSwitchMenu.append($item);
+    });
+
+    this.onAccessibleClick(this.$choiceSwitchButton, () => {
+      if (this.choiceSwitchMenuOpen) {
+        this.choiceSwitchMenuOpen = false;
+        this.$choiceSwitchMenu.hide();
+      } else {
+        this.choiceSwitchMenuOpen = true;
+        this.$choiceSwitchMenu.show();
+      }
+    });
+  }
+
+  updateChoiceSwitch(choiceIndex: number): void {
+    if (!this.$choiceSwitchMenu) return;
+    this.$choiceSwitchMenu.find('input[type="radio"]').prop("checked", false);
+    this.$choiceSwitchMenu
+      .find(`input[value="${choiceIndex}"]`)
+      .prop("checked", true);
+  }
+
   async getGirderTileSource(): Promise<any> {
     return new Promise<any>((resolve) => {
       const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -793,6 +868,47 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const spinnerTimeout = setTimeout(() => {
       this.$spinner.show();
     }, 200);
+
+    if (this.extension.helper.hasChoices()) {
+      try {
+        const choices = this.extension.helper.getChoices();
+
+        choices.forEach((choice, index) => {
+          const services = choice.getServices();
+          let tileSource: any;
+
+          if (services.length) {
+            let id = services[0].id;
+            if (!id.endsWith("/")) id += "/";
+            tileSource = id + "info.json";
+          } else {
+            tileSource = {
+              type: "image",
+              url: choice.id,
+              buildPyramid: false,
+            };
+          }
+
+          this.viewer.addTiledImage({
+            tileSource: tileSource,
+            opacity: index === this.extension.helper.choiceIndex ? 1 : 0,
+            success: (item: any) => {
+              this.items.push(item);
+              if (this.items.length === choices.length) {
+                clearTimeout(spinnerTimeout);
+                this.$spinner.hide();
+                this.openPagesHandler();
+              }
+              this.resize();
+              this.goHome();
+            },
+          });
+        });
+      } catch {
+        // do nothing
+      }
+      return;
+    }
 
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
