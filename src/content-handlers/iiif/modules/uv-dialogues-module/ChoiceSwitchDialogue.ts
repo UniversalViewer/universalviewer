@@ -55,7 +55,6 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
       $item.find("input").on("change", () => {
         this.extensionHost.publish(IIIFEvents.CHOICE_CHANGE, index);
-        this.close();
       });
 
       this.$choiceList.append($item);
@@ -74,6 +73,6 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
   resize(): void {
     super.resize();
-    this.setDockedPosition();
+    this.setDockedPosition("below");
   }
 }
