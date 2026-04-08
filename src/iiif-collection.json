@@ -1166,6 +1166,21 @@
           "visible": true
         }
       ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Choices on a canvas",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0033-choice/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "IIIF Cookbook Choice",
+          "visible": true
+        }
+      ]
     }
   ]
 }
