@@ -38,8 +38,12 @@ jobs:
 
       - name: Publish a release candidate
         if: contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --tag=rc --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag=rc
 
       - name: Publish a regular release
         if: false == contains(steps.tagName.outputs.tag, 'rc')
-        run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
