@@ -160,5 +160,6 @@
   "$contrast": "Kontrast",
   "$saturation": "Färgmättnad",
   "$reset": "Återställ",
-  "$remember": "Kom ihåg mina inställningar"
+  "$remember": "Kom ihåg mina inställningar",
+  "$rights": "Rättigheter"
 }
