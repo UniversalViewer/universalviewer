@@ -319,7 +319,6 @@ describe("Universal Viewer", () => {
           style.getPropertyValue("visibility") === "hidden"
         );
       });
-      
       expect(isOverlayVisible).toBe(false);
     });
   });
