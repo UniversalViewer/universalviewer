@@ -10,14 +10,31 @@ describe("Universal Viewer", () => {
     return await page.evaluate(() => {
       const el = document.querySelector(".displayregioncontainer");
       if (!el) return 0;
-
+      
       const transform = el.style.transform || "";
       const match = transform.match(/rotate\((-?\d+(?:\.\d+)?)deg\)/);
       if (!match) return 0;
-
+      
       const deg = Number(match[1]);
       return ((deg % 360) + 360) % 360;
     });
+  };
+
+  const waitForRotation = async (expectedRotation) => {
+    await page.waitForFunction(
+      (expected) => {
+        const el = document.querySelector(".displayregioncontainer");
+        if (!el) return false;
+
+        const transform = el.style.transform || "";
+        const match = transform.match(/rotate\((-?\d+(?:\.\d+)?)deg\)/);
+        const current = match ? Number(match[1]) : 0;
+
+        return ((current % 360) + 360) % 360 === expected;
+      },
+      {},
+      expectedRotation
+    );
   };
 
   const getCanvasValue = (url) => {
@@ -179,25 +196,8 @@ describe("Universal Viewer", () => {
       await page.goto("http://localhost:4444");
     });
 
-    // navigate to next image
-    it("can navigate to next image", async () => {
-      await page.waitForSelector(".btn.imageBtn.next", { visible: true });
-
-      const urlBefore = page.url();
-      const before = getCanvasValue(urlBefore);
-      
-      await page.click(".btn.imageBtn.next");
-      await waitForCanvasValue(page, 1);
-
-      const urlAfter = page.url();
-      const after = getCanvasValue(urlAfter);
-
-      expect(before).toBe(0);
-      expect(after).toBe(1);
-    });
-
-    // navigate to previous image
-    it("can navigate to previous image", async () => {
+    // can navigate back and forth
+    it("can navigate back and forth", async () => {
       await page.waitForSelector(".btn.imageBtn.next", { visible: true });
       await page.waitForSelector(".btn.imageBtn.prev", { visible: true });
 
@@ -232,7 +232,6 @@ describe("Universal Viewer", () => {
       expect(startValue).toBe(0);
       expect(nextValue).toBe(1);
       expect(previousValue).toBe(0);
-      
     });
 
     // zoom in and zoom out
@@ -283,21 +282,10 @@ describe("Universal Viewer", () => {
       });
       
       const initialRot = await getRotationFromNavigator();
-      const initialTransform = await page.evaluate(() => {
-        return (
-          document.querySelector(".displayregioncontainer")?.style.transform || ""
-        );
-      });
-      
+
       await page.click(".rotate.viewportNavButton");
-      await page.waitForFunction(
-        (prev) => {
-          const current = document.querySelector(".displayregioncontainer")?.style.transform || "";
-          return current !== prev;
-        },
-        {},
-        initialTransform
-      );
+      await waitForRotaion(90);
+
       const rotatedRot = await getRotationFromNavigator();
       expect(initialRot).toBe(0);
       expect(rotatedRot).toBe(90);
@@ -318,10 +306,7 @@ describe("Universal Viewer", () => {
       const text = await page.$eval(heading, (el) => el.textContent.trim());
       expect(text).toBe("Adjust image");
 
-      await page.evaluate((selector) => {
-        const el = document.querySelector(selector);
-        if (el) el.click();
-      }, closeBtn);
+      await page.$eval(closeBtn, (el) => el.click());
 
       const isOverlayVisible = await page.evaluate(() => {
         const isOverlayVisible = document.querySelector(
