@@ -284,7 +284,7 @@ describe("Universal Viewer", () => {
       const initialRot = await getRotationFromNavigator();
 
       await page.click(".rotate.viewportNavButton");
-      await waitForRotaion(90);
+      await waitForRotation(90);
 
       const rotatedRot = await getRotationFromNavigator();
       expect(initialRot).toBe(0);
