@@ -119,7 +119,7 @@
     "mediaelement": "4.2.15",
     "mediaelement-plugins": "5.0.0",
     "openseadragon": "4.0.0",
-    "pdfjs-dist": "3.11.174",
+    "pdfjs-dist": "5.4.54",
     "pdfobject": "2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
