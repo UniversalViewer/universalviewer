@@ -155,5 +155,6 @@
   "$duration": "Durée",
   "$mute": "Muet",
   "$pause": "Pause",
-  "$play": "Jouer"
+  "$play": "Jouer",
+  "$rights": "Droits"
 }

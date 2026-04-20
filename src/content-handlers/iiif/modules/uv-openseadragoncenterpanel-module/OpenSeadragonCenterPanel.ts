@@ -579,6 +579,26 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.isCreated = true;
     //this.resize();
+
+    // check if initial interaction is keyboard navigation or mouse
+    // this prevents blue focus border from appearing on first mouse interaction
+    document.addEventListener(
+      "keydown",
+      (e: KeyboardEvent) => {
+        if (e.key === "Tab") {
+          this.$canvas?.addClass("keyboard-nav");
+        }
+      },
+      { capture: true }
+    );
+
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        this.$canvas?.removeClass("keyboard-nav");
+      },
+      { capture: true }
+    );
   }
 
   createNavigationButtons() {
@@ -1086,11 +1106,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.addClass("disabled");
+    this.$prevButton.attr("tabindex", -1);
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.removeClass("disabled");
+    this.$prevButton.attr("tabindex", 0);
   }
 
   hidePrevButton(): void {
@@ -1106,11 +1128,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.addClass("disabled");
+    this.$nextButton.attr("tabindex", -1);
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.removeClass("disabled");
+    this.$nextButton.attr("tabindex", 0);
   }
 
   hideNextButton(): void {

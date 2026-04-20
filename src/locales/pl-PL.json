@@ -155,5 +155,6 @@
   "$duration": "Czas trwania",
   "$mute": "Wycisz",
   "$pause": "Pauza",
-  "$play": "Odtwarzaj"
+  "$play": "Odtwarzaj",
+  "$rights": "Prawa"
 }
