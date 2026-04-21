@@ -133,6 +133,10 @@ const config = [
             from: resolvePath("./src/uv.html"),
             to: resolvePath("./dist"),
           },
+          {
+            from: resolvePath("./node_modules/pdfjs-dist/build/pdf.worker.min.mjs"),
+            to: resolvePath("./dist"),
+          },
         ],
       }),
     ],

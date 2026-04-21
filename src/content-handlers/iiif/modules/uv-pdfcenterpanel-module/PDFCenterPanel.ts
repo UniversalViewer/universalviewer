@@ -315,8 +315,7 @@ export class PDFCenterPanel extends CenterPanel<
           /* webpackChunkName: "pdfjs" */ /* webpackMode: "lazy" */ "pdfjs-dist"
         );
         this._pdfjsLib = pdfjs;
-        this._pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.5.207/build/pdf.worker.min.mjs";
+        this._pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.worker.min.mjs";
       } else {
         this._$progress[0].setAttribute("value", "0");
         this._$progress.show();
