@@ -105,6 +105,10 @@
           &:focus-visible {
             outline: 2px solid @link-color;
             outline-offset: -2px;
+            i,
+            span {
+              outline: 0;
+            }
           }
         }
 
@@ -275,7 +279,7 @@
     &:focus {
       outline: none;
     }
-    &:focus-visible {
+    &.keyboard-nav:focus-visible {
       outline: 2px solid @link-color;
       outline-offset: -2px;
     }
