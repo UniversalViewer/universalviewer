@@ -14,12 +14,113 @@
       height: 80px;
     }
 
-    .options {
-      height: 40px;
+    .header-button {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 120ms ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      z-index: 1000;
+    }
+
+    .header-button:hover {
+      background-color: @gray;
+    }
+
+    .header-button svg {
+      width: 100%;
+      height: 100%;
+      fill: white;
+      transition: fill 120ms ease;
+    }
+
+    .header-button:hover svg {
+      fill: #00fff2;
+    }
+
+    .header-button:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    .header-button:disabled:hover {
+      background-color: transparent;
+    }
+
+    .header-button:disabled svg {
+      opacity: 0.2;
+    }
+
+    .header-button-container {
+      height: 30px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: -33px;
+      transform: translateX(-50%);
+      padding: 4px 8px;
       background-color: @panel-dark-bg;
+      white-space: nowrap;
+      z-index: 1000;
+      pointer-events: none;
+      transition: all 200ms ease-in-out;
+      transition-delay: 300ms;
+    }
+
+    .tooltip-hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(4px);
+      visibility: hidden;
+      transition-delay: 0ms;
+    }
+
+    .tooltip-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      visibility: visible;
+      transition-delay: 300ms;
+    }
+
+    .tooltip-arrow {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: @panel-dark-bg;
+      transform: rotate(45deg);
+      top: -4px;
+      left: 50%;
+      margin-left: -4px;
+      transition: inherit;
+    }
+
+    .options {
+      padding-left: 8px;
+      padding-right: 8px;
+      height: 30px;
+      background-color: @panel-dark-bg;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .leftOptions {
+        height: 30px;
+        display: flex;
+        width: auto;
+        justify-content: flex-start;
+        align-items: center;
+      }
 
       .centerOptions {
-        position: absolute;
+        text-align: center;
       }
 
       .rightOptions {

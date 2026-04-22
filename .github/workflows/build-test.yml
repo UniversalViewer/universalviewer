@@ -11,8 +11,8 @@ jobs:
 
     name: Node ${{ matrix.node }} build
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/cache@v5
+      - uses: actions/checkout@v5
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}

@@ -25,7 +25,6 @@ export default class Extension
 {
   $downloadDialogue: JQuery;
   $shareDialogue: JQuery;
-  $helpDialogue: JQuery;
   $settingsDialogue: JQuery;
   centerPanel: PDFCenterPanel;
   downloadDialogue: DownloadDialogue;

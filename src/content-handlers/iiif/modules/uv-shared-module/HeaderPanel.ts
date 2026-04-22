@@ -1,7 +1,7 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
-import { ILocale } from "./ILocale";
+// import { ILocale } from "./ILocale";
 import { Information } from "./Information";
 import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
@@ -9,6 +9,9 @@ import { InformationFactory } from "./InformationFactory";
 import { Bools } from "../../Utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
+import { createRoot, Root } from "react-dom/client";
+import HeaderPanelRightOptions from "./HeaderPanelRightOptions";
+import { createElement } from "react";
 
 export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"],
@@ -21,6 +24,9 @@ export class HeaderPanel<
   $rightOptions: JQuery;
   $settingsButton: JQuery;
   information: Information;
+  $leftOptions: JQuery;
+  leftOptionsRoot: Root;
+  rightOptionsRoot: Root;
 
   constructor($element: JQuery) {
     super($element, false, false);
@@ -45,11 +51,19 @@ export class HeaderPanel<
     this.$options = $('<div class="options"></div>');
     this.$element.append(this.$options);
 
+    this.$leftOptions = $('<div class="leftOptions"></div>');
+    this.$options.append(this.$leftOptions);
+    this.leftOptionsRoot = createRoot(this.$leftOptions[0]);
+
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
 
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
+    this.rightOptionsRoot = createRoot(this.$rightOptions[0]);
+
+    //temporarily hide center options while transferring functionality to left options
+    this.$centerOptions.hide();
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
@@ -59,8 +73,8 @@ export class HeaderPanel<
             <i class="uv-icon-settings" aria-hidden="true"></i>
           </button>
         `);
-    this.$settingsButton.attr("title", this.content.settings);
-    this.$rightOptions.append(this.$settingsButton);
+    // this.$settingsButton.attr("title", this.content.settings);
+    //  this.$rightOptions.append(this.$settingsButton);
 
     this.$helpButton = $(`
       <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
@@ -103,9 +117,17 @@ export class HeaderPanel<
       );
     });
 
-    if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
-      this.$centerOptions.hide();
-    }
+    this.rightOptionsRoot.render(
+      createElement(HeaderPanelRightOptions, {
+        extensionHost: this.extensionHost,
+        options: this.options,
+        content: this.content,
+      })
+    );
+
+    // if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
+    //   this.$centerOptions.hide();
+    // }
 
     this.updateLocaleToggle();
     this.updateSettingsButton();
@@ -138,14 +160,14 @@ export class HeaderPanel<
   }
 
   localeToggleIsVisible(): boolean {
-    const locales: ILocale[] | undefined = this.extension.data.locales;
+    // const locales: ILocale[] | undefined = this.extension.data.locales;
 
-    if (locales) {
-      return (
-        locales.length > 1 &&
-        Bools.getBool(this.options.localeToggleEnabled, false)
-      );
-    }
+    // if (locales) {
+    //   return (
+    //     locales.length > 1 &&
+    //     Bools.getBool(this.options.localeToggleEnabled, false)
+    //   );
+    // }
 
     return false;
   }

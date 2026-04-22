@@ -124,21 +124,37 @@ export type Localisation = {
 };
 
 export type HeaderPanelOptions = {
-  /** Determines if center options are enabled */
-  centerOptionsEnabled: boolean;
-  /** Determines if locale toggle is enabled */
-  localeToggleEnabled: boolean;
-  /** Determines if settings button is enabled */
-  settingsButtonEnabled: boolean;
+  settingsButtonEnabled?: boolean;
   /** Determines if help is enabled */
   helpEnabled?: boolean;
+  /** Determines help URL */
   helpUrl?: string;
+  /** Determines if download is enabled */
+  downloadEnabled?: boolean;
+  /** Determines if share is enabled */
+  shareEnabled?: boolean;
+  /** Determines if print is enabled */
+  printEnabled?: boolean;
+  /** Determines if fullscreen is enabled */
+  fullscreenEnabled?: boolean;
+  /** Determines if feedback is enabled */
+  feedbackEnabled?: boolean;
+  /** Determines if bookmark is enabled */
+  bookmarkEnabled?: boolean;
 };
 
 export type HeaderPanelContent = {
+  bookmark: string;
+  feedback: string;
   close: string;
   settings: string;
   help: string;
+  helpUrl?: string;
+  download?: string;
+  share: string;
+  print: string;
+  fullScreen: string;
+  exitFullScreen: string;
 };
 
 type HeaderPanel = ModuleConfig & {
@@ -377,18 +393,6 @@ type GenericDialogue = ModuleConfig & {
   content: GenericDialogueContent;
 };
 
-type HelpDialogueOptions = DialogueOptions & {};
-
-type HelpDialogueContent = DialogueContent & {
-  text: string;
-  title: string;
-};
-
-type HelpDialogue = ModuleConfig & {
-  options: HelpDialogueOptions;
-  content: HelpDialogueContent;
-};
-
 type MoreInfoRightPanelOptions = DialogueOptions &
   ExpandPanelOptions & {
     /** Order in which canvases are displayed */
@@ -465,7 +469,6 @@ export type BaseConfig = {
     footerPanel: FooterPanel;
     genericDialogue: GenericDialogue;
     headerPanel: HeaderPanel;
-    helpDialogue: HelpDialogue;
     leftPanel: LeftPanel;
     loginDialogue: LoginDialogue;
     moreInfoRightPanel: MoreInfoRightPanel;

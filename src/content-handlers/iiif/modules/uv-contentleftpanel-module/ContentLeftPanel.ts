@@ -524,7 +524,6 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
-        thumbnailsLabel: this.content.thumbnails,
         truncateThumbnailLabels:
           settings.truncateThumbnailLabels !== undefined
             ? settings.truncateThumbnailLabels

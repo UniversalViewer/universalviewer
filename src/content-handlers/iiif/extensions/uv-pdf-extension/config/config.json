@@ -133,25 +133,18 @@
       }
     },
     "headerPanel": {
-      "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
-      },
+      "options": {},
       "content": {
         "close": "$close",
         "settings": "$settings",
-        "help": "$help"
-      }
-    },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text text",
-        "title": "$help"
+        "help": "$help",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback",
+        "exitFullScreen": "$exitFullScreen",
+        "fullScreen": "$fullScreen"
       }
     },
     "adjustImageDialogue": {
@@ -209,7 +202,6 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
-        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -307,11 +299,15 @@
     },
     "pdfHeaderPanel": {
       "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": false,
-        "helpUrl": "https://universalviewer.io"
+        "helpUrl": "https://universalviewer.io",
+        "downloadEnabled": true,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false
       },
       "content": {
         "emptyValue": "$pleaseEnterValue",
@@ -322,9 +318,17 @@
         "of": "$of",
         "previous": "$previous",
         "pageSearchLabel": "$searchByPageNumber",
-        "close": "$close",
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback",
         "settings": "$settings",
-        "help": "$help"
+        "help": "$help",
+        "close": "$close"
       }
     },
     "shareDialogue": {

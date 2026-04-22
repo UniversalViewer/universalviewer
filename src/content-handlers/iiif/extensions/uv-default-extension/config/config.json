@@ -155,26 +155,27 @@
     },
     "headerPanel": {
       "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
         "settingsButtonEnabled": true,
         "helpEnabled": false,
-        "helpUrl": "https://universalviewer.io"
+        "downloadEnabled": false,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false
       },
       "content": {
         "close": "$close",
         "settings": "$settings",
-        "help": "$help"
-      }
-    },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text",
-        "title": "$help"
+        "help": "$help",
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "restrictedDialogue": {
@@ -227,7 +228,6 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
-        "rights": "$rights",
         "title": "$moreInformation"
       }
     },

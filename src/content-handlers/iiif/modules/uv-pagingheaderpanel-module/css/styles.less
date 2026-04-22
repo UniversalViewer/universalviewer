@@ -2,193 +2,297 @@
 
 .uv {
   .headerPanel {
+    .pagingHeaderPanelLeftOptions {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 30px;
+    }
+
     color: @text-secondary-color;
 
-    button.btn.imageBtn {
-      padding-left: 2px;
-      padding-right: 2px;
-
-      &.first,
-      &.prev,
-      &.next,
-      &.last {
-        i {
-          background-color: @gray;
-          &:hover {
-            background-color: @gray-dark;
-          }
-        }
-      }
-
-      &.disabled,
-      &.disabled:hover,
-      &.disabled i,
-      &.disabled i:hover {
-        background-color: transparent;
-      }
+    .slide-out-container {
+      height: 30px;
+      display: flex;
+      transition:
+        max-width 0.1s cubic-bezier(0.4, 0, 0.6, 1),
+        opacity 0.2s ease-out;
+      opacity: 0;
+      overflow: hidden;
+      position: relative;
+      align-items: center;
     }
 
-    .centerOptions {
-      .image-selectionbox-options {
-        float: left;
-        margin: 0;
-      }
-
-      .image-selectionbox {
-        height: 30px;
-      }
-
-      .prevOptions {
-        float: left;
-        margin: 0 15px 0 0;
-      }
-
-      .mode {
-        float: left;
-        margin: 12px 0 0;
-      }
-
-      .search {
-        float: left;
-        margin: 6px 0 0 5px;
-        width: auto;
-
-        .searchText {
-          border: none;
-          padding: 0 0 0 2px;
-        }
-      }
-
-      .nextOptions {
-        float: left;
-        margin: 0 0 0 15px;
-      }
-
-      .mode {
-        input {
-          float: left;
-        }
-
-        label {
-          clear: none;
-          width: auto;
-          margin: 0;
-          padding: 0;
-          float: left;
-          font-size: @font-size-small;
-          line-height: 18px;
-          text-align: right;
-
-          &.disabled {
-            color: @disabled;
-          }
-        }
-      }
-
-      &.modeOptionsDisabled {
-        width: 280px;
-      }
-
-      .autocompleteText {
-        width: 30px;
-        height: 19px;
-        line-height: 19px;
-        float: left;
-        font-size: @font-size-small;
-        padding-inline: 2px;
-        padding-block: 0;
-        margin-top: 6px;
-        color: black;
-        background-color: white;
-        border: none;
-      }
-
-      .autocomplete {
-        position: absolute;
-        background: #fff;
-        width: 60px;
-        border: 2px solid @brand-primary-lighter;
-        list-style-type: none;
-        -webkit-margin-before: 0;
-        -webkit-margin-after: 0;
-        -webkit-margin-start: 0;
-        -webkit-margin-end: 0;
-        -webkit-padding-start: 0;
-        margin: 0;
-        padding: 0;
-        max-height: 150px;
-        overflow: hidden auto;
-        z-index: 1000;
-
-        .result {
-          padding: 4px;
-          width: 270px;
-          overflow: hidden;
-
-          &.loading {
-            background-image: data-uri(@loader-white-bg);
-            background-repeat: no-repeat;
-            background-position: 4px 4px;
-            height: 25px;
-          }
-
-          &.selected {
-            background: @gray-lighter;
-          }
-        }
-      }
+    .slide-out-container.avisible {
+      opacity: 1;
     }
 
-    .rightOptions {
-      .pagingToggleButtons {
-        float: left;
-        .one-up {
-          .opacity(1);
-          &.on {
-            .opacity(0.75);
-          }
-        }
-        .two-up {
-          .opacity(1);
-          &.on {
-            .opacity(0.75);
-          }
-        }
-      }
-      .gallery {
+    /* Prevent content wrapping */
+    .slide-out-container > * {
+      white-space: nowrap;
+      align-items: center;
+    }
+
+    .pager .search-new {
+      display: flex; /* Use flexbox to arrange elements in a row */
+      justify-content: space-between; /* Distribute space evenly between the elements */
+      align-items: center; /* Vertically center the items */
+      height: 30px; /* Set the height of the parent container */
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center; /* Vertically center the form elements */
+      height: 100%; /* Ensure the form takes up the full height of the parent */
+      margin: 0; /* Remove any default margin from the form */
+      position: relative; /* To position the autocomplete dropdown relative to the form */
+    }
+
+    .search-input-container {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-right: 8px;
+      margin-left: 8px;
+      position: relative;
+    }
+
+    .search-input {
+      padding: 0 4px;
+      // border: 1px solid @gray;
+      border: none;
+      border-radius: 0;
+      outline: none;
+      z-index: 10; /* Ensures the input is above the dropdown */
+      text-align: right;
+      color: black;
+      background-color: white;
+    }
+
+    .dropdown-portal {
+      position: fixed;
+      z-index: 1000;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      color: black;
+      background-color: white;
+      border-radius: 0;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 100;
+      margin-top: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .autocomplete-dropdown li {
+      padding: 4px 7px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .autocomplete-dropdown li:hover {
+      background-color: @gray;
+    }
+
+    .focused-option {
+      background-color: @gray;
+    }
+
+    .total-label {
+      margin-left: 4px;
+    }
+  }
+
+  // button.btn.imageBtn {
+  //     padding-left: 2px;
+  //     padding-right: 2px;
+
+  //     &.first,
+  //     &.prev,
+  //     &.next,
+  //     &.last {
+  //         i {
+  //             background-color: @gray;
+  //             &:hover {
+  //                 background-color: @gray-dark;
+  //             }
+  //         }
+  //     }
+
+  //     &.disabled,
+  //     &.disabled:hover,
+  //     &.disabled i,
+  //     &.disabled i:hover {
+  //         background-color: transparent;
+  //     }
+  // }
+
+  // .centerOptions {
+
+  //     .image-selectionbox-options {
+  //         float: left;
+  //         margin: 0 0 0 0;
+  //     }
+
+  //     .image-selectionbox {
+  //         height: 30px;
+  //     }
+
+  //     .prevOptions {
+  //         float: left;
+  //         margin: 0 15px 0 0;
+  //     }
+
+  //     .mode {
+  //         float: left;
+  //         margin: 12px 0 0 0;
+  //     }
+
+  //     .search {
+  //         float: left;
+  //         margin: 6px 0 0 5px;
+  //         width: auto;
+
+  //         .searchText {
+  //             border: none;
+  //             padding: 0 0 0 2px;
+  //         }
+  //     }
+
+  //     .nextOptions {
+  //         float: left;
+  //         margin: 0 0 0 15px;
+  //     }
+
+  //     .mode {
+
+  //         input {
+  //             float: left;
+  //         }
+
+  //         label {
+  //             clear: none;
+  //             width: auto;
+  //             margin: 0 0 0 0;
+  //             padding: 0;
+  //             float: left;
+  //             font-size: @font-size-small;
+  //             line-height: 18px;
+  //             text-align: right;
+
+  //             &.disabled {
+  //                 color: @disabled;
+  //             }
+  //         }
+  //     }
+
+  //     &.modeOptionsDisabled {
+  //         width: 280px;
+  //     }
+
+  //     .autocompleteText {
+  //         width: 30px;
+  //         height: 19px;
+  //         line-height: 19px;
+  //         float: left;
+  //         font-size: @font-size-small;
+  //         padding-inline: 2px;
+  //         padding-block: 0;
+  //         margin-top: 6px;
+  //         color: black;
+  //         background-color: white;
+  //         border: none;
+  //     }
+
+  //     .autocomplete {
+  //         position: absolute;
+  //         background: #fff;
+  //         width: 60px;
+  //         border: 2px solid @brand-primary-lighter;
+  //         list-style-type: none;
+  //         -webkit-margin-before: 0px;
+  //         -webkit-margin-after: 0px;
+  //         -webkit-margin-start: 0px;
+  //         -webkit-margin-end: 0px;
+  //         -webkit-padding-start: 0px;
+  //         margin: 0;
+  //         padding: 0;
+  //         max-height: 150px;
+  //         overflow-y: auto;
+  //         overflow-x: hidden;
+  //         z-index: 1000;
+
+  //         .result {
+  //             padding: 4px;
+  //             width: 270px;
+  //             overflow: hidden;
+
+  //             &.loading {
+  //                 background-image: data-uri(@loader-white-bg);
+  //                 background-repeat: no-repeat;
+  //                 background-position: 4px 4px;
+  //                 height: 25px;
+  //             }
+
+  //             &.selected {
+  //                 background: @gray-lighter;
+  //             }
+  //         }
+  //     }
+  // }
+
+  .rightOptions {
+    .pagingToggleButtons {
+      float: left;
+      .one-up {
         .opacity(1);
         &.on {
           .opacity(0.75);
         }
       }
-      .localeToggle {
-        .link-color-decoration(#fff, none);
-        font-size: @font-size-large;
-        float: left;
-        margin: 4px 8px;
-        cursor: pointer;
+      .two-up {
+        .opacity(1);
+        &.on {
+          .opacity(0.75);
+        }
       }
     }
-
-    .searchText {
-      width: 30px;
-      height: 19px;
-      line-height: 19px;
-      float: left;
-      font-size: @font-size-small;
-      padding: 0;
-      margin-top: 6px;
+    .gallery {
+      .opacity(1);
+      &.on {
+        .opacity(0.75);
+      }
     }
-
-    .total {
+    .localeToggle {
+      .link-color-decoration(#fff, none);
+      font-size: @font-size-large;
       float: left;
-      display: block;
-      height: 18px;
-      line-height: 18px;
-      margin: 6px 5px 0;
-      width: 41px;
-      font-size: @font-size-small;
-      overflow: hidden;
+      margin: 4px 8px;
+      cursor: pointer;
     }
   }
+
+  // .searchText {
+  //     width: 30px;
+  //     height: 19px;
+  //     line-height: 19px;
+  //     float: left;
+  //     font-size: @font-size-small;
+  //     padding: 0;
+  //     margin-top: 6px;
+  // }
+
+  // .total {
+  //     float: left;
+  //     display: block;
+  //     height: 18px;
+  //     line-height: 18px;
+  //     margin: 6px 5px 0 5px;
+  //     width: 41px;
+  //     font-size: @font-size-small;
+  //     overflow: hidden;
+  // }
 }

@@ -5,7 +5,7 @@
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
-    "footerPanelEnabled": true,
+    "footerPanelEnabled": false,
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
@@ -128,7 +128,6 @@
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
-        "minImageWidth": 0,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -162,15 +161,15 @@
     "footerPanel": {
       "options": {
         "bookmarkEnabled": false,
-        "downloadEnabled": true,
+        "downloadEnabled": false,
         "embedEnabled": false,
         "feedbackEnabled": false,
-        "fullscreenEnabled": true,
-        "minimiseButtons": true,
-        "moreInfoEnabled": true,
+        "fullscreenEnabled": false,
+        "minimiseButtons": false,
+        "moreInfoEnabled": false,
         "openEnabled": false,
         "printEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": false
       },
       "content": {
         "bookmark": "$add_to_bookmarks",
@@ -203,25 +202,18 @@
       }
     },
     "headerPanel": {
-      "options": {
-        "centerOptionsEnabled": true,
-        "localeToggleEnabled": false,
-        "settingsButtonEnabled": true
-      },
+      "options": {},
       "content": {
         "close": "$close",
         "settings": "$settings",
-        "help": "$help"
-      }
-    },
-    "helpDialogue": {
-      "options": {
-        "topCloseButtonEnabled": false
-      },
-      "content": {
-        "close": "$close",
-        "text": "$placeholder_text",
-        "title": "$help"
+        "help": "$help",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "moreInfoRightPanel": {
@@ -265,7 +257,6 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
-        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -280,7 +271,7 @@
       },
       "content": {
         "close": "$close",
-        "download": "$download",
+        "select": "$download",
         "selectAll": "$selectAll",
         "title": "$selectPagesForDownload"
       }
@@ -291,14 +282,19 @@
         "autocompleteAllowWords": false,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
-        "pageModeEnabled": false,
+        "pageModeEnabled": true,
         "pagingToggleEnabled": true,
         "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
-        "settingsButtonEnabled": true,
+        "modeOptionsEnabled": true,
         "helpEnabled": false,
-        "helpUrl": "https://universalviewer.io/",
-        "modeOptionsEnabled": true
+        "downloadEnabled": true,
+        "shareEnabled": true,
+        "printEnabled": false,
+        "fullscreenEnabled": true,
+        "bookmarkEnabled": false,
+        "feedbackEnabled": false,
+        "settingsButtonEnabled": true
       },
       "content": {
         "close": "$close",
@@ -324,8 +320,16 @@
         "previous": "$previous",
         "previousImage": "$previousImage",
         "previousPage": "$previousPage",
+        "twoUp": "$twoPageView",
         "settings": "$settings",
-        "twoUp": "$twoPageView"
+        "helpUrl": "https://universalviewer.io/",
+        "download": "$download",
+        "share": "$share",
+        "print": "$print",
+        "fullScreen": "$fullScreen",
+        "exitFullScreen": "$exitFullScreen",
+        "bookmark": "$add_to_bookmarks",
+        "feedback": "$feedback"
       }
     },
     "centerPanel": {
@@ -352,6 +356,7 @@
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
         "doubleClickAnnotationEnabled": false,
+        "galleryButtonEnabled": true,
         "immediateRender": false,
         "maxZoomPixelRatio": 1.25,
         "mostSpecificRequiredStatement": true,
@@ -373,13 +378,15 @@
         "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
-        "mediaViewer": "$mediaViewer",
         "nextImage": "$nextImage",
         "previousImage": "$previousImage",
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
-        "adjustImage": "$adjustImage"
+        "adjustImage": "$adjustImage",
+        "oneUp": "$singlePageView",
+        "twoUp": "$twoPageView",
+        "gallery": "$gallery"
       }
     },
     "searchFooterPanel": {
@@ -391,15 +398,15 @@
         "pageModeEnabled": true,
         "positionMarkerEnabled": true,
         "bookmarkEnabled": false,
-        "downloadEnabled": true,
+        "downloadEnabled": false,
         "embedEnabled": false,
         "feedbackEnabled": false,
-        "fullscreenEnabled": true,
-        "minimiseButtons": true,
-        "moreInfoEnabled": true,
+        "fullscreenEnabled": false,
+        "minimiseButtons": false,
+        "moreInfoEnabled": false,
         "openEnabled": false,
         "printEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": false
       },
       "content": {
         "clearSearch": "$clearSearch",

@@ -34,7 +34,6 @@ export class IIIFEvents {
   static HIDE_EMBED_DIALOGUE: string = "hideEmbedDialogue";
   static HIDE_EXTERNALCONTENT_DIALOGUE: string = "hideExternalContentDialogue";
   static HIDE_GENERIC_DIALOGUE: string = "hideGenericDialogue";
-  static HIDE_HELP_DIALOGUE: string = "hideHelpDialogue";
   static HIDE_INFORMATION: string = "hideInformation";
   static HIDE_LOGIN_DIALOGUE: string = "hideLoginDialogue";
   static HIDE_MULTISELECT_DIALOGUE: string = "hideMultiSelectDialogue";
@@ -94,7 +93,6 @@ export class IIIFEvents {
   static SHOW_EMBED_DIALOGUE: string = "showEmbedDialogue";
   static SHOW_EXTERNALCONTENT_DIALOGUE: string = "showExternalContentDialogue";
   static SHOW_GENERIC_DIALOGUE: string = "showGenericDialogue";
-  static SHOW_HELP_DIALOGUE: string = "showHelpDialogue";
   static SHOW_INFORMATION: string = "showInformation";
   static SHOW_LOGIN_DIALOGUE: string = "showLoginDialogue";
   static SHOW_MESSAGE: string = "showMessage";

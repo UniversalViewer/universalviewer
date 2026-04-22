@@ -25,12 +25,6 @@ import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-interface AnnotationOverlayRect extends OpenSeadragon.Rect {
-  canvasIndex: number;
-  resultIndex: number;
-  chars: string;
-}
-
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
@@ -58,18 +52,28 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $goHomeButton: JQuery;
   $navigator: JQuery;
   $nextButton: JQuery;
+  $oneUpButton: JQuery;
   $prevButton: JQuery;
   $rotateButton: JQuery;
   $spinner: JQuery;
+  $twoUpButton: JQuery;
   $viewer: JQuery;
   $viewportNavButtonsContainer: JQuery;
   $viewportNavButtons: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
+  $toggleContainer: JQuery;
+  $galleryButton: JQuery;
+  $pagingToggleButtons: JQuery;
 
   constructor($element: JQuery) {
     super($element);
+  }
+
+  updateSettings(settings: ISettings): void {
+    this.extension.updateSettings(settings);
+    this.extensionHost.publish(IIIFEvents.UPDATE_SETTINGS, settings);
   }
 
   create(): void {
@@ -80,6 +84,109 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewerId = "osd" + new Date().getTime();
     this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
     this.$content.prepend(this.$viewer);
+    this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
+    this.$content.prepend(this.$pagingToggleButtons);
+    this.$oneUpButton = $(`
+      <button class="btn imageBtn one-up" title="${this.content.oneUp}">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <g>
+            <rect x="10" y="8" width="10" height="14" />
+          </g>
+        </svg>
+        <span class="sr-only">${this.content.oneUp}</span>
+      </button>
+    `);
+    this.$twoUpButton = $(`
+      <button class="btn imageBtn two-up" title="${this.content.twoUp}">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <g>
+            <g>
+              <rect x="4" y="8" width="10" height="14" />
+            </g>
+            <g>
+              <rect x="16" y="8" width="10" height="14" />
+            </g>
+          </g>
+        </svg>
+        <span class="sr-only">${this.content.twoUp}</span>
+      </button>
+    `);
+    this.$pagingToggleButtons.append(this.$oneUpButton, this.$twoUpButton);
+    const hasPaging = (
+      this.extension as OpenSeadragonExtension
+    ).helper.isPagingAvailable();
+    const isPagingEnabled =
+      (this.extension as any).getSettings().pagingEnabled ?? false;
+    if (hasPaging) {
+      this.togglePagingButtons(isPagingEnabled);
+    } else {
+      this.$oneUpButton.remove();
+      this.$twoUpButton.remove();
+    }
+    this.togglePagingButtons(isPagingEnabled);
+
+    this.$oneUpButton.onPressed(() => {
+      this.updateSettings({ pagingEnabled: false });
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        false
+      );
+      this.togglePagingButtons(false);
+    });
+
+    this.$twoUpButton.onPressed(() => {
+      this.updateSettings({ pagingEnabled: true });
+      this.extensionHost.publish(
+        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+        true
+      );
+      this.togglePagingButtons(true);
+    });
+
+    this.$galleryButton = $(`
+      <button class="btn imageBtn gallery" title="${this.content.gallery}" style="display: none;">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M14,14H8V8h6V14z M22,8h-6v6h6V8z M14,16H8v6h6V16z M22,16h-6v6h6V16z" />
+        </svg>
+        <span class="sr-only">${this.content.gallery}</span>
+      </button>
+    `);
+    this.$pagingToggleButtons.append(this.$galleryButton);
+
+    this.$galleryButton.onPressed(() => {
+      this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
+    });
+  }
+
+  private togglePagingButtons(pagingEnabled: boolean): void {
+    if (pagingEnabled) {
+      this.$oneUpButton.show();
+      this.$twoUpButton.hide();
+    } else {
+      this.$oneUpButton.hide();
+      this.$twoUpButton.show();
+    }
 
     this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
       this.overlayAnnotations();
@@ -104,6 +211,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           this.isLoaded = false;
           await this.openMedia(resources);
           this.isLoaded = true;
+          this.updateGalleryButton();
           this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
           this.extensionHost.publish(Events.LOAD);
         });
@@ -178,6 +286,21 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
   }
 
+  updateGalleryButton(): void {
+    if (!this.galleryIsVisible()) {
+      this.$galleryButton.hide();
+    } else {
+      this.$galleryButton.show();
+    }
+  }
+
+  galleryIsVisible(): boolean {
+    return (
+      Bools.getBool(this.options.galleryButtonEnabled, true) &&
+      this.extension?.isLeftPanelEnabled?.()
+    );
+  }
+
   whenCreated(cb: () => void): void {
     Async.waitFor(() => {
       return this.isCreated;
@@ -244,8 +367,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
       element: this.$viewer[0],
-      drawer: "auto",
-      crossOriginPolicy: "Anonymous",
+      // crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
       showRotationControl: true,
@@ -258,13 +380,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition: (this.extension.helper.isContinuous()
+      navigatorPosition: this.extension.helper.isContinuous()
         ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition ||
-          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
+        : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
       navigatorHeight: "100px",
       navigatorWidth: "100px",
       navigatorMaintainSizeRatio: false,
+      navigatorAutoResize: false,
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
@@ -280,7 +402,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: undefined,
+      prefixUrl: null,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config!.options.clickToZoomEnabled,
@@ -325,18 +447,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           DOWN: pixel,
         },
         previous: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        fullpage: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        flip: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
@@ -393,6 +503,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
+    this.$zoomInButton.html(`<svg
+    width="26"
+    height="26"
+    viewBox="0 0 26 26"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
+  </svg>`);
 
     this.onAccessibleClick(this.$zoomInButton, () => {
       if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
@@ -407,6 +526,16 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
+    this.$zoomOutButton.html(`<svg
+  width="26"
+  height="26"
+  viewBox="0 0 26 26"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+>
+  <rect x="8" y="14" width="14" height="2" />
+</svg>
+`);
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
       if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
@@ -434,6 +563,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
     this.$rotateButton.addClass("rotate viewportNavButton");
+    this.$rotateButton.html(`<svg
+    width="30"
+    height="30"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-2.1,0-3.9-0.7-5.3-2.2S7.5,17.1,7.5,15s0.7-3.9,2.2-5.3s3.2-2.2,5.3-2.2
+		c1.1,0,2.1,0.2,3.1,0.7s1.8,1.1,2.5,1.9V7.5h1.9v6.6h-6.6v-1.9h3.9c-0.5-0.9-1.2-1.6-2.1-2.1C17,9.6,16,9.4,15,9.4
+		c-1.6,0-2.9,0.5-4,1.6s-1.6,2.4-1.6,4s0.5,2.9,1.6,4s2.4,1.6,4,1.6c1.2,0,2.3-0.3,3.3-1s1.6-1.6,2-2.7h2c-0.4,1.7-1.3,3-2.7,4.1
+		S16.7,22.5,15,22.5z"
+      />
+    </g>
+  </svg>`);
 
     this.onAccessibleClick(this.$rotateButton, () => {
       this.rotateRight();
@@ -448,6 +593,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
+      this.$adjustImageButton.html(`  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-1,0-2-0.2-2.9-0.6c-0.9-0.4-1.7-0.9-2.4-1.6c-0.7-0.7-1.2-1.5-1.6-2.4
+		C7.7,17,7.5,16,7.5,15s0.2-2,0.6-2.9S9,10.4,9.7,9.7c0.7-0.7,1.5-1.2,2.4-1.6C13,7.7,14,7.5,15,7.5s2,0.2,2.9,0.6s1.7,0.9,2.4,1.6
+		c0.7,0.7,1.2,1.5,1.6,2.4c0.4,0.9,0.6,1.9,0.6,2.9s-0.2,2-0.6,2.9c-0.4,0.9-0.9,1.7-1.6,2.4c-0.7,0.7-1.5,1.2-2.4,1.6
+		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
+      />
+    </g>
+  </svg>`);
       this.$adjustImageButton.insertAfter(this.$rotateButton);
 
       this.onAccessibleClick(this.$adjustImageButton, () => {
@@ -482,8 +643,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$viewportNavButtonsContainer.find(".viewportNavButton");
 
     this.$canvas = $(this.viewer.canvas);
-    this.$canvas.attr("role", "application");
-    this.$canvas.attr("aria-label", this.content.mediaViewer);
 
     // Check if we have saved settings for image adjustment
     const settings = this.extension.getSettings();
@@ -542,6 +701,56 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.config.options.controlsFadeAfterInactive
     );
 
+    const fadeDelay = 1500;
+
+    let fadeButtonsTimeout: number | undefined;
+
+    const showPagingButtons = () => {
+      this.$pagingToggleButtons.removeClass("fade-out");
+      this.$galleryButton.removeClass("fade-out");
+    };
+
+    const hidePagingButtons = () => {
+      this.$pagingToggleButtons.addClass("fade-out");
+      this.$galleryButton.addClass("fade-out");
+    };
+
+    const resetPagingFadeTimer = () => {
+      clearTimeout(fadeButtonsTimeout);
+      showPagingButtons();
+
+      fadeButtonsTimeout = window.setTimeout(() => {
+        hidePagingButtons();
+      }, fadeDelay);
+    };
+
+    this.$element.on("mousemove", () => {
+      resetPagingFadeTimer();
+    });
+
+    this.$pagingToggleButtons.on("mouseenter", () => {
+      showPagingButtons();
+      clearTimeout(fadeButtonsTimeout);
+    });
+    this.$galleryButton.on("mouseenter", () => {
+      showPagingButtons();
+      clearTimeout(fadeButtonsTimeout);
+    });
+
+    this.$pagingToggleButtons.on("mouseleave", () => {
+      resetPagingFadeTimer();
+    });
+    this.$galleryButton.on("mouseleave", () => {
+      resetPagingFadeTimer();
+    });
+
+    showPagingButtons();
+    resetPagingFadeTimer();
+
+    this.viewer.addHandler("tile-drawn", () => {
+      this.$spinner.hide();
+    });
+
     //this.viewer.addHandler("open-failed", () => {
     //});
 
@@ -594,26 +803,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.isCreated = true;
     //this.resize();
-
-    // check if initial interaction is keyboard navigation or mouse
-    // this prevents blue focus border from appearing on first mouse interaction
-    document.addEventListener(
-      "keydown",
-      (e: KeyboardEvent) => {
-        if (e.key === "Tab") {
-          this.$canvas?.addClass("keyboard-nav");
-        }
-      },
-      { capture: true }
-    );
-
-    document.addEventListener(
-      "pointerdown",
-      () => {
-        this.$canvas?.removeClass("keyboard-nav");
-      },
-      { capture: true }
-    );
   }
 
   createNavigationButtons() {
@@ -786,13 +975,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       return;
     }
 
-    this.viewer.close();
+    this.$spinner.show();
     this.items = [];
-
-    // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
-    const spinnerTimeout = setTimeout(() => {
-      this.$spinner.show();
-    }, 200);
 
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
@@ -832,9 +1016,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
-              clearTimeout(spinnerTimeout);
-              this.$spinner.hide();
-
               this.openPagesHandler();
             }
             this.resize();
@@ -1055,8 +1236,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     for (let i = 0; i < annotations.length; i++) {
       const annotation: AnnotationGroup = annotations[i];
-      const rects: AnnotationOverlayRect[] =
-        this.getAnnotationOverlayRects(annotation);
+      const rects: any[] = this.getAnnotationOverlayRects(annotation);
 
       for (let k = 0; k < rects.length; k++) {
         const rect = rects[k];
@@ -1130,13 +1310,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.addClass("disabled");
-    this.$prevButton.attr("tabindex", -1);
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.removeClass("disabled");
-    this.$prevButton.attr("tabindex", 0);
   }
 
   hidePrevButton(): void {
@@ -1152,13 +1330,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.addClass("disabled");
-    this.$nextButton.attr("tabindex", -1);
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.removeClass("disabled");
-    this.$nextButton.attr("tabindex", 0);
   }
 
   hideNextButton(): void {
@@ -1495,9 +1671,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     $(".annotationRect").not($rect).removeClass("current");
   }
 
-  getAnnotationOverlayRects(
-    annotationGroup: AnnotationGroup
-  ): AnnotationOverlayRect[] {
+  getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
     const newRects: any[] = [];
 
     if (!this.extension.resources) {
@@ -1525,7 +1699,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       const w: number = searchRect.width;
       const h: number = searchRect.height;
 
-      const rect = new OpenSeadragon.Rect(x, y, w, h) as AnnotationOverlayRect;
+      const rect = new OpenSeadragon.Rect(x, y, w, h);
       searchRect.viewportX = x;
       searchRect.viewportY = y;
       rect.canvasIndex = searchRect.canvasIndex;

@@ -34,7 +34,7 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
-  download: string;
+  select: string;
   selectAll: string;
   title: string;
 };
@@ -131,19 +131,22 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   tileTimeout: number;
   /** Whether to zoom in to first annotation on load */
   zoomToInitialAnnotation: boolean;
+  galleryButtonEnabled?: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
-  mediaViewer: string;
   nextImage: string;
   previousImage: string;
   rotateRight: string;
   zoomIn: string;
   zoomOut: string;
   adjustImage: string;
+  oneUp: string;
+  twoUp: string;
+  gallery: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
@@ -223,8 +226,6 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
-  /** Minimum width of the downloadable image */
-  minImageWidth: number;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };

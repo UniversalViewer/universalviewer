@@ -708,13 +708,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     if (!this.data.embedded) {
       // Use the current page URL with hash params
       if (Documents.isInIFrame()) {
-        try {
-          return (<any>parent.document).location.href;
-        } catch (e) {
-          // Cross-origin browser security may prevent us from getting the href; in that case,
-          // just disable the share URL.
-          return null;
-        }
+        return (<any>parent.document).location.href;
       } else {
         return (<any>document).location.href;
       }
