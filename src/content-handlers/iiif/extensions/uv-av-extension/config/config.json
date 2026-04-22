@@ -251,6 +251,7 @@
         "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
+        "rights": "$rights",
         "rangeHeader": "$aboutThisSection",
         "title": "$moreInformation"
       }

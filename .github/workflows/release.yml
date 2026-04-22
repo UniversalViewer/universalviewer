@@ -4,32 +4,17 @@ on:
   push:
     tags: ['v*']
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Node build
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-      - name: Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '20.x'
-      - run: npm ci
-      - run: npm run build
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
-  release:
-    needs: [build]
+jobs:
+  publish:
     runs-on: ubuntu-latest
     name: Release
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v6
+      - uses: actions/cache@v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
@@ -38,15 +23,27 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Set tag
         id: tagName
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
 
       - run: npm ci
-      - run: npm run prepublishOnly
 
-      - uses: JS-DevTools/npm-publish@v4
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish a release candidate
+        if: contains(steps.tagName.outputs.tag, 'rc')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag=rc
+
+      - name: Publish a regular release
+        if: false == contains(steps.tagName.outputs.tag, 'rc')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish

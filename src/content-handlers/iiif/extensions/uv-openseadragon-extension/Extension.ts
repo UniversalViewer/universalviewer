@@ -654,6 +654,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         locale: this.getLocale(),
         manifest: this.helper.manifest as Manifest,
         maxImageWidth: config.options.maxImageWidth,
+        minImageWidth: config.options.minImageWidth,
         mediaDownloadEnabled: this.helper.isUIEnabled("mediaDownload"),
         open: downloadDialogueOpen,
         paged: paged,
