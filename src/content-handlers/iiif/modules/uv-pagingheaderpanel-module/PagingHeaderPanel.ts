@@ -50,29 +50,6 @@ export class PagingHeaderPanel extends HeaderPanel<
 
     super.create();
 
-    this.extensionHost.subscribe(
-      IIIFEvents.CANVAS_INDEX_CHANGE,
-      (canvasIndex: number) => {
-        this.canvasIndexChanged(canvasIndex);
-      }
-    );
-
-    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
-      this.modeChanged();
-      this.updatePagingToggle();
-    });
-
-    this.extensionHost.subscribe(
-      OpenSeadragonExtensionEvents.PAGING_TOGGLED,
-      () => {
-        this.updatePagingToggle();
-      }
-    );
-
-    this.extensionHost.subscribe(IIIFEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
-      this.setSearchFieldValue(this.extension.helper.canvasIndex);
-    });
-
     this.extensionHost.subscribe(IIIFEvents.LEFTPANEL_EXPAND_FULL_START, () => {
       this.openGallery();
     });
@@ -85,7 +62,7 @@ export class PagingHeaderPanel extends HeaderPanel<
     );
 
     this.$galleryButton = $(`
-          <button class="btn imageBtn gallery" title="${this.content.gallery}" aria-pressed="false">
+          <button class="btn imageBtn gallery" title="${this.content.gallery}">
             <i class="uv-icon-gallery" aria-hidden="true"></i>
             <span class="sr-only">${this.content.gallery}</span>
           </button>
@@ -130,14 +107,14 @@ export class PagingHeaderPanel extends HeaderPanel<
     );
 
     this.$oneUpButton = $(`
-          <button class="btn imageBtn one-up" title="${this.content.oneUp}" aria-pressed="false">
+          <button class="btn imageBtn one-up" title="${this.content.oneUp}">
             <i class="uv-icon-one-up" aria-hidden="true"></i>
             <span class="sr-only">${this.content.oneUp}</span>
           </button>`);
     this.$pagingToggleButtons.append(this.$oneUpButton);
 
     this.$twoUpButton = $(`
-          <button class="btn imageBtn two-up" title="${this.content.twoUp}" aria-pressed="false">
+          <button class="btn imageBtn two-up" title="${this.content.twoUp}">
             <i class="uv-icon-two-up" aria-hidden="true"></i>
             <span class="sr-only">${this.content.twoUp}</span>
           </button>
@@ -196,14 +173,14 @@ export class PagingHeaderPanel extends HeaderPanel<
   }
 
   openGallery(): void {
-    this.$oneUpButton.removeClass("on").attr("aria-pressed", "false");
-    this.$twoUpButton.removeClass("on").attr("aria-pressed", "false");
-    this.$galleryButton.addClass("on").attr("aria-pressed", "true");
+    this.$oneUpButton.removeClass("on");
+    this.$twoUpButton.removeClass("on");
+    this.$galleryButton.addClass("on");
   }
 
   closeGallery(): void {
     this.updatePagingToggle();
-    this.$galleryButton.removeClass("on").attr("aria-pressed", "false");
+    this.$galleryButton.removeClass("on");
   }
 
   isPageModeEnabled(): boolean {
@@ -221,11 +198,11 @@ export class PagingHeaderPanel extends HeaderPanel<
     }
 
     if ((<OpenSeadragonExtension>this.extension).isPagingSettingEnabled()) {
-      this.$oneUpButton.removeClass("on").attr("aria-pressed", "false");
-      this.$twoUpButton.addClass("on").attr("aria-pressed", "true");
+      this.$oneUpButton.removeClass("on");
+      this.$twoUpButton.addClass("on");
     } else {
-      this.$twoUpButton.removeClass("on").attr("aria-pressed", "false");
-      this.$oneUpButton.addClass("on").attr("aria-pressed", "true");
+      this.$twoUpButton.removeClass("on");
+      this.$oneUpButton.addClass("on");
     }
   }
 

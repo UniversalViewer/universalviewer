@@ -14,7 +14,7 @@ import { Strings, Maths } from "../../Utils";
 export interface IGalleryComponentContent {
   searchResult: string;
   searchResults: string;
-  download: string;
+  select: string;
   selectAll: string;
 }
 
@@ -47,7 +47,7 @@ export class GalleryComponent extends BaseComponent {
   private _$rightOptions: JQuery;
   private _$selectAllButton: JQuery;
   private _$selectAllButtonCheckbox: JQuery;
-  private _$downloadButton: JQuery;
+  private _$selectButton: JQuery;
   private _$selectedThumb: JQuery;
   private _$sizeDownButton: JQuery;
   private _$sizeRange: JQuery;
@@ -109,12 +109,10 @@ export class GalleryComponent extends BaseComponent {
       this._$selectAllButton.find("input:checkbox")
     );
 
-    this._$downloadButton = $(
-      '<a class="download" href="#">' +
-        this.options.data.content.download +
-        "</a>"
+    this._$selectButton = $(
+      '<a class="select" href="#">' + this.options.data.content.select + "</a>"
     );
-    this._$multiSelectOptions.append(this._$downloadButton);
+    this._$multiSelectOptions.append(this._$selectButton);
 
     this._$main = $('<div class="main"></div>');
     this._$element.append(this._$main);
@@ -162,7 +160,7 @@ export class GalleryComponent extends BaseComponent {
       this.set(this.options.data);
     });
 
-    this._$downloadButton.on("click", () => {
+    this._$selectButton.on("click", () => {
       const multiSelectState: MultiSelectState | null =
         this._getMultiSelectState();
 
@@ -201,6 +199,8 @@ export class GalleryComponent extends BaseComponent {
       content: <IGalleryComponentContent>{
         searchResult: "{0} search result",
         searchResults: "{0} search results",
+        select: "Select",
+        selectAll: "Select All",
       },
       debug: false,
       helper: null,
@@ -311,9 +311,9 @@ export class GalleryComponent extends BaseComponent {
         multiSelectState.getAll().filter((t) => t.multiSelected).length > 0;
 
       if (!anySelected) {
-        this._$downloadButton.hide();
+        this._$selectButton.hide();
       } else {
-        this._$downloadButton.show();
+        this._$selectButton.show();
       }
     }
   }

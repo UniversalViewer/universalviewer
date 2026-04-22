@@ -202,7 +202,6 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
-        "rights": "$rights",
         "title": "$moreInformation"
       }
     },

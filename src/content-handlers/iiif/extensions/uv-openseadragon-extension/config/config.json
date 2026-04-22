@@ -128,7 +128,6 @@
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
-        "minImageWidth": 0,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -258,7 +257,6 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
-        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -273,7 +271,7 @@
       },
       "content": {
         "close": "$close",
-        "download": "$download",
+        "select": "$download",
         "selectAll": "$selectAll",
         "title": "$selectPagesForDownload"
       }
@@ -380,7 +378,6 @@
         "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
-        "mediaViewer": "$mediaViewer",
         "nextImage": "$nextImage",
         "previousImage": "$previousImage",
         "rotateRight": "$rotateRight",

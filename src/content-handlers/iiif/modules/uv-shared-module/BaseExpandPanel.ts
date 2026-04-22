@@ -44,20 +44,18 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     }
 
     this.$collapseButton = $(
-      '<button role="button" class="collapseButton" tabindex="0" aria-expanded="true"></button>'
+      '<button role="button" class="collapseButton" tabindex="0"></button>'
     );
     this.$collapseButton.prop("title", this.content.collapse);
-    this.$collapseButton.attr("aria-label", this.content.collapse);
     this.$top.append(this.$collapseButton);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
     this.$expandButton = $(
-      '<button role="button" class="expandButton" tabindex="0" aria-expanded="false"></button>'
+      '<button role="button" class="expandButton" tabindex="0"></button>'
     );
     this.$expandButton.prop("title", this.content.expand);
-    this.$expandButton.attr("aria-label", this.content.expand);
 
     this.$closed.append(this.$expandButton);
 
@@ -128,8 +126,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "true");
       this.$main.attr("aria-hidden", "true");
       this.$closed.attr("aria-hidden", "false");
-      this.$collapseButton.attr("aria-expanded", "false");
-      this.$expandButton.attr("aria-expanded", "false");
     }
 
     let timeout = 0;
@@ -162,8 +158,6 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "false");
       this.$main.attr("aria-hidden", "false");
       this.$closed.attr("aria-hidden", "true");
-      this.$collapseButton.attr("aria-expanded", "true");
-      this.$expandButton.attr("aria-expanded", "true");
     }
 
     this.toggleFinish();
@@ -277,11 +271,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   toggleStart(): void {}
 
   toggleFinish(): void {
-    if (this.autoToggled) {
-      return;
-    }
-
-    if (this.isExpanded) {
+    if (this.isExpanded && !this.autoToggled) {
       this.focusCollapseButton();
     } else {
       this.focusExpandButton();
