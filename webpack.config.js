@@ -22,6 +22,9 @@ const config = [
       chunkFilename: "[name].[contenthash].js",
     },
     resolve: {
+      alias: {
+        jquery: require.resolve("jquery"),
+      },
       extensions: [".ts", ".tsx", ".js"],
       fallback: {
         zlib: false,
