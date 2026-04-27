@@ -116,7 +116,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
         // JM todo: make config option for preserving choice over canvas changes
         this.changeCanvas(canvasIndex);
-        this.changeCanvas(canvasIndex);
       }
     );
 

@@ -29,8 +29,6 @@ interface AnnotationOverlayRect extends OpenSeadragon.Rect {
   canvasIndex: number;
   resultIndex: number;
   chars: string;
-  width: number;
-  height: number;
 }
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
@@ -871,8 +869,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     if (hasChoices) {
       try {
-        this.viewer.close();
-
         // we need to build these objects and pass them to getPagePositions() because choice isn't currently supported on IExternalResource.
         const canvasData = indices.map((index) => {
           const canvas = this.extension.helper.getCanvasByIndex(index);
