@@ -53,7 +53,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   viewer: any;
   viewerId: string;
   showAdjustImageButton: boolean;
-  choiceSwitchMenuOpen: boolean;
 
   $canvas: JQuery;
   $goHomeButton: JQuery;
