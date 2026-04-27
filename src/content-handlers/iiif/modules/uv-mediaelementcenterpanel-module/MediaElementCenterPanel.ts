@@ -1,4 +1,4 @@
-import { Dimensions } from "@edsilv/utils";
+import { Dimensions } from "../../Utils";
 
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";

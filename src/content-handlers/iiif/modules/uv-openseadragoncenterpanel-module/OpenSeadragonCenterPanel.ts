@@ -1,6 +1,6 @@
 const $ = require("jquery");
 import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Async, Bools, Dimensions } from "@edsilv/utils";
+import { Async, Bools, Dimensions } from "../../Utils";
 import {
   Canvas,
   IExternalResource,
@@ -24,6 +24,12 @@ import "@openseadragon-imaging/openseadragon-viewerinputhook";
 import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+
+interface AnnotationOverlayRect extends OpenSeadragon.Rect {
+  canvasIndex: number;
+  resultIndex: number;
+  chars: string;
+}
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
@@ -238,7 +244,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
       element: this.$viewer[0],
-      // crossOriginPolicy: "Anonymous",
+      drawer: "auto",
+      crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
       showRotationControl: true,
@@ -251,10 +258,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition:
-        this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+      navigatorPosition: (this.extension.helper.isContinuous()
+        ? "BOTTOM_LEFT"
+        : this.config.options.navigatorPosition ||
+          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
       navigatorHeight: "100px",
       navigatorWidth: "100px",
+      navigatorMaintainSizeRatio: false,
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
@@ -270,7 +280,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: null,
+      prefixUrl: undefined,
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config!.options.clickToZoomEnabled,
@@ -320,7 +330,21 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           HOVER: pixel,
           DOWN: pixel,
         },
+        fullpage: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
+        flip: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
       },
+      // The max number of milliseconds that an image job may take to complete.
+      timeout: this.config.options.tileTimeout || 30_000,
     });
 
     const that = this;
@@ -361,7 +385,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       ],
     });
 
-    let $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
+    const $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
     this.$zoomInButton = $("<button />").append($oldZoomIn.contents());
     this.$zoomInButton.insertAfter($oldZoomIn);
     $oldZoomIn.remove();
@@ -371,10 +395,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.addClass("zoomIn viewportNavButton");
 
     this.onAccessibleClick(this.$zoomInButton, () => {
-      this.zoomIn();
+      if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
+        this.zoomIn();
     });
 
-    let $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
+    const $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
     this.$zoomOutButton = $("<button />").append($oldZoomOut.contents());
     this.$zoomOutButton.insertAfter($oldZoomOut);
     $oldZoomIn.remove();
@@ -384,10 +409,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.addClass("zoomOut viewportNavButton");
 
     this.onAccessibleClick(this.$zoomOutButton, () => {
-      this.zoomOut();
+      if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
+        this.zoomOut();
     });
 
-    let $oldGoHome = this.$viewer.find('div[title="Go home"]');
+    const $oldGoHome = this.$viewer.find('div[title="Go home"]');
     this.$goHomeButton = $("<button />").append($oldGoHome.contents());
     this.$goHomeButton.insertAfter($oldGoHome);
     $oldGoHome.remove();
@@ -400,7 +426,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.goHome();
     });
 
-    let $oldRotate = this.$viewer.find('div[title="Rotate right"]');
+    const $oldRotate = this.$viewer.find('div[title="Rotate right"]');
     this.$rotateButton = $("<button />").append($oldRotate.contents());
     this.$rotateButton.insertAfter($oldRotate);
     $oldRotate.remove();
@@ -456,19 +482,20 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$viewportNavButtonsContainer.find(".viewportNavButton");
 
     this.$canvas = $(this.viewer.canvas);
+    this.$canvas.attr("role", "application");
+    this.$canvas.attr("aria-label", this.content.mediaViewer);
 
     // Check if we have saved settings for image adjustment
-    let settings = this.extension.getSettings();
+    const settings = this.extension.getSettings();
     if (
       this.extension.data.config?.options.saveUserSettings &&
       settings.rememberSettings
     ) {
-      let contrastPercent = settings.contrastPercent;
-      let brightnessPercent = settings.brightnessPercent;
-      let saturationPercent = settings.saturationPercent;
-      (<HTMLCanvasElement>(
-        this.$canvas[0].children[0]
-      )).style.filter = `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
+      const contrastPercent = settings.contrastPercent;
+      const brightnessPercent = settings.brightnessPercent;
+      const saturationPercent = settings.saturationPercent;
+      (<HTMLCanvasElement>this.$canvas[0].children[0]).style.filter =
+        `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
     }
 
     // disable right click on canvas
@@ -514,10 +541,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       },
       this.config.options.controlsFadeAfterInactive
     );
-
-    this.viewer.addHandler("tile-drawn", () => {
-      this.$spinner.hide();
-    });
 
     //this.viewer.addHandler("open-failed", () => {
     //});
@@ -571,6 +594,26 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.isCreated = true;
     //this.resize();
+
+    // check if initial interaction is keyboard navigation or mouse
+    // this prevents blue focus border from appearing on first mouse interaction
+    document.addEventListener(
+      "keydown",
+      (e: KeyboardEvent) => {
+        if (e.key === "Tab") {
+          this.$canvas?.addClass("keyboard-nav");
+        }
+      },
+      { capture: true }
+    );
+
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        this.$canvas?.removeClass("keyboard-nav");
+      },
+      { capture: true }
+    );
   }
 
   createNavigationButtons() {
@@ -681,7 +724,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   async getGirderTileSource(): Promise<any> {
     return new Promise<any>((resolve) => {
-      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
       const annotations: Annotation[] = canvas.getContent();
 
       if (annotations.length) {
@@ -743,8 +786,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       return;
     }
 
-    this.$spinner.show();
+    this.viewer.close();
     this.items = [];
+
+    // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
+    const spinnerTimeout = setTimeout(() => {
+      this.$spinner.show();
+    }, 200);
 
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
@@ -784,6 +832,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
+              clearTimeout(spinnerTimeout);
+              this.$spinner.hide();
+
               this.openPagesHandler();
             }
             this.resize();
@@ -911,6 +962,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.setNavigatorVisible();
 
+    // resize navigator for continuous manifests
+    if (this.extension.helper.isContinuous()) {
+      setTimeout(() => {
+        this.resizeNavigatorForContinuous();
+      }, 200);
+    }
+
     this.overlayAnnotations();
 
     this.updateBounds();
@@ -924,8 +982,61 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.isFirstLoad = false;
   }
 
+  private resizeNavigatorForContinuous(): void {
+    if (!this.viewer || !this.viewer.navigator) return;
+
+    const homeBounds = this.viewer.world.getHomeBounds();
+    const contentAspectRatio = homeBounds.width / homeBounds.height;
+
+    const viewportWidth = this.$viewer.width();
+    const viewportHeight = this.$viewer.height();
+    const maxNavigatorWidth = 100;
+    const maxNavigatorHeight = 100;
+    const minVerticalNavigatorWidth = 60;
+    const minHorizontalNavigatorHeight = 40;
+
+    let navigatorWidth: number;
+    let navigatorHeight: number;
+
+    if (this.extension.helper.isVerticallyAligned()) {
+      navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
+      navigatorWidth = navigatorHeight * contentAspectRatio;
+
+      // Enforce max width
+      if (navigatorWidth > maxNavigatorWidth) {
+        navigatorWidth = maxNavigatorWidth;
+      }
+
+      // Enforce min width
+      if (navigatorWidth < minVerticalNavigatorWidth) {
+        navigatorWidth = minVerticalNavigatorWidth;
+      }
+    } else {
+      navigatorWidth = viewportWidth;
+      navigatorHeight = navigatorWidth / contentAspectRatio;
+
+      // Enforce max height
+      if (navigatorHeight > maxNavigatorHeight) {
+        navigatorHeight = maxNavigatorHeight;
+      }
+
+      // Enforce min height
+      if (navigatorHeight < minHorizontalNavigatorHeight) {
+        navigatorHeight = minHorizontalNavigatorHeight;
+      }
+    }
+
+    const navigatorElement = this.viewer.navigator.element;
+    navigatorElement.style.width = `${navigatorWidth}px`;
+    navigatorElement.style.height = `${navigatorHeight}px`;
+
+    this.viewer.navigator.viewport.fitBounds(homeBounds, true);
+    this.viewer.navigator.updateSize();
+  }
+
   zoomToInitialAnnotation(): void {
-    let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+    const annotationRect: AnnotationRect | null =
+      this.getInitialAnnotationRect();
 
     (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
     (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
@@ -944,7 +1055,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     for (let i = 0; i < annotations.length; i++) {
       const annotation: AnnotationGroup = annotations[i];
-      const rects: any[] = this.getAnnotationOverlayRects(annotation);
+      const rects: AnnotationOverlayRect[] =
+        this.getAnnotationOverlayRects(annotation);
 
       for (let k = 0; k < rects.length; k++) {
         const rect = rects[k];
@@ -1018,11 +1130,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.addClass("disabled");
+    this.$prevButton.attr("tabindex", -1);
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.removeClass("disabled");
+    this.$prevButton.attr("tabindex", 0);
   }
 
   hidePrevButton(): void {
@@ -1038,11 +1152,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.addClass("disabled");
+    this.$nextButton.attr("tabindex", -1);
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.removeClass("disabled");
+    this.$nextButton.attr("tabindex", 0);
   }
 
   hideNextButton(): void {
@@ -1118,7 +1234,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   getAnnotationsForCurrentImages(): AnnotationGroup[] {
-    let annotationsForCurrentImages: AnnotationGroup[] = [];
+    const annotationsForCurrentImages: AnnotationGroup[] = [];
     const annotations: AnnotationGroup[] | null = (
       this.extension as OpenSeadragonExtension
     ).annotations;
@@ -1162,8 +1278,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.getAnnotationRectsForCurrentImages();
 
     for (let i = 0; i < annotationRects.length; i++) {
-      let rect: AnnotationRect = annotationRects[i];
-      let viewportBounds: any = this.viewer.viewport.getBounds();
+      const rect: AnnotationRect = annotationRects[i];
+      const viewportBounds: any = this.viewer.viewport.getBounds();
 
       rect.isVisible = Dimensions.hitRect(
         viewportBounds.x,
@@ -1379,17 +1495,19 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     $(".annotationRect").not($rect).removeClass("current");
   }
 
-  getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
-    let newRects: any[] = [];
+  getAnnotationOverlayRects(
+    annotationGroup: AnnotationGroup
+  ): AnnotationOverlayRect[] {
+    const newRects: any[] = [];
 
     if (!this.extension.resources) {
       return newRects;
     }
 
-    let resource: any = this.extension.resources.filter(
+    const resource: any = this.extension.resources.filter(
       (x) => x.index === annotationGroup.canvasIndex
     )[0];
-    let index: number = this.extension.resources.indexOf(resource);
+    const index: number = this.extension.resources.indexOf(resource);
     let offsetX: number = 0;
 
     if (index > 0) {
@@ -1407,7 +1525,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       const w: number = searchRect.width;
       const h: number = searchRect.height;
 
-      const rect = new OpenSeadragon.Rect(x, y, w, h);
+      const rect = new OpenSeadragon.Rect(x, y, w, h) as AnnotationOverlayRect;
       searchRect.viewportX = x;
       searchRect.viewportY = y;
       rect.canvasIndex = searchRect.canvasIndex;
@@ -1504,20 +1622,14 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           );
           break;
       }
-    }
 
-    // stretch navigator, allowing time for OSD to resize
-    setTimeout(() => {
+      // resize navigator for continuous manifests
       if (this.extension.helper.isContinuous()) {
-        if (this.extension.helper.isHorizontallyAligned()) {
-          const width: number =
-            this.$viewer.width() - this.$viewer.rightMargin();
-          this.$navigator.width(width);
-        } else {
-          this.$navigator.height(this.$viewer.height());
-        }
+        setTimeout(() => {
+          this.resizeNavigatorForContinuous();
+        }, 200);
       }
-    }, 100);
+    }
   }
 
   setFocus(): void {

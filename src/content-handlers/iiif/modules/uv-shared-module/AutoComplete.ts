@@ -1,6 +1,6 @@
 const $ = require("jquery");
-import * as KeyCodes from "@edsilv/key-codes";
-import { Keyboard } from "@edsilv/utils";
+import * as KeyCodes from "../../KeyCodes";
+import { Keyboard } from "../../Utils";
 import { isVisible } from "../../../../Utils";
 export class AutoComplete {
   private _results: any;

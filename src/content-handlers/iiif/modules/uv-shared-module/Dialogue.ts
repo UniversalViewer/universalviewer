@@ -1,11 +1,11 @@
 const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { IIIFEvents } from "../../IIIFEvents";
-import { Maths } from "@edsilv/utils";
+import { Maths } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class Dialogue<
-  T extends BaseConfig["modules"]["dialogue"]
+  T extends BaseConfig["modules"]["dialogue"],
 > extends BaseView<T> {
   allowClose: boolean = true;
   isActive: boolean = false;

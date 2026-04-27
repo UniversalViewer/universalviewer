@@ -1,6 +1,7 @@
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { DownloadOption } from "../../modules/uv-shared-module/DownloadOption";
 import { XYWHFragment } from "../../modules/uv-shared-module/XYWHFragment";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { CroppedImageDimensions } from "./CroppedImageDimensions";
@@ -20,7 +21,7 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Bools, Maths, Strings } from "@edsilv/utils";
+import { Bools, Maths, Strings } from "../../Utils";
 import {
   IIIFResourceType,
   ExternalResourceType,
@@ -614,8 +615,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     // todo: can this be added to store?
     const paged = this.isPagingSettingEnabled();
 
-    const { downloadDialogueOpen, dialogueTriggerButton } =
-      this.store.getState() as OpenSeadragonExtensionState;
+    // Try to initialize using the stored state; exit early if the state is not ready yet:
+    const state: null | OpenSeadragonExtensionState = this.store.getState();
+    if (state === null) {
+      return;
+    }
+    const { downloadDialogueOpen, dialogueTriggerButton } = state;
 
     // todo: can the overlay visibility be added to the store?
     if (downloadDialogueOpen) {
@@ -658,6 +663,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         locale: this.getLocale(),
         manifest: this.helper.manifest as Manifest,
         maxImageWidth: config.options.maxImageWidth,
+        minImageWidth: config.options.minImageWidth,
         mediaDownloadEnabled: this.helper.isUIEnabled("mediaDownload"),
         open: downloadDialogueOpen,
         paged: paged,
@@ -686,6 +692,12 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
         },
         onClose: () => {
           this.closeActiveDialogue();
+        },
+        onDownload: (type: DownloadOption, label: string) => {
+          this.extensionHost.publish(IIIFEvents.DOWNLOAD, {
+            type: type,
+            label: label,
+          });
         },
         onDownloadCurrentView: (canvas: Canvas) => {
           const viewer: any = this.getViewer();
@@ -1107,20 +1119,20 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     width = Math.min(width, resourceWidth);
     height = Math.min(height, resourceHeight);
-    let regionWidth: number = width;
-    let regionHeight: number = height;
+    const regionWidth: number = width;
+    const regionHeight: number = height;
 
     const maxDimensions: Size | null = canvas.getMaxDimensions();
 
     if (maxDimensions) {
       if (width > maxDimensions.width) {
-        let newWidth: number = maxDimensions.width;
+        const newWidth: number = maxDimensions.width;
         height = Math.round(newWidth * (height / width));
         width = newWidth;
       }
 
       if (height > maxDimensions.height) {
-        let newHeight: number = maxDimensions.height;
+        const newHeight: number = maxDimensions.height;
         width = Math.round((width / height) * newHeight);
         height = newHeight;
       }
@@ -1527,7 +1539,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     let index: number;
 
     if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
+      const indices: number[] = this.getPagedIndices(canvasIndex);
 
       if (this.helper.isRightToLeft()) {
         index = indices[indices.length - 1] - 1;
@@ -1547,7 +1559,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     // const canvas: Canvas | null = this.helper.getCanvasByIndex(canvasIndex);
 
     if (this.isPagingSettingEnabled()) {
-      let indices: number[] = this.getPagedIndices(canvasIndex);
+      const indices: number[] = this.getPagedIndices(canvasIndex);
 
       if (this.helper.isRightToLeft()) {
         index = indices[0] + 1;
@@ -1577,7 +1589,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     let indices: number[] = [];
 
     // if it's a continuous manifest, get all resources.
-    if (sequence.getViewingHint() === ViewingHint.CONTINUOUS) {
+    if (this.helper.isContinuous()) {
       // get all canvases to be displayed inline
       indices = canvases.map((_canvas: Canvas, index: number) => {
         return index;

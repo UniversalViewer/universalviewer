@@ -1,5 +1,5 @@
-@import "@iiif/iiif-gallery-component/dist-css/styles.less";
-@import "@iiif/iiif-tree-component/dist-css/styles.less";
+@import "../../uv-shared-module/css/iiif-gallery-component.less";
+@import "../../uv-shared-module/css/iiif-tree-component.less";
 @import "../../uv-shared-module/css/thumbs-view.less";
 
 .uv {
@@ -47,7 +47,7 @@
       padding: @padding-medium;
 
       .options {
-        padding: 0 0 @padding-medium-vertical 0;
+        padding: 0 0 @padding-medium-vertical;
 
         .top {
           overflow: hidden;
@@ -97,7 +97,7 @@
 
       .btn-group {
         .btn {
-          padding: 0 @margin-small-horizontal 0 @margin-small-horizontal;
+          padding: 0 @margin-small-horizontal;
           background: @gray;
           color: @gray-light;
           width: 55px;
@@ -127,12 +127,12 @@
             .thumb {
               .info {
                 .label {
-                    min-height: 35px;
-                    max-height: 35px;
-                    overflow-x: visible;
-                    text-overflow: nowrap;
-                    white-space: break-spaces;
-                    max-width: 100%;
+                  min-height: 35px;
+                  max-height: 35px;
+                  overflow-x: visible;
+                  text-overflow: nowrap;
+                  white-space: break-spaces;
+                  max-width: 100%;
                 }
               }
             }

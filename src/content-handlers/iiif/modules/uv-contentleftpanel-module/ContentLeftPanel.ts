@@ -5,7 +5,7 @@ import ThumbsView from "./ThumbsView";
 const ViewingDirectionEnum =
   require("@iiif/vocabulary/dist-commonjs/").ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { ViewingHint, ViewingDirection } from "@iiif/vocabulary/dist-commonjs/";
 import { IIIFEvents } from "../../IIIFEvents";
 import { GalleryView } from "./GalleryView";
@@ -495,13 +495,13 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         const searchResult: AnnotationGroup = searchResults[i];
 
         // find the thumb with the same canvasIndex and add the searchResult
-        let thumb: Thumb = thumbs.filter(
+        const thumb: Thumb = thumbs.filter(
           (t) => t.index === searchResult.canvasIndex
         )[0];
 
         if (thumb) {
           // clone the data so searchResults isn't persisted on the canvas.
-          let data = Object.assign({}, thumb.data);
+          const data = Object.assign({}, thumb.data);
           data.searchResults = searchResult.rects.length;
           thumb.data = data;
         }
@@ -524,6 +524,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
         selected: selectedIndices,
+        thumbnailsLabel: this.content.thumbnails,
         truncateThumbnailLabels:
           settings.truncateThumbnailLabels !== undefined
             ? settings.truncateThumbnailLabels

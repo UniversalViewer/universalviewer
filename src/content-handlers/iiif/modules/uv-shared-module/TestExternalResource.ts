@@ -1,5 +1,5 @@
 import { ServiceProfile } from "@iiif/vocabulary/dist-commonjs";
-import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import { HTTPStatusCode } from "../../HTTPStatusCodes";
 import {
   Annotation,
   AnnotationBody,
@@ -378,7 +378,7 @@ export class ExternalResource implements IExternalResource {
 
         xhr.onload = () => {
           const data = JSON.parse(xhr.responseText);
-          let contentLocation: string = unescape(data.contentLocation);
+          const contentLocation: string = unescape(data.contentLocation);
 
           that.status = xhr.status;
 

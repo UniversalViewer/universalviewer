@@ -16,6 +16,10 @@ import {
 } from "@/content-handlers/iiif/BaseConfig";
 
 type PDFCenterPanelOptions = CenterPanelOptions & {
+  /** Minimum scale value when using PDF.js */
+  minScale: number;
+  /** Maximum scale value when using PDF.js */
+  maxScale: number;
   /** Determines if PDF.js should be used for PDF rendering */
   usePdfJs: boolean;
 };
@@ -23,6 +27,8 @@ type PDFCenterPanelOptions = CenterPanelOptions & {
 type PDFCenterPanelContent = CenterPanelContent & {
   next: string;
   previous: string;
+  zoomIn: string;
+  zoomOut: string;
 };
 
 type PDFCenterPanel = {

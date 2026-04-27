@@ -162,14 +162,14 @@
               "keydown",
               function (e) {
                 function focusNext(dir = 1) {
-                  let radioEls = Array.from(
+                  const radioEls = Array.from(
                     player.sourcechooserButton.querySelectorAll(
                       'input[type="radio"]'
                     )
                   );
-                  let index = radioEls.indexOf(document.activeElement);
-                  let next = dir === 1 ? 1 : radioEls.length - 1;
-                  let nextIndex = (index + next) % radioEls.length;
+                  const index = radioEls.indexOf(document.activeElement);
+                  const next = dir === 1 ? 1 : radioEls.length - 1;
+                  const nextIndex = (index + next) % radioEls.length;
                   radioEls[nextIndex].focus();
                 }
 
@@ -216,7 +216,7 @@
                     case 9: // Tab
                       if (player.isSourcechooserSelectorOpen()) {
                         // Get focused element
-                        let checked = document.activeElement;
+                        const checked = document.activeElement;
                         // Focus next radio element
                         if (
                           checked.matches('input[type="radio"]') &&
@@ -243,7 +243,7 @@
                           document.activeElement
                         )
                       ) {
-                        let dir = keyCode === 37 || keyCode === 38 ? -1 : 1;
+                        const dir = keyCode === 37 || keyCode === 38 ? -1 : 1;
                         focusNext(dir);
                         stopPropagation = true;
                       }

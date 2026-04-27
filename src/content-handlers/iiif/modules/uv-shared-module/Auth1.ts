@@ -11,10 +11,8 @@ import {
   StatusCode,
   Utils,
 } from "manifesto.js";
-import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
-// import { Urls } from "@edsilv/utils";
-// import { Storage, StorageType, StorageItem } from "../../../../Utils";
-import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import { Storage, StorageType, StorageItem, Urls } from "../../Utils";
+import { HTTPStatusCode } from "../../HTTPStatusCodes";
 
 export class Auth1 {
   static messages: any = {};
@@ -68,7 +66,8 @@ export class Auth1 {
   }
 
   static getCookieServiceUrl(service: Service): string {
-    let cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
+    const cookieServiceUrl: string =
+      service.id + "?origin=" + Auth1.getOrigin();
     return cookieServiceUrl;
   }
 

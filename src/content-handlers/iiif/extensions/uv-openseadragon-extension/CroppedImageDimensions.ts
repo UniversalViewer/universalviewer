@@ -1,4 +1,4 @@
-import { Size } from "@edsilv/utils";
+import { Size } from "../../Utils";
 import { Point } from "../../modules/uv-shared-module/Point";
 
 export class CroppedImageDimensions {

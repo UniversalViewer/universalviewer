@@ -1,85 +1,83 @@
 .uv {
+  @expandFullEnabled: false;
 
-    @expandFullEnabled: false;
+  .leftPanel {
+    z-index: 10;
 
-    .leftPanel {
-
-        z-index: 10;
-
-        a {
-            color: @text-color;
-            text-decoration: none;
-        }
-
-        .top {
-            height: 35px;
-            position: relative;
-
-            .title {
-                height: 20px;
-                margin: 9px 0 0 10px;
-                font-size: inherit;
-                font-weight: normal;
-                float: left;
-                cursor: pointer;
-                letter-spacing: 0.08rem;
-            }
-
-            .collapseButton {
-                float: right;
-                background: data-uri('../img/arrows_left.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin: 7px 5px 0 0;
-                display: block;
-            }
-
-            .expandFullButton {
-                float: right;
-                background: data-uri('../img/arrows_right.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin: 7px 5px 0 0;
-                display: none;
-            }
-
-            .expandFull();
-        }
-
-        .closed {
-            width: 25px;
-            float: right;
-
-            .title {
-                .link-color-decoration(@text-color, none);
-                white-space: nowrap;
-                display: block;
-                margin: 8px 8px 0 0px;
-                cursor: pointer;
-                text-transform: uppercase;
-                .rotate(90deg);
-                letter-spacing: 0.08rem;
-            }
-
-            .expandButton {
-                background: data-uri('../img/arrows_right.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin: 7px 5px 0 0;
-                display: block;
-            }
-        }
+    a {
+      color: @text-color;
+      text-decoration: none;
     }
 
-    .expandFull() when (@expandFullEnabled = true) {
-        .expandFullButton{
-            display: block;
-        }
+    .top {
+      height: 35px;
+      position: relative;
+
+      .title {
+        height: 20px;
+        margin: 9px 0 0 10px;
+        font-size: inherit;
+        font-weight: normal;
+        float: left;
+        cursor: pointer;
+        letter-spacing: 0.08rem;
+      }
+
+      .collapseButton {
+        float: right;
+        background: data-uri("../img/arrows_left.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin: 7px 5px 0 0;
+        display: block;
+      }
+
+      .expandFullButton {
+        float: right;
+        background: data-uri("../img/arrows_right.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin: 7px 5px 0 0;
+        display: none;
+      }
+
+      .expandFull();
     }
+
+    .closed {
+      width: 25px;
+      float: right;
+
+      .title {
+        .link-color-decoration(@text-color, none);
+        white-space: nowrap;
+        display: block;
+        margin: 8px 8px 0 0;
+        cursor: pointer;
+        text-transform: uppercase;
+        .rotate(90deg);
+        letter-spacing: 0.08rem;
+      }
+
+      .expandButton {
+        background: data-uri("../img/arrows_right.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin: 7px 5px 0 0;
+        display: block;
+      }
+    }
+  }
+
+  .expandFull() when (@expandFullEnabled = true) {
+    .expandFullButton {
+      display: block;
+    }
+  }
 }

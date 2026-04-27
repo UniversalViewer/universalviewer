@@ -6,12 +6,12 @@ import { Information } from "./Information";
 import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
 import { InformationFactory } from "./InformationFactory";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class HeaderPanel<
-  T extends BaseConfig["modules"]["headerPanel"]
+  T extends BaseConfig["modules"]["headerPanel"],
 > extends BaseView<T> {
   $centerOptions: JQuery;
   $helpButton: JQuery;

@@ -13,7 +13,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import {
   ExternalResourceType,
   MediaType,
@@ -276,7 +276,15 @@ export default class Extension
       const annotations: Annotation[] = canvas.getContent();
 
       if (annotations && annotations.length) {
-        posterUri = annotations[0].getProperty("thumbnail");
+        const annotationUri = annotations[0].getProperty("thumbnail");
+        if (typeof annotationUri === "string") {
+          posterUri = annotationUri;
+        } else if (
+          annotationUri?.length &&
+          typeof annotationUri[0].id === "string"
+        ) {
+          posterUri = annotationUri[0].id;
+        }
       } else {
         posterUri = canvas.getProperty("thumbnail");
       }

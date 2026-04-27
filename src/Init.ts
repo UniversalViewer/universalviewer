@@ -2,7 +2,6 @@ import { Events } from "./Events";
 import { UniversalViewer } from "./UniversalViewer";
 
 export const init = (el: string | HTMLDivElement, data) => {
-  let uv;
   let isFullScreen = false;
   let overrideFullScreen = false;
   const container = typeof el === "string" ? document.getElementById(el) : el;
@@ -18,19 +17,26 @@ export const init = (el: string | HTMLDivElement, data) => {
   const uvDiv = document.createElement("div");
   parent.appendChild(uvDiv);
 
+  const uv = new UniversalViewer({
+    target: uvDiv,
+    data: data,
+  });
+
   const resize = () => {
-    if (uv) {
-      if (isFullScreen && !overrideFullScreen) {
-        // is full screen and not overridden.
-        parent.style.width = window.innerWidth + "px";
-        parent.style.height = window.innerHeight + "px";
-      } else {
-        // either we're not full screen or scaling to the window size is overridden
-        parent.style.width = container.offsetWidth + "px";
-        parent.style.height = container.offsetHeight + "px";
-      }
-      uv.resize();
+    if (!uv) {
+      return;
     }
+
+    if (isFullScreen && !overrideFullScreen) {
+      // is full screen and not overridden.
+      parent.style.width = window.innerWidth + "px";
+      parent.style.height = window.innerHeight + "px";
+    } else {
+      // either we're not full screen or scaling to the window size is overridden
+      parent.style.width = container.offsetWidth + "px";
+      parent.style.height = container.offsetHeight + "px";
+    }
+    uv.resize();
   };
 
   window.addEventListener("resize", function () {
@@ -41,11 +47,6 @@ export const init = (el: string | HTMLDivElement, data) => {
     setTimeout(function () {
       resize();
     }, 100);
-  });
-
-  uv = new UniversalViewer({
-    target: uvDiv,
-    data: data,
   });
 
   // todo: can we remove the following two event listeners

@@ -6,8 +6,8 @@
 
 .uv-iiif-extension-host {
   *,
-  *:before,
-  *:after {
+  *::before,
+  *::after {
     .box-sizing(border-box);
   }
 
@@ -32,7 +32,7 @@
   padding: 0;
   height: 100%;
 
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0%);
 
   font-family: @font-family-base;
   font-size: @font-size-base;
@@ -139,7 +139,9 @@
     white-space: nowrap;
     border-width: 0;
   }
-  .not-sr-only, .sr-only:focus-visible, .sr-only:active {
+  .not-sr-only,
+  .sr-only:focus-visible,
+  .sr-only:active {
     position: static;
     width: auto;
     height: auto;

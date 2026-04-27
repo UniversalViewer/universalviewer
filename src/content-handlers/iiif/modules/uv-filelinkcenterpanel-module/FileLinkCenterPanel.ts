@@ -78,7 +78,7 @@ export class FileLinkCenterPanel extends CenterPanel<
         $fileName.text(id.substr(id.lastIndexOf("/") + 1));
       }
 
-      let label: string | null = LanguageMap.getValue(
+      const label: string | null = LanguageMap.getValue(
         annotationBody.getLabel()
       );
 
@@ -94,7 +94,7 @@ export class FileLinkCenterPanel extends CenterPanel<
         $thumb.hide();
       }
 
-      let description: string | null =
+      const description: string | null =
         annotationBody.getProperty("description");
 
       if (description) {

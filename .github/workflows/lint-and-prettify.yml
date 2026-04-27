@@ -1,0 +1,35 @@
+name: Lint and Prettify code
+
+on: [push, pull_request]
+
+jobs:
+  lint-and-prettify:
+    name: Lint and Prettify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Lint code
+        run: npm run lint-code
+
+      - name: Lint styles
+        run: npm run lint-styles
+
+      - name: Prettify code
+        run: npm run prettify
+
+      - name: Auto-commit fixes
+        uses: EndBug/add-and-commit@v10
+        with:
+          default_author: github_actions
+          add: "['src/']"

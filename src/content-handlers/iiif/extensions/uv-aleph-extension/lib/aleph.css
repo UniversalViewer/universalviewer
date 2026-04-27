@@ -1,6 +1,7 @@
 html.ios {
-  --ion-default-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    "Roboto", sans-serif;
+  --ion-default-font:
+    /* stylelint-disable-next-line value-keyword-case */
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
 }
 html.md {
   --ion-default-font: "Roboto", "Helvetica Neue", sans-serif;
@@ -132,11 +133,7 @@ body.backdrop-no-scroll {
   --ion-color-tint: var(--ion-color-dark-tint, #383a3e) !important;
 }
 .ion-page {
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: -ms-flexbox;
+  inset: 0;
   display: flex;
   position: absolute;
   -ms-flex-direction: column;
@@ -171,11 +168,13 @@ html.plt-ios.plt-hybrid,
 html.plt-ios.plt-pwa {
   --ion-statusbar-padding: 20px;
 }
+
 @supports (padding-top: 20px) {
   html {
     --ion-safe-area-top: var(--ion-statusbar-padding);
   }
 }
+
 @supports (padding-top: constant(safe-area-inset-top)) {
   html {
     --ion-safe-area-top: constant(safe-area-inset-top);
@@ -184,6 +183,7 @@ html.plt-ios.plt-pwa {
     --ion-safe-area-right: constant(safe-area-inset-right);
   }
 }
+
 @supports (padding-top: env(safe-area-inset-top)) {
   html {
     --ion-safe-area-top: env(safe-area-inset-top);
@@ -203,18 +203,21 @@ html.plt-ios.plt-pwa {
   pointer-events: none;
 }
 .ios .menu-content-reveal {
-  -webkit-box-shadow: -8px 0 42px rgba(0, 0, 0, 0.08);
-  box-shadow: -8px 0 42px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: -8px 0 42px rgb(0 0 0 / 8%);
+  box-shadow: -8px 0 42px rgb(0 0 0 / 8%);
 }
 [dir="rtl"].ios .menu-content-reveal {
-  -webkit-box-shadow: 8px 0 42px rgba(0, 0, 0, 0.08);
-  box-shadow: 8px 0 42px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 8px 0 42px rgb(0 0 0 / 8%);
+  box-shadow: 8px 0 42px rgb(0 0 0 / 8%);
 }
 .md .menu-content-push,
 .md .menu-content-reveal {
-  -webkit-box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09),
-    4px 0 16px 0 rgba(0, 0, 0, 0.18);
-  box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.09), 4px 0 16px 0 rgba(0, 0, 0, 0.18);
+  -webkit-box-shadow:
+    0 2px 22px 0 rgb(0 0 0 / 9%),
+    4px 0 16px 0 rgb(0 0 0 / 18%);
+  box-shadow:
+    0 2px 22px 0 rgb(0 0 0 / 9%),
+    4px 0 16px 0 rgb(0 0 0 / 18%);
 }
 audio,
 canvas,
@@ -269,16 +272,16 @@ textarea {
   font: inherit;
   color: inherit;
 }
-textarea::-webkit-input-placeholder {
+textarea::input-placeholder {
   padding-left: 2px;
 }
-textarea::-moz-placeholder {
+textarea::placeholder {
   padding-left: 2px;
 }
-textarea:-ms-input-placeholder {
+textarea:input-placeholder {
   padding-left: 2px;
 }
-textarea::-ms-input-placeholder {
+textarea::input-placeholder {
   padding-left: 2px;
 }
 textarea::placeholder {
@@ -372,7 +375,7 @@ th {
 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
@@ -393,19 +396,14 @@ html.plt-pwa {
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 0;
   position: fixed;
   width: 100%;
   max-width: 100%;
   height: 100%;
   max-height: 100%;
+  /* stylelint-disable-next-line value-keyword-case */
   text-rendering: optimizeLegibility;
   overflow: hidden;
   -ms-touch-action: manipulation;
@@ -480,10 +478,7 @@ sub {
   --padding-end: 0;
   --padding-top: 0;
   --padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 .ion-padding,
 [padding] {
@@ -491,11 +486,10 @@ sub {
   --padding-end: var(--ion-padding, 16px);
   --padding-top: var(--ion-padding, 16px);
   --padding-bottom: var(--ion-padding, 16px);
-  padding-left: var(--ion-padding, 16px);
-  padding-right: var(--ion-padding, 16px);
-  padding-top: var(--ion-padding, 16px);
-  padding-bottom: var(--ion-padding, 16px);
+  padding: var(--ion-padding, 16px) var(--ion-padding, 16px)
+    var(--ion-padding, 16px) var(--ion-padding, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-padding,
@@ -503,9 +497,8 @@ sub {
     padding-left: unset;
     padding-right: unset;
     -webkit-padding-start: var(--ion-padding, 16px);
-    padding-inline-start: var(--ion-padding, 16px);
+    padding-inline: var(--ion-padding, 16px) var(--ion-padding, 16px);
     -webkit-padding-end: var(--ion-padding, 16px);
-    padding-inline-end: var(--ion-padding, 16px);
   }
 }
 .ion-padding-top,
@@ -518,6 +511,7 @@ sub {
   --padding-start: var(--ion-padding, 16px);
   padding-left: var(--ion-padding, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-padding-start,
@@ -532,6 +526,7 @@ sub {
   --padding-end: var(--ion-padding, 16px);
   padding-right: var(--ion-padding, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-padding-end,
@@ -560,6 +555,7 @@ sub {
   padding-left: var(--ion-padding, 16px);
   padding-right: var(--ion-padding, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-padding-horizontal,
@@ -567,9 +563,8 @@ sub {
     padding-left: unset;
     padding-right: unset;
     -webkit-padding-start: var(--ion-padding, 16px);
-    padding-inline-start: var(--ion-padding, 16px);
+    padding-inline: var(--ion-padding, 16px) var(--ion-padding, 16px);
     -webkit-padding-end: var(--ion-padding, 16px);
-    padding-inline-end: var(--ion-padding, 16px);
   }
 }
 .ion-no-margin,
@@ -578,10 +573,7 @@ sub {
   --margin-end: 0;
   --margin-top: 0;
   --margin-bottom: 0;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 .ion-margin,
 [margin] {
@@ -589,11 +581,10 @@ sub {
   --margin-end: var(--ion-margin, 16px);
   --margin-top: var(--ion-margin, 16px);
   --margin-bottom: var(--ion-margin, 16px);
-  margin-left: var(--ion-margin, 16px);
-  margin-right: var(--ion-margin, 16px);
-  margin-top: var(--ion-margin, 16px);
-  margin-bottom: var(--ion-margin, 16px);
+  margin: var(--ion-margin, 16px) var(--ion-margin, 16px)
+    var(--ion-margin, 16px) var(--ion-margin, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-margin,
@@ -601,9 +592,8 @@ sub {
     margin-left: unset;
     margin-right: unset;
     -webkit-margin-start: var(--ion-margin, 16px);
-    margin-inline-start: var(--ion-margin, 16px);
+    margin-inline: var(--ion-margin, 16px) var(--ion-margin, 16px);
     -webkit-margin-end: var(--ion-margin, 16px);
-    margin-inline-end: var(--ion-margin, 16px);
   }
 }
 .ion-margin-top,
@@ -616,6 +606,7 @@ sub {
   --margin-start: var(--ion-margin, 16px);
   margin-left: var(--ion-margin, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-margin-start,
@@ -630,6 +621,7 @@ sub {
   --margin-end: var(--ion-margin, 16px);
   margin-right: var(--ion-margin, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-margin-end,
@@ -658,6 +650,7 @@ sub {
   margin-left: var(--ion-margin, 16px);
   margin-right: var(--ion-margin, 16px);
 }
+
 @supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or
   (-webkit-margin-start: 0) {
   .ion-margin-horizontal,
@@ -665,9 +658,8 @@ sub {
     margin-left: unset;
     margin-right: unset;
     -webkit-margin-start: var(--ion-margin, 16px);
-    margin-inline-start: var(--ion-margin, 16px);
+    margin-inline: var(--ion-margin, 16px) var(--ion-margin, 16px);
     -webkit-margin-end: var(--ion-margin, 16px);
-    margin-inline-end: var(--ion-margin, 16px);
   }
 }
 .ion-float-left,
@@ -696,6 +688,7 @@ sub {
 [dir="rtl"] [float-end] {
   float: left !important;
 }
+
 @media (min-width: 576px) {
   .ion-float-sm-left,
   [float-sm-left] {
@@ -724,6 +717,7 @@ sub {
     float: left !important;
   }
 }
+
 @media (min-width: 768px) {
   .ion-float-md-left,
   [float-md-left] {
@@ -752,6 +746,7 @@ sub {
     float: left !important;
   }
 }
+
 @media (min-width: 992px) {
   .ion-float-lg-left,
   [float-lg-left] {
@@ -780,6 +775,7 @@ sub {
     float: left !important;
   }
 }
+
 @media (min-width: 1200px) {
   .ion-float-xl-left,
   [float-xl-left] {
@@ -840,6 +836,7 @@ sub {
 [text-wrap] {
   white-space: normal !important;
 }
+
 @media (min-width: 576px) {
   .ion-text-sm-center,
   [text-sm-center] {
@@ -874,6 +871,7 @@ sub {
     white-space: normal !important;
   }
 }
+
 @media (min-width: 768px) {
   .ion-text-md-center,
   [text-md-center] {
@@ -908,6 +906,7 @@ sub {
     white-space: normal !important;
   }
 }
+
 @media (min-width: 992px) {
   .ion-text-lg-center,
   [text-lg-center] {
@@ -942,6 +941,7 @@ sub {
     white-space: normal !important;
   }
 }
+
 @media (min-width: 1200px) {
   .ion-text-xl-center,
   [text-xl-center] {
@@ -988,6 +988,7 @@ sub {
 [text-capitalize] {
   text-transform: capitalize !important;
 }
+
 @media (min-width: 576px) {
   .ion-text-sm-uppercase,
   [text-sm-uppercase] {
@@ -1002,6 +1003,7 @@ sub {
     text-transform: capitalize !important;
   }
 }
+
 @media (min-width: 768px) {
   .ion-text-md-uppercase,
   [text-md-uppercase] {
@@ -1016,6 +1018,7 @@ sub {
     text-transform: capitalize !important;
   }
 }
+
 @media (min-width: 992px) {
   .ion-text-lg-uppercase,
   [text-lg-uppercase] {
@@ -1030,6 +1033,7 @@ sub {
     text-transform: capitalize !important;
   }
 }
+
 @media (min-width: 1200px) {
   .ion-text-xl-uppercase,
   [text-xl-uppercase] {
@@ -1148,41 +1152,49 @@ sub {
 .ion-hide-up {
   display: none !important;
 }
+
 @media (max-width: 575px) {
   .ion-hide-down {
     display: none !important;
   }
 }
+
 @media (min-width: 576px) {
   .ion-hide-sm-up {
     display: none !important;
   }
 }
+
 @media (max-width: 767px) {
   .ion-hide-sm-down {
     display: none !important;
   }
 }
+
 @media (min-width: 768px) {
   .ion-hide-md-up {
     display: none !important;
   }
 }
+
 @media (max-width: 991px) {
   .ion-hide-md-down {
     display: none !important;
   }
 }
+
 @media (min-width: 992px) {
   .ion-hide-lg-up {
     display: none !important;
   }
 }
+
 @media (max-width: 1199px) {
   .ion-hide-lg-down {
     display: none !important;
   }
 }
+
 @media (min-width: 1200px) {
   .ion-hide-xl-up {
     display: none !important;
@@ -1219,7 +1231,7 @@ sub {
   --al-select-background-color: #333233;
   --color: var(--al-color-primary);
   --ion-item-color: var(--al-item-color);
-  --ion-list-header-border-color: rgba(199, 197, 199, 0.1);
+  --ion-list-header-border-color: rgb(199 197 199 / 10%);
   --ion-item-border-color: var(--al-item-border-color);
   --ion-text-color-rgb: 255, 255, 255;
   --ion-color-primary-rgb: 255, 255, 255;

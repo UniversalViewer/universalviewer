@@ -1,12 +1,12 @@
 const $ = require("jquery");
-import { Bools, Clipboard, Numbers } from "@edsilv/utils";
+import { Bools, Clipboard, Numbers } from "../../Utils";
 import type { ILabelValuePair } from "@iiif/manifold";
 import type { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 
 export class ShareDialogue<
-  T extends BaseConfig["modules"]["shareDialogue"]
+  T extends BaseConfig["modules"]["shareDialogue"],
 > extends Dialogue<T> {
   copyToClipboardEnabled = true;
 

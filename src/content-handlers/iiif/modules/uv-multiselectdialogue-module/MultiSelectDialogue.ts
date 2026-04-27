@@ -3,8 +3,8 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Mode } from "../../extensions/uv-openseadragon-extension/Mode";
-import { Bools } from "@edsilv/utils";
-import { GalleryComponent } from "@iiif/iiif-gallery-component";
+import { Bools } from "../../Utils";
+import { GalleryComponent } from "../uv-shared-module/GalleryComponent";
 // import { GalleryComponent } from "../../GalleryComponent";
 import { MultiSelectState } from "@iiif/manifold";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
@@ -74,10 +74,11 @@ export class MultiSelectDialogue extends Dialogue<
 
     this.galleryComponent = new GalleryComponent({
       target: <HTMLElement>this.$gallery[0],
+      data: this.data,
     });
 
-    const $selectButton: JQuery = this.$gallery.find("a.select");
-    $selectButton.addClass("btn btn-primary");
+    const $downloadButton: JQuery = this.$gallery.find("a.download");
+    $downloadButton.addClass("btn btn-primary");
 
     this.galleryComponent.on(
       "multiSelectionMade",

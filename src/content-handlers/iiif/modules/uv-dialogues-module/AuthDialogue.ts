@@ -89,9 +89,9 @@ export class AuthDialogue extends Dialogue<
 
     super.open();
 
-    let header: string | null = this.service.getHeader();
-    let description: string | null = this.service.getDescription();
-    let confirmLabel: string | null = this.service.getConfirmLabel();
+    const header: string | null = this.service.getHeader();
+    const description: string | null = this.service.getDescription();
+    const confirmLabel: string | null = this.service.getConfirmLabel();
 
     if (header) {
       this.$title.text(sanitize(header));

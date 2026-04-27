@@ -134,6 +134,7 @@ export default class IIIFContentHandler
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
@@ -142,11 +143,14 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
     this._extensionRegistry[MediaType.MP3] = Extension.AV;
+    this._extensionRegistry[MediaType.MPEG] = Extension.AV;
     this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
     this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
+    this._extensionRegistry[MediaType.PNG] = Extension.OSD;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
+    this._extensionRegistry[MediaType.VIDEO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.WAV] = Extension.AV;
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
@@ -276,7 +280,7 @@ export default class IIIFContentHandler
       data.locales = [];
       data.locales.push(defaultLocale);
     }
-    let config = await extension.loadConfig(
+    const config = await extension.loadConfig(
       data.locales[0].name,
       extension?.type.name
     );
@@ -323,9 +327,7 @@ export default class IIIFContentHandler
         window.trackingLabel = trackingLabel;
       }
 
-      let canvas: Canvas | undefined;
-
-      canvas = helper.getCurrentCanvas();
+      const canvas: Canvas | undefined = helper.getCurrentCanvas();
 
       if (!canvas) {
         that._error(`Canvas ${data.canvasIndex} not found.`);

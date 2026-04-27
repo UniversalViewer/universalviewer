@@ -1,125 +1,123 @@
 .uv {
+  @expandFullEnabled: false;
 
-    @expandFullEnabled: false;
+  .rightPanel {
+    z-index: 10;
 
-    .rightPanel {
+    .top {
+      height: 35px;
+      position: relative;
 
-        z-index: 10;
+      .title {
+        position: absolute;
+        height: 20px;
+        margin-top: 9px;
+        font-size: inherit;
+        font-weight: normal;
+        cursor: pointer;
+        left: 35px;
+        letter-spacing: 0.08rem;
+      }
 
-        .top {
-            height: 35px;
-            position: relative;
+      .collapseButton {
+        position: absolute;
+        background-image: data-uri("../img/arrows_right.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-top: 7px;
+        display: block;
+        left: 5px;
+      }
 
-            .title {
-                position: absolute;
-                height: 20px;
-                margin-top: 9px;
-                font-size: inherit;
-                font-weight: normal;
-                cursor: pointer;
-                left: 35px;
-                letter-spacing: 0.08rem;
-            }
+      .expandFullButton {
+        position: absolute;
+        background-image: data-uri("../img/arrows_left.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-top: 7px;
+        display: none;
+        left: 5px;
+      }
 
-            .collapseButton {
-                position: absolute;
-                background-image: data-uri('../img/arrows_right.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin-top: 7px;
-                display: block;
-                left: 5px;
-            }
-
-            .expandFullButton {
-                position: absolute;
-                background-image: data-uri('../img/arrows_left.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin-top: 7px;
-                display: none;
-                left: 5px;
-            }
-
-            .expandFull();
-        }
-
-        .closed {
-            width: 25px;
-
-            .title {
-                .link-color-decoration(@text-color, none);
-                white-space: nowrap;
-                display: block;
-                margin: 8px 3px 0 5px;
-                cursor: pointer;
-                text-transform: uppercase;
-                .rotate(90deg);
-                letter-spacing: 0.08rem;
-            }
-
-            .expandButton {
-                background-image: data-uri('../img/arrows_left.png');
-                background-repeat: no-repeat;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                margin: 7px 0 0 5px;
-                display: block;
-            }
-        }
-
-        .main {
-            margin-right: @margin-medium-horizontal;
-            margin-bottom: @margin-medium-vertical;
-
-            .transcribed-text {
-                width: 230px;
-                padding: 5px 5px 5px 7px;
-
-                p {
-                    padding: 5px;
-                    margin: 0;
-                }
-
-                .lineAnnotation {
-                    &.current {
-                        color: #000;
-                        @col: rgb(120, 251, 185);
-                        background-color: saturate(@col, 100%);
-                    }
-
-                    &:hover {
-                        color: #000;
-                        @col: lighten(rgb(120, 251, 185), 20%);
-                        background-color: saturate(@col, 80%);
-                    }
-                }
-
-                .label {
-                    color: #9a9a9a;
-                    border-bottom: 1px solid #343434;
-                    margin: 0 10px 10px 0;
-                }
-            }
-        }
+      .expandFull();
     }
 
-    .expandFull() when (@expandFullEnabled =true) {
-        .title {
-            left: 55px;
-        }
+    .closed {
+      width: 25px;
 
-        .collapseButton {
-            left: 30px;
-        }
+      .title {
+        .link-color-decoration(@text-color, none);
+        white-space: nowrap;
+        display: block;
+        margin: 8px 3px 0 5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        .rotate(90deg);
+        letter-spacing: 0.08rem;
+      }
 
-        .expandFullButton {
-            display: block;
-        }
+      .expandButton {
+        background-image: data-uri("../img/arrows_left.png");
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin: 7px 0 0 5px;
+        display: block;
+      }
     }
+
+    .main {
+      margin-right: @margin-medium-horizontal;
+      margin-bottom: @margin-medium-vertical;
+
+      .transcribed-text {
+        width: 230px;
+        padding: 5px 5px 5px 7px;
+
+        p {
+          padding: 5px;
+          margin: 0;
+        }
+
+        .lineAnnotation {
+          &.current {
+            color: #000;
+            @col: rgb(120, 251, 185);
+            background-color: saturate(@col, 100%);
+          }
+
+          &:hover {
+            color: #000;
+            @col: lighten(rgb(120, 251, 185), 20%);
+            background-color: saturate(@col, 80%);
+          }
+        }
+
+        .label {
+          color: #9a9a9a;
+          border-bottom: 1px solid #343434;
+          margin: 0 10px 10px 0;
+        }
+      }
+    }
+  }
+
+  .expandFull() when (@expandFullEnabled =true) {
+    .title {
+      left: 55px;
+    }
+
+    .collapseButton {
+      left: 30px;
+    }
+
+    .expandFullButton {
+      display: block;
+    }
+  }
 }

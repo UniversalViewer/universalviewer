@@ -31,8 +31,7 @@ import {
   Manifest,
   Range,
 } from "manifesto.js";
-import { ViewingHint } from "@iiif/vocabulary/dist-commonjs/";
-import * as KeyCodes from "@edsilv/key-codes";
+import * as KeyCodes from "../../KeyCodes";
 import {
   Bools,
   Documents,
@@ -41,7 +40,7 @@ import {
   StorageType,
   Urls,
   Strings,
-} from "@edsilv/utils";
+} from "../../Utils";
 import { defaultLocale, isVisible } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
@@ -482,14 +481,14 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     config: Object,
     locale: String
   ): Promise<Object> {
-    let loader =
+    const loader =
       this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
-    let localeStrings = (await loader()) || {};
+    const localeStrings = (await loader()) || {};
     let conf = JSON.stringify(config);
 
-    for (let str in localeStrings) {
-      let replaceStr = str.replace("$", "");
-      let re = new RegExp(`\\$${replaceStr}\\b`, "g");
+    for (const str in localeStrings) {
+      const replaceStr = str.replace("$", "");
+      const re = new RegExp(`\\$${replaceStr}\\b`, "g");
       conf = conf.replace(re, localeStrings[str]);
     }
 
@@ -704,16 +703,18 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     this.extensionHost.publish(Events.RELOAD, data);
   }
 
-  isSeeAlsoEnabled(): boolean {
-    return this.data.config!.options.seeAlsoEnabled !== false;
-  }
-
   getShareUrl(): string | null {
     // If not embedded on an external domain (this causes CORS errors when fetching parent url)
     if (!this.data.embedded) {
       // Use the current page URL with hash params
       if (Documents.isInIFrame()) {
-        return (<any>parent.document).location.href;
+        try {
+          return (<any>parent.document).location.href;
+        } catch (e) {
+          // Cross-origin browser security may prevent us from getting the href; in that case,
+          // just disable the share URL.
+          return null;
+        }
       } else {
         return (<any>document).location.href;
       }
@@ -1095,12 +1096,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
       if (this.helper.hasParentCollection()) {
         return true;
       } else if (this.helper.isMultiCanvas()) {
-        const viewingHint: ViewingHint | null = this.helper.getViewingHint();
-
-        if (
-          !viewingHint ||
-          (viewingHint && viewingHint !== ViewingHint.CONTINUOUS)
-        ) {
+        if (!this.helper.isContinuous()) {
           return true;
         }
       }

@@ -6,7 +6,7 @@ import { Orientation } from "./Orientation";
 import { Position } from "../uv-shared-module/Position";
 import { Units } from "./Units";
 import { ControlsType } from "./ControlsType";
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import {
   IExternalResource,
   Canvas,
@@ -231,7 +231,7 @@ export class AlephCenterPanel extends CenterPanel<
 
   async openMedia(resources: IExternalResource[]) {
     this.extension.getExternalResources(resources).then(async () => {
-      let canvas: Canvas = this.extension.helper.getCurrentCanvas();
+      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
 
       const annotations: Annotation[] = canvas.getContent();
 

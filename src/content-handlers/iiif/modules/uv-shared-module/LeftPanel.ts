@@ -1,10 +1,10 @@
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 
 export class LeftPanel<
-  T extends BaseConfig["modules"]["leftPanel"]
+  T extends BaseConfig["modules"]["leftPanel"],
 > extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
     super($element, false, false);

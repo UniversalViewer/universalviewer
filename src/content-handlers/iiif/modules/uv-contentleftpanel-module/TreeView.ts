@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "../uv-shared-module/BaseView";
 import { TreeNode } from "manifesto.js";
-import { TreeComponent } from "@iiif/iiif-tree-component";
+import { TreeComponent } from "../uv-shared-module/TreeComponent";
 import { ContentLeftPanel } from "./ContentLeftPanel";
 
 export class TreeView extends BaseView<ContentLeftPanel> {

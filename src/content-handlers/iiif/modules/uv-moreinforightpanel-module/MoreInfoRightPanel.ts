@@ -2,10 +2,13 @@ const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { RightPanel } from "../uv-shared-module/RightPanel";
 import { sanitize } from "../../../../Utils";
-import { Bools, Urls } from "@edsilv/utils";
+import { Bools, Urls } from "../../Utils";
 import { Range } from "manifesto.js";
 import { UriLabeller } from "@iiif/manifold";
-import { MetadataComponent, LimitType } from "@iiif/iiif-metadata-component";
+import {
+  MetadataComponent,
+  LimitType,
+} from "../uv-shared-module/MetadataComponent";
 import { MoreInfoRightPanel as MoreInfoRightPanelConfig } from "../../BaseConfig";
 
 export class MoreInfoRightPanel extends RightPanel<MoreInfoRightPanelConfig> {
