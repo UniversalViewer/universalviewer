@@ -1,6 +1,7 @@
 test.skip("Configuration options", () => {});
 
 const puppeteer = require("puppeteer");
+const { BASE_URL } = require("../testBaseUrl");
 
 describe("Universal Viewer", () => {
   let browser;
@@ -75,7 +76,7 @@ describe("Universal Viewer", () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto("http://localhost:4444");
+    await page.goto(BASE_URL);
   });
 
   afterAll(async () => {
@@ -193,7 +194,7 @@ describe("Universal Viewer", () => {
 
   describe("viewer controls", () => {
     afterEach(async () => {
-      await page.goto("http://localhost:4444");
+      await page.goto(BASE_URL);
     });
 
     // can navigate back and forth
@@ -320,6 +321,80 @@ describe("Universal Viewer", () => {
         );
       });
       expect(isOverlayVisible).toBe(false);
+    });
+  });
+
+  describe("content panel", () => {
+    const contentExpandBtn = "button.expandButton";
+    const contentCollapseBtn = "button.collapseButton";
+    const contentTabs = "div.leftPanel";
+    const contentIndexTab = ".index.tab";
+    const contentIndexActiveTab = ".index.tab.on";
+    const contentThumbnailsTab = ".thumbs.tab";
+    const contentThumbnailsActiveTab = ".thumbs.tab.on";
+
+    afterEach(async () => {
+      await page.goto(BASE_URL);
+    });
+    
+    // switch content tabs and collapse content panel
+    it("can switch content tabs", async () => {
+      await page.waitForSelector(contentThumbnailsActiveTab, { visible: true });
+      
+      await page.click(contentIndexTab);
+      await page.waitForSelector(contentIndexActiveTab, { visible: true });
+
+      expect(
+        await page.$eval(contentIndexTab, (el) =>
+        el.classList.contains("on")
+      )
+    ).toBe(true);
+
+      expect(
+        await page.$eval(contentThumbnailsTab, (el) =>
+        el.classList.contains("on")
+      )
+    ).toBe(false);
+    });
+    
+    it("can collapse content", async () => {
+      await page.waitForSelector(contentTabs, { visible: true });
+      await page.waitForSelector(contentCollapseBtn, { visible: true });
+
+      await page.click(contentCollapseBtn);
+      
+      await page.waitForSelector(contentExpandBtn, { visible: true });
+      await page.waitForSelector(".leftPanel .tabs", { hidden: true });
+      });
+  });
+
+  describe("more information panel", () => {
+    const moreInfoExpandBtn = ".rightPanel button.expandButton";
+    const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
+    const moreInfoHeader = ".rightPanel div.header";
+
+    afterEach(async () => {
+      await page.goto(BASE_URL);
+    });
+
+    it("can expand and collapse moreInformation panel", async () => {
+
+      await page.waitForSelector(moreInfoExpandBtn, { visible: true });
+
+      await page.click(moreInfoExpandBtn);
+
+      // verify expanded state and header
+      await page.waitForSelector(moreInfoCollapseBtn, { visible: true });
+      await page.waitForSelector(moreInfoHeader, { visible: true });
+
+      const headers = await page.$$eval(moreInfoHeader, (els) => 
+        els.map((el) => el.textContent.trim()));
+      
+      expect(headers).toContain("About the item");
+
+      await page.click(moreInfoCollapseBtn);
+      await page.waitForSelector(moreInfoExpandBtn, { visible: true });
+      await page.waitForSelector(moreInfoHeader, { hidden: true });
     });
   });
 });
