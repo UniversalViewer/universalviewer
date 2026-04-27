@@ -29,6 +29,8 @@ interface AnnotationOverlayRect extends OpenSeadragon.Rect {
   canvasIndex: number;
   resultIndex: number;
   chars: string;
+  width: number;
+  height: number;
 }
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
