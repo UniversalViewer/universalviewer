@@ -195,6 +195,7 @@ describe("Universal Viewer", () => {
   describe("viewer controls", () => {
     afterEach(async () => {
       await page.goto(BASE_URL);
+      await page.goto("http://localhost:4444");
     });
 
     // can navigate back and forth

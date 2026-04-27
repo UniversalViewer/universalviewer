@@ -83,6 +83,14 @@
         max-width: 100%;
       }
 
+      .thumbsView .thumbs .thumb:focus {
+        outline: none;
+      }
+
+      .thumbsView .thumbs .thumb:focus-visible {
+        border: 1px solid @link-color;
+      }
+
       .thumbsView .thumbs .thumb .info .label {
         float: left;
         overflow-x: visible;
@@ -113,7 +121,10 @@
       }
 
       .thumbsView .thumbs .thumb.oneCol {
-        margin: 0 0 7px;
+        display: grid;
+        grid-template-columns: 93px 1fr;
+        gap: 1px;
+        align-items: start;
       }
 
       .thumbsView .thumbs .thumb.oneCol .label {

@@ -209,6 +209,7 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
+        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -240,7 +241,9 @@
         "close": "$close",
         "closeAttribution": "$closeAttribution",
         "next": "$next",
-        "previous": "$previous"
+        "previous": "$previous",
+        "zoomIn": "$zoomIn",
+        "zoomOut": "$zoomOut"
       }
     },
     "resourcesLeftPanel": {

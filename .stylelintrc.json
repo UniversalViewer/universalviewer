@@ -5,6 +5,7 @@
   "rules": {
     "block-no-empty": true,
     "at-rule-no-unknown": null,
+    "color-function-notation": null,
     "color-no-invalid-hex": true,
     "less/color-no-invalid-hex": null,
     "rule-empty-line-before": null,

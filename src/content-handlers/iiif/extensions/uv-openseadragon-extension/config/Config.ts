@@ -34,7 +34,7 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
-  select: string;
+  download: string;
   selectAll: string;
   title: string;
 };
@@ -137,6 +137,7 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
+  mediaViewer: string;
   nextImage: string;
   previousImage: string;
   rotateRight: string;
@@ -222,6 +223,8 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
+  /** Minimum width of the downloadable image */
+  minImageWidth: number;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };
