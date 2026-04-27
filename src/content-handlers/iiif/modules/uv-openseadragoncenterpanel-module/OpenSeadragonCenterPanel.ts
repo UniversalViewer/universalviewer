@@ -68,7 +68,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
   $choiceSwitchButton: JQuery;
-  $choiceSwitchMenu: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -777,14 +776,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.onAccessibleClick(this.$choiceSwitchButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
-  }
-
-  updateChoiceSwitch(choiceIndex: number): void {
-    if (!this.$choiceSwitchMenu) return;
-    this.$choiceSwitchMenu.find('input[type="radio"]').prop("checked", false);
-    this.$choiceSwitchMenu
-      .find(`input[value="${choiceIndex}"]`)
-      .prop("checked", true);
   }
 
   async getGirderTileSource(): Promise<any> {
