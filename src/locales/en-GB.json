@@ -161,5 +161,6 @@
   "$contrast": "Contrast",
   "$saturation": "Saturation",
   "$reset": "Reset",
-  "$remember": "Remember my settings"
+  "$remember": "Remember my settings",
+  "$layers": "Layers"
 }

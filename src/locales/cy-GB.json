@@ -159,5 +159,6 @@
   "$play": "Chwarae",
   "$brightness": "Disgleirdeb",
   "$contrast": "Cyferbyniad",
-  "$saturation": "Dirlawnder"
+  "$saturation": "Dirlawnder",
+  "$layers": "Haenau"
 }

@@ -156,5 +156,6 @@
   "$mute": "Wycisz",
   "$pause": "Pauza",
   "$play": "Odtwarzaj",
-  "$rights": "Prawa"
+  "$rights": "Prawa",
+  "$layers": "Warstwy"
 }

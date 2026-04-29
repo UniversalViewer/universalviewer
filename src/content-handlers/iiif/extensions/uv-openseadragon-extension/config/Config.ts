@@ -145,6 +145,7 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   adjustImage: string;
+  layers: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
