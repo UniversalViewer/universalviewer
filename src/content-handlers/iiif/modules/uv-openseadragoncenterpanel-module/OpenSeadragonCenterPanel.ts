@@ -940,7 +940,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                 let id = services[0].id;
                 if (!id.endsWith("/")) id += "/";
                 tileSource = id + "info.json";
-                console.log("choice tileSource:", tileSource);
               } else {
                 tileSource = {
                   type: "image",
