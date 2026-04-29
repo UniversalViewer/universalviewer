@@ -55,7 +55,7 @@ import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 import { AdjustImageDialogue } from "../../modules/uv-dialogues-module/AdjustImageDialogue";
-import { ChoiceSwitchDialogue } from "../../modules/uv-dialogues-module/ChoiceSwitchDialogue";
+import { ChoiceSwitchDialogue } from "./ChoiceSwitchDialogue";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
