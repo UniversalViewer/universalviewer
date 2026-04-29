@@ -765,10 +765,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   createChoiceSwitch(): void {
     // check for a choice on either of the displayed canvases if in 2-up view
     const indices = this.extension.getPagedIndices();
-    const hasChoices = indices.some((index) => {
-      const canvas = this.extension.helper.getCanvasByIndex(index);
-      return canvas.getChoices().length > 0;
-    });
+    const hasChoices = this.indicesIncludeChoices(indices);
 
     if (!hasChoices) return;
 
@@ -1849,15 +1846,18 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       : this.config.options.controlsFadeLength || 250;
   }
 
+  indicesIncludeChoices(indices: number[]): boolean {
+    return indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+  }
+
   updateChoiceSwitchVisibility(): void {
     if (!this.$choiceSwitchButton) return;
 
     const indices = this.extension.getPagedIndices();
-    const hasChoices = indices.some((index) => {
-      const canvas = this.extension.helper.getCanvasByIndex(index);
-      const choices = canvas.getChoices().length;
-      return choices > 0;
-    });
+    const hasChoices = this.indicesIncludeChoices(indices);
 
     if (hasChoices) {
       this.$choiceSwitchButton.css("visibility", "visible");
