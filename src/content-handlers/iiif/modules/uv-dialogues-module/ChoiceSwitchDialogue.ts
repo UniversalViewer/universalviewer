@@ -7,7 +7,7 @@ import { Shell } from "../uv-shared-module/Shell";
 export class ChoiceSwitchDialogue extends Dialogue<
   BaseConfig["modules"]["choiceSwitchDialogue"]
 > {
-  $choiceList: JQuery;
+  $choiceList!: JQuery;
   shell: Shell;
 
   constructor($element: JQuery, shell: Shell) {
@@ -17,51 +17,85 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
   create(): void {
     this.setConfig("choiceSwitchDialogue");
-
     super.create();
 
     this.extensionHost.subscribe(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE, () => {
       this.open();
     });
 
-    this.$choiceList = $(
-      '<div class="choiceList" role="radiogroup" aria-label="Image choices"></div>'
-    );
+    this.$choiceList = $('<div class="choiceList"></div>');
     this.$content.append(this.$choiceList);
-
     this.$closeButton.hide();
-
     this.$element.hide();
   }
 
   open(): void {
     this.$choiceList.empty();
 
-    const choices = (<OpenSeadragonExtension>(
-      this.extension
-    )).helper.getChoices();
+    const extension = <OpenSeadragonExtension>this.extension;
+    const indices = extension.getPagedIndices();
+    const isMultiCanvas = indices.length > 1;
 
-    choices.forEach((choice, index) => {
-      const label = choice.getLabel().getValue() ?? `Choice ${index + 1}`;
-      const isActive =
-        index === (<OpenSeadragonExtension>this.extension).helper.choiceIndex;
+    // we can use the OSD world as the source of the current view state
+    const world = extension.centerPanel.viewer.world;
 
-      const $item = $(`
-        <label class="choiceItem">
-          <input type="radio" name="choice" value="${index}" ${isActive ? "checked" : ""} />
-          ${label}
-        </label>
-      `);
+    indices.forEach((canvasIndex) => {
+      const canvas = extension.helper.getCanvasByIndex(canvasIndex);
+      const choices = canvas.getChoices();
 
-      $item.find("input").on("change", () => {
-        this.extensionHost.publish(IIIFEvents.CHOICE_CHANGE, index);
+      if (!choices.length) return;
+
+      const isFirstCanvas = indices.indexOf(canvasIndex) === 0;
+      const worldOffset = isFirstCanvas
+        ? 0
+        : extension.helper.getCanvasByIndex(indices[0]).getChoices().length;
+
+      let currentChoiceIndex = 0;
+      for (let c = 0; c < choices.length; c++) {
+        const item = world.getItemAt(worldOffset + c);
+        if (item && item.getOpacity() === 1) {
+          currentChoiceIndex = c;
+          break;
+        }
+      }
+
+      const canvasLabel =
+        canvas.getLabel().getValue() || `Canvas ${canvasIndex + 1}`;
+
+      if (isMultiCanvas) {
+        const $heading = $(`<div class="choiceHeading">${canvasLabel}</div>`);
+        this.$choiceList.append($heading);
+      }
+
+      const $group = $(
+        `<div role="radiogroup" aria-label="${canvasLabel}"></div>`
+      );
+
+      choices.forEach((choice, index) => {
+        const label = choice.getLabel().getValue() || `Choice ${index + 1}`;
+        const isActive = index === currentChoiceIndex;
+
+        const $item = $(`
+          <label class="choiceItem">
+            <input type="radio" name="choice-${canvas.id}" value="${index}" ${isActive ? "checked" : ""} />
+            ${label}
+          </label>
+        `);
+
+        $item.find("input").on("change", () => {
+          this.extensionHost.publish(IIIFEvents.CHOICE_CHANGE, {
+            canvasId: canvas.id,
+            choiceIndex: index,
+          });
+        });
+
+        $group.append($item);
       });
 
-      this.$choiceList.append($item);
+      this.$choiceList.append($group);
     });
 
-    const $button = (<OpenSeadragonExtension>this.extension).centerPanel
-      .$choiceSwitchButton;
+    const $button = extension.centerPanel.$choiceSwitchButton;
     super.open($button[0]);
     this.shell.$overlays.css("background", "none");
   }

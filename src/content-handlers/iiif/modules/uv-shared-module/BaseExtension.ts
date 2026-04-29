@@ -463,12 +463,17 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
 
     this.extensionHost.subscribe(
       IIIFEvents.CHOICE_CHANGE,
-      (choiceIndex: number) => {
-        this.helper.choiceIndex = choiceIndex;
-        this.extensionHost.publish(
-          OpenSeadragonExtensionEvents.CHOICE_CHANGE,
-          choiceIndex
-        );
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.CHOICE_CHANGE, {
+          canvasId,
+          choiceIndex,
+        });
       }
     );
 

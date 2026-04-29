@@ -180,28 +180,32 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.CHOICE_CHANGE,
-      (choiceIndex: number) => {
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
         this.whenCreated(() => {
           const world = this.viewer.world;
           const indices = this.extension.getPagedIndices();
-
-          // this is to sync the OSD world item with the canvas choice in situations where the canvases have a different number of choices
 
           let worldIndex = 0;
           indices.forEach((index) => {
             const canvas = this.extension.helper.getCanvasByIndex(index);
             const numChoices = canvas.getChoices().length;
 
-            // fall back to first choice if the choice index for one of the canvases is out of range
-            const effectiveChoiceIndex =
-              choiceIndex < numChoices ? choiceIndex : 0;
-
-            for (let c = 0; c < numChoices; c++) {
-              const item = world.getItemAt(worldIndex);
-              if (item) {
-                item.setOpacity(c === effectiveChoiceIndex ? 1 : 0);
+            if (canvas.id === canvasId) {
+              for (let c = 0; c < numChoices; c++) {
+                const item = world.getItemAt(worldIndex);
+                if (item) {
+                  item.setOpacity(c === choiceIndex ? 1 : 0);
+                }
+                worldIndex++;
               }
-              worldIndex++;
+            } else {
+              worldIndex += numChoices;
             }
           });
         });
@@ -905,7 +909,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
               x: data.x,
               y: data.y,
               width: data.width,
-              opacity: index === this.extension.helper.choiceIndex ? 1 : 0,
+              opacity: index === 0 ? 1 : 0,
               success: (item: any) => {
                 this.items.push(item);
                 loadedItems++;

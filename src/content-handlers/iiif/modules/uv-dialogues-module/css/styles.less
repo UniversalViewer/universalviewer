@@ -444,14 +444,27 @@
         .content {
           padding: 8px;
 
-          .heading {
-            font-size: 14px;
-            margin: 0 0 8px;
-            padding: 0 0 6px;
-            border-bottom: 1px solid #eee;
-          }
-
           .choiceList {
+            .choiceHeading {
+              font-size: 12px;
+              font-weight: bold;
+              padding: 6px 0 4px;
+              border-bottom: 1px solid #eee;
+              margin-bottom: 4px;
+
+              &:first-child {
+                padding-top: 0;
+              }
+            }
+
+            [role="radiogroup"] {
+              margin-bottom: 8px;
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+
             .choiceItem {
               display: block;
               cursor: pointer;
