@@ -505,6 +505,22 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.closeActiveDialogue();
     });
 
+    this.extensionHost.subscribe(
+      IIIFEvents.CHOICE_CHANGE,
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.CHOICE_CHANGE, {
+          canvasId,
+          choiceIndex,
+        });
+      }
+    );
+
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
     //     this.fire(Events.VIEW_PAGE, index);
     //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [index]);
