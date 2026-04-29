@@ -34,7 +34,7 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
     const extension = <OpenSeadragonExtension>this.extension;
     const indices = extension.getPagedIndices();
-    const isMultiCanvas = indices.length > 1;
+    const isTwoUp = indices.length > 1;
 
     // we can use the OSD world as the source of the current view state
     const world = extension.centerPanel.viewer.world;
@@ -48,6 +48,8 @@ export class ChoiceSwitchDialogue extends Dialogue<
       const isFirstCanvas = indices.indexOf(canvasIndex) === 0;
 
       // this is to update the radio buttons to reflect the current state of the OSD world
+
+      // a canvas with "zero" choices has to be counted as one
       const getWorldItemCount = (canvas) => {
         const numChoices = canvas.getChoices().length;
         return numChoices === 0 ? 1 : numChoices;
@@ -69,7 +71,7 @@ export class ChoiceSwitchDialogue extends Dialogue<
       const canvasLabel =
         canvas.getLabel().getValue() || `Canvas ${canvasIndex + 1}`;
 
-      if (isMultiCanvas) {
+      if (isTwoUp) {
         const $heading = $(`<div class="choiceHeading">${canvasLabel}</div>`);
         this.$choiceList.append($heading);
       }

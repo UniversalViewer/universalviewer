@@ -778,8 +778,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
     this.$choiceSwitchButton.attr("tabindex", 0);
 
-    this.$choiceSwitchButton.insertAfter(this.$rotateButton);
-
+    if (this.showAdjustImageButton && this.$adjustImageButton) {
+      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
+    } else {
+      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
+    }
     this.onAccessibleClick(this.$choiceSwitchButton, () => {
       this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
@@ -1162,6 +1165,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     }
 
     this.isFirstLoad = false;
+
+    this.updateChoiceSwitchVisibility();
   }
 
   private resizeNavigatorForContinuous(): void {
@@ -1842,5 +1847,22 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
+  }
+
+  updateChoiceSwitchVisibility(): void {
+    if (!this.$choiceSwitchButton) return;
+
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      const choices = canvas.getChoices().length;
+      return choices > 0;
+    });
+
+    if (hasChoices) {
+      this.$choiceSwitchButton.css("visibility", "visible");
+    } else {
+      this.$choiceSwitchButton.css("visibility", "hidden");
+    }
   }
 }
