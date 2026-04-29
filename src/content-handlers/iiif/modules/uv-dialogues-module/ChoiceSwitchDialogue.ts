@@ -31,11 +31,12 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
   open(): void {
     super.open(this.$anchor[0] as HTMLElement);
-    this.shell.$overlays.css("background", "none");
+    this.shell.$overlays.css({ background: "none" });
   }
 
   close(): void {
-    this.shell.$overlays.css("background", "");
+    this.shell.$overlays.off("click.choiceSwitch");
+    this.shell.$overlays.css({ background: "" });
     super.close();
   }
 

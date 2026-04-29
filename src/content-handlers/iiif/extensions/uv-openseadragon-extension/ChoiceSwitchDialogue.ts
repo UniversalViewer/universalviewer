@@ -81,6 +81,7 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
     this.$anchor = (<OpenSeadragonExtension>(
       this.extension
     )).centerPanel.$choiceSwitchButton;
+
     super.open();
   }
 }
