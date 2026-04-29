@@ -196,6 +196,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             const canvas = this.extension.helper.getCanvasByIndex(index);
             const numChoices = canvas.getChoices().length;
 
+            // need to count a canvas with "zero" choices as 1
+            const worldItemCount = numChoices === 0 ? 1 : numChoices;
+
             if (canvas.id === canvasId) {
               for (let c = 0; c < numChoices; c++) {
                 const item = world.getItemAt(worldIndex);
@@ -205,7 +208,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                 worldIndex++;
               }
             } else {
-              worldIndex += numChoices;
+              worldIndex += worldItemCount;
             }
           });
         });
@@ -887,42 +890,85 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         let loadedItems = 0;
 
         positioned.forEach((data: any) => {
-          data.choices.forEach((choice: any, index: number) => {
-            const services = choice.getServices();
-            let tileSource: any;
+          if (data.choices.length === 0) {
+            // no choices on this canvas, load as regular image
+            const content = data.canvas.getContent();
+            if (content.length) {
+              const body = content[0].getBody();
+              if (body.length) {
+                const services = body[0].getServices();
+                let tileSource: any;
 
-            if (services.length) {
-              let id = services[0].id;
-              if (!id.endsWith("/")) id += "/";
-              tileSource = id + "info.json";
-              console.log("choice tileSource:", tileSource);
-            } else {
-              tileSource = {
-                type: "image",
-                url: choice.id,
-                buildPyramid: false,
-              };
-            }
-
-            this.viewer.addTiledImage({
-              tileSource: tileSource,
-              x: data.x,
-              y: data.y,
-              width: data.width,
-              opacity: index === 0 ? 1 : 0,
-              success: (item: any) => {
-                this.items.push(item);
-                loadedItems++;
-                if (loadedItems === totalItems) {
-                  clearTimeout(spinnerTimeout);
-                  this.$spinner.hide();
-                  this.openPagesHandler();
-                  this.resize();
-                  this.goHome();
+                if (services.length) {
+                  let id = services[0].id;
+                  if (!id.endsWith("/")) id += "/";
+                  tileSource = id + "info.json";
+                } else {
+                  tileSource = {
+                    type: "image",
+                    url: body[0].id,
+                    buildPyramid: false,
+                  };
                 }
-              },
+
+                totalItems++;
+                this.viewer.addTiledImage({
+                  tileSource,
+                  x: data.x,
+                  y: data.y,
+                  width: data.width,
+                  success: (item: any) => {
+                    this.items.push(item);
+                    loadedItems++;
+                    if (loadedItems === totalItems) {
+                      clearTimeout(spinnerTimeout);
+                      this.$spinner.hide();
+                      this.openPagesHandler();
+                      this.resize();
+                      this.goHome();
+                    }
+                  },
+                });
+              }
+            }
+          } else {
+            data.choices.forEach((choice: any, index: number) => {
+              const services = choice.getServices();
+              let tileSource: any;
+
+              if (services.length) {
+                let id = services[0].id;
+                if (!id.endsWith("/")) id += "/";
+                tileSource = id + "info.json";
+                console.log("choice tileSource:", tileSource);
+              } else {
+                tileSource = {
+                  type: "image",
+                  url: choice.id,
+                  buildPyramid: false,
+                };
+              }
+
+              this.viewer.addTiledImage({
+                tileSource: tileSource,
+                x: data.x,
+                y: data.y,
+                width: data.width,
+                opacity: index === 0 ? 1 : 0,
+                success: (item: any) => {
+                  this.items.push(item);
+                  loadedItems++;
+                  if (loadedItems === totalItems) {
+                    clearTimeout(spinnerTimeout);
+                    this.$spinner.hide();
+                    this.openPagesHandler();
+                    this.resize();
+                    this.goHome();
+                  }
+                },
+              });
             });
-          });
+          }
         });
       } catch {
         // do nothing

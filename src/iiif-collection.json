@@ -1181,7 +1181,7 @@
           "visible": true
         },
         {
-          "@id": "https://gist.githubusercontent.com/jamesmisson/1dd6cf715c0b28c12f3c5ab061bc0b48/raw/05931adc704d158cec450f0c6752e44ab419706f/choice_test_manifest2.json",
+          "@id": "https://gist.githubusercontent.com/jamesmisson/1dd6cf715c0b28c12f3c5ab061bc0b48/raw/29e41b21546ad15c360eac320333e63a6638af0d/choice_test_manifest2.json",
           "@type": "sc:Manifest",
           "label": "Paged choice combinations",
           "visible": true

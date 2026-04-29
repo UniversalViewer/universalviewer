@@ -46,9 +46,16 @@ export class ChoiceSwitchDialogue extends Dialogue<
       if (!choices.length) return;
 
       const isFirstCanvas = indices.indexOf(canvasIndex) === 0;
+
+      // this is to update the radio buttons to reflect the current state of the OSD world
+      const getWorldItemCount = (canvas) => {
+        const numChoices = canvas.getChoices().length;
+        return numChoices === 0 ? 1 : numChoices;
+      };
+
       const worldOffset = isFirstCanvas
         ? 0
-        : extension.helper.getCanvasByIndex(indices[0]).getChoices().length;
+        : getWorldItemCount(extension.helper.getCanvasByIndex(indices[0]));
 
       let currentChoiceIndex = 0;
       for (let c = 0; c < choices.length; c++) {
