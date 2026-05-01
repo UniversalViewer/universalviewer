@@ -351,9 +351,7 @@ describe("Universal Viewer", () => {
       ).toBe(true);
 
       expect(
-        await page.$eval(contentThumbnailsTab, (el) =>
-          el.classList.contains("on")
-        )
+        await page.$eval(contentThumbnailsTab, (el) => el.classList.contains("on"))
       ).toBe(false);
     });
 
