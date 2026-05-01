@@ -1,4 +1,4 @@
-const { BASE_URL } = require("../testBaseUrl");
+const { BASE_URL } = require("../scripts/testBaseUrl");
 
 describe("Configuration options", () => {
   describe("thumb cache invalidation", () => {
