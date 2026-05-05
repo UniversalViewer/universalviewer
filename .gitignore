@@ -34,6 +34,8 @@ results
 npm-debug.log
 node_modules
 
+testBaseUrl.local.json
+
 #################
 ## JavaScript
 #################
@@ -51,6 +53,7 @@ src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
 !src/extensions/*/config.js
 !docs/assets/*.js
+!testBaseUrl.js
 
 #################
 ## Misc
