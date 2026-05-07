@@ -33,10 +33,20 @@ export class ChoiceSwitchDialogue extends Dialogue<
     super.open(this.$anchor[0] as HTMLElement);
     this.shell.$overlays.css({ background: "none" });
     $(".viewer").addClass("choice-dialogue-open");
+
+    // enable scroll to zoom while the menu is open
+    this.shell.$overlays.on("wheel.choiceSwitch", (e) => {
+      e.preventDefault();
+      const osdCanvas = $(".openseadragon-canvas canvas")[0];
+      if (osdCanvas) {
+        osdCanvas.dispatchEvent(new WheelEvent("wheel", e.originalEvent));
+      }
+    });
   }
 
   close(): void {
     this.shell.$overlays.off("click.choiceSwitch");
+    this.shell.$overlays.off("wheel.choiceSwitch");
     this.shell.$overlays.css({ background: "" });
     $(".viewer").removeClass("choice-dialogue-open");
     super.close();
