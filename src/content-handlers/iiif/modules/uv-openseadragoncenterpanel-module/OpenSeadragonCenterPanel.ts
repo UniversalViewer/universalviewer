@@ -554,6 +554,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$element.on("mouseleave", () => {
       if (!this.controlsVisible) return;
+
+      // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+      if ($(".overlay:visible").length) return;
+
       this.controlsVisible = false;
       this.viewer.setControlsEnabled(false);
     });
@@ -571,6 +575,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         if (this.$nextButton.ismouseover()) {
           return;
         }
+        // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+        if ($(".overlay:visible").length) return;
         if (!this.$viewer.find(".navigator").ismouseover()) {
           if (!this.controlsVisible) return;
           this.controlsVisible = false;
@@ -654,6 +660,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     );
 
     this.createChoiceSwitch();
+
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+      this.$viewer.removeClass("dialogue-open");
+    });
   }
 
   createNavigationButtons() {

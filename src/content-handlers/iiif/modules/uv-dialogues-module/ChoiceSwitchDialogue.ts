@@ -32,11 +32,13 @@ export class ChoiceSwitchDialogue extends Dialogue<
   open(): void {
     super.open(this.$anchor[0] as HTMLElement);
     this.shell.$overlays.css({ background: "none" });
+    $(".viewer").addClass("choice-dialogue-open");
   }
 
   close(): void {
     this.shell.$overlays.off("click.choiceSwitch");
     this.shell.$overlays.css({ background: "" });
+    $(".viewer").removeClass("choice-dialogue-open");
     super.close();
   }
 
