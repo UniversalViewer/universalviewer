@@ -980,7 +980,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           }
         });
       } catch {
-        // do nothing
+        console.error;
       }
       return;
     }
@@ -1868,10 +1868,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const indices = this.extension.getPagedIndices();
     const hasChoices = this.indicesIncludeChoices(indices);
 
-    if (hasChoices) {
-      this.$choiceSwitchButton.css("visibility", "visible");
-    } else {
-      this.$choiceSwitchButton.css("visibility", "hidden");
-    }
+    this.$choiceSwitchButton.css(
+      "visibility",
+      hasChoices ? "visible" : "hidden"
+    );
   }
 }
