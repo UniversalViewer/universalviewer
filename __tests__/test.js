@@ -3,6 +3,20 @@ test.skip("Configuration options", () => {});
 const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
+// Cookbook manifest for viewer control tests
+const COOKBOOK_MANIFEST =
+  "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
+
+// PDF manifest for PDF-specific behaviour
+const PDF_MANIFEST =
+  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
+
+const viewerUrl = (manifestUrl) => {
+  const separator = BASE_URL.includes("?") ? "&" : "?";
+
+  return `${BASE_URL}${separator}manifest=${encodeURIComponent(manifestUrl)}`;
+};
+
 describe("Universal Viewer", () => {
   let browser;
   let page;
@@ -85,6 +99,7 @@ describe("Universal Viewer", () => {
     await browser.close();
   });
 
+  // Default manifest test
   it("has the correct page title", async () => {
     const title = await page.title();
     expect(title).toBe("Universal Viewer Examples");
@@ -194,9 +209,10 @@ describe("Universal Viewer", () => {
     expect(isSettingsButtonVisible).toBe(true);
   });
 
+  // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
-    afterEach(async () => {
-      await page.goto(BASE_URL);
+    beforeEach(async () => {
+      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
     });
 
     // can navigate back and forth
@@ -335,8 +351,8 @@ describe("Universal Viewer", () => {
     const contentThumbnailsTab = ".thumbs.tab";
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
-    afterEach(async () => {
-      await page.goto(BASE_URL);
+    beforeEach(async () => {
+      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
     });
 
     // switch content tabs and collapse content panel
@@ -351,7 +367,9 @@ describe("Universal Viewer", () => {
       ).toBe(true);
 
       expect(
-        await page.$eval(contentThumbnailsTab, (el) => el.classList.contains("on"))
+        await page.$eval(contentThumbnailsTab, (el) =>
+          el.classList.contains("on")
+        )
       ).toBe(false);
     });
 
@@ -371,8 +389,8 @@ describe("Universal Viewer", () => {
     const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
     const moreInfoHeader = ".rightPanel div.header";
 
-    afterEach(async () => {
-      await page.goto(BASE_URL);
+    beforeEach(async () => {
+      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
     });
 
     it("can expand and collapse moreInformation panel", async () => {
@@ -392,6 +410,26 @@ describe("Universal Viewer", () => {
       await page.click(moreInfoCollapseBtn);
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
       await page.waitForSelector(moreInfoHeader, { hidden: true });
+    });
+  });
+
+  // PDF MANIFEST TEST
+  describe("PDF manifest", () => {
+    beforeEach(async () => {
+      await page.goto(viewerUrl(PDF_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+    });
+
+    it("loads PDF manifest successfully", async () => {
+      expect(page.url()).toContain(encodeURIComponent(PDF_MANIFEST));
+
+      await page.waitForSelector(".uv", { visible: true });
+
+      const pageText = await page.evaluate(() => document.body.innerText);
+
+      expect(pageText).not.toContain("Unable to load");
+      expect(pageText).not.toContain("Error loading");
     });
   });
 });
