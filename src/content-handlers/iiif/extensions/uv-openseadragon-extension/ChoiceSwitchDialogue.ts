@@ -42,8 +42,10 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
         }
       }
 
+      const locale = extension.getLocale();
+
       const canvasLabel =
-        canvas.getLabel().getValue() || `Canvas ${canvasIndex + 1}`;
+        canvas.getLabel().getValue(locale) || `Canvas ${canvasIndex + 1}`;
 
       if (isTwoUp) {
         const $heading = $(`<div class="choiceHeading">${canvasLabel}</div>`);
@@ -55,7 +57,8 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
       );
 
       choices.forEach((choice, index) => {
-        const label = choice.getLabel().getValue() || `Choice ${index + 1}`;
+        const label =
+          choice.getLabel().getValue(locale) || `Choice ${index + 1}`;
         const isActive = index === currentChoiceIndex;
 
         const $item = $(`
