@@ -113,8 +113,6 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       (canvasIndex: number) => {
         this.previousAnnotationRect = null;
         this.currentAnnotationRect = null;
-
-        // JM todo: make config option for preserving choice over canvas changes
         this.changeCanvas(canvasIndex);
       }
     );
