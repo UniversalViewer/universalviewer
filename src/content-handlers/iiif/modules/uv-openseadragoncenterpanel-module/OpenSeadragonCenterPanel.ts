@@ -979,8 +979,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             });
           }
         });
-      } catch {
-        console.error;
+      } catch (e) {
+        console.error(e);
       }
       return;
     }
