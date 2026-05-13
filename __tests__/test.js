@@ -291,7 +291,7 @@ describe("Universal Viewer", () => {
       expect(zoomOutXywh).not.toBeNull();
       expect(zoomOutXywh).not.toBe(zoomInXywh);
       expect(zoomOutXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
-    }, 10000);
+    });
 
     // rotate image
     it("can rotate image", async () => {
