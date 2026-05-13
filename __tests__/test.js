@@ -211,7 +211,10 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST));
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
+      { 
+        waitUntil: "domcontentloaded"
+      });
     });
 
     // can navigate back and forth
@@ -264,7 +267,7 @@ describe("Universal Viewer", () => {
       const initialUrl = page.url();
       const initialXywh = getXywhValue(initialUrl);
 
-      await page.click(".zoomIn.viewportNavButton");
+      await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -278,7 +281,7 @@ describe("Universal Viewer", () => {
       expect(zoomInXywh).not.toBe(initialXywh);
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
-      await page.click(".zoomOut.viewportNavButton");
+      await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -301,7 +304,7 @@ describe("Universal Viewer", () => {
 
       const initialRot = await getRotationFromNavigator();
 
-      await page.click(".rotate.viewportNavButton");
+      await page.$eval(".rotate.viewportNavButton", (el) => el.click());
       await waitForRotation(90);
 
       const rotatedRot = await getRotationFromNavigator();
@@ -317,7 +320,7 @@ describe("Universal Viewer", () => {
       const closeBtn = ".btn.btn-default.close";
 
       await page.waitForSelector(btn, { visible: true });
-      await page.click(btn);
+      await page.$eval(btn, (el) => el.click());
 
       await page.waitForSelector(overlay, { visible: true });
 
