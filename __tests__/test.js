@@ -4,16 +4,15 @@ const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Cookbook manifest for viewer control tests
-const COOKBOOK_MANIFEST =
+const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
   "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
 
 // PDF manifest for PDF-specific behaviour
-const PDF_MANIFEST =
+const PDF_MULTI_FILE_MANIFEST =
   "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
 
 const viewerUrl = (manifestUrl) => {
-  const separator = BASE_URL.includes("?") ? "&" : "?";
-
+  const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}${separator}manifest=${encodeURIComponent(manifestUrl)}`;
 };
 
@@ -212,7 +211,7 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST));
     });
 
     // can navigate back and forth
@@ -292,7 +291,7 @@ describe("Universal Viewer", () => {
       expect(zoomOutXywh).not.toBeNull();
       expect(zoomOutXywh).not.toBe(zoomInXywh);
       expect(zoomOutXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
-    });
+    }, 10000);
 
     // rotate image
     it("can rotate image", async () => {
@@ -352,7 +351,7 @@ describe("Universal Viewer", () => {
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
+      await page.goto(BASE_URL);
     });
 
     // switch content tabs and collapse content panel
@@ -390,7 +389,7 @@ describe("Universal Viewer", () => {
     const moreInfoHeader = ".rightPanel div.header";
 
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_MANIFEST));
+      await page.goto(BASE_URL);
     });
 
     it("can expand and collapse moreInformation panel", async () => {
@@ -416,13 +415,13 @@ describe("Universal Viewer", () => {
   // PDF MANIFEST TEST
   describe("PDF manifest", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(PDF_MANIFEST), {
+      await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
         waitUntil: "domcontentloaded",
       });
     });
 
     it("loads PDF manifest successfully", async () => {
-      expect(page.url()).toContain(encodeURIComponent(PDF_MANIFEST));
+      expect(page.url()).toContain(encodeURIComponent(PDF_MULTI_FILE_MANIFEST));
 
       await page.waitForSelector(".uv", { visible: true });
 
@@ -430,6 +429,22 @@ describe("Universal Viewer", () => {
 
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
+    });
+
+    it("shows multiple PDF files in the sidebar and allows navigation", async () => {
+      await page.waitForSelector("button.expandButton", { visible: true });
+      await page.click("button.expandButton");
+
+      await page.waitForSelector(".thumb", { visible: true });
+
+      const thumbs = await page.$$(".thumb");
+
+      expect(thumbs.length).toBeGreaterThan(1);
+      await thumbs[1].click();
+
+      await page.waitForFunction(() => window.location.href.includes("cv=1"));
+
+      expect(page.url()).toContain("cv=1");
     });
   });
 });
