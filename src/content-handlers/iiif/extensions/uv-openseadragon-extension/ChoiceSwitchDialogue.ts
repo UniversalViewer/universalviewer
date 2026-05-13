@@ -45,7 +45,8 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
       const locale = extension.getLocale();
 
       const canvasLabel =
-        canvas.getLabel().getValue(locale) || `Canvas ${canvasIndex + 1}`;
+        canvas.getLabel().getValue(locale) ||
+        `${this.content.canvas} ${canvasIndex + 1}`;
 
       if (isTwoUp) {
         const $heading = $(`<div class="choiceHeading">${canvasLabel}</div>`);

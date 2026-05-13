@@ -296,7 +296,8 @@
         "topCloseButtonEnabled": false
       },
       "content": {
-        "close": "$close"
+        "close": "$close",
+        "canvas": "$canvas"
       }
     },
     "clickThroughDialogue": {

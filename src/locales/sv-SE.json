@@ -162,5 +162,6 @@
   "$reset": "Återställ",
   "$remember": "Kom ihåg mina inställningar",
   "$rights": "Rättigheter",
-  "$layers": "Lager"
+  "$layers": "Lager",
+  "$canvas": "Canvas"
 }

@@ -157,5 +157,6 @@
   "$pause": "Pause",
   "$play": "Jouer",
   "$rights": "Droits",
-  "$layers": "Couches"
+  "$layers": "Couches",
+  "$canvas": "Canvas"
 }

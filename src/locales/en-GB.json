@@ -162,5 +162,6 @@
   "$saturation": "Saturation",
   "$reset": "Reset",
   "$remember": "Remember my settings",
-  "$layers": "Layers"
+  "$layers": "Layers",
+  "$canvas": "Canvas"
 }

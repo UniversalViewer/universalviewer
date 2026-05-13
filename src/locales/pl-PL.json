@@ -157,5 +157,6 @@
   "$pause": "Pauza",
   "$play": "Odtwarzaj",
   "$rights": "Prawa",
-  "$layers": "Warstwy"
+  "$layers": "Warstwy",
+  "$canvas": "Kanwa"
 }

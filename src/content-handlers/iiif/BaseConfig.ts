@@ -312,7 +312,9 @@ export type AdjustImageDialogue = ModuleConfig & {
 
 type ChoiceSwitchDialogueOptions = DialogueOptions & {};
 
-type ChoiceSwitchDialogueContent = DialogueContent & {};
+type ChoiceSwitchDialogueContent = DialogueContent & {
+  canvas: string;
+};
 
 export type ChoiceSwitchDialogue = ModuleConfig & {
   options: ChoiceSwitchDialogueOptions;
