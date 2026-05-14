@@ -137,6 +137,10 @@ const config = [
             from: resolvePath("./node_modules/pdfjs-dist/build/pdf.worker.min.mjs"),
             to: resolvePath("./dist"),
           },
+          {
+            from: resolvePath("./node_modules/mediaelement/build/mejs-controls.svg"),
+            to: resolvePath("./dist"),
+          }
         ],
       }),
     ],
