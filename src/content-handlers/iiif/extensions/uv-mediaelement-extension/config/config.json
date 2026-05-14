@@ -219,7 +219,8 @@
       },
       "content": {
         "close": "$close",
-        "canvas": "$canvas"
+        "canvas": "$canvas",
+        "choice": "$choice"
       }
     },
     "clickThroughDialogue": {

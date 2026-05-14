@@ -60,7 +60,9 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
 
       choices.forEach((choice, index) => {
         const label =
-          choice.getLabel().getValue(locale) || `Choice ${index + 1}`;
+          choice.getLabel().getValue(locale) ||
+          Strings.format(this.content.choice, String(canvasIndex + 1));
+
         const isActive = index === currentChoiceIndex;
 
         const $item = $(`

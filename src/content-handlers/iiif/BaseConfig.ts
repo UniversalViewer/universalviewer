@@ -314,6 +314,7 @@ type ChoiceSwitchDialogueOptions = DialogueOptions & {};
 
 type ChoiceSwitchDialogueContent = DialogueContent & {
   canvas: string;
+  choice: string;
 };
 
 export type ChoiceSwitchDialogue = ModuleConfig & {
