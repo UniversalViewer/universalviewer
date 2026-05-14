@@ -158,5 +158,5 @@
   "$play": "Jouer",
   "$rights": "Droits",
   "$layers": "Couches",
-  "$canvas": "Canvas"
+  "$canvas": "Canvas {0}"
 }

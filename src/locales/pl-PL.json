@@ -158,5 +158,5 @@
   "$play": "Odtwarzaj",
   "$rights": "Prawa",
   "$layers": "Warstwy",
-  "$canvas": "Kanwa"
+  "$canvas": "Kanwa {0}"
 }

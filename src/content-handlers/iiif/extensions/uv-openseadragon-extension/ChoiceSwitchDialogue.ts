@@ -1,6 +1,7 @@
 import { ChoiceSwitchDialogue as BaseChoiceSwitchDialogue } from "../../modules/uv-dialogues-module/ChoiceSwitchDialogue";
 import { IIIFEvents } from "../../IIIFEvents";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
+import { Strings } from "../../Utils";
 
 export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
   open(): void {
@@ -46,7 +47,7 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
 
       const canvasLabel =
         canvas.getLabel().getValue(locale) ||
-        `${this.content.canvas} ${canvasIndex + 1}`;
+        Strings.format(this.content.canvas, String(canvasIndex + 1));
 
       if (isTwoUp) {
         const $heading = $(`<div class="choiceHeading">${canvasLabel}</div>`);

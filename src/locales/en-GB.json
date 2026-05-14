@@ -163,5 +163,5 @@
   "$reset": "Reset",
   "$remember": "Remember my settings",
   "$layers": "Layers",
-  "$canvas": "Canvas"
+  "$canvas": "Canvas {0}"
 }

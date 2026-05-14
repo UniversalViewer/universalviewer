@@ -161,5 +161,5 @@
   "$contrast": "Cyferbyniad",
   "$saturation": "Dirlawnder",
   "$layers": "Haenau",
-  "$canvas": "Canfas"
+  "$canvas": "Canfas {0}"
 }
