@@ -106,6 +106,10 @@ const config = {
         express.static(path.join(__dirname, "src", "uv.css"))
       );
       devServer.app.use(
+        "/pdf.worker.min.mjs",
+        express.static(path.join(__dirname, "node_modules", "pdfjs-dist", "build", "pdf.worker.min.mjs"))
+      );
+      devServer.app.use(
         "/mejs-controls.svg",
         express.static(path.join(__dirname, "node_modules" , "mediaelement", "build", "mejs-controls.svg"))
       );
