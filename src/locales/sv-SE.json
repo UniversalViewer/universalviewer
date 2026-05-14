@@ -163,5 +163,6 @@
   "$remember": "Kom ihåg mina inställningar",
   "$rights": "Rättigheter",
   "$layers": "Lager",
-  "$canvas": "Canvas {0}"
+  "$canvas": "Canvas {0}",
+  "$choice": "Val {0}"
 }

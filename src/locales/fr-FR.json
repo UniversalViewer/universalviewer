@@ -158,5 +158,6 @@
   "$play": "Jouer",
   "$rights": "Droits",
   "$layers": "Couches",
-  "$canvas": "Canvas {0}"
+  "$canvas": "Canvas {0}",
+  "$choice": "Choix {0}"
 }
