@@ -169,6 +169,7 @@
         "autoPlayOnSetTarget": false,
         "defaultHeight": 420,
         "defaultWidth": 560,
+        "iconSprite": "mejs-controls.svg",
         "titleEnabled": true,
         "subtitleEnabled": true,
         "mostSpecificRequiredStatement": true,

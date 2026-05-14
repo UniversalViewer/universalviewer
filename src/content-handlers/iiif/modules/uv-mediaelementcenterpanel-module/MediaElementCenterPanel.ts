@@ -223,6 +223,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("video")[0], {
+        iconSprite: this.config.options.iconSprite,
         poster: poster,
         toggleCaptionsButtonWhenOnlyOne: true,
         features: [

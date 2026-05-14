@@ -1118,6 +1118,12 @@ Specifies the default height for the panel or content.
 **Default**: `560`  
 Specifies the default width for the panel or content.
 
+##### iconSprite
+
+**Type**: `string`  
+**Default**: `mejs-controls.svg`  
+Specifies the URL of the spritesheet used by MediaElement.
+
 ##### titleEnabled
 
 **Type**: `boolean`  
