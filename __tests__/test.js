@@ -12,8 +12,8 @@ const PDF_MULTI_FILE_MANIFEST =
   "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
 
 const viewerUrl = (manifestUrl) => {
-  const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}${separator}manifest=${encodeURIComponent(manifestUrl)}`;
+  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
+  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
 };
 
 describe("Universal Viewer", () => {
@@ -428,8 +428,41 @@ describe("Universal Viewer", () => {
 
       await page.waitForSelector(".uv", { visible: true });
 
-      const pageText = await page.evaluate(() => document.body.innerText);
+      await page.waitForFunction(() => {
+        return document.querySelectorAll("iframe").length > 0;
+      });
 
+      const viewerFrame = page.frames().find((f) => {
+        const url = f.url();
+        
+        return (
+          url.includes("uv.html") ||
+          url.includes("viewer") ||
+          url.includes("manifest")
+        );
+      });
+
+      expect(viewerFrame).toBeTruthy();
+      
+      await viewerFrame.waitForSelector("canvas", { visible: true});
+      
+      const canvasInfo = await viewerFrame.evaluate(() => {
+        const canvas = document.querySelector(
+          "canvas"
+        );
+        
+        if (!canvas) return null;
+        return {
+          width: canvas.width,
+          height: canvas.height,
+        };
+      });
+      expect(canvasInfo).not.toBeNull();
+      expect(canvasInfo.width).toBeGreaterThan(0);
+      expect(canvasInfo.height).toBeGreaterThan(0);
+      
+      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
+      
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
     });
