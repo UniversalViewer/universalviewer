@@ -135,6 +135,7 @@
   },
   "jest": {
     "preset": "jest-puppeteer",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",

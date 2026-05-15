@@ -3,6 +3,19 @@ test.skip("Configuration options", () => {});
 const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
+// Cookbook manifest for viewer control tests
+const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
+  "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
+
+// PDF manifest for PDF-specific behaviour
+const PDF_MULTI_FILE_MANIFEST =
+  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
+
+const viewerUrl = (manifestUrl) => {
+  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
+  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+};
+
 describe("Universal Viewer", () => {
   let browser;
   let page;
@@ -85,6 +98,7 @@ describe("Universal Viewer", () => {
     await browser.close();
   });
 
+  // Default manifest test
   it("has the correct page title", async () => {
     const title = await page.title();
     expect(title).toBe("Universal Viewer Examples");
@@ -194,9 +208,13 @@ describe("Universal Viewer", () => {
     expect(isSettingsButtonVisible).toBe(true);
   });
 
+  // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
-    afterEach(async () => {
-      await page.goto(BASE_URL);
+    beforeEach(async () => {
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
+      { 
+        waitUntil: "domcontentloaded"
+      });
     });
 
     // can navigate back and forth
@@ -249,7 +267,7 @@ describe("Universal Viewer", () => {
       const initialUrl = page.url();
       const initialXywh = getXywhValue(initialUrl);
 
-      await page.click(".zoomIn.viewportNavButton");
+      await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -263,7 +281,7 @@ describe("Universal Viewer", () => {
       expect(zoomInXywh).not.toBe(initialXywh);
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
-      await page.click(".zoomOut.viewportNavButton");
+      await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -286,7 +304,7 @@ describe("Universal Viewer", () => {
 
       const initialRot = await getRotationFromNavigator();
 
-      await page.click(".rotate.viewportNavButton");
+      await page.$eval(".rotate.viewportNavButton", (el) => el.click());
       await waitForRotation(90);
 
       const rotatedRot = await getRotationFromNavigator();
@@ -302,7 +320,7 @@ describe("Universal Viewer", () => {
       const closeBtn = ".btn.btn-default.close";
 
       await page.waitForSelector(btn, { visible: true });
-      await page.click(btn);
+      await page.$eval(btn, (el) => el.click());
 
       await page.waitForSelector(overlay, { visible: true });
 
@@ -335,7 +353,7 @@ describe("Universal Viewer", () => {
     const contentThumbnailsTab = ".thumbs.tab";
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
-    afterEach(async () => {
+    beforeEach(async () => {
       await page.goto(BASE_URL);
     });
 
@@ -351,7 +369,9 @@ describe("Universal Viewer", () => {
       ).toBe(true);
 
       expect(
-        await page.$eval(contentThumbnailsTab, (el) => el.classList.contains("on"))
+        await page.$eval(contentThumbnailsTab, (el) =>
+          el.classList.contains("on")
+        )
       ).toBe(false);
     });
 
@@ -371,7 +391,7 @@ describe("Universal Viewer", () => {
     const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
     const moreInfoHeader = ".rightPanel div.header";
 
-    afterEach(async () => {
+    beforeEach(async () => {
       await page.goto(BASE_URL);
     });
 
@@ -392,6 +412,75 @@ describe("Universal Viewer", () => {
       await page.click(moreInfoCollapseBtn);
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
       await page.waitForSelector(moreInfoHeader, { hidden: true });
+    });
+  });
+
+  // PDF MANIFEST TEST
+  describe("PDF manifest", () => {
+    beforeEach(async () => {
+      await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+    });
+
+    it("loads PDF manifest successfully", async () => {
+      expect(page.url()).toContain(encodeURIComponent(PDF_MULTI_FILE_MANIFEST));
+
+      await page.waitForSelector(".uv", { visible: true });
+
+      await page.waitForFunction(() => {
+        return document.querySelectorAll("iframe").length > 0;
+      });
+
+      const viewerFrame = page.frames().find((f) => {
+        const url = f.url();
+        
+        return (
+          url.includes("uv.html") ||
+          url.includes("viewer") ||
+          url.includes("manifest")
+        );
+      });
+
+      expect(viewerFrame).toBeTruthy();
+      
+      await viewerFrame.waitForSelector("canvas", { visible: true});
+      
+      const canvasInfo = await viewerFrame.evaluate(() => {
+        const canvas = document.querySelector(
+          "canvas"
+        );
+        
+        if (!canvas) return null;
+        return {
+          width: canvas.width,
+          height: canvas.height,
+        };
+      });
+      expect(canvasInfo).not.toBeNull();
+      expect(canvasInfo.width).toBeGreaterThan(0);
+      expect(canvasInfo.height).toBeGreaterThan(0);
+      
+      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
+      
+      expect(pageText).not.toContain("Unable to load");
+      expect(pageText).not.toContain("Error loading");
+    });
+
+    it("shows multiple PDF files in the sidebar and allows navigation", async () => {
+      await page.waitForSelector("button.expandButton", { visible: true });
+      await page.click("button.expandButton");
+
+      await page.waitForSelector(".thumb", { visible: true });
+
+      const thumbs = await page.$$(".thumb");
+
+      expect(thumbs.length).toBeGreaterThan(1);
+      await thumbs[1].click();
+
+      await page.waitForFunction(() => window.location.href.includes("cv=1"));
+
+      expect(page.url()).toContain("cv=1");
     });
   });
 });
