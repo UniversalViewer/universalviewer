@@ -67,6 +67,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
+  $choiceSwitchButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -173,6 +174,43 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       (rotation: number) => {
         this.whenLoaded(() => {
           this.viewer.viewport.setRotation(rotation);
+        });
+      }
+    );
+
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.CHOICE_CHANGE,
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
+        this.whenCreated(() => {
+          const world = this.viewer.world;
+          const indices = this.extension.getPagedIndices();
+
+          let worldIndex = 0;
+          indices.forEach((index) => {
+            const canvas = this.extension.helper.getCanvasByIndex(index);
+            const numChoices = canvas.getChoices().length;
+
+            // need to count a canvas with "zero" choices as 1
+            const worldItemCount = numChoices === 0 ? 1 : numChoices;
+
+            if (canvas.id === canvasId) {
+              for (let c = 0; c < numChoices; c++) {
+                const item = world.getItemAt(worldIndex);
+                if (item) {
+                  item.setOpacity(c === choiceIndex ? 1 : 0);
+                }
+                worldIndex++;
+              }
+            } else {
+              worldIndex += worldItemCount;
+            }
+          });
         });
       }
     );
@@ -516,6 +554,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$element.on("mouseleave", () => {
       if (!this.controlsVisible) return;
+
+      // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+      if ($(".overlay:visible").length) return;
+
       this.controlsVisible = false;
       this.viewer.setControlsEnabled(false);
     });
@@ -533,6 +575,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         if (this.$nextButton.ismouseover()) {
           return;
         }
+        // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+        if ($(".overlay:visible").length) return;
         if (!this.$viewer.find(".navigator").ismouseover()) {
           if (!this.controlsVisible) return;
           this.controlsVisible = false;
@@ -614,6 +658,12 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       },
       { capture: true }
     );
+
+    this.createChoiceSwitch();
+
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+      this.$viewer.removeClass("dialogue-open");
+    });
   }
 
   createNavigationButtons() {
@@ -722,6 +772,29 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
   }
 
+  createChoiceSwitch(): void {
+    // check for a choice on either of the displayed canvases if in 2-up view
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = this.indicesIncludeChoices(indices);
+
+    if (!hasChoices) return;
+
+    this.$choiceSwitchButton = this.$rotateButton.clone();
+    this.$choiceSwitchButton.attr("title", this.content.layers);
+    this.$choiceSwitchButton.attr("aria-label", this.content.layers);
+    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
+    this.$choiceSwitchButton.attr("tabindex", 0);
+
+    if (this.showAdjustImageButton && this.$adjustImageButton) {
+      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
+    } else {
+      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
+    }
+    this.onAccessibleClick(this.$choiceSwitchButton, () => {
+      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
+    });
+  }
+
   async getGirderTileSource(): Promise<any> {
     return new Promise<any>((resolve) => {
       const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -793,6 +866,124 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const spinnerTimeout = setTimeout(() => {
       this.$spinner.show();
     }, 200);
+
+    // check for a choice on either of the displayed canvases if in 2-up view
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+
+    if (hasChoices) {
+      try {
+        // we need to build these objects and pass them to getPagePositions() because choice isn't currently supported on IExternalResource.
+        const canvasData = indices.map((index) => {
+          const canvas = this.extension.helper.getCanvasByIndex(index);
+          return {
+            index,
+            canvas,
+            choices: canvas.getChoices(),
+            width: canvas.getWidth(),
+            height: canvas.getHeight(),
+            x: 0,
+            y: 0,
+          };
+        });
+
+        const positioned = this.getPagePositions(canvasData as any);
+
+        let totalItems = 0;
+        for (const data of canvasData) {
+          totalItems += data.choices.length;
+        }
+
+        let loadedItems = 0;
+
+        positioned.forEach((data: any) => {
+          if (data.choices.length === 0) {
+            // no choices on this canvas, load as regular image
+            const content = data.canvas.getContent();
+            if (content.length) {
+              const body = content[0].getBody();
+              if (body.length) {
+                const services = body[0].getServices();
+                let tileSource: any;
+
+                if (services.length) {
+                  let id = services[0].id;
+                  if (!id.endsWith("/")) id += "/";
+                  tileSource = id + "info.json";
+                } else {
+                  tileSource = {
+                    type: "image",
+                    url: body[0].id,
+                    buildPyramid: false,
+                  };
+                }
+
+                totalItems++;
+                this.viewer.addTiledImage({
+                  tileSource,
+                  x: data.x,
+                  y: data.y,
+                  width: data.width,
+                  success: (item: any) => {
+                    this.items.push(item);
+                    loadedItems++;
+                    if (loadedItems === totalItems) {
+                      clearTimeout(spinnerTimeout);
+                      this.$spinner.hide();
+                      this.openPagesHandler();
+                      this.resize();
+                      this.goHome();
+                    }
+                  },
+                });
+              }
+            }
+          } else {
+            data.choices.forEach((choice: any, index: number) => {
+              const services = choice.getServices();
+              let tileSource: any;
+
+              if (services.length) {
+                let id = services[0].id;
+                if (!id.endsWith("/")) id += "/";
+                tileSource = id + "info.json";
+              } else {
+                tileSource = {
+                  type: "image",
+                  url: choice.id,
+                  buildPyramid: false,
+                };
+              }
+
+              this.viewer.addTiledImage({
+                tileSource: tileSource,
+                x: data.x,
+                y: data.y,
+                width: data.width,
+                opacity: index === 0 ? 1 : 0,
+                success: (item: any) => {
+                  this.items.push(item);
+                  loadedItems++;
+                  if (loadedItems === totalItems) {
+                    clearTimeout(spinnerTimeout);
+                    this.$spinner.hide();
+                    this.openPagesHandler();
+                    this.resize();
+                    this.goHome();
+                  }
+                },
+              });
+            });
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+      return;
+    }
 
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
@@ -980,6 +1171,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     }
 
     this.isFirstLoad = false;
+
+    this.updateChoiceSwitchVisibility();
   }
 
   private resizeNavigatorForContinuous(): void {
@@ -1660,5 +1853,24 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
+  }
+
+  indicesIncludeChoices(indices: number[]): boolean {
+    return indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+  }
+
+  updateChoiceSwitchVisibility(): void {
+    if (!this.$choiceSwitchButton) return;
+
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = this.indicesIncludeChoices(indices);
+
+    this.$choiceSwitchButton.css(
+      "visibility",
+      hasChoices ? "visible" : "hidden"
+    );
   }
 }

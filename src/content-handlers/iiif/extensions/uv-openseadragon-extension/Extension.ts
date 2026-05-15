@@ -55,6 +55,7 @@ import { merge } from "../../../../Utils";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";
 import { AdjustImageDialogue } from "../../modules/uv-dialogues-module/AdjustImageDialogue";
+import { ChoiceSwitchDialogue } from "./ChoiceSwitchDialogue";
 
 export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $downloadDialogue: JQuery;
@@ -64,6 +65,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $settingsDialogue: JQuery;
   $shareDialogue: JQuery;
   $adjustImageDialogue: JQuery;
+  $choiceSwitchDialogue: JQuery;
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
@@ -73,6 +75,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   headerPanel: PagingHeaderPanel;
   helpDialogue: HelpDialogue;
   adjustImageDialogue: AdjustImageDialogue;
+  choiceSwitchDialogue: ChoiceSwitchDialogue;
   isAnnotating: boolean = false;
   leftPanel: ContentLeftPanel;
   mobileFooterPanel: MobileFooterPanel;
@@ -500,6 +503,22 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.closeActiveDialogue();
     });
 
+    this.extensionHost.subscribe(
+      IIIFEvents.CHOICE_CHANGE,
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.CHOICE_CHANGE, {
+          canvasId,
+          choiceIndex,
+        });
+      }
+    );
+
     // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
     //     this.fire(Events.VIEW_PAGE, index);
     //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE, [index]);
@@ -599,6 +618,17 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     if (this.isFooterPanelEnabled()) {
       this.footerPanel.init();
+    }
+
+    if (this.helper.hasChoices()) {
+      this.$choiceSwitchDialogue = $(
+        '<div class="overlay choiceSwitch" aria-hidden="true"></div>'
+      );
+      this.shell.$overlays.append(this.$choiceSwitchDialogue);
+      this.choiceSwitchDialogue = new ChoiceSwitchDialogue(
+        this.$choiceSwitchDialogue,
+        this.shell
+      );
     }
   }
 

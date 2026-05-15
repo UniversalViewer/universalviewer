@@ -93,7 +93,7 @@ export class Dialogue<
     this.$closeButton.hide();
   }
 
-  setDockedPosition(): void {
+  setDockedPosition(position: "above" | "below" = "above"): void {
     let top: number = Math.floor(
       this.extension.height() - this.$element.outerHeight(true)
     );
@@ -109,9 +109,14 @@ export class Dialogue<
       const b: number = (<JQueryCoordinates>this.extension.$element.offset())
         .top;
       const d: number = this.$element.outerHeight(true);
-      const e: number = a - b - d;
 
-      top = e + verticalPadding;
+      if (position === "above") {
+        const e: number = a - b - d;
+        top = e + verticalPadding;
+      } else {
+        const buttonHeight: number = this.$triggerButton.outerHeight();
+        top = a - b + buttonHeight + verticalPadding;
+      }
 
       const f: number = (<JQueryCoordinates>this.$triggerButton.offset()).left;
       const g: number = (<JQueryCoordinates>this.extension.$element.offset())
@@ -128,7 +133,15 @@ export class Dialogue<
       arrowLeft = Math.floor(this.$element.width() * normalisedPos);
     }
 
-    this.$bottom.css("backgroundPosition", arrowLeft + "px 0px");
+    if (position === "above") {
+      this.$element.removeClass("arrow-top");
+      this.$bottom.css("backgroundPosition", arrowLeft + "px 0px");
+      this.$bottom.show();
+    } else {
+      this.$element.addClass("arrow-top");
+      this.$top.css("backgroundPosition", arrowLeft + "px 0px");
+      this.$bottom.hide();
+    }
 
     this.$element.css({
       top: top,

@@ -379,7 +379,8 @@
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
-        "adjustImage": "$adjustImage"
+        "adjustImage": "$adjustImage",
+        "layers": "$layers"
       }
     },
     "searchFooterPanel": {
@@ -499,6 +500,16 @@
         "close": "$close",
         "reset": "$reset",
         "remember": "$remember"
+      }
+    },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close",
+        "canvas": "$canvas",
+        "choice": "$choice"
       }
     },
     "clickThroughDialogue": {

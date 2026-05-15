@@ -156,5 +156,8 @@
   "$mute": "Muet",
   "$pause": "Pause",
   "$play": "Jouer",
-  "$rights": "Droits"
+  "$rights": "Droits",
+  "$layers": "Couches",
+  "$canvas": "Canvas {0}",
+  "$choice": "Choix {0}"
 }
