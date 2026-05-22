@@ -85,9 +85,11 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
       this.$choiceList.append($group);
     });
 
-    this.$anchor = (<OpenSeadragonExtension>(
-      this.extension
-    )).centerPanel.$choiceSwitchButton;
+    const mobileFooterButton = extension.mobileFooterPanel?.$choiceSwitchButton;
+    this.$anchor =
+      mobileFooterButton?.is(":visible") && mobileFooterButton?.length
+        ? mobileFooterButton
+        : extension.centerPanel.$choiceSwitchButton;
 
     super.open();
   }
