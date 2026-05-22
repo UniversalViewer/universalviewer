@@ -867,6 +867,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$spinner.show();
     }, 200);
 
+    // we need to do this before the choice branch even though the branch doesn't use images, because getExternalResources populates the resources needed for the download dialogue
+    let images: IExternalResourceData[] =
+      await this.extension.getExternalResources(resources);
+
     // check for a choice on either of the displayed canvases if in 2-up view
     const indices = this.extension.getPagedIndices();
     const hasChoices = indices.some((index) => {
@@ -984,9 +988,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }
       return;
     }
-
-    let images: IExternalResourceData[] =
-      await this.extension.getExternalResources(resources);
 
     const isGirder: boolean = this.extension.format === MediaType.GIRDER;
 

@@ -564,7 +564,8 @@
         "closeLeftPanel": "$closeLeftPanel",
         "openRightPanel": "$openRightPanel",
         "closeRightPanel": "$closeRightPanel",
-        "help": "$help"
+        "help": "$help",
+        "layers": "$layers"
       }
     },
     "restrictedDialogue": {

@@ -207,6 +207,7 @@ type MobileFooterPanelContent = FooterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   help: string;
+  layers: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {

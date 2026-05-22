@@ -245,6 +245,10 @@ const DownloadDialogue = ({
 
     const canvas: Canvas = getSelectedCanvas();
 
+    if (!canvas.externalResource) {
+      return false;
+    }
+
     // if the external resource doesn't have a service descriptor or is level 0
     // only allow wholeImageHighRes
     if (
