@@ -45,7 +45,6 @@ export class ChoiceSwitchDialogue extends Dialogue<
   }
 
   close(): void {
-    this.shell.$overlays.off("click.choiceSwitch");
     this.shell.$overlays.off("wheel.choiceSwitch");
     this.shell.$overlays.css({ background: "" });
     $(".viewer").removeClass("choice-dialogue-open");
@@ -54,6 +53,6 @@ export class ChoiceSwitchDialogue extends Dialogue<
 
   resize(): void {
     super.resize();
-    this.setDockedPosition("below");
+    this.setDockedPosition(this.extension.isMobile() ? "above" : "below");
   }
 }
