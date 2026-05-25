@@ -82,7 +82,7 @@
     "style-loader": "4.0.0",
     "stylelint": "16.19.1",
     "stylelint-config-standard-less": "3.0.1",
-    "stylelint-less": "3.0.1",
+    "stylelint-less": "4.2.1",
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
     "typedoc": "^0.28.5",
