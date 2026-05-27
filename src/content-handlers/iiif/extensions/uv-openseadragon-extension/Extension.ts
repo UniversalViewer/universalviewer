@@ -620,16 +620,14 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       this.footerPanel.init();
     }
 
-    if (this.helper.hasChoices()) {
-      this.$choiceSwitchDialogue = $(
-        '<div class="overlay choiceSwitch" aria-hidden="true"></div>'
-      );
-      this.shell.$overlays.append(this.$choiceSwitchDialogue);
-      this.choiceSwitchDialogue = new ChoiceSwitchDialogue(
-        this.$choiceSwitchDialogue,
-        this.shell
-      );
-    }
+    this.$choiceSwitchDialogue = $(
+      '<div class="overlay choiceSwitch" aria-hidden="true"></div>'
+    );
+    this.shell.$overlays.append(this.$choiceSwitchDialogue);
+    this.choiceSwitchDialogue = new ChoiceSwitchDialogue(
+      this.$choiceSwitchDialogue,
+      this.shell
+    );
   }
 
   render(): void {

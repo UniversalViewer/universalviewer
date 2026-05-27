@@ -86,6 +86,7 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
     });
 
     const mobileFooterButton = extension.mobileFooterPanel?.$choiceSwitchButton;
+
     this.$anchor =
       mobileFooterButton?.is(":visible") && mobileFooterButton?.length
         ? mobileFooterButton
