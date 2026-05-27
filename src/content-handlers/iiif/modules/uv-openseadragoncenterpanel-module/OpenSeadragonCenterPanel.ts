@@ -774,8 +774,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   createChoiceSwitch(): void {
     this.$choiceSwitchButton = this.$rotateButton.clone();
-    this.$choiceSwitchButton.attr("title", this.content.layers);
     this.$choiceSwitchButton.attr("aria-label", this.content.layers);
+    this.$choiceSwitchButton.attr("title", this.content.layers);
     this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
     this.$choiceSwitchButton.attr("tabindex", 0);
 
