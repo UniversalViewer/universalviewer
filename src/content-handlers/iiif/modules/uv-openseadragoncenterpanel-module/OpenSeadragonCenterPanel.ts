@@ -636,6 +636,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.hidePrevButton();
     this.hideNextButton();
 
+    this.createChoiceSwitch();
+
     this.isCreated = true;
     //this.resize();
 
@@ -658,8 +660,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       },
       { capture: true }
     );
-
-    this.createChoiceSwitch();
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       this.$viewer.removeClass("dialogue-open");
@@ -773,12 +773,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   createChoiceSwitch(): void {
-    // check for a choice on either of the displayed canvases if in 2-up view
-    const indices = this.extension.getPagedIndices();
-    const hasChoices = this.indicesIncludeChoices(indices);
-
-    if (!hasChoices) return;
-
     this.$choiceSwitchButton = this.$rotateButton.clone();
     this.$choiceSwitchButton.attr("title", this.content.layers);
     this.$choiceSwitchButton.attr("aria-label", this.content.layers);
@@ -791,6 +785,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$choiceSwitchButton.insertAfter(this.$rotateButton);
     }
     this.onAccessibleClick(this.$choiceSwitchButton, () => {
+      console.log("choice clicked");
       this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
   }
