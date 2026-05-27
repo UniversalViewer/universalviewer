@@ -785,7 +785,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$choiceSwitchButton.insertAfter(this.$rotateButton);
     }
     this.onAccessibleClick(this.$choiceSwitchButton, () => {
-      console.log("choice clicked");
       this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
   }
