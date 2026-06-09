@@ -379,7 +379,8 @@
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
-        "adjustImage": "$adjustImage"
+        "adjustImage": "$adjustImage",
+        "layers": "$layers"
       }
     },
     "searchFooterPanel": {
@@ -501,6 +502,16 @@
         "remember": "$remember"
       }
     },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close",
+        "canvas": "$canvas",
+        "choice": "$choice"
+      }
+    },
     "clickThroughDialogue": {
       "options": {
         "topCloseButtonEnabled": false
@@ -553,7 +564,8 @@
         "closeLeftPanel": "$closeLeftPanel",
         "openRightPanel": "$openRightPanel",
         "closeRightPanel": "$closeRightPanel",
-        "help": "$help"
+        "help": "$help",
+        "layers": "$layers"
       }
     },
     "restrictedDialogue": {
