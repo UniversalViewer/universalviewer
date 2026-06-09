@@ -15,6 +15,7 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
   autoPlayOnSetTarget: boolean;
   defaultHeight: number;
   defaultWidth: number;
+  iconSprite: string;
 };
 
 type MediaElementCenterPanelContent = CenterPanelContent & {};

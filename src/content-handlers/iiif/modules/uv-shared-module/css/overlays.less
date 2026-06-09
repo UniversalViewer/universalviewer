@@ -186,5 +186,15 @@
       padding: 0 @padding-medium-horizontal 0 0;
       overflow: auto;
     }
+
+    &.arrow-top {
+      .top {
+        height: 11px;
+        background-image: data-uri("../img/dialogue_arrow.png");
+        background-repeat: no-repeat;
+        transform: scaleY(-1);
+        margin-bottom: -1px;
+      }
+    }
   }
 }

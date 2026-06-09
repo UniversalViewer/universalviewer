@@ -161,5 +161,8 @@
   "$saturation": "Färgmättnad",
   "$reset": "Återställ",
   "$remember": "Kom ihåg mina inställningar",
-  "$rights": "Rättigheter"
+  "$rights": "Rättigheter",
+  "$layers": "Lager",
+  "$canvas": "Canvas {0}",
+  "$choice": "Val {0}"
 }

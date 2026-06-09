@@ -1,6 +1,20 @@
 test.skip("Configuration options", () => {});
 
 const puppeteer = require("puppeteer");
+const { BASE_URL } = require("../scripts/testBaseUrl");
+
+// Cookbook manifest for viewer control tests
+const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
+  "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
+
+// PDF manifest for PDF-specific behaviour
+const PDF_MULTI_FILE_MANIFEST =
+  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
+
+const viewerUrl = (manifestUrl) => {
+  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
+  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+};
 
 describe("Universal Viewer", () => {
   let browser;
@@ -10,11 +24,11 @@ describe("Universal Viewer", () => {
     return await page.evaluate(() => {
       const el = document.querySelector(".displayregioncontainer");
       if (!el) return 0;
-      
+
       const transform = el.style.transform || "";
       const match = transform.match(/rotate\((-?\d+(?:\.\d+)?)deg\)/);
       if (!match) return 0;
-      
+
       const deg = Number(match[1]);
       return ((deg % 360) + 360) % 360;
     });
@@ -53,7 +67,9 @@ describe("Universal Viewer", () => {
   const waitForCanvasValue = async (page, expected) => {
     await page.waitForFunction(
       (expectedValue) => {
-        const match = window.location.href.match(/(?:^|[?&#])(cv|canvas|page)=([^&#]*)/);
+        const match = window.location.href.match(
+          /(?:^|[?&#])(cv|canvas|page)=([^&#]*)/
+        );
         if (!match) return expectedValue === 0;
 
         const rawValue = match[2];
@@ -71,17 +87,18 @@ describe("Universal Viewer", () => {
     const match = url.match(/[?&#]xywh=([^&]+)/);
     return match ? decodeURIComponent(match[1]) : null;
   };
-  
+
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto("http://localhost:4444");
+    await page.goto(BASE_URL);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
+  // Default manifest test
   it("has the correct page title", async () => {
     const title = await page.title();
     expect(title).toBe("Universal Viewer Examples");
@@ -191,9 +208,13 @@ describe("Universal Viewer", () => {
     expect(isSettingsButtonVisible).toBe(true);
   });
 
+  // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
-    afterEach(async () => {
-      await page.goto("http://localhost:4444");
+    beforeEach(async () => {
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
+      { 
+        waitUntil: "domcontentloaded"
+      });
     });
 
     // can navigate back and forth
@@ -208,7 +229,7 @@ describe("Universal Viewer", () => {
         (btn) => btn.disabled
       );
       expect(isPrevDisabledInitially).toBe(true);
-      
+
       await page.click(".btn.imageBtn.next");
       await waitForCanvasValue(page, 1);
 
@@ -246,7 +267,7 @@ describe("Universal Viewer", () => {
       const initialUrl = page.url();
       const initialXywh = getXywhValue(initialUrl);
 
-      await page.click(".zoomIn.viewportNavButton");
+      await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -260,7 +281,7 @@ describe("Universal Viewer", () => {
       expect(zoomInXywh).not.toBe(initialXywh);
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
-      await page.click(".zoomOut.viewportNavButton");
+      await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
       await page.waitForFunction(
         (prev) => window.location.href !== prev,
         {},
@@ -280,10 +301,10 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(".rotate.viewportNavButton", {
         visible: true,
       });
-      
+
       const initialRot = await getRotationFromNavigator();
 
-      await page.click(".rotate.viewportNavButton");
+      await page.$eval(".rotate.viewportNavButton", (el) => el.click());
       await waitForRotation(90);
 
       const rotatedRot = await getRotationFromNavigator();
@@ -299,7 +320,7 @@ describe("Universal Viewer", () => {
       const closeBtn = ".btn.btn-default.close";
 
       await page.waitForSelector(btn, { visible: true });
-      await page.click(btn);
+      await page.$eval(btn, (el) => el.click());
 
       await page.waitForSelector(overlay, { visible: true });
 
@@ -320,6 +341,146 @@ describe("Universal Viewer", () => {
         );
       });
       expect(isOverlayVisible).toBe(false);
+    });
+  });
+
+  describe("content panel", () => {
+    const contentExpandBtn = "button.expandButton";
+    const contentCollapseBtn = "button.collapseButton";
+    const contentTabs = "div.leftPanel";
+    const contentIndexTab = ".index.tab";
+    const contentIndexActiveTab = ".index.tab.on";
+    const contentThumbnailsTab = ".thumbs.tab";
+    const contentThumbnailsActiveTab = ".thumbs.tab.on";
+
+    beforeEach(async () => {
+      await page.goto(BASE_URL);
+    });
+
+    // switch content tabs and collapse content panel
+    it("can switch content tabs", async () => {
+      await page.waitForSelector(contentThumbnailsActiveTab, { visible: true });
+
+      await page.click(contentIndexTab);
+      await page.waitForSelector(contentIndexActiveTab, { visible: true });
+
+      expect(
+        await page.$eval(contentIndexTab, (el) => el.classList.contains("on"))
+      ).toBe(true);
+
+      expect(
+        await page.$eval(contentThumbnailsTab, (el) =>
+          el.classList.contains("on")
+        )
+      ).toBe(false);
+    });
+
+    it("can collapse content", async () => {
+      await page.waitForSelector(contentTabs, { visible: true });
+      await page.waitForSelector(contentCollapseBtn, { visible: true });
+
+      await page.click(contentCollapseBtn);
+
+      await page.waitForSelector(contentExpandBtn, { visible: true });
+      await page.waitForSelector(".leftPanel .tabs", { hidden: true });
+    });
+  });
+
+  describe("more information panel", () => {
+    const moreInfoExpandBtn = ".rightPanel button.expandButton";
+    const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
+    const moreInfoHeader = ".rightPanel div.header";
+
+    beforeEach(async () => {
+      await page.goto(BASE_URL);
+    });
+
+    it("can expand and collapse moreInformation panel", async () => {
+      await page.waitForSelector(moreInfoExpandBtn, { visible: true });
+      await page.click(moreInfoExpandBtn);
+
+      // verify expanded state and header
+      await page.waitForSelector(moreInfoCollapseBtn, { visible: true });
+      await page.waitForSelector(moreInfoHeader, { visible: true });
+
+      const headers = await page.$$eval(moreInfoHeader, (els) =>
+        els.map((el) => el.textContent.trim())
+      );
+
+      expect(headers).toContain("About the item");
+
+      await page.click(moreInfoCollapseBtn);
+      await page.waitForSelector(moreInfoExpandBtn, { visible: true });
+      await page.waitForSelector(moreInfoHeader, { hidden: true });
+    });
+  });
+
+  // PDF MANIFEST TEST
+  describe("PDF manifest", () => {
+    beforeEach(async () => {
+      await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+    });
+
+    it("loads PDF manifest successfully", async () => {
+      expect(page.url()).toContain(encodeURIComponent(PDF_MULTI_FILE_MANIFEST));
+
+      await page.waitForSelector(".uv", { visible: true });
+
+      await page.waitForFunction(() => {
+        return document.querySelectorAll("iframe").length > 0;
+      });
+
+      const viewerFrame = page.frames().find((f) => {
+        const url = f.url();
+        
+        return (
+          url.includes("uv.html") ||
+          url.includes("viewer") ||
+          url.includes("manifest")
+        );
+      });
+
+      expect(viewerFrame).toBeTruthy();
+      
+      await viewerFrame.waitForSelector("canvas", { visible: true});
+      
+      const canvasInfo = await viewerFrame.evaluate(() => {
+        const canvas = document.querySelector(
+          "canvas"
+        );
+        
+        if (!canvas) return null;
+        return {
+          width: canvas.width,
+          height: canvas.height,
+        };
+      });
+      expect(canvasInfo).not.toBeNull();
+      expect(canvasInfo.width).toBeGreaterThan(0);
+      expect(canvasInfo.height).toBeGreaterThan(0);
+      
+      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
+      
+      expect(pageText).not.toContain("Unable to load");
+      expect(pageText).not.toContain("Error loading");
+    });
+
+    it("shows multiple PDF files in the sidebar and allows navigation", async () => {
+      await page.waitForSelector("button.expandButton", { visible: true });
+      await page.click("button.expandButton");
+
+      await page.waitForSelector(".thumb", { visible: true });
+
+      const thumbs = await page.$$(".thumb");
+
+      expect(thumbs.length).toBeGreaterThan(1);
+      await thumbs[1].click();
+
+      await page.waitForFunction(() => window.location.href.includes("cv=1"));
+
+      expect(page.url()).toContain("cv=1");
     });
   });
 });

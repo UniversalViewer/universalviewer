@@ -1,7 +1,9 @@
+const { BASE_URL } = require("../scripts/testBaseUrl");
+
 describe("Configuration options", () => {
   describe("thumb cache invalidation", () => {
     beforeEach(async () => {
-      await page.goto("http://localhost:4444/");
+      await page.goto(BASE_URL);
       await page.waitForSelector("#thumb0");
     });
     it.skip("when set to false does not provide timestamp", async () => {
