@@ -11,6 +11,10 @@ const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
 const PDF_MULTI_FILE_MANIFEST =
   "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
 
+// 3D manifest for model viewer tests
+const MODEL_3D_MANIFEST =
+  "https://biiif-template-example-3kntb3jpl-mnemoscene.vercel.app/3d/index.json";
+
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
@@ -211,9 +215,8 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -481,6 +484,57 @@ describe("Universal Viewer", () => {
       await page.waitForFunction(() => window.location.href.includes("cv=1"));
 
       expect(page.url()).toContain("cv=1");
+    });
+  });
+
+  // 3D manifest test
+  describe("3D manifest", () => {
+    beforeEach(async () => {
+      await page.goto(viewerUrl(MODEL_3D_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+      
+      await page.waitForSelector(".uv", {
+        visible: true,
+      });
+    });
+    
+    it("loads the 3D manifest", async () => {
+      expect(page.url()).toContain(encodeURIComponent(MODEL_3D_MANIFEST));
+    });
+    
+    it("allows zoom interaction", async () => {
+      const viewer = await page.$(".uv, .centerPanel, canvas");
+      expect(viewer).toBeTruthy();
+      
+      const box = await viewer.boundingBox();
+      expect(box).toBeTruthy();
+      
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel({ deltaY: -600 });
+      await page.mouse.wheel({ deltaY: 600 });
+      
+      const uv = await page.$(".uv");
+      expect(uv).toBeTruthy();
+    });
+    
+    it("allows model rotation", async () => {
+      const viewer = await page.$(".uv, .centerPanel, canvas");
+      expect(viewer).toBeTruthy();
+      
+      const box = await viewer.boundingBox();
+      expect(box).toBeTruthy();
+      
+      const centerX = box.x + box.width / 2;
+      const centerY = box.y + box.height / 2;
+      
+      await page.mouse.move(centerX, centerY);
+      await page.mouse.down();
+      await page.mouse.move(centerX + 200, centerY, { steps: 20 });
+      await page.mouse.up();
+      
+      const uv = await page.$(".uv");
+      expect(uv).toBeTruthy();
     });
   });
 });
