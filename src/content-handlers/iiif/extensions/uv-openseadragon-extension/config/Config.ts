@@ -35,8 +35,11 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
+  decreaseSize: string;
   download: string;
+  increaseSize: string;
   selectAll: string;
+  size: string;
   title: string;
 };
 
