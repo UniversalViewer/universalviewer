@@ -12,11 +12,11 @@ import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { Strings, Maths } from "../../Utils";
 
 export interface IGalleryComponentContent {
-  decreaseSize: string;
-  increaseSize: string;
+  decreaseThumbnailSize: string;
+  increaseThumbnailSize: string;
   searchResult: string;
   searchResults: string;
-  size: string;
+  thumbnailSize: string;
   download: string;
   selectAll: string;
 }
@@ -89,19 +89,19 @@ export class GalleryComponent extends BaseComponent {
 
     this._$sizeDownButton = $(
       '<input class="btn btn-default size-down" type="button" value="-" />'
-    ).attr("aria-label", this.options.data.content.decreaseSize);
+    ).attr("aria-label", this.options.data.content.decreaseThumbnailSize);
     this._$leftOptions.append(this._$sizeDownButton);
 
     this._$sizeRange = $(
       '<input type="range" name="size" min="1" max="10" value="' +
         this.options.data.initialZoom +
         '" />'
-    ).attr("aria-label", this.options.data.content.size);
+    ).attr("aria-label", this.options.data.content.thumbnailSize);
     this._$leftOptions.append(this._$sizeRange);
 
     this._$sizeUpButton = $(
       '<input class="btn btn-default size-up" type="button" value="+" />'
-    ).attr("aria-label", this.options.data.content.increaseSize);
+    ).attr("aria-label", this.options.data.content.increaseThumbnailSize);
     this._$leftOptions.append(this._$sizeUpButton);
 
     this._$multiSelectOptions = $('<div class="multiSelectOptions"></div>');
@@ -207,11 +207,11 @@ export class GalleryComponent extends BaseComponent {
     return {
       chunkedResizingThreshold: 400,
       content: <IGalleryComponentContent>{
-        decreaseSize: "Decrease thumbnail size",
-        increaseSize: "Increase thumbnail size",
+        decreaseThumbnailSize: "Decrease thumbnail size",
+        increaseThumbnailSize: "Increase thumbnail size",
         searchResult: "{0} search result",
         searchResults: "{0} search results",
-        size: "Thumbnail size",
+        thumbnailSize: "Thumbnail size",
       },
       debug: false,
       helper: null,
