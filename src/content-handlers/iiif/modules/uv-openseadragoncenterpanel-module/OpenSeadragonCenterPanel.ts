@@ -237,8 +237,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   rotateRight(): void {
-    this.viewer.viewport.setRotation(this.viewer.viewport.getRotation() + 90);
-  }
+    const current = this.viewer.viewport.getRotation();
+    const next = (current + 90) % 360;
+    this.viewer.viewport.setRotation(next);
+}
 
   updateResponsiveView(): void {
     this.setNavigatorVisible();
