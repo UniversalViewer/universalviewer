@@ -120,8 +120,8 @@ export class ShareDialogue<
       this.shareManifestsEnabled
     );
     this.$manifestInput = $(
-      `<input class="copy-input" id="manifestInput" type="text" value="${iiifUrl}" readonly/>`
-    );
+      `<input class="copy-input" id="manifestInput" type="text" readonly/>`
+    ).attr('value', iiifUrl);
     this.$manifestInput.focus(function () {
       $(this).select();
     });
@@ -206,8 +206,8 @@ export class ShareDialogue<
 
     const $iiifSection = $('<div class="iiif-section"></div>');
     this.$iiifButton = $(
-      `<a class="imageBtn iiif" href="${iiifUrl}" title="${this.content.iiif}" target="_blank"></a>`
-    );
+      `<a class="imageBtn iiif" title="${this.content.iiif}" target="_blank"></a>`
+    ).attr('href', iiifUrl);
     $iiifSection.append(this.$iiifButton);
     this.$content.append($iiifSection);
 
