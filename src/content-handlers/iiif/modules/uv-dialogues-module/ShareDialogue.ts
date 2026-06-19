@@ -121,7 +121,7 @@ export class ShareDialogue<
     );
     this.$manifestInput = $(
       `<input class="copy-input" id="manifestInput" type="text" readonly/>`
-    ).attr('value', iiifUrl);
+    ).attr("value", iiifUrl);
     this.$manifestInput.focus(function () {
       $(this).select();
     });
@@ -207,7 +207,7 @@ export class ShareDialogue<
     const $iiifSection = $('<div class="iiif-section"></div>');
     this.$iiifButton = $(
       `<a class="imageBtn iiif" title="${this.content.iiif}" target="_blank"></a>`
-    ).attr('href', iiifUrl);
+    ).attr("href", iiifUrl);
     $iiifSection.append(this.$iiifButton);
     this.$content.append($iiifSection);
 
