@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=20",
@@ -135,7 +135,9 @@
   },
   "jest": {
     "preset": "jest-puppeteer",
-    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
