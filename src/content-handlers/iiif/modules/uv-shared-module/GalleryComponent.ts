@@ -63,11 +63,6 @@ export class GalleryComponent extends BaseComponent {
 
   constructor(options: IBaseComponentOptions) {
     super(options);
-    this.options.data.content = Object.assign(
-      {},
-      this.data().content,
-      this.options.data.content
-    );
     this._data = this.options.data;
     this._init();
     this._resize();
@@ -89,20 +84,21 @@ export class GalleryComponent extends BaseComponent {
 
     this._$sizeDownButton = $(
       '<input class="btn btn-default size-down" type="button" value="-" />'
-    ).attr("aria-label", this.options.data.content.decreaseThumbnailSize);
+    );
     this._$leftOptions.append(this._$sizeDownButton);
 
     this._$sizeRange = $(
       '<input type="range" name="size" min="1" max="10" value="' +
         this.options.data.initialZoom +
         '" />'
-    ).attr("aria-label", this.options.data.content.thumbnailSize);
+    );
     this._$leftOptions.append(this._$sizeRange);
 
     this._$sizeUpButton = $(
       '<input class="btn btn-default size-up" type="button" value="+" />'
-    ).attr("aria-label", this.options.data.content.increaseThumbnailSize);
+    );
     this._$leftOptions.append(this._$sizeUpButton);
+    this._updateSizeControlLabels();
 
     this._$multiSelectOptions = $('<div class="multiSelectOptions"></div>');
     this._$rightOptions.append(this._$multiSelectOptions);
@@ -231,6 +227,7 @@ export class GalleryComponent extends BaseComponent {
 
   public set(data: IGalleryComponentData): void {
     this._data = Object.assign(this._data, data);
+    this._updateSizeControlLabels();
 
     if (
       this._data.helper &&
@@ -306,6 +303,22 @@ export class GalleryComponent extends BaseComponent {
     }
 
     // this._update();
+  }
+
+  private _updateSizeControlLabels(): void {
+    if (!this._data.content) {
+      return;
+    }
+
+    this._$sizeDownButton.attr(
+      "aria-label",
+      this._data.content.decreaseThumbnailSize
+    );
+    this._$sizeRange.attr("aria-label", this._data.content.thumbnailSize);
+    this._$sizeUpButton.attr(
+      "aria-label",
+      this._data.content.increaseThumbnailSize
+    );
   }
 
   private _update(): void {
