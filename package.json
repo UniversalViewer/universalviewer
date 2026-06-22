@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your 📚📜📰📽️📻🗿 with the 🌎",
   "engines": {
     "node": ">=20",
