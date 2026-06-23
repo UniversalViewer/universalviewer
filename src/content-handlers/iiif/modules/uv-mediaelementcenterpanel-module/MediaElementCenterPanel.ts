@@ -24,6 +24,7 @@ import { Config } from "../../extensions/uv-mediaelement-extension/config/Config
 type TextTrackDescriptor = {
   language?: string;
   label?: string;
+  format?: string;
   id: string;
 };
 
@@ -174,6 +175,7 @@ export class MediaElementCenterPanel extends CenterPanel<
             label:
               rendering.getLabel().getValue() ??
               rendering.getFormat().toString(),
+            format: rendering.getFormat().toString(),
             id: rendering.id,
           });
         }
@@ -397,7 +399,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.$media.append(
         $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
           subtitle.language
-        }" src="${subtitle.id}" ${
+        }" src="${subtitle.id}" type="${subtitle.format}" ${
           subtitles.indexOf(subtitle) === 0 ? "default" : ""
         }>
 `)
