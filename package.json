@@ -116,7 +116,7 @@
     "jsviews": "1.0.15",
     "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.3.0",
-    "mediaelement": "^5",
+    "mediaelement": "^7.1.0",
     "mediaelement-plugins": "^5.0.0",
     "openseadragon": "^6.0.0",
     "pdfjs-dist": "3.11.174",
