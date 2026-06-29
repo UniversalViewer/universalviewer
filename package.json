@@ -102,7 +102,7 @@
     "@iiif/manifold": "^2.3.0",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.31",
-    "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
+    "@openseadragon-imaging/openseadragon-viewerinputhook": "^3.0.1",
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
