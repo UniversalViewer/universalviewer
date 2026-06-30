@@ -148,7 +148,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     this.$tabs.append(this.$thumbsButton);
     if (this.config.options.hideThumbsView) {
       this.$thumbsButton.hide();
-      }
+    }
 
     this.$tabsContent = $('<div class="tabsContent"></div>');
     this.$main.append(this.$tabsContent);
@@ -655,7 +655,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     );
     if (hideThumbsView) {
       return false;
-      }
+    }
 
     const treeData: TreeNode | null = this.getTree();
 
