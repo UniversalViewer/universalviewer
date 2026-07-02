@@ -14,7 +14,7 @@ declare let jQuery: any;
 // Declared here rather than via @types/jqueryui, whose non-generic JQuery
 // interface declaration conflicts with @types/jquery v3. switchClass is
 // already declared globally in src/globals.d.ts.
- 
+
 interface JQuery<TElement = HTMLElement> {
   slider(...args: any[]): any;
 }

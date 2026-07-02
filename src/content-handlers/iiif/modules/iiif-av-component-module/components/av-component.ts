@@ -1,6 +1,3 @@
- 
- 
- 
 const $ = require("jquery");
 require("jquery-ui-dist/jquery-ui");
 require("jquery-ui-dist/jquery-ui.css");
@@ -98,7 +95,6 @@ export class AVComponent extends BaseComponent {
   }
 
   public set(data: IAVComponentData): void {
-     
     Logger.groupCollapsed("AVComponent.set()");
     Logger.log("Data", data);
 

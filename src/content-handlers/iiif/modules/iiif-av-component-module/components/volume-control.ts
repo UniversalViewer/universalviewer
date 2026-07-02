@@ -1,4 +1,3 @@
- 
 const $ = require("jquery");
 import { IAVVolumeControlState } from "../interfaces/volume-control-state";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
@@ -42,7 +41,6 @@ export class AVVolumeControl extends BaseComponent {
 
     this._$element.append(this._$volumeMute, this._$volumeSlider);
 
-     
     const that = this;
 
     this._$volumeMute.on("touchstart click", (e) => {

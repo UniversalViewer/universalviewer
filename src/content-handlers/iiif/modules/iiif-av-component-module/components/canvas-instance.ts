@@ -1,5 +1,3 @@
- 
- 
 import { convertToPercentage } from "../helpers/convert-to-percentage";
 
 const $ = require("jquery");
@@ -437,7 +435,6 @@ export class CanvasInstance extends BaseComponent {
       this._canvasHeight = canvasHeight;
     }
 
-     
     const that = this;
 
     let prevClicks = 0;
@@ -1180,7 +1177,6 @@ export class CanvasInstance extends BaseComponent {
           this._$durationHighlight.hide();
         }
 
-         
         const that = this;
 
         // try to destroy existing rangeTimelineContainer
@@ -1464,11 +1460,9 @@ export class CanvasInstance extends BaseComponent {
 
     data.timeout = null;
 
-     
     const that = this;
 
     data.checkForStall = function () {
-       
       const self = this;
 
       if (this.active) {

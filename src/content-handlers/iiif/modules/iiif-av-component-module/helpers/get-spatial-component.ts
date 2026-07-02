@@ -3,7 +3,6 @@ export function getSpatialComponent(target: string): number[] | null {
   let xywh: number[] | null = null;
 
   if (spatial && spatial[1]) {
-     
     xywh = <any>spatial[1].split(",");
   }
 

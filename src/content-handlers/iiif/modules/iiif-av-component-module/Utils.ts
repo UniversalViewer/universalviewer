@@ -63,7 +63,10 @@ export class AVComponentUtils {
 
     if (t) {
       let offset: number = 0;
-      const targetWithoutTemporal: string = target.substr(0, target.indexOf("#"));
+      const targetWithoutTemporal: string = target.substr(
+        0,
+        target.indexOf("#")
+      );
 
       // loop through canvases adding up their durations until we reach the targeted canvas
       for (let i = 0; i < canvases.length; i++) {
