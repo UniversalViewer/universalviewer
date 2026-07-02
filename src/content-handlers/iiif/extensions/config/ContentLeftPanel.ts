@@ -59,10 +59,13 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
 
 type ContentLeftPanelContent = ExpandPanelContent & {
   date: string;
+  decreaseThumbnailSize: string;
   index: string;
+  increaseThumbnailSize: string;
   manifestRanges: string;
   searchResult: string;
   searchResults: string;
+  thumbnailSize: string;
   sortBy: string;
   thumbnails: string;
   title: string;

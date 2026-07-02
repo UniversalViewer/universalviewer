@@ -12,8 +12,11 @@ import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { Strings, Maths } from "../../Utils";
 
 export interface IGalleryComponentContent {
+  decreaseThumbnailSize: string;
+  increaseThumbnailSize: string;
   searchResult: string;
   searchResults: string;
+  thumbnailSize: string;
   download: string;
   selectAll: string;
 }
@@ -95,6 +98,7 @@ export class GalleryComponent extends BaseComponent {
       '<input class="btn btn-default size-up" type="button" value="+" />'
     );
     this._$leftOptions.append(this._$sizeUpButton);
+    this._updateSizeControlLabels();
 
     this._$multiSelectOptions = $('<div class="multiSelectOptions"></div>');
     this._$rightOptions.append(this._$multiSelectOptions);
@@ -199,8 +203,11 @@ export class GalleryComponent extends BaseComponent {
     return {
       chunkedResizingThreshold: 400,
       content: <IGalleryComponentContent>{
+        decreaseThumbnailSize: "Decrease thumbnail size",
+        increaseThumbnailSize: "Increase thumbnail size",
         searchResult: "{0} search result",
         searchResults: "{0} search results",
+        thumbnailSize: "Thumbnail size",
       },
       debug: false,
       helper: null,
@@ -220,6 +227,7 @@ export class GalleryComponent extends BaseComponent {
 
   public set(data: IGalleryComponentData): void {
     this._data = Object.assign(this._data, data);
+    this._updateSizeControlLabels();
 
     if (
       this._data.helper &&
@@ -295,6 +303,22 @@ export class GalleryComponent extends BaseComponent {
     }
 
     // this._update();
+  }
+
+  private _updateSizeControlLabels(): void {
+    if (!this._data.content) {
+      return;
+    }
+
+    this._$sizeDownButton.attr(
+      "aria-label",
+      this._data.content.decreaseThumbnailSize
+    );
+    this._$sizeRange.attr("aria-label", this._data.content.thumbnailSize);
+    this._$sizeUpButton.attr(
+      "aria-label",
+      this._data.content.increaseThumbnailSize
+    );
   }
 
   private _update(): void {
