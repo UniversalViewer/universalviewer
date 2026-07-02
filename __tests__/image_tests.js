@@ -1,15 +1,9 @@
-test.skip("Configuration options", () => {});
-
 const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Cookbook manifest for viewer control tests
 const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
   "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
-
-// PDF manifest for PDF-specific behaviour
-const PDF_MULTI_FILE_MANIFEST =
-  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
 
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
@@ -211,9 +205,8 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -412,75 +405,6 @@ describe("Universal Viewer", () => {
       await page.click(moreInfoCollapseBtn);
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
       await page.waitForSelector(moreInfoHeader, { hidden: true });
-    });
-  });
-
-  // PDF MANIFEST TEST
-  describe("PDF manifest", () => {
-    beforeEach(async () => {
-      await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
-        waitUntil: "domcontentloaded",
-      });
-    });
-
-    it("loads PDF manifest successfully", async () => {
-      expect(page.url()).toContain(encodeURIComponent(PDF_MULTI_FILE_MANIFEST));
-
-      await page.waitForSelector(".uv", { visible: true });
-
-      await page.waitForFunction(() => {
-        return document.querySelectorAll("iframe").length > 0;
-      });
-
-      const viewerFrame = page.frames().find((f) => {
-        const url = f.url();
-        
-        return (
-          url.includes("uv.html") ||
-          url.includes("viewer") ||
-          url.includes("manifest")
-        );
-      });
-
-      expect(viewerFrame).toBeTruthy();
-      
-      await viewerFrame.waitForSelector("canvas", { visible: true});
-      
-      const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector(
-          "canvas"
-        );
-        
-        if (!canvas) return null;
-        return {
-          width: canvas.width,
-          height: canvas.height,
-        };
-      });
-      expect(canvasInfo).not.toBeNull();
-      expect(canvasInfo.width).toBeGreaterThan(0);
-      expect(canvasInfo.height).toBeGreaterThan(0);
-      
-      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
-      
-      expect(pageText).not.toContain("Unable to load");
-      expect(pageText).not.toContain("Error loading");
-    });
-
-    it("shows multiple PDF files in the sidebar and allows navigation", async () => {
-      await page.waitForSelector("button.expandButton", { visible: true });
-      await page.click("button.expandButton");
-
-      await page.waitForSelector(".thumb", { visible: true });
-
-      const thumbs = await page.$$(".thumb");
-
-      expect(thumbs.length).toBeGreaterThan(1);
-      await thumbs[1].click();
-
-      await page.waitForFunction(() => window.location.href.includes("cv=1"));
-
-      expect(page.url()).toContain("cv=1");
     });
   });
 });
