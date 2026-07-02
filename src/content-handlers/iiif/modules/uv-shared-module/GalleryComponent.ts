@@ -692,7 +692,7 @@ export class GalleryComponent extends BaseComponent {
     if (!this._thumbsCache) {
       this._thumbsCache = this._$thumbs.find(".thumb");
     }
-    return this._thumbsCache;
+    return this._thumbsCache as JQuery;
   }
 
   private _getThumbByIndex(canvasIndex: number): JQuery {
