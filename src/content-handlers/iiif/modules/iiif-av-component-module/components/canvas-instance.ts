@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+ 
+ 
 import { convertToPercentage } from "../helpers/convert-to-percentage";
 
 const $ = require("jquery");
@@ -227,8 +226,9 @@ export class CanvasInstance extends BaseComponent {
 
     // this._renderSyncIndicator(data)
 
-    // @ts-ignore
-    const plan = createTimePlansFromManifest(
+    // upstream passes a second argument that createTimePlansFromManifest
+    // ignores; cast keeps the call as-is without a line-fragile @ts-ignore
+    const plan = (createTimePlansFromManifest as any)(
       helper.manifest as any,
       mediaElements
     );
@@ -437,7 +437,7 @@ export class CanvasInstance extends BaseComponent {
       this._canvasHeight = canvasHeight;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
+     
     const that = this;
 
     let prevClicks = 0;
@@ -1180,7 +1180,7 @@ export class CanvasInstance extends BaseComponent {
           this._$durationHighlight.hide();
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
+         
         const that = this;
 
         // try to destroy existing rangeTimelineContainer
@@ -1464,11 +1464,11 @@ export class CanvasInstance extends BaseComponent {
 
     data.timeout = null;
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
+     
     const that = this;
 
     data.checkForStall = function () {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
+       
       const self = this;
 
       if (this.active) {

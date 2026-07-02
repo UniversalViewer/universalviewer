@@ -1,7 +1,6 @@
-/* eslint-disable no-debugger */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+ 
+ 
+ 
 const $ = require("jquery");
 require("jquery-ui-dist/jquery-ui");
 require("jquery-ui-dist/jquery-ui.css");
@@ -99,7 +98,7 @@ export class AVComponent extends BaseComponent {
   }
 
   public set(data: IAVComponentData): void {
-    // eslint-disable-next-line no-debugger
+     
     Logger.groupCollapsed("AVComponent.set()");
     Logger.log("Data", data);
 

@@ -20,7 +20,7 @@ interface HTMLElement {
 // interface lived inside JQueryPlugins.ts where, being module-scoped, it never
 // applied globally — the app instead type-checked against the loose jQuery 2
 // typings that @iiif/iiif-av-component (since vendored) pulled in transitively.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 interface JQuery<TElement = HTMLElement> {
   attr(...args: any[]): any;
   css(...args: any[]): any;
