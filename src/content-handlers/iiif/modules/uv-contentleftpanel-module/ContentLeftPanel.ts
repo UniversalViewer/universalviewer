@@ -520,6 +520,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
+        cacheInvalidation: this.config.options.thumbsCacheInvalidation,
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
