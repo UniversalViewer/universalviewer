@@ -124,6 +124,7 @@ export class DownloadDialogue extends Dialogue<
         if (renderingFormat) {
           format = renderingFormat.toString();
         }
+
         this.addEntireFileDownloadOption(
           rendering.id,
           <string>LanguageMap.getValue(rendering.getLabel()),
