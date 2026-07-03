@@ -184,13 +184,16 @@ export class DownloadDialogue extends Dialogue<
       label += " (" + fileType + ")";
     }
 
-    this.$downloadOptions.append(
-      '<li><a href="' +
-        uri +
-        '" target="_blank" download tabindex="0">' +
-        label +
-        "</li>"
-    );
+    const $link = $("<a>", {
+      href: uri,
+      target: "_blank",
+      download: "",
+      tabindex: "0",
+      text: label,
+    });
+
+    const $li = $("<li>").append($link);
+    this.$downloadOptions.append($li);
   }
 
   resetDynamicDownloadOptions(): void {
