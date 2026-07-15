@@ -91,7 +91,7 @@ export class DownloadDialogue extends Dialogue<
     this.updateTermsOfUseButton();
   }
 
- isSafeRenderingUri(uri) {
+  isSafeRenderingUri(uri) {
     try {
       const parsed = new URL(uri, window.location.href);
       return ["http:", "https:"].includes(parsed.protocol);
@@ -113,9 +113,9 @@ export class DownloadDialogue extends Dialogue<
 
       let renderingFound: boolean = false;
 
-    const renderings: Rendering[] = canvas
-      .getRenderings()
-      .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
+      const renderings: Rendering[] = canvas
+        .getRenderings()
+        .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
 
       for (let i = 0; i < renderings.length; i++) {
         const rendering: Rendering = renderings[i];
@@ -207,9 +207,9 @@ export class DownloadDialogue extends Dialogue<
     defaultLabel: string,
     type: DownloadOption
   ): IRenderingOption[] {
-  const renderings: Rendering[] = resource
-    .getRenderings()
-    .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
+    const renderings: Rendering[] = resource
+      .getRenderings()
+      .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
 
     const downloadOptions: any[] = [];
 
