@@ -358,6 +358,12 @@ Padding for loading gallery thumbnails.
 **Default**: `200`  
 Width of the gallery thumbnail.
 
+##### hideThumbsView
+
+**Type**: `boolean`  
+**Default**: `false`  
+Hides the thumbnails view within the left panel. 
+
 ##### oneColThumbHeight
 
 **Type**: `number`  
