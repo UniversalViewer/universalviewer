@@ -1,4 +1,4 @@
-// Vendored from https://github.com/IIIF-Commons/iiif-av-component (v1.2.4).
+// Incorporated from https://github.com/IIIF-Commons/iiif-av-component (v1.2.4).
 // The original globals.d.ts also declared Window.MediaSource,
 // Window.WebKitMediaSource, Window.jQuery and Array.includes — those are
 // already declared in src/globals.d.ts, so only the bare globals the
