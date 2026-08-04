@@ -64,7 +64,7 @@
     "chai": "5.1.2",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
-    "eslint": "9.27.0",
+    "eslint": "10.8.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.4.0",
     "eslint-plugin-react": "7.37.5",
@@ -88,12 +88,12 @@
     "typedoc": "^0.28.5",
     "typedoc-plugin-missing-exports": "^4.1.0",
     "typescript": "^5",
-    "typescript-eslint": "8.36.0",
+    "typescript-eslint": "8.62.1",
     "url-loader": "4.1.1",
     "webpack": "^5.59.1",
     "webpack-bundle-analyzer": "^5.3.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "5.2.5"
+    "webpack-dev-server": "5.2.6"
   },
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
@@ -101,7 +101,7 @@
     "@iiif/manifold": "^2.3.0",
     "@iiif/presentation-3": "^1.0.5",
     "@iiif/vocabulary": "^1.0.31",
-    "@openseadragon-imaging/openseadragon-viewerinputhook": "^2.2.1",
+    "@openseadragon-imaging/openseadragon-viewerinputhook": "^3.0.1",
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
