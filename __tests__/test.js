@@ -193,6 +193,25 @@ describe("Universal Viewer", () => {
     expect(galleryViewAfterTwoUpToggle).toBe("hidden");
   });
 
+  it("labels gallery thumbnail size controls", async () => {
+    await page.waitForSelector(".iiif-gallery-component .size-down");
+
+    const labels = await page.$$eval(
+      [
+        ".iiif-gallery-component .size-down",
+        ".iiif-gallery-component input[type='range'][name='size']",
+        ".iiif-gallery-component .size-up",
+      ].join(", "),
+      (controls) => controls.map((control) => control.getAttribute("aria-label"))
+    );
+
+    expect(labels).toEqual([
+      "Decrease thumbnail size",
+      "Thumbnail size",
+      "Increase thumbnail size",
+    ]);
+  });
+
   it("settings button is visible", async () => {
     await page.waitForSelector(".btn.imageBtn.settings");
 
