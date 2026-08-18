@@ -916,7 +916,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                     type: "image",
                     url: body[0].id,
                     buildPyramid: false,
-                    crossOriginPolicy: false
+                    crossOriginPolicy: false,
                   };
                 }
 
@@ -954,7 +954,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                   type: "image",
                   url: choice.id,
                   buildPyramid: false,
-                  crossOriginPolicy: false
+                  crossOriginPolicy: false,
                 };
               }
 
@@ -1009,7 +1009,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             type: "image",
             url: data.id,
             buildPyramid: false,
-            crossOriginPolicy: false
+            crossOriginPolicy: false,
           };
         }
 
