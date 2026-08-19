@@ -318,7 +318,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: undefined,
+      prefixUrl: "",
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config!.options.clickToZoomEnabled,
@@ -916,6 +916,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                     type: "image",
                     url: body[0].id,
                     buildPyramid: false,
+                    crossOriginPolicy: false,
                   };
                 }
 
@@ -953,6 +954,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
                   type: "image",
                   url: choice.id,
                   buildPyramid: false,
+                  crossOriginPolicy: false,
                 };
               }
 
@@ -1007,6 +1009,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             type: "image",
             url: data.id,
             buildPyramid: false,
+            crossOriginPolicy: false,
           };
         }
 
