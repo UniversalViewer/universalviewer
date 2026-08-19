@@ -11,6 +11,18 @@ const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
 const PDF_MULTI_FILE_MANIFEST =
   "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
 
+// AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
+// AV manifest (no ranges) is rendered by the mediaelement extension.
+const AV_VIDEO_MANIFEST =
+  "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json";
+
+// AV manifest WITH a table of contents (structures/ranges). When an AV manifest
+// has ranges and preferMediaElementExtension is false (the default), the viewer
+// uses uv-av-extension -> AVCenterPanel (iiif-av-component) instead of the
+// mediaelement player.
+const AV_TOC_MANIFEST =
+  "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json";
+
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
@@ -230,9 +242,8 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -453,7 +464,7 @@ describe("Universal Viewer", () => {
 
       const viewerFrame = page.frames().find((f) => {
         const url = f.url();
-        
+
         return (
           url.includes("uv.html") ||
           url.includes("viewer") ||
@@ -462,14 +473,12 @@ describe("Universal Viewer", () => {
       });
 
       expect(viewerFrame).toBeTruthy();
-      
-      await viewerFrame.waitForSelector("canvas", { visible: true});
-      
+
+      await viewerFrame.waitForSelector("canvas", { visible: true });
+
       const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector(
-          "canvas"
-        );
-        
+        const canvas = document.querySelector("canvas");
+
         if (!canvas) return null;
         return {
           width: canvas.width,
@@ -479,9 +488,11 @@ describe("Universal Viewer", () => {
       expect(canvasInfo).not.toBeNull();
       expect(canvasInfo.width).toBeGreaterThan(0);
       expect(canvasInfo.height).toBeGreaterThan(0);
-      
-      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
-      
+
+      const pageText = await viewerFrame.evaluate(
+        () => document.body.innerText
+      );
+
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
     });
@@ -501,5 +512,145 @@ describe("Universal Viewer", () => {
 
       expect(page.url()).toContain("cv=1");
     });
+  });
+
+  // AV MANIFEST TEST
+  describe("AV manifest", () => {
+    // Use a dedicated page so the AV tests are isolated from whatever state
+    // (e.g. in-flight iframe loads) earlier suites left on the shared page.
+    let avPage;
+
+    beforeAll(async () => {
+      avPage = await browser.newPage();
+    });
+
+    afterAll(async () => {
+      await avPage.close();
+    });
+
+    beforeEach(async () => {
+      // The example page reads the manifest from the URL only on the initial
+      // document load, so force a full reload (a hash-only change would not
+      // re-initialise the viewer).
+      await avPage.goto("about:blank");
+      await avPage.goto(viewerUrl(AV_VIDEO_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+    }, 60000);
+
+    it("loads the AV manifest into the mediaelement player", async () => {
+      expect(avPage.url()).toContain(encodeURIComponent(AV_VIDEO_MANIFEST));
+
+      await avPage.waitForSelector(".uv", { visible: true });
+
+      // The AV manifest is handled by the mediaelement extension, which adds
+      // this class to the extension host element.
+      await avPage.waitForSelector(".uv-mediaelement-extension", {
+        visible: true,
+      });
+
+      // The MediaElement.js player renders into a .mejs__container. For a
+      // video canvas it also carries the .mejs__video class.
+      await avPage.waitForSelector(".mejs__container.mejs__video", {
+        visible: true,
+      });
+
+      // The underlying media element points at the canvas' video resource.
+      const videoSrc = await avPage.$eval(
+        ".mejs__mediaelement video",
+        (el) => el.src || el.querySelector("source")?.src || ""
+      );
+      expect(videoSrc).toMatch(/\.mp4($|\?)/);
+
+      const pageText = await avPage.evaluate(() => document.body.innerText);
+      expect(pageText).not.toContain("Unable to load");
+      expect(pageText).not.toContain("Error loading");
+    }, 60000);
+
+    it("renders AV playback controls", async () => {
+      await avPage.waitForSelector(".mejs__controls", { visible: true });
+
+      // Play / pause button.
+      const playButton = await avPage.$(".mejs__playpause-button");
+      expect(playButton).toBeTruthy();
+
+      // Current time readout.
+      const currentTime = await avPage.$eval(".mejs__currenttime", (el) =>
+        el.textContent.trim()
+      );
+      expect(currentTime).toMatch(/^\d{2}:\d{2}/);
+    }, 60000);
+  });
+
+  // AV MANIFEST WITH TABLE OF CONTENTS TEST
+  // An AV manifest that defines ranges/structures is routed to the AV extension
+  // (AVCenterPanel / iiif-av-component) rather than the mediaelement player.
+  describe("AV manifest with table of contents", () => {
+    // Use a dedicated page so the AV tests are isolated from whatever state
+    // (e.g. in-flight iframe loads) earlier suites left on the shared page.
+    let avPage;
+
+    beforeAll(async () => {
+      avPage = await browser.newPage();
+    });
+
+    afterAll(async () => {
+      await avPage.close();
+    });
+
+    beforeEach(async () => {
+      // Force a full reload so the viewer re-initialises on this manifest
+      // (a hash-only change would keep the previously loaded manifest).
+      await avPage.goto("about:blank");
+      await avPage.goto(viewerUrl(AV_TOC_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+    }, 60000);
+
+    it("loads the AV manifest into the AV center panel", async () => {
+      expect(avPage.url()).toContain(encodeURIComponent(AV_TOC_MANIFEST));
+
+      await avPage.waitForSelector(".uv", { visible: true });
+
+      // The AV extension mounts the AVComponent into a .iiif-av-component
+      // wrapper inside the center panel.
+      await avPage.waitForSelector(".iiif-av-component .player", {
+        visible: true,
+      });
+
+      // This path must NOT fall back to the mediaelement player.
+      const mejsCount = await avPage.$$eval(
+        ".mejs__container",
+        (els) => els.length
+      );
+      expect(mejsCount).toBe(0);
+
+      // The media element is created as video.anno / audio.anno.
+      await avPage.waitForSelector(
+        ".iiif-av-component video.anno, .iiif-av-component audio.anno"
+      );
+
+      const pageText = await avPage.evaluate(() => document.body.innerText);
+      expect(pageText).not.toContain("Unable to load");
+      expect(pageText).not.toContain("Error loading");
+    }, 60000);
+
+    it("renders AV component playback controls", async () => {
+      await avPage.waitForSelector(".iiif-av-component .controls-container", {
+        visible: true,
+      });
+
+      // Play/pause button.
+      const playButton = await avPage.$(
+        ".iiif-av-component .controls-container .av-icon-play"
+      );
+      expect(playButton).toBeTruthy();
+
+      // Duration display.
+      const duration = await avPage.$(
+        ".iiif-av-component .time-display .canvas-duration"
+      );
+      expect(duration).toBeTruthy();
+    }, 60000);
   });
 });

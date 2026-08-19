@@ -11,7 +11,7 @@ import {
   Range,
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
-import { AVComponent } from "@iiif/iiif-av-component/dist-esmodule";
+import { AVComponent } from "../iiif-av-component-module";
 import { Bools } from "../../Utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";
@@ -393,7 +393,10 @@ export class AVCenterPanel extends CenterPanel<
     super.resize();
 
     if (resizeAVComponent && this.avcomponent) {
-      this.$avcomponent.height(this.$content.height());
+      const contentHeight: number | undefined = this.$content.height();
+      if (contentHeight !== undefined) {
+        this.$avcomponent.height(contentHeight);
+      }
       this.avcomponent.resize();
     }
   }

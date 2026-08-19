@@ -15,6 +15,85 @@ interface HTMLElement {
   ontouchstart: any;
 }
 
+// jQuery plugin methods added in src/content-handlers/iiif/JQueryPlugins.ts,
+// plus loosened core-method types this codebase relies on. Previously this
+// interface lived inside JQueryPlugins.ts where, being module-scoped, it never
+// applied globally — the app instead type-checked against the loose jQuery 2
+// typings that @iiif/iiif-av-component (since vendored) pulled in transitively.
+
+interface JQuery<TElement = HTMLElement> {
+  attr(...args: any[]): any;
+  css(...args: any[]): any;
+  append(...args: any[]): any;
+  text(...args: any[]): any;
+  toggle(...args: any[]): any;
+  html(...args: any[]): any;
+  empty(...args: any[]): any;
+  one(...args: any[]): any;
+  remove(...args: any[]): any;
+  height(...args: any[]): any;
+  contents(...args: any[]): any;
+  outerWidth(...args: any[]): any;
+  outerHeight(...args: any[]): any;
+  offset(...args: any[]): any;
+  mousemove(...args: any[]): any;
+  find(...args: any[]): any;
+  data(...args: any[]): any;
+  addClass(...args: any[]): any;
+  removeClass(...args: any[]): any;
+  width(...args: any[]): any;
+  removeAttr(...args: any[]): any;
+  prop(...args: any[]): any;
+  is(...args: any[]): any;
+  val(...args: any[]): any;
+  on(...args: any[]): any;
+  delegate(...args: any[]): any;
+  scrollTop(...args: any[]): any;
+  link(...args: any[]): any; // jsviews
+  checkboxButton(onClicked: (checked: boolean) => void): void;
+  disable(): void;
+  ellipsis(chars: number): string;
+  ellipsisFill(text?: string): any;
+  ellipsisFixed(chars: number, buttonText: string): any;
+  ellipsisHtmlFixed(chars: number, callback: () => void): any;
+  enable(): void;
+  equaliseHeight(reset?: boolean, average?: boolean): any;
+  getVisibleElementWithGreatestTabIndex(): any;
+  horizontalMargins(): number;
+  horizontalPadding(): number;
+  ismouseover(): boolean;
+  leftMargin(): number;
+  leftPadding(): number;
+  on(
+    events: string,
+    handler: (eventObject: JQueryEventObject, ...args: any[]) => any,
+    wait: Number
+  ): JQuery;
+  onEnter(callback: () => void): any;
+  onPressed(callback: (e: any) => void): any;
+  removeLastWord(chars?: number, depth?: number): any;
+  rightMargin(): number;
+  rightPadding(): number;
+  switchClass(class1: string, class2: string): any;
+  targetBlank(): void;
+  toggleExpandText(
+    chars: number,
+    lessText: string,
+    moreText: string,
+    cb: () => void
+  ): any;
+  toggleExpandTextByLines(
+    lines: number,
+    lessText: string,
+    moreText: string,
+    cb: () => void
+  ): any;
+  toggleText(text1: string, text2: string): any;
+  updateAttr(attrName: string, oldVal: string, newVal: string): void;
+  verticalMargins(): number;
+  verticalPadding(): number;
+}
+
 interface JQueryStatic {
   // pubsub
   publish(event: string, eventObj?: any[]): void;
