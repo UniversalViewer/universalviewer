@@ -202,7 +202,8 @@ describe("Universal Viewer", () => {
         ".iiif-gallery-component input[type='range'][name='size']",
         ".iiif-gallery-component .size-up",
       ].join(", "),
-      (controls) => controls.map((control) => control.getAttribute("aria-label"))
+      (controls) =>
+        controls.map((control) => control.getAttribute("aria-label"))
     );
 
     expect(labels).toEqual([
@@ -230,9 +231,8 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -453,7 +453,7 @@ describe("Universal Viewer", () => {
 
       const viewerFrame = page.frames().find((f) => {
         const url = f.url();
-        
+
         return (
           url.includes("uv.html") ||
           url.includes("viewer") ||
@@ -462,14 +462,12 @@ describe("Universal Viewer", () => {
       });
 
       expect(viewerFrame).toBeTruthy();
-      
-      await viewerFrame.waitForSelector("canvas", { visible: true});
-      
+
+      await viewerFrame.waitForSelector("canvas", { visible: true });
+
       const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector(
-          "canvas"
-        );
-        
+        const canvas = document.querySelector("canvas");
+
         if (!canvas) return null;
         return {
           width: canvas.width,
@@ -479,9 +477,11 @@ describe("Universal Viewer", () => {
       expect(canvasInfo).not.toBeNull();
       expect(canvasInfo.width).toBeGreaterThan(0);
       expect(canvasInfo.height).toBeGreaterThan(0);
-      
-      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
-      
+
+      const pageText = await viewerFrame.evaluate(
+        () => document.body.innerText
+      );
+
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
     });
