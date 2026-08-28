@@ -101,12 +101,15 @@
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "date": "$date",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
         "expand": "$expandContents",
         "expandFull": "$expandGallery",
         "index": "$index",
+        "increaseThumbnailSize": "$increaseThumbnailSize",
         "manifestRanges": "$manifestRanges",
         "searchResult": "$searchResult",
         "searchResults": "$searchResults",
+        "thumbnailSize": "$thumbnailSize",
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
@@ -280,8 +283,11 @@
       },
       "content": {
         "close": "$close",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
         "download": "$download",
+        "increaseThumbnailSize": "$increaseThumbnailSize",
         "selectAll": "$selectAll",
+        "thumbnailSize": "$thumbnailSize",
         "title": "$selectPagesForDownload"
       }
     },
