@@ -286,6 +286,38 @@ Width of the collapsed panel.
 _Repeated - edit in contentLeftPanel_.  
 Determines if the panel is open.
 
+#### contentLeftPanel
+
+##### expandFullEnabled
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if expand full is enabled.
+
+##### panelAnimationDuration
+
+**Type**: `number`  
+**Default**: `250`  
+Determines the duration of the panel expand/collapse animation.
+
+##### panelCollapsedWidth
+
+**Type**: `number`  
+**Default**: `30`   
+Width of the collapsed panel.
+
+##### panelExpandedWidth
+
+**Type**: `number`  
+**Default**: `255`  
+Width of the collapsed panel.
+
+##### panelOpen
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if the panel is open.
+
 ##### autoExpandTreeEnabled
 
 **Type**: `boolean`  
@@ -357,6 +389,12 @@ Padding for loading gallery thumbnails.
 **Type**: `number`  
 **Default**: `200`  
 Width of the gallery thumbnail.
+
+##### hideThumbsView
+
+**Type**: `boolean`  
+**Default**: `false`  
+Hides the thumbnails view within the left panel. 
 
 ##### oneColThumbHeight
 

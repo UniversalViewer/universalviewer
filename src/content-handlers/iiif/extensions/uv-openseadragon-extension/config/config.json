@@ -75,6 +75,7 @@
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
+        "hideThumbsView": false,
         "oneColThumbHeight": 320,
         "oneColThumbWidth": 200,
         "pageModeEnabled": true,
