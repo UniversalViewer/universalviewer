@@ -206,8 +206,8 @@
               h1 {
                 font-size: @headings-size-large;
                 font-weight: @headings-font-weight;
-                margin: @margin-large-vertical 0px 0px 0px;
-                padding: 0 0 @padding-medium-vertical 0;
+                margin: @margin-large-vertical 0 0 0;
+                padding: 0 0 @padding-medium-vertical;
               }
 
               h2 {
@@ -231,14 +231,12 @@
               }
 
               ol.options {
-                list-style-image: none;
-                list-style-position: inside;
-                list-style-type: none;
+                list-style: none inside none;
                 margin: 0;
 
                 li {
                   //background: @gray-lighter;
-                  margin: 2px 0 0 0;
+                  margin: 2px 0 0;
                   padding: 4px;
 
                   input {
