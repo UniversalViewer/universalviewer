@@ -3,66 +3,88 @@
 
 @property --uv-color-canvas {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "black";
 }
-
 @property --uv-color-text {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
 }
-
-@property --uv-color-panel-bg {
+@property --uv-color-panel-dark-bg {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
 }
-
+@property --uv-color-panel-dark-color {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#dfdfdf";
+}
+@property --uv-color-panel-light-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#dfdfdf";
+}
+@property --uv-color-panel-light-color {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
+}
 @property --uv-color-panel-border {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
 }
-
 @property --uv-color-overlay-bg {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
 }
-
 @property --uv-color-overlay-text {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "black";
 }
-
 @property --uv-color-overlay-border {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
 }
-
-@property --uv-color-accent-bg {
+@property --uv-color-link-color {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#26b5cc";
 }
-
-@property --uv-color-accent-text {
-  syntax: "<color>";
-}
-
-@property --uv-color-link {
-  syntax: "<color>";
-}
-
 @property --uv-color-btn-text {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
 }
-
 @property --uv-color-btn-bg {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
 }
-
 @property --uv-color-btn-border {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
 }
-
 @property --uv-color-btn-primary-text {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
 }
-
 @property --uv-color-btn-primary-bg {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#10819a";
 }
-
 @property --uv-color-btn-primary-border {
   syntax: "<color>";
+  inherits: true;
+  initialvalue: "#10819a";
 }
 
 // Global values
@@ -109,8 +131,8 @@
 // Links
 // -------------------------
 
-@link-color: #26b5cc;
-@link-hover-color: lighten(@link-color, 10%);
+@link-color: var(--uv-color-link-color, #26b5cc);
+@link-hover-color: inherit;
 @link-secondary-color: @brand-secondary;
 @link-secondary-hover-color: lighten(@link-secondary-color, 10%);
 
