@@ -1,4 +1,4 @@
-import { Dimensions } from "@edsilv/utils";
+import { Dimensions } from "../../Utils";
 
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
@@ -223,6 +223,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("video")[0], {
+        iconSprite: this.config.options.iconSprite,
         poster: poster,
         toggleCaptionsButtonWhenOnlyOne: true,
         features: [
@@ -324,6 +325,7 @@ export class MediaElementCenterPanel extends CenterPanel<
         ],
         stretching: "responsive",
         defaultAudioHeight: "auto",
+        hideVolumeOnTouchDevices: false,
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function (mediaElement: any, originalNode: any) {

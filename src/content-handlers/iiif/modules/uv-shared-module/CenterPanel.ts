@@ -4,11 +4,11 @@ const $ = require("jquery");
 import { BaseView } from "./BaseView";
 import { Position } from "./Position";
 import { sanitize, isVisible } from "../../../../Utils";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
 export class CenterPanel<
-  T extends BaseConfig["modules"]["centerPanel"]
+  T extends BaseConfig["modules"]["centerPanel"],
 > extends BaseView<T> {
   title: string | null;
   subtitle: string | null;
@@ -210,10 +210,6 @@ export class CenterPanel<
 
       $attributionText.targetBlank();
     }
-
-    // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
-    //     this.resize();
-    // });
 
     //if (license){
     //    $license.append('<a href="' + license + '">' + license + '</a>');

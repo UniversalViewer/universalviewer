@@ -2,7 +2,7 @@ const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { LeftPanel } from "../uv-shared-module/LeftPanel";
 import { EbookExtensionEvents } from "../../extensions/uv-ebook-extension/Events";
-import { Async } from "@edsilv/utils";
+import { Async } from "../../Utils";
 import {
   applyPolyfills,
   defineCustomElements,

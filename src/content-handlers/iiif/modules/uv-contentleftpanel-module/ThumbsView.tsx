@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { Thumb } from "manifesto.js";
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
-import { useInView } from "react-intersection-observer";
 import cx from "classnames";
+import { Thumb } from "manifesto.js";
+import React, { useEffect, useMemo, useRef } from "react";
+import { useInView } from "react-intersection-observer";
+import { ThumbsCacheInvalidation } from "../../extensions/config/ContentLeftPanel";
+import { Dates } from "../../Utils";
 
 const ThumbImage = ({
+  cacheInvalidation,
   first,
   onClick,
   onKeyDown,
@@ -14,6 +17,7 @@ const ThumbImage = ({
   truncateThumbnailLabels,
   viewingDirection,
 }: {
+  cacheInvalidation?: ThumbsCacheInvalidation;
   first: boolean;
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
@@ -28,6 +32,14 @@ const ThumbImage = ({
     rootMargin: "0px 0px 0px 0px",
     triggerOnce: true,
   });
+
+  // memoised so re-renders don't generate a new timestamp and re-request the image
+  const src = useMemo(() => {
+    if (thumb.uri && cacheInvalidation && cacheInvalidation.enabled) {
+      return `${thumb.uri}${cacheInvalidation.paramType}t=${Dates.getTimeStamp()}`;
+    }
+    return thumb.uri;
+  }, [thumb.uri, cacheInvalidation]);
 
   var keydownHandler = (e) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -51,6 +63,9 @@ const ThumbImage = ({
         "truncate-labels": truncateThumbnailLabels,
       })}
       tabIndex={0}
+      role="option"
+      aria-selected={selected}
+      aria-label={thumb.label}
     >
       <div
         ref={ref}
@@ -59,11 +74,11 @@ const ThumbImage = ({
           height: thumb.height + 8 + "px",
         }}
       >
-        {inView && <img src={thumb.uri} alt={thumb.label} />}
+        {inView && <img src={src} alt={thumb.label} />}
       </div>
       <div className="info">
         <span className="label" title={thumb.label}>
-          {thumb.label}&nbsp;
+          {thumb.label}
         </span>
         {thumb.data.searchResults && (
           <span className="searchResults">{thumb.data.searchResults}</span>
@@ -74,19 +89,23 @@ const ThumbImage = ({
 };
 
 const Thumbnails = ({
+  cacheInvalidation,
   onClick,
   onKeyDown,
   paged,
   selected,
   thumbs,
+  thumbnailsLabel,
   viewingDirection,
   truncateThumbnailLabels,
 }: {
+  cacheInvalidation?: ThumbsCacheInvalidation;
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
   selected: number[];
   thumbs: Thumb[];
+  thumbnailsLabel: string;
   viewingDirection: ViewingDirection;
   truncateThumbnailLabels: boolean;
 }) => {
@@ -134,10 +153,17 @@ const Thumbnails = ({
         paged: paged,
         "truncate-labels": truncateThumbnailLabels,
       })}
+      role="listbox"
+      aria-label={thumbnailsLabel}
     >
       {thumbs.map((thumb, index) => (
-        <span key={`thumb-${index}`} id={`thumb-${index}`}>
+        <span
+          key={`thumb-${index}`}
+          id={`thumb-${index}`}
+          className="thumb-container"
+        >
           <ThumbImage
+            cacheInvalidation={cacheInvalidation}
             first={index === firstNonPagedIndex}
             onClick={onClick}
             onKeyDown={onKeyDown}

@@ -1166,6 +1166,27 @@
           "visible": true
         }
       ]
+    },
+    {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://universalviewer.io/manifests.json",
+      "@type": "sc:Collection",
+      "label": "Choices on a canvas",
+      "visible": true,
+      "manifests": [
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0033-choice/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "IIIF Cookbook Choice",
+          "visible": true
+        },
+        {
+          "@id": "https://gist.githubusercontent.com/jamesmisson/1dd6cf715c0b28c12f3c5ab061bc0b48/raw/29e41b21546ad15c360eac320333e63a6638af0d/choice_test_manifest2.json",
+          "@type": "sc:Manifest",
+          "label": "Paged choice combinations",
+          "visible": true
+        }
+      ]
     }
   ]
 }

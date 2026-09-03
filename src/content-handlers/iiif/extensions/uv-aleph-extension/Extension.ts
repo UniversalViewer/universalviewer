@@ -10,7 +10,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Config } from "./config/Config";

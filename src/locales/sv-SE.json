@@ -133,6 +133,9 @@
   "$shareLink": "Länk till denna sida",
   "$shareInstructions": "Kopiera länken nedan för att dela det här objektet.",
   "$size": "Storlek:",
+  "$decreaseThumbnailSize": "Minska miniatyrstorlek",
+  "$thumbnailSize": "Miniatyrstorlek",
+  "$increaseThumbnailSize": "Öka miniatyrstorlek",
   "$width": "Bredd",
   "$cancel": "Avbryt",
   "$confirm": "Bekräfta",
@@ -160,5 +163,9 @@
   "$contrast": "Kontrast",
   "$saturation": "Färgmättnad",
   "$reset": "Återställ",
-  "$remember": "Kom ihåg mina inställningar"
+  "$remember": "Kom ihåg mina inställningar",
+  "$rights": "Rättigheter",
+  "$layers": "Lager",
+  "$canvas": "Canvas {0}",
+  "$choice": "Val {0}"
 }

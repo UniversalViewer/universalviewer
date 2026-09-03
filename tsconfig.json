@@ -21,6 +21,7 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
+    "useDefineForClassFields": false,
     "target": "ES5",
     "tsBuildInfoFile": "./buildcache/front-end",
     "types": ["@iiif/base-component", "jest", "jquery", "node"],

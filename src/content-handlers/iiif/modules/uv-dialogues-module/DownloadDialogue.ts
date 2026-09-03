@@ -3,7 +3,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
-import { Bools, Files, Strings } from "@edsilv/utils";
+import { Bools, Files, Strings } from "../../Utils";
 import {
   Annotation,
   AnnotationBody,
@@ -91,6 +91,15 @@ export class DownloadDialogue extends Dialogue<
     this.updateTermsOfUseButton();
   }
 
+  isSafeRenderingUri(uri) {
+    try {
+      const parsed = new URL(uri, window.location.href);
+      return ["http:", "https:"].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  }
+
   addEntireFileDownloadOptions(): void {
     if (
       this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL)
@@ -104,7 +113,9 @@ export class DownloadDialogue extends Dialogue<
 
       let renderingFound: boolean = false;
 
-      const renderings: Rendering[] = canvas.getRenderings();
+      const renderings: Rendering[] = canvas
+        .getRenderings()
+        .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
 
       for (let i = 0; i < renderings.length; i++) {
         const rendering: Rendering = renderings[i];
@@ -113,6 +124,7 @@ export class DownloadDialogue extends Dialogue<
         if (renderingFormat) {
           format = renderingFormat.toString();
         }
+
         this.addEntireFileDownloadOption(
           rendering.id,
           <string>LanguageMap.getValue(rendering.getLabel()),
@@ -130,7 +142,7 @@ export class DownloadDialogue extends Dialogue<
           const annotation: Annotation = annotations[i];
           const body: AnnotationBody[] = annotation.getBody();
 
-          if (body.length) {
+          if (body.length && this.isSafeRenderingUri(body[0].id)) {
             const format: MediaType | null = body[0].getFormat();
 
             if (format) {
@@ -172,13 +184,16 @@ export class DownloadDialogue extends Dialogue<
       label += " (" + fileType + ")";
     }
 
-    this.$downloadOptions.append(
-      '<li><a href="' +
-        uri +
-        '" target="_blank" download tabindex="0">' +
-        label +
-        "</li>"
-    );
+    const $link = $("<a>", {
+      href: uri,
+      target: "_blank",
+      download: "",
+      tabindex: "0",
+      text: label,
+    });
+
+    const $li = $("<li>").append($link);
+    this.$downloadOptions.append($li);
   }
 
   resetDynamicDownloadOptions(): void {
@@ -192,7 +207,9 @@ export class DownloadDialogue extends Dialogue<
     defaultLabel: string,
     type: DownloadOption
   ): IRenderingOption[] {
-    const renderings: Rendering[] = resource.getRenderings();
+    const renderings: Rendering[] = resource
+      .getRenderings()
+      .filter((r: Rendering) => this.isSafeRenderingUri(r.id));
 
     const downloadOptions: any[] = [];
 
@@ -287,7 +304,7 @@ export class DownloadDialogue extends Dialogue<
   }
 
   getFileExtension(fileUri: string): string | null {
-    let extension: string = <string>fileUri.split(".").pop();
+    const extension: string = <string>fileUri.split(".").pop();
 
     // if it's not a valid file extension
     if (extension.length > 5 || extension.indexOf("/") !== -1) {

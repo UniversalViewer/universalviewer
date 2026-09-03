@@ -1,5 +1,6 @@
 import {
   AdjustImageDialogue,
+  ChoiceSwitchDialogue,
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
@@ -21,8 +22,6 @@ import {
 import { ContentLeftPanel } from "../../config/ContentLeftPanel";
 
 type MultiSelectDialogueOptions = DialogueOptions & {
-  /** Determines if chunked resizing is enabled for gallery thumbnails */
-  galleryThumbChunkedResizingEnabled: boolean;
   /** Threshold for chunked resizing of gallery thumbnails */
   galleryThumbChunkedResizingThreshold: number;
   /** Height of the gallery thumbnail */
@@ -36,8 +35,11 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
-  select: string;
+  decreaseThumbnailSize: string;
+  download: string;
+  increaseThumbnailSize: string;
   selectAll: string;
+  thumbnailSize: string;
   title: string;
 };
 
@@ -127,10 +129,10 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   showHomeControl: boolean;
   /** Determines if adjust image control is shown */
   showAdjustImageControl: boolean;
-  /** Number of attributions to trim */
-  trimAttributionCount: number;
   /** Ratio of visibility */
   visibilityRatio: number;
+  /** The maximum amount of time in milliseconds an image operation can take */
+  tileTimeout: number;
   /** Whether to zoom in to first annotation on load */
   zoomToInitialAnnotation: boolean;
 };
@@ -139,12 +141,14 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
+  mediaViewer: string;
   nextImage: string;
   previousImage: string;
   rotateRight: string;
   zoomIn: string;
   zoomOut: string;
   adjustImage: string;
+  layers: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
@@ -206,6 +210,7 @@ type MobileFooterPanelContent = FooterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   help: string;
+  layers: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {
@@ -216,8 +221,6 @@ type MobileFooterPanel = ModuleConfig & {
 type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   /** Size of the confined image */
   confinedImageSize: number;
-  /** Percentage of the current view that is disabled */
-  currentViewDisabledPercentage: number;
   /** Determines if download of current view is enabled */
   downloadCurrentViewEnabled: boolean;
   /** Determines if download of whole image in high resolution is enabled */
@@ -226,8 +229,8 @@ type OSDDownloadDialogueOptions = DownloadDialogueOptions & {
   downloadWholeImageLowResEnabled: boolean;
   /** Maximum width of the image */
   maxImageWidth: number;
-  /** Determines if explanatory text for options is enabled */
-  optionsExplanatoryTextEnabled: boolean;
+  /** Minimum width of the downloadable image */
+  minImageWidth: number;
   /** Determines if selection is enabled */
   selectionEnabled: boolean;
 };
@@ -292,6 +295,7 @@ type Modules = {
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
   adjustImageDialogue: AdjustImageDialogue;
+  choiceSwitchDialogue: ChoiceSwitchDialogue;
 };
 
 export type Config = BaseConfig & {

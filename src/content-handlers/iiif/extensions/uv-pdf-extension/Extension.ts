@@ -12,7 +12,7 @@ import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/R
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
-import { Bools } from "@edsilv/utils";
+import { Bools } from "../../Utils";
 import { Canvas, LanguageMap, Thumb } from "manifesto.js";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";

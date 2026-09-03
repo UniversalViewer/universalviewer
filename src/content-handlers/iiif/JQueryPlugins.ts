@@ -1,4 +1,4 @@
-import { Strings } from "@edsilv/utils";
+import { Strings } from "../iiif/Utils";
 
 export default function jqueryPlugins($) {
   $.fn.checkboxButton = function (onClick: (checked: boolean) => void) {
@@ -196,16 +196,17 @@ export default function jqueryPlugins($) {
     let maxTabIndex: number = 0;
     let $elementWithGreatestTabIndex: JQuery | null = null;
 
-    $self
-      .find("*:visible[tabindex]")
-      .each(function (index: number, el: Element) {
-        const $el: JQuery = $(el);
-        const tabIndex: number = parseInt($el.attr("tabindex"));
-        if (tabIndex > maxTabIndex) {
-          maxTabIndex = tabIndex;
-          $elementWithGreatestTabIndex = $el;
-        }
-      });
+    $self.find("*:visible[tabindex]").each(function (
+      index: number,
+      el: Element
+    ) {
+      const $el: JQuery = $(el);
+      const tabIndex: number = parseInt($el.attr("tabindex"));
+      if (tabIndex > maxTabIndex) {
+        maxTabIndex = tabIndex;
+        $elementWithGreatestTabIndex = $el;
+      }
+    });
 
     return $elementWithGreatestTabIndex;
   };
@@ -269,7 +270,7 @@ export default function jqueryPlugins($) {
     return result;
   };
 
-  let on = $.fn.on;
+  const on = $.fn.on;
   let timer: any;
 
   $.fn.on = function () {

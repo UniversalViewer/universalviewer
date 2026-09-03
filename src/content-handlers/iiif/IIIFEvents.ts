@@ -8,6 +8,7 @@ export class IIIFEvents {
   static BOOKMARK: string = "bookmark";
   static CANVAS_INDEX_CHANGE_FAILED: string = "canvasIndexChangeFailed";
   static CANVAS_INDEX_CHANGE: string = "canvasIndexChange";
+  static CHOICE_CHANGE: string = "choiceChange";
   static CLEAR_ANNOTATIONS: string = "clearAnnotations";
   static CLICKTHROUGH: string = "clickthrough";
   static CLOSE_ACTIVE_DIALOGUE: string = "closeActiveDialogue";
@@ -90,6 +91,7 @@ export class IIIFEvents {
   static SETTINGS_CHANGE: string = "settingsChange";
   static SHOW_AUTH_DIALOGUE: string = "showAuthDialogue";
   static SHOW_CLICKTHROUGH_DIALOGUE: string = "showClickThroughDialogue";
+  static SHOW_CHOICE_SWITCH_DIALOGUE: string = "showChoiceSwitchDialogue";
   static SHOW_DOWNLOAD_DIALOGUE: string = "showDownloadDialogue";
   static SHOW_EMBED_DIALOGUE: string = "showEmbedDialogue";
   static SHOW_EXTERNALCONTENT_DIALOGUE: string = "showExternalContentDialogue";

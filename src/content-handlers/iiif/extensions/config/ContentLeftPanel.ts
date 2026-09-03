@@ -1,7 +1,7 @@
 import { ModuleConfig } from "../../BaseConfig";
 import { ExpandPanelContent, ExpandPanelOptions } from "./ExpandPanel";
 
-type ThumbsCacheInvalidation = {
+export type ThumbsCacheInvalidation = {
   /** Determines if cache invalidation is enabled */
   enabled: boolean;
   /** Type of the parameter for cache invalidation */
@@ -23,8 +23,6 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
   defaultToTreeIfGreaterThan: number;
   /** Determines if collection should default to tree view (even if defaultToTreeEnabled = false) */
   defaultToTreeIfCollection: boolean;
-  /** Number of characters to elide at */
-  elideCount: number;
   /** Threshold for gallery thumb chunked resizing */
   galleryThumbChunkedResizingThreshold: number;
   /** Height of the gallery thumbnail */
@@ -61,10 +59,13 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
 
 type ContentLeftPanelContent = ExpandPanelContent & {
   date: string;
+  decreaseThumbnailSize: string;
   index: string;
+  increaseThumbnailSize: string;
   manifestRanges: string;
   searchResult: string;
   searchResults: string;
+  thumbnailSize: string;
   sortBy: string;
   thumbnails: string;
   title: string;

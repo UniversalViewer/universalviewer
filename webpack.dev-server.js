@@ -105,6 +105,10 @@ const config = {
         "/uv.css",
         express.static(path.join(__dirname, "src", "uv.css"))
       );
+      devServer.app.use(
+        "/mejs-controls.svg",
+        express.static(path.join(__dirname, "node_modules" , "mediaelement", "build", "mejs-controls.svg"))
+      );
     },
   },
   plugins: [

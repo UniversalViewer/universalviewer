@@ -13,8 +13,7 @@ const bundledPackages = [
   "jquery",
   "jsviews",
   "xss",
-  "@iiif/vocabulary",
-  "@edsilv/jquery-plugins",
+  "@iiif/vocabulary"
 ];
 
 // This plugin will ensure that mediaelement css is loaded correctly. It's currently using a webpack specific
@@ -34,6 +33,7 @@ let resolveMediaElement = {
 
 async function main() {
   await build({
+    tsconfig: "./tsconfig.json",
     // Enables code splitting, similar to webpack.
     splitting: true,
     outdir: path.resolve(process.cwd(), "dist/esm"),
