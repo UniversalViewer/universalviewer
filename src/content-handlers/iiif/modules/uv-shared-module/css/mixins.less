@@ -563,8 +563,11 @@
   &.active,
   .open .dropdown-toggle& {
     color: @color;
-    background-color: darken(@background, 8%);
-    border-color: darken(@border, 12%);
+    background-color: if((iscolor(@background)),
+        darken(@background, 8%),
+        @background);
+    border-color: if((iscolor(@border)), darken(@border, 12%), @border);
+    filter: if((iscolor(@background)), none, brightness(92%));
   }
   &:active,
   &.active,
@@ -584,9 +587,10 @@
       background-color: if(
         (iscolor(@background)),
         darken(@background, 8%),
-        @border
+        @background
       );
       border-color: if((iscolor(@border)), darken(@border, 12%), @border);
+      filter: if((iscolor(@background)), none, brightness(92%));
     }
     &:active,
     &.active,
