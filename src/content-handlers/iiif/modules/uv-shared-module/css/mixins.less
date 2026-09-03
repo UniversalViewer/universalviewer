@@ -563,11 +563,16 @@
   &.active,
   .open .dropdown-toggle& {
     color: @color;
-    background-color: if((iscolor(@background)),
-        darken(@background, 8%),
-        @background);
-    border-color: if((iscolor(@border)), darken(@border, 12%), @border);
-    filter: if((iscolor(@background)), none, brightness(92%));
+    background-color: if(
+      (iscolor(@background)),
+      darken(@background, 8%),
+      color-mix(@background, black, 8%)
+    );
+    border-color: if(
+      (iscolor(@border)),
+      darken(@border, 12%),
+      color-mix(@border, black, 12%)
+    );
   }
   &:active,
   &.active,
@@ -587,10 +592,13 @@
       background-color: if(
         (iscolor(@background)),
         darken(@background, 8%),
-        @background
+        color-mix(@background, black, 8%)
       );
-      border-color: if((iscolor(@border)), darken(@border, 12%), @border);
-      filter: if((iscolor(@background)), none, brightness(92%));
+      border-color: if(
+        (iscolor(@border)),
+        darken(@border, 12%),
+        color-mix(@border, black, 12%)
+      );
     }
     &:active,
     &.active,
