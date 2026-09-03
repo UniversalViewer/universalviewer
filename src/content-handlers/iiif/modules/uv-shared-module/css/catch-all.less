@@ -31,7 +31,9 @@
       }
 
       .btn {
-        color: white;
+        margin-right: @margin-small-horizontal;
+
+        color: @text-color;
         font-size: 0;
 
         &.moreInfo {
@@ -61,17 +63,6 @@
         &.fullScreen {
           display: inline-block;
         }
-      }
-
-      .choiceSwitch {
-        display: inline-block;
-        background-image: data-uri(
-          "../../uv-osdmobilefooterpanel-module/img/layers.svg"
-        );
-        background-repeat: no-repeat;
-        background-position: center center;
-        width: 30px;
-        height: 30px;
       }
     }
   }
