@@ -132,7 +132,7 @@ describe("Universal Viewer", () => {
       const title = await avPage.$eval(titleSelector, (el) =>
         el.textContent.trim()
       );
-      expect(title).toBe("Video Example 3");
+      expect(title).toBe("Simplest Video Example (IIIF Presentation 3)");
     }, 60000);
 
     it("renders AV playback controls", async () => {
