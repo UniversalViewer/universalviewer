@@ -1,7 +1,7 @@
 import { ModuleConfig } from "../../BaseConfig";
 import { ExpandPanelContent, ExpandPanelOptions } from "./ExpandPanel";
 
-type ThumbsCacheInvalidation = {
+export type ThumbsCacheInvalidation = {
   /** Determines if cache invalidation is enabled */
   enabled: boolean;
   /** Type of the parameter for cache invalidation */
