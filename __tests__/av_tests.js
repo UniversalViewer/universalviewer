@@ -13,6 +13,15 @@ const AV_VIDEO_MANIFEST =
 const AV_TOC_MANIFEST =
   "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json";
 
+// The first section of that manifest's table of contents. The AV center panel
+// titles the player with the current range's label (AVCenterPanel._setTitle),
+// so a range has to be selected for a title to appear: on a plain load there
+// is no current range and the opera's single canvas carries no label.
+const AV_TOC_RANGE =
+  "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/range/3";
+const AV_TOC_RANGE_LABEL =
+  "Preludio e Coro d'introduzione – Bel conforto al mietitore";
+
 // AV manifests with a transcription. UV surfaces transcriptions/captions in
 // the mediaelement player when the canvas provides them as a text/vtt (or
 // text/srt) rendering, as an additional body on the painting annotation, or
@@ -51,6 +60,23 @@ const AV_SUPPLEMENTING_EXTERNAL_MANIFEST = `${BASE_URL}/test-fixtures/supplement
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+};
+
+// The center panel titles the player above the media. The mediaelement panel
+// uses the manifest's label (MediaElementCenterPanel.createUI), while the AV
+// panel uses the current range's label, falling back to the canvas'
+// (AVCenterPanel._setTitle).
+const expectPanelTitle = async (page, expected) => {
+  await page.waitForSelector(".centerPanel h1.title", { visible: true });
+  await page.waitForFunction(() => {
+    const title = document.querySelector(".centerPanel h1.title");
+    return title && title.textContent.trim().length > 0;
+  });
+
+  const title = await page.$eval(".centerPanel h1.title", (el) =>
+    el.textContent.trim()
+  );
+  expect(title).toBe(expected);
 };
 
 describe("Universal Viewer", () => {
@@ -120,6 +146,11 @@ describe("Universal Viewer", () => {
       const pageText = await avPage.evaluate(() => document.body.innerText);
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
+
+      await expectPanelTitle(
+        avPage,
+        "Simplest Video Example (IIIF Presentation 3)"
+      );
     }, 60000);
 
     it("renders AV playback controls", async () => {
@@ -233,6 +264,25 @@ describe("Universal Viewer", () => {
       expect(pageText).not.toContain("Error loading");
     }, 60000);
 
+    it("titles the player with the selected range's label", async () => {
+      // Re-navigate: the beforeEach loads the manifest with no range selected,
+      // and the title is only rendered for a current range. The about:blank
+      // hop forces a full reload — this URL differs from the beforeEach's only
+      // in the hash, and without it the test races the viewer's teardown and
+      // re-initialisation on the still-mounted previous load.
+      await avPage.goto("about:blank");
+      await avPage.goto(
+        `${viewerUrl(AV_TOC_MANIFEST)}&rid=${encodeURIComponent(AV_TOC_RANGE)}`,
+        { waitUntil: "domcontentloaded" }
+      );
+
+      await avPage.waitForSelector(".iiif-av-component .player", {
+        visible: true,
+      });
+
+      await expectPanelTitle(avPage, AV_TOC_RANGE_LABEL);
+    }, 60000);
+
     it("renders AV component playback controls", async () => {
       await avPage.waitForSelector(".iiif-av-component .controls-container", {
         visible: true,
@@ -300,6 +350,8 @@ describe("Universal Viewer", () => {
         );
         return input && !input.disabled;
       });
+
+      await expectPanelTitle(avPage, "Video with captions (e2e test fixture)");
     }, 60000);
 
     it("displays the transcription text during playback", async () => {
@@ -376,6 +428,11 @@ describe("Universal Viewer", () => {
         );
         return input && !input.disabled;
       });
+
+      await expectPanelTitle(
+        avPage,
+        "Video with SRT captions (e2e test fixture)"
+      );
     }, 60000);
 
     it("displays the SRT transcription text during playback", async () => {
@@ -467,6 +524,11 @@ describe("Universal Viewer", () => {
         el.textContent.trim()
       );
       expect(captionText).toBe("[music]");
+
+      await expectPanelTitle(
+        avPage,
+        "Video with cross-origin captions (e2e test fixture)"
+      );
     }, 60000);
 
     it("resolves a transcription behind an institutional redirect", async () => {
@@ -515,6 +577,11 @@ describe("Universal Viewer", () => {
         el.textContent.trim()
       );
       expect(captionText).toBe("[music]");
+
+      await expectPanelTitle(
+        avPage,
+        "Video with captions behind a redirect (e2e test fixture)"
+      );
     }, 60000);
 
     it("displays a transcription supplied as a supplementing annotation (cookbook 0219)", async () => {
@@ -560,6 +627,8 @@ describe("Universal Viewer", () => {
         el.textContent.trim()
       );
       expect(captionText).toBe("[music]");
+
+      await expectPanelTitle(avPage, "Lunchroom Manners");
     }, 60000);
 
     it("displays a transcription from an externally referenced annotation page", async () => {
@@ -598,6 +667,11 @@ describe("Universal Viewer", () => {
       );
       expect(captionText).toBe(
         "Just before lunch one day, a puppet show was put on at school."
+      );
+
+      await expectPanelTitle(
+        avPage,
+        "Video with captions in an external annotation page (e2e test fixture)"
       );
     }, 60000);
   });
