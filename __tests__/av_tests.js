@@ -130,6 +130,49 @@ describe("Universal Viewer", () => {
       );
       expect(currentTime).toMatch(/^\d{2}:\d{2}/);
     }, 60000);
+
+    it("can play/pause the video", async () => {
+      const playPauseButton = ".mejs__playpause-button button";
+
+      await avPage.waitForSelector(playPauseButton, { visible: true });
+
+      await avPage.click(playPauseButton);
+
+      await avPage.waitForFunction(() => {
+        const video = document.querySelector("video");
+        return video && !video.paused;
+      });
+
+      const startTime = await avPage.$eval(
+        "video",
+        (video) => video.currentTime
+      );
+
+      // Let the video play for approximately 10 seconds
+      await avPage.waitForFunction(
+        (start) => {
+          const video = document.querySelector("video");
+          return video && video.currentTime > start + 10;
+        },
+        { timeout: 30000 },
+        startTime
+      );
+
+      // Pause playback
+      await avPage.click(playPauseButton);
+
+      await avPage.waitForFunction(() => {
+        const video = document.querySelector("video");
+        return video && video.paused;
+      });
+
+      const pausedTime = await avPage.$eval(
+        "video",
+        (video) => video.currentTime
+      );
+
+      expect(pausedTime).toBeGreaterThan(startTime + 10);
+    }, 60000);
   });
 
   // AV MANIFEST WITH TABLE OF CONTENTS TEST
