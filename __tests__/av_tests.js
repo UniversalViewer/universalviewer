@@ -28,6 +28,11 @@ const AV_TOC_MANIFEST =
 const AV_CAPTIONED_MANIFEST = `${BASE_URL}/test-fixtures/captioned-video-manifest.json`;
 const AV_CROSS_ORIGIN_CAPTIONED_MANIFEST = `${BASE_URL}/test-fixtures/cross-origin-captioned-video-manifest.json`;
 
+// Same shape as the fixture above, but the transcription is declared as
+// text/srt. UV accepts either caption format (MediaElementCenterPanel's
+// captionTypes), and the player's own track parser reads SRT timecodes.
+const AV_SRT_CAPTIONED_MANIFEST = `${BASE_URL}/test-fixtures/srt-captioned-video-manifest.json`;
+
 // This fixture references the VTT through http://dlib.indiana.edu, whose 301
 // upgrade redirect carries no CORS headers, so the URL is unreadable as-is.
 // UV resolves such captions to their https destination before wiring the
@@ -334,6 +339,84 @@ describe("Universal Viewer", () => {
       );
       expect(captionText).toBe(
         "Just before lunch one day, a puppet show was put on at school."
+      );
+    }, 60000);
+
+    it("surfaces an SRT transcription as a caption track in the player", async () => {
+      await avPage.goto("about:blank");
+      await avPage.goto(viewerUrl(AV_SRT_CAPTIONED_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+
+      await avPage.waitForSelector(".mejs__container.mejs__video", {
+        visible: true,
+      });
+
+      // The captions button only renders when a caption track was wired up,
+      // so its presence shows text/srt was recognised as a caption format.
+      await avPage.waitForSelector(".mejs__captions-button", {
+        visible: true,
+      });
+
+      // The <track> points at the manifest's SRT transcription.
+      const track = await avPage.$eval("track[src*='captions.srt']", (t) => ({
+        kind: t.kind,
+        srclang: t.srclang,
+        label: t.label,
+      }));
+      expect(track.kind).toBe("subtitles");
+      expect(track.srclang).toBe("en");
+      expect(track.label).toBe("English SRT captions");
+
+      // The transcription appears as a selectable option, and becomes
+      // enabled once the player has loaded the SRT file.
+      await avPage.waitForFunction(() => {
+        const input = document.querySelector(
+          ".mejs__captions-selector input:not([value='none'])"
+        );
+        return input && !input.disabled;
+      });
+    }, 60000);
+
+    it("displays the SRT transcription text during playback", async () => {
+      await avPage.goto("about:blank");
+      await avPage.goto(viewerUrl(AV_SRT_CAPTIONED_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+
+      await avPage.waitForSelector(".mejs__captions-button", {
+        visible: true,
+      });
+
+      // Wait for the player to finish loading the SRT.
+      await avPage.waitForFunction(() => {
+        const input = document.querySelector(
+          ".mejs__captions-selector input:not([value='none'])"
+        );
+        return input && !input.disabled;
+      });
+
+      // Turn captions on through the player UI, then play (muted, so
+      // headless autoplay is allowed) to reach the first cue.
+      await avPage.evaluate(() => {
+        document
+          .querySelector(".mejs__captions-selector input:not([value='none'])")
+          .click();
+        const video = document.querySelector(".mejs__mediaelement video");
+        video.muted = true;
+        return video.play();
+      });
+
+      await avPage.waitForFunction(() => {
+        const el = document.querySelector(".mejs__captions-text");
+        return el && el.textContent.trim().length > 0;
+      });
+
+      const captionText = await avPage.$eval(".mejs__captions-text", (el) =>
+        el.textContent.trim()
+      );
+      expect(captionText).toBe(
+        "A puppet show was put on at school, just before lunch."
       );
     }, 60000);
 
