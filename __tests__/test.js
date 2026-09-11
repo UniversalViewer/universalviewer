@@ -193,6 +193,26 @@ describe("Universal Viewer", () => {
     expect(galleryViewAfterTwoUpToggle).toBe("hidden");
   });
 
+  it("labels gallery thumbnail size controls", async () => {
+    await page.waitForSelector(".iiif-gallery-component .size-down");
+
+    const labels = await page.$$eval(
+      [
+        ".iiif-gallery-component .size-down",
+        ".iiif-gallery-component input[type='range'][name='size']",
+        ".iiif-gallery-component .size-up",
+      ].join(", "),
+      (controls) =>
+        controls.map((control) => control.getAttribute("aria-label"))
+    );
+
+    expect(labels).toEqual([
+      "Decrease thumbnail size",
+      "Thumbnail size",
+      "Increase thumbnail size",
+    ]);
+  });
+
   it("settings button is visible", async () => {
     await page.waitForSelector(".btn.imageBtn.settings");
 
@@ -211,9 +231,8 @@ describe("Universal Viewer", () => {
   // COOKBOOK MANIFEST TEST
   describe("viewer controls", () => {
     beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
+      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -434,7 +453,7 @@ describe("Universal Viewer", () => {
 
       const viewerFrame = page.frames().find((f) => {
         const url = f.url();
-        
+
         return (
           url.includes("uv.html") ||
           url.includes("viewer") ||
@@ -443,14 +462,12 @@ describe("Universal Viewer", () => {
       });
 
       expect(viewerFrame).toBeTruthy();
-      
-      await viewerFrame.waitForSelector("canvas", { visible: true});
-      
+
+      await viewerFrame.waitForSelector("canvas", { visible: true });
+
       const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector(
-          "canvas"
-        );
-        
+        const canvas = document.querySelector("canvas");
+
         if (!canvas) return null;
         return {
           width: canvas.width,
@@ -460,9 +477,11 @@ describe("Universal Viewer", () => {
       expect(canvasInfo).not.toBeNull();
       expect(canvasInfo.width).toBeGreaterThan(0);
       expect(canvasInfo.height).toBeGreaterThan(0);
-      
-      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
-      
+
+      const pageText = await viewerFrame.evaluate(
+        () => document.body.innerText
+      );
+
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
     });
