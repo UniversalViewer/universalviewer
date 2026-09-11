@@ -49,6 +49,7 @@ testBaseUrl.local.json
 !src/*/*/js/*.js
 !src/extensions/*/dependencies.js
 !jest.setup.js
+!__tests__/*.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
 !src/extensions/*/config.js

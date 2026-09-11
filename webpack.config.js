@@ -136,6 +136,12 @@ const config = [
           {
             from: resolvePath("./node_modules/mediaelement/build/mejs-controls.svg"),
             to: resolvePath("./dist"),
+          },
+          {
+            // Manifests and caption files served to the e2e tests, which run
+            // against dist via `npm run e2eserve`.
+            from: resolvePath("./src/test-fixtures"),
+            to: resolvePath("./dist/test-fixtures"),
           }
         ],
       }),
