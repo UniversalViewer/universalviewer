@@ -54,6 +54,8 @@ src/extensions/*/lib/*.js
 !src/extensions/*/config.js
 !docs/assets/*.js
 !testBaseUrl.js
+!jest.globalSetup.js
+!jest.globalTeardown.js
 
 #################
 ## Misc
