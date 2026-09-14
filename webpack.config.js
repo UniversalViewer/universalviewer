@@ -1,5 +1,4 @@
 const webpack = require("webpack");
-const pkg = require("./package.json");
 const CopyPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
@@ -78,9 +77,6 @@ const config = [
       ],
     },
     plugins: [
-      new webpack.EnvironmentPlugin({
-        PACKAGE_VERSION: pkg.version,
-      }),
       new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
@@ -134,9 +130,11 @@ const config = [
             to: resolvePath("./dist"),
           },
           {
-            from: resolvePath("./node_modules/mediaelement/build/mejs-controls.svg"),
+            from: resolvePath(
+              "./node_modules/mediaelement/build/mejs-controls.svg"
+            ),
             to: resolvePath("./dist"),
-          }
+          },
         ],
       }),
     ],

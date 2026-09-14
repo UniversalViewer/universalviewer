@@ -2,7 +2,6 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const express = require("express");
 const webpack = require("webpack");
-const pkg = require("./package.json");
 
 const config = {
   entry: {
@@ -107,14 +106,19 @@ const config = {
       );
       devServer.app.use(
         "/mejs-controls.svg",
-        express.static(path.join(__dirname, "node_modules" , "mediaelement", "build", "mejs-controls.svg"))
+        express.static(
+          path.join(
+            __dirname,
+            "node_modules",
+            "mediaelement",
+            "build",
+            "mejs-controls.svg"
+          )
+        )
       );
     },
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      PACKAGE_VERSION: `${pkg.version} (development)`,
-    }),
     new HtmlWebpackPlugin({
       title: "UV Examples",
       template: "./src/index.html",
