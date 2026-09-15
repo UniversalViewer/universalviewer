@@ -27,6 +27,17 @@ type TextTrackDescriptor = {
   id: string;
 };
 
+const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
+
+// A label in raw annotation JSON may be a plain string or a language map.
+const captionLabel = (label: any): string | undefined => {
+  if (!label || typeof label === "string") {
+    return label || undefined;
+  }
+  const values = label[Object.keys(label)[0]];
+  return Array.isArray(values) ? values[0] : undefined;
+};
+
 type MediaSourceDescriptor = {
   label: string;
   type: string;
@@ -206,7 +217,23 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
     }
 
+    // Captions may also be supplied as supplementing annotations on the
+    // canvas (IIIF cookbook recipe 0219).
+    const supplementing = await this.getSupplementingCaptions(canvas);
+    for (const caption of supplementing) {
+      if (!subtitles.some((subtitle) => subtitle.id === caption.id)) {
+        subtitles.push(caption);
+      }
+    }
+
     if (subtitles.length > 0) {
+      // Resolve caption URLs to ones the player's XHR will be able to read.
+      for (const subtitle of subtitles) {
+        if (subtitle.id) {
+          subtitle.id = await this.resolveCaptionSource(subtitle.id);
+        }
+      }
+
       // Show captions options popover for better interface feedback
       subtitles.unshift({ id: "none" });
     }
@@ -392,6 +419,96 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.extensionHost.publish(Events.LOAD);
   }
 
+  // Captions/transcriptions supplied as supplementing annotations in the
+  // canvas' annotations pages (IIIF cookbook recipe 0219). Inline
+  // annotation pages are read directly; pages referenced by id alone are
+  // fetched.
+  async getSupplementingCaptions(
+    canvas: Canvas
+  ): Promise<TextTrackDescriptor[]> {
+    const captions: TextTrackDescriptor[] = [];
+    const pages: any[] = canvas.getProperty("annotations") || [];
+
+    for (const page of pages) {
+      let items: any[] = page.items;
+
+      if (!items && page.id) {
+        try {
+          const response = await fetch(page.id);
+          if (response.ok) {
+            items = (await response.json()).items;
+          }
+        } catch {
+          console.warn(
+            `Annotation page ${page.id} could not be read (CORS headers are required); any captions it contains will be unavailable.`
+          );
+        }
+      }
+
+      if (!items) {
+        continue;
+      }
+
+      for (const annotation of items) {
+        const motivations = Array.isArray(annotation.motivation)
+          ? annotation.motivation
+          : [annotation.motivation];
+
+        if (!motivations.includes("supplementing")) {
+          continue;
+        }
+
+        const bodies = Array.isArray(annotation.body)
+          ? annotation.body
+          : [annotation.body];
+
+        for (const body of bodies) {
+          if (body && body.id && captionTypes.has(body.format)) {
+            captions.push({
+              id: body.id,
+              label: captionLabel(body.label),
+              language: body.language,
+            });
+          }
+        }
+      }
+    }
+
+    return captions;
+  }
+
+  // Captions are fetched with XHR by the player, so a cross-origin URL is
+  // only readable when every response hop carries CORS headers. Follow any
+  // CORS-friendly redirect to its final URL, and retry plain-http sources
+  // over https — an http -> https upgrade redirect whose 301 response lacks
+  // CORS headers is blocked by the browser even though its destination is
+  // readable.
+  async resolveCaptionSource(src: string): Promise<string> {
+    const attempts: string[] = [src];
+
+    if (src.startsWith("http://")) {
+      attempts.push(src.replace(/^http:\/\//, "https://"));
+    }
+
+    for (const attempt of attempts) {
+      try {
+        const response = await fetch(attempt);
+        if (response.ok) {
+          return response.url;
+        }
+      } catch {
+        // expected when the attempt is blocked by CORS or mixed content;
+        // fall through to the next candidate
+      }
+    }
+
+    console.warn(
+      `Captions at ${src} could not be read (CORS headers are required on every response, including redirects); the player will omit this track.`
+    );
+
+    return src;
+  }
+
   appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
     for (const subtitle of subtitles) {
       this.$media.append(
@@ -429,15 +546,13 @@ export class MediaElementCenterPanel extends CenterPanel<
     return typeGroup === "audio" || typeGroup === "video";
   }
 
-  // vtt, srt, csv
+  // vtt, srt
   isTypeCaption(element: Rendering | AnnotationBody) {
     const type: RenderingFormat | MediaType | null = element.getFormat();
 
     if (type === null) {
       return false;
     }
-
-    const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
 
     return captionTypes.has(type.toString());
   }
