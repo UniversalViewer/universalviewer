@@ -31,6 +31,8 @@ type ContentLeftPanelOptions = ExpandPanelOptions & {
   galleryThumbLoadPadding: number;
   /** Width of the gallery thumbnail */
   galleryThumbWidth: number;
+  /** Hide thumbnails tab */
+  hideThumbsView: boolean;
   /** Height of the one column thumbnail */
   oneColThumbHeight: number;
   /** Width of the one column thumbnail */
