@@ -57,9 +57,35 @@ const AV_COOKBOOK_CAPTION_MANIFEST =
 // by id only, so the viewer has to fetch it.
 const AV_SUPPLEMENTING_EXTERNAL_MANIFEST = `${BASE_URL}/test-fixtures/supplementing-external-captioned-video-manifest.json`;
 
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+// Same video with the Welsh SRT, whose label is a language map with English
+// first and Welsh second, so honouring the user's locale means choosing a
+// value other than the first. One fixture per way a manifest can supply
+// captions; all should label the track the same way.
+const AV_MULTILINGUAL_LABEL_CAPTIONED_MANIFESTS = [
+  [
+    "a supplementing annotation",
+    `${BASE_URL}/test-fixtures/multilingual-label-captioned-video-manifest.json`,
+  ],
+  [
+    "the painting annotation",
+    `${BASE_URL}/test-fixtures/multilingual-label-painting-captioned-video-manifest.json`,
+  ],
+  [
+    "a canvas rendering",
+    `${BASE_URL}/test-fixtures/multilingual-label-rendering-captioned-video-manifest.json`,
+  ],
+];
+
+// Captions in two languages as a Choice in one supplementing annotation, per
+// IIIF cookbook recipe 0074 (Using Caption and Subtitle Files in Multiple
+// Languages with Video Content):
+// https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/
+// The options are the English VTT and the Welsh SRT.
+const AV_MULTIPLE_LANGUAGE_CAPTIONS_MANIFEST = `${BASE_URL}/test-fixtures/multiple-language-captions-video-manifest.json`;
+
+const viewerUrl = (manifestUrl, locales) => {
+  const url = `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+  return locales ? `${url}&locales=${locales}` : url;
 };
 
 // The center panel titles the player above the media. The mediaelement panel
@@ -411,14 +437,14 @@ describe("Universal Viewer", () => {
       });
 
       // The <track> points at the manifest's SRT transcription.
-      const track = await avPage.$eval("track[src*='captions.srt']", (t) => ({
+      const track = await avPage.$eval("track[src*='capsiynau.srt']", (t) => ({
         kind: t.kind,
         srclang: t.srclang,
         label: t.label,
       }));
       expect(track.kind).toBe("subtitles");
-      expect(track.srclang).toBe("en");
-      expect(track.label).toBe("English SRT captions");
+      expect(track.srclang).toBe("cy");
+      expect(track.label).toBe("Welsh SRT captions");
 
       // The transcription appears as a selectable option, and becomes
       // enabled once the player has loaded the SRT file.
@@ -473,7 +499,7 @@ describe("Universal Viewer", () => {
         el.textContent.trim()
       );
       expect(captionText).toBe(
-        "A puppet show was put on at school, just before lunch."
+        "Cafwyd sioe bypedau ei pherfformio yn yr ysgol, ychydig cyn cinio."
       );
     }, 60000);
 
@@ -672,6 +698,155 @@ describe("Universal Viewer", () => {
       await expectPanelTitle(
         avPage,
         "Video with captions in an external annotation page (e2e test fixture)"
+      );
+    }, 60000);
+  });
+
+  // CAPTION LABEL LANGUAGE TEST
+  describe.each(AV_MULTILINGUAL_LABEL_CAPTIONED_MANIFESTS)(
+    "AV manifest with a multilingual caption label on %s",
+    (_source, manifestUrl) => {
+      let avPage;
+
+      beforeAll(async () => {
+        avPage = await browser.newPage();
+      });
+
+      afterAll(async () => {
+        await avPage.close();
+      });
+
+      // Loads the fixture with the given UV locale and returns the caption
+      // track's label, plus the label shown in the player's captions menu.
+      const captionLabelsFor = async (locales) => {
+        // Force a full reload so the viewer re-initialises with this locale.
+        await avPage.goto("about:blank");
+        await avPage.goto(viewerUrl(manifestUrl, locales), {
+          waitUntil: "domcontentloaded",
+        });
+
+        await avPage.waitForSelector(".mejs__captions-button", {
+          visible: true,
+        });
+
+        const trackLabel = await avPage.$eval(
+          "track[src*='capsiynau.srt']",
+          (t) => t.label
+        );
+        const menuLabel = await avPage.$eval(
+          ".mejs__captions-selector input:not([value='none']) + label",
+          (el) => el.textContent.trim()
+        );
+        return { trackLabel, menuLabel };
+      };
+
+      it("labels the caption in the user's language when the label has a match", async () => {
+        // cy-GB matches the label's "cy" entry, which is not the first one.
+        expect(await captionLabelsFor("cy-GB")).toEqual({
+          trackLabel: "Capsiynau Cymraeg",
+          menuLabel: "Capsiynau Cymraeg",
+        });
+      }, 60000);
+
+      it("falls back to the first label language when there is no match", async () => {
+        // UV ships a Swedish locale, but the label has no "sv" entry.
+        expect(await captionLabelsFor("sv-SE")).toEqual({
+          trackLabel: "Welsh captions",
+          menuLabel: "Welsh captions",
+        });
+      }, 60000);
+    }
+  );
+
+  // MULTIPLE LANGUAGE CAPTIONS TEST
+  describe("AV manifest with captions in multiple languages", () => {
+    let avPage;
+
+    beforeAll(async () => {
+      avPage = await browser.newPage();
+    });
+
+    afterAll(async () => {
+      await avPage.close();
+    });
+
+    beforeEach(async () => {
+      // Force a full reload so the viewer re-initialises on this manifest.
+      await avPage.goto("about:blank");
+      await avPage.goto(viewerUrl(AV_MULTIPLE_LANGUAGE_CAPTIONS_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+
+      await avPage.waitForSelector(".mejs__captions-button", {
+        visible: true,
+      });
+    }, 60000);
+
+    it("surfaces each caption choice as its own track", async () => {
+      const tracks = await avPage.$$eval("track[kind='subtitles']", (els) =>
+        els
+          .filter((t) => t.getAttribute("src") !== "none")
+          .map((t) => ({
+            src: t.getAttribute("src").split("/").pop(),
+            srclang: t.srclang,
+            label: t.label,
+          }))
+      );
+      expect(tracks).toEqual([
+        { src: "captions.vtt", srclang: "en", label: "English captions" },
+        { src: "capsiynau.srt", srclang: "cy", label: "Capsiynau Cymraeg" },
+      ]);
+
+      // Both appear as options in the player's captions menu.
+      await avPage.waitForFunction(
+        () =>
+          document.querySelectorAll(
+            ".mejs__captions-selector input:not([value='none'])"
+          ).length === 2
+      );
+      const menuLabels = await avPage.$$eval(
+        ".mejs__captions-selector input:not([value='none']) + label",
+        (els) => els.map((el) => el.textContent.trim())
+      );
+      expect(menuLabels).toEqual(["English captions", "Capsiynau Cymraeg"]);
+
+      await expectPanelTitle(
+        avPage,
+        "Video with captions in multiple languages (e2e test fixture)"
+      );
+    }, 60000);
+
+    it("displays the chosen language's captions during playback", async () => {
+      // Wait for the Welsh option to be enabled once its SRT has loaded.
+      await avPage.waitForFunction(() => {
+        const label = [
+          ...document.querySelectorAll(".mejs__captions-selector label"),
+        ].find((el) => el.textContent.trim() === "Capsiynau Cymraeg");
+        const input = label && label.previousElementSibling;
+        return input && !input.disabled;
+      });
+
+      // Choose Welsh through the player UI, then play (muted, so headless
+      // autoplay is allowed) to reach the first cue.
+      await avPage.evaluate(() => {
+        [...document.querySelectorAll(".mejs__captions-selector label")]
+          .find((el) => el.textContent.trim() === "Capsiynau Cymraeg")
+          .previousElementSibling.click();
+        const video = document.querySelector(".mejs__mediaelement video");
+        video.muted = true;
+        return video.play();
+      });
+
+      await avPage.waitForFunction(() => {
+        const el = document.querySelector(".mejs__captions-text");
+        return el && el.textContent.trim().length > 0;
+      });
+
+      const captionText = await avPage.$eval(".mejs__captions-text", (el) =>
+        el.textContent.trim()
+      );
+      expect(captionText).toBe(
+        "Cafwyd sioe bypedau ei pherfformio yn yr ysgol, ychydig cyn cinio."
       );
     }, 60000);
   });
