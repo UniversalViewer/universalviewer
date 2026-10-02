@@ -29,13 +29,52 @@ type TextTrackDescriptor = {
 
 const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
 
-// A label in raw annotation JSON may be a plain string or a language map.
-const captionLabel = (label: any): string | undefined => {
+// Picks the label value for the user's locale from raw caption JSON. A label
+// may be a plain string, a IIIF v3 language map ({ "cy": ["..."] }) or IIIF
+// v2 language values ([{ "@value": "...", "@language": "cy" }]). Prefers an
+// exact locale match (cy-GB), then the same base language (cy), then the
+// first value available.
+const captionLabel = (label: any, locale: string): string | undefined => {
   if (!label || typeof label === "string") {
     return label || undefined;
   }
-  const values = label[Object.keys(label)[0]];
-  return Array.isArray(values) ? values[0] : undefined;
+
+  const entries: Array<[string, string]> = Array.isArray(label)
+    ? label.map((value: any) =>
+        typeof value === "string"
+          ? ["", value]
+          : [value["@language"] || "", value["@value"]]
+      )
+    : Object.keys(label).map((language) => {
+        const values = label[language];
+        return [language, Array.isArray(values) ? values[0] : values];
+      });
+
+  const wanted = (locale || "").toLowerCase();
+  const baseLanguage = (tag: string) => tag.toLowerCase().split("-")[0];
+  const match =
+    entries.find(([language]) => language.toLowerCase() === wanted) ||
+    entries.find(
+      ([language]) =>
+        language && baseLanguage(language) === baseLanguage(wanted)
+    ) ||
+    entries[0];
+
+  return match ? match[1] : undefined;
+};
+
+// Captions may come from a canvas rendering, a painting annotation body or a
+// supplementing annotation; all are read from their raw JSON the same way.
+const captionTrack = (json: any, locale: string): TextTrackDescriptor => {
+  const language = Array.isArray(json.language)
+    ? json.language[0]
+    : json.language;
+
+  return {
+    id: json.id || json["@id"],
+    label: captionLabel(json.label, locale) ?? json.format,
+    language,
+  };
 };
 
 type MediaSourceDescriptor = {
@@ -165,9 +204,13 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     const sources: Array<MediaSourceDescriptor> = [];
     const subtitles: Array<TextTrackDescriptor> = [];
+    const locale: string = this.extension.getLocale();
 
     const renderings: Rendering[] = canvas.getRenderings();
 
+    // Media and captions may be supplied as renderings on the canvas. IIIF
+    // cookbook recipe 0017 links text to an AV canvas this way (there, a
+    // plain-text transcript); recipe 0046 covers the rendering property.
     if (renderings && renderings.length) {
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
@@ -181,15 +224,14 @@ export class MediaElementCenterPanel extends CenterPanel<
         }
 
         if (this.isTypeCaption(rendering)) {
-          subtitles.push({
-            label:
-              rendering.getLabel().getValue() ??
-              rendering.getFormat().toString(),
-            id: rendering.id,
-          });
+          subtitles.push(captionTrack(rendering.__jsonld, locale));
         }
       });
     } else {
+      // Otherwise read them from the bodies of the canvas' painting
+      // annotation. Captions as an extra painting body follow no IIIF
+      // cookbook recipe (recipe 0219 makes them supplementing annotations,
+      // handled below), but are supported for existing manifests.
       const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
         this.extension.helper.getCurrentCanvas()
       );
@@ -211,7 +253,7 @@ export class MediaElementCenterPanel extends CenterPanel<
           }
 
           if (this.isTypeCaption(format)) {
-            subtitles.push(format.__jsonld);
+            subtitles.push(captionTrack(format.__jsonld, locale));
           }
         });
       }
@@ -219,7 +261,7 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     // Captions may also be supplied as supplementing annotations on the
     // canvas (IIIF cookbook recipe 0219).
-    const supplementing = await this.getSupplementingCaptions(canvas);
+    const supplementing = await this.getSupplementingCaptions(canvas, locale);
     for (const caption of supplementing) {
       if (!subtitles.some((subtitle) => subtitle.id === caption.id)) {
         subtitles.push(caption);
@@ -422,9 +464,11 @@ export class MediaElementCenterPanel extends CenterPanel<
   // Captions/transcriptions supplied as supplementing annotations in the
   // canvas' annotations pages (IIIF cookbook recipe 0219). Inline
   // annotation pages are read directly; pages referenced by id alone are
-  // fetched.
+  // fetched. A body may also be a Choice of caption files, e.g. one per
+  // language (IIIF cookbook recipe 0074); each option becomes a track.
   async getSupplementingCaptions(
-    canvas: Canvas
+    canvas: Canvas,
+    locale: string
   ): Promise<TextTrackDescriptor[]> {
     const captions: TextTrackDescriptor[] = [];
     const pages: any[] = canvas.getProperty("annotations") || [];
@@ -458,17 +502,17 @@ export class MediaElementCenterPanel extends CenterPanel<
           continue;
         }
 
-        const bodies = Array.isArray(annotation.body)
-          ? annotation.body
-          : [annotation.body];
+        const bodies = (
+          Array.isArray(annotation.body) ? annotation.body : [annotation.body]
+        ).flatMap((body: any) =>
+          body && body.type === "Choice" && Array.isArray(body.items)
+            ? body.items
+            : [body]
+        );
 
         for (const body of bodies) {
           if (body && body.id && captionTypes.has(body.format)) {
-            captions.push({
-              id: body.id,
-              label: captionLabel(body.label),
-              language: body.language,
-            });
+            captions.push(captionTrack(body, locale));
           }
         }
       }

@@ -32,11 +32,11 @@
                   "format": "video/mp4"
                 },
                 {
-                  "id": "http://localhost:4444/test-fixtures/captions.srt",
+                  "id": "http://localhost:4444/test-fixtures/capsiynau.srt",
                   "type": "Text",
                   "format": "text/srt",
-                  "label": "English SRT captions",
-                  "language": "en"
+                  "label": "Welsh SRT captions",
+                  "language": "cy"
                 }
               ]
             }
