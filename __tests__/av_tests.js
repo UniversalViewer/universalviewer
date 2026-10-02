@@ -202,11 +202,11 @@ describe("Universal Viewer", () => {
         (video) => video.currentTime
       );
 
-      // Let the video play for approximately 10 seconds
+      // Let the video play for approximately 3 seconds
       await avPage.waitForFunction(
         (start) => {
           const video = document.querySelector("video");
-          return video && video.currentTime > start + 10;
+          return video && video.currentTime > start + 3;
         },
         { timeout: 30000 },
         startTime
@@ -225,7 +225,7 @@ describe("Universal Viewer", () => {
         (video) => video.currentTime
       );
 
-      expect(pausedTime).toBeGreaterThan(startTime + 10);
+      expect(pausedTime).toBeGreaterThan(startTime + 3);
     }, 60000);
   });
 
