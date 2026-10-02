@@ -1,9 +1,16 @@
 const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
-// Cookbook manifest for viewer control tests
-const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
+// Local paged book of static images, with ranges for the Index tab. Modelled
+// on these IIIF Cookbook recipes (also credited in the manifest's summary):
+// - 0031 Multiple Volumes in a Single Bound Volume (nested ranges); this
+//   fixture replaces that recipe's manifest in these tests
+//   https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/
+// - 0011 Book 'behavior' Variations (the "paged" behavior)
+//   https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
+// - 0001 Simplest Manifest - Single Image File (static images, no service)
+//   https://iiif.io/api/cookbook/recipe/0001-mvm-image/
+const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
 
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
@@ -82,10 +89,32 @@ describe("Universal Viewer", () => {
     return match ? decodeURIComponent(match[1]) : null;
   };
 
+  const waitForXywhChange = async (page, previous) => {
+    await page.waitForFunction(
+      (prev) => {
+        const match = window.location.href.match(/[?&#]xywh=([^&]+)/);
+        const current = match ? decodeURIComponent(match[1]) : null;
+        return current !== null && current !== prev;
+      },
+      {},
+      previous
+    );
+  };
+
+  // Navigating to a URL that differs only by #hash doesn't reload the page,
+  // and navigating away from a busy viewer can stall, so open the viewer on a
+  // fresh page whenever a test needs a clean state.
+  const openFreshViewer = async () => {
+    if (page) await page.close();
+    page = await browser.newPage();
+    await page.goto(viewerUrl(IMAGE_BOOK_MANIFEST), {
+      waitUntil: "domcontentloaded",
+    });
+  };
+
   beforeAll(async () => {
     browser = await puppeteer.launch();
-    page = await browser.newPage();
-    await page.goto(BASE_URL);
+    await openFreshViewer();
   });
 
   afterAll(async () => {
@@ -99,11 +128,12 @@ describe("Universal Viewer", () => {
   });
 
   it("loads the viewer images", async () => {
-    await page.waitForSelector("#thumb-0");
+    // The thumbnail's <img> is attached after its #thumb-0 container.
+    await page.waitForSelector("#thumb-0 img");
     const imageSrc = await page.$eval("#thumb-0 img", (e) => e.src);
     expect(imageSrc).toEqual(
       expect.stringContaining(
-        "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg"
+        `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page-thumb.jpg`
       )
     );
   });
@@ -145,56 +175,72 @@ describe("Universal Viewer", () => {
   });
 
   it("can toggle gallery view", async () => {
-    // gallery view is not default view
-    const galleryViewBeforeToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewBeforeToggle).toBe("hidden");
+    const galleryButton = ".btn.imageBtn.gallery";
+    const twoUpButton = ".btn.imageBtn.two-up";
+    // The gallery view's component is only created once gallery view is
+    // first opened; the multi-select dialogue has its own hidden one.
+    const gallery = ".galleryView .iiif-gallery-component";
+    const thumbsView = ".leftPanel .thumbsView";
 
-    // gallery toggle icon is visible
-    await page.waitForSelector(".uv-icon-gallery");
-    const galleryViewToggle = await page.evaluate(() => {
-      const toggle = document.querySelector(".uv-icon-gallery");
-      return getComputedStyle(toggle).overflowX;
-    });
-    expect(galleryViewToggle).toBe("visible");
+    const ariaPressed = (selector) =>
+      page.$eval(selector, (el) => el.getAttribute("aria-pressed"));
+    const isVisible = (selector) =>
+      page.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        return !!el && el.offsetParent !== null;
+      }, selector);
 
-    // gallery view can be toggled on
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-gallery").click();
-    });
-    const galleryViewAfterToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterToggle).toBe("visible");
+    // The header hides the gallery and paging buttons at Puppeteer's default
+    // 800px width, so use a desktop-sized viewport to click them as a user.
+    await page.setViewport({ width: 1280, height: 800 });
 
-    // gallery view can be toggled off
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-two-up").click();
-    });
-    const galleryViewAfterTwoUpToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterTwoUpToggle).toBe("hidden");
+    // Gallery view is not the default: the sidebar thumbnails show instead.
+    await page.waitForSelector(galleryButton, { visible: true });
+    await page.waitForSelector(thumbsView, { visible: true });
+    expect(await ariaPressed(galleryButton)).toBe("false");
+    expect(await isVisible(gallery)).toBe(false);
+
+    // Toggling gallery view on shows every canvas in the gallery and hides
+    // the sidebar thumbnails.
+    await page.click(galleryButton);
+    await page.waitForSelector(gallery, { visible: true });
+    await page.waitForSelector(thumbsView, { hidden: true });
+    await page.waitForFunction(
+      (sel) =>
+        document.querySelector(sel).getAttribute("aria-pressed") === "true",
+      {},
+      galleryButton
+    );
+    expect(await page.$$eval(`${gallery} .thumb`, (els) => els.length)).toBe(6);
+
+    // Choosing two-up toggles gallery view off again.
+    await page.click(twoUpButton);
+    await page.waitForSelector(gallery, { hidden: true });
+    await page.waitForSelector(thumbsView, { visible: true });
+    await page.waitForFunction(
+      (sel) =>
+        document.querySelector(sel).getAttribute("aria-pressed") === "false",
+      {},
+      galleryButton
+    );
+    expect(await ariaPressed(twoUpButton)).toBe("true");
   });
 
   it("labels gallery thumbnail size controls", async () => {
-    await page.waitForSelector(".iiif-gallery-component .size-down");
+    // Scope to the gallery view, which is only created once gallery view is
+    // first opened. The multi-select dialogue renders its own (hidden)
+    // gallery component with the same controls.
+    const gallery = ".galleryView .iiif-gallery-component";
+    await page.evaluate(() => {
+      document.querySelector(".uv-icon-gallery").click();
+    });
+    await page.waitForSelector(`${gallery} .size-down`, { visible: true });
 
     const labels = await page.$$eval(
       [
-        ".iiif-gallery-component .size-down",
-        ".iiif-gallery-component input[type='range'][name='size']",
-        ".iiif-gallery-component .size-up",
+        `${gallery} .size-down`,
+        `${gallery} input[type='range'][name='size']`,
+        `${gallery} .size-up`,
       ].join(", "),
       (controls) =>
         controls.map((control) => control.getAttribute("aria-label"))
@@ -205,6 +251,10 @@ describe("Universal Viewer", () => {
       "Thumbnail size",
       "Increase thumbnail size",
     ]);
+
+    await page.evaluate(() => {
+      document.querySelector(".uv-icon-two-up").click();
+    });
   });
 
   it("settings button is visible", async () => {
@@ -222,13 +272,9 @@ describe("Universal Viewer", () => {
     expect(isSettingsButtonVisible).toBe(true);
   });
 
-  // COOKBOOK MANIFEST TEST
+  // VIEWER CONTROLS
   describe("viewer controls", () => {
-    beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), {
-        waitUntil: "domcontentloaded",
-      });
-    });
+    beforeEach(openFreshViewer);
 
     // can navigate back and forth
     it("can navigate back and forth", async () => {
@@ -281,11 +327,7 @@ describe("Universal Viewer", () => {
       const initialXywh = getXywhValue(initialUrl);
 
       await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        initialUrl
-      );
+      await waitForXywhChange(page, initialXywh);
 
       const zoomInUrl = page.url();
       const zoomInXywh = getXywhValue(zoomInUrl);
@@ -295,11 +337,7 @@ describe("Universal Viewer", () => {
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
       await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        zoomInUrl
-      );
+      await waitForXywhChange(page, zoomInXywh);
 
       const zoomOutUrl = page.url();
       const zoomOutXywh = getXywhValue(zoomOutUrl);
@@ -366,9 +404,7 @@ describe("Universal Viewer", () => {
     const contentThumbnailsTab = ".thumbs.tab";
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
-    beforeEach(async () => {
-      await page.goto(BASE_URL);
-    });
+    beforeEach(openFreshViewer);
 
     // switch content tabs and collapse content panel
     it("can switch content tabs", async () => {
@@ -404,9 +440,7 @@ describe("Universal Viewer", () => {
     const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
     const moreInfoHeader = ".rightPanel div.header";
 
-    beforeEach(async () => {
-      await page.goto(BASE_URL);
-    });
+    beforeEach(openFreshViewer);
 
     it("can expand and collapse moreInformation panel", async () => {
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
