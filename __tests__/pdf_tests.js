@@ -1,9 +1,9 @@
 const puppeteer = require("puppeteer");
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
-// PDF manifest for PDF-specific behaviour
-const PDF_MULTI_FILE_MANIFEST =
-  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
+// Local multi-file PDF manifest (three single-page PDFs) for PDF-specific
+// behaviour, modelled on the Villanova manifest vudl:294631.
+const PDF_MULTI_FILE_MANIFEST = `${BASE_URL}/test-fixtures/pdf-multi-file-manifest.json`;
 
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
