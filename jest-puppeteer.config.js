@@ -7,10 +7,6 @@ module.exports = {
       height: 1080
     }
   },
-  server: {
-    command: 'npm run e2eserve',
-    port: 4444,
-  },
   setupFilesAfterEnv: [
     './jest.setup.js'
   ]

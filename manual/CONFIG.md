@@ -277,7 +277,7 @@ Width of the collapsed panel.
 **Type**: `number`  
 **Default**: `255`  
 _Repeated - edit in contentLeftPanel_.  
-Width of the collapsed panel.
+Width of the expanded panel.
 
 ##### panelOpen
 

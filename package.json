@@ -55,7 +55,7 @@
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
     "@eslint/js": "9.28.0",
-    "@types/jest": "^29",
+    "@types/jest": "^30",
     "@types/jquery": "^3.5.14",
     "@types/node": "^22.9.0",
     "@types/react": "^19.0.2",
@@ -70,7 +70,7 @@
     "eslint-plugin-react": "7.37.5",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "5.6.7",
-    "jest": "^29",
+    "jest": "^30",
     "jest-puppeteer": "^11",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
@@ -80,7 +80,7 @@
     "puppeteer": "^23",
     "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
-    "stylelint": "16.19.1",
+    "stylelint": "17.15.0",
     "stylelint-config-standard-less": "3.0.1",
     "stylelint-less": "4.2.1",
     "ts-jest": "^29",
@@ -100,7 +100,7 @@
     "@iiif/base-component": "2.0.1",
     "@iiif/iiif-av-component": "1.2.4",
     "@iiif/manifold": "^2.3.0",
-    "@iiif/presentation-3": "^1.0.5",
+    "@iiif/presentation-3": "^2.2.4",
     "@iiif/vocabulary": "^1.0.31",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^3.0.1",
     "@universalviewer/aleph": "0.0.21",
@@ -112,8 +112,8 @@
     "esbuild": "^0.28.1",
     "esbuild-plugin-less": "^1.1.5",
     "esbuild-plugin-svg": "^0.1.0",
-    "jquery": "3.5.0",
-    "jsviews": "1.0.15",
+    "jquery": "3.7.1",
+    "jsviews": "1.2.0",
     "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.3.0",
     "mediaelement": "^5",
@@ -134,7 +134,8 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "jest": {
-    "preset": "jest-puppeteer",
+    "globalSetup": "<rootDir>/jest.globalSetup.js",
+    "globalTeardown": "<rootDir>/jest.globalTeardown.js",
     "setupFilesAfterEnv": [
       "<rootDir>/jest.setup.js"
     ],
