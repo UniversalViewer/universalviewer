@@ -27,6 +27,56 @@ type TextTrackDescriptor = {
   id: string;
 };
 
+const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
+
+// Picks the label value for the user's locale from raw caption JSON. A label
+// may be a plain string, a IIIF v3 language map ({ "cy": ["..."] }) or IIIF
+// v2 language values ([{ "@value": "...", "@language": "cy" }]). Prefers an
+// exact locale match (cy-GB), then the same base language (cy), then the
+// first value available.
+const captionLabel = (label: any, locale: string): string | undefined => {
+  if (!label || typeof label === "string") {
+    return label || undefined;
+  }
+
+  const entries: Array<[string, string]> = Array.isArray(label)
+    ? label.map((value: any) =>
+        typeof value === "string"
+          ? ["", value]
+          : [value["@language"] || "", value["@value"]]
+      )
+    : Object.keys(label).map((language) => {
+        const values = label[language];
+        return [language, Array.isArray(values) ? values[0] : values];
+      });
+
+  const wanted = (locale || "").toLowerCase();
+  const baseLanguage = (tag: string) => tag.toLowerCase().split("-")[0];
+  const match =
+    entries.find(([language]) => language.toLowerCase() === wanted) ||
+    entries.find(
+      ([language]) =>
+        language && baseLanguage(language) === baseLanguage(wanted)
+    ) ||
+    entries[0];
+
+  return match ? match[1] : undefined;
+};
+
+// Captions may come from a canvas rendering, a painting annotation body or a
+// supplementing annotation; all are read from their raw JSON the same way.
+const captionTrack = (json: any, locale: string): TextTrackDescriptor => {
+  const language = Array.isArray(json.language)
+    ? json.language[0]
+    : json.language;
+
+  return {
+    id: json.id || json["@id"],
+    label: captionLabel(json.label, locale) ?? json.format,
+    language,
+  };
+};
+
 type MediaSourceDescriptor = {
   label: string;
   type: string;
@@ -154,9 +204,13 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     const sources: Array<MediaSourceDescriptor> = [];
     const subtitles: Array<TextTrackDescriptor> = [];
+    const locale: string = this.extension.getLocale();
 
     const renderings: Rendering[] = canvas.getRenderings();
 
+    // Media and captions may be supplied as renderings on the canvas. IIIF
+    // cookbook recipe 0017 links text to an AV canvas this way (there, a
+    // plain-text transcript); recipe 0046 covers the rendering property.
     if (renderings && renderings.length) {
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
@@ -170,15 +224,14 @@ export class MediaElementCenterPanel extends CenterPanel<
         }
 
         if (this.isTypeCaption(rendering)) {
-          subtitles.push({
-            label:
-              rendering.getLabel().getValue() ??
-              rendering.getFormat().toString(),
-            id: rendering.id,
-          });
+          subtitles.push(captionTrack(rendering.__jsonld, locale));
         }
       });
     } else {
+      // Otherwise read them from the bodies of the canvas' painting
+      // annotation. Captions as an extra painting body follow no IIIF
+      // cookbook recipe (recipe 0219 makes them supplementing annotations,
+      // handled below), but are supported for existing manifests.
       const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
         this.extension.helper.getCurrentCanvas()
       );
@@ -200,13 +253,29 @@ export class MediaElementCenterPanel extends CenterPanel<
           }
 
           if (this.isTypeCaption(format)) {
-            subtitles.push(format.__jsonld);
+            subtitles.push(captionTrack(format.__jsonld, locale));
           }
         });
       }
     }
 
+    // Captions may also be supplied as supplementing annotations on the
+    // canvas (IIIF cookbook recipe 0219).
+    const supplementing = await this.getSupplementingCaptions(canvas, locale);
+    for (const caption of supplementing) {
+      if (!subtitles.some((subtitle) => subtitle.id === caption.id)) {
+        subtitles.push(caption);
+      }
+    }
+
     if (subtitles.length > 0) {
+      // Resolve caption URLs to ones the player's XHR will be able to read.
+      for (const subtitle of subtitles) {
+        if (subtitle.id) {
+          subtitle.id = await this.resolveCaptionSource(subtitle.id);
+        }
+      }
+
       // Show captions options popover for better interface feedback
       subtitles.unshift({ id: "none" });
     }
@@ -392,6 +461,98 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.extensionHost.publish(Events.LOAD);
   }
 
+  // Captions/transcriptions supplied as supplementing annotations in the
+  // canvas' annotations pages (IIIF cookbook recipe 0219). Inline
+  // annotation pages are read directly; pages referenced by id alone are
+  // fetched. A body may also be a Choice of caption files, e.g. one per
+  // language (IIIF cookbook recipe 0074); each option becomes a track.
+  async getSupplementingCaptions(
+    canvas: Canvas,
+    locale: string
+  ): Promise<TextTrackDescriptor[]> {
+    const captions: TextTrackDescriptor[] = [];
+    const pages: any[] = canvas.getProperty("annotations") || [];
+
+    for (const page of pages) {
+      let items: any[] = page.items;
+
+      if (!items && page.id) {
+        try {
+          const response = await fetch(page.id);
+          if (response.ok) {
+            items = (await response.json()).items;
+          }
+        } catch {
+          console.warn(
+            `Annotation page ${page.id} could not be read (CORS headers are required); any captions it contains will be unavailable.`
+          );
+        }
+      }
+
+      if (!items) {
+        continue;
+      }
+
+      for (const annotation of items) {
+        const motivations = Array.isArray(annotation.motivation)
+          ? annotation.motivation
+          : [annotation.motivation];
+
+        if (!motivations.includes("supplementing")) {
+          continue;
+        }
+
+        const bodies = (
+          Array.isArray(annotation.body) ? annotation.body : [annotation.body]
+        ).flatMap((body: any) =>
+          body && body.type === "Choice" && Array.isArray(body.items)
+            ? body.items
+            : [body]
+        );
+
+        for (const body of bodies) {
+          if (body && body.id && captionTypes.has(body.format)) {
+            captions.push(captionTrack(body, locale));
+          }
+        }
+      }
+    }
+
+    return captions;
+  }
+
+  // Captions are fetched with XHR by the player, so a cross-origin URL is
+  // only readable when every response hop carries CORS headers. Follow any
+  // CORS-friendly redirect to its final URL, and retry plain-http sources
+  // over https — an http -> https upgrade redirect whose 301 response lacks
+  // CORS headers is blocked by the browser even though its destination is
+  // readable.
+  async resolveCaptionSource(src: string): Promise<string> {
+    const attempts: string[] = [src];
+
+    if (src.startsWith("http://")) {
+      attempts.push(src.replace(/^http:\/\//, "https://"));
+    }
+
+    for (const attempt of attempts) {
+      try {
+        const response = await fetch(attempt);
+        if (response.ok) {
+          return response.url;
+        }
+      } catch {
+        // expected when the attempt is blocked by CORS or mixed content;
+        // fall through to the next candidate
+      }
+    }
+
+    console.warn(
+      `Captions at ${src} could not be read (CORS headers are required on every response, including redirects); the player will omit this track.`
+    );
+
+    return src;
+  }
+
   appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
     for (const subtitle of subtitles) {
       this.$media.append(
@@ -429,15 +590,13 @@ export class MediaElementCenterPanel extends CenterPanel<
     return typeGroup === "audio" || typeGroup === "video";
   }
 
-  // vtt, srt, csv
+  // vtt, srt
   isTypeCaption(element: Rendering | AnnotationBody) {
     const type: RenderingFormat | MediaType | null = element.getFormat();
 
     if (type === null) {
       return false;
     }
-
-    const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
 
     return captionTypes.has(type.toString());
   }

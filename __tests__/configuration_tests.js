@@ -5,7 +5,7 @@ const FIRST_THUMB_SRC =
   "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";
 
 let browser;
-let page;  
+let page;
 
 // Applies custom config through the examples page's Configuration tab:
 // the #customConfig JSON is merged into the viewer config by a
@@ -28,7 +28,7 @@ describe("Configuration options", () => {
   afterAll(async () => {
     await browser.close();
   });
-  
+
   describe("thumb cache invalidation", () => {
     beforeEach(async () => {
       await page.goto(BASE_URL);
