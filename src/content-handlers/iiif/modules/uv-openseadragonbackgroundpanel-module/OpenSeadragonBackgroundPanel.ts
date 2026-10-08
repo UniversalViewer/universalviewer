@@ -55,19 +55,13 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   showAdjustImageButton: boolean;
 
   $canvas: JQuery;
-  $goHomeButton: JQuery;
   $navigator: JQuery;
   $nextButton: JQuery;
   $prevButton: JQuery;
-  $rotateButton: JQuery;
   $spinner: JQuery;
   $viewer: JQuery;
   $viewportNavButtonsContainer: JQuery;
   $viewportNavButtons: JQuery;
-  $zoomInButton: JQuery;
-  $zoomOutButton: JQuery;
-  $adjustImageButton: JQuery;
-  $choiceSwitchButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -160,11 +154,11 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       });
     });
 
-    this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
-      this.whenCreated(() => {
-        this.updateResponsiveView();
-      });
-    });
+    // this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
+    //   this.whenCreated(() => {
+    //     this.updateResponsiveView();
+    //   });
+    // });
 
     this.extensionHost.subscribe(
       IIIFEvents.SET_TARGET,
@@ -248,44 +242,35 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.viewer.viewport.setRotation(next);
   }
 
-  updateResponsiveView(): void {
-    this.setNavigatorVisible();
-    this.viewer.autoHideControls = this.extension.isDesktopMetric();
+  // updateResponsiveView(): void {
+  //   this.setNavigatorVisible();
+  //   this.viewer.autoHideControls = this.extension.isDesktopMetric();
 
-    const enableAutoHide = (event: JQuery.FocusOutEvent) => {
-      this.viewer.autoHideControls = true;
-    };
+  //   const enableAutoHide = (event: JQuery.FocusOutEvent) => {
+  //     this.viewer.autoHideControls = true;
+  //   };
 
-    const disableAutoHide = () => {
-      this.viewer.autoHideControls = false;
-    };
+  //   const disableAutoHide = () => {
+  //     this.viewer.autoHideControls = false;
+  //   };
 
-    const buttons = [
-      this.$zoomInButton,
-      this.$zoomOutButton,
-      this.$goHomeButton,
-      this.$rotateButton,
-      this.$adjustImageButton,
-    ];
+  //   const buttons = [
+  //     this.$zoomInButton,
+  //     this.$zoomOutButton,
+  //     this.$goHomeButton,
+  //     this.$rotateButton,
+  //     this.$adjustImageButton,
+  //   ];
 
-    buttons.forEach((button) => {
-      button.on("focus", disableAutoHide);
-      button.on("focusout", enableAutoHide);
-    });
-  }
+  //   buttons.forEach((button) => {
+  //     button.on("focus", disableAutoHide);
+  //     button.on("focusout", enableAutoHide);
+  //   });
+  // }
 
   async createUI(): Promise<void> {
     this.$spinner = $('<div class="spinner"></div>');
     this.$element.append(this.$spinner);
-
-    this.showAdjustImageButton = Bools.getBool(
-      this.config.options.showAdjustImageControl,
-      false
-    );
-
-    // Transparent pixel
-    const pixel =
-      "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
 
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
@@ -294,11 +279,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
-      showRotationControl: true,
-      showHomeControl: Bools.getBool(
-        this.config.options.showHomeControl,
-        false
-      ),
+      showRotationControl: false,
+      showHomeControl: false,
+      showZoomControl: false,
       showFullPageControl: false,
       defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
@@ -332,62 +315,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           this.extension.data.config!.options.clickToZoomEnabled,
           true
         ),
-      },
-      navImages: {
-        zoomIn: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        zoomOut: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        home: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        rotateright: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        rotateleft: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        next: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        previous: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        fullpage: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        flip: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
       },
       // The max number of milliseconds that an image job may take to complete.
       timeout: this.config.options.tileTimeout || 30_000,
@@ -429,93 +356,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           },
         },
       ],
-    });
-
-    const $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
-    this.$zoomInButton = $("<button />").append($oldZoomIn.contents());
-    this.$zoomInButton.insertAfter($oldZoomIn);
-    $oldZoomIn.remove();
-    this.$zoomInButton.attr("tabindex", 0);
-    this.$zoomInButton.attr("title", this.content.zoomIn);
-    this.$zoomInButton.attr("aria-label", this.content.zoomIn);
-    this.$zoomInButton.addClass("zoomIn viewportNavButton");
-
-    this.onAccessibleClick(this.$zoomInButton, () => {
-      if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
-        this.zoomIn();
-    });
-
-    const $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
-    this.$zoomOutButton = $("<button />").append($oldZoomOut.contents());
-    this.$zoomOutButton.insertAfter($oldZoomOut);
-    $oldZoomIn.remove();
-    this.$zoomOutButton.attr("tabindex", 0);
-    this.$zoomOutButton.attr("title", this.content.zoomOut);
-    this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
-    this.$zoomOutButton.addClass("zoomOut viewportNavButton");
-
-    this.onAccessibleClick(this.$zoomOutButton, () => {
-      if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
-        this.zoomOut();
-    });
-
-    const $oldGoHome = this.$viewer.find('div[title="Go home"]');
-    this.$goHomeButton = $("<button />").append($oldGoHome.contents());
-    this.$goHomeButton.insertAfter($oldGoHome);
-    $oldGoHome.remove();
-    this.$goHomeButton.attr("tabindex", 0);
-    this.$goHomeButton.attr("title", this.content.goHome);
-    this.$goHomeButton.attr("aria-label", this.content.goHome);
-    this.$goHomeButton.addClass("goHome viewportNavButton");
-
-    this.onAccessibleClick(this.$goHomeButton, () => {
-      this.goHome();
-    });
-
-    const $oldRotate = this.$viewer.find('div[title="Rotate right"]');
-    this.$rotateButton = $("<button />").append($oldRotate.contents());
-    this.$rotateButton.insertAfter($oldRotate);
-    $oldRotate.remove();
-    this.$rotateButton.attr("tabindex", 0);
-    this.$rotateButton.attr("title", this.content.rotateRight);
-    this.$rotateButton.attr("aria-label", this.content.rotateRight);
-    this.$rotateButton.addClass("rotate viewportNavButton");
-
-    this.onAccessibleClick(this.$rotateButton, () => {
-      this.rotateRight();
-    });
-
-    if (this.showAdjustImageButton) {
-      this.$adjustImageButton = this.$rotateButton.clone();
-      this.$adjustImageButton.attr("title", this.content.adjustImage);
-      this.$adjustImageButton.attr("aria-label", this.content.adjustImage);
-      this.$adjustImageButton.switchClass("rotate", "adjustImage");
-      this.$adjustImageButton.attr("tabindex", 0);
-      this.$adjustImageButton.onPressed(() => {
-        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
-      });
-      this.$adjustImageButton.insertAfter(this.$rotateButton);
-
-      this.onAccessibleClick(this.$adjustImageButton, () => {
-        this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
-      });
-    }
-
-    this.$zoomInButton
-      .add(this.$zoomOutButton)
-      .add(this.$goHomeButton)
-      .add(this.$rotateButton)
-      .add(this.$adjustImageButton)
-      .on("focus", () => {
-        if (this.controlsVisible) return;
-        this.controlsVisible = true;
-        this.viewer.setControlsEnabled(true);
-      });
-
-    this.$zoomInButton.add(this.$adjustImageButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
     });
 
     this.$viewportNavButtonsContainer = this.$viewer.find(
@@ -641,8 +481,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.createNavigationButtons();
     this.hidePrevButton();
     this.hideNextButton();
-
-    this.createChoiceSwitch();
 
     this.isCreated = true;
     //this.resize();
@@ -775,23 +613,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       if (!this.controlsVisible) return;
       this.controlsVisible = false;
       this.viewer.setControlsEnabled(false);
-    });
-  }
-
-  createChoiceSwitch(): void {
-    this.$choiceSwitchButton = this.$rotateButton.clone();
-    this.$choiceSwitchButton.attr("aria-label", this.content.layers);
-    this.$choiceSwitchButton.attr("title", this.content.layers);
-    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
-    this.$choiceSwitchButton.attr("tabindex", 0);
-
-    if (this.showAdjustImageButton && this.$adjustImageButton) {
-      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
-    } else {
-      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
-    }
-    this.onAccessibleClick(this.$choiceSwitchButton, () => {
-      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
   }
 
@@ -1157,12 +978,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.setNavigatorVisible();
 
-    // resize navigator for continuous manifests
-    if (this.extension.helper.isContinuous()) {
-      setTimeout(() => {
-        this.resizeNavigatorForContinuous();
-      }, 200);
-    }
+    // // resize navigator for continuous manifests
+    // if (this.extension.helper.isContinuous()) {
+    //   setTimeout(() => {
+    //     this.resizeNavigatorForContinuous();
+    //   }, 200);
+    // }
 
     this.overlayAnnotations();
 
@@ -1175,61 +996,59 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
 
     this.isFirstLoad = false;
-
-    this.updateChoiceSwitchVisibility();
   }
 
-  private resizeNavigatorForContinuous(): void {
-    if (!this.viewer || !this.viewer.navigator) return;
+  // private resizeNavigatorForContinuous(): void {
+  //   if (!this.viewer || !this.viewer.navigator) return;
 
-    const homeBounds = this.viewer.world.getHomeBounds();
-    const contentAspectRatio = homeBounds.width / homeBounds.height;
+  //   const homeBounds = this.viewer.world.getHomeBounds();
+  //   const contentAspectRatio = homeBounds.width / homeBounds.height;
 
-    const viewportWidth = this.$viewer.width();
-    const viewportHeight = this.$viewer.height();
-    const maxNavigatorWidth = 100;
-    const maxNavigatorHeight = 100;
-    const minVerticalNavigatorWidth = 60;
-    const minHorizontalNavigatorHeight = 40;
+  //   const viewportWidth = this.$viewer.width();
+  //   const viewportHeight = this.$viewer.height();
+  //   const maxNavigatorWidth = 100;
+  //   const maxNavigatorHeight = 100;
+  //   const minVerticalNavigatorWidth = 60;
+  //   const minHorizontalNavigatorHeight = 40;
 
-    let navigatorWidth: number;
-    let navigatorHeight: number;
+  //   let navigatorWidth: number;
+  //   let navigatorHeight: number;
 
-    if (this.extension.helper.isVerticallyAligned()) {
-      navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
-      navigatorWidth = navigatorHeight * contentAspectRatio;
+  //   if (this.extension.helper.isVerticallyAligned()) {
+  //     navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
+  //     navigatorWidth = navigatorHeight * contentAspectRatio;
 
-      // Enforce max width
-      if (navigatorWidth > maxNavigatorWidth) {
-        navigatorWidth = maxNavigatorWidth;
-      }
+  //     // Enforce max width
+  //     if (navigatorWidth > maxNavigatorWidth) {
+  //       navigatorWidth = maxNavigatorWidth;
+  //     }
 
-      // Enforce min width
-      if (navigatorWidth < minVerticalNavigatorWidth) {
-        navigatorWidth = minVerticalNavigatorWidth;
-      }
-    } else {
-      navigatorWidth = viewportWidth;
-      navigatorHeight = navigatorWidth / contentAspectRatio;
+  //     // Enforce min width
+  //     if (navigatorWidth < minVerticalNavigatorWidth) {
+  //       navigatorWidth = minVerticalNavigatorWidth;
+  //     }
+  //   } else {
+  //     navigatorWidth = viewportWidth;
+  //     navigatorHeight = navigatorWidth / contentAspectRatio;
 
-      // Enforce max height
-      if (navigatorHeight > maxNavigatorHeight) {
-        navigatorHeight = maxNavigatorHeight;
-      }
+  //     // Enforce max height
+  //     if (navigatorHeight > maxNavigatorHeight) {
+  //       navigatorHeight = maxNavigatorHeight;
+  //     }
 
-      // Enforce min height
-      if (navigatorHeight < minHorizontalNavigatorHeight) {
-        navigatorHeight = minHorizontalNavigatorHeight;
-      }
-    }
+  //     // Enforce min height
+  //     if (navigatorHeight < minHorizontalNavigatorHeight) {
+  //       navigatorHeight = minHorizontalNavigatorHeight;
+  //     }
+  //   }
 
-    const navigatorElement = this.viewer.navigator.element;
-    navigatorElement.style.width = `${navigatorWidth}px`;
-    navigatorElement.style.height = `${navigatorHeight}px`;
+  //   const navigatorElement = this.viewer.navigator.element;
+  //   navigatorElement.style.width = `${navigatorWidth}px`;
+  //   navigatorElement.style.height = `${navigatorHeight}px`;
 
-    this.viewer.navigator.viewport.fitBounds(homeBounds, true);
-    this.viewer.navigator.updateSize();
-  }
+  //   this.viewer.navigator.viewport.fitBounds(homeBounds, true);
+  //   this.viewer.navigator.updateSize();
+  // }
 
   zoomToInitialAnnotation(): void {
     const annotationRect: AnnotationRect | null =
@@ -1810,12 +1629,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           break;
       }
 
-      // resize navigator for continuous manifests
-      if (this.extension.helper.isContinuous()) {
-        setTimeout(() => {
-          this.resizeNavigatorForContinuous();
-        }, 200);
-      }
+      // // resize navigator for continuous manifests
+      // if (this.extension.helper.isContinuous()) {
+      //   setTimeout(() => {
+      //     this.resizeNavigatorForContinuous();
+      //   }, 200);
+      // }
     }
   }
 
@@ -1847,24 +1666,5 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
-  }
-
-  indicesIncludeChoices(indices: number[]): boolean {
-    return indices.some((index) => {
-      const canvas = this.extension.helper.getCanvasByIndex(index);
-      return canvas.getChoices().length > 0;
-    });
-  }
-
-  updateChoiceSwitchVisibility(): void {
-    if (!this.$choiceSwitchButton) return;
-
-    const indices = this.extension.getPagedIndices();
-    const hasChoices = this.indicesIncludeChoices(indices);
-
-    this.$choiceSwitchButton.css(
-      "visibility",
-      hasChoices ? "visible" : "hidden"
-    );
   }
 }

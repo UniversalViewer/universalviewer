@@ -181,7 +181,7 @@ export class AdjustImageDialogue extends Dialogue<
     // put focus back on the button when the dialogue is closed
     (<OpenSeadragonExtension>(
       this.extension
-    )).backgroundPanel.$adjustImageButton.focus();
+    )).centerPanel.$adjustImageButton.focus();
   }
 
   resize(): void {

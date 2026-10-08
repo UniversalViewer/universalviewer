@@ -163,7 +163,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_OUT);
     });
 
-    if (this.showAdjustImageButton) {
+    if (this.showHomeButton) {
       this.$goHomeButton = $("<button />");
       this.$imageControlsContainer.append(this.$goHomeButton);
       this.$goHomeButton.attr("tabindex", 0);
@@ -173,6 +173,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.onAccessibleClick(this.$goHomeButton, () => {
         this.extensionHost.publish(OpenSeadragonExtensionEvents.GO_HOME);
       });
+      // todo: add goHome SVG and remove icon as background image from styles.less
     }
 
     this.$rotateButton = $("<button />");

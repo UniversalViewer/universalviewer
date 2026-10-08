@@ -90,7 +90,7 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
     this.$anchor =
       mobileFooterButton?.is(":visible") && mobileFooterButton?.length
         ? mobileFooterButton
-        : extension.backgroundPanel.$choiceSwitchButton;
+        : extension.centerPanel.$choiceSwitchButton;
 
     super.open();
   }
