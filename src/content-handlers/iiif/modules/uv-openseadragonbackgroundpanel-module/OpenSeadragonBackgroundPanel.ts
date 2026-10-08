@@ -1,7 +1,7 @@
-import { BaseView } from "../uv-shared-module/BaseView";
+import { BackgroundPanel } from "../uv-shared-module/BackgroundPanel";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
-export class OpenSeadragonBackgroundPanel extends BaseView<
+export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   // todo: add config
   Config["modules"]["openSeadragonCenterPanel"]
 > {
