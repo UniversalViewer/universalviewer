@@ -154,6 +154,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       });
     });
 
+    this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
+      this.whenCreated(() => {
+        this.goHome();
+      });
+    });
+
     this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
       this.whenCreated(() => {
         this.updateResponsiveView();
