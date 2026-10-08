@@ -4,6 +4,15 @@
   @search-result: @brand-secondary;
 
   .centerPanel {
+    // this is to let the clicks pass through to the background panel. When all extensions use the same panel structure, this can be moved up to the generic center panel css.
+    pointer-events: none;
+
+    // allow clicks on interactive elements
+    .attribution,
+    .subtitle .expand-btn {
+      pointer-events: auto;
+    }
+
     .content {
       position: relative;
 
