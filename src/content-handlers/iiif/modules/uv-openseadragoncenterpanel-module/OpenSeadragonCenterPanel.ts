@@ -1,4 +1,4 @@
-// const $ = require("jquery");
+const $ = require("jquery");
 // import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
   Bools,
@@ -81,16 +81,18 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     super.create();
 
-    this.createUI();
-
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
       () => {
+        this.isCreated = true;
+
         this.title = this.extension.helper.getLabel();
         this.resize();
-        this.updateChoiceSwitchVisibility;
+        this.updateChoiceSwitchVisibility();
       }
     );
+
+    this.createUI();
   }
 
   createUI(): void {
@@ -104,8 +106,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     // this.createNavButtons();
     // // Prev/next buttons
-
-    this.isCreated = true;
   }
 
   createImageControls(): void {
@@ -244,6 +244,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
     this.$choiceSwitchButton.attr("tabindex", 0);
     this.$choiceSwitchButton.css("visibility", "hidden");
+    // this svg is a hacky transformation of the google icons svg - will need to make a proper one when we add the svg icon library
+    this.$choiceSwitchButton.html(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+    viewBox="0 0 30 30" fill="currentColor">
+    <g transform="translate(15 15) scale(0.0185) translate(-480 480)">
+      <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"/>
+    </g>
+  </svg>`
+    );
 
     if (this.showAdjustImageButton && this.$adjustImageButton) {
       this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
@@ -276,8 +285,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   resize(): void {
     super.resize();
-
-    if (!this.isCreated) return;
 
     if (this.title) {
       this.$title.text(sanitize(this.title));
