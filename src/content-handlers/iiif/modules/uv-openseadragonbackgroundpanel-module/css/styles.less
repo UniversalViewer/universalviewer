@@ -1,0 +1,72 @@
+.uv-iiif-extension-host.uv-openseadragon-extension {
+  @search-result: @brand-secondary;
+
+  .spinner {
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    border-radius: 27px;
+    .loading(@loader-black-bg);
+  }
+
+  .annotationRect {
+    background-color: desaturate(@search-result, 40%);
+    .opacity(0.5);
+    &.current {
+      //border: 3px solid #fff;
+      @col: lighten(@search-result, 20%);
+      background-color: saturate(@col, 100%);
+    }
+    z-index: 20;
+  }
+
+  .lineAnnotationRect {
+    .opacity(0.5);
+    &.current {
+      @col: rgb(120, 251, 185);
+      background-color: saturate(@col, 100%);
+    }
+    &:hover {
+      @col: lighten(rgb(120, 251, 185), 20%);
+      background-color: saturate(@col, 80%);
+    }
+    z-index: 10;
+  }
+
+  .viewer.choice-dialogue-open {
+    .openseadragon-container > div > div {
+      opacity: 1 !important;
+    }
+  }
+
+  .annotationPin {
+    // background-color: white;
+    background-image: data-uri("../img/pin.svg") !important;
+    width: 28px !important;
+    height: 37px !important;
+    background-position-x: 1px;
+    transform: translate(-45%, -90%);
+    overflow: hidden;
+    cursor: pointer;
+
+    span {
+      color: #2a2a2a;
+      user-select: none;
+      display: block;
+      width: 95%;
+      text-align: center;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+  }
+
+  .openseadragon-canvas {
+    &:focus {
+      outline: none;
+    }
+    &.keyboard-nav:focus-visible {
+      outline: 2px solid @link-color;
+      outline-offset: -2px;
+    }
+  }
+}
