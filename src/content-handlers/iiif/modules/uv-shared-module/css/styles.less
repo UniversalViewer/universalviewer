@@ -115,6 +115,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
+    position: relative;
 
     .md-mediaquery({
             padding: 0.5rem;
@@ -159,6 +160,12 @@
     transition-duration: calc(
       var(--uv-animation) * var(--uv-animation-duration)
     );
+  }
+
+  .backgroundPanel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
 
   .centerPanel {
