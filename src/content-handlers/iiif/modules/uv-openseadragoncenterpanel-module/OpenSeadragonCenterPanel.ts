@@ -19,7 +19,7 @@ import {
 // import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 // import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
-// import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
+import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 // import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
 // import OpenSeadragon from "openseadragon";
 // import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
@@ -74,6 +74,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.setConfig("openSeadragonCenterPanel");
 
     super.create();
+
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
+      () => {
+        this.title = this.extension.helper.getLabel();
+        this.isCreated = true;
+        this.resize();
+      }
+    );
   }
 
   resize(): void {
