@@ -115,7 +115,7 @@ export class AdjustImageDialogue extends Dialogue<
       this.$brightnessInput.val(this.brightnessPercent);
       this.$saturationInput.val(this.saturationPercent);
       const canvas = <HTMLCanvasElement>(
-        (<OpenSeadragonExtension>this.extension).centerPanel.$canvas[0]
+        (<OpenSeadragonExtension>this.extension).backgroundPanel.$canvas[0]
           .children[0]
       );
       canvas.style.filter = "none";
@@ -127,7 +127,7 @@ export class AdjustImageDialogue extends Dialogue<
 
   filter(): void {
     const canvas = <HTMLCanvasElement>(
-      (<OpenSeadragonExtension>this.extension).centerPanel.$canvas[0]
+      (<OpenSeadragonExtension>this.extension).backgroundPanel.$canvas[0]
         .children[0]
     );
     canvas.style.filter = `contrast(${this.contrastPercent}%) brightness(${this.brightnessPercent}%) saturate(${this.saturationPercent}%)`;
@@ -181,7 +181,7 @@ export class AdjustImageDialogue extends Dialogue<
     // put focus back on the button when the dialogue is closed
     (<OpenSeadragonExtension>(
       this.extension
-    )).centerPanel.$adjustImageButton.focus();
+    )).backgroundPanel.$adjustImageButton.focus();
   }
 
   resize(): void {

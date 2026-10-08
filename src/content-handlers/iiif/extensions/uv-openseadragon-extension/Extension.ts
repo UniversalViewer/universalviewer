@@ -127,7 +127,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     this.extensionHost.subscribe(IIIFEvents.DOWN_ARROW, () => {
       if (!this.useArrowKeysToNavigate()) {
-        this.centerPanel.setFocus();
+        this.backgroundPanel.setFocus();
       }
     });
 
@@ -188,7 +188,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           this.getPrevPageIndex()
         );
       } else {
-        this.centerPanel.setFocus();
+        this.backgroundPanel.setFocus();
       }
     });
 
@@ -210,7 +210,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
 
     this.extensionHost.subscribe(IIIFEvents.MINUS, () => {
-      this.centerPanel.setFocus();
+      this.backgroundPanel.setFocus();
     });
 
     this.extensionHost.subscribe(
@@ -309,7 +309,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     );
 
     this.extensionHost.subscribe(IIIFEvents.PLUS, () => {
-      this.centerPanel.setFocus();
+      this.backgroundPanel.setFocus();
     });
 
     this.extensionHost.subscribe(IIIFEvents.PREV, () => {
@@ -342,7 +342,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
           this.getNextPageIndex()
         );
       } else {
-        this.centerPanel.setFocus();
+        this.backgroundPanel.setFocus();
       }
     });
 
@@ -363,7 +363,8 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION_FINISH,
       (viewer: any) => {
-        const xywh: XYWHFragment | null = this.centerPanel.getViewportBounds();
+        const xywh: XYWHFragment | null =
+          this.backgroundPanel.getViewportBounds();
         const canvas: Canvas = this.helper.getCurrentCanvas();
 
         if (this.centerPanel && xywh && canvas) {
@@ -393,7 +394,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
       OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
       () => {
         if (!this.useArrowKeysToNavigate()) {
-          this.centerPanel.setFocus();
+          this.backgroundPanel.setFocus();
         }
         this.fire(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
       }
@@ -472,7 +473,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
     this.extensionHost.subscribe(IIIFEvents.UP_ARROW, () => {
       if (!this.useArrowKeysToNavigate()) {
-        this.centerPanel.setFocus();
+        this.backgroundPanel.setFocus();
       }
     });
 
@@ -939,7 +940,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   }
 
   getViewer() {
-    return this.centerPanel.viewer;
+    return this.backgroundPanel.viewer;
   }
 
   getMode(): Mode {
@@ -957,7 +958,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
 
   getViewportBounds(): string | null {
     if (!this.centerPanel) return null;
-    const bounds = this.centerPanel.getViewportBounds();
+    const bounds = this.backgroundPanel.getViewportBounds();
     if (bounds) {
       return bounds.toString();
     }

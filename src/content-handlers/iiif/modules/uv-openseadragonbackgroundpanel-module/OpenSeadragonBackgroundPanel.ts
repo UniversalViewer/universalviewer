@@ -632,8 +632,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       );
     });
 
-    this.title = this.extension.helper.getLabel();
-
     this.createNavigationButtons();
     this.hidePrevButton();
     this.hideNextButton();
@@ -1743,10 +1741,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     if (!this.isCreated) return;
 
-    if (this.title) {
-      this.$title.text(sanitize(this.title));
-    }
-
     this.$spinner.css(
       "top",
       this.$element.height() / 2 - this.$spinner.height() / 2
@@ -1759,12 +1753,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const viewingDirection: ViewingDirection =
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
-
-    if (this.extension.helper.isRightToLeft()) {
-      this.$title.addClass("rtl");
-    } else {
-      this.$title.removeClass("rtl");
-    }
 
     if (
       this.extension.helper.isMultiCanvas() &&
