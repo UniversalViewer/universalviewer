@@ -18,6 +18,7 @@ import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module
 import { MultiSelectionArgs } from "./MultiSelectionArgs";
 import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
 import { Point } from "../../modules/uv-shared-module/Point";
+import { OpenSeadragonBackgroundPanel } from "../../modules/uv-openseadragonbackgroundpanel-module/OpenSeadragonBackgroundPanel";
 import { OpenSeadragonCenterPanel } from "../../modules/uv-openseadragoncenterpanel-module/OpenSeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
@@ -66,6 +67,7 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
   $shareDialogue: JQuery;
   $adjustImageDialogue: JQuery;
   $choiceSwitchDialogue: JQuery;
+  backgroundPanel: OpenSeadragonBackgroundPanel;
   centerPanel: OpenSeadragonCenterPanel;
   currentAnnotationRect: AnnotationRect | null;
   currentRotation: number = 0;
@@ -533,6 +535,10 @@ export default class OpenSeadragonExtension extends BaseExtension<Config> {
     } else {
       this.shell.$headerPanel.hide();
     }
+
+    this.backgroundPanel = new OpenSeadragonBackgroundPanel(
+      this.shell.$backgroundPanel
+    );
 
     if (this.isLeftPanelEnabled()) {
       this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
