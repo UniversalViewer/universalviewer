@@ -1,0 +1,68 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["HLS audio with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in the British Library's early AV manifests, its audio is HLS, of type Audio, in a Choice. Its ranges make the AV extension play it. The media doesn't exist: only the extension chosen is tested."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 60,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "http://localhost:4444/test-fixtures/missing-media.m3u8",
+                    "type": "Audio",
+                    "format": "application/vnd.apple.mpegurl"
+                  }
+                ]
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part 1"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-manifest.json/canvas#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

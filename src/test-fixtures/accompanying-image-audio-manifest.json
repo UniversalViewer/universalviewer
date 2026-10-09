@@ -1,0 +1,65 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with an accompanying image (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Mahler's Symphony No. 3 with an accompanying image, as in IIIF Cookbook recipe 0014, which is shown while the audio plays. As in that recipe, the audio is in an MP4 file, so its format is video/mp4 though its type is Sound."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "accompanyingCanvas": {
+        "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying",
+        "type": "Canvas",
+        "height": 1000,
+        "width": 1000,
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying/page",
+            "type": "AnnotationPage",
+            "items": [
+              {
+                "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying/page/annotation",
+                "type": "Annotation",
+                "motivation": "painting",
+                "body": {
+                  "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                },
+                "target": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying"
+              }
+            ]
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas",
+              "body": {
+                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "video/mp4"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

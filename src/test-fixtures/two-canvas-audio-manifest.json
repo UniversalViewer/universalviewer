@@ -1,0 +1,88 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio on two canvases (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Two canvases of audio, like the sides of a tape, the first with a thumbnail image and the second with no image at all, so its thumbnail shows an icon. Each side's media has its own URL, to tell which is loaded. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0). Thumbnail: P. Oxy. I 29, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 1"]
+      },
+      "duration": 10,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/1",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/whale-song.ogg?side=1",
+                "type": "Sound",
+                "format": "audio/ogg",
+                "duration": 37.9
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "en": ["Side 2"]
+      },
+      "duration": 10,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/two-canvas-audio-manifest.json/canvas/2",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/whale-song.ogg?side=2",
+                "type": "Sound",
+                "format": "audio/ogg",
+                "duration": 37.9
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

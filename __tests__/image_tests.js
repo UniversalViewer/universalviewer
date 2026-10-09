@@ -19,6 +19,7 @@ const viewerUrl = (manifestUrl) => {
 
 describe("Universal Viewer", () => {
   let browser;
+  let context;
   let page;
 
   const getRotationFromNavigator = async () => {
@@ -101,12 +102,13 @@ describe("Universal Viewer", () => {
     );
   };
 
-  // Navigating to a URL that differs only by #hash doesn't reload the page,
-  // and navigating away from a busy viewer can stall, so open the viewer on a
-  // fresh page whenever a test needs a clean state.
+  // Each test opens the viewer as a new visitor: in a new browser context,
+  // so nothing a test does (including what the viewer remembers in
+  // localStorage) carries over to another, whatever order they run in.
   const openFreshViewer = async () => {
-    if (page) await page.close();
-    page = await browser.newPage();
+    if (context) await context.close();
+    context = await browser.createBrowserContext();
+    page = await context.newPage();
     await page.goto(viewerUrl(IMAGE_BOOK_MANIFEST), {
       waitUntil: "domcontentloaded",
     });
@@ -114,8 +116,9 @@ describe("Universal Viewer", () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch();
-    await openFreshViewer();
   });
+
+  beforeEach(openFreshViewer);
 
   afterAll(async () => {
     await browser.close();
@@ -140,6 +143,7 @@ describe("Universal Viewer", () => {
 
   it("can toggle thumbnail label truncation", async () => {
     await page.waitForSelector("#truncateThumbnailLabels");
+    await page.waitForSelector(".thumbsView .thumbs .thumb .info .label");
 
     const isCheckedBeforeToggle = await page.$eval(
       "#truncateThumbnailLabels",
@@ -231,9 +235,11 @@ describe("Universal Viewer", () => {
     // first opened. The multi-select dialogue renders its own (hidden)
     // gallery component with the same controls.
     const gallery = ".galleryView .iiif-gallery-component";
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-gallery").click();
-    });
+    const galleryButton = ".btn.imageBtn.gallery";
+    // The header hides the gallery button at Puppeteer's default 800px width.
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.waitForSelector(galleryButton, { visible: true });
+    await page.click(galleryButton);
     await page.waitForSelector(`${gallery} .size-down`, { visible: true });
 
     const labels = await page.$$eval(
@@ -251,10 +257,6 @@ describe("Universal Viewer", () => {
       "Thumbnail size",
       "Increase thumbnail size",
     ]);
-
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-two-up").click();
-    });
   });
 
   it("settings button is visible", async () => {
@@ -274,8 +276,6 @@ describe("Universal Viewer", () => {
 
   // VIEWER CONTROLS
   describe("viewer controls", () => {
-    beforeEach(openFreshViewer);
-
     // can navigate back and forth
     it("can navigate back and forth", async () => {
       await page.waitForSelector(".btn.imageBtn.next", { visible: true });
@@ -404,8 +404,6 @@ describe("Universal Viewer", () => {
     const contentThumbnailsTab = ".thumbs.tab";
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
-    beforeEach(openFreshViewer);
-
     // switch content tabs and collapse content panel
     it("can switch content tabs", async () => {
       await page.waitForSelector(contentThumbnailsActiveTab, { visible: true });
@@ -439,8 +437,6 @@ describe("Universal Viewer", () => {
     const moreInfoExpandBtn = ".rightPanel button.expandButton";
     const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
     const moreInfoHeader = ".rightPanel div.header";
-
-    beforeEach(openFreshViewer);
 
     it("can expand and collapse moreInformation panel", async () => {
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });

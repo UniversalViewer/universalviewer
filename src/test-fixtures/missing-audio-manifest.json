@@ -1,0 +1,40 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/missing-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio whose file is missing (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Its audio file returns 404 Not Found, as the old Florence Nightingale manifest's does, so the player can't play it."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/missing-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 74.057144,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/missing-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/missing-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/missing-audio-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/missing-audio.mp3",
+                "type": "Sound",
+                "duration": 74.057144,
+                "format": "audio/mp3"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

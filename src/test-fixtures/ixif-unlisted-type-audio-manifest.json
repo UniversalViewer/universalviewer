@@ -1,0 +1,62 @@
+{
+  "@context": [
+    "http://wellcomelibrary.org/ld/ixif/0/context.json",
+    "http://iiif.io/api/presentation/2/context.json"
+  ],
+  "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json",
+  "@type": "sc:Manifest",
+  "label": "Audio of a type UV doesn't list, in a IIIF v2 IxIF manifest (e2e test fixture)",
+  "description": "Its media sequence element's type, ixif:Recording, isn't one UV chooses an extension by, so its format, audio/mp4, is used instead.",
+  "mediaSequences": [
+    {
+      "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/xsequence/s0",
+      "@type": "ixif:MediaSequence",
+      "label": "XSequence 0",
+      "elements": [
+        {
+          "@id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4#identity",
+          "@type": "ixif:Recording",
+          "format": "audio/mp4",
+          "label": "Audio (e2e test fixture)",
+          "thumbnail": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page.jpg",
+          "rendering": {
+            "@id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+            "format": "audio/mp4"
+          }
+        }
+      ]
+    }
+  ],
+  "sequences": [
+    {
+      "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/sequence/seq",
+      "@type": "sc:Sequence",
+      "label": "Unsupported extension. This manifest is being used as a wrapper for non-IIIF content (e.g., audio, video) and is unfortunately incompatible with IIIF viewers.",
+      "compatibilityHint": "displayIfContentUnsupported",
+      "canvases": [
+        {
+          "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/canvas/c1",
+          "@type": "sc:Canvas",
+          "label": "Placeholder image",
+          "height": 600,
+          "width": 600,
+          "images": [
+            {
+              "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/canvas/c1/image",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/canvas/c1",
+              "resource": {
+                "@id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 600,
+                "width": 600
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

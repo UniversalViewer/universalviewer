@@ -56,7 +56,9 @@
                     "type": "Text",
                     "format": "text/vtt",
                     "label": {
-                      "en": ["English captions"]
+                      "en": ["English captions"],
+                      "cy": ["Capsiynau Saesneg"],
+                      "fr": ["Sous-titres anglais"]
                     },
                     "language": "en"
                   },
@@ -65,9 +67,22 @@
                     "type": "Text",
                     "format": "text/srt",
                     "label": {
-                      "cy": ["Capsiynau Cymraeg"]
+                      "en": ["Welsh captions"],
+                      "cy": ["Capsiynau Cymraeg"],
+                      "fr": ["Sous-titres gallois"]
                     },
                     "language": "cy"
+                  },
+                  {
+                    "id": "http://localhost:4444/test-fixtures/sous-titres.vtt",
+                    "type": "Text",
+                    "format": "text/vtt",
+                    "label": {
+                      "en": ["French captions"],
+                      "cy": ["Capsiynau Ffrangeg"],
+                      "fr": ["Sous-titres français"]
+                    },
+                    "language": "fr"
                   }
                 ]
               },

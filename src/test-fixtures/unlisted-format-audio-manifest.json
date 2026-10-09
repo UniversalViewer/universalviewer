@@ -1,0 +1,40 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/unlisted-format-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio in a format UV doesn't list (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Its body's format, audio/flac, isn't one UV chooses an extension by, so its type, Sound, is used instead. The media doesn't exist: only the extension chosen is tested."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/unlisted-format-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 60,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/unlisted-format-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/unlisted-format-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/unlisted-format-audio-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/missing-media.flac",
+                "type": "Sound",
+                "format": "audio/flac",
+                "duration": 60
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

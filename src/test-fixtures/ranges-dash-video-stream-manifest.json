@@ -1,0 +1,68 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["MPEG-DASH video with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Plays Akamai's MPEG-DASH test stream, which needs dash.js in browsers without native support. Its ranges make the AV extension play it."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 600,
+      "width": 1280,
+      "height": 720,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/canvas",
+              "body": {
+                "id": "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+                "type": "Video",
+                "format": "application/dash+xml",
+                "width": 1280,
+                "height": 720,
+                "duration": 600
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part 1"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-dash-video-stream-manifest.json/canvas#t=0,600",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

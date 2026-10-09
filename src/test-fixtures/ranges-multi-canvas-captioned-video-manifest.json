@@ -1,0 +1,238 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Videos with ranges and differing captions (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Three canvases with ranges: the first has English and Welsh captions, the second English captions and a caption file that can't be read, the third no captions. The auto-advance behavior joins them into one timeline."
+    ]
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part one"]
+      },
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4"
+              }
+            }
+          ]
+        }
+      ],
+      "height": 360,
+      "width": 480,
+      "annotations": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1/captions",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1/captions/annotation",
+              "type": "Annotation",
+              "motivation": "supplementing",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "http://localhost:4444/test-fixtures/captions.vtt",
+                    "type": "Text",
+                    "format": "text/vtt",
+                    "label": {
+                      "en": ["English captions"],
+                      "cy": ["Capsiynau Saesneg"]
+                    },
+                    "language": "en"
+                  },
+                  {
+                    "id": "http://localhost:4444/test-fixtures/capsiynau.srt",
+                    "type": "Text",
+                    "format": "text/srt",
+                    "label": {
+                      "en": ["Welsh captions"],
+                      "cy": ["Capsiynau Cymraeg"]
+                    },
+                    "language": "cy"
+                  }
+                ]
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part two"]
+      },
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4"
+              }
+            }
+          ]
+        }
+      ],
+      "height": 360,
+      "width": 480,
+      "annotations": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2/captions",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2/captions/annotation",
+              "type": "Annotation",
+              "motivation": "supplementing",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "http://localhost:4444/test-fixtures/part-two-captions.vtt",
+                    "type": "Text",
+                    "format": "text/vtt",
+                    "label": {
+                      "en": ["English captions (part two)"]
+                    },
+                    "language": "en"
+                  },
+                  {
+                    "id": "http://localhost:4444/test-fixtures/missing-captions.vtt",
+                    "type": "Text",
+                    "format": "text/vtt",
+                    "label": {
+                      "en": ["French captions"]
+                    },
+                    "language": "fr"
+                  }
+                ]
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part three"]
+      },
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/3/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/3",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4"
+              }
+            }
+          ]
+        }
+      ],
+      "height": 360,
+      "width": 480
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/1#t=0,572.034",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Part two"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/2#t=0,572.034",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/range/3",
+          "type": "Range",
+          "label": {
+            "en": ["Part three"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-multi-canvas-captioned-video-manifest.json/canvas/3#t=0,572.034",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/cross-origin-dash-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "MPEG-DASH audio from another origin, without CORS (e2e test fixture)"
+    ]
+  },
+  "summary": {
+    "en": [
+      "Its MPEG-DASH stream is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as the British Library's early AV streams are, so dash.js, which fetches it with a script request, can't load it. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/cross-origin-dash-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 10,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/cross-origin-dash-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/cross-origin-dash-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/cross-origin-dash-manifest.json/canvas",
+              "body": {
+                "id": "http://127.0.0.1:4444/test-fixtures/stream.mpd",
+                "type": "Sound",
+                "format": "application/dash+xml",
+                "duration": 10
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

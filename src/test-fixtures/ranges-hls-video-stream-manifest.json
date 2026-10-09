@@ -1,0 +1,68 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["HLS video with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Plays the Mux HLS test stream, which needs hls.js in browsers without native support. Its ranges make the AV extension play it."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 600,
+      "width": 1280,
+      "height": 720,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas",
+              "body": {
+                "id": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                "type": "Video",
+                "format": "application/vnd.apple.mpegurl",
+                "width": 1280,
+                "height": 720,
+                "duration": 600
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part 1"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas#t=0,600",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

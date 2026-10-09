@@ -1,0 +1,102 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with a posterCanvas with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in the British Library's early AV manifests, the manifest has a posterCanvas (the name for placeholderCanvas in drafts of IIIF Presentation 3), shown before and while the audio plays. Its ranges make the AV component play it."
+    ]
+  },
+  "posterCanvas": {
+    "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/poster",
+    "type": "Canvas",
+    "width": 1000,
+    "height": 1000,
+    "items": [
+      {
+        "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/poster/page",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/poster/page/annotation",
+            "type": "Annotation",
+            "motivation": "painting",
+            "body": {
+              "id": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page.jpg",
+              "type": "Image",
+              "format": "image/jpeg"
+            },
+            "target": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/poster"
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "audio/mp4"
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Part two"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas#t=60,1985.024",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

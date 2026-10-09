@@ -28,7 +28,9 @@ const viewerUrl = (manifestUrl) => {
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
 };
 
-describe("Universal Viewer", () => {
+// Pending: this file is to be deleted in another branch, and its tests depend
+// on running in the order written, which the suite no longer guarantees.
+describe.skip("Universal Viewer", () => {
   let browser;
   let page;
 

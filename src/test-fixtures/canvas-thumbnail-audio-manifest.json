@@ -1,0 +1,49 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/canvas-thumbnail-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with a canvas thumbnail (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "With no placeholder or accompanying image, the canvas' IIIF v3 thumbnail is shown before and while the audio plays."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/canvas-thumbnail-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-4-fayum-portrait.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 1000,
+          "height": 1000
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/canvas-thumbnail-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/canvas-thumbnail-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "audio/mp4"
+              },
+              "target": "http://localhost:4444/test-fixtures/canvas-thumbnail-audio-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
