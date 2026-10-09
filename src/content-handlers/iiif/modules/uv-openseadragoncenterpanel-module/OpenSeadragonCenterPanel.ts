@@ -104,6 +104,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   createUI(): void {
     this.createImageControls();
     this.createNavigationButtons();
+    this.hidePrevButton();
+    this.hideNextButton();
   }
 
   createNavigator(): void {
@@ -445,6 +447,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           this.enableNextButton();
         }
       }
+    } else {
+      this.hidePrevButton();
+      this.hideNextButton();
     }
 
     this.updateChoiceSwitchVisibility();
