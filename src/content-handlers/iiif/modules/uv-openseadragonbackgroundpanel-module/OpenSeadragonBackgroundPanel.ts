@@ -359,15 +359,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       ],
     });
 
-    this.$viewportNavButtonsContainer = this.$viewer.find(
-      ".openseadragon-container > div:not(.openseadragon-canvas):first"
-    );
-
-    //this.$viewportNavButtonsContainer.addClass("viewportControls");
-
-    this.$viewportNavButtons =
-      this.$viewportNavButtonsContainer.find(".viewportNavButton");
-
     this.$canvas = $(this.viewer.canvas);
     this.$canvas.attr("role", "application");
     this.$canvas.attr("aria-label", this.content.mediaViewer);
@@ -392,43 +383,44 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     // events
 
-    this.$element.on("mousemove", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
-    });
+    // JM to do: move visibility logic to center panel
+    // this.$element.on("mousemove", () => {
+    //   if (this.controlsVisible) return;
+    //   this.controlsVisible = true;
+    //   this.viewer.setControlsEnabled(true);
+    // });
 
-    this.$element.on("mouseleave", () => {
-      if (!this.controlsVisible) return;
+    // this.$element.on("mouseleave", () => {
+    //   if (!this.controlsVisible) return;
 
-      // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-      if ($(".overlay:visible").length) return;
+    //   // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+    //   if ($(".overlay:visible").length) return;
 
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
-    });
+    //   this.controlsVisible = false;
+    //   this.viewer.setControlsEnabled(false);
+    // });
 
-    // when mouse move stopped
-    this.$element.on(
-      //@ts-ignore
-      "mousemove",
-      () => {
-        // if over element, hide controls.
-        // When over prev/next buttons keep controls enabled
-        if (this.$prevButton.ismouseover()) {
-          return;
-        }
-        if (this.$nextButton.ismouseover()) {
-          return;
-        }
-        // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-        if ($(".overlay:visible").length) return;
-      },
-      this.config.options.controlsFadeAfterInactive
-    );
+    // // when mouse move stopped
+    // this.$element.on(
+    //   //@ts-ignore
+    //   "mousemove",
+    //   () => {
+    //     // if over element, hide controls.
+    //     // When over prev/next buttons keep controls enabled
+    //     if (this.$prevButton.ismouseover()) {
+    //       return;
+    //     }
+    //     if (this.$nextButton.ismouseover()) {
+    //       return;
+    //     }
+    //     // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+    //     if ($(".overlay:visible").length) return;
+    //   },
+    //   this.config.options.controlsFadeAfterInactive
+    // );
 
-    //this.viewer.addHandler("open-failed", () => {
-    //});
+    // //this.viewer.addHandler("open-failed", () => {
+    // //});
 
     this.viewer.addHandler("resize", (viewer: any) => {
       this.extensionHost.publish(
@@ -471,10 +463,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       );
     });
 
-    this.createNavigationButtons();
-    this.hidePrevButton();
-    this.hideNextButton();
-
     this.isCreated = true;
     //this.resize();
 
@@ -500,112 +488,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       this.$viewer.removeClass("dialogue-open");
-    });
-  }
-
-  createNavigationButtons() {
-    const viewingDirection: ViewingDirection =
-      this.extension.helper.getViewingDirection() ||
-      ViewingDirection.LEFT_TO_RIGHT;
-
-    this.$prevButton = $(
-      `<button class="btn btn-default paging prev" title="${this.content.previousImage}">
-          <i class="uv-icon-prev" aria-hidden="true"></i>
-          <span class="sr-only">${this.content.previousImage}</span>
-        </button>`
-    );
-
-    if (this.extension.helper.isRightToLeft()) {
-      this.$prevButton
-        .prop("title", this.content.nextImage)
-        .attr("aria-label", this.content.nextImage);
-    } else {
-      this.$prevButton
-        .prop("title", this.content.previousImage)
-        .attr("aria-label", this.content.previousImage);
-    }
-
-    this.$nextButton = $(
-      `<button class="btn btn-default paging next" title="${this.content.nextImage}">
-        <i class="uv-icon-next" aria-hidden="true"></i>
-        <span class="sr-only">${this.content.nextImage}</span>
-      </button>`
-    );
-
-    if (this.extension.helper.isRightToLeft()) {
-      this.$nextButton
-        .prop("title", this.content.previousImage)
-        .attr("aria-label", this.content.previousImage);
-    } else {
-      this.$nextButton
-        .prop("title", this.content.nextImage)
-        .attr("aria-label", this.content.nextImage);
-    }
-
-    this.viewer.addControl(this.$prevButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_LEFT,
-    });
-    this.viewer.addControl(this.$nextButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT,
-    });
-
-    switch (viewingDirection) {
-      case ViewingDirection.BOTTOM_TO_TOP:
-      case ViewingDirection.TOP_TO_BOTTOM:
-        this.$prevButton.addClass("vertical");
-        this.$nextButton.addClass("vertical");
-        break;
-    }
-
-    const that = this;
-
-    this.onAccessibleClick(this.$prevButton, (e: any) => {
-      e.preventDefault();
-      OpenSeadragon.cancelEvent(e);
-
-      if (!that.prevButtonEnabled) return;
-
-      switch (viewingDirection) {
-        case ViewingDirection.LEFT_TO_RIGHT:
-        case ViewingDirection.BOTTOM_TO_TOP:
-        case ViewingDirection.TOP_TO_BOTTOM:
-          this.extensionHost.publish(IIIFEvents.PREV);
-          break;
-        case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(IIIFEvents.NEXT);
-          break;
-      }
-    });
-
-    this.onAccessibleClick(this.$nextButton, (e: any) => {
-      e.preventDefault();
-      OpenSeadragon.cancelEvent(e);
-
-      if (!that.nextButtonEnabled) return;
-
-      switch (viewingDirection) {
-        case ViewingDirection.LEFT_TO_RIGHT:
-        case ViewingDirection.BOTTOM_TO_TOP:
-        case ViewingDirection.TOP_TO_BOTTOM:
-          this.extensionHost.publish(IIIFEvents.NEXT);
-          break;
-        case ViewingDirection.RIGHT_TO_LEFT:
-          this.extensionHost.publish(IIIFEvents.PREV);
-          break;
-      }
-    });
-
-    // When Prev/Next buttons are focused, make sure the controls are enabled
-    this.$prevButton.add(this.$nextButton).on("focus", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
-    });
-
-    this.$prevButton.add(this.$nextButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
     });
   }
 
@@ -929,44 +811,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   openPagesHandler(): void {
     this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
 
-    if (
-      this.extension.helper.isMultiCanvas() &&
-      !this.extension.helper.isContinuous()
-    ) {
-      this.showPrevButton();
-      this.showNextButton();
-
-      const viewingDirection: ViewingDirection =
-        this.extension.helper.getViewingDirection() ||
-        ViewingDirection.LEFT_TO_RIGHT;
-
-      if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
-        if (this.extension.helper.isFirstCanvas()) {
-          this.disableNextButton();
-        } else {
-          this.enableNextButton();
-        }
-
-        if (this.extension.helper.isLastCanvas()) {
-          this.disablePrevButton();
-        } else {
-          this.enablePrevButton();
-        }
-      } else {
-        if (this.extension.helper.isFirstCanvas()) {
-          this.disablePrevButton();
-        } else {
-          this.enablePrevButton();
-        }
-
-        if (this.extension.helper.isLastCanvas()) {
-          this.disableNextButton();
-        } else {
-          this.enableNextButton();
-        }
-      }
-    }
-
     // resize navigator for continuous manifests
     if (this.extension.helper.isContinuous()) {
       setTimeout(() => {
@@ -990,6 +834,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   private resizeNavigatorForContinuous(): void {
     if (!this.viewer || !this.viewer.navigator) return;
 
+    // this all still feels pretty hacky, but continues the basic principle of how it was done before.
+    // the positioning and size of the nav for continuous scrolls needs its own treatment, so that's for another PR.
+    // For such manifests, the nav should be a full width/height panel that sits within the grid system alongside left/right/center/background panels
     const navigatorElement = this.viewer.navigator.element as HTMLElement;
     const $centerPanel = $(navigatorElement).parent().parent();
     const $content = $centerPanel.find(".content");
@@ -1144,50 +991,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
   goHome(): void {
     this.viewer.viewport.goHome(true);
-  }
-
-  disablePrevButton(): void {
-    this.prevButtonEnabled = false;
-    this.$prevButton.addClass("disabled");
-    this.$prevButton.attr("tabindex", -1);
-  }
-
-  enablePrevButton(): void {
-    this.prevButtonEnabled = true;
-    this.$prevButton.removeClass("disabled");
-    this.$prevButton.attr("tabindex", 0);
-  }
-
-  hidePrevButton(): void {
-    this.disablePrevButton();
-    this.$prevButton.hide();
-  }
-
-  showPrevButton(): void {
-    this.enablePrevButton();
-    this.$prevButton.show();
-  }
-
-  disableNextButton(): void {
-    this.nextButtonEnabled = false;
-    this.$nextButton.addClass("disabled");
-    this.$nextButton.attr("tabindex", -1);
-  }
-
-  enableNextButton(): void {
-    this.nextButtonEnabled = true;
-    this.$nextButton.removeClass("disabled");
-    this.$nextButton.attr("tabindex", 0);
-  }
-
-  hideNextButton(): void {
-    this.disableNextButton();
-    this.$nextButton.hide();
-  }
-
-  showNextButton(): void {
-    this.enableNextButton();
-    this.$nextButton.show();
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {

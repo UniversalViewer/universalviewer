@@ -5,6 +5,18 @@
     // this is to let the clicks pass through to the background panel. When all extensions use the same panel structure, this can be moved up to the generic center panel css.
     pointer-events: none;
 
+    // this styling can be lifted up to the generic center panel once the other extensions share the new panel structure
+    width: auto;
+    left: 0;
+    right: 0;
+    margin: 0 @panel-margin;
+
+    // overriding the title spacing temporarily until this is normalized across extensions in the generic center panel styling.
+    .title {
+      margin: 0;
+      padding: 0;
+    }
+
     // allow clicks on interactive elements
     .attribution,
     .subtitle .expand-btn,
@@ -16,7 +28,7 @@
     #osd-navigator-container {
       position: absolute;
       bottom: 0;
-      right: @panel-margin;
+      right: 0;
       z-index: 1;
       width: 100px;
       height: 100px;
@@ -26,102 +38,103 @@
     }
 
     #osd-navigator-container.continuous {
-      left: @panel-margin;
-      right: auto;
+      left: 0;
+    }
+
+    .paging.btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 90px;
+      background-repeat: no-repeat;
+      background-color: @body-bg;
+      background-position: 0 50%;
+      cursor: pointer;
+      padding: 0;
+      border: none;
+      pointer-events: auto;
+
+      .border-radius(0);
+
+      &.vertical {
+        height: 30px;
+        width: 90px;
+        background-position: 50% 0;
+      }
+
+      &.prev {
+        background-image: data-uri("../img/left_arrow.png");
+        left: 0;
+        &.disabled {
+          background-image: data-uri("../img/left_arrow_disabled.png");
+        }
+      }
+
+      &.prev.vertical {
+        background-image: data-uri("../img/up_arrow.png");
+        left: 0;
+        top: 0;
+        &.disabled {
+          background-image: data-uri("../img/up_arrow_disabled.png");
+        }
+        &.down {
+          background-image: data-uri("../img/down_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/down_arrow_disabled.png");
+          }
+        }
+      }
+
+      &.next {
+        background-image: data-uri("../img/right_arrow.png");
+        right: 0;
+        &.disabled {
+          background-image: data-uri("../img/right_arrow_disabled.png");
+        }
+
+        & .uv-icon-next {
+          background-image: none;
+        }
+      }
+
+      &.next.vertical {
+        background-image: data-uri("../img/down_arrow.png");
+        left: 0;
+        top: 0;
+        margin-left: 15px;
+        &.disabled {
+          background-image: data-uri("../img/down_arrow_disabled.png");
+        }
+        &.up {
+          background-image: data-uri("../img/up_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/up_arrow_disabled.png");
+          }
+        }
+      }
+
+      /* fixes out-of-scope iiif-tree and iiif-gallery icons */
+      &.prev .uv-icon-prev,
+      &.next .uv-icon-next {
+        background-image: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid @link-color;
+        outline-offset: -2px;
+        i,
+        span {
+          outline: 0;
+        }
+      }
     }
 
     .content {
       position: relative;
-      margin: 0 @panel-margin;
 
       .displayregion {
         border: 2px solid #fff !important;
-      }
-
-      .paging.btn {
-        position: absolute !important;
-        width: 30px;
-        height: 90px;
-        background-repeat: no-repeat;
-        background-color: @body-bg;
-        background-position: 0 50%;
-        cursor: pointer;
-        padding: 0;
-        border: none;
-
-        .border-radius(0);
-
-        &.vertical {
-          height: 30px;
-          width: 90px;
-          background-position: 50% 0;
-        }
-
-        &.prev {
-          background-image: data-uri("../img/left_arrow.png");
-          left: 0;
-          &.disabled {
-            background-image: data-uri("../img/left_arrow_disabled.png");
-          }
-        }
-
-        &.prev.vertical {
-          background-image: data-uri("../img/up_arrow.png");
-          left: 0;
-          top: 0;
-          &.disabled {
-            background-image: data-uri("../img/up_arrow_disabled.png");
-          }
-          &.down {
-            background-image: data-uri("../img/down_arrow.png");
-            &.disabled {
-              background-image: data-uri("../img/down_arrow_disabled.png");
-            }
-          }
-        }
-
-        &.next {
-          background-image: data-uri("../img/right_arrow.png");
-          right: 0;
-          &.disabled {
-            background-image: data-uri("../img/right_arrow_disabled.png");
-          }
-
-          & .uv-icon-next {
-            background-image: none;
-          }
-        }
-
-        &.next.vertical {
-          background-image: data-uri("../img/down_arrow.png");
-          left: 0;
-          top: 0;
-          margin-left: 15px;
-          &.disabled {
-            background-image: data-uri("../img/down_arrow_disabled.png");
-          }
-          &.up {
-            background-image: data-uri("../img/up_arrow.png");
-            &.disabled {
-              background-image: data-uri("../img/up_arrow_disabled.png");
-            }
-          }
-        }
-
-        /* fixes out-of-scope iiif-tree and iiif-gallery icons */
-        &.prev .uv-icon-prev,
-        &.next .uv-icon-next {
-          background-image: none;
-        }
-
-        &:focus-visible {
-          outline: 2px solid @link-color;
-          outline-offset: -2px;
-          i,
-          span {
-            outline: 0;
-          }
-        }
       }
 
       .imageControlsContainer {
@@ -241,14 +254,6 @@
                         }
                     });
         }
-      }
-
-      div[title="Previous page"] {
-        display: none !important;
-      }
-
-      div[title="Next page"] {
-        display: none !important;
       }
     }
   }

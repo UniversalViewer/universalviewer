@@ -17,7 +17,7 @@ import {
   // debounce,
   sanitize,
 } from "../../../../Utils";
-// import { ViewingDirection } from "@iiif/vocabulary";
+import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
 // import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
@@ -34,7 +34,7 @@ import { Config } from "../../extensions/uv-openseadragon-extension/config/Confi
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
-  // controlsVisible: boolean = false;
+  controlsVisible: boolean = false;
   // currentAnnotationRect: AnnotationRect;
   // currentBounds: XYWHFragment | null;
   // handler: any;
@@ -45,9 +45,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   // isFirstLoad: boolean = true;
   // items: any[];
   // navigatedFromSearch: boolean = false;
-  // nextButtonEnabled: boolean = false;
+  nextButtonEnabled: boolean = false;
   // // pages: IExternalResource[];
-  // prevButtonEnabled: boolean = false;
+  prevButtonEnabled: boolean = false;
   // previousAnnotationRect: AnnotationRect;
   // userData: any;
   // viewer: any;
@@ -57,9 +57,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   // $canvas: JQuery;
   $goHomeButton: JQuery;
-  // $navigator: JQuery;
-  // $nextButton: JQuery;
-  // $prevButton: JQuery;
+  $nextButton: JQuery;
+  $prevButton: JQuery;
   $rotateButton: JQuery;
   // $viewer: JQuery;
   // $viewportNavButtonsContainer: JQuery;
@@ -87,12 +86,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
       () => {
-        this.isCreated = true;
-
-        this.title = this.extension.helper.getLabel();
-        this.resize();
-        this.updateChoiceSwitchVisibility();
-        this.setNavigatorVisible();
+        this.openPagesHandler();
       }
     );
 
@@ -109,9 +103,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   createUI(): void {
     this.createImageControls();
-
-    // this.createNavButtons();
-    // // Prev/next buttons
+    this.createNavigationButtons();
   }
 
   createNavigator(): void {
@@ -307,6 +299,200 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       "visibility",
       hasChoices ? "visible" : "hidden"
     );
+  }
+
+  createNavigationButtons(): void {
+    const viewingDirection: ViewingDirection =
+      this.extension.helper.getViewingDirection() ||
+      ViewingDirection.LEFT_TO_RIGHT;
+
+    this.$prevButton = $(
+      `<button class="btn btn-default paging prev" title="${this.content.previousImage}">
+          <i class="uv-icon-prev" aria-hidden="true"></i>
+          <span class="sr-only">${this.content.previousImage}</span>
+        </button>`
+    );
+
+    if (this.extension.helper.isRightToLeft()) {
+      this.$prevButton
+        .prop("title", this.content.nextImage)
+        .attr("aria-label", this.content.nextImage);
+    } else {
+      this.$prevButton
+        .prop("title", this.content.previousImage)
+        .attr("aria-label", this.content.previousImage);
+    }
+
+    this.$nextButton = $(
+      `<button class="btn btn-default paging next" title="${this.content.nextImage}">
+        <i class="uv-icon-next" aria-hidden="true"></i>
+        <span class="sr-only">${this.content.nextImage}</span>
+      </button>`
+    );
+
+    if (this.extension.helper.isRightToLeft()) {
+      this.$nextButton
+        .prop("title", this.content.previousImage)
+        .attr("aria-label", this.content.previousImage);
+    } else {
+      this.$nextButton
+        .prop("title", this.content.nextImage)
+        .attr("aria-label", this.content.nextImage);
+    }
+
+    this.$element.append(this.$prevButton);
+    this.$element.append(this.$nextButton);
+
+    switch (viewingDirection) {
+      case ViewingDirection.BOTTOM_TO_TOP:
+      case ViewingDirection.TOP_TO_BOTTOM:
+        this.$prevButton.addClass("vertical");
+        this.$nextButton.addClass("vertical");
+        break;
+    }
+
+    const that = this;
+
+    this.onAccessibleClick(this.$prevButton, (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!that.prevButtonEnabled) return;
+
+      switch (viewingDirection) {
+        case ViewingDirection.LEFT_TO_RIGHT:
+        case ViewingDirection.BOTTOM_TO_TOP:
+        case ViewingDirection.TOP_TO_BOTTOM:
+          this.extensionHost.publish(IIIFEvents.PREV);
+          break;
+        case ViewingDirection.RIGHT_TO_LEFT:
+          this.extensionHost.publish(IIIFEvents.NEXT);
+          break;
+      }
+    });
+
+    this.onAccessibleClick(this.$nextButton, (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!that.nextButtonEnabled) return;
+
+      switch (viewingDirection) {
+        case ViewingDirection.LEFT_TO_RIGHT:
+        case ViewingDirection.BOTTOM_TO_TOP:
+        case ViewingDirection.TOP_TO_BOTTOM:
+          this.extensionHost.publish(IIIFEvents.NEXT);
+          break;
+        case ViewingDirection.RIGHT_TO_LEFT:
+          this.extensionHost.publish(IIIFEvents.PREV);
+          break;
+      }
+    });
+
+    // // When Prev/Next buttons are focused, make sure the controls are enabled
+    // this.$prevButton.add(this.$nextButton).on("focus", () => {
+    //   if (this.controlsVisible) return;
+    //   this.controlsVisible = true;
+    //   this.viewer.setControlsEnabled(true);
+    // });
+
+    // this.$prevButton.add(this.$nextButton).on("blur", () => {
+    //   if (!this.controlsVisible) return;
+    //   this.controlsVisible = false;
+    //   this.viewer.setControlsEnabled(false);
+    // });
+  }
+
+  openPagesHandler(): void {
+    this.isCreated = true;
+
+    this.title = this.extension.helper.getLabel();
+    this.resize();
+
+    if (
+      this.extension.helper.isMultiCanvas() &&
+      !this.extension.helper.isContinuous()
+    ) {
+      this.showPrevButton();
+      this.showNextButton();
+
+      const viewingDirection: ViewingDirection =
+        this.extension.helper.getViewingDirection() ||
+        ViewingDirection.LEFT_TO_RIGHT;
+
+      if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
+        if (this.extension.helper.isFirstCanvas()) {
+          this.disableNextButton();
+        } else {
+          this.enableNextButton();
+        }
+
+        if (this.extension.helper.isLastCanvas()) {
+          this.disablePrevButton();
+        } else {
+          this.enablePrevButton();
+        }
+      } else {
+        if (this.extension.helper.isFirstCanvas()) {
+          this.disablePrevButton();
+        } else {
+          this.enablePrevButton();
+        }
+
+        if (this.extension.helper.isLastCanvas()) {
+          this.disableNextButton();
+        } else {
+          this.enableNextButton();
+        }
+      }
+    }
+
+    this.updateChoiceSwitchVisibility();
+    this.setNavigatorVisible();
+  }
+
+  disablePrevButton(): void {
+    this.prevButtonEnabled = false;
+    this.$prevButton.addClass("disabled");
+    this.$prevButton.attr("tabindex", -1);
+  }
+
+  enablePrevButton(): void {
+    this.prevButtonEnabled = true;
+    this.$prevButton.removeClass("disabled");
+    this.$prevButton.attr("tabindex", 0);
+  }
+
+  hidePrevButton(): void {
+    this.disablePrevButton();
+    this.$prevButton.hide();
+  }
+
+  showPrevButton(): void {
+    this.enablePrevButton();
+    this.$prevButton.show();
+  }
+
+  disableNextButton(): void {
+    this.nextButtonEnabled = false;
+    this.$nextButton.addClass("disabled");
+    this.$nextButton.attr("tabindex", -1);
+  }
+
+  enableNextButton(): void {
+    this.nextButtonEnabled = true;
+    this.$nextButton.removeClass("disabled");
+    this.$nextButton.attr("tabindex", 0);
+  }
+
+  hideNextButton(): void {
+    this.disableNextButton();
+    this.$nextButton.hide();
+  }
+
+  showNextButton(): void {
+    this.enableNextButton();
+    this.$nextButton.show();
   }
 
   resize(): void {
