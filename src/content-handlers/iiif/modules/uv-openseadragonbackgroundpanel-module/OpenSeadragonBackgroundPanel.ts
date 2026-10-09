@@ -250,7 +250,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   // updateResponsiveView(): void {
-  //   this.setNavigatorVisible();
   //   this.viewer.autoHideControls = this.extension.isDesktopMetric();
 
   //   const enableAutoHide = (event: JQuery.FocusOutEvent) => {
@@ -389,8 +388,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.$canvas.on("contextmenu", () => {
       return false;
     });
-
-    this.setNavigatorVisible();
 
     // events
 
@@ -968,8 +965,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         }
       }
     }
-
-    this.setNavigatorVisible();
 
     // // resize navigator for continuous manifests
     // if (this.extension.helper.isContinuous()) {
@@ -1636,16 +1631,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       if (this.extension.data.config!.options.allowStealFocus) {
         this.$canvas.focus();
       }
-    }
-  }
-
-  setNavigatorVisible(): void {
-    const navigatorEnabled: boolean =
-      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
-      this.extension.isDesktopMetric();
-
-    if (this.viewer && this.viewer.navigator) {
-      this.viewer.navigator.setVisible(navigatorEnabled);
     }
   }
 

@@ -92,8 +92,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.title = this.extension.helper.getLabel();
         this.resize();
         this.updateChoiceSwitchVisibility();
+        this.setNavigatorVisible();
       }
     );
+
+    this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
+      this.setNavigatorVisible();
+    });
+
+    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
+      this.setNavigatorVisible();
+    });
 
     this.createUI();
   }
@@ -109,7 +118,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$navigator = $('<div id="osd-navigator-container"></div>');
     // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize
     this.$element.append(this.$navigator);
-    // this.setNavigatorVisible();
+    this.setNavigatorVisible();
+  }
+
+  setNavigatorVisible(): void {
+    const enabled: boolean =
+      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
+      this.extension.isDesktopMetric();
+
+    this.$navigator.toggle(enabled);
   }
 
   createImageControls(): void {
