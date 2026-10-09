@@ -6,7 +6,7 @@ import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-ex
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../../../Utils";
-import { MediaType, RenderingFormat } from "@iiif/vocabulary/dist-commonjs/";
+import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
   Canvas,
@@ -20,62 +20,14 @@ import "mediaelement-plugins/dist/source-chooser/source-chooser.css";
 import { TFragment } from "../uv-shared-module/TFragment";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-mediaelement-extension/config/Config";
-
-type TextTrackDescriptor = {
-  language?: string;
-  label?: string;
-  id: string;
-};
-
-const captionTypes = new Set<String>(["text/vtt", "text/srt"]);
-
-// Picks the label value for the user's locale from raw caption JSON. A label
-// may be a plain string, a IIIF v3 language map ({ "cy": ["..."] }) or IIIF
-// v2 language values ([{ "@value": "...", "@language": "cy" }]). Prefers an
-// exact locale match (cy-GB), then the same base language (cy), then the
-// first value available.
-const captionLabel = (label: any, locale: string): string | undefined => {
-  if (!label || typeof label === "string") {
-    return label || undefined;
-  }
-
-  const entries: Array<[string, string]> = Array.isArray(label)
-    ? label.map((value: any) =>
-        typeof value === "string"
-          ? ["", value]
-          : [value["@language"] || "", value["@value"]]
-      )
-    : Object.keys(label).map((language) => {
-        const values = label[language];
-        return [language, Array.isArray(values) ? values[0] : values];
-      });
-
-  const wanted = (locale || "").toLowerCase();
-  const baseLanguage = (tag: string) => tag.toLowerCase().split("-")[0];
-  const match =
-    entries.find(([language]) => language.toLowerCase() === wanted) ||
-    entries.find(
-      ([language]) =>
-        language && baseLanguage(language) === baseLanguage(wanted)
-    ) ||
-    entries[0];
-
-  return match ? match[1] : undefined;
-};
-
-// Captions may come from a canvas rendering, a painting annotation body or a
-// supplementing annotation; all are read from their raw JSON the same way.
-const captionTrack = (json: any, locale: string): TextTrackDescriptor => {
-  const language = Array.isArray(json.language)
-    ? json.language[0]
-    : json.language;
-
-  return {
-    id: json.id || json["@id"],
-    label: captionLabel(json.label, locale) ?? json.format,
-    language,
-  };
-};
+import { getCanvasCaptions } from "../uv-captions-module/Captions";
+import { CaptionLibrary } from "../uv-captions-module/CaptionLibrary";
+import { CanvasCaptions } from "../uv-captions-module/CanvasCaptions";
+import { PosterImages } from "../uv-shared-module/PosterImages";
+import { mediaKind } from "../uv-shared-module/MediaKind";
+import { loadDash, loadHls } from "../uv-shared-module/StreamingLibraries";
+import { isHLSFormat } from "../iiif-av-component-module/helpers/is-hls-format";
+import { isMpegDashFormat } from "../iiif-av-component-module/helpers/is-mpeg-dash-format";
 
 type MediaSourceDescriptor = {
   label: string;
@@ -95,6 +47,13 @@ export class MediaElementCenterPanel extends CenterPanel<
   title: string | null;
   pauseTimeoutId: any = null;
   muted: boolean = false;
+  // Shared by the canvases this panel plays, so the caption track chosen
+  // carries over from one to the next.
+  private _captionLibrary = new CaptionLibrary(
+    () => (canvas: Canvas) =>
+      getCanvasCaptions(canvas, this.extension.getLocale())
+  );
+  private _captions: CanvasCaptions | undefined;
 
   constructor($element: JQuery) {
     super($element);
@@ -191,6 +150,9 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     await this.extension.getExternalResources(resources);
 
+    if (this._captions) {
+      this._captions.destroy();
+    }
     this.$container.empty();
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -198,19 +160,20 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.mediaHeight = this.options.defaultHeight;
     this.mediaWidth = this.options.defaultWidth;
 
-    const poster: string | null = (<IMediaElementExtension>(
+    const posterImages: PosterImages = (<IMediaElementExtension>(
       this.extension
-    )).getPosterImageUri();
+    )).getPosterImages();
+    const poster: string = posterImages.beforePlay
+      ? posterImages.beforePlay.id
+      : "";
 
     const sources: Array<MediaSourceDescriptor> = [];
-    const subtitles: Array<TextTrackDescriptor> = [];
-    const locale: string = this.extension.getLocale();
 
     const renderings: Rendering[] = canvas.getRenderings();
 
-    // Media and captions may be supplied as renderings on the canvas. IIIF
-    // cookbook recipe 0017 links text to an AV canvas this way (there, a
-    // plain-text transcript); recipe 0046 covers the rendering property.
+    // Media may be supplied as renderings on the canvas (IIIF cookbook recipe
+    // 0046 covers the rendering property), otherwise as the bodies of its
+    // painting annotation.
     if (renderings && renderings.length) {
       canvas.getRenderings().forEach((rendering: Rendering) => {
         if (this.isTypeMedia(rendering)) {
@@ -222,16 +185,8 @@ export class MediaElementCenterPanel extends CenterPanel<
             src: rendering.id,
           });
         }
-
-        if (this.isTypeCaption(rendering)) {
-          subtitles.push(captionTrack(rendering.__jsonld, locale));
-        }
       });
     } else {
-      // Otherwise read them from the bodies of the canvas' painting
-      // annotation. Captions as an extra painting body follow no IIIF
-      // cookbook recipe (recipe 0219 makes them supplementing annotations,
-      // handled below), but are supported for existing manifests.
       const formats: AnnotationBody[] | null = this.extension.getMediaFormats(
         this.extension.helper.getCurrentCanvas()
       );
@@ -251,33 +206,17 @@ export class MediaElementCenterPanel extends CenterPanel<
               src: format.id,
             });
           }
-
-          if (this.isTypeCaption(format)) {
-            subtitles.push(captionTrack(format.__jsonld, locale));
-          }
         });
       }
     }
 
-    // Captions may also be supplied as supplementing annotations on the
-    // canvas (IIIF cookbook recipe 0219).
-    const supplementing = await this.getSupplementingCaptions(canvas, locale);
-    for (const caption of supplementing) {
-      if (!subtitles.some((subtitle) => subtitle.id === caption.id)) {
-        subtitles.push(caption);
-      }
+    // MediaElement plays HLS and MPEG-DASH with hls.js and dash.js, which it
+    // would fetch from a CDN unless they're already loaded.
+    if (sources.some((source) => isHLSFormat(source.type as MediaType))) {
+      await loadHls();
     }
-
-    if (subtitles.length > 0) {
-      // Resolve caption URLs to ones the player's XHR will be able to read.
-      for (const subtitle of subtitles) {
-        if (subtitle.id) {
-          subtitle.id = await this.resolveCaptionSource(subtitle.id);
-        }
-      }
-
-      // Show captions options popover for better interface feedback
-      subtitles.unshift({ id: "none" });
+    if (sources.some((source) => isMpegDashFormat(source.type as MediaType))) {
+      await loadDash();
     }
 
     if (this.isVideo()) {
@@ -285,8 +224,6 @@ export class MediaElementCenterPanel extends CenterPanel<
         '<video controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
-      // Add VTT subtitles/captions.
-      this.appendTextTracks(subtitles);
       this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
@@ -294,17 +231,18 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.player = new MediaElementPlayer($("video")[0], {
         iconSprite: this.config.options.iconSprite,
         poster: poster,
-        toggleCaptionsButtonWhenOnlyOne: true,
         features: [
           "playpause",
           "current",
           "progress",
-          "tracks",
           "volume",
           "sourcechooser",
           "fullscreen",
         ],
-        success: function (mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any, player: any) {
+          that._reportMediaErrors(mediaElement);
+          that._showCaptions(canvas, mediaElement, player);
+
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
             that.resize();
@@ -375,8 +313,6 @@ export class MediaElementCenterPanel extends CenterPanel<
         '<audio controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
       );
 
-      // Add VTT subtitles/captions.
-      this.appendTextTracks(subtitles);
       this.appendMediaSources(sources);
 
       this.$container.append(this.$media);
@@ -388,7 +324,6 @@ export class MediaElementCenterPanel extends CenterPanel<
           "playpause",
           "current",
           "progress",
-          "tracks",
           "volume",
           "sourcechooser",
         ],
@@ -397,7 +332,11 @@ export class MediaElementCenterPanel extends CenterPanel<
         hideVolumeOnTouchDevices: false,
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
-        success: function (mediaElement: any, originalNode: any) {
+        success: function (mediaElement: any, originalNode: any, player: any) {
+          that._reportMediaErrors(mediaElement);
+          that._showPosterWhilePlaying(mediaElement, player, posterImages);
+          that._showCaptions(canvas, mediaElement, player);
+
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
               MediaElementExtensionEvents.MEDIA_PLAYED,
@@ -461,109 +400,80 @@ export class MediaElementCenterPanel extends CenterPanel<
     this.extensionHost.publish(Events.LOAD);
   }
 
-  // Captions/transcriptions supplied as supplementing annotations in the
-  // canvas' annotations pages (IIIF cookbook recipe 0219). Inline
-  // annotation pages are read directly; pages referenced by id alone are
-  // fetched. A body may also be a Choice of caption files, e.g. one per
-  // language (IIIF cookbook recipe 0074); each option becomes a track.
-  async getSupplementingCaptions(
-    canvas: Canvas,
-    locale: string
-  ): Promise<TextTrackDescriptor[]> {
-    const captions: TextTrackDescriptor[] = [];
-    const pages: any[] = canvas.getProperty("annotations") || [];
-
-    for (const page of pages) {
-      let items: any[] = page.items;
-
-      if (!items && page.id) {
-        try {
-          const response = await fetch(page.id);
-          if (response.ok) {
-            items = (await response.json()).items;
-          }
-        } catch {
-          console.warn(
-            `Annotation page ${page.id} could not be read (CORS headers are required); any captions it contains will be unavailable.`
-          );
+  // Shows the image for audio while it plays (e.g. its accompanyingCanvas,
+  // as in IIIF Cookbook recipe 0014), in place of the one shown before (e.g.
+  // its placeholderCanvas, recipe 0013). mediaelement hides its poster on
+  // play, as video takes its place.
+  private _showPosterWhilePlaying(
+    mediaElement: any,
+    player: any,
+    posterImages: PosterImages
+  ): void {
+    const image = posterImages.whilePlaying;
+    const $poster = $(player.layers).find(".mejs__poster");
+    ["play", "playing"].forEach((event) =>
+      mediaElement.addEventListener(event, () => {
+        if (!image) {
+          return;
         }
-      }
-
-      if (!items) {
-        continue;
-      }
-
-      for (const annotation of items) {
-        const motivations = Array.isArray(annotation.motivation)
-          ? annotation.motivation
-          : [annotation.motivation];
-
-        if (!motivations.includes("supplementing")) {
-          continue;
+        if (image.id !== player.options.poster) {
+          player.setPoster(image.id);
+          player.options.poster = image.id;
         }
-
-        const bodies = (
-          Array.isArray(annotation.body) ? annotation.body : [annotation.body]
-        ).flatMap((body: any) =>
-          body && body.type === "Choice" && Array.isArray(body.items)
-            ? body.items
-            : [body]
-        );
-
-        for (const body of bodies) {
-          if (body && body.id && captionTypes.has(body.format)) {
-            captions.push(captionTrack(body, locale));
-          }
-        }
-      }
-    }
-
-    return captions;
-  }
-
-  // Captions are fetched with XHR by the player, so a cross-origin URL is
-  // only readable when every response hop carries CORS headers. Follow any
-  // CORS-friendly redirect to its final URL, and retry plain-http sources
-  // over https — an http -> https upgrade redirect whose 301 response lacks
-  // CORS headers is blocked by the browser even though its destination is
-  // readable.
-  async resolveCaptionSource(src: string): Promise<string> {
-    const attempts: string[] = [src];
-
-    if (src.startsWith("http://")) {
-      attempts.push(src.replace(/^http:\/\//, "https://"));
-    }
-
-    for (const attempt of attempts) {
-      try {
-        const response = await fetch(attempt);
-        if (response.ok) {
-          return response.url;
-        }
-      } catch {
-        // expected when the attempt is blocked by CORS or mixed content;
-        // fall through to the next candidate
-      }
-    }
-
-    console.warn(
-      `Captions at ${src} could not be read (CORS headers are required on every response, including redirects); the player will omit this track.`
+        $poster.show();
+      })
     );
-
-    return src;
   }
 
-  appendTextTracks(subtitles: Array<TextTrackDescriptor>) {
-    for (const subtitle of subtitles) {
-      this.$media.append(
-        $(`<track label="${subtitle.label}" kind="subtitles" srclang="${
-          subtitle.language
-        }" src="${subtitle.id}" ${
-          subtitles.indexOf(subtitle) === 0 ? "default" : ""
-        }>
-`)
-      );
+  // Tells the user when the media can't be played (e.g. its file is missing),
+  // unless configured not to (hideMediaError).
+  // The browser then also rejects requests to play it, which mediaelement
+  // leaves unhandled, so they're caught here.
+  private _reportMediaErrors(mediaElement: any): void {
+    const play = mediaElement.play.bind(mediaElement);
+    mediaElement.play = () =>
+      Promise.resolve(play()).catch((err) => console.log("err", err));
+
+    mediaElement.addEventListener("error", () => {
+      if (!this.config.options.hideMediaError) {
+        this.extensionHost.publish(IIIFEvents.SHOW_MESSAGE, [
+          this.content.mediaUnavailable,
+        ]);
+      }
+    });
+  }
+
+  // Shows the captions control among the player's controls (before the
+  // fullscreen button) and the captions overlay over the media, following
+  // playback. Called once the player is ready, from within its constructor,
+  // so it's given the player rather than reading this.player.
+  private _showCaptions(canvas: Canvas, mediaElement: any, player: any): void {
+    const captions = new CanvasCaptions(
+      this._captionLibrary,
+      this.content,
+      this.options.captionStyles
+    );
+    this._captions = captions;
+
+    const $controls = $(player.controls);
+    const $fullscreen = $controls.find(".mejs__fullscreen-button");
+    if ($fullscreen.length) {
+      captions.$control.insertBefore($fullscreen);
+    } else {
+      $controls.append(captions.$control);
     }
+    $(player.container).append(captions.$overlay);
+
+    const update = () =>
+      captions.update({
+        canvasId: canvas.id,
+        time: mediaElement.currentTime || 0,
+      });
+    ["loadedmetadata", "timeupdate", "seeked"].forEach((event) =>
+      mediaElement.addEventListener(event, update)
+    );
+    update();
+    captions.load([canvas]);
   }
 
   appendMediaSources(sources: Array<MediaSourceDescriptor>) {
@@ -577,28 +487,10 @@ export class MediaElementCenterPanel extends CenterPanel<
   }
 
   // audio/video
+  // Whether a rendering or body is audio or video (see mediaKind), with a
+  // format to offer the player.
   isTypeMedia(element: Rendering | AnnotationBody) {
-    const type: RenderingFormat | MediaType | null = element.getFormat();
-
-    if (type === null) {
-      return false;
-    }
-
-    const typeStr = type.toString();
-    const typeGroup = typeStr.split("/")[0];
-
-    return typeGroup === "audio" || typeGroup === "video";
-  }
-
-  // vtt, srt
-  isTypeCaption(element: Rendering | AnnotationBody) {
-    const type: RenderingFormat | MediaType | null = element.getFormat();
-
-    if (type === null) {
-      return false;
-    }
-
-    return captionTypes.has(type.toString());
+    return element.getFormat() !== null && mediaKind(element.__jsonld) !== null;
   }
 
   isVideo(): boolean {

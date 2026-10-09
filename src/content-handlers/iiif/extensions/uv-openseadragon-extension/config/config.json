@@ -113,7 +113,9 @@
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
-        "volume": "$volume"
+        "volume": "$volume",
+        "selectAll": "$selectAll",
+        "download": "$download"
       }
     },
     "dialogue": {
@@ -269,7 +271,9 @@
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
         "rights": "$rights",
-        "title": "$moreInformation"
+        "title": "$moreInformation",
+        "imageHeader": "$aboutTheImage",
+        "sequenceHeader": "$aboutTheSequence"
       }
     },
     "multiSelectDialogue": {
@@ -288,7 +292,8 @@
         "increaseThumbnailSize": "$increaseThumbnailSize",
         "selectAll": "$selectAll",
         "thumbnailSize": "$thumbnailSize",
-        "title": "$selectPagesForDownload"
+        "title": "$selectPagesForDownload",
+        "searchResults": "$searchResults"
       }
     },
     "pagingHeaderPanel": {

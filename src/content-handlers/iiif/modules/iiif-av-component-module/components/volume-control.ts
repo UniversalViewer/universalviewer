@@ -3,6 +3,8 @@ import { IAVVolumeControlState } from "../interfaces/volume-control-state";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { VolumeEvents } from "../events/volume-events";
 import { Logger } from "../helpers/logger";
+import { controlButton, setButtonLabel } from "../helpers/control-button";
+import { describeSlider } from "../helpers/describe-slider";
 
 export class AVVolumeControl extends BaseComponent {
   private _$volumeSlider: JQuery;
@@ -30,12 +32,11 @@ export class AVVolumeControl extends BaseComponent {
       Logger.error("Component failed to initialise");
     }
 
-    this._$volumeMute = $(`
-      <button class="btn volume-mute" title="${this.options.data.content.mute}">
-          <i class="av-icon av-icon-mute on" aria-hidden="true"></i>
-          <span class="sr-only>${this.options.data.content.mute}</span>
-      </button>
-    `);
+    this._$volumeMute = controlButton(
+      "btn volume-mute",
+      "av-icon av-icon-mute on",
+      this.options.data.content.mute
+    );
 
     this._$volumeSlider = $('<div class="volume-slider"></div>');
 
@@ -81,13 +82,24 @@ export class AVVolumeControl extends BaseComponent {
         // end reducer
 
         that.fire(VolumeEvents.VOLUME_CHANGED, that._data.volume);
+        that._describeSlider(ui.value);
       },
       stop: function (evt: any, ui: any) {
         // No-op
       },
     });
+    this._describeSlider(this._data.volume as number);
 
     return success;
+  }
+
+  // Tells screen readers the volume, e.g. "80%".
+  private _describeSlider(volume: number): void {
+    describeSlider(
+      this._$volumeSlider,
+      this.options.data.content.audioVolume,
+      `${Math.round(volume * 100)}%`
+    );
   }
 
   public set(data: IAVVolumeControlState): void {
@@ -101,14 +113,13 @@ export class AVVolumeControl extends BaseComponent {
       this._$volumeSlider.slider({
         value: this._data.volume,
       });
+      this._describeSlider(this._data.volume);
 
       if (this._data.volume === 0) {
-        const label: string = this.options.data.content.unmute;
-        this._$volumeMute.prop("title", label);
+        setButtonLabel(this._$volumeMute, this.options.data.content.unmute);
         this._$volumeMute.find("i").switchClass("on", "off");
       } else {
-        const label: string = this.options.data.content.mute;
-        this._$volumeMute.prop("title", label);
+        setButtonLabel(this._$volumeMute, this.options.data.content.mute);
         this._$volumeMute.find("i").switchClass("off", "on");
       }
     }

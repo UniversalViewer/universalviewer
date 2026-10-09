@@ -1,4 +1,6 @@
-import { getHls } from "../helpers/get-hls";
+import { MediaType } from "@iiif/vocabulary";
+import { isHLSFormat } from "../helpers/is-hls-format";
+import { isMpegDashFormat } from "../helpers/is-mpeg-dash-format";
 
 const $ = require("jquery");
 import { MediaFormat } from "../media-formats/abstract-media-format";
@@ -31,7 +33,6 @@ export class MediaElement {
         this.element = document.createElement("video");
         break;
 
-      case "sound":
       case "audio":
         this.element = document.createElement("audio");
         break;
@@ -49,9 +50,6 @@ export class MediaElement {
       this.instance = new DefaultFormat(this.mediaSource, mediaOptions);
     }
     this.element.classList.add("anno");
-    if (!mediaOptions.probed) {
-      this.element.crossOrigin = "anonymous";
-    }
     this.element.preload = "metadata";
     this.instance.attachTo(this.element);
     this.element.currentTime = this.source.start;
@@ -145,22 +143,11 @@ export class MediaElement {
   }
 
   isDash() {
-    return (
-      this.format &&
-      this.format.toString() === "application/dash+xml" &&
-      typeof dashjs !== "undefined"
-    );
+    return !!this.format && isMpegDashFormat(this.format as MediaType);
   }
 
   isHls() {
-    const Hls = getHls();
-    return (
-      this.format &&
-      this.format.toString() === "application/vnd.apple.mpegurl" &&
-      typeof Hls !== "undefined" &&
-      Hls !== null &&
-      Hls.isSupported()
-    );
+    return !!this.format && isHLSFormat(this.format as MediaType);
   }
 
   isMpeg(): boolean {

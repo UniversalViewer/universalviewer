@@ -11,7 +11,8 @@ import {
   Range,
 } from "manifesto.js";
 import { MetadataGroup, MetadataOptions } from "@iiif/manifold";
-import { AVComponent } from "../iiif-av-component-module";
+import { AVComponent } from "../iiif-av-component-module/components/av-component";
+import { getCanvasCaptions } from "../uv-captions-module/Captions";
 import { Bools } from "../../Utils";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-av-extension/config/Config";
@@ -48,7 +49,12 @@ export class AVCenterPanel extends CenterPanel<
       IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
         if (this._lastCanvasIndex !== canvasIndex) {
+          // Another canvas chosen, rather than the first opening.
+          const chosen = this._lastCanvasIndex !== undefined;
           this._viewCanvas(canvasIndex);
+          if (chosen) {
+            this._followCanvasRange(canvasIndex);
+          }
         }
       }
     );
@@ -78,12 +84,12 @@ export class AVCenterPanel extends CenterPanel<
     this.extensionHost.subscribe(
       IIIFEvents.RANGE_CHANGE,
       (range: Range | null) => {
-        if (!this._observeRangeChanges()) {
-          return;
-        }
-
         this._whenMediaReady(() => {
-          that._viewRange(range);
+          // In the thumbnails view, each canvas plays on its own, rather than
+          // its ranges on a timeline, but the title still follows the range.
+          if (this._observeRangeChanges()) {
+            that._viewRange(range);
+          }
           that._setTitle();
         });
       }
@@ -327,6 +333,9 @@ export class AVCenterPanel extends CenterPanel<
           constrainNavigationToRange: this._limitToRange(),
           autoAdvanceRanges: this._autoAdvanceRanges(),
           content: this.content,
+          getCaptions: (canvas: Canvas) =>
+            getCanvasCaptions(canvas, this.extension.getLocale()),
+          captionStyles: this.config.options.captionStyles,
           defaultAspectRatio: 0.56,
           doubleClickMS: 350,
           limitToRange: this._limitToRange(),
@@ -336,11 +345,6 @@ export class AVCenterPanel extends CenterPanel<
         if (didReset) {
           this._viewCanvas(this._lastCanvasIndex);
         }
-
-        // console.log("set up")
-        // this.avcomponent.on('waveformready', () => {
-        //     this.resize();
-        // }, false);
 
         this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
       }
@@ -378,6 +382,26 @@ export class AVCenterPanel extends CenterPanel<
     });
   }
 
+  // When another canvas is chosen (e.g. its thumbnail), the range playing is
+  // then the canvas', unless it's already one the canvas is in, so the
+  // title, the index and the current range follow the canvas.
+  private _followCanvasRange(canvasIndex: number): void {
+    const helper = this.extension.helper;
+    const currentRange: Range | null = helper.getCurrentRange();
+    const canvas: Canvas = helper.getCanvasByIndex(canvasIndex);
+    const ranges: Range[] = helper.getCanvasRanges(canvas);
+
+    if (
+      ranges.length &&
+      !ranges.some((range) => currentRange && range.id === currentRange.id)
+    ) {
+      this.extensionHost.publish(
+        IIIFEvents.RANGE_CHANGE,
+        helper.getCanvasRange(canvas)
+      );
+    }
+  }
+
   private _viewCanvas(canvasIndex: number): void {
     this._whenMediaReady(() => {
       const canvas: Canvas | null =
@@ -392,8 +416,16 @@ export class AVCenterPanel extends CenterPanel<
   resize(resizeAVComponent: boolean = true) {
     super.resize();
 
-    if (resizeAVComponent && this.avcomponent) {
-      const contentHeight: number | undefined = this.$content.height();
+    if (!this.avcomponent) {
+      return;
+    }
+
+    const contentHeight: number | undefined = this.$content.height();
+
+    // The AV component fills the content area, which is resized when the
+    // title above it changes (e.g. to a range's label once it plays), so it's
+    // resized then too, keeping its controls in view.
+    if (resizeAVComponent || contentHeight !== this.$avcomponent.height()) {
       if (contentHeight !== undefined) {
         this.$avcomponent.height(contentHeight);
       }

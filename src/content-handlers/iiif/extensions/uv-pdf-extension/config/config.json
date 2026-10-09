@@ -220,7 +220,9 @@
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
         "rights": "$rights",
-        "title": "$moreInformation"
+        "title": "$moreInformation",
+        "imageHeader": "$aboutTheImage",
+        "sequenceHeader": "$aboutTheSequence"
       }
     },
     "centerPanel": {
@@ -419,7 +421,16 @@
         "website": "$uvWebsite"
       }
     },
-    "contentLeftPanel": {}
+    "contentLeftPanel": {
+      "content": {
+        "selectAll": "$selectAll",
+        "download": "$download",
+        "searchResults": "$searchResults",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
+        "thumbnailSize": "$thumbnailSize",
+        "increaseThumbnailSize": "$increaseThumbnailSize"
+      }
+    }
   },
   "localisation": {
     "label": "English (GB)",

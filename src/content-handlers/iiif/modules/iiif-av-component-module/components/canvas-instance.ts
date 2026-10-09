@@ -9,7 +9,7 @@ import {
   Range,
   Utils,
 } from "manifesto.js";
-import { Behavior, MediaType } from "@iiif/vocabulary/dist-commonjs";
+import { Behavior } from "@iiif/vocabulary/dist-commonjs";
 import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
 import { IAVCanvasInstanceData } from "../interfaces/canvas-instance-data";
 import { MediaElement } from "../elements/media-element";
@@ -17,6 +17,14 @@ import { TimePlanPlayer } from "../elements/timeplan-player";
 import { VolumeEvents } from "../events/volume-events";
 import { extractMediaFromAnnotationBodies } from "../helpers/extract-media-from-annotation-bodies";
 import { AVVolumeControl } from "./volume-control";
+import { controlButton, setButtonLabel } from "../helpers/control-button";
+import { describeSlider } from "../helpers/describe-slider";
+import {
+  CanvasCaptions,
+  CanvasPosition,
+} from "../../uv-captions-module/CanvasCaptions";
+import { CaptionLibrary } from "../../uv-captions-module/CaptionLibrary";
+import { getCanvasPosition } from "../helpers/get-canvas-position";
 import { CompositeMediaElement } from "../elements/composite-media-element";
 import { createTimePlansFromManifest } from "../helpers/create-time-plans-from-manifest";
 import { getMediaSourceFromAnnotationBody } from "../helpers/get-media-source-from-annotation-body";
@@ -24,13 +32,10 @@ import { CanvasInstanceEvents } from "../events/canvas-instance-events";
 import { AVComponent } from "./av-component";
 import { VirtualCanvas } from "../elements/virtual-canvas";
 import { Events } from "../events/av-component-events";
-import { isHLSFormat } from "../helpers/is-hls-format";
-import { isMpegDashFormat } from "../helpers/is-mpeg-dash-format";
+import { mediaKind } from "../../uv-shared-module/MediaKind";
 import { retargetTemporalComponent } from "../helpers/retarget-temporal-component";
 import { getSpatialComponent } from "../helpers/get-spatial-component";
-import { canPlayHls } from "../helpers/can-play-hls";
 import { formatTime } from "../helpers/format-time";
-import { isSafari } from "../helpers/is-safari";
 import { diffData } from "../helpers/diff-data";
 import { isVirtual } from "../helpers/is-virtual";
 import {
@@ -43,7 +48,12 @@ import {
   toMs,
 } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
-import { getHls } from "../helpers/get-hls";
+import { isHLSFormat } from "../helpers/is-hls-format";
+import { isMpegDashFormat } from "../helpers/is-mpeg-dash-format";
+import {
+  attachDash,
+  attachHls,
+} from "../../uv-shared-module/StreamingLibraries";
 import "waveform-panel";
 import { WaveformPanel } from "waveform-panel";
 
@@ -90,6 +100,7 @@ export class CanvasInstance extends BaseComponent {
   private _readyMediaCount = 0;
   private _stallRequestedBy: any[] = []; //todo: type
   private _volume: AVVolumeControl;
+  private _captions: CanvasCaptions;
   private _wasPlaying = false;
   public ranges: Range[] = [];
   public waveforms: string[] = [];
@@ -146,7 +157,10 @@ export class CanvasInstance extends BaseComponent {
       const annotations = canvas.getContent();
       for (const annotation of annotations) {
         const annotationBody = extractMediaFromAnnotationBodies(annotation);
-        if (!annotationBody) {
+        if (
+          !annotationBody ||
+          !mediaKind(annotationBody.__jsonld, canvas.__jsonld)
+        ) {
           continue;
         }
         const mediaSource = getMediaSourceFromAnnotationBody(
@@ -162,7 +176,6 @@ export class CanvasInstance extends BaseComponent {
 
         const mediaElement = new MediaElement(mediaSource, {
           adaptiveAuthEnabled: this._data.adaptiveAuthEnabled,
-          probed: this.options.data?.canvas?.externalResource?.isProbed,
         });
 
         mediaElement.setSize(
@@ -206,14 +219,15 @@ export class CanvasInstance extends BaseComponent {
     if (mediaElements.length === 0) {
       // Since this is a constructor call.
       setTimeout(() => {
-        this.fire(
-          Events.MEDIA_ERROR,
-          this._data?.content?.noMediaMessage || "No media available to play"
-        );
+        this.fire(Events.MEDIA_ERROR, this._data.content?.noMediaMessage);
       }, 200);
     }
 
     const compositeMediaElement = new CompositeMediaElement(mediaElements);
+
+    mediaElements.forEach((mediaElement) =>
+      this._reportMediaUnavailable(mediaElement.getRawElement())
+    );
 
     compositeMediaElement.appendTo(this.$playerElement);
 
@@ -283,35 +297,32 @@ export class CanvasInstance extends BaseComponent {
       '<div class="timeline-item-container"></div>'
     );
     this._$controlsContainer = $('<div class="controls-container"></div>');
-    this._$prevButton = $(`
-                                <button class="btn" title="${this._data.content.previous}">
-                                    <i class="av-icon av-icon-previous" aria-hidden="true"></i>
-                                    <span class="sr-only>${this._data.content.previous}</span>
-                                </button>`);
-    this._$playButton = $(`
-                                <button class="btn" title="${this._data.content.play}">
-                                    <i class="av-icon av-icon-play play" aria-hidden="true"></i>
-                                    <span class="sr-only>${this._data.content.play}</span>
-                                </button>`);
-    this._$nextButton = $(`
-                                <button class="btn" title="${this._data.content.next}">
-                                    <i class="av-icon av-icon-next" aria-hidden="true"></i>
-                                    <span class="sr-only>${this._data.content.next}</span>
-                                </button>`);
-    this._$fastForward = $(`
-                                <button class="btn" title="${this._data.content.fastForward}">
-                                    <i class="av-icon av-icon-fast-forward" aria-hidden="true"></i>
-                                    <span class="sr-only>
-                                    ${this._data.content.fastForward || ""}
-                                    </span>
-                                </button>`);
-    this._$fastRewind = $(`
-                                <button class="btn" title="${this._data.content.fastRewind}">
-                                    <i class="av-icon av-icon-fast-rewind" aria-hidden="true"></i>
-                                    <span class="sr-only>
-                                    ${this._data.content.fastRewind || ""}
-                                    </span>
-                                </button>`);
+    const content = this._data.content;
+    this._$prevButton = controlButton(
+      "btn",
+      "av-icon av-icon-previous",
+      content.previous
+    );
+    this._$playButton = controlButton(
+      "btn",
+      "av-icon av-icon-play play",
+      content.play
+    );
+    this._$nextButton = controlButton(
+      "btn",
+      "av-icon av-icon-next",
+      content.next
+    );
+    this._$fastForward = controlButton(
+      "btn",
+      "av-icon av-icon-fast-forward",
+      content.fastForward
+    );
+    this._$fastRewind = controlButton(
+      "btn",
+      "av-icon av-icon-fast-rewind",
+      content.fastRewind
+    );
 
     this._$timeDisplay = $(
       '<div class="time-display"><span class="canvas-time"></span> / <span class="canvas-duration"></span></div>'
@@ -337,6 +348,12 @@ export class CanvasInstance extends BaseComponent {
       false
     );
 
+    this._captions = new CanvasCaptions(
+      this._data.captionLibrary || new CaptionLibrary(() => undefined),
+      this._data.content,
+      this._data.captionStyles
+    );
+
     // @todo make the buttons for FF and FR configurable.
     this._$controlsContainer.append(
       this._$prevButton,
@@ -345,7 +362,8 @@ export class CanvasInstance extends BaseComponent {
       (this._data.enableFastForward ? this._$fastForward : null) as JQuery,
       this._$nextButton,
       this._$timeDisplay,
-      $volume
+      $volume,
+      this._captions.$control
     );
     this._$canvasTimelineContainer.append(
       this._$canvasHoverPreview,
@@ -361,7 +379,13 @@ export class CanvasInstance extends BaseComponent {
       this._$rangeTimelineContainer,
       this._$controlsContainer
     );
+    this._$canvasContainer.append(this._captions.$overlay);
     this.$playerElement.append(this._$canvasContainer, this._$optionsContainer);
+    this._captions.load(
+      this.isVirtual()
+        ? (this._data.canvas as VirtualCanvas).canvases
+        : [this._data.canvas as Canvas]
+    );
 
     this._$canvasHoverPreview.hide();
     this._$rangeHoverPreview.hide();
@@ -478,6 +502,9 @@ export class CanvasInstance extends BaseComponent {
     });
 
     this._$fastForward.on("touchstart click", (e) => {
+      // A tap fires touchstart then click; handle it once, as the other
+      // buttons do.
+      e.preventDefault();
       const { end } = this.getRangeTiming();
       const goToTime = addTime(this.getClockTime(), 20 as TimelineTime);
       if (goToTime < end) {
@@ -487,6 +514,7 @@ export class CanvasInstance extends BaseComponent {
     });
 
     this._$fastRewind.on("touchstart click", (e) => {
+      e.preventDefault();
       const { start } = this.getRangeTiming();
       const goToTime = minusTime(this.getClockTime(), 20 as TimelineTime);
       if (goToTime >= start) {
@@ -494,6 +522,17 @@ export class CanvasInstance extends BaseComponent {
       }
       return this._setCurrentTime(start);
     });
+
+    this._addTimelineKeys(this._$canvasTimelineContainer, (value) =>
+      this._setCurrentTime(
+        (newRanges
+          ? this.timePlanPlayer.plan.start + value
+          : value) as TimelineTime
+      )
+    );
+    this._addTimelineKeys(this._$rangeTimelineContainer, (value) =>
+      this._setCurrentTime(value as TimelineTime)
+    );
 
     if (newRanges) {
       this._$canvasTimelineContainer.slider({
@@ -595,7 +634,8 @@ export class CanvasInstance extends BaseComponent {
         return;
       }
 
-      const body: AnnotationBody | null = this._getBody(bodies);
+      const body: AnnotationBody | null =
+        extractMediaFromAnnotationBodies(item);
 
       if (!body) {
         // if no suitable format was found for the current browser, skip this item.
@@ -681,7 +721,11 @@ export class CanvasInstance extends BaseComponent {
         start: startTime,
         startOffset: offsetStart,
         top: percentageTop,
-        type: type,
+        // "audio" or "video" (see mediaKind).
+        type: mediaKind(body.__jsonld, {
+          width: this._data.canvas?.getWidth(),
+          height: this._data.canvas?.getHeight(),
+        }),
         width: percentageWidth,
       };
 
@@ -703,47 +747,6 @@ export class CanvasInstance extends BaseComponent {
         });
       }
     }
-  }
-
-  private _getBody(bodies: AnnotationBody[]): AnnotationBody | null {
-    // if there's an HLS format and HLS is supported in this browser
-    for (let i = 0; i < bodies.length; i++) {
-      const body: AnnotationBody = bodies[i];
-      const format: MediaType | null = body.getFormat();
-
-      if (format) {
-        if (isHLSFormat(format) && canPlayHls()) {
-          return body;
-        }
-      }
-    }
-
-    // if there's a Dash format and the browser isn't Safari
-    for (let i = 0; i < bodies.length; i++) {
-      const body: AnnotationBody = bodies[i];
-      const format: MediaType | null = body.getFormat();
-
-      if (format) {
-        if (isMpegDashFormat(format) && !isSafari()) {
-          return body;
-        }
-      }
-    }
-
-    // otherwise, return the first format that isn't HLS or Dash
-    for (let i = 0; i < bodies.length; i++) {
-      const body: AnnotationBody = bodies[i];
-      const format: MediaType | null = body.getFormat();
-
-      if (format) {
-        if (!isHLSFormat(format) && !isMpegDashFormat(format)) {
-          return body;
-        }
-      }
-    }
-
-    // couldn't find a suitable format
-    return null;
   }
 
   getDuration() {
@@ -843,11 +846,9 @@ export class CanvasInstance extends BaseComponent {
     range: null | string,
     {
       autoChanged = false,
-      limitToRange = false,
       noRender = false,
     }: {
       autoChanged?: boolean;
-      limitToRange?: boolean;
       noRender?: boolean;
     } = {}
   ) {
@@ -889,15 +890,12 @@ export class CanvasInstance extends BaseComponent {
   public set(data: IAVCanvasInstanceData): void {
     // Simplification of setting state.
     if (AVComponent.newRanges && this.isVirtual()) {
+      // The timeline is limited to the current range by setLimitToRange().
       if (typeof data.range !== "undefined") {
-        this.setCurrentRangeId(data.range.id, {
-          limitToRange: data.limitToRange,
-        });
+        this.setCurrentRangeId(data.range.id);
       }
       if (typeof data.rangeId !== "undefined") {
-        this.setCurrentRangeId(data.rangeId, {
-          limitToRange: data.limitToRange,
-        });
+        this.setCurrentRangeId(data.rangeId);
       }
       if (typeof data.volume !== "undefined") {
         this.setVolume(data.volume);
@@ -1341,6 +1339,9 @@ export class CanvasInstance extends BaseComponent {
   }
 
   public destroy(): void {
+    if (this._captions) {
+      this._captions.destroy();
+    }
     window.clearInterval(this._highPriorityInterval);
     window.clearInterval(this._lowPriorityInterval);
     window.clearInterval(this._canvasClockInterval);
@@ -1350,16 +1351,25 @@ export class CanvasInstance extends BaseComponent {
     return convertToPercentage(pixelValue, maxValue);
   }
 
-  private _renderMediaElement(data: any): void {
-    const isProbed = this.options.data?.canvas?.externalResource?.isProbed;
-    let $mediaElement;
-    const type: string = data.type.toString().toLowerCase();
+  private _mediaUnavailableReported = false;
 
-    switch (type) {
+  // Tells the user, once, when media can't be loaded (e.g. its file is
+  // missing).
+  private _reportMediaUnavailable(media: HTMLMediaElement): void {
+    media.addEventListener("error", () => {
+      if (!this._mediaUnavailableReported) {
+        this._mediaUnavailableReported = true;
+        this.fire(Events.MEDIA_ERROR, this._data.content?.mediaUnavailable);
+      }
+    });
+  }
+
+  private _renderMediaElement(data: any): void {
+    let $mediaElement;
+    switch (data.type) {
       case "video":
         $mediaElement = $('<video class="anno" />');
         break;
-      case "sound":
       case "audio":
         $mediaElement = $('<audio class="anno" />');
         break;
@@ -1374,11 +1384,6 @@ export class CanvasInstance extends BaseComponent {
     }
 
     const media: HTMLMediaElement = $mediaElement[0] as HTMLMediaElement;
-
-    if (!isProbed) {
-      media.setAttribute("crossorigin", "anonymous");
-      media.crossOrigin = "anonymous";
-    }
 
     //
     // var audioCtx = new AudioContext();
@@ -1397,52 +1402,11 @@ export class CanvasInstance extends BaseComponent {
     // source.connect(panNode);
     // panNode.connect(audioCtx.destination);
 
-    if (data.format && data.format.toString() === "application/dash+xml") {
-      // dash
+    if (data.format && isMpegDashFormat(data.format)) {
       $mediaElement.attr("data-dashjs-player", "");
-      const player = dashjs.MediaPlayer().create();
-      player.getDebug().setLogToBrowserConsole(false);
-      // player.getDebug().setLogToBrowserConsole(true);
-      // player.getDebug().setLogLevel(4);
-      if (this._data.adaptiveAuthEnabled) {
-        player.setXHRWithCredentialsForType("MPD", true); // send cookies
-      }
-      player.initialize(media, data.source, false);
-    } else if (
-      data.format &&
-      data.format.toString() === "application/vnd.apple.mpegurl"
-    ) {
-      const Hls = getHls();
-      // hls
-      if (Hls && Hls.isSupported()) {
-        let hls = new Hls();
-
-        if (this._data.adaptiveAuthEnabled) {
-          hls = new Hls({
-            xhrSetup: (xhr: any) => {
-              xhr.withCredentials = true; // send cookies
-            },
-          });
-        }
-
-        if (this._data.adaptiveAuthEnabled) {
-          // no-op.
-        }
-
-        hls.loadSource(data.source);
-        hls.attachMedia(media);
-        //hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        //media.play();
-        //});
-      } else if (media.canPlayType("application/vnd.apple.mpegurl")) {
-        // hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
-        // When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element throught the `src` property.
-        // This is using the built-in support of the plain video element, without using hls.js.
-        media.src = data.source;
-        //media.addEventListener('canplay', function () {
-        //media.play();
-        //});
-      }
+      attachDash(media, data.source, this._data.adaptiveAuthEnabled);
+    } else if (data.format && isHLSFormat(data.format)) {
+      attachHls(media, data.source, this._data.adaptiveAuthEnabled);
     } else {
       $mediaElement.attr("src", data.source);
     }
@@ -1488,6 +1452,8 @@ export class CanvasInstance extends BaseComponent {
     if (this.$playerElement) {
       this._$canvasContainer.append($mediaElement);
     }
+
+    this._reportMediaUnavailable($mediaElement.get(0) as HTMLMediaElement);
 
     $mediaElement.on("loadedmetadata", async () => {
       this._readyMediaCount++;
@@ -1656,15 +1622,98 @@ export class CanvasInstance extends BaseComponent {
     };
   }
 
-  public isLimitedToRange() {
-    return this._data.limitToRange;
-  }
+  // Where playback is: on a virtual canvas, the canvas being played and the
+  // time on it; otherwise, the time on this instance's canvas.
+  private _getCanvasPosition(): CanvasPosition | null {
+    if (AVComponent.newRanges && this.isVirtual()) {
+      const stop =
+        this.timePlanPlayer && this.timePlanPlayer.plan.stops.length
+          ? this.timePlanPlayer.findStop(this._canvasClockTime)
+          : undefined;
+      return stop ? getCanvasPosition(stop, this._canvasClockTime) : null;
+    }
 
-  public hasCurrentRange() {
-    return !!this._data.range;
+    return this._data.canvas
+      ? { canvasId: this._data.canvas.id, time: this._canvasClockTime }
+      : null;
   }
 
   private _updateCurrentTimeDisplay(): void {
+    this._captions.update(this._getCanvasPosition());
+    this._showCurrentTime();
+    this._describeTimelines();
+  }
+
+  // Keyboard steps for a timeline: 5 seconds per arrow key, a minute per
+  // page key, and Home and End for its ends. Handled before jQuery UI's own
+  // keys, which move by the slider's 0.01-second step.
+  private _addTimelineKeys(
+    $slider: JQuery,
+    seek: (value: number) => void
+  ): void {
+    const steps: { [key: string]: number } = {
+      ArrowRight: 5,
+      ArrowUp: 5,
+      ArrowLeft: -5,
+      ArrowDown: -5,
+      PageUp: 60,
+      PageDown: -60,
+    };
+
+    $slider[0].addEventListener(
+      "keydown",
+      (e: KeyboardEvent) => {
+        if (!$slider.slider("instance")) {
+          return;
+        }
+        const min: number = $slider.slider("option", "min");
+        const max: number = $slider.slider("option", "max");
+        const value: number = $slider.slider("value");
+        const target =
+          e.key === "Home"
+            ? min
+            : e.key === "End"
+              ? max
+              : e.key in steps
+                ? Math.min(max, Math.max(min, value + steps[e.key]))
+                : undefined;
+
+        if (target === undefined) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        $slider.slider("value", target);
+        seek(target);
+      },
+      true
+    );
+  }
+
+  // Tells screen readers where playback is on the timelines, in the words the
+  // time display shows: e.g. "00:05 of 09:32".
+  private _describeTimelines(): void {
+    const content = this._data.content;
+    if (!content) {
+      return;
+    }
+    const text = content.positionOfDuration
+      .replace("{0}", this._$canvasTime.text())
+      .replace("{1}", this._$canvasDuration.text());
+
+    describeSlider(
+      this._$canvasTimelineContainer,
+      content.playbackPosition,
+      text
+    );
+    describeSlider(
+      this._$rangeTimelineContainer,
+      content.playbackPosition,
+      text
+    );
+  }
+
+  private _showCurrentTime(): void {
     if (AVComponent.newRanges && this.isVirtual()) {
       const time = this._canvasClockTime - this.timePlanPlayer.getStartTime();
       this._$canvasTime.text(formatTime(time));
@@ -1778,10 +1827,6 @@ export class CanvasInstance extends BaseComponent {
     return fromMs(Date.now() as TimelineTimeMs);
   }
 
-  nowMs(): TimelineTimeMs {
-    return Date.now() as TimelineTimeMs;
-  }
-
   private async _setCurrentTime(
     seconds: TimelineTime,
     setRange = true,
@@ -1832,7 +1877,7 @@ export class CanvasInstance extends BaseComponent {
     this._synchronizeMedia();
   }
 
-  private _rewind(withoutUpdate?: boolean): void {
+  private _rewind(): void {
     if (AVComponent.newRanges && this.isVirtual()) {
       Logger.log("Rewind");
       return;
@@ -1952,9 +1997,10 @@ export class CanvasInstance extends BaseComponent {
       this._synchronizeMedia();
     }
 
-    const label: string =
-      this._data && this._data.content ? this._data.content.pause : "";
-    this._$playButton.prop("title", label);
+    setButtonLabel(
+      this._$playButton,
+      this._data.content ? this._data.content.pause : ""
+    );
     this._$playButton.find("i").switchClass("play", "pause");
 
     this.fire(CanvasInstanceEvents.PLAYCANVAS);
@@ -1981,9 +2027,10 @@ export class CanvasInstance extends BaseComponent {
       this.timePlanPlayer.pause();
     }
 
-    const label: string =
-      this._data && this._data.content ? this._data.content.play : "";
-    this._$playButton.prop("title", label);
+    setButtonLabel(
+      this._$playButton,
+      this._data.content ? this._data.content.play : ""
+    );
     this._$playButton.find("i").switchClass("pause", "play");
 
     this.fire(CanvasInstanceEvents.PAUSECANVAS);

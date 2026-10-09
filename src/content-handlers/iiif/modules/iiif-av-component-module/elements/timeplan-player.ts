@@ -17,7 +17,6 @@ export class TimePlanPlayer {
   media: CompositeMediaElement;
   currentStop: TimeStop;
   currentRange: string;
-  continuous = true;
   playing = false;
   _time: TimelineTime = timelineTime(0);
   notifyRangeChange: (
@@ -176,10 +175,6 @@ export class TimePlanPlayer {
     }
   }
 
-  setContinuousPlayback(continuous: boolean) {
-    this.continuous = continuous;
-  }
-
   setIsPlaying(playing: boolean) {
     this.playing = playing;
   }
@@ -195,10 +190,6 @@ export class TimePlanPlayer {
       });
     }
 
-    return this.getTime();
-  }
-
-  currentTimelineTime(): TimelineTime {
     return this.getTime();
   }
 

@@ -1,3 +1,5 @@
+import { CaptionsContent } from "../../../modules/uv-captions-module/CaptionsControl";
+import { CaptionStyle } from "../../../modules/uv-captions-module/CaptionStyle";
 import {
   BaseConfig,
   CenterPanelContent,
@@ -16,9 +18,16 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
   defaultHeight: number;
   defaultWidth: number;
   iconSprite: string;
+  /** Determines if media errors are hidden */
+  hideMediaError: boolean;
+  /** The colours offered for captions, in place of UV's own */
+  captionStyles?: CaptionStyle[];
 };
 
-type MediaElementCenterPanelContent = CenterPanelContent & {};
+type MediaElementCenterPanelContent = CenterPanelContent &
+  CaptionsContent & {
+    mediaUnavailable: string;
+  };
 
 type MediaElementCenterPanel = {
   options: MediaElementCenterPanelOptions;

@@ -15,12 +15,21 @@ import { getFirstTargetedCanvasId } from "../helpers/get-first-targeted-canvas-i
 import { Events } from "../events/av-component-events";
 import { TimelineTime } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
-import "dashjs/dist/dash.mediaplayer.min";
+import { CaptionLibrary } from "../../uv-captions-module/CaptionLibrary";
+import { controlButton, setButtonLabel } from "../helpers/control-button";
+import {
+  choosePosterImages,
+  PosterImages,
+} from "../../uv-shared-module/PosterImages";
+import { isVideoCanvas } from "../../uv-shared-module/MediaKind";
 import "../css/styles.less";
 
 export class AVComponent extends BaseComponent {
   static newRanges = true;
   private _data: IAVComponentData = this.data();
+  // Shared by every canvas instance, so the caption track chosen carries over
+  // when the canvas instances are recreated (e.g. switching panel views).
+  private _captionLibrary = new CaptionLibrary(() => this._data.getCaptions);
   public options: IBaseComponentOptions;
   public canvasInstances: CanvasInstance[] = [];
   private _checkAllMediaReadyInterval: any;
@@ -36,9 +45,17 @@ export class AVComponent extends BaseComponent {
   private _$element: JQuery;
 
   private _posterImageExpanded = false;
+  // The images for the current canvas, and whether its media has played.
+  private _posterImages: PosterImages = {
+    beforePlay: null,
+    whilePlaying: null,
+  };
+  private _posterPlaying = false;
 
   constructor(options: IBaseComponentOptions) {
     super(options);
+    // The data it's created with (BaseComponent merges it into the defaults).
+    this._data = Object.assign({}, this.options.data);
     this._init();
     this._resize();
   }
@@ -55,17 +72,6 @@ export class AVComponent extends BaseComponent {
     return success;
   }
 
-  public getCurrentCanvasInstance(): Canvas | null {
-    const range = this._data.helper!.getRangeById(this._data.range.id);
-    if (!range) {
-      return null;
-    }
-    // @ts-ignore
-    const canvasId: string | undefined = getFirstTargetedCanvasId(range);
-    // @ts-ignore
-    return canvasId ? this._data.helper!.getCanvasById(canvasId) : null;
-  }
-
   public data(): IAVComponentData {
     return {
       autoPlay: false,
@@ -76,19 +82,10 @@ export class AVComponent extends BaseComponent {
       limitToRange: false,
       autoAdvanceRanges: true,
       posterImageRatio: 0.3,
+      posterImageExpanded: false,
       virtualCanvasEnabled: true,
-      content: {
-        currentTime: "Current Time",
-        collapse: "Collapse",
-        duration: "Duration",
-        expand: "Expand",
-        mute: "Mute",
-        next: "Next",
-        pause: "Pause",
-        play: "Play",
-        previous: "Previous",
-        unmute: "Unmute",
-      } as IAVComponentContent,
+      // All text comes from the config's (localised) content.
+      content: {} as IAVComponentContent,
       enableFastForward: true,
       enableFastRewind: true,
     };
@@ -113,32 +110,27 @@ export class AVComponent extends BaseComponent {
       return;
     }
 
-    this.canvasInstances.forEach(
-      (canvasInstance: CanvasInstance, index: number) => {
-        const toSet: any = {};
+    this.canvasInstances.forEach((canvasInstance: CanvasInstance) => {
+      const toSet: any = {};
 
-        if (diff.includes("limitToRange") && this._data.canvasId) {
-          toSet.limitToRange = this._data.limitToRange;
-        }
-        if (diff.includes("autoAdvanceRanges") && this._data.canvasId) {
-          toSet.autoAdvanceRanges = this._data.autoAdvanceRanges;
-        }
-
-        if (
-          diff.includes("constrainNavigationToRange") &&
-          this._data.canvasId
-        ) {
-          toSet.constrainNavigationToRange =
-            this._data.constrainNavigationToRange;
-        }
-
-        if (diff.includes("autoSelectRange") && this._data.canvasId) {
-          toSet.autoSelectRange = this._data.autoSelectRange;
-        }
-
-        canvasInstance.set(toSet);
+      if (diff.includes("limitToRange") && this._data.canvasId) {
+        toSet.limitToRange = this._data.limitToRange;
       }
-    );
+      if (diff.includes("autoAdvanceRanges") && this._data.canvasId) {
+        toSet.autoAdvanceRanges = this._data.autoAdvanceRanges;
+      }
+
+      if (diff.includes("constrainNavigationToRange") && this._data.canvasId) {
+        toSet.constrainNavigationToRange =
+          this._data.constrainNavigationToRange;
+      }
+
+      if (diff.includes("autoSelectRange") && this._data.canvasId) {
+        toSet.autoSelectRange = this._data.autoSelectRange;
+      }
+
+      canvasInstance.set(toSet);
+    });
 
     if (
       (diff.includes("virtualCanvasEnabled") || diff.includes("canvasId")) &&
@@ -148,6 +140,11 @@ export class AVComponent extends BaseComponent {
         this._getCanvasInstanceById(this._data.canvasId);
 
       if (nextCanvasInstance) {
+        if (this._$posterImage) {
+          this._posterPlaying = nextCanvasInstance.isPlaying();
+          this._updatePosterImages();
+        }
+
         this.canvasInstances.forEach((canvasInstance: CanvasInstance) => {
           // hide canvases that don't have the same id
           if (
@@ -317,16 +314,16 @@ export class AVComponent extends BaseComponent {
       this._$element.append(this._$posterContainer);
 
       this._$posterImage = $('<div class="poster-image"></div>');
-      this._$posterExpandButton = $(`
-                    <button class="btn" title="${this._data && this._data.content ? this._data.content.expand : ""}">
-                        <i class="av-icon  av-icon-expand expand" aria-hidden="true"></i><span class="sr-only">${
-                          this._data && this._data.content
-                            ? this._data.content.expand
-                            : ""
-                        }</span>
-                    </button>
-                `);
+      this._$posterExpandButton = controlButton(
+        "btn",
+        "av-icon av-icon-expand expand",
+        this._data.content ? this._data.content.expand : ""
+      );
       this._$posterImage.append(this._$posterExpandButton);
+
+      // The image starts as configured (posterImageExpanded).
+      this._posterImageExpanded = !!this._data.posterImageExpanded;
+      this._labelPosterExpandButton();
 
       this._$posterImage.on("touchstart click", (e) => {
         e.preventDefault();
@@ -335,59 +332,87 @@ export class AVComponent extends BaseComponent {
         //this._$posterImage.animate(target,"fast", "easein");
         this._$posterImage.animate(target);
         this._posterImageExpanded = !this._posterImageExpanded;
-
-        if (this._data.content) {
-          if (this._posterImageExpanded) {
-            const label: string = this._data.content.collapse;
-            this._$posterExpandButton.prop("title", label);
-            this._$posterExpandButton
-              .find("i")
-              .switchClass("expand", "collapse");
-          } else {
-            const label: string = this._data.content.expand;
-            this._$posterExpandButton.prop("title", label);
-            this._$posterExpandButton
-              .find("i")
-              .switchClass("collapse", "expand");
-          }
-        }
+        this._labelPosterExpandButton();
       });
 
-      // this._logMessage('get accompanying canvas');
-
-      // poster canvas
-      // @ts-ignore
-      let accompanyingCanvas: Canvas | null =
-        this._data.helper.getAccompanyingCanvas();
-
-      //this._logMessage(accompanyingCanvas);
-
-      if (!accompanyingCanvas) {
-        accompanyingCanvas = this._data.helper.getPosterCanvas();
-      }
-
-      if (accompanyingCanvas) {
-        this._posterCanvasWidth = accompanyingCanvas.getWidth();
-        this._posterCanvasHeight = accompanyingCanvas.getHeight();
-
-        let posterImage: string | null = this._data.helper.getPosterImage();
-
-        if (!posterImage) {
-          posterImage = this._data.helper.getAccompanyingCanvasImage();
-        }
-
-        if (posterImage) {
-          this._$posterContainer.append(this._$posterImage);
-
-          let css: any = this._getPosterImageCss(this._posterImageExpanded);
-          css = Object.assign({}, css, {
-            "background-image": "url(" + posterImage + ")",
-          });
-
-          this._$posterImage.css(css);
-        }
-      }
+      this._posterPlaying = false;
+      this._updatePosterImages();
     }
+  }
+
+  // Chooses the images for the current canvas (see choosePosterImages) and
+  // shows the one for now.
+  private _updatePosterImages(): void {
+    const helper = this._data.helper;
+    if (!helper || !helper.manifest) {
+      return;
+    }
+    const canvas: Canvas | null =
+      (this._data.canvasId && helper.getCanvasById(this._data.canvasId)) ||
+      helper.getCurrentCanvas();
+    const canvasJson = canvas ? canvas.__jsonld : undefined;
+    this._posterImages = choosePosterImages({
+      manifest: helper.manifest.__jsonld,
+      canvas: canvasJson,
+      isVideo: isVideoCanvas(canvasJson),
+    });
+    this._showPosterImage();
+  }
+
+  // Shows the image for before or while the media plays, or none. The image
+  // is sized by its proportions, so those of an image without a given size
+  // are read once it loads.
+  private _showPosterImage(): void {
+    const image = this._posterPlaying
+      ? this._posterImages.whilePlaying
+      : this._posterImages.beforePlay;
+
+    if (!image) {
+      this._$posterImage.detach();
+      return;
+    }
+
+    if (!image.width || !image.height) {
+      const loader = new Image();
+      loader.onload = () => {
+        if (
+          image ===
+          (this._posterPlaying
+            ? this._posterImages.whilePlaying
+            : this._posterImages.beforePlay)
+        ) {
+          image.width = loader.naturalWidth;
+          image.height = loader.naturalHeight;
+          this._showPosterImage();
+        }
+      };
+      loader.src = image.id;
+      return;
+    }
+
+    this._posterCanvasWidth = image.width;
+    this._posterCanvasHeight = image.height;
+    this._$posterContainer.append(this._$posterImage);
+    this._$posterImage.css(
+      Object.assign({}, this._getPosterImageCss(this._posterImageExpanded), {
+        "background-image": "url(" + image.id + ")",
+      })
+    );
+  }
+
+  // Labels the poster image's button, and sets its icon, for what it does:
+  // collapse the image when it's expanded, otherwise expand it.
+  private _labelPosterExpandButton(): void {
+    const expanded = this._posterImageExpanded;
+    const content = this._data.content;
+    setButtonLabel(
+      this._$posterExpandButton,
+      (expanded ? content?.collapse : content?.expand) || ""
+    );
+    this._$posterExpandButton
+      .find("i")
+      .removeClass(expanded ? "expand" : "collapse")
+      .addClass(expanded ? "collapse" : "expand");
   }
 
   public async setCurrentTime(time: number, external = false): Promise<void> {
@@ -469,7 +494,9 @@ export class AVComponent extends BaseComponent {
 
     const canvasInstance: CanvasInstance = new CanvasInstance({
       target: document.createElement("div"),
-      data: Object.assign({}, { canvas: canvas }, this._data),
+      data: Object.assign({}, { canvas: canvas }, this._data, {
+        captionLibrary: this._captionLibrary,
+      }),
     });
 
     canvasInstance.logMessage = this._logMessage.bind(this);
@@ -488,6 +515,10 @@ export class AVComponent extends BaseComponent {
     canvasInstance.on(
       "play",
       () => {
+        if (!this._posterPlaying) {
+          this._posterPlaying = true;
+          this._showPosterImage();
+        }
         this.fire(Events.PLAY, canvasInstance);
       },
       false

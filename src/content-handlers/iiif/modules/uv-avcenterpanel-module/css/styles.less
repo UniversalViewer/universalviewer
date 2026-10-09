@@ -1,20 +1,14 @@
 @import "../../iiif-av-component-module/css/styles.less";
 
 .uv-iiif-extension-host.uv-av-extension {
-  &.right-panel-enabled .footerPanel {
+  // The footer sits below the center panel, clear of the AV controls, with
+  // or without the right panel.
+  .footerPanel {
     position: relative;
     float: none;
     bottom: initial;
     right: initial;
     height: auto;
-  }
-
-  .footerPanel {
-    position: absolute;
-    float: right;
-    bottom: 44px;
-    right: 0;
-    height: 0;
   }
 
   .centerPanel {
@@ -54,26 +48,6 @@
 
       .controls-container {
         margin-bottom: 5px;
-        .time-display {
-          padding-top: 10px;
-
-          @media only screen and (min-width: @sm-min-width) and (max-width: 600px) {
-            display: none;
-          }
-        }
-
-        .volume {
-          display: inline-block;
-          float: none;
-
-          @media only screen and (min-width: @sm-min-width) and (max-width: 600px) {
-            display: none;
-          }
-
-          .volume-slider {
-            margin-top: 17px !important;
-          }
-        }
       }
     }
 
@@ -94,18 +68,5 @@
     //     });
 
     // }
-  }
-}
-
-.uv-iiif-extension-host.mobile {
-  .centerPanel {
-    .iiif-av-component {
-      .controls-container {
-        // hide the volume control on mobile
-        .volume {
-          display: none;
-        }
-      }
-    }
   }
 }
