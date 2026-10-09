@@ -112,6 +112,7 @@
     "esbuild": "^0.28.1",
     "esbuild-plugin-less": "^1.1.5",
     "esbuild-plugin-svg": "^0.1.0",
+    "hls.js": "1.7.3",
     "jquery": "3.7.1",
     "jquery-ui-dist": "^1.12.1",
     "jsviews": "1.2.0",
@@ -135,6 +136,8 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "jest": {
+    "maxWorkers": "50%",
+    "randomize": true,
     "globalSetup": "<rootDir>/jest.globalSetup.js",
     "globalTeardown": "<rootDir>/jest.globalTeardown.js",
     "setupFilesAfterEnv": [
