@@ -132,13 +132,21 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.ZOOM_IN, () => {
       this.whenCreated(() => {
-        this.zoomIn();
+        if (
+          this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom()
+        ) {
+          this.zoomIn();
+        }
       });
     });
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.ZOOM_OUT, () => {
       this.whenCreated(() => {
-        this.zoomOut();
+        if (
+          this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom()
+        ) {
+          this.zoomOut();
+        }
       });
     });
 
@@ -277,7 +285,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       element: this.$viewer[0],
       drawer: "auto",
       crossOriginPolicy: "Anonymous",
-      showNavigationControl: true,
+      showNavigationControl: false,
       showNavigator: true,
       showRotationControl: false,
       showHomeControl: false,
