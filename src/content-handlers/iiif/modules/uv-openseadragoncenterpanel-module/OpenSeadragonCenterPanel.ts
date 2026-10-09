@@ -512,5 +512,60 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     } else {
       this.$title.removeClass("rtl");
     }
+
+    if (
+      this.extension.helper.isMultiCanvas() &&
+      this.$prevButton &&
+      this.$nextButton
+    ) {
+      const verticalButtonPos: number = Math.floor(this.$element.width() / 2);
+
+      const viewingDirection: ViewingDirection =
+        this.extension.helper.getViewingDirection() ||
+        ViewingDirection.LEFT_TO_RIGHT;
+
+      switch (viewingDirection) {
+        case ViewingDirection.BOTTOM_TO_TOP:
+          this.$prevButton.addClass("down");
+          this.$nextButton.addClass("up");
+          this.$prevButton.css(
+            "left",
+            verticalButtonPos - this.$prevButton.outerWidth() / 2
+          );
+          this.$prevButton.css(
+            "top",
+            this.$element.height() - this.$prevButton.height()
+          );
+          this.$nextButton.css(
+            "left",
+            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
+          );
+          break;
+        case ViewingDirection.TOP_TO_BOTTOM:
+          this.$prevButton.css(
+            "left",
+            verticalButtonPos - this.$prevButton.outerWidth() / 2
+          );
+          this.$nextButton.css(
+            "left",
+            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
+          );
+          this.$nextButton.css(
+            "top",
+            this.$element.height() - this.$nextButton.height()
+          );
+          break;
+        default:
+          this.$prevButton.css(
+            "top",
+            (this.$element.height() - this.$prevButton.height()) / 2
+          );
+          this.$nextButton.css(
+            "top",
+            (this.$element.height() - this.$nextButton.height()) / 2
+          );
+          break;
+      }
+    }
   }
 }
