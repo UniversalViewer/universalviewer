@@ -144,7 +144,7 @@ The constructor calls `_init()`, which in turn calls `set()`, which then (if fir
 
 After `set()`, `resize()` is called which calls `extension.resize()`.
 
-`_reload()` uses Manifold and Manifesto to parse the manifest, and based on the media type, rendering format, or external resource type found in the IIIF manifest, selects an appropriate UV extension (e.g., OpenSeadragon, PDF, etc.) to load.
+`_reload()` uses Manifold and Manifesto to parse the manifest, and based on the media type, rendering format, or external resource type found in the IIIF manifest, selects an appropriate UV extension (e.g., OpenSeadragon, PDF, etc.) to load. For audio and video, see [Audio and Video: Choosing the extension](extensions/AV.md#choosing-the-extension).
 
 ## Loading the Extension
 

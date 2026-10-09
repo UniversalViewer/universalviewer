@@ -182,6 +182,12 @@ Determines if full-screen behavior is overridden - setting to true disables abil
 **Default**: `true`  
 Determines if paging is enabled - when true, defaults to 2-up view if supported by the IIIF manifest; when false, defaults to 1-up view. Overriden in uv-iiif-config.json file.
 
+##### preferMediaElementExtension
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if audio and video with ranges are played by the MediaElement extension rather than the AV extension, which shows ranges as a table of contents. Audio and video without ranges are always played by the MediaElement extension, unless a canvas has more than one clip. See [Audio and Video](extensions/AV.md#choosing-the-extension).
+
 ##### preserveViewport
 
 **Type**: `boolean`  
@@ -842,6 +848,12 @@ Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-
 **Default**: `false`  
 Determines if auto play is enabled.
 
+##### captionStyles
+
+**Type**: `array` of `{ "label": string, "color": string, "background": string }`  
+**Default**: none (UV's own five colour combinations)  
+The colours offered in the captions menu, in place of UV's own: each one's name in the menu (`label`), its text colour (`color`) and its background colour (`background`), as CSS colours. The first is used until the user chooses another. Configure every colour combination to be offered: these replace UV's own, rather than being added to them. See [Audio and Video](extensions/AV.md#caption-colours).
+
 ##### includeParentInTitleEnabled
 
 **Type**: `boolean`  
@@ -852,7 +864,7 @@ Determines if the parent is included in the title.
 
 **Type**: `number`  
 **Default**: `0.3`  
-Specifies the ratio of the poster image displayed by the AV component.
+Specifies the ratio of the poster image displayed by the AV component: when collapsed, the longer edge of the image shown with audio or video is this proportion of the player's width or height.
 
 ##### subtitleMetadataField
 
@@ -888,13 +900,13 @@ Determines if the [required statement](https://iiif.io/api/cookbook/recipe/0008-
 
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if the poster image is expanded.
+Determines if the poster image (the image shown with audio or video; see [Audio and Video](extensions/AV.md#images-with-audio-and-video)) starts expanded to fill the player. Otherwise it starts collapsed, sized by `posterImageRatio`. Either way, the user can expand and collapse it with its button.
 
 ##### hideMediaError
 
 **Type**: `boolean`  
 **Default**: `false`  
-Determines if media errors are hidden.
+Determines if media errors are hidden. When `false`, the user is told in the generic dialogue when media can't be played (e.g. its file is missing) or a canvas has no media. See [Audio and Video](extensions/AV.md#media-that-cant-be-played).
 
 ##### enableFastForward
 
@@ -1106,6 +1118,12 @@ Determines if PDF.js should be used for PDF rendering - uses the UV's interface 
 **Default**: `false`  
 When the target setting is changed, should the media automatically begin playing? Useful for externally triggering playback of specific clips; see [PR #1113](https://github.com/UniversalViewer/universalviewer/pull/1113) for details/examples.
 
+##### captionStyles
+
+**Type**: `array` of `{ "label": string, "color": string, "background": string }`  
+**Default**: none (UV's own five colour combinations)  
+The colours offered in the captions menu, in place of UV's own: each one's name in the menu (`label`), its text colour (`color`) and its background colour (`background`), as CSS colours. The first is used until the user chooses another. Configure every colour combination to be offered: these replace UV's own, rather than being added to them. See [Audio and Video](extensions/AV.md#caption-colours).
+
 ##### defaultHeight
 
 **Type**: `number`  
@@ -1123,6 +1141,12 @@ Specifies the default width for the panel or content.
 **Type**: `string`  
 **Default**: `mejs-controls.svg`  
 Specifies the URL of the spritesheet used by MediaElement.
+
+##### hideMediaError
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if media errors are hidden. When `false`, the user is told in the generic dialogue when media can't be played (e.g. its file is missing). See [Audio and Video](extensions/AV.md#media-that-cant-be-played).
 
 ##### titleEnabled
 
