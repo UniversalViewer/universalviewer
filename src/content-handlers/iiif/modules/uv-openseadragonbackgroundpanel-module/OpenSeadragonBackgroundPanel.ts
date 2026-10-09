@@ -53,6 +53,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewer: any;
   viewerId: string;
   showAdjustImageButton: boolean;
+  navigatorResizeTimeout: number;
 
   $canvas: JQuery;
   $nextButton: JQuery;
@@ -966,12 +967,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       }
     }
 
-    // // resize navigator for continuous manifests
-    // if (this.extension.helper.isContinuous()) {
-    //   setTimeout(() => {
-    //     this.resizeNavigatorForContinuous();
-    //   }, 200);
-    // }
+    // resize navigator for continuous manifests
+    if (this.extension.helper.isContinuous()) {
+      setTimeout(() => {
+        this.resizeNavigatorForContinuous();
+      }, 200);
+    }
 
     this.overlayAnnotations();
 
@@ -986,57 +987,71 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.isFirstLoad = false;
   }
 
-  // private resizeNavigatorForContinuous(): void {
-  //   if (!this.viewer || !this.viewer.navigator) return;
+  private resizeNavigatorForContinuous(): void {
+    if (!this.viewer || !this.viewer.navigator) return;
 
-  //   const homeBounds = this.viewer.world.getHomeBounds();
-  //   const contentAspectRatio = homeBounds.width / homeBounds.height;
+    const navigatorElement = this.viewer.navigator.element as HTMLElement;
+    const $centerPanel = $(navigatorElement).parent().parent();
+    const $content = $centerPanel.find(".content");
+    const $controls = $centerPanel.find(".imageControlsContainer");
 
-  //   const viewportWidth = this.$viewer.width();
-  //   const viewportHeight = this.$viewer.height();
-  //   const maxNavigatorWidth = 100;
-  //   const maxNavigatorHeight = 100;
-  //   const minVerticalNavigatorWidth = 60;
-  //   const minHorizontalNavigatorHeight = 40;
+    const homeBounds = this.viewer.world.getHomeBounds();
+    const contentAspectRatio = homeBounds.width / homeBounds.height;
 
-  //   let navigatorWidth: number;
-  //   let navigatorHeight: number;
+    const viewportWidth = $content.width();
+    const viewportHeight = $content.height();
 
-  //   if (this.extension.helper.isVerticallyAligned()) {
-  //     navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
-  //     navigatorWidth = navigatorHeight * contentAspectRatio;
+    const maxNavigatorWidth = 100;
+    const maxNavigatorHeight = 100;
+    const minVerticalNavigatorWidth = 60;
+    const minHorizontalNavigatorHeight = 40;
 
-  //     // Enforce max width
-  //     if (navigatorWidth > maxNavigatorWidth) {
-  //       navigatorWidth = maxNavigatorWidth;
-  //     }
+    let navigatorWidth: number;
+    let navigatorHeight: number;
 
-  //     // Enforce min width
-  //     if (navigatorWidth < minVerticalNavigatorWidth) {
-  //       navigatorWidth = minVerticalNavigatorWidth;
-  //     }
-  //   } else {
-  //     navigatorWidth = viewportWidth;
-  //     navigatorHeight = navigatorWidth / contentAspectRatio;
+    if (this.extension.helper.isVerticallyAligned()) {
+      navigatorHeight = viewportHeight - $controls.outerHeight() - 4;
+      navigatorWidth = navigatorHeight * contentAspectRatio;
 
-  //     // Enforce max height
-  //     if (navigatorHeight > maxNavigatorHeight) {
-  //       navigatorHeight = maxNavigatorHeight;
-  //     }
+      // Enforce max width
+      if (navigatorWidth > maxNavigatorWidth) {
+        navigatorWidth = maxNavigatorWidth;
+      }
 
-  //     // Enforce min height
-  //     if (navigatorHeight < minHorizontalNavigatorHeight) {
-  //       navigatorHeight = minHorizontalNavigatorHeight;
-  //     }
-  //   }
+      // Enforce min width
+      if (navigatorWidth < minVerticalNavigatorWidth) {
+        navigatorWidth = minVerticalNavigatorWidth;
+      }
+    } else {
+      navigatorWidth = viewportWidth;
+      navigatorHeight = navigatorWidth / contentAspectRatio;
 
-  //   const navigatorElement = this.viewer.navigator.element;
-  //   navigatorElement.style.width = `${navigatorWidth}px`;
-  //   navigatorElement.style.height = `${navigatorHeight}px`;
+      // Enforce max height
+      if (navigatorHeight > maxNavigatorHeight) {
+        navigatorHeight = maxNavigatorHeight;
+      }
 
-  //   this.viewer.navigator.viewport.fitBounds(homeBounds, true);
-  //   this.viewer.navigator.updateSize();
-  // }
+      // Enforce min height
+      if (navigatorHeight < minHorizontalNavigatorHeight) {
+        navigatorHeight = minHorizontalNavigatorHeight;
+      }
+    }
+
+    navigatorElement.style.width = `${navigatorWidth}px`;
+    navigatorElement.style.height = `${navigatorHeight}px`;
+
+    this.viewer.navigator.viewport.fitBounds(homeBounds, true);
+    this.viewer.navigator.updateSize();
+
+    console.log("nav resize", {
+      hasNav: !!this.viewer?.navigator,
+      w: $content.width(),
+      h: $content.height(),
+      controlsH: $controls.outerHeight(),
+      aspect: contentAspectRatio,
+      vertical: this.extension.helper.isVerticallyAligned(),
+    });
+  }
 
   zoomToInitialAnnotation(): void {
     const annotationRect: AnnotationRect | null =
@@ -1616,13 +1631,13 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           );
           break;
       }
+    }
 
-      // // resize navigator for continuous manifests
-      // if (this.extension.helper.isContinuous()) {
-      //   setTimeout(() => {
-      //     this.resizeNavigatorForContinuous();
-      //   }, 200);
-      // }
+    if (this.extension.helper.isContinuous()) {
+      clearTimeout(this.navigatorResizeTimeout);
+      this.navigatorResizeTimeout = window.setTimeout(() => {
+        this.resizeNavigatorForContinuous();
+      }, 200);
     }
   }
 

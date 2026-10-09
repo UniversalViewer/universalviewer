@@ -127,6 +127,11 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.extension.isDesktopMetric();
 
     this.$navigator.toggle(enabled);
+
+    this.$navigator.toggleClass(
+      "continuous",
+      this.extension.helper.isContinuous()
+    );
   }
 
   createImageControls(): void {
