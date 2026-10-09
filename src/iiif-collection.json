@@ -44,13 +44,13 @@
           "@id": "https://wellcomelibrary.org/iiif/b20605055/manifest",
           "@type": "sc:Manifest",
           "label": "English folding almanac in Latin (video)",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b16748967/manifest",
           "@type": "sc:Manifest",
           "label": "Entebbe encounter (video with transcript)",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b17307922/manifest",
@@ -938,37 +938,37 @@
           "@id": "https://iiif-video-nav-demo.netlify.app/iiif-manifest.json",
           "@type": "sc:Manifest",
           "label": "Story Session 1 - Dad & Mom - Learning to Ski & A Night in Kentucky",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/01_gapless_audio.json",
           "@type": "sc:Manifest",
           "label": "Gapless audio playback",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/02_gapless_video.json",
           "@type": "sc:Manifest",
           "label": "Gapless audio playback",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/03_synchronised_video.json",
           "@type": "sc:Manifest",
           "label": "Synchronised video example",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/04_synchronised_av.json",
           "@type": "sc:Manifest",
           "label": "Synchronised video example",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/05_synchronised_av_text.json",
           "@type": "sc:Manifest",
           "label": "Video synchronised with gapless audio, text",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/fire.json",
@@ -980,13 +980,13 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/mahler-symphony.json",
           "@type": "sc:Manifest",
           "label": "Symphony no. 3 - Mahler, Gustav, 1860-1911",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/lunchroom-manners.json",
           "@type": "sc:Manifest",
           "label": "Lunchroom manners",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/02.json",
@@ -998,13 +998,13 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/iiif/16.json",
           "@type": "sc:Manifest",
           "label": "One video file, segments of file associated with different canvases",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C308_8.json",
           "@type": "sc:Manifest",
           "label": "C308_8 Brian Hayes programme",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C728_241.json",
@@ -1016,13 +1016,13 @@
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/C1132_116.json",
           "@type": "sc:Manifest",
           "label": "C1132_116 Cliff Richard interview (Heathcliff)",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/WS0003.json",
           "@type": "sc:Manifest",
           "label": "WS0003 Aburria aburri r1",
-          "visible": false
+          "visible": true
         },
         {
           "@id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/loose-ends/C1685_98_P3.json",
@@ -1089,6 +1089,12 @@
           "@type": "sc:Manifest",
           "label": "Adaptive audio auth",
           "visible": false
+        },
+        {
+          "@id": "https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/manifest.json",
+          "@type": "sc:Manifest",
+          "label": "Video with captions in multiple languages",
+          "visible": true
         }
       ]
     },
