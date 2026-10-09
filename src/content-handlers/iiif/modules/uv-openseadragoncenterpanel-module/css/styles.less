@@ -109,10 +109,19 @@
         }
       }
 
-      .zoomIn {
-        display: none !important;
+      .imageControlsContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: row; // change this to 'column' for vertical buttons
+        gap: 0px;
 
-        .md-mediaquery({
+        .zoomIn {
+          display: none !important;
+
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         width: 28px;
@@ -125,12 +134,12 @@
                             .tab-focus();
                         }
                     });
-      }
+        }
 
-      .zoomOut {
-        display: none !important;
+        .zoomOut {
+          display: none !important;
 
-        .md-mediaquery({
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         width: 28px;
@@ -143,12 +152,12 @@
                             .tab-focus();
                         }
                     });
-      }
+        }
 
-      .goHome {
-        display: none !important;
+        .goHome {
+          display: none !important;
 
-        .md-mediaquery({
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         background-image: data-uri('../img/home.png') !important;
@@ -162,16 +171,12 @@
                             .tab-focus();
                         }
                     });
-      }
+        }
 
-      div[title="Rotate left"] {
-        display: none !important;
-      }
+        .rotate {
+          display: none !important;
 
-      .rotate {
-        display: none !important;
-
-        .md-mediaquery({
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         width: 28px;
@@ -184,12 +189,12 @@
                             .tab-focus();
                         }
                     });
-      }
+        }
 
-      .adjustImage {
-        display: none !important;
+        .adjustImage {
+          display: none !important;
 
-        .md-mediaquery({
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         width: 28px;
@@ -202,12 +207,12 @@
                             .tab-focus();
                         }
                     });
-      }
+        }
 
-      .choiceSwitch {
-        display: none !important;
+        .choiceSwitch {
+          display: none !important;
 
-        .md-mediaquery({
+          .md-mediaquery({
                         display: inline-block !important;
                         cursor: pointer !important;
                         width: 28px;
@@ -220,6 +225,7 @@
                             .tab-focus();
                         }
                     });
+        }
       }
 
       div[title="Previous page"] {
