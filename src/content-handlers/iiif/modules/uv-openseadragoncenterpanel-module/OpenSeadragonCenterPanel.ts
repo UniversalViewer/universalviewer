@@ -69,7 +69,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $adjustImageButton: JQuery;
   $choiceSwitchButton: JQuery;
 
-  // $navigator: JQuery;
+  $navigator: JQuery;
   $imageControlsContainer: JQuery;
 
   constructor($element: JQuery) {
@@ -80,6 +80,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.setConfig("openSeadragonCenterPanel");
 
     super.create();
+
+    // needs to happen here so that the element already exists for OSD to render the nav inside it
+    this.createNavigator();
 
     this.extensionHost.subscribe(
       OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
@@ -98,14 +101,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   createUI(): void {
     this.createImageControls();
 
-    // this.createNavigator();
-    // // OSD Navigator
-    // this.$navigator = $(`<div id="osd-navigator-container"></div>`);
-    // this.$content.append(this.$navigator);
-    // // this.setNavigatorVisible();
-
     // this.createNavButtons();
     // // Prev/next buttons
+  }
+
+  createNavigator(): void {
+    this.$navigator = $('<div id="osd-navigator-container"></div>');
+    // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize
+    this.$element.append(this.$navigator);
+    // this.setNavigatorVisible();
   }
 
   createImageControls(): void {

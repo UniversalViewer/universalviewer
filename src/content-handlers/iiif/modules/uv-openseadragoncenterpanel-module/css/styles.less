@@ -8,19 +8,28 @@
     // allow clicks on interactive elements
     .attribution,
     .subtitle .expand-btn,
-    .imageControlsContainer {
+    .imageControlsContainer,
+    #osd-navigator-container {
       pointer-events: auto;
+    }
+
+    #osd-navigator-container {
+      position: absolute;
+      bottom: 0;
+      right: @panel-margin;
+      z-index: 1;
+      width: 100px;
+      height: 100px;
+      border: 2px solid rgb(85, 85, 85);
+      background: #000;
     }
 
     .content {
       position: relative;
+      margin: 0 @panel-margin;
 
       .displayregion {
         border: 2px solid #fff !important;
-      }
-
-      .navigator.extraMargin {
-        margin: 0 30px 0 0 !important;
       }
 
       .paging.btn {

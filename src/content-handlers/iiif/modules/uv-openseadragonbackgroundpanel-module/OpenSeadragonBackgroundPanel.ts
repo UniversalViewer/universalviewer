@@ -55,7 +55,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   showAdjustImageButton: boolean;
 
   $canvas: JQuery;
-  $navigator: JQuery;
   $nextButton: JQuery;
   $prevButton: JQuery;
   $spinner: JQuery;
@@ -285,8 +284,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       element: this.$viewer[0],
       drawer: "auto",
       crossOriginPolicy: "Anonymous",
-      showNavigationControl: false,
-      showNavigator: true,
       showRotationControl: false,
       showHomeControl: false,
       showZoomControl: false,
@@ -295,13 +292,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition: (this.extension.helper.isContinuous()
-        ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition ||
-          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
-      navigatorHeight: "100px",
-      navigatorWidth: "100px",
-      navigatorMaintainSizeRatio: false,
+      showNavigationControl: false,
+      showNavigator: true,
+      navigatorId: "osd-navigator-container",
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
@@ -397,7 +390,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       return false;
     });
 
-    this.$navigator = this.$viewer.find(".navigator");
     this.setNavigatorVisible();
 
     // events
@@ -433,11 +425,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         }
         // don't hide controls if a dialog overlay (e.g. choice menu) is visible
         if ($(".overlay:visible").length) return;
-        if (!this.$viewer.find(".navigator").ismouseover()) {
-          if (!this.controlsVisible) return;
-          this.controlsVisible = false;
-          this.viewer.setControlsEnabled(false);
-        }
       },
       this.config.options.controlsFadeAfterInactive
     );
@@ -950,8 +937,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     ) {
       this.showPrevButton();
       this.showNextButton();
-
-      $(".navigator").addClass("extraMargin");
 
       const viewingDirection: ViewingDirection =
         this.extension.helper.getViewingDirection() ||
@@ -1661,12 +1646,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     if (this.viewer && this.viewer.navigator) {
       this.viewer.navigator.setVisible(navigatorEnabled);
-
-      if (navigatorEnabled) {
-        this.$navigator.show();
-      } else {
-        this.$navigator.hide();
-      }
     }
   }
 
