@@ -1,3 +1,108 @@
+// Exposed CSS variables
+// --------------------------------------------------
+
+@property --uv-color-canvas {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "black";
+}
+
+@property --uv-color-text {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
+}
+
+@property --uv-color-panel-dark-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
+}
+
+@property --uv-color-panel-dark-color {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#dfdfdf";
+}
+
+@property --uv-color-panel-light-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#dfdfdf";
+}
+
+@property --uv-color-panel-light-color {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
+}
+
+@property --uv-color-panel-border {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#212121";
+}
+
+@property --uv-color-overlay-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
+}
+
+@property --uv-color-overlay-text {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "black";
+}
+
+@property --uv-color-overlay-border {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
+}
+
+@property --uv-color-link-color {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#26b5cc";
+}
+
+@property --uv-color-btn-text {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
+}
+
+@property --uv-color-btn-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
+}
+
+@property --uv-color-btn-border {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#565656";
+}
+
+@property --uv-color-btn-primary-text {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "white";
+}
+
+@property --uv-color-btn-primary-bg {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#10819a";
+}
+
+@property --uv-color-btn-primary-border {
+  syntax: "<color>";
+  inherits: true;
+  initialvalue: "#10819a";
+}
+
 // Global values
 // --------------------------------------------------
 
@@ -32,8 +137,8 @@
 // Scaffolding
 // -------------------------
 
-@body-bg: #000;
-@text-color: #fff;
+@body-bg: var(--uv-color-canvas, #000);
+@text-color: var(--uv-color-text, #fff);
 @text-secondary-color: #000;
 @text-tertiary-color: #949494;
 @headings-color: #000;
@@ -42,8 +147,8 @@
 // Links
 // -------------------------
 
-@link-color: #26b5cc;
-@link-hover-color: lighten(@link-color, 10%);
+@link-color: var(--uv-color-link-color, #26b5cc);
+@link-hover-color: inherit;
 @link-secondary-color: @brand-secondary;
 @link-secondary-hover-color: lighten(@link-secondary-color, 10%);
 
@@ -96,13 +201,13 @@
 
 @btn-font-weight: normal;
 
-@btn-default-color: #fff;
-@btn-default-bg: @gray;
-@btn-default-border: @gray;
+@btn-default-color: var(--uv-color-btn-text, @text-color);
+@btn-default-bg: var(--uv-color-btn-bg, @gray);
+@btn-default-border: var(--uv-color-btn-border, @gray);
 
-@btn-primary-color: #fff;
-@btn-primary-bg: @brand-primary;
-@btn-primary-border: @brand-primary;
+@btn-primary-color: var(--uv-color-btn-primary-text, white);
+@btn-primary-bg: var(--uv-color-btn-primary-bg, @brand-primary);
+@btn-primary-border: var(--uv-color-btn-primary-border, @brand-primary);
 
 @btn-secondary-color: #fff;
 @btn-secondary-bg: @brand-secondary;
@@ -134,9 +239,9 @@
 // Panels
 // -------------------------
 
-@panel-dark-bg: #212121;
-@panel-light-bg: #dfdfdf;
-@panel-border-color: #373737;
+@panel-dark-bg: var(--uv-color-panel-bg, #212121);
+@panel-light-bg: var(--uv-color-panel-bg, #dfdfdf);
+@panel-border-color: var(--uv-color-panel-border, #212121);
 @panel-border: none;
 @panel-margin: 8px;
 
@@ -196,9 +301,11 @@
 // Overlays
 // -------------------------
 
-@overlay-modal-bg: rgba(0, 0, 0, 0.5);
-@overlay-bg: #fff;
+@overlay-bg: var(--uv-color-overlay-bg, white);
+@overlay-color: var(--uv-color-overlay-text, black);
+@overlay-border: var(--uv-color-overlay-border, @gray);
 @overlay-group-bg: #f5f5f5;
+@overlay-modal-bg: rgba(0, 0, 0, 0.5);
 
 // Miscellaneous
 // -------------------------
