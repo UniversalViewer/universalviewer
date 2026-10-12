@@ -36,10 +36,9 @@
       background: #000;
       box-sizing: border-box;
 
-            .displayregion {
+      .displayregion {
         border: 2px solid #fff !important;
       }
-
     }
 
     #osd-navigator-container.continuous {
@@ -62,73 +61,67 @@
 
       .border-radius(0);
 
-    &.prev {
-      background-image: data-uri("../img/left_arrow.png");
-      left: 0;
-      &.disabled {
-        background-image: data-uri("../img/left_arrow_disabled.png");
-      }
-    }
-
-    &.next {
-      background-image: data-uri("../img/right_arrow.png");
-      right: 0;
-      &.disabled {
-        background-image: data-uri("../img/right_arrow_disabled.png");
-      }
-
-      & .uv-icon-next {
-        background-image: none;
-      }
-    }
-
-    &.vertical {
-      height: 30px;
-      width: 90px;
-      background-position: 50% 0;
-      left: 50%;
-      right: auto;
-      margin-left: 0;
-      transform: translateX(-50%);
-    }
-
-    &.prev.vertical {
-      left: 50%;
-      right: auto;
-      top: 0;
-      bottom: auto;
-      background-image: data-uri("../img/up_arrow.png");
-      &.disabled {
-        background-image: data-uri("../img/up_arrow_disabled.png");
-      }
-      &.down {
-        top: auto;
-        bottom: 0;
-        background-image: data-uri("../img/down_arrow.png");
+      &.prev {
+        background-image: data-uri("../img/left_arrow.png");
+        left: 0;
         &.disabled {
-          background-image: data-uri("../img/down_arrow_disabled.png");
+          background-image: data-uri("../img/left_arrow_disabled.png");
         }
       }
-    }
 
-    &.next.vertical {
-      left: 50%;
-      right: auto;
-      top: auto;
-      bottom: 0;
-      background-image: data-uri("../img/down_arrow.png");
-      &.disabled {
-        background-image: data-uri("../img/down_arrow_disabled.png");
+      &.next {
+        background-image: data-uri("../img/right_arrow.png");
+        right: 0;
+        &.disabled {
+          background-image: data-uri("../img/right_arrow_disabled.png");
+        }
+
+        & .uv-icon-next {
+          background-image: none;
+        }
       }
-      &.up {
-        top: 0;
-        bottom: auto;
+
+      &.vertical {
+        height: 30px;
+        width: 90px;
+        background-position: 50% 0;
+        left: 50%;
+        right: auto;
+        margin-left: 0;
+        transform: translateX(-50%);
+      }
+
+      &.prev.vertical {
+        inset: 0 auto auto 50%;
         background-image: data-uri("../img/up_arrow.png");
         &.disabled {
           background-image: data-uri("../img/up_arrow_disabled.png");
         }
+        &.down {
+          top: auto;
+          bottom: 0;
+          background-image: data-uri("../img/down_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/down_arrow_disabled.png");
+          }
+        }
       }
-    }
+
+      &.next.vertical {
+        inset: auto auto 0 50%;
+        background-image: data-uri("../img/down_arrow.png");
+        &.disabled {
+          background-image: data-uri("../img/down_arrow_disabled.png");
+        }
+        &.up {
+          top: 0;
+          bottom: auto;
+          background-image: data-uri("../img/up_arrow.png");
+          &.disabled {
+            background-image: data-uri("../img/up_arrow_disabled.png");
+          }
+        }
+      }
 
       /* fixes out-of-scope iiif-tree and iiif-gallery icons */
       &.prev .uv-icon-prev,
