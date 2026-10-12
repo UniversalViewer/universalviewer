@@ -11,7 +11,6 @@ import {
   Service,
 } from "manifesto.js";
 import { debounce, sanitize } from "../../../../Utils";
-import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
 import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { BackgroundPanel } from "../uv-shared-module/BackgroundPanel";
@@ -45,23 +44,16 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   isFirstLoad: boolean = true;
   items: any[];
   navigatedFromSearch: boolean = false;
-  nextButtonEnabled: boolean = false;
   // pages: IExternalResource[];
-  prevButtonEnabled: boolean = false;
   previousAnnotationRect: AnnotationRect;
   userData: any;
   viewer: any;
   viewerId: string;
-  showAdjustImageButton: boolean;
   navigatorResizeTimeout: number;
 
   $canvas: JQuery;
-  $nextButton: JQuery;
-  $prevButton: JQuery;
   $spinner: JQuery;
   $viewer: JQuery;
-  $viewportNavButtonsContainer: JQuery;
-  $viewportNavButtons: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -889,15 +881,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.viewer.navigator.viewport.fitBounds(homeBounds, true);
     this.viewer.navigator.updateSize();
-
-    console.log("nav resize", {
-      hasNav: !!this.viewer?.navigator,
-      w: $content.width(),
-      h: $content.height(),
-      controlsH: $controls.outerHeight(),
-      aspect: contentAspectRatio,
-      vertical: this.extension.helper.isVerticallyAligned(),
-    });
   }
 
   zoomToInitialAnnotation(): void {
@@ -1380,61 +1363,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       "left",
       this.$element.width() / 2 - this.$spinner.width() / 2
     );
-
-    const viewingDirection: ViewingDirection =
-      this.extension.helper.getViewingDirection() ||
-      ViewingDirection.LEFT_TO_RIGHT;
-
-    if (
-      this.extension.helper.isMultiCanvas() &&
-      this.$prevButton &&
-      this.$nextButton
-    ) {
-      const verticalButtonPos: number = Math.floor(this.$element.width() / 2);
-
-      switch (viewingDirection) {
-        case ViewingDirection.BOTTOM_TO_TOP:
-          this.$prevButton.addClass("down");
-          this.$nextButton.addClass("up");
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$prevButton.css(
-            "top",
-            this.$element.height() - this.$prevButton.height()
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          break;
-        case ViewingDirection.TOP_TO_BOTTOM:
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "top",
-            this.$element.height() - this.$nextButton.height()
-          );
-          break;
-        default:
-          this.$prevButton.css(
-            "top",
-            (this.$element.height() - this.$prevButton.height()) / 2
-          );
-          this.$nextButton.css(
-            "top",
-            (this.$element.height() - this.$nextButton.height()) / 2
-          );
-          break;
-      }
-    }
 
     if (this.extension.helper.isContinuous()) {
       clearTimeout(this.navigatorResizeTimeout);
