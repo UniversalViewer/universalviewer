@@ -107,7 +107,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomInButton.attr("tabindex", 0);
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
-    this.$zoomInButton.addClass("zoomIn imageControlButton");
+    this.$zoomInButton.addClass("zoomIn imageControlButton viewportNavButton");
     this.$zoomInButton.html(`  <svg
     width=30
     height=30
@@ -126,7 +126,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
-    this.$zoomOutButton.addClass("zoomOut imageControlButton");
+    this.$zoomOutButton.addClass("zoomOut imageControlButton viewportNavButton");
     this.$zoomOutButton.html(`<svg
     width=30
     height=30
@@ -147,7 +147,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$goHomeButton.attr("tabindex", 0);
       this.$goHomeButton.attr("title", this.content.goHome);
       this.$goHomeButton.attr("aria-label", this.content.goHome);
-      this.$goHomeButton.addClass("goHome imageControlButton");
+      this.$goHomeButton.addClass("goHome imageControlButton viewportNavButton");
       this.onAccessibleClick(this.$goHomeButton, () => {
         this.extensionHost.publish(OpenSeadragonExtensionEvents.GO_HOME);
       });
@@ -159,7 +159,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
-    this.$rotateButton.addClass("rotate imageControlButton");
+    this.$rotateButton.addClass("rotate imageControlButton viewportNavButton");
     this.$rotateButton.html(`<svg
     width=30
     height=30
@@ -186,7 +186,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$imageControlsContainer.append(this.$adjustImageButton);
       this.$adjustImageButton.attr("title", this.content.adjustImage);
       this.$adjustImageButton.attr("aria-label", this.content.adjustImage);
-      this.$adjustImageButton.addClass("adjustImage imageControlButton");
+      this.$adjustImageButton.addClass("adjustImage imageControlButton viewportNavButton");
       this.$adjustImageButton.attr("tabindex", 0);
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
