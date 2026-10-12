@@ -30,13 +30,11 @@ interface AnnotationOverlayRect extends OpenSeadragon.Rect {
   chars: string;
 }
 export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
-  // todo: add config
+  // JM todo: split out a new BackgroundPanel general config and OpenSeadragonBackgroundPanel config, when other extensions have been split to use background panel
   Config["modules"]["openSeadragonCenterPanel"]
 > {
-  controlsVisible: boolean = false;
   currentAnnotationRect: AnnotationRect;
   currentBounds: XYWHFragment | null;
-  handler: any;
   initialBounds: XYWHFragment | null;
   initialRotation: any;
   isCreated: boolean = false;
@@ -44,9 +42,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   isFirstLoad: boolean = true;
   items: any[];
   navigatedFromSearch: boolean = false;
-  // pages: IExternalResource[];
   previousAnnotationRect: AnnotationRect;
-  userData: any;
   viewer: any;
   viewerId: string;
   navigatorResizeTimeout: number;
@@ -943,6 +939,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateBounds(): void {
+    // JM to do: update this so that the viewer is aware of the visible viewport (the dimensions of the OSD center panel now overlayed above) and centers within that
     const settings: ISettings = this.extension.getSettings();
 
     // if this is the first load and there are initial bounds, fit to those.

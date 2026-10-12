@@ -1,68 +1,30 @@
 const $ = require("jquery");
-// import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
 import {
   Bools,
-  // Dimensions
 } from "../../Utils";
-// import {
-//   Canvas,
-//   IExternalResource,
-//   IExternalImageResourceData,
-//   IExternalResourceData,
-//   Annotation,
-//   AnnotationBody,
-//   Service,
-// } from "manifesto.js";
 import {
-  // debounce,
   sanitize,
 } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
-// import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-// import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
-// import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
-// import OpenSeadragon from "openseadragon";
-// import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
-// import "@openseadragon-imaging/openseadragon-viewerinputhook";
-// import { MediaType } from "@iiif/vocabulary/dist-commonjs";
-// import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
   controlsVisible: boolean = false;
-  // currentAnnotationRect: AnnotationRect;
-  // currentBounds: XYWHFragment | null;
-  // handler: any;
-  // initialBounds: XYWHFragment | null;
-  // initialRotation: any;
   isCreated: boolean = false;
-  // isLoaded: boolean = false;
-  // isFirstLoad: boolean = true;
-  // items: any[];
-  // navigatedFromSearch: boolean = false;
   nextButtonEnabled: boolean = false;
-  // // pages: IExternalResource[];
   prevButtonEnabled: boolean = false;
-  // previousAnnotationRect: AnnotationRect;
-  // userData: any;
-  // viewer: any;
-  // viewerId: string;
   showAdjustImageButton: boolean;
   showHomeButton: boolean;
 
-  // $canvas: JQuery;
   $goHomeButton: JQuery;
   $nextButton: JQuery;
   $prevButton: JQuery;
   $rotateButton: JQuery;
-  // $viewer: JQuery;
-  // $viewportNavButtonsContainer: JQuery;
-  // $viewportNavButtons: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
@@ -110,7 +72,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
   createNavigator(): void {
     this.$navigator = $('<div id="osd-navigator-container"></div>');
-    // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize
+    // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize on panels opening
     this.$element.append(this.$navigator);
     this.setNavigatorVisible();
   }
@@ -391,6 +353,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       }
     });
 
+    // JM to do as part of the button visibility PR
     // // When Prev/Next buttons are focused, make sure the controls are enabled
     // this.$prevButton.add(this.$nextButton).on("focus", () => {
     //   if (this.controlsVisible) return;
