@@ -73,7 +73,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   createNavigator(): void {
     this.$navigator = $('<div id="osd-navigator-container"></div>');
     // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize on panels opening
-    this.$element.append(this.$navigator);
+    this.$content.append(this.$navigator);
     this.setNavigatorVisible();
   }
 
@@ -304,14 +304,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         .attr("aria-label", this.content.nextImage);
     }
 
-    this.$element.append(this.$prevButton);
-    this.$element.append(this.$nextButton);
+    this.$content.append(this.$prevButton);
+    this.$content.append(this.$nextButton);
 
     switch (viewingDirection) {
-      case ViewingDirection.BOTTOM_TO_TOP:
       case ViewingDirection.TOP_TO_BOTTOM:
         this.$prevButton.addClass("vertical");
         this.$nextButton.addClass("vertical");
+        break;
+      case ViewingDirection.BOTTOM_TO_TOP:
+        this.$prevButton.addClass("vertical down");
+        this.$nextButton.addClass("vertical up");
         break;
     }
 
@@ -474,61 +477,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       this.$title.addClass("rtl");
     } else {
       this.$title.removeClass("rtl");
-    }
-
-    if (
-      this.extension.helper.isMultiCanvas() &&
-      this.$prevButton &&
-      this.$nextButton
-    ) {
-      const verticalButtonPos: number = Math.floor(this.$element.width() / 2);
-
-      const viewingDirection: ViewingDirection =
-        this.extension.helper.getViewingDirection() ||
-        ViewingDirection.LEFT_TO_RIGHT;
-
-      switch (viewingDirection) {
-        case ViewingDirection.BOTTOM_TO_TOP:
-          this.$prevButton.addClass("down");
-          this.$nextButton.addClass("up");
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$prevButton.css(
-            "top",
-            this.$element.height() - this.$prevButton.height()
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          break;
-        case ViewingDirection.TOP_TO_BOTTOM:
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "top",
-            this.$element.height() - this.$nextButton.height()
-          );
-          break;
-        default:
-          this.$prevButton.css(
-            "top",
-            (this.$element.height() - this.$prevButton.height()) / 2
-          );
-          this.$nextButton.css(
-            "top",
-            (this.$element.height() - this.$nextButton.height()) / 2
-          );
-          break;
-      }
     }
   }
 }
