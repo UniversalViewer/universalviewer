@@ -822,13 +822,15 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   private resizeNavigatorForContinuous(): void {
     if (!this.viewer || !this.viewer.navigator) return;
 
-    // this all still feels pretty hacky, but continues the basic principle of how it was done before.
+    // this all still feels pretty fragile, but continues how it was done before the panel restructure.
     // the positioning and size of the nav for continuous scrolls needs its own treatment, so that's for another PR.
     // For such manifests, the nav should be a full width/height panel that sits within the grid system alongside left/right/center/background panels
     const navigatorElement = this.viewer.navigator.element as HTMLElement;
-    const $centerPanel = $(navigatorElement).parent().parent();
-    const $content = $centerPanel.find(".content");
-    const $controls = $centerPanel.find(".imageControlsContainer");
+    const $content = $(navigatorElement).parent().parent();
+    const $controls = $content.find(".imageControlsContainer");
+
+        console.log(navigatorElement)
+
 
     const homeBounds = this.viewer.world.getHomeBounds();
     const contentAspectRatio = homeBounds.width / homeBounds.height;
