@@ -6,14 +6,12 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-// import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension"
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
   autoHideControls: boolean;
   controlsFadeTimeout: number;
-  controlsVisible: boolean = false;
   isCreated: boolean = false;
   nextButtonEnabled: boolean = false;
   prevButtonEnabled: boolean = false;
