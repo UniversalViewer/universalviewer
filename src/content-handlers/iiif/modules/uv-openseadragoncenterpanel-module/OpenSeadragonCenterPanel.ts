@@ -457,7 +457,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   setupControlsFade(): void {
-    this.autoHideControls = Bools.getBool(this.config.options.autoHideControls, true);
+    this.autoHideControls = Bools.getBool(
+      this.config.options.autoHideControls,
+      true
+    );
     if (!this.autoHideControls) return;
 
     // select the element to detect interaction activity on
