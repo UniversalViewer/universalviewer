@@ -6,10 +6,13 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+// import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension"
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
+  autoHideControls: boolean;
+  controlsFadeTimeout: number;
   controlsVisible: boolean = false;
   isCreated: boolean = false;
   nextButtonEnabled: boolean = false;
@@ -64,6 +67,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.createNavigationButtons();
     this.hidePrevButton();
     this.hideNextButton();
+    this.setupControlsFade();
   }
 
   createNavigator(): void {
@@ -357,20 +361,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           break;
       }
     });
-
-    // JM to do as part of the button visibility PR
-    // // When Prev/Next buttons are focused, make sure the controls are enabled
-    // this.$prevButton.add(this.$nextButton).on("focus", () => {
-    //   if (this.controlsVisible) return;
-    //   this.controlsVisible = true;
-    //   this.viewer.setControlsEnabled(true);
-    // });
-
-    // this.$prevButton.add(this.$nextButton).on("blur", () => {
-    //   if (!this.controlsVisible) return;
-    //   this.controlsVisible = false;
-    //   this.viewer.setControlsEnabled(false);
-    // });
   }
 
   openPagesHandler(): void {
@@ -466,6 +456,46 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   showNextButton(): void {
     this.enableNextButton();
     this.$nextButton.show();
+  }
+
+  setupControlsFade(): void {
+    this.autoHideControls = Bools.getBool(this.config.options.autoHideControls, true);
+    if (!this.autoHideControls) return;
+
+    // select the element to detect interaction activity on
+    const $activeArea = this.$element.parent();
+
+    // pointer events also cover touch; focusin covers keyboard
+    $activeArea.on("pointermove pointerdown", () => this.showControls());
+
+    this.showControls();
+  }
+
+  showControls(): void {
+    clearTimeout(this.controlsFadeTimeout);
+    this.$element
+      .css("--fade-length", `${this.getControlsFadeLength()}ms`)
+      .removeClass("fade-out");
+
+    this.controlsFadeTimeout = window.setTimeout(
+      () => this.hideControls(),
+      this.config.options.controlsFadeAfterInactive
+    );
+  }
+
+  hideControls(): void {
+    // hovered or focused content keeps the controls visible
+    if (this.$element[0].matches(":hover, :focus-within")) {
+      this.showControls();
+      return;
+    }
+    this.$element.addClass("fade-out");
+  }
+
+  getControlsFadeLength(): number {
+    return (<ISettings>this.extension.getSettings()).reducedAnimation
+      ? 0
+      : this.config.options.controlsFadeLength || 250;
   }
 
   resize(): void {
