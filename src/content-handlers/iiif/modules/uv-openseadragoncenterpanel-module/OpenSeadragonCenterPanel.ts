@@ -468,6 +468,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     // pointer events also cover touch; focusin covers keyboard
     $activeArea.on("pointermove pointerdown", () => this.showControls());
 
+    // stay visible when using keyboard to navigate
+    this.$element.on("focusin", () => this.showControls());
+
     this.showControls();
   }
 
@@ -484,8 +487,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   hideControls(): void {
-    // hovered or focused content keeps the controls visible
-    if (this.$element[0].matches(":hover, :focus-within")) {
+    const el = this.$element[0];
+
+    // hovered or keyboard-focused content keeps the controls visible
+    if (el.matches(":hover") || el.querySelector(":focus-visible")) {
       this.showControls();
       return;
     }
