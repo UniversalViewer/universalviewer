@@ -1,10 +1,6 @@
 const $ = require("jquery");
-import {
-  Bools,
-} from "../../Utils";
-import {
-  sanitize,
-} from "../../../../Utils";
+import { Bools } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
