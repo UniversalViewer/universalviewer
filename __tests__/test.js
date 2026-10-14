@@ -1,6 +1,6 @@
 test.skip("Configuration options", () => {});
 
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Cookbook manifest for viewer control tests
@@ -89,6 +89,7 @@ describe("Universal Viewer", () => {
   };
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.goto(BASE_URL);
