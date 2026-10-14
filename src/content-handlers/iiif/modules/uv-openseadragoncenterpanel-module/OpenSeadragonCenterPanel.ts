@@ -480,7 +480,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.controlsFadeTimeout = window.setTimeout(
       () => this.hideControls(),
-      this.config.options.controlsFadeAfterInactive
+      this.config.options.controlsFadeAfterInactive || 3000
     );
   }
 
