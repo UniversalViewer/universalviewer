@@ -752,8 +752,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const $content = $(navigatorElement).parent().parent();
     const $controls = $content.find(".imageControlsContainer");
 
-    console.log(navigatorElement);
-
     const homeBounds = this.viewer.world.getHomeBounds();
     const contentAspectRatio = homeBounds.width / homeBounds.height;
 
