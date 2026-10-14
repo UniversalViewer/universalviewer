@@ -892,7 +892,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   goHome(): void {
-    this.viewer.viewport.goHome(true);
+    this.viewer.viewport.goHome(false);
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
