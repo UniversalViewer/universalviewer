@@ -12,7 +12,7 @@ export class ChoiceSwitchDialogue extends BaseChoiceSwitchDialogue {
     const isTwoUp = indices.length > 1;
 
     // we can use the OSD world as the source of the current view state
-    const world = extension.centerPanel.viewer.world;
+    const world = extension.backgroundPanel.viewer.world;
 
     indices.forEach((canvasIndex) => {
       const canvas = extension.helper.getCanvasByIndex(canvasIndex);

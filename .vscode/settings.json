@@ -29,5 +29,8 @@
     "typescriptreact",
     "javascript",
     "javascriptreact"
-  ]
+  ],
+  "[less]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  }
 }

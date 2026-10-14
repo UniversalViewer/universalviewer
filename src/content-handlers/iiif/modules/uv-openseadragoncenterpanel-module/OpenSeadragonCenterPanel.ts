@@ -1,73 +1,34 @@
 const $ = require("jquery");
-import { AnnotationGroup, AnnotationRect } from "@iiif/manifold";
-import { Async, Bools, Dimensions } from "../../Utils";
-import {
-  Canvas,
-  IExternalResource,
-  IExternalImageResourceData,
-  IExternalResourceData,
-  Annotation,
-  AnnotationBody,
-  Service,
-} from "manifesto.js";
-import { debounce, sanitize } from "../../../../Utils";
+import { Bools } from "../../Utils";
+import { sanitize } from "../../../../Utils";
 import { ViewingDirection } from "@iiif/vocabulary";
 import { IIIFEvents } from "../../IIIFEvents";
-import { XYWHFragment } from "../uv-shared-module/XYWHFragment";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { CroppedImageDimensions } from "../../extensions/uv-openseadragon-extension/CroppedImageDimensions";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
-import { IOpenSeadragonExtensionData } from "../../extensions/uv-openseadragon-extension/IOpenSeadragonExtensionData";
-import OpenSeadragon from "openseadragon";
-import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
-import "@openseadragon-imaging/openseadragon-viewerinputhook";
-import { MediaType } from "@iiif/vocabulary/dist-commonjs";
-import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-
-interface AnnotationOverlayRect extends OpenSeadragon.Rect {
-  canvasIndex: number;
-  resultIndex: number;
-  chars: string;
-}
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
-  controlsVisible: boolean = false;
-  currentAnnotationRect: AnnotationRect;
-  currentBounds: XYWHFragment | null;
-  handler: any;
-  initialBounds: XYWHFragment | null;
-  initialRotation: any;
+  autoHideControls: boolean;
+  controlsFadeTimeout: number;
   isCreated: boolean = false;
-  isLoaded: boolean = false;
-  isFirstLoad: boolean = true;
-  items: any[];
-  navigatedFromSearch: boolean = false;
   nextButtonEnabled: boolean = false;
-  // pages: IExternalResource[];
   prevButtonEnabled: boolean = false;
-  previousAnnotationRect: AnnotationRect;
-  userData: any;
-  viewer: any;
-  viewerId: string;
   showAdjustImageButton: boolean;
+  showHomeButton: boolean;
 
-  $canvas: JQuery;
   $goHomeButton: JQuery;
-  $navigator: JQuery;
   $nextButton: JQuery;
   $prevButton: JQuery;
   $rotateButton: JQuery;
-  $spinner: JQuery;
-  $viewer: JQuery;
-  $viewportNavButtonsContainer: JQuery;
-  $viewportNavButtons: JQuery;
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
   $choiceSwitchButton: JQuery;
+
+  $navigator: JQuery;
+  $imageControlsContainer: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -78,597 +39,237 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     super.create();
 
-    this.viewerId = "osd" + new Date().getTime();
-    this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
-    this.$content.prepend(this.$viewer);
-
-    this.extensionHost.subscribe(IIIFEvents.ANNOTATIONS, (args: any) => {
-      this.overlayAnnotations();
-    });
+    // needs to happen here so that the element already exists for OSD to render the nav inside it
+    this.createNavigator();
 
     this.extensionHost.subscribe(
-      IIIFEvents.SETTINGS_CHANGE,
-      (args: ISettings) => {
-        this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
-        this.viewer.controlsFadeLength = this.getControlsFadeLength();
-      }
-    );
-
-    this.extensionHost.subscribe(
-      IIIFEvents.OPEN_EXTERNAL_RESOURCE,
-      (resources: IExternalResource[]) => {
-        this.whenResized(async () => {
-          if (!this.isCreated) {
-            // uv may have reloaded
-            this.createUI();
-          }
-          this.isLoaded = false;
-          await this.openMedia(resources);
-          this.isLoaded = true;
-          this.extensionHost.publish(Events.EXTERNAL_RESOURCE_OPENED);
-          this.extensionHost.publish(Events.LOAD);
-        });
-      }
-    );
-
-    this.extensionHost.subscribe(IIIFEvents.CLEAR_ANNOTATIONS, () => {
-      this.whenCreated(() => {
-        (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
-        this.clearAnnotations();
-      });
-    });
-
-    this.extensionHost.subscribe(
-      OpenSeadragonExtensionEvents.NEXT_SEARCH_RESULT,
+      OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN,
       () => {
-        this.whenCreated(() => {
-          this.nextAnnotation();
-        });
+        this.openPagesHandler();
       }
     );
-
-    this.extensionHost.subscribe(
-      OpenSeadragonExtensionEvents.PREV_SEARCH_RESULT,
-      () => {
-        this.whenCreated(() => {
-          this.prevAnnotation();
-        });
-      }
-    );
-
-    this.extensionHost.subscribe(OpenSeadragonExtensionEvents.ZOOM_IN, () => {
-      this.whenCreated(() => {
-        this.zoomIn();
-      });
-    });
-
-    this.extensionHost.subscribe(OpenSeadragonExtensionEvents.ZOOM_OUT, () => {
-      this.whenCreated(() => {
-        this.zoomOut();
-      });
-    });
-
-    this.extensionHost.subscribe(OpenSeadragonExtensionEvents.ROTATE, () => {
-      this.whenCreated(() => {
-        this.rotateRight();
-      });
-    });
 
     this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
-      this.whenCreated(() => {
-        this.updateResponsiveView();
-      });
+      this.setNavigatorVisible();
     });
 
-    this.extensionHost.subscribe(
-      IIIFEvents.SET_TARGET,
-      (target: XYWHFragment) => {
-        this.whenLoaded(() => {
-          this.fitToBounds(target, false);
-        });
-      }
-    );
+    this.extensionHost.subscribe(IIIFEvents.SETTINGS_CHANGE, () => {
+      this.setNavigatorVisible();
+    });
 
-    this.extensionHost.subscribe(
-      IIIFEvents.SET_ROTATION,
-      (rotation: number) => {
-        this.whenLoaded(() => {
-          this.viewer.viewport.setRotation(rotation);
-        });
-      }
-    );
-
-    this.extensionHost.subscribe(
-      OpenSeadragonExtensionEvents.CHOICE_CHANGE,
-      ({
-        canvasId,
-        choiceIndex,
-      }: {
-        canvasId: string;
-        choiceIndex: number;
-      }) => {
-        this.whenCreated(() => {
-          const world = this.viewer.world;
-          const indices = this.extension.getPagedIndices();
-
-          let worldIndex = 0;
-          indices.forEach((index) => {
-            const canvas = this.extension.helper.getCanvasByIndex(index);
-            const numChoices = canvas.getChoices().length;
-
-            // need to count a canvas with "zero" choices as 1
-            const worldItemCount = numChoices === 0 ? 1 : numChoices;
-
-            if (canvas.id === canvasId) {
-              for (let c = 0; c < numChoices; c++) {
-                const item = world.getItemAt(worldIndex);
-                if (item) {
-                  item.setOpacity(c === choiceIndex ? 1 : 0);
-                }
-                worldIndex++;
-              }
-            } else {
-              worldIndex += worldItemCount;
-            }
-          });
-        });
-      }
-    );
+    this.createUI();
   }
 
-  whenCreated(cb: () => void): void {
-    Async.waitFor(() => {
-      return this.isCreated;
-    }, cb);
+  createUI(): void {
+    this.createImageControls();
+    this.createNavigationButtons();
+    this.hidePrevButton();
+    this.hideNextButton();
+    this.setupControlsFade();
   }
 
-  whenLoaded(cb: () => void): void {
-    Async.waitFor(() => {
-      return this.isLoaded;
-    }, cb);
-  }
-
-  zoomIn(): void {
-    this.viewer.viewport.zoomTo(this.viewer.viewport.getZoom(true) * 2);
-  }
-
-  zoomOut(): void {
-    this.viewer.viewport.zoomTo(this.viewer.viewport.getZoom(true) * 0.5);
-  }
-
-  rotateRight(): void {
-    const current = this.viewer.viewport.getRotation();
-    const next = (current + 90) % 360;
-    this.viewer.viewport.setRotation(next);
-  }
-
-  updateResponsiveView(): void {
+  createNavigator(): void {
+    this.$navigator = $('<div id="osd-navigator-container"></div>');
+    // navigator needs to be appended to the .centerPanel, not .content, so it moves with the grid resize on panels opening
+    this.$content.append(this.$navigator);
     this.setNavigatorVisible();
-    this.viewer.autoHideControls = this.extension.isDesktopMetric();
-
-    const enableAutoHide = (event: JQuery.FocusOutEvent) => {
-      this.viewer.autoHideControls = true;
-    };
-
-    const disableAutoHide = () => {
-      this.viewer.autoHideControls = false;
-    };
-
-    const buttons = [
-      this.$zoomInButton,
-      this.$zoomOutButton,
-      this.$goHomeButton,
-      this.$rotateButton,
-      this.$adjustImageButton,
-    ];
-
-    buttons.forEach((button) => {
-      button.on("focus", disableAutoHide);
-      button.on("focusout", enableAutoHide);
-    });
   }
 
-  async createUI(): Promise<void> {
-    this.$spinner = $('<div class="spinner"></div>');
-    this.$content.append(this.$spinner);
+  setNavigatorVisible(): void {
+    const enabled: boolean =
+      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
+      this.extension.isDesktopMetric();
 
+    this.$navigator.toggle(enabled);
+
+    this.$navigator.toggleClass(
+      "continuous",
+      this.extension.helper.isContinuous()
+    );
+  }
+
+  createImageControls(): void {
     this.showAdjustImageButton = Bools.getBool(
       this.config.options.showAdjustImageControl,
       false
     );
 
-    // Transparent pixel
-    const pixel =
-      "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    this.showHomeButton = Bools.getBool(
+      this.config.options.showHomeControl,
+      false
+    );
 
-    this.viewer = OpenSeadragon({
-      // id: this.viewerId,
-      element: this.$viewer[0],
-      drawer: "auto",
-      crossOriginPolicy: "Anonymous",
-      showNavigationControl: true,
-      showNavigator: true,
-      showRotationControl: true,
-      showHomeControl: Bools.getBool(
-        this.config.options.showHomeControl,
-        false
-      ),
-      showFullPageControl: false,
-      defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
-      maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
-      controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-      controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition: (this.extension.helper.isContinuous()
-        ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition ||
-          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
-      navigatorHeight: "100px",
-      navigatorWidth: "100px",
-      navigatorMaintainSizeRatio: false,
-      animationTime: this.config.options.animationTime || 1.2,
-      visibilityRatio: this.config.options.visibilityRatio || 0.5,
-      constrainDuringPan: Bools.getBool(
-        this.config.options.constrainDuringPan,
-        false
-      ),
-      immediateRender: Bools.getBool(
-        this.config.options.immediateRender,
-        false
-      ),
-      blendTime: this.config.options.blendTime || 0,
-      autoHideControls: Bools.getBool(
-        this.config.options.autoHideControls,
-        true
-      ),
-      prefixUrl: "",
-      gestureSettingsMouse: {
-        clickToZoom: Bools.getBool(
-          this.extension.data.config!.options.clickToZoomEnabled,
-          true
-        ),
-      },
-      navImages: {
-        zoomIn: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        zoomOut: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        home: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        rotateright: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        rotateleft: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        next: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        previous: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        fullpage: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-        flip: {
-          REST: pixel,
-          GROUP: pixel,
-          HOVER: pixel,
-          DOWN: pixel,
-        },
-      },
-      // The max number of milliseconds that an image job may take to complete.
-      timeout: this.config.options.tileTimeout || 30_000,
-    });
+    this.$imageControlsContainer = $(
+      '<div class="imageControlsContainer"></div>'
+    );
+    this.$content.prepend(this.$imageControlsContainer);
 
-    const that = this;
-
-    const debouncedDoubleClick = debounce((e: any) => {
-      const canvas: Canvas = that.extension.helper.getCurrentCanvas();
-      var viewportPoint = that.viewer.viewport.pointFromPixel(e.position);
-      var imagePoint = that.viewer.viewport.viewportToImageCoordinates(
-        viewportPoint.x,
-        viewportPoint.y
-      );
-      this.extensionHost.publish(OpenSeadragonExtensionEvents.DOUBLECLICK, {
-        target: `${canvas.id}#xywh=${Math.round(imagePoint.x)},${Math.round(
-          imagePoint.y
-        )},1,1`,
-      });
-    }, 100);
-
-    this.viewer.addViewerInputHook({
-      hooks: [
-        {
-          tracker: "viewer",
-          handler: "dblClickHandler",
-          hookHandler: (e) => {
-            const settings: ISettings = this.extension.getSettings();
-            const pagingAvailable: boolean =
-              this.extension.helper.isPagingAvailable();
-            if (
-              (pagingAvailable && !settings.pagingEnabled) ||
-              !pagingAvailable
-            ) {
-              if (this.config.options.doubleClickAnnotationEnabled) {
-                debouncedDoubleClick(e);
-              }
-            }
-          },
-        },
-      ],
-    });
-
-    const $oldZoomIn = this.$viewer.find('div[title="Zoom in"]');
-    this.$zoomInButton = $("<button />").append($oldZoomIn.contents());
-    this.$zoomInButton.insertAfter($oldZoomIn);
-    $oldZoomIn.remove();
+    this.$zoomInButton = $("<button />");
+    this.$imageControlsContainer.append(this.$zoomInButton);
     this.$zoomInButton.attr("tabindex", 0);
     this.$zoomInButton.attr("title", this.content.zoomIn);
     this.$zoomInButton.attr("aria-label", this.content.zoomIn);
-    this.$zoomInButton.addClass("zoomIn viewportNavButton");
-
+    this.$zoomInButton.addClass("zoomIn imageControlButton viewportNavButton");
+    this.$zoomInButton.html(`  <svg
+    width=30
+    height=30
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  >
+    <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
+  </svg>`);
     this.onAccessibleClick(this.$zoomInButton, () => {
-      if (this.viewer.viewport.getZoom() < this.viewer.viewport.getMaxZoom())
-        this.zoomIn();
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_IN);
     });
 
-    const $oldZoomOut = this.$viewer.find('div[title="Zoom out"]');
-    this.$zoomOutButton = $("<button />").append($oldZoomOut.contents());
-    this.$zoomOutButton.insertAfter($oldZoomOut);
-    $oldZoomIn.remove();
+    this.$zoomOutButton = $("<button />");
+    this.$imageControlsContainer.append(this.$zoomOutButton);
     this.$zoomOutButton.attr("tabindex", 0);
     this.$zoomOutButton.attr("title", this.content.zoomOut);
     this.$zoomOutButton.attr("aria-label", this.content.zoomOut);
-    this.$zoomOutButton.addClass("zoomOut viewportNavButton");
-
+    this.$zoomOutButton.addClass(
+      "zoomOut imageControlButton viewportNavButton"
+    );
+    this.$zoomOutButton.html(`<svg
+    width=30
+    height=30
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  >
+    <rect x="8" y="14" width="14" height="2" />
+</svg>
+`);
     this.onAccessibleClick(this.$zoomOutButton, () => {
-      if (this.viewer.viewport.getZoom() > this.viewer.viewport.getMinZoom())
-        this.zoomOut();
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_OUT);
     });
 
-    const $oldGoHome = this.$viewer.find('div[title="Go home"]');
-    this.$goHomeButton = $("<button />").append($oldGoHome.contents());
-    this.$goHomeButton.insertAfter($oldGoHome);
-    $oldGoHome.remove();
-    this.$goHomeButton.attr("tabindex", 0);
-    this.$goHomeButton.attr("title", this.content.goHome);
-    this.$goHomeButton.attr("aria-label", this.content.goHome);
-    this.$goHomeButton.addClass("goHome viewportNavButton");
+    if (this.showHomeButton) {
+      this.$goHomeButton = $("<button />");
+      this.$imageControlsContainer.append(this.$goHomeButton);
+      this.$goHomeButton.attr("tabindex", 0);
+      this.$goHomeButton.attr("title", this.content.goHome);
+      this.$goHomeButton.attr("aria-label", this.content.goHome);
+      this.$goHomeButton.addClass(
+        "goHome imageControlButton viewportNavButton"
+      );
+      this.onAccessibleClick(this.$goHomeButton, () => {
+        this.extensionHost.publish(OpenSeadragonExtensionEvents.GO_HOME);
+      });
+      // todo: add goHome SVG and remove icon as background image from styles.less
+    }
 
-    this.onAccessibleClick(this.$goHomeButton, () => {
-      this.goHome();
-    });
-
-    const $oldRotate = this.$viewer.find('div[title="Rotate right"]');
-    this.$rotateButton = $("<button />").append($oldRotate.contents());
-    this.$rotateButton.insertAfter($oldRotate);
-    $oldRotate.remove();
+    this.$rotateButton = $("<button />");
+    this.$imageControlsContainer.append(this.$rotateButton);
     this.$rotateButton.attr("tabindex", 0);
     this.$rotateButton.attr("title", this.content.rotateRight);
     this.$rotateButton.attr("aria-label", this.content.rotateRight);
-    this.$rotateButton.addClass("rotate viewportNavButton");
+    this.$rotateButton.addClass("rotate imageControlButton viewportNavButton");
+    this.$rotateButton.html(`<svg
+    width=30
+    height=30
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-2.1,0-3.9-0.7-5.3-2.2S7.5,17.1,7.5,15s0.7-3.9,2.2-5.3s3.2-2.2,5.3-2.2
+		c1.1,0,2.1,0.2,3.1,0.7s1.8,1.1,2.5,1.9V7.5h1.9v6.6h-6.6v-1.9h3.9c-0.5-0.9-1.2-1.6-2.1-2.1C17,9.6,16,9.4,15,9.4
+		c-1.6,0-2.9,0.5-4,1.6s-1.6,2.4-1.6,4s0.5,2.9,1.6,4s2.4,1.6,4,1.6c1.2,0,2.3-0.3,3.3-1s1.6-1.6,2-2.7h2c-0.4,1.7-1.3,3-2.7,4.1
+		S16.7,22.5,15,22.5z"
+      />
+    </g>
+  </svg>`);
 
     this.onAccessibleClick(this.$rotateButton, () => {
-      this.rotateRight();
+      this.extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE);
     });
 
     if (this.showAdjustImageButton) {
-      this.$adjustImageButton = this.$rotateButton.clone();
+      this.$adjustImageButton = $("<button />");
+      this.$imageControlsContainer.append(this.$adjustImageButton);
       this.$adjustImageButton.attr("title", this.content.adjustImage);
       this.$adjustImageButton.attr("aria-label", this.content.adjustImage);
-      this.$adjustImageButton.switchClass("rotate", "adjustImage");
+      this.$adjustImageButton.addClass(
+        "adjustImage imageControlButton viewportNavButton"
+      );
       this.$adjustImageButton.attr("tabindex", 0);
       this.$adjustImageButton.onPressed(() => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
-      this.$adjustImageButton.insertAfter(this.$rotateButton);
-
+      this.$adjustImageButton.html(`  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <g>
+      <path
+        d="M15,22.5c-1,0-2-0.2-2.9-0.6c-0.9-0.4-1.7-0.9-2.4-1.6c-0.7-0.7-1.2-1.5-1.6-2.4
+		C7.7,17,7.5,16,7.5,15s0.2-2,0.6-2.9S9,10.4,9.7,9.7c0.7-0.7,1.5-1.2,2.4-1.6C13,7.7,14,7.5,15,7.5s2,0.2,2.9,0.6s1.7,0.9,2.4,1.6
+		c0.7,0.7,1.2,1.5,1.6,2.4c0.4,0.9,0.6,1.9,0.6,2.9s-0.2,2-0.6,2.9c-0.4,0.9-0.9,1.7-1.6,2.4c-0.7,0.7-1.5,1.2-2.4,1.6
+		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
+      />
+    </g>
+  </svg>`);
       this.onAccessibleClick(this.$adjustImageButton, () => {
         this.extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE);
       });
     }
 
-    this.$zoomInButton
-      .add(this.$zoomOutButton)
-      .add(this.$goHomeButton)
-      .add(this.$rotateButton)
-      .add(this.$adjustImageButton)
-      .on("focus", () => {
-        if (this.controlsVisible) return;
-        this.controlsVisible = true;
-        this.viewer.setControlsEnabled(true);
-      });
-
-    this.$zoomInButton.add(this.$adjustImageButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
-    });
-
-    this.$viewportNavButtonsContainer = this.$viewer.find(
-      ".openseadragon-container > div:not(.openseadragon-canvas):first"
-    );
-
-    //this.$viewportNavButtonsContainer.addClass("viewportControls");
-
-    this.$viewportNavButtons =
-      this.$viewportNavButtonsContainer.find(".viewportNavButton");
-
-    this.$canvas = $(this.viewer.canvas);
-    this.$canvas.attr("role", "application");
-    this.$canvas.attr("aria-label", this.content.mediaViewer);
-
-    // Check if we have saved settings for image adjustment
-    const settings = this.extension.getSettings();
-    if (
-      this.extension.data.config?.options.saveUserSettings &&
-      settings.rememberSettings
-    ) {
-      const contrastPercent = settings.contrastPercent;
-      const brightnessPercent = settings.brightnessPercent;
-      const saturationPercent = settings.saturationPercent;
-      (<HTMLCanvasElement>this.$canvas[0].children[0]).style.filter =
-        `contrast(${contrastPercent}%) brightness(${brightnessPercent}%) saturate(${saturationPercent}%)`;
-    }
-
-    // disable right click on canvas
-    this.$canvas.on("contextmenu", () => {
-      return false;
-    });
-
-    this.$navigator = this.$viewer.find(".navigator");
-    this.setNavigatorVisible();
-
-    // events
-
-    this.$element.on("mousemove", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
-    });
-
-    this.$element.on("mouseleave", () => {
-      if (!this.controlsVisible) return;
-
-      // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-      if ($(".overlay:visible").length) return;
-
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
-    });
-
-    // when mouse move stopped
-    this.$element.on(
-      //@ts-ignore
-      "mousemove",
-      () => {
-        // if over element, hide controls.
-        // When over prev/next buttons keep controls enabled
-        if (this.$prevButton.ismouseover()) {
-          return;
-        }
-        if (this.$nextButton.ismouseover()) {
-          return;
-        }
-        // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-        if ($(".overlay:visible").length) return;
-        if (!this.$viewer.find(".navigator").ismouseover()) {
-          if (!this.controlsVisible) return;
-          this.controlsVisible = false;
-          this.viewer.setControlsEnabled(false);
-        }
-      },
-      this.config.options.controlsFadeAfterInactive
-    );
-
-    //this.viewer.addHandler("open-failed", () => {
-    //});
-
-    this.viewer.addHandler("resize", (viewer: any) => {
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.OPENSEADRAGON_RESIZE,
-        viewer
-      );
-      this.viewerResize(viewer);
-    });
-
-    this.viewer.addHandler("animation-start", (viewer: any) => {
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION_START,
-        viewer
-      );
-    });
-
-    this.viewer.addHandler("animation", (viewer: any) => {
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION,
-        viewer
-      );
-    });
-
-    this.viewer.addHandler("animation-finish", (viewer: any) => {
-      this.currentBounds = this.getViewportBounds();
-
-      this.updateVisibleAnnotationRects();
-
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.OPENSEADRAGON_ANIMATION_FINISH,
-        viewer
-      );
-    });
-
-    this.viewer.addHandler("rotate", (args: any) => {
-      // console.log("rotate");
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.OPENSEADRAGON_ROTATION,
-        args.degrees
-      );
-    });
-
-    this.title = this.extension.helper.getLabel();
-
-    this.createNavigationButtons();
-    this.hidePrevButton();
-    this.hideNextButton();
-
     this.createChoiceSwitch();
+  }
 
-    this.isCreated = true;
-    //this.resize();
-
-    // check if initial interaction is keyboard navigation or mouse
-    // this prevents blue focus border from appearing on first mouse interaction
-    document.addEventListener(
-      "keydown",
-      (e: KeyboardEvent) => {
-        if (e.key === "Tab") {
-          this.$canvas?.addClass("keyboard-nav");
-        }
-      },
-      { capture: true }
+  createChoiceSwitch(): void {
+    this.$choiceSwitchButton = this.$rotateButton.clone();
+    this.$choiceSwitchButton.attr("aria-label", this.content.layers);
+    this.$choiceSwitchButton.attr("title", this.content.layers);
+    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
+    this.$choiceSwitchButton.attr("tabindex", 0);
+    this.$choiceSwitchButton.css("visibility", "hidden");
+    // this svg is a hacky transformation of the google icons svg - will need to make a proper one when we add the svg icon library
+    this.$choiceSwitchButton.html(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+    viewBox="0 0 30 30" fill="currentColor">
+    <g transform="translate(15 15) scale(0.0185) translate(-480 480)">
+      <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"/>
+    </g>
+  </svg>`
     );
 
-    document.addEventListener(
-      "pointerdown",
-      () => {
-        this.$canvas?.removeClass("keyboard-nav");
-      },
-      { capture: true }
-    );
-
-    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
-      this.$viewer.removeClass("dialogue-open");
+    if (this.showAdjustImageButton && this.$adjustImageButton) {
+      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
+    } else {
+      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
+    }
+    this.onAccessibleClick(this.$choiceSwitchButton, () => {
+      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
     });
   }
 
-  createNavigationButtons() {
+  indicesIncludeChoices(indices: number[]): boolean {
+    return indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+  }
+
+  updateChoiceSwitchVisibility(): void {
+    if (!this.$choiceSwitchButton) return;
+
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = this.indicesIncludeChoices(indices);
+
+    this.$choiceSwitchButton.css(
+      "visibility",
+      hasChoices ? "visible" : "hidden"
+    );
+  }
+
+  createNavigationButtons(): void {
     const viewingDirection: ViewingDirection =
       this.extension.helper.getViewingDirection() ||
       ViewingDirection.LEFT_TO_RIGHT;
@@ -707,18 +308,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         .attr("aria-label", this.content.nextImage);
     }
 
-    this.viewer.addControl(this.$prevButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_LEFT,
-    });
-    this.viewer.addControl(this.$nextButton[0], {
-      anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT,
-    });
+    this.$content.append(this.$prevButton);
+    this.$content.append(this.$nextButton);
 
     switch (viewingDirection) {
-      case ViewingDirection.BOTTOM_TO_TOP:
       case ViewingDirection.TOP_TO_BOTTOM:
         this.$prevButton.addClass("vertical");
         this.$nextButton.addClass("vertical");
+        break;
+      case ViewingDirection.BOTTOM_TO_TOP:
+        this.$prevButton.addClass("vertical down");
+        this.$nextButton.addClass("vertical up");
         break;
     }
 
@@ -726,7 +326,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$prevButton, (e: any) => {
       e.preventDefault();
-      OpenSeadragon.cancelEvent(e);
+      e.stopPropagation();
 
       if (!that.prevButtonEnabled) return;
 
@@ -744,7 +344,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.onAccessibleClick(this.$nextButton, (e: any) => {
       e.preventDefault();
-      OpenSeadragon.cancelEvent(e);
+      e.stopPropagation();
 
       if (!that.nextButtonEnabled) return;
 
@@ -759,357 +359,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           break;
       }
     });
-
-    // When Prev/Next buttons are focused, make sure the controls are enabled
-    this.$prevButton.add(this.$nextButton).on("focus", () => {
-      if (this.controlsVisible) return;
-      this.controlsVisible = true;
-      this.viewer.setControlsEnabled(true);
-    });
-
-    this.$prevButton.add(this.$nextButton).on("blur", () => {
-      if (!this.controlsVisible) return;
-      this.controlsVisible = false;
-      this.viewer.setControlsEnabled(false);
-    });
-  }
-
-  createChoiceSwitch(): void {
-    this.$choiceSwitchButton = this.$rotateButton.clone();
-    this.$choiceSwitchButton.attr("aria-label", this.content.layers);
-    this.$choiceSwitchButton.attr("title", this.content.layers);
-    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
-    this.$choiceSwitchButton.attr("tabindex", 0);
-
-    if (this.showAdjustImageButton && this.$adjustImageButton) {
-      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
-    } else {
-      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
-    }
-    this.onAccessibleClick(this.$choiceSwitchButton, () => {
-      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
-    });
-  }
-
-  async getGirderTileSource(): Promise<any> {
-    return new Promise<any>((resolve) => {
-      const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-      const annotations: Annotation[] = canvas.getContent();
-
-      if (annotations.length) {
-        const annotation: Annotation = annotations[0];
-        const body: AnnotationBody[] = annotation.getBody();
-
-        if (body.length) {
-          const services: Service[] = body[0].getServices();
-
-          if (services.length) {
-            let id: string = services[0].id;
-            let tileDescriptor = id;
-            if (!tileDescriptor.endsWith("/")) {
-              tileDescriptor += "/";
-            }
-            tileDescriptor += "tiles";
-
-            if (id.endsWith("/")) {
-              id = id.substr(0, id.length - 1);
-            }
-            fetch(tileDescriptor)
-              .then((response) => response.json())
-              .then((info) => {
-                const tileSource = {
-                  height: info.sizeY,
-                  width: info.sizeX,
-                  tileWidth: info.tileWidth,
-                  tileHeight: info.tileHeight,
-                  minLevel: 0,
-                  maxLevel: info.levels - 1,
-                  units: "mm",
-                  spacing: [info.mm_x, info.mm_y],
-                  getTileUrl: function (level, x, y, query) {
-                    var url =
-                      tileDescriptor + "/zxy/" + level + "/" + x + "/" + y;
-                    if (query) {
-                      url += "?" + $.param(query);
-                    }
-                    return url;
-                  },
-                };
-
-                if (!info.mm_x) {
-                  tileSource.units = "pixels";
-                  tileSource.spacing = [1, 1];
-                }
-
-                resolve(tileSource);
-              });
-          }
-        }
-      }
-    });
-  }
-
-  async openMedia(resources?: IExternalResource[]): Promise<void> {
-    // uv may have been unloaded
-    if (!this.viewer) {
-      return;
-    }
-
-    this.viewer.close();
-    this.items = [];
-
-    // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
-    const spinnerTimeout = setTimeout(() => {
-      this.$spinner.show();
-    }, 200);
-
-    // we need to do this before the choice branch even though the branch doesn't use images, because getExternalResources populates the resources needed for the download dialogue
-    let images: IExternalResourceData[] =
-      await this.extension.getExternalResources(resources);
-
-    // check for a choice on either of the displayed canvases if in 2-up view
-    const indices = this.extension.getPagedIndices();
-    const hasChoices = indices.some((index) => {
-      const canvas = this.extension.helper.getCanvasByIndex(index);
-      return canvas.getChoices().length > 0;
-    });
-
-    if (hasChoices) {
-      try {
-        // we need to build these objects and pass them to getPagePositions() because choice isn't currently supported on IExternalResource.
-        const canvasData = indices.map((index) => {
-          const canvas = this.extension.helper.getCanvasByIndex(index);
-          return {
-            index,
-            canvas,
-            choices: canvas.getChoices(),
-            width: canvas.getWidth(),
-            height: canvas.getHeight(),
-            x: 0,
-            y: 0,
-          };
-        });
-
-        const positioned = this.getPagePositions(canvasData as any);
-
-        let totalItems = 0;
-        for (const data of canvasData) {
-          totalItems += data.choices.length;
-        }
-
-        let loadedItems = 0;
-
-        positioned.forEach((data: any) => {
-          if (data.choices.length === 0) {
-            // no choices on this canvas, load as regular image
-            const content = data.canvas.getContent();
-            if (content.length) {
-              const body = content[0].getBody();
-              if (body.length) {
-                const services = body[0].getServices();
-                let tileSource: any;
-
-                if (services.length) {
-                  let id = services[0].id;
-                  if (!id.endsWith("/")) id += "/";
-                  tileSource = id + "info.json";
-                } else {
-                  tileSource = {
-                    type: "image",
-                    url: body[0].id,
-                    buildPyramid: false,
-                    crossOriginPolicy: false,
-                  };
-                }
-
-                totalItems++;
-                this.viewer.addTiledImage({
-                  tileSource,
-                  x: data.x,
-                  y: data.y,
-                  width: data.width,
-                  success: (item: any) => {
-                    this.items.push(item);
-                    loadedItems++;
-                    if (loadedItems === totalItems) {
-                      clearTimeout(spinnerTimeout);
-                      this.$spinner.hide();
-                      this.openPagesHandler();
-                      this.resize();
-                      this.goHome();
-                    }
-                  },
-                });
-              }
-            }
-          } else {
-            data.choices.forEach((choice: any, index: number) => {
-              const services = choice.getServices();
-              let tileSource: any;
-
-              if (services.length) {
-                let id = services[0].id;
-                if (!id.endsWith("/")) id += "/";
-                tileSource = id + "info.json";
-              } else {
-                tileSource = {
-                  type: "image",
-                  url: choice.id,
-                  buildPyramid: false,
-                  crossOriginPolicy: false,
-                };
-              }
-
-              this.viewer.addTiledImage({
-                tileSource: tileSource,
-                x: data.x,
-                y: data.y,
-                width: data.width,
-                opacity: index === 0 ? 1 : 0,
-                success: (item: any) => {
-                  this.items.push(item);
-                  loadedItems++;
-                  if (loadedItems === totalItems) {
-                    clearTimeout(spinnerTimeout);
-                    this.$spinner.hide();
-                    this.openPagesHandler();
-                    this.resize();
-                    this.goHome();
-                  }
-                },
-              });
-            });
-          }
-        });
-      } catch (e) {
-        console.error(e);
-      }
-      return;
-    }
-
-    const isGirder: boolean = this.extension.format === MediaType.GIRDER;
-
-    try {
-      this.viewer.close();
-
-      images = this.getPagePositions(images);
-
-      for (let i = 0; i < images.length; i++) {
-        const data: any = images[i];
-
-        let tileSource: any;
-
-        if (data.hasServiceDescriptor) {
-          // use the info.json descriptor
-          tileSource = data;
-        } else if (isGirder) {
-          // load girder image
-          tileSource = await this.getGirderTileSource();
-        } else {
-          // load image without tiling
-          tileSource = {
-            type: "image",
-            url: data.id,
-            buildPyramid: false,
-            crossOriginPolicy: false,
-          };
-        }
-
-        this.viewer.addTiledImage({
-          tileSource: tileSource,
-          x: data.x,
-          y: data.y,
-          width: data.width,
-          success: (item: any) => {
-            this.items.push(item);
-            if (this.items.length === images.length) {
-              clearTimeout(spinnerTimeout);
-              this.$spinner.hide();
-
-              this.openPagesHandler();
-            }
-            this.resize();
-            this.goHome();
-          },
-        });
-      }
-    } catch {
-      // do nothing
-    }
-  }
-
-  getPagePositions(
-    resources: IExternalResourceData[]
-  ): IExternalResourceData[] {
-    let leftPage: any;
-    let rightPage: any;
-    let topPage: any;
-    let bottomPage: any;
-    let page: any;
-    let nextPage: any;
-
-    // if there's more than one image, determine alignment strategy
-    if (resources.length > 1) {
-      if (resources.length === 2) {
-        // recto verso
-        if (this.extension.helper.isVerticallyAligned()) {
-          // vertical alignment
-          topPage = resources[0];
-          topPage.y = 0;
-          bottomPage = resources[1];
-          bottomPage.y = topPage.height + this.config.options.pageGap;
-        } else {
-          // horizontal alignment
-          leftPage = resources[0];
-          leftPage.x = 0;
-          rightPage = resources[1];
-          rightPage.x = leftPage.width + this.config.options.pageGap;
-        }
-      } else {
-        // scroll
-        if (this.extension.helper.isVerticallyAligned()) {
-          // vertical alignment
-          if (this.extension.helper.isTopToBottom()) {
-            // top to bottom
-            for (let i = 0; i < resources.length - 1; i++) {
-              page = resources[i];
-              nextPage = resources[i + 1];
-              nextPage.y = (page.y || 0) + page.height;
-            }
-          } else {
-            // bottom to top
-            for (let i = resources.length; i > 0; i--) {
-              page = resources[i];
-              nextPage = resources[i - 1];
-              nextPage.y = (page.y || 0) - page.height;
-            }
-          }
-        } else {
-          // horizontal alignment
-          if (this.extension.helper.isLeftToRight()) {
-            // left to right
-            for (let i = 0; i < resources.length - 1; i++) {
-              page = resources[i];
-              nextPage = resources[i + 1];
-              nextPage.x = (page.x || 0) + page.width;
-            }
-          } else {
-            // right to left
-            for (let i = resources.length - 1; i > 0; i--) {
-              page = resources[i];
-              nextPage = resources[i - 1];
-              nextPage.x = (page.x || 0) - page.width;
-            }
-          }
-        }
-      }
-    }
-
-    return resources;
   }
 
   openPagesHandler(): void {
-    this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
+    this.isCreated = true;
+
+    this.title = this.extension.helper.getLabel();
+    this.resize();
 
     if (
       this.extension.helper.isMultiCanvas() &&
@@ -1117,8 +373,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     ) {
       this.showPrevButton();
       this.showNextButton();
-
-      $(".navigator").addClass("extraMargin");
 
       const viewingDirection: ViewingDirection =
         this.extension.helper.getViewingDirection() ||
@@ -1149,175 +403,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           this.enableNextButton();
         }
       }
+    } else {
+      this.hidePrevButton();
+      this.hideNextButton();
     }
-
-    this.setNavigatorVisible();
-
-    // resize navigator for continuous manifests
-    if (this.extension.helper.isContinuous()) {
-      setTimeout(() => {
-        this.resizeNavigatorForContinuous();
-      }, 200);
-    }
-
-    this.overlayAnnotations();
-
-    this.updateBounds();
-
-    // this only happens if prev/next search result were clicked and caused a reload
-    if (this.navigatedFromSearch) {
-      this.navigatedFromSearch = false;
-      this.zoomToInitialAnnotation();
-    }
-
-    this.isFirstLoad = false;
 
     this.updateChoiceSwitchVisibility();
-  }
-
-  private resizeNavigatorForContinuous(): void {
-    if (!this.viewer || !this.viewer.navigator) return;
-
-    const homeBounds = this.viewer.world.getHomeBounds();
-    const contentAspectRatio = homeBounds.width / homeBounds.height;
-
-    const viewportWidth = this.$viewer.width();
-    const viewportHeight = this.$viewer.height();
-    const maxNavigatorWidth = 100;
-    const maxNavigatorHeight = 100;
-    const minVerticalNavigatorWidth = 60;
-    const minHorizontalNavigatorHeight = 40;
-
-    let navigatorWidth: number;
-    let navigatorHeight: number;
-
-    if (this.extension.helper.isVerticallyAligned()) {
-      navigatorHeight = viewportHeight - this.$zoomInButton.height() - 4;
-      navigatorWidth = navigatorHeight * contentAspectRatio;
-
-      // Enforce max width
-      if (navigatorWidth > maxNavigatorWidth) {
-        navigatorWidth = maxNavigatorWidth;
-      }
-
-      // Enforce min width
-      if (navigatorWidth < minVerticalNavigatorWidth) {
-        navigatorWidth = minVerticalNavigatorWidth;
-      }
-    } else {
-      navigatorWidth = viewportWidth;
-      navigatorHeight = navigatorWidth / contentAspectRatio;
-
-      // Enforce max height
-      if (navigatorHeight > maxNavigatorHeight) {
-        navigatorHeight = maxNavigatorHeight;
-      }
-
-      // Enforce min height
-      if (navigatorHeight < minHorizontalNavigatorHeight) {
-        navigatorHeight = minHorizontalNavigatorHeight;
-      }
-    }
-
-    const navigatorElement = this.viewer.navigator.element;
-    navigatorElement.style.width = `${navigatorWidth}px`;
-    navigatorElement.style.height = `${navigatorHeight}px`;
-
-    this.viewer.navigator.viewport.fitBounds(homeBounds, true);
-    this.viewer.navigator.updateSize();
-  }
-
-  zoomToInitialAnnotation(): void {
-    const annotationRect: AnnotationRect | null =
-      this.getInitialAnnotationRect();
-
-    (this.extension as OpenSeadragonExtension).previousAnnotationRect = null;
-    (this.extension as OpenSeadragonExtension).currentAnnotationRect = null;
-
-    if (annotationRect && this.isZoomToSearchResultEnabled()) {
-      this.zoomToAnnotation(annotationRect);
-    }
-  }
-
-  overlayAnnotations(): void {
-    const annotations: AnnotationGroup[] =
-      this.getAnnotationsForCurrentImages();
-
-    // clear existing annotations
-    this.clearAnnotations();
-
-    for (let i = 0; i < annotations.length; i++) {
-      const annotation: AnnotationGroup = annotations[i];
-      const rects: AnnotationOverlayRect[] =
-        this.getAnnotationOverlayRects(annotation);
-
-      for (let k = 0; k < rects.length; k++) {
-        const rect = rects[k];
-
-        const div: HTMLElement = document.createElement("DIV");
-        div.id = "annotation-" + rect.canvasIndex + "-" + rect.resultIndex;
-
-        div.title = sanitize(rect.chars);
-
-        // if it's a pin
-        if (rect.width === 1 && rect.height === 1) {
-          div.className = "annotationPin";
-          div.onclick = (e: any) => {
-            e.preventDefault();
-            this.extensionHost.publish(
-              IIIFEvents.PINPOINT_ANNOTATION_CLICKED,
-              k
-            );
-          };
-          const span: HTMLSpanElement = document.createElement("SPAN");
-          span.innerText = String(k + 1);
-          div.appendChild(span);
-        } else {
-          // it's a rect
-          div.className = "annotationRect";
-        }
-
-        this.viewer.addOverlay(div, rect);
-      }
-    }
-
-    if (annotations.length && this.shouldZoomToInitialAnnotation()) {
-      this.zoomToInitialAnnotation();
-    }
-  }
-
-  updateBounds(): void {
-    const settings: ISettings = this.extension.getSettings();
-
-    // if this is the first load and there are initial bounds, fit to those.
-    if (this.isFirstLoad) {
-      this.initialRotation = (<IOpenSeadragonExtensionData>(
-        this.extension.data
-      )).rotation;
-
-      if (this.initialRotation) {
-        this.viewer.viewport.setRotation(parseInt(this.initialRotation));
-      }
-
-      const xywh: string | undefined = (
-        this.extension.data as IOpenSeadragonExtensionData
-      ).xywh;
-
-      if (xywh) {
-        this.initialBounds = XYWHFragment.fromString(xywh);
-        this.currentBounds = this.initialBounds;
-        this.fitToBounds(this.currentBounds);
-      }
-    } else if (settings.preserveViewport && this.currentBounds) {
-      // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
-      this.fitToBounds(this.currentBounds);
-    } else {
-      this.goHome();
-    }
-  }
-
-  goHome(): void {
-    this.viewer.viewport.goHome(true);
+    this.setNavigatorVisible();
   }
 
   disablePrevButton(): void {
@@ -1364,489 +456,46 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.$nextButton.show();
   }
 
-  fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
-    const rect = new OpenSeadragon.Rect();
-    rect.x = Number(bounds.x);
-    rect.y = Number(bounds.y);
-    rect.width = Number(bounds.w);
-    rect.height = Number(bounds.h);
-    setTimeout(() => {
-      this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
-    }, 100);
-  }
-
-  getCroppedImageBounds(): string | null {
-    if (!this.viewer || !this.viewer.viewport) return null;
-
-    const canvas: Canvas = this.extension.helper.getCurrentCanvas();
-    const dimensions: CroppedImageDimensions | null = (
-      this.extension as OpenSeadragonExtension
-    ).getCroppedImageDimensions(canvas, this.viewer);
-
-    if (dimensions) {
-      const bounds: XYWHFragment = new XYWHFragment(
-        dimensions.regionPos.x,
-        dimensions.regionPos.y,
-        dimensions.region.width,
-        dimensions.region.height
-      );
-      return bounds.toString();
-    }
-
-    return null;
-  }
-
-  getViewportBounds(): XYWHFragment | null {
-    if (!this.viewer || !this.viewer.viewport) return null;
-
-    const b: any = this.viewer.viewport.getBounds(true);
-    const bounds: XYWHFragment = new XYWHFragment(
-      Math.floor(b.x),
-      Math.floor(b.y),
-      Math.floor(b.width),
-      Math.floor(b.height)
-    );
-
-    return bounds;
-  }
-
-  viewerResize(viewer: any): void {
-    if (!viewer.viewport) return;
-
-    const center = viewer.viewport.getCenter(true);
-    if (!center) return;
-
-    // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
-    setTimeout(function () {
-      viewer.viewport.panTo(center, true);
-    }, 1);
-  }
-
-  clearAnnotations(): void {
-    this.viewer.clearOverlays();
-  }
-
-  getAnnotationsForCurrentImages(): AnnotationGroup[] {
-    const annotationsForCurrentImages: AnnotationGroup[] = [];
-    const annotations: AnnotationGroup[] | null = (
-      this.extension as OpenSeadragonExtension
-    ).annotations;
-
-    if (!annotations || !annotations.length) return annotationsForCurrentImages;
-
-    const indices: number[] = this.extension.getPagedIndices();
-
-    for (let i = 0; i < indices.length; i++) {
-      const canvasIndex = indices[i];
-
-      for (let j = 0; j < annotations.length; j++) {
-        if (annotations[j].canvasIndex === canvasIndex) {
-          annotationsForCurrentImages.push(annotations[j]);
-          break;
-        }
-      }
-    }
-
-    return annotationsForCurrentImages;
-  }
-
-  getAnnotationRectsForCurrentImages(): AnnotationRect[] {
-    const annotations: AnnotationGroup[] =
-      this.getAnnotationsForCurrentImages();
-    if (annotations.length) {
-      return annotations
-        .map((x) => {
-          return x.rects;
-        })
-        .reduce((a, b) => {
-          return a.concat(b);
-        });
-    }
-    return [];
-  }
-
-  updateVisibleAnnotationRects(): void {
-    // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-
-    for (let i = 0; i < annotationRects.length; i++) {
-      const rect: AnnotationRect = annotationRects[i];
-      const viewportBounds: any = this.viewer.viewport.getBounds();
-
-      rect.isVisible = Dimensions.hitRect(
-        viewportBounds.x,
-        viewportBounds.y,
-        viewportBounds.width,
-        viewportBounds.height,
-        rect.viewportX,
-        rect.viewportY
-      );
-    }
-  }
-
-  getAnnotationRectIndex(annotationRect: AnnotationRect): number {
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-    return annotationRects.indexOf(annotationRect);
-  }
-
-  isZoomToSearchResultEnabled(): boolean {
-    return Bools.getBool(
-      this.extension.data.config!.options.zoomToSearchResultEnabled,
+  setupControlsFade(): void {
+    this.autoHideControls = Bools.getBool(
+      this.config.options.autoHideControls,
       true
     );
+    if (!this.autoHideControls) return;
+
+    // select the element to detect interaction activity on
+    const $activeArea = this.$element.parent();
+
+    // pointer events also cover touch; focusin covers keyboard
+    $activeArea.on("pointermove pointerdown", () => this.showControls());
+
+    // stay visible when using keyboard to navigate
+    this.$element.on("focusin", () => this.showControls());
+
+    this.showControls();
   }
 
-  shouldZoomToInitialAnnotation(): boolean {
-    return Bools.getBool(this.config.options.zoomToInitialAnnotation, true);
-  }
+  showControls(): void {
+    clearTimeout(this.controlsFadeTimeout);
+    this.$element
+      .css("--fade-length", `${this.getControlsFadeLength()}ms`)
+      .removeClass("fade-out");
 
-  prevAnnotation(): void {
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (
-      this.extension as OpenSeadragonExtension
-    ).currentAnnotationRect;
-
-    const currentAnnotationRectIndex: number = currentAnnotationRect
-      ? this.getAnnotationRectIndex(currentAnnotationRect)
-      : annotationRects.length;
-    //const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
-    let foundRect: AnnotationRect | null = null;
-
-    // if there's no currentAnnotationRect selected, index is the total available annotation rects for the current images.
-    // minusing 1 makes the index the last of the available rects for the current images.
-    for (let i = currentAnnotationRectIndex - 1; i >= 0; i--) {
-      const rect: AnnotationRect = annotationRects[i];
-
-      // this was removed as users found it confusing.
-      // find the prev visible or non-visible rect.
-      //if (rect.isVisible) {
-      //    continue;
-      //} else {
-      foundRect = rect;
-      break;
-      //}
-    }
-
-    if (foundRect && this.isZoomToSearchResultEnabled()) {
-      // if the rect's canvasIndex is less than the current canvasIndex
-      if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
-        (this.extension as OpenSeadragonExtension).currentAnnotationRect =
-          foundRect;
-        this.navigatedFromSearch = true;
-        this.extensionHost.publish(IIIFEvents.ANNOTATION_CANVAS_CHANGE, [
-          foundRect,
-        ]);
-      } else {
-        this.zoomToAnnotation(foundRect);
-      }
-    } else {
-      this.navigatedFromSearch = true;
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE
-      );
-    }
-  }
-
-  nextAnnotation(): void {
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-    const currentAnnotationRect: AnnotationRect | null = (
-      this.extension as OpenSeadragonExtension
-    ).currentAnnotationRect;
-
-    const currentAnnotationRectIndex: number = currentAnnotationRect
-      ? this.getAnnotationRectIndex(currentAnnotationRect)
-      : -1;
-    let foundRect: AnnotationRect | null = null;
-
-    // if there's no currentAnnotationRect selected, index is -1.
-    // adding 1 makes the index 0 of available rects for the current images.
-    for (
-      let i = currentAnnotationRectIndex + 1;
-      i < annotationRects.length;
-      i++
-    ) {
-      const rect: AnnotationRect = annotationRects[i];
-
-      // this was removed as users found it confusing.
-      // find the next visible or non-visible rect.
-      //if (rect.isVisible) {
-      //    continue;
-      //} else {
-      foundRect = rect;
-      break;
-      //}
-    }
-
-    if (foundRect && this.isZoomToSearchResultEnabled()) {
-      // if the rect's canvasIndex is greater than the current canvasIndex
-      if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-        (this.extension as OpenSeadragonExtension).currentAnnotationRect =
-          foundRect;
-        this.navigatedFromSearch = true;
-        this.extensionHost.publish(IIIFEvents.ANNOTATION_CANVAS_CHANGE, [
-          foundRect,
-        ]);
-      } else {
-        this.zoomToAnnotation(foundRect);
-      }
-    } else {
-      this.navigatedFromSearch = true;
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE
-      );
-    }
-  }
-
-  getAnnotationRectByIndex(index: number): AnnotationRect | null {
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-    if (!annotationRects.length) return null;
-    return annotationRects[index];
-  }
-
-  getInitialAnnotationRect(): AnnotationRect | null {
-    const annotationRects: AnnotationRect[] =
-      this.getAnnotationRectsForCurrentImages();
-    if (!annotationRects.length) return null;
-
-    // if we've got this far it means that a reload has happened
-    // check if the lastCanvasIndex is greater or less than the current canvasIndex
-    // if greater than, select the last annotation on the current page
-    // if less than, select the first annotation on the current page
-    // otherwise default to the first annotation
-
-    const previousAnnotationRect: AnnotationRect | null = (
-      this.extension as OpenSeadragonExtension
-    ).previousAnnotationRect;
-
-    if (!previousAnnotationRect) {
-      if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
-        const result = annotationRects.filter(
-          (x) => x.canvasIndex === this.extension.helper.canvasIndex
-        );
-        return result[result.length - 1];
-      }
-    }
-
-    return annotationRects.filter(
-      (x) => x.canvasIndex === this.extension.helper.canvasIndex
-    )[0];
-  }
-
-  zoomToAnnotation(annotationRect: AnnotationRect): void {
-    (this.extension as OpenSeadragonExtension).previousAnnotationRect =
-      (this.extension as OpenSeadragonExtension).currentAnnotationRect ||
-      annotationRect;
-    (this.extension as OpenSeadragonExtension).currentAnnotationRect =
-      annotationRect;
-
-    // if zoomToBoundsEnabled, zoom to the annotation's bounds.
-    // otherwise, pan into view preserving the current zoom level.
-    if (
-      Bools.getBool(
-        this.extension.data.config!.options.zoomToBoundsEnabled,
-        false
-      )
-    ) {
-      this.fitToBounds(
-        new XYWHFragment(
-          annotationRect.viewportX,
-          annotationRect.viewportY,
-          annotationRect.width,
-          annotationRect.height
-        ),
-        false
-      );
-    } else if (this.currentBounds) {
-      const x: number =
-        annotationRect.viewportX -
-        (this.currentBounds.w * 0.5 - annotationRect.width * 0.5);
-      const y: number =
-        annotationRect.viewportY -
-        (this.currentBounds.h * 0.5 - annotationRect.height * 0.5);
-      const w: number = this.currentBounds.w;
-      const h: number = this.currentBounds.h;
-
-      const bounds: XYWHFragment = new XYWHFragment(x, y, w, h);
-      this.fitToBounds(bounds);
-    }
-
-    this.highlightAnnotationRect(annotationRect);
-
-    this.extensionHost.publish(IIIFEvents.ANNOTATION_CHANGE);
-  }
-
-  highlightAnnotationRect(annotationRect: AnnotationRect): void {
-    const $rect = $(
-      "#annotation-" + annotationRect.canvasIndex + "-" + annotationRect.index
+    this.controlsFadeTimeout = window.setTimeout(
+      () => this.hideControls(),
+      this.config.options.controlsFadeAfterInactive || 3000
     );
-    $rect.addClass("current");
-    $(".annotationRect").not($rect).removeClass("current");
   }
 
-  getAnnotationOverlayRects(
-    annotationGroup: AnnotationGroup
-  ): AnnotationOverlayRect[] {
-    const newRects: any[] = [];
+  hideControls(): void {
+    const el = this.$element[0];
 
-    if (!this.extension.resources) {
-      return newRects;
+    // hovered or keyboard-focused content keeps the controls visible
+    if (el.matches(":hover") || el.querySelector(":focus-visible")) {
+      this.showControls();
+      return;
     }
-
-    const resource: any = this.extension.resources.filter(
-      (x) => x.index === annotationGroup.canvasIndex
-    )[0];
-    const index: number = this.extension.resources.indexOf(resource);
-    let offsetX: number = 0;
-
-    if (index > 0) {
-      offsetX = (<IExternalImageResourceData>(
-        this.extension.resources[index - 1]
-      )).width;
-    }
-
-    for (let i = 0; i < annotationGroup.rects.length; i++) {
-      const searchRect: AnnotationRect = annotationGroup.rects[i];
-
-      const x: number =
-        searchRect.x + offsetX + (index > 0 ? this.config.options.pageGap : 0);
-      const y: number = searchRect.y;
-      const w: number = searchRect.width;
-      const h: number = searchRect.height;
-
-      const rect = new OpenSeadragon.Rect(x, y, w, h) as AnnotationOverlayRect;
-      searchRect.viewportX = x;
-      searchRect.viewportY = y;
-      rect.canvasIndex = searchRect.canvasIndex;
-      rect.resultIndex = searchRect.index;
-      rect.chars = searchRect.chars;
-
-      newRects.push(rect);
-    }
-
-    return newRects;
-  }
-
-  resize(): void {
-    super.resize();
-
-    this.$viewer.height(
-      this.$content.height() - this.$viewer.verticalMargins()
-    );
-    this.$viewer.width(
-      this.$content.width() - this.$viewer.horizontalMargins()
-    );
-
-    if (!this.isCreated) return;
-
-    if (this.title) {
-      this.$title.text(sanitize(this.title));
-    }
-
-    this.$spinner.css(
-      "top",
-      this.$content.height() / 2 - this.$spinner.height() / 2
-    );
-    this.$spinner.css(
-      "left",
-      this.$content.width() / 2 - this.$spinner.width() / 2
-    );
-
-    const viewingDirection: ViewingDirection =
-      this.extension.helper.getViewingDirection() ||
-      ViewingDirection.LEFT_TO_RIGHT;
-
-    if (this.extension.helper.isRightToLeft()) {
-      this.$title.addClass("rtl");
-    } else {
-      this.$title.removeClass("rtl");
-    }
-
-    if (
-      this.extension.helper.isMultiCanvas() &&
-      this.$prevButton &&
-      this.$nextButton
-    ) {
-      const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
-
-      switch (viewingDirection) {
-        case ViewingDirection.BOTTOM_TO_TOP:
-          this.$prevButton.addClass("down");
-          this.$nextButton.addClass("up");
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$prevButton.css(
-            "top",
-            this.$content.height() - this.$prevButton.height()
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          break;
-        case ViewingDirection.TOP_TO_BOTTOM:
-          this.$prevButton.css(
-            "left",
-            verticalButtonPos - this.$prevButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "left",
-            verticalButtonPos * -1 - this.$nextButton.outerWidth() / 2
-          );
-          this.$nextButton.css(
-            "top",
-            this.$content.height() - this.$nextButton.height()
-          );
-          break;
-        default:
-          this.$prevButton.css(
-            "top",
-            (this.$content.height() - this.$prevButton.height()) / 2
-          );
-          this.$nextButton.css(
-            "top",
-            (this.$content.height() - this.$nextButton.height()) / 2
-          );
-          break;
-      }
-
-      // resize navigator for continuous manifests
-      if (this.extension.helper.isContinuous()) {
-        setTimeout(() => {
-          this.resizeNavigatorForContinuous();
-        }, 200);
-      }
-    }
-  }
-
-  setFocus(): void {
-    if (this.$canvas && !this.$canvas.is(":focus")) {
-      if (this.extension.data.config!.options.allowStealFocus) {
-        this.$canvas.focus();
-      }
-    }
-  }
-
-  setNavigatorVisible(): void {
-    const navigatorEnabled: boolean =
-      Bools.getBool(this.extension.getSettings().navigatorEnabled, true) &&
-      this.extension.isDesktopMetric();
-
-    if (this.viewer && this.viewer.navigator) {
-      this.viewer.navigator.setVisible(navigatorEnabled);
-
-      if (navigatorEnabled) {
-        this.$navigator.show();
-      } else {
-        this.$navigator.hide();
-      }
-    }
+    this.$element.addClass("fade-out");
   }
 
   getControlsFadeLength(): number {
@@ -1855,22 +504,17 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       : this.config.options.controlsFadeLength || 250;
   }
 
-  indicesIncludeChoices(indices: number[]): boolean {
-    return indices.some((index) => {
-      const canvas = this.extension.helper.getCanvasByIndex(index);
-      return canvas.getChoices().length > 0;
-    });
-  }
+  resize(): void {
+    super.resize();
 
-  updateChoiceSwitchVisibility(): void {
-    if (!this.$choiceSwitchButton) return;
+    if (this.title) {
+      this.$title.text(sanitize(this.title));
+    }
 
-    const indices = this.extension.getPagedIndices();
-    const hasChoices = this.indicesIncludeChoices(indices);
-
-    this.$choiceSwitchButton.css(
-      "visibility",
-      hasChoices ? "visible" : "hidden"
-    );
+    if (this.extension.helper.isRightToLeft()) {
+      this.$title.addClass("rtl");
+    } else {
+      this.$title.removeClass("rtl");
+    }
   }
 }
