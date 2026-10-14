@@ -149,12 +149,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       });
     });
 
-    // this.extensionHost.subscribe(IIIFEvents.METRIC_CHANGE, () => {
-    //   this.whenCreated(() => {
-    //     this.updateResponsiveView();
-    //   });
-    // });
-
     this.extensionHost.subscribe(
       IIIFEvents.SET_TARGET,
       (target: XYWHFragment) => {
@@ -236,31 +230,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const next = (current + 90) % 360;
     this.viewer.viewport.setRotation(next);
   }
-
-  // updateResponsiveView(): void {
-  //   this.viewer.autoHideControls = this.extension.isDesktopMetric();
-
-  //   const enableAutoHide = (event: JQuery.FocusOutEvent) => {
-  //     this.viewer.autoHideControls = true;
-  //   };
-
-  //   const disableAutoHide = () => {
-  //     this.viewer.autoHideControls = false;
-  //   };
-
-  //   const buttons = [
-  //     this.$zoomInButton,
-  //     this.$zoomOutButton,
-  //     this.$goHomeButton,
-  //     this.$rotateButton,
-  //     this.$adjustImageButton,
-  //   ];
-
-  //   buttons.forEach((button) => {
-  //     button.on("focus", disableAutoHide);
-  //     button.on("focusout", enableAutoHide);
-  //   });
-  // }
 
   async createUI(): Promise<void> {
     this.$spinner = $('<div class="spinner"></div>');
@@ -363,45 +332,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     });
 
     // events
-
-    // JM to do: move visibility logic to center panel
-    // this.$element.on("mousemove", () => {
-    //   if (this.controlsVisible) return;
-    //   this.controlsVisible = true;
-    //   this.viewer.setControlsEnabled(true);
-    // });
-
-    // this.$element.on("mouseleave", () => {
-    //   if (!this.controlsVisible) return;
-
-    //   // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-    //   if ($(".overlay:visible").length) return;
-
-    //   this.controlsVisible = false;
-    //   this.viewer.setControlsEnabled(false);
-    // });
-
-    // // when mouse move stopped
-    // this.$element.on(
-    //   //@ts-ignore
-    //   "mousemove",
-    //   () => {
-    //     // if over element, hide controls.
-    //     // When over prev/next buttons keep controls enabled
-    //     if (this.$prevButton.ismouseover()) {
-    //       return;
-    //     }
-    //     if (this.$nextButton.ismouseover()) {
-    //       return;
-    //     }
-    //     // don't hide controls if a dialog overlay (e.g. choice menu) is visible
-    //     if ($(".overlay:visible").length) return;
-    //   },
-    //   this.config.options.controlsFadeAfterInactive
-    // );
-
-    // //this.viewer.addHandler("open-failed", () => {
-    // //});
 
     this.viewer.addHandler("resize", (viewer: any) => {
       this.extensionHost.publish(
