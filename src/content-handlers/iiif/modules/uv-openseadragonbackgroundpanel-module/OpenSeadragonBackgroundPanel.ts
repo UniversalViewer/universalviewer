@@ -46,6 +46,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewer: any;
   viewerId: string;
   navigatorResizeTimeout: number;
+  visibleAreaObserver: ResizeObserver;
 
   $canvas: JQuery;
   $spinner: JQuery;
@@ -400,6 +401,23 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       this.$viewer.removeClass("dialogue-open");
     });
+
+    // add resize observer to the center panel content; update margins when it's resized
+    // The behaviour here needs some though. It feels more intuitive to have the image move with the panels when they open (retains content visibility), but stay still when they close.OR the image should just pan rather than zoom when the panels are oepened - need to try out different options
+    this.visibleAreaObserver = new ResizeObserver(() => {
+        const viewport = this.viewer?.viewport;
+        if (!viewport) return;
+
+        // check before the margins change, because they change the home zoom
+        const wasHome = Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
+
+        this.updateViewportMargins();
+        if (wasHome) this.goHome(); 
+    });
+
+    this.visibleAreaObserver.observe(
+      (this.extension as OpenSeadragonExtension).centerPanel.$content[0]
+    );
   }
 
   async getGirderTileSource(): Promise<any> {
@@ -892,7 +910,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   goHome(): void {
-    this.viewer.viewport.goHome(false);
+    // JM to do: make the immediate parameter controlled by reduced animation setting 
+    this.viewer.viewport.goHome(true);
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
@@ -1246,6 +1265,24 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
 
     return newRects;
+  }
+
+  updateViewportMargins(): void {
+    if (!this.viewer?.viewport) return;
+
+    const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
+    if (!centerPanel?.$content?.length) return;
+
+    const v = this.$viewer[0].getBoundingClientRect();
+    const c = centerPanel.$content[0].getBoundingClientRect();
+    if (!v.width || !v.height) return;
+
+    this.viewer.viewport.setMargins({
+      left: Math.max(0, c.left - v.left),
+      top: Math.max(0, c.top - v.top),
+      right: Math.max(0, v.right - c.right),
+      bottom: Math.max(0, v.bottom - c.bottom),
+    });
   }
 
   resize(): void {
