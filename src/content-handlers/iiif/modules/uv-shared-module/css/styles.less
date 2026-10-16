@@ -98,7 +98,7 @@
 
   .headerPanel {
     position: relative;
-    color: #fff;
+    color: @text-color;
     height: 40px;
   }
 
@@ -116,11 +116,73 @@
     padding: 0;
     overflow: hidden;
 
-    .md-mediaquery({
+    .action,
+    a.action.black,
+    input.action {
+      display: inline-block;
+      background-image: data-uri("../img/sprite.png");
+      background-position-x: 0;
+      background-position-y: -1000px;
+      background-repeat: no-repeat;
+      text-transform: none;
+      padding: 0 0 0 16px;
+      font-weight: bold;
+    }
+
+    #debug {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+
+      #sm {
+        display: none;
+      }
+
+      #md {
+        display: none;
+      }
+
+      #lg {
+        display: none;
+      }
+
+      #xl {
+        display: none;
+      }
+    }
+
+    #commsFrame {
+      width: 1px;
+      height: 1px;
+      border: none;
+      display: none;
+    }
+
+    .headerPanel {
+      position: relative;
+      color: @text-color;
+      height: 40px;
+    }
+
+    .mainPanel {
+      position: relative;
+      padding-top: @panel-margin;
+      margin-right: @panel-margin;
+      margin-bottom: 0;
+      margin-left: @panel-margin;
+      background: @body-bg; // important, otherwise you see two spinners
+    }
+
+    .mainPanel {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+
+      .md-mediaquery({
             padding: 0.5rem;
             display: grid;
-            grid-template-columns: 
-                [left] var(--uv-grid-left-width) 
+            grid-template-columns:
+                [left] var(--uv-grid-left-width)
                 [center] var(--uv-grid-main-width)
                 [right] var(--uv-grid-right-width);
             grid-template-areas: "left center right";
@@ -130,69 +192,69 @@
             transition-duration: calc(var(--uv-animation) * var(--uv-animation-duration));
         });
 
-    /* hide empty panels */
+      /* hide empty panels */
 
-    &:has(.leftPanel:empty) {
-      --uv-grid-left-width: auto;
+      &:has(.leftPanel:empty) {
+        --uv-grid-left-width: auto;
+      }
+
+      &:has(.rightPanel:empty) {
+        --uv-grid-right-width: auto;
+      }
     }
 
-    &:has(.rightPanel:empty) {
-      --uv-grid-right-width: auto;
+    .mainPanel.leftPanelOpen {
+      --uv-grid-left-width: var(--uv-grid-left-width-open);
     }
-  }
 
-  .mainPanel.leftPanelOpen {
-    --uv-grid-left-width: var(--uv-grid-left-width-open);
-  }
+    .mainPanel.rightPanelOpen {
+      --uv-grid-right-width: var(--uv-grid-right-width-open);
+    }
 
-  .mainPanel.rightPanelOpen {
-    --uv-grid-right-width: var(--uv-grid-right-width-open);
-  }
+    .mainPanel.leftPanelOpenFull {
+      --uv-grid-left-width: 100%;
+      --uv-grid-main-width: 0;
+      --uv-grid-right-width: 0;
 
-  .mainPanel.leftPanelOpenFull {
-    --uv-grid-left-width: 100%;
-    --uv-grid-main-width: 0;
-    --uv-grid-right-width: 0;
+      transition-property: grid-template-columns;
+      transition-timing-function: linear;
+      transition-duration: calc(
+        var(--uv-animation) * var(--uv-animation-duration)
+      );
+    }
 
-    transition-property: grid-template-columns;
-    transition-timing-function: linear;
-    transition-duration: calc(
-      var(--uv-animation) * var(--uv-animation-duration)
-    );
-  }
+    .centerPanel {
+      position: absolute;
+      overflow: hidden;
+      width: 100%;
 
-  .centerPanel {
-    position: absolute;
-    overflow: hidden;
-    width: 100%;
-
-    .md-mediaquery({
+      .md-mediaquery({
             z-index: 15;
             grid-area: center;
         });
-  }
+    }
 
-  .leftPanel,
-  .rightPanel {
-    background: @panel-dark-bg;
-    border: @panel-border;
+    .leftPanel,
+    .rightPanel {
+      background: @panel-dark-bg;
+      border: @panel-border;
 
-    overflow: hidden;
-    z-index: 20;
+      overflow: hidden;
+      z-index: 20;
 
-    transition-property: all;
-    transition-timing-function: linear;
-    transition-duration: calc(
-      var(--uv-animation) * var(--uv-animation-duration)
-    );
+      transition-property: all;
+      transition-timing-function: linear;
+      transition-duration: calc(
+        var(--uv-animation) * var(--uv-animation-duration)
+      );
 
-    position: absolute;
-    inset: calc(5em + 8px) 0 2em;
+      position: absolute;
+      inset: calc(5em + 8px) 0 2em;
 
-    width: 100%;
-    height: auto;
+      width: 100%;
+      height: auto;
 
-    .md-mediaquery({
+      .md-mediaquery({
             display: block;
             position: relative;
 
@@ -205,42 +267,42 @@
             height: auto;
         });
 
-    // by default top and main are shown, as on mobile the panel is transformed to off-screen
-    // but on md they're hidden, just in case
-    .top,
-    .main {
-      display: block;
+      // by default top and main are shown, as on mobile the panel is transformed to off-screen
+      // but on md they're hidden, just in case
+      .top,
+      .main {
+        display: block;
 
-      .md-mediaquery({
+        .md-mediaquery({
                 display: none;
             });
-    }
+      }
 
-    // by default closed is hidden unless on md and up
-    // when it serves as a tab to click
-    .closed {
-      display: none;
-
-      .md-mediaquery({
-                display: block;
-            });
-    }
-
-    // open-finished hides the .closed tab on md+
-    &.open-finished {
+      // by default closed is hidden unless on md and up
+      // when it serves as a tab to click
       .closed {
         display: none;
 
         .md-mediaquery({
+                display: block;
+            });
+      }
+
+      // open-finished hides the .closed tab on md+
+      &.open-finished {
+        .closed {
+          display: none;
+
+          .md-mediaquery({
                     display: none;
                 });
+        }
       }
-    }
 
-    // only when the container has open & open-finished can top and main display on md+
-    // this prevents the content getting squished when the panels contract when the grid changes
-    &.open.open-finished {
-      .md-mediaquery({
+      // only when the container has open & open-finished can top and main display on md+
+      // this prevents the content getting squished when the panels contract when the grid changes
+      &.open.open-finished {
+        .md-mediaquery({
                 .top,
                 .main {
                     display: block;
@@ -249,82 +311,83 @@
                     display: none;
                 }
             });
-    }
-  }
-
-  .leftPanel {
-    right: auto;
-    left: 0;
-    transform: translateX(-100%);
-
-    .md-mediaquery({
-            grid-area: left;
-            transform: none;
-        });
-  }
-
-  .leftPanel.open {
-    left: 0;
-    transform: none;
-    width: min(95%, 25rem);
-
-    .md-mediaquery({
-            transition-property: none;
-            left: initial;
-            right: initial;
-            width: auto;
-        });
-  }
-
-  .rightPanel {
-    right: 0;
-    left: auto;
-    transform: translateX(100%);
-
-    .md-mediaquery({
-            grid-area: right;
-            transform: none;
-        });
-  }
-
-  .rightPanel.open {
-    transform: none;
-    width: min(95%, 30rem);
-
-    .md-mediaquery({
-            transition-property: none;
-            left: initial;
-            right: initial;
-            width: auto;
-        });
-  }
-
-  .footerPanel {
-    position: relative;
-    margin: 0 @panel-margin;
-  }
-}
-
-@media print {
-  .uv {
-    .headerPanel {
-      display: none;
+      }
     }
 
     .leftPanel {
-      display: none;
+      right: auto;
+      left: 0;
+      transform: translateX(-100%);
+
+      .md-mediaquery({
+            grid-area: left;
+            transform: none;
+        });
+    }
+
+    .leftPanel.open {
+      left: 0;
+      transform: none;
+      width: min(95%, 25rem);
+
+      .md-mediaquery({
+            transition-property: none;
+            left: initial;
+            right: initial;
+            width: auto;
+        });
     }
 
     .rightPanel {
-      display: none;
+      right: 0;
+      left: auto;
+      transform: translateX(100%);
+
+      .md-mediaquery({
+            grid-area: right;
+            transform: none;
+        });
+    }
+
+    .rightPanel.open {
+      transform: none;
+      width: min(95%, 30rem);
+
+      .md-mediaquery({
+            transition-property: none;
+            left: initial;
+            right: initial;
+            width: auto;
+        });
     }
 
     .footerPanel {
-      display: none;
+      position: relative;
+      margin: 0 @panel-margin;
     }
+  }
 
-    .mobileFooterPanel {
-      display: none;
+  @media print {
+    .uv {
+      .headerPanel {
+        display: none;
+      }
+
+      .leftPanel {
+        display: none;
+      }
+
+      .rightPanel {
+        display: none;
+      }
+
+      .footerPanel {
+        display: none;
+      }
+
+      .mobileFooterPanel {
+        display: none;
+      }
     }
   }
 }
