@@ -1,0 +1,332 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Paged book of images (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Six static images (three rendered pages from the PDF fixtures and their source images), arranged as a paged book with ranges for the Index tab. Modelled on these IIIF Cookbook recipes: <a href=\"https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/\">0031 Multiple Volumes in a Single Bound Volume</a> (nested ranges), <a href=\"https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/\">0011 Book 'behavior' Variations</a> (the \"paged\" behavior) and <a href=\"https://iiif.io/api/cookbook/recipe/0001-mvm-image/\">0001 Simplest Manifest - Single Image File</a> (static images without an image service)."
+    ]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": ["Date"]
+      },
+      "value": {
+        "en": ["c. 1250 BC - 125 AD"]
+      }
+    }
+  ],
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Images via Wikimedia Commons: P. Oxy. I 29 (public domain); Fayum mummy portrait, British Museum EA29772 (public domain); \"The Weighing of the Heart\" by PharaohCrab (CC0)."
+      ]
+    }
+  },
+  "behavior": ["paged"],
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Euclid's Elements, Book II"]
+      },
+      "width": 1236,
+      "height": 1600,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 117
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1236,
+                "height": 1600
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p2",
+      "type": "Canvas",
+      "label": {
+        "en": ["P. Oxy. I 29"]
+      },
+      "width": 960,
+      "height": 585,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-2-euclid-papyrus-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 55
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-2-euclid-papyrus.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 960,
+                "height": 585
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p3",
+      "type": "Canvas",
+      "label": {
+        "en": ["Fayum Mummy Portrait"]
+      },
+      "width": 1236,
+      "height": 1600,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-3-fayum-page-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 117
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p3/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-3-fayum-page.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1236,
+                "height": 1600
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p4",
+      "type": "Canvas",
+      "label": {
+        "en": ["Fayum portrait, British Museum EA29772"]
+      },
+      "width": 434,
+      "height": 902,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-4-fayum-portrait-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 187
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p4/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-4-fayum-portrait.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 434,
+                "height": 902
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p5",
+      "type": "Canvas",
+      "label": {
+        "en": ["The Weighing of the Heart"]
+      },
+      "width": 1236,
+      "height": 1600,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 117
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p5/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1236,
+                "height": 1600
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6",
+      "type": "Canvas",
+      "label": {
+        "en": ["Weighing of the Heart scene"]
+      },
+      "width": 960,
+      "height": 431,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-6-weighing-of-the-heart-scene-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 90,
+          "height": 40
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/image-fixture-6-weighing-of-the-heart-scene.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 960,
+                "height": 431
+              },
+              "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/range/r0",
+      "type": "Range",
+      "label": {
+        "en": ["Ancient sources"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/range/r1",
+          "type": "Range",
+          "label": {
+            "en": ["Euclid's Elements"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p1",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p2",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/range/r2",
+          "type": "Range",
+          "label": {
+            "en": ["Fayum Mummy Portrait"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p3",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p4",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/range/r3",
+          "type": "Range",
+          "label": {
+            "en": ["The Weighing of the Heart"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p5",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
