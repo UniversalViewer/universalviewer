@@ -12,18 +12,6 @@ const { BASE_URL } = require("../scripts/testBaseUrl");
 //   https://iiif.io/api/cookbook/recipe/0001-mvm-image/
 const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
 
-// AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
-// AV manifest (no ranges) is rendered by the mediaelement extension.
-const AV_VIDEO_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json";
-
-// AV manifest WITH a table of contents (structures/ranges). When an AV manifest
-// has ranges and preferMediaElementExtension is false (the default), the viewer
-// uses uv-av-extension -> AVCenterPanel (iiif-av-component) instead of the
-// mediaelement player.
-const AV_TOC_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json";
-
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
