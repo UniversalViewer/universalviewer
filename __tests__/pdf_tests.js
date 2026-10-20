@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Local multi-file PDF manifest (three single-page PDFs) for PDF-specific
@@ -15,6 +15,7 @@ describe("Universal Viewer", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

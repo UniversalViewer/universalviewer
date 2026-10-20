@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 const FIRST_THUMB_SRC =
@@ -21,6 +21,7 @@ const applyCustomConfig = async (config) => {
 
 describe("Configuration options", () => {
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
     page = await browser.newPage();
   });

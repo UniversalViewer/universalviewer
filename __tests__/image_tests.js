@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
@@ -113,6 +113,7 @@ describe("Universal Viewer", () => {
   };
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
     await openFreshViewer();
   });
