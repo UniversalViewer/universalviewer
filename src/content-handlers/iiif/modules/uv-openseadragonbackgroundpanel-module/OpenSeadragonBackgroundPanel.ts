@@ -409,6 +409,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       const viewport = this.viewer?.viewport;
       if (!viewport) return;
 
+      const keepInView = this.options.keepImageInViewEnabled;
+
+      if (!keepInView) return;
+
       // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
@@ -883,7 +887,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateBounds(): void {
-    // JM to do: update this so that the viewer is aware of the visible viewport (the dimensions of the OSD center panel now overlayed above) and centers within that
     const settings: ISettings = this.extension.getSettings();
 
     // if this is the first load and there are initial bounds, fit to those.

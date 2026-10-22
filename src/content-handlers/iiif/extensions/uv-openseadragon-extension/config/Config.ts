@@ -135,6 +135,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   tileTimeout: number;
   /** Whether to zoom in to first annotation on load */
   zoomToInitialAnnotation: boolean;
+  // Does the viewer adjust the image to maintain visiblity when side panels open over it?
+  keepImageInViewEnabled: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {
