@@ -47,6 +47,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewerId: string;
   navigatorResizeTimeout: number;
   visibleAreaObserver: ResizeObserver;
+  lastMargins = { left: 0, right: 0 };
 
   $canvas: JQuery;
   $spinner: JQuery;
