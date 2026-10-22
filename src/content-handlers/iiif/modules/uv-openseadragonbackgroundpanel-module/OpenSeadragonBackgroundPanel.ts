@@ -406,14 +406,15 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     // add resize observer to the center panel content; update margins when it's resized
     // The behaviour here needs some though. It feels more intuitive to have the image move with the panels when they open (retains content visibility), but stay still when they close.OR the image should just pan rather than zoom when the panels are oepened - need to try out different options
     this.visibleAreaObserver = new ResizeObserver(() => {
-        const viewport = this.viewer?.viewport;
-        if (!viewport) return;
+      const viewport = this.viewer?.viewport;
+      if (!viewport) return;
 
-        // check before the margins change, because they change the home zoom
-        const wasHome = Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
+      // check before the margins change, because they change the home zoom
+      const wasHome =
+        Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
-        this.updateViewportMargins();
-        if (wasHome) this.goHome(); 
+      this.updateViewportMargins();
+      if (wasHome) this.goHome();
     });
 
     this.visibleAreaObserver.observe(
@@ -911,7 +912,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   goHome(): void {
-    // JM to do: make the immediate parameter controlled by reduced animation setting 
+    // JM to do: make the immediate parameter controlled by reduced animation setting
     this.viewer.viewport.goHome(true);
   }
 
