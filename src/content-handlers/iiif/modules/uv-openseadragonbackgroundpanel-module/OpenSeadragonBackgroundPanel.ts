@@ -147,7 +147,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        this.goHome();
+        this.goHome(false);
       });
     });
 
@@ -404,16 +404,18 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     });
 
     // add resize observer to the center panel content; update margins when it's resized
-    // The behaviour here needs some though. It feels more intuitive to have the image move with the panels when they open (retains content visibility), but stay still when they close.OR the image should just pan rather than zoom when the panels are oepened - need to try out different options
+    // The behaviour here needs some thought. It feels more intuitive to have the image move with the panels when they open (retains content visibility), but stay still when they close.OR the image should just pan rather than zoom when the panels are oepened - need to try out different options
     this.visibleAreaObserver = new ResizeObserver(() => {
       const viewport = this.viewer?.viewport;
       if (!viewport) return;
 
-      // check before the margins change, because they change the home zoom
+      // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
       this.updateViewportMargins();
+
+      // without this, the image zooms in if it was at home and a panel closes.
       if (wasHome) this.goHome();
     });
 
@@ -911,9 +913,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
   }
 
-  goHome(): void {
+  goHome(immediately: boolean = true): void {
     // JM to do: make the immediate parameter controlled by reduced animation setting
-    this.viewer.viewport.goHome(true);
+    this.viewer.viewport.goHome(immediately);
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
