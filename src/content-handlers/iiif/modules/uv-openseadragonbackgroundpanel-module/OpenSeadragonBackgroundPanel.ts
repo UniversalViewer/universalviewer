@@ -914,8 +914,11 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   goHome(immediately: boolean = true): void {
-    // JM to do: make the immediate parameter controlled by reduced animation setting
-    this.viewer.viewport.goHome(immediately);
+    if ((<ISettings>this.extension.getSettings()).reducedAnimation) {
+      this.viewer.viewport.goHome(true);
+    } else {
+      this.viewer.viewport.goHome(immediately);
+    }
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
