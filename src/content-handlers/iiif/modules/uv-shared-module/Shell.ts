@@ -6,6 +6,7 @@ import { BaseView } from "./BaseView";
 import { GenericDialogue } from "./GenericDialogue";
 
 export class Shell extends BaseView<BaseConfig> {
+  public $backgroundPanel: JQuery;
   public $centerPanel: JQuery;
   public $element: JQuery;
   public $footerPanel: JQuery;
@@ -44,6 +45,9 @@ export class Shell extends BaseView<BaseConfig> {
 
     this.$mainPanel = $('<div class="mainPanel"></div>');
     this.$element.append(this.$mainPanel);
+
+    this.$backgroundPanel = $('<div class="backgroundPanel"></div>');
+    this.$mainPanel.append(this.$backgroundPanel);
 
     this.$centerPanel = $('<div class="centerPanel"></div>');
     this.$centerPanel.append(

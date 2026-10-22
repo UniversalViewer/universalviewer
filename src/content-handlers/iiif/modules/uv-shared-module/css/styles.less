@@ -103,18 +103,11 @@
   }
 
   .mainPanel {
-    position: relative;
-    padding-top: @panel-margin;
-    margin-right: @panel-margin;
-    margin-bottom: 0;
-    margin-left: @panel-margin;
-    background: @body-bg; // important, otherwise you see two spinners
-  }
-
-  .mainPanel {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    position: relative;
+    background: @body-bg; // important, otherwise you see two spinners
 
     .md-mediaquery({
             padding: 0.5rem;
@@ -159,6 +152,12 @@
     transition-duration: calc(
       var(--uv-animation) * var(--uv-animation-duration)
     );
+  }
+
+  .backgroundPanel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
 
   .centerPanel {
