@@ -147,7 +147,16 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        this.goHome(false);
+        if (this.options.keepImageInViewEnabled) {
+          this.goHome(false);
+        } else {
+          // need to update margins if keepImageInViewEnabled is false, because they won't have bene updated by the resizeObserver yet
+          this.updateViewportMargins();
+          // unfortunately in this case we can't animate the return home as doing this right after updateViewportMargins causes the image to jump
+          // todo: look into how to enable animation in static mode (updateViewportMargins = false)
+          // to enable animation we'd need to avoid changing the margins in static mode entirely, and have the 'home' set as bounds of the visible viewport, and move to there
+          this.goHome(true);
+        }
       });
     });
 
@@ -409,8 +418,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       const viewport = this.viewer?.viewport;
       if (!viewport) return;
 
-      const keepInView = this.options.keepImageInViewEnabled;
-
+      const keepInView = Bools.getBool(
+        this.options.keepImageInViewEnabled,
+        true
+      );
       if (!keepInView) return;
 
       // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
