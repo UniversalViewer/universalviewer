@@ -281,11 +281,15 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     const pixel =
       "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
 
+    const drawer = (this.config.options.drawer ||
+      "auto") as OpenSeadragon.DrawerType;
+
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
       element: this.$viewer[0],
-      drawer: "auto",
-      crossOriginPolicy: "Anonymous",
+      drawer,
+      // WebGL can only draw images loaded with a cross-origin policy; canvas has no such requirement
+      crossOriginPolicy: drawer === "canvas" ? false : "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
       showRotationControl: true,
