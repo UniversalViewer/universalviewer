@@ -98,7 +98,7 @@
 
   .headerPanel {
     position: relative;
-    color: #fff;
+    color: @text-color;
     height: 40px;
   }
 
@@ -119,8 +119,8 @@
     .md-mediaquery({
             padding: 0.5rem;
             display: grid;
-            grid-template-columns: 
-                [left] var(--uv-grid-left-width) 
+            grid-template-columns:
+                [left] var(--uv-grid-left-width)
                 [center] var(--uv-grid-main-width)
                 [right] var(--uv-grid-right-width);
             grid-template-areas: "left center right";
