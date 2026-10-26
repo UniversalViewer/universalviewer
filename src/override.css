@@ -1,0 +1,7 @@
+:root {
+  --uv-background-color: pink;
+
+  @media (prefers-color-scheme: dark) {
+    --uv-background-color: aqua;
+  }
+}

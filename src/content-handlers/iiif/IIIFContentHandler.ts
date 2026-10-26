@@ -16,6 +16,7 @@ import {
 } from "@iiif/vocabulary/dist-commonjs/";
 import { Helper, loadManifest, IManifoldOptions } from "@iiif/manifold";
 import { Annotation, AnnotationBody, Canvas } from "manifesto.js";
+import "../../props.css";
 import "../../uv.css";
 import "./themes/theme.less";
 import { IContentHandler } from "@/IContentHandler";

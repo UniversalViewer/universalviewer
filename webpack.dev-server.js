@@ -107,7 +107,19 @@ const config = {
       );
       devServer.app.use(
         "/mejs-controls.svg",
-        express.static(path.join(__dirname, "node_modules" , "mediaelement", "build", "mejs-controls.svg"))
+        express.static(
+          path.join(
+            __dirname,
+            "node_modules",
+            "mediaelement",
+            "build",
+            "mejs-controls.svg"
+          )
+        )
+      );
+      devServer.app.use(
+        "/override.css",
+        express.static(path.join(__dirname, "src", "override.css"))
       );
     },
   },

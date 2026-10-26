@@ -1,0 +1,7 @@
+:root {
+  --uv-d-background-color: red;
+
+  @media (prefers-color-scheme: dark) {
+    --uv-d-background-color: lime;
+  }
+}
