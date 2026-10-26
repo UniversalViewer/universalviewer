@@ -65,8 +65,7 @@ A canvas is video if any body of its painting annotations (or of a `Choice` amon
 Tests:
 
 - `__tests__/media_kind_tests.ts` covers each step of the rule, and of a canvas' kind.
-- `__tests__/media_type_tests.js` checks the player the MediaElement extension builds, for IIIF v3, draft IIIF Presentation 3 and IIIF v2 IxIF audio and video.
-- `__tests__/av_media_type_tests.js` checks the element the AV component creates, for media given by its type or only by its size, on a canvas played on its own and on canvases played as one timeline.
+- `__tests__/media_type_tests.js` checks the player the MediaElement extension builds, for IIIF v3, draft IIIF Presentation 3 and IIIF v2 IxIF audio and video, and the element the AV component creates, for media given by its type or only by its size, on a canvas played on its own and on canvases played as one timeline.
 
 ## Loading the media
 
@@ -90,7 +89,7 @@ UV includes hls.js (pinned in `package.json`) and dash.js, and loads each only w
 - The AV component plays streams with `attachHls()` and `attachDash()`.
 - The MediaElement extension plays them with MediaElement's own HLS and DASH renderers, which would otherwise fetch the libraries from a CDN (`cdn.jsdelivr.net`). So `MediaElementCenterPanel` loads UV's copies before it creates the player.
 
-`__tests__/streaming_tests.js` plays HLS and MPEG-DASH test streams in both extensions, checks nothing is fetched from a CDN, and checks other media loads neither library. `__tests__/av_playback_tests.js` checks the AV component plays a file from a server without CORS headers.
+`__tests__/streaming_tests.js` plays HLS and MPEG-DASH test streams in both extensions, checks nothing is fetched from a CDN, and checks other media loads neither library. `__tests__/av_playback_tests.js` checks both extensions play a file from a server without CORS headers.
 
 ## Images with audio and video
 
@@ -150,7 +149,7 @@ The left panel's thumbnail for a canvas of audio or video shows its image from b
 
 - `__tests__/poster_images_tests.ts` covers each of the rules above, and the thumbnails of canvases.
 - `__tests__/poster_selection_tests.js` checks the image shown before and while media plays in both extensions, for a placeholder with video (as in recipe 0013), placeholder and accompanying images with audio, a IIIF v3 canvas `thumbnail`, and a manifest's `posterCanvas`.
-- `__tests__/accompanying_image_tests.js` (recipe 0014) and `__tests__/poster_image_tests.js` (`posterImageExpanded`) cover each extension's display.
+- `__tests__/accompanying_image_tests.js` (recipe 0014) checks both extensions keep showing the accompanying image while audio plays, and `__tests__/poster_image_tests.js` (`posterImageExpanded`) covers the AV component's collapsible poster image, which the MediaElement extension doesn't have.
 - `__tests__/media_thumbnails_tests.js` checks the thumbnails of canvases in both extensions: a canvas' image, an icon for one without, and no image that can't load.
 
 ## Playing
@@ -234,8 +233,8 @@ A host can offer its own instead, with the center panel's `captionStyles` option
     "mediaElementCenterPanel": {
       "options": {
         "captionStyles": [
-          { "label": "Yellow on navy", "color": "#ffdc00", "background": "#001f3f" },
-          { "label": "Navy on cream", "color": "#001f3f", "background": "#fffdd0" }
+          { "label": "Indigo on sand", "color": "#36096e", "background": "#faefcd" },
+          { "label": "Smoke on soot", "color": "#f2f2f0", "background": "#24241e" }
         ]
       }
     }
@@ -247,9 +246,43 @@ Set it for both players, `avCenterPanel` and `mediaElementCenterPanel`, for the 
 
 - They replace UV's own, rather than adding to them, so list every combination to offer. (UV's own aren't in the extensions' config files: the host's config is merged into those item by item, which would leave some of UV's own in a shorter list.)
 - They're offered in the order given, and the first is used until the user chooses another.
-- Names are shown as given, in every language, rather than translated.
+- Names are shown as given, in every language. To name a colour in the user's language, give its `label` as a `$key` from UV's locale files (`src/locales`), e.g. `"label": "$captionWhiteOnBlack"`, and add the key to each locale file for your own names. The key is read from the user's locale, as UV's own content is; a key a locale file doesn't have is shown as written.
 - An entry without a `label`, `color` or `background` is left out, with a warning in the browser console. If none can be used, UV's own are offered.
 - Choose colours with enough contrast: WCAG asks for at least 4.5:1 (AA), and 7:1 (AAA) for the most legible captions. UV doesn't check.
+
+#### Trying your own colours on the examples page
+
+`captionStyles` isn't in the extensions' config files, so the examples page's configuration builder doesn't list it. To try your colours:
+
+1. Load a manifest with audio or video. A manifest with ranges plays in the AV component, and one without plays in the MediaElement player.
+2. Open the **Configuration** tab and paste JSON like this into the **Custom configuration** box:
+
+   ```json
+   {
+     "modules": {
+       "avCenterPanel": {
+         "options": {
+           "captionStyles": [
+             { "label": "Indigo on sand", "color": "#36096e", "background": "#faefcd" },
+             { "label": "Smoke on soot", "color": "#f2f2f0", "background": "#24241e" }
+           ]
+         }
+       },
+       "mediaElementCenterPanel": {
+         "options": {
+           "captionStyles": [
+             { "label": "Indigo on sand", "color": "#36096e", "background": "#faefcd" },
+             { "label": "Smoke on soot", "color": "#f2f2f0", "background": "#24241e" }
+           ]
+         }
+       }
+     }
+   }
+   ```
+
+3. Press **Apply Configurations**. The viewer restarts with your colours in the captions menu's **Colours** group.
+
+If a combination you chose before isn't in your list, the player starts with your first one (see [Remembered choices](#remembered-choices)). To also forget your chosen caption language, tick **Clear saved viewer state before applying**. If your JSON has a mistake, for example a missing comma, or an entry is missing its `label`, `color` or `background`, check the browser console.
 
 ### Remembered choices
 

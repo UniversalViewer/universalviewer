@@ -159,7 +159,8 @@ For a detailed overview of how the Event system works see [Execution - Events](E
   - Translation strings are stored files named with the relevant language tag e.g. `en-GB.json`.
   - These contain an object consisting of key-value pairs of text strings.
   - Each key begins with a `$` to serve as a marker for replacement and config contains matching markers.
-  - After config is loaded, `BaseExtension.ts#translateLocale()` handles replacement.
+  - After config is loaded, `BaseExtension.ts#readLocale()` handles replacement. It runs again once the host's config is merged in, so markers in the host's config are replaced too.
+  - Each string is escaped as it's put into the config, so quotes and backslashes in it are kept as written.
   - Values are then generally available in `this.content`.
   - Some components have no built-in text, so everything they show comes from config:
     - the AV component (`avCenterPanel`);

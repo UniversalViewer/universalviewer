@@ -154,9 +154,11 @@ The relevant Extension class is dynamically imported and instantiated.
 
 After the extension is created, `_loadAndApplyConfigToExtension()` is called. 
 
-This first calls the extension's `loadConfig()`function which then calls `translateLocale()` to load the relevant locale file from `src/locales` and replace translation markers with the correct language strings in the extension's [default config](#extension-default-config).
+This first calls the extension's `loadConfig()`function which then calls `readLocale()` to load the relevant locale file from `src/locales` and replace translation markers with the correct language strings in the extension's [default config](#extension-default-config).
 
 This config is then returned to the Content Handler which then passes it to `configure()` which resolves any configs passed externally via the "**configure**" event and merges them with config, overwriting any existing values.
+
+`readLocale()` then runs again on the merged config, so any translation markers in the configs passed externally (e.g. `"label": "$captionWhiteOnBlack"`) are replaced with the locale's strings too. Handlers of the "**configure**" event still receive the default config with its markers already replaced.
 
 Finally, in `_createExtension()`:
 - the `IIIFContentHandler` is assigned as the extension's `extensionHost`,
