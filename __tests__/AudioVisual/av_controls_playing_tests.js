@@ -1,0 +1,111 @@
+const puppeteer = require("puppeteer");
+const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { viewerUrl } = require("../../scripts/testViewer");
+
+// Each player's controls stay in view while it plays. In the AV component,
+// when the canvas has no label (as in IIIF Cookbook recipe 0026), the panel
+// has no title until a range plays, whose label then takes up room above the
+// player. The MediaElement extension plays manifests without ranges, so has
+// no range title to make room for.
+const fixture = (name) => `${BASE_URL}/test-fixtures/${name}`;
+
+const PLAYERS = [
+  {
+    player: "mediaelement (manifests without ranges)",
+    manifest: "captioned-video-manifest.json",
+    play: ".mejs__playpause-button button",
+    controls: ".mejs__controls button",
+    // mediaelement hides a video's controls while it plays unless the
+    // pointer is over the player.
+    hover: ".mejs__container",
+  },
+  {
+    player: "the AV component (manifests with ranges)",
+    manifest: "ranges-unlabelled-canvas-video-manifest.json",
+    play: ".iiif-av-component .controls-container button:has(.av-icon-play)",
+    controls: ".iiif-av-component .controls-container button",
+    rangeTitle: "The puppet show",
+  },
+];
+
+describe.each(PLAYERS)("Controls in $player while playing", (player) => {
+  let browser;
+  let page;
+
+  // Loading the viewer can be slow while other tests run, so it has 60s.
+  beforeAll(async () => {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    page = await browser.newPage();
+    await page.setViewport({ width: 1200, height: 800 });
+    await page.goto(viewerUrl(fixture(player.manifest)), {
+      waitUntil: "domcontentloaded",
+    });
+    await page.waitForSelector(player.play, { visible: true });
+  }, 60000);
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
+  // The controls that could be hidden, cut off by the panel, or covered, by
+  // class and why.
+  const controlsOutOfView = async () => {
+    if (player.hover) {
+      await page.hover(player.hover);
+    }
+    return page.evaluate((selector) => {
+      const panel = document
+        .querySelector(".centerPanel .content")
+        .getBoundingClientRect();
+      return Array.from(document.querySelectorAll(selector))
+        .filter((button) => button.offsetParent)
+        .map((button) => {
+          const { x, y, width, height, top, bottom } =
+            button.getBoundingClientRect();
+          const seen = document.elementFromPoint(x + width / 2, y + height / 2);
+          const name = button.className || button.innerHTML;
+          if (top < panel.top) {
+            return `${name}: ${panel.top - top}px above the panel`;
+          }
+          if (bottom > panel.bottom) {
+            return `${name}: ${bottom - panel.bottom}px below the panel`;
+          }
+          if (!(seen === button || button.contains(seen))) {
+            return `${name}: covered by ${seen && seen.className}`;
+          }
+          return null;
+        })
+        .filter(Boolean);
+    }, player.controls);
+  };
+
+  it("shows every control before playing", async () => {
+    expect(await controlsOutOfView()).toEqual([]);
+  });
+
+  it("keeps every control in view once playing", async () => {
+    await page.click(player.play);
+    if (player.rangeTitle) {
+      // Playing shows the range's title above the player.
+      await page.waitForFunction(
+        (title) =>
+          document.querySelector(".centerPanel h1.title").textContent.trim() ===
+          title,
+        {},
+        player.rangeTitle
+      );
+    } else {
+      await page.waitForFunction(() =>
+        Array.from(document.querySelectorAll(".centerPanel video")).some(
+          (video) => !video.paused
+        )
+      );
+    }
+    // Gives the panel time to lay out.
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    expect(await controlsOutOfView()).toEqual([]);
+  });
+});
