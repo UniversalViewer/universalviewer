@@ -5,7 +5,7 @@
 Before you can build the UV, we assume the following list of software is already installed in your system
 
 - Git
-- Node 18 or higher
+- Node 22.15 or higher
 - Npm 8.1.1 or higher
 
 ## Forking the repository
@@ -61,6 +61,25 @@ npm test
 > Note: the test suite runs its own server on port 4444 for browser-based testing; be sure that you have built the latest code (e.g. using `npm run build`) before running tests to ensure that you are testing the right changes.
 
 > Tests are written using [Jest](https://jestjs.io/)
+
+### Running part of the suite
+
+The tests are grouped by what they cover, in `__tests__/AudioVisual/`, `__tests__/Config/`, `__tests__/Image/` and `__tests__/PDF/`. To run some of them, pass Jest's options after `--`, which tells npm to hand them on to Jest rather than read them itself:
+
+```
+# One file, or several
+npm test -- __tests__/AudioVisual/captions_tests.js
+
+# Every file in a folder
+npm test -- __tests__/Config/
+
+# Only the tests whose names match a pattern
+npm test -- __tests__/AudioVisual/av_controls_tests.js -t "MediaElement player"
+```
+
+A test's name, for `-t`, is its `describe` titles and its `it` title joined with spaces (e.g. `Controls in the MediaElement player on a phone makes every button at least 44px square, to tap`), and the pattern is a regular expression, so it may match more tests than you meant.
+
+> Note: Most tests run in a browser against the built viewer in `dist/`, including the manifests in `src/test-fixtures/`, so run `npm run build` after changing anything in `src/` first. Unit tests that import from `src/` directly (the `.ts` ones, such as `__tests__/Config/locale_strings_tests.ts`) don't need a build.
 
 ## Project branch strategy
 
