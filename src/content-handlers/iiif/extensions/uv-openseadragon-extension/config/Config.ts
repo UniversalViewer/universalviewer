@@ -117,6 +117,8 @@ type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
   defaultZoomLevel: number;
   /** Determines if annotation is enabled */
   doubleClickAnnotationEnabled: boolean;
+  /** OpenSeadragon drawer used to render images: "auto", "webgl" or "canvas" */
+  drawer: string;
   /** Determines if rendering is immediate */
   immediateRender: boolean;
   /** Maximum pixel ratio for zoom */
