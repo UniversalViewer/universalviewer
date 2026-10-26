@@ -466,7 +466,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     // select the element to detect interaction activity on
     const $activeArea = this.$element.parent();
 
-    // pointer events also cover touch; focusin covers keyboard
+    // pointer events also cover touch
     $activeArea.on("pointermove pointerdown", () => this.showControls());
 
     // stay visible when using keyboard to navigate
