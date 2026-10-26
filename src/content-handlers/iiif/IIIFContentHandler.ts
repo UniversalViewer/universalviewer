@@ -302,7 +302,12 @@ export default class IIIFContentHandler
       extension?.type.name
     );
 
-    data.config = await that.configure(config);
+    // The host's config may use "$key"s too, which are read from the locale
+    // once it's merged in.
+    data.config = await extension.readLocale(
+      await that.configure(config),
+      data.locales[0].name
+    );
   }
 
   private async _reload(data: IUVData<any>): Promise<void> {

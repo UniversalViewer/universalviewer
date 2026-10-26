@@ -41,7 +41,7 @@ import {
   Urls,
   Strings,
 } from "../../Utils";
-import { defaultLocale, isVisible } from "../../../../Utils";
+import { defaultLocale, isVisible, readLocaleStrings } from "../../../../Utils";
 import { IIIFEvents } from "../../IIIFEvents";
 import { Events } from "../../../../Events";
 import type { StoreApi } from "zustand/vanilla";
@@ -474,27 +474,20 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   }
 
   public async loadConfig(locale: string, extension: string): Promise<any> {
-    return this.translateLocale(this.defaultConfig, locale);
+    return this.readLocale(this.defaultConfig, locale);
   }
 
-  private async translateLocale(
+  // Replaces each "$key" in the config with the locale's string for it. Run
+  // on the extension's own config (loadConfig) and again once the host's
+  // config is merged in, for the "$key"s the host's config uses.
+  public async readLocale(
     config: Object,
     locale: String
   ): Promise<Object> {
     const loader =
       this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
     const localeStrings = (await loader()) || {};
-    let conf = JSON.stringify(config);
-
-    for (const str in localeStrings) {
-      const replaceStr = str.replace("$", "");
-      const re = new RegExp(`\\$${replaceStr}\\b`, "g");
-      conf = conf.replace(re, localeStrings[str]);
-    }
-
-    conf = JSON.parse(conf);
-
-    return conf;
+    return readLocaleStrings(config, localeStrings);
   }
 
   createModules(): void {
