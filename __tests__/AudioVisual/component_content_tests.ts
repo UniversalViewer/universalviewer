@@ -2,8 +2,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { BUILT_IN_CAPTION_STYLES } from "../../src/content-handlers/iiif/modules/uv-captions-module/CaptionStyle";
 
-// The AV component, gallery and metadata components have no built-in text:
-// everything they show comes from their panel's content in each extension's
+// The AV component, MediaElement player (its controls' names, in place of
+// mediaelement's own English), gallery and metadata components have no
+// built-in text: everything they show comes from their panel's content in each
+// extension's
 // config, which refers to the locales ("$key"). So every content key a
 // component reads must be in every config panel that gives it content, and
 // every locale must translate it.
@@ -25,13 +27,15 @@ const sources = (...paths: string[]): string[] =>
       : [full];
   });
 
-// The content keys read in some source files, as `content.key`.
+// The content keys read in some source files, as `content.key`. Not
+// `$content.key`: that's a panel's element (e.g. `this.$content.width()`).
 const contentKeysIn = (files: string[]): string[] =>
   unique(
     files.flatMap((file) =>
-      (fs.readFileSync(file, "utf8").match(/\bcontent\??\.\w+/g) || []).map(
-        (read) => read.replace(/^content\??\./, "")
-      )
+      (
+        fs.readFileSync(file, "utf8").match(/(?<![\w$])content\??\.\w+/g) ||
+        []
+      ).map((read) => read.replace(/^content\??\./, ""))
     )
   );
 
@@ -49,6 +53,20 @@ const COMPONENTS = [
       ...BUILT_IN_CAPTION_STYLES.map((style) => style.nameKey),
     ],
     panels: ["avCenterPanel"],
+  },
+  {
+    name: "the MediaElement player",
+    keys: [
+      ...contentKeysIn(
+        sources(
+          "modules/uv-mediaelementcenterpanel-module",
+          "modules/uv-captions-module"
+        )
+      ),
+      // The names of UV's own caption colours, looked up by style.
+      ...BUILT_IN_CAPTION_STYLES.map((style) => style.nameKey),
+    ],
+    panels: ["mediaElementCenterPanel"],
   },
   {
     name: "the gallery",

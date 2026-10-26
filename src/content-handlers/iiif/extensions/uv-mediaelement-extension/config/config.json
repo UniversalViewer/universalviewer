@@ -170,6 +170,7 @@
         "defaultHeight": 420,
         "defaultWidth": 560,
         "hideMediaError": false,
+        "hideVolumeOnTouchDevices": false,
         "iconSprite": "mejs-controls.svg",
         "titleEnabled": true,
         "subtitleEnabled": true,
@@ -190,10 +191,13 @@
         "captionDarkPurpleOnYellow": "$captionDarkPurpleOnYellow",
         "close": "$close",
         "closeAttribution": "$closeAttribution",
+        "audioVolume": "$audioVolume",
         "fullScreen": "$fullScreen",
         "mute": "$mute",
         "pause": "$pause",
         "play": "$play",
+        "playbackPosition": "$playbackPosition",
+        "positionOfDuration": "$positionOfDuration",
         "unmute": "$unmute"
       }
     },

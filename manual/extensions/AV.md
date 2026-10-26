@@ -173,6 +173,36 @@ The timeline and volume are sliders that screen readers announce by name ("Playb
 
 The AV component always fills the center panel's content area. When the title above it changes, e.g. to the label of a range once it plays, `AVCenterPanel.resize()` resizes the component too, so the controls stay in view.
 
+### MediaElement controls
+
+The MediaElement extension's controls are mediaelement's own (play, current time, timeline, mute, volume, captions and, for video, full screen), held to the same standard as the AV component's (`MediaElementCenterPanel`):
+
+- **Size:** every button is at least 44 by 44 pixels, as WCAG 2.1 success criterion 2.5.5 Target Size (Enhanced, AAA) asks, and the controls fit any screen size.
+- **Names:** every button has a label, and a tooltip with the same text, in the user's language, from the center panel's `content` (`play`, `pause`, `mute`, `unmute`, `fullScreen`) rather than mediaelement's own English.
+- **Sliders:** the timeline and volume are sliders that screen readers announce by name (`playbackPosition`, `audioVolume`) with their values, e.g. "01:05 of 09:32" (`positionOfDuration`) and "80%". The timeline keeps its name and value while the media plays (mediaelement would remove them); its value is only rewritten when it changes, at most once a second.
+- **Volume:** the volume slider is always in the controls (not only over the mute button), and playback starts at full volume.
+- **Metadata:** the media's metadata (e.g. its duration) is loaded with the page, so the timeline can be used before the media plays.
+
+On the timeline:
+
+| Key | Moves |
+| --- | --- |
+| Left arrow | 5 seconds back |
+| Right arrow | 5 seconds forward |
+| Home | to the start |
+| End | to the end |
+
+On the volume slider:
+
+| Key | Changes the volume |
+| --- | --- |
+| Down or Left arrow | 10% down |
+| Up or Right arrow | 10% up |
+| Home | to silent |
+| End | to full |
+
+On touch devices, the volume controls are shown unless the center panel's `hideVolumeOnTouchDevices` option is set (see `mediaElementCenterPanel` in [CONFIG.md](../CONFIG.md)). iOS and iPadOS don't let pages set the volume, only the device's buttons can, so there only the mute button is shown.
+
 ### Canvases, ranges and the title
 
 In the AV extension:
@@ -310,7 +340,7 @@ Set the center panel's `hideMediaError` option to `true` to show no message: see
 
 ## Text
 
-The AV component and the captions module have no built-in text. Every label, tooltip and message comes from the center panel's `content` in the extension's config, which refers to the locales. See [Localisation](../ARCHITECTURE.md#localisation). The exception is the names of caption colours a host configures, which are shown as given (see [Caption colours](#caption-colours)).
+The AV component, the MediaElement extension's controls and the captions module have no built-in text. Every label, tooltip and message comes from the center panel's `content` in the extension's config, which refers to the locales. See [Localisation](../ARCHITECTURE.md#localisation). The exception is the names of caption colours a host configures, which are shown as given unless given as a `$key` from the locale files (see [Caption colours](#caption-colours)).
 
 ## Known limitations
 

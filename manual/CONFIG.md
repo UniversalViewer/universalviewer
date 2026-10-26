@@ -1186,6 +1186,12 @@ Specifies the URL of the spritesheet used by MediaElement.
 **Default**: `false`  
 Determines if media errors are hidden. When `false`, the user is told in the generic dialogue when media can't be played (e.g. its file is missing). See [Audio and Video](extensions/AV.md#media-that-cant-be-played).
 
+##### hideVolumeOnTouchDevices
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if the volume controls (the mute button and volume slider) are left out on Android and iOS devices, for both video and audio. When `false`, they're shown; on iOS and iPadOS, which don't let pages set the volume, only the mute button is shown. See [Audio and Video](extensions/AV.md#mediaelement-controls).
+
 ##### titleEnabled
 
 **Type**: `boolean`  

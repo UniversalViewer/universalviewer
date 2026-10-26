@@ -1,4 +1,4 @@
-import { Dimensions } from "../../Utils";
+import { Bools, Dimensions } from "../../Utils";
 
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
@@ -221,7 +221,7 @@ export class MediaElementCenterPanel extends CenterPanel<
 
     if (this.isVideo()) {
       this.$media = $(
-        '<video controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></video>'
+        '<video controls="controls" preload="metadata" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
       this.appendMediaSources(sources);
@@ -242,6 +242,8 @@ export class MediaElementCenterPanel extends CenterPanel<
         ],
         success: function (mediaElement: any, originalNode: any, player: any) {
           that._reportMediaErrors(mediaElement);
+          that._labelTimeline(canvas, mediaElement, player);
+          that._labelVolume(mediaElement, player);
           that._showCaptions(canvas, mediaElement, player);
 
           mediaElement.addEventListener("loadstart", () => {
@@ -311,7 +313,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       // audio
 
       this.$media = $(
-        '<audio controls="controls" preload="none" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
+        '<audio controls="controls" preload="metadata" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
       );
 
       this.appendMediaSources(sources);
@@ -331,11 +333,12 @@ export class MediaElementCenterPanel extends CenterPanel<
         ],
         stretching: "responsive",
         defaultAudioHeight: "auto",
-        hideVolumeOnTouchDevices: false,
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function (mediaElement: any, originalNode: any, player: any) {
           that._reportMediaErrors(mediaElement);
+          that._labelTimeline(canvas, mediaElement, player);
+          that._labelVolume(mediaElement, player);
           that._showPosterWhilePlaying(mediaElement, player, posterImages);
           that._showCaptions(canvas, mediaElement, player);
 
@@ -427,9 +430,17 @@ export class MediaElementCenterPanel extends CenterPanel<
     );
   }
 
-  // The controls' options shared by the video and audio players: their names
-  // and tooltips in the user's language, from the panel's content, rather
-  // than mediaelement's own English.
+  // The controls' options shared by the video and audio players, in place of
+  // mediaelement's own:
+  // - the buttons' names and tooltips in the user's language, from the
+  //   panel's content, rather than in English;
+  // - the volume slider always in the controls, as audio has it, rather than
+  //   appearing only over the mute button;
+  // - starting at full volume, rather than 80%;
+  // - the volume controls shown on touch devices, unless configured not to
+  //   be (hideVolumeOnTouchDevices);
+  // - the arrow keys moving 5 seconds, as the AV component's do, rather than
+  //   5% of the media.
   private _controlOptions(): object {
     return {
       playText: this.content.play,
@@ -437,7 +448,135 @@ export class MediaElementCenterPanel extends CenterPanel<
       muteText: this.content.mute,
       unmuteText: this.content.unmute,
       fullscreenText: this.content.fullScreen,
+      videoVolume: "horizontal",
+      startVolume: 1,
+      hideVolumeOnTouchDevices: Bools.getBool(
+        this.config.options.hideVolumeOnTouchDevices,
+        false
+      ),
+      defaultSeekForwardInterval: () => 5,
+      defaultSeekBackwardInterval: () => 5,
     };
+  }
+
+  // Presents the timeline as a slider, named in the user's language, with its
+  // value. mediaelement only gives it its role once it's focused or playing,
+  // names it in English, and removes its name and value while it plays, so a
+  // screen reader user reaching it then wouldn't know what it is or where
+  // it's at. Its value is only written when it changes, which is once a
+  // second while playing (it's in whole seconds), so it isn't announced more
+  // often than that.
+  private _labelTimeline(
+    canvas: Canvas,
+    mediaElement: any,
+    player: any
+  ): void {
+    const timeline = player.controls.querySelector(".mejs__time-total");
+    if (!timeline) {
+      return;
+    }
+
+    timeline.setAttribute("role", "slider");
+    timeline.tabIndex = 0;
+
+    const timeCode = (seconds: number): string =>
+      (window as any).mejs.Utils.secondsToTimeCode(
+        seconds,
+        player.options.alwaysShowHours,
+        player.options.showTimecodeFrameCount,
+        player.options.framesPerSecond,
+        player.options.secondsDecimalLength,
+        player.options.timeFormat
+      );
+
+    const label = () => {
+      const duration = isFinite(mediaElement.duration)
+        ? mediaElement.duration
+        : canvas.getDuration() || 0;
+      const valueText = this.content.positionOfDuration
+        .replace("{0}", timeCode(mediaElement.currentTime || 0))
+        .replace("{1}", timeCode(duration));
+
+      // Each only when it differs, so the observer below isn't set off by
+      // its own change.
+      if (timeline.getAttribute("aria-label") !== this.content.playbackPosition) {
+        timeline.setAttribute("aria-label", this.content.playbackPosition);
+      }
+      if (timeline.getAttribute("aria-valuetext") !== valueText) {
+        timeline.setAttribute("aria-valuetext", valueText);
+      }
+    };
+
+    label();
+    ["loadedmetadata", "timeupdate", "seeked"].forEach((event) =>
+      mediaElement.addEventListener(event, label)
+    );
+    // mediaelement rewrites (or removes) both as it plays and loads, so
+    // they're put back whenever it changes them.
+    new MutationObserver(label).observe(timeline, {
+      attributes: true,
+      attributeFilter: ["aria-label", "aria-valuetext"],
+    });
+  }
+
+  // Presents the volume as a slider, named in the user's language, with its
+  // value, that keyboard users can reach and change.
+  private _labelVolume(mediaElement: any, player: any): void {
+    const volume = player.controls.querySelector(
+      ".mejs__horizontal-volume-slider"
+    );
+    if (!volume) {
+      return;
+    }
+
+    // iOS and iPadOS don't let pages set the volume (only the device's
+    // buttons can), so there the slider would do nothing: it's left out, and
+    // the mute button kept. Since iPadOS 13, an iPad presents itself as a Mac,
+    // so it's told apart by its touch screen.
+    if (
+      (window as any).mejs.Features.isiOS ||
+      (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1)
+    ) {
+      volume.remove();
+      return;
+    }
+
+    const valueText = (level: number): string => `${Math.round(level * 100)}%`;
+
+    // mediaelement draws it as a link without an href, which keyboard users
+    // can't reach.
+    volume.tabIndex = 0;
+    volume.setAttribute("aria-label", this.content.audioVolume);
+    // mediaelement only writes it once the volume changes.
+    volume.setAttribute("aria-valuetext", valueText(mediaElement.volume));
+
+    // mediaelement gives the slider no keys of its own, so they're the AV
+    // component's: up and down (or right and left) by 10%, home for silent
+    // and end for full volume, rather than seeking the media.
+    const steps: { [key: string]: (level: number) => number } = {
+      ArrowUp: (level) => level + 0.1,
+      ArrowRight: (level) => level + 0.1,
+      ArrowDown: (level) => level - 0.1,
+      ArrowLeft: (level) => level - 0.1,
+      Home: () => 0,
+      End: () => 1,
+    };
+    volume.addEventListener("keydown", (e: KeyboardEvent) => {
+      const step = steps[e.key];
+      if (!step) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      // Rounded to tenths, so ten steps down from full reach silent exactly.
+      const level =
+        Math.round(Math.min(1, Math.max(0, step(player.volume))) * 10) / 10;
+      player.setVolume(level);
+      player.setMuted(level === 0);
+      // Straight away, rather than once the media's volumechange event comes,
+      // so the new value is what's read out.
+      volume.setAttribute("aria-valuetext", valueText(level));
+    });
   }
 
   // Tells the user when the media can't be played (e.g. its file is missing),

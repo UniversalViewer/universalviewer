@@ -20,6 +20,8 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
   iconSprite: string;
   /** Determines if media errors are hidden */
   hideMediaError: boolean;
+  /** Determines if the volume controls are left out on Android and iOS */
+  hideVolumeOnTouchDevices: boolean;
   /** The colours offered for captions, in place of UV's own */
   captionStyles?: CaptionStyle[];
 };
@@ -27,10 +29,13 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
 type MediaElementCenterPanelContent = CenterPanelContent &
   CaptionsContent & {
     mediaUnavailable: string;
+    audioVolume: string;
     fullScreen: string;
     mute: string;
     pause: string;
     play: string;
+    playbackPosition: string;
+    positionOfDuration: string;
     unmute: string;
   };
 
