@@ -51,6 +51,13 @@
 .mejs__controls .captions {
   display: flex;
   align-items: center;
+
+  // Without the shared .btn padding and border, so the button is no taller
+  // than its icon and fits within mediaelement's controls.
+  .captions-button {
+    padding: 0 5px;
+    border: 0;
+  }
 }
 
 .mejs__container .captions-overlay {
