@@ -189,7 +189,12 @@
         "captionDarkRedOnMint": "$captionDarkRedOnMint",
         "captionDarkPurpleOnYellow": "$captionDarkPurpleOnYellow",
         "close": "$close",
-        "closeAttribution": "$closeAttribution"
+        "closeAttribution": "$closeAttribution",
+        "fullScreen": "$fullScreen",
+        "mute": "$mute",
+        "pause": "$pause",
+        "play": "$play",
+        "unmute": "$unmute"
       }
     },
     "restrictedDialogue": {

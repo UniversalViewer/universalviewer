@@ -27,6 +27,11 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
 type MediaElementCenterPanelContent = CenterPanelContent &
   CaptionsContent & {
     mediaUnavailable: string;
+    fullScreen: string;
+    mute: string;
+    pause: string;
+    play: string;
+    unmute: string;
   };
 
 type MediaElementCenterPanel = {

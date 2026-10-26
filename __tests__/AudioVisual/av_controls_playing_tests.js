@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
 const { viewerUrl } = require("../../scripts/testViewer");
 
@@ -34,6 +34,7 @@ describe.each(PLAYERS)("Controls in $player while playing", (player) => {
 
   // Loading the viewer can be slow while other tests run, so it has 60s.
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

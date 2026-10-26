@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
@@ -109,12 +109,14 @@ describe("Universal Viewer", () => {
     if (context) await context.close();
     context = await browser.createBrowserContext();
     page = await context.newPage();
+
     await page.goto(viewerUrl(IMAGE_BOOK_MANIFEST), {
       waitUntil: "domcontentloaded",
     });
   };
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
   });
 
@@ -257,6 +259,10 @@ describe("Universal Viewer", () => {
       "Thumbnail size",
       "Increase thumbnail size",
     ]);
+
+    await page.evaluate(() => {
+      document.querySelector(".uv-icon-two-up").click();
+    });
   });
 
   it("settings button is visible", async () => {

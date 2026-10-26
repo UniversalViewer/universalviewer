@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
 const { viewerUrl } = require("../../scripts/testViewer");
 
@@ -23,6 +23,7 @@ describe("AV component controls", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -343,18 +344,20 @@ describe("AV component controls", () => {
   }, 60000);
 });
 
-// The MediaElement extension's controls, as they are today. Unlike the AV
-// component's: UV doesn't translate mediaelement's own labels (only the
-// captions control's), so they're tested in English; its buttons are smaller
-// than 44px square; it has no buttons to skip 20 seconds; and its keyboard
-// steps are mediaelement's own. A video's volume slider only appears over the
-// mute button, so isn't among the controls that should always be in view.
+// The MediaElement extension's controls (manifests without ranges), held to
+// the same accessibility checks as the AV component's: each control named,
+// with its tooltip, in the user's language; every control shown and in reach
+// on any device, and at least 44px square to tap; the timeline and volume
+// presented as sliders, named in the user's language, with their values; and
+// keyboard steps of 5 seconds and 10%. It has its own controls (no previous,
+// next or 20-second skip buttons, but a full screen button).
 describe("MediaElement controls", () => {
   let browser;
   let context;
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -365,16 +368,17 @@ describe("MediaElement controls", () => {
     await browser.close();
   });
 
-  // Loads the manifest as a new visitor, on a device of the given size, and
-  // waits for the player's controls and their layout to settle.
-  const load = async (viewport = SIZES[0][1]) => {
+  // Loads the manifest as a new visitor, in the given locales and on a device
+  // of the given size, and waits for the player's controls and their layout
+  // to settle.
+  const load = async ({ locales, viewport = SIZES[0][1] } = {}) => {
     if (context) {
       await context.close();
     }
     context = await browser.createBrowserContext();
     page = await context.newPage();
     await page.setViewport({ deviceScaleFactor: 1, ...viewport });
-    await page.goto(viewerUrl(MEDIAELEMENT_MANIFEST), {
+    await page.goto(viewerUrl(MEDIAELEMENT_MANIFEST, locales), {
       waitUntil: "domcontentloaded",
     });
     await page.waitForSelector(".mejs__controls .captions-button", {
@@ -384,28 +388,62 @@ describe("MediaElement controls", () => {
     return page.$(".mejs__container");
   };
 
+  // Each button in the controls, by its accessible name (what screen readers
+  // announce) and its tooltip.
+  const buttons = async (player) => {
+    const names = [];
+    for (const button of await player.$$(".mejs__controls button")) {
+      const { name } = await page.accessibility.snapshot({ root: button });
+      names.push({ name, title: await button.evaluate((b) => b.title) });
+    }
+    return names;
+  };
+
   const accessibleName = async (element) =>
     (await page.accessibility.snapshot({ root: element })).name;
 
-  const CONTROLS = {
-    play: ".mejs__playpause-button button",
-    time: ".mejs__currenttime",
-    timeline: ".mejs__time-total",
-    mute: ".mejs__volume-button button",
-    captions: ".captions-button",
-    fullscreen: ".mejs__fullscreen-button button",
+  // The timeline and volume, as the controls' sliders in the order they're
+  // shown, whatever elements mediaelement draws them with.
+  const SLIDERS = {
+    timeline: 0,
+    volume: 1,
+  };
+
+  const sliderHandle = async (player, which) =>
+    (await player.$$(".mejs__controls [role=slider]"))[SLIDERS[which]];
+
+  const slider = async (player, which) => {
+    const handle = await sliderHandle(player, which);
+    if (!handle) {
+      return null;
+    }
+    const node = await page.accessibility.snapshot({ root: handle });
+    return {
+      role: node.role,
+      name: node.name,
+      valuetext: await handle.evaluate((h) => h.getAttribute("aria-valuetext")),
+    };
   };
 
   // In the order they're shown, which is the order keyboard and screen reader
   // users reach them.
-  it("names every control", async () => {
-    const player = await load();
-    const names = [];
-    for (const button of await player.$$(".mejs__controls button")) {
-      names.push(await accessibleName(button));
-    }
-    expect(names).toEqual(["Play", "Mute", "Captions: Off", "Fullscreen"]);
-  }, 60000);
+  it("names every control, and its tooltip, in the user's language", async () => {
+    const english = await buttons(await load());
+    expect(english).toEqual(
+      ["Play", "Mute", "Captions: Off", "Full Screen"].map((name) => ({
+        name,
+        title: name,
+      }))
+    );
+
+    const welsh = await buttons(await load({ locales: "cy-GB" }));
+    expect(welsh).toEqual(
+      ["Chwarae", "Mudo", "Capsiynau: I ffwrdd", "Sgrin lawn"].map((name) => ({
+        name,
+        title: name,
+      }))
+    );
+  }, 90000);
 
   it("never shows 'undefined'", async () => {
     const player = await load();
@@ -422,8 +460,8 @@ describe("MediaElement controls", () => {
   }, 60000);
 
   it("names the play button for what it will do", async () => {
-    await load();
-    const play = await page.$(CONTROLS.play);
+    const player = await load();
+    const play = await player.$(".mejs__playpause-button button");
     await page.evaluate(() =>
       document
         .querySelectorAll(".mejs__container video")
@@ -431,51 +469,54 @@ describe("MediaElement controls", () => {
     );
 
     await play.click();
-    await page.waitForFunction(
-      (b) => b.getAttribute("aria-label") === "Pause",
-      {},
-      play
-    );
+    await page.waitForFunction((b) => b.title === "Pause", {}, play);
     expect(await accessibleName(play)).toBe("Pause");
 
     await play.click();
-    await page.waitForFunction(
-      (b) => b.getAttribute("aria-label") === "Play",
-      {},
-      play
-    );
+    await page.waitForFunction((b) => b.title === "Play", {}, play);
     expect(await accessibleName(play)).toBe("Play");
   }, 60000);
 
   it("names the mute button for what it will do", async () => {
-    await load();
-    const mute = await page.$(CONTROLS.mute);
+    const player = await load();
+    const mute = await player.$(".mejs__volume-button button");
 
     await mute.click();
-    await page.waitForFunction(
-      (b) => b.getAttribute("aria-label") === "Unmute",
-      {},
-      mute
-    );
+    await page.waitForFunction((b) => b.title === "Unmute", {}, mute);
     expect(await accessibleName(mute)).toBe("Unmute");
 
     await mute.click();
-    await page.waitForFunction(
-      (b) => b.getAttribute("aria-label") === "Mute",
-      {},
-      mute
-    );
+    await page.waitForFunction((b) => b.title === "Mute", {}, mute);
     expect(await accessibleName(mute)).toBe("Mute");
   }, 60000);
 
+  // FITTING ANY SIZE
+  const CONTROLS = {
+    play: ".mejs__playpause-button button",
+    time: ".mejs__currenttime",
+    // The track: pressing anywhere on it seeks there.
+    timeline: ".mejs__time-total",
+    mute: ".mejs__volume-button button",
+    captions: ".captions-button",
+    fullscreen: ".mejs__fullscreen-button button",
+  };
+
   // For each control: whether it can be seen and reached, i.e. it's laid
   // out, on screen, and the topmost element at its centre (so nothing covers
-  // it and no container clips it).
+  // it and no container clips it). The volume is the controls' second slider.
   const reachability = (player) =>
     player.evaluate((player, controls) => {
       const result = {};
-      for (const [name, selector] of Object.entries(controls)) {
-        const el = player.querySelector(selector);
+      const elements = Object.fromEntries(
+        Object.entries(controls).map(([name, selector]) => [
+          name,
+          player.querySelector(selector),
+        ])
+      );
+      elements.volume = player.querySelectorAll(
+        ".mejs__controls [role=slider]"
+      )[1];
+      for (const [name, el] of Object.entries(elements)) {
         const box = el && el.getBoundingClientRect();
         if (!box || !box.width || !box.height) {
           result[name] = "not shown";
@@ -501,30 +542,86 @@ describe("MediaElement controls", () => {
 
   describe.each(SIZES)("on %s", (_, viewport) => {
     it("shows every control, uncovered and unclipped", async () => {
-      const player = await load(viewport);
+      const player = await load({ viewport });
       const ok = Object.fromEntries(
-        Object.keys(CONTROLS).map((name) => [name, "ok"])
+        [...Object.keys(CONTROLS), "volume"].map((name) => [name, "ok"])
       );
       expect(await reachability(player)).toEqual(ok);
     }, 60000);
+
+    if (viewport.hasTouch) {
+      it("makes every button at least 44px square, to tap", async () => {
+        const player = await load({ viewport });
+        const small = await player.$$eval(".mejs__controls button", (buttons) =>
+          buttons
+            .map((b) => {
+              const { width, height } = b.getBoundingClientRect();
+              return { label: b.title, width, height };
+            })
+            .filter(({ width, height }) => width < 44 || height < 44)
+        );
+        expect(small).toEqual([]);
+      }, 60000);
+    }
   });
 
-  it("presents the timeline and volume as sliders, by name", async () => {
+  // THE SLIDERS
+  it("presents the timeline and volume as sliders, with their values", async () => {
     const player = await load();
-    // mediaelement gives the timeline its name and value while it's focused
-    // and paused.
-    await player.$eval(CONTROLS.timeline, (timeline) => timeline.focus());
-    const sliders = await player.$$eval(
-      ".mejs__time-total, .mejs__volume-slider",
-      (sliders) =>
-        sliders.map((slider) => ({
-          role: slider.getAttribute("role"),
-          name: slider.getAttribute("aria-label"),
-        }))
+
+    expect(await slider(player, "timeline")).toEqual({
+      role: "slider",
+      name: "Playback position",
+      valuetext: "00:00 of 09:32",
+    });
+    expect(await slider(player, "volume")).toEqual({
+      role: "slider",
+      name: "Volume",
+      valuetext: "100%",
+    });
+  }, 60000);
+
+  it("moves through the media with the keyboard, 5 seconds at a time", async () => {
+    const player = await load();
+    const time = () =>
+      player.$eval(".mejs__currenttime", (el) => el.textContent);
+    const timeline = await sliderHandle(player, "timeline");
+
+    await timeline.focus();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
+    expect(await time()).toBe("00:10");
+
+    await page.keyboard.press("ArrowLeft");
+    expect(await time()).toBe("00:05");
+    expect(await timeline.evaluate((h) => h.getAttribute("aria-valuetext"))).toBe(
+      "00:05 of 09:32"
     );
-    expect(sliders).toEqual([
-      { role: "slider", name: "Time Slider" },
-      { role: "slider", name: "Volume Slider" },
-    ]);
+
+    await page.keyboard.press("Home");
+    expect(await time()).toBe("00:00");
+  }, 60000);
+
+  it("changes the volume with the keyboard, 10% at a time", async () => {
+    const player = await load();
+    const volume = await sliderHandle(player, "volume");
+
+    await volume.focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+
+    expect(await volume.evaluate((h) => h.getAttribute("aria-valuetext"))).toBe(
+      "80%"
+    );
+    expect(
+      await page.$eval(".mejs__container video", (video) => video.volume)
+    ).toBeCloseTo(0.8, 5);
+  }, 60000);
+
+  it("names the sliders in the user's language", async () => {
+    const player = await load({ locales: "cy-GB" });
+
+    expect((await slider(player, "timeline")).name).toBe("Safle chwarae");
+    expect((await slider(player, "volume")).name).toBe("Lefel sain");
   }, 60000);
 });

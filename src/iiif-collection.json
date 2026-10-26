@@ -55,7 +55,8 @@
         {
           "@id": "https://wellcomelibrary.org/iiif/b17307922/manifest",
           "@type": "sc:Manifest",
-          "label": "Florence Nightingale (audio)"
+          "label": "Florence Nightingale (audio)",
+          "visible": false
         },
         {
           "@id": "https://wellcomelibrary.org/iiif/b17502792/manifest",
@@ -925,7 +926,7 @@
         {
           "@id": "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json",
           "@type": "sc:Manifest",
-          "label": "Table of Contents for Multiple A/V Files on a Single Canvas",
+          "label": "Manifest with Ranges for Multiple A/V Files on a Single Canvas",
           "visible": true
         },
         {

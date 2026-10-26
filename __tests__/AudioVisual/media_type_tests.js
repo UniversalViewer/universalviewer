@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
 const { viewerUrl } = require("../../scripts/testViewer");
 
@@ -73,6 +73,7 @@ describe("The MediaElement extension's player", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -119,6 +120,7 @@ describe("The AV component's media element", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

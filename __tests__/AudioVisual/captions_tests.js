@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
 const { viewerUrl, expectPanelTitle } = require("../../scripts/testViewer");
 
@@ -115,6 +115,7 @@ describe("Captions", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

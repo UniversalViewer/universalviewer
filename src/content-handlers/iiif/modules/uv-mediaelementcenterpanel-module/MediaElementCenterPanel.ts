@@ -229,6 +229,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("video")[0], {
+        ...this._controlOptions(),
         iconSprite: this.config.options.iconSprite,
         poster: poster,
         features: [
@@ -318,6 +319,7 @@ export class MediaElementCenterPanel extends CenterPanel<
       this.$container.append(this.$media);
 
       this.player = new MediaElementPlayer($("audio")[0], {
+        ...this._controlOptions(),
         poster: poster,
         defaultAudioWidth: "auto",
         features: [
@@ -423,6 +425,19 @@ export class MediaElementCenterPanel extends CenterPanel<
         $poster.show();
       })
     );
+  }
+
+  // The controls' options shared by the video and audio players: their names
+  // and tooltips in the user's language, from the panel's content, rather
+  // than mediaelement's own English.
+  private _controlOptions(): object {
+    return {
+      playText: this.content.play,
+      pauseText: this.content.pause,
+      muteText: this.content.mute,
+      unmuteText: this.content.unmute,
+      fullscreenText: this.content.fullScreen,
+    };
   }
 
   // Tells the user when the media can't be played (e.g. its file is missing),

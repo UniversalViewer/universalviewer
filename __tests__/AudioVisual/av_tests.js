@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+let puppeteer;
 const { viewerUrl, expectPanelTitle } = require("../../scripts/testViewer");
 
 // AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
@@ -27,6 +27,7 @@ describe("Universal Viewer", () => {
   let page;
 
   beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
