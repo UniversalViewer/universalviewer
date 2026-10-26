@@ -1,4 +1,6 @@
 @import "variables";
+@import "themes";
+@import "properties";
 @import "mixins";
 @import "mixins-extended";
 @import "icons";
@@ -21,6 +23,24 @@
 @import "lg";
 @import "xl";
 
+.uv {
+  .theme-dark();
+}
+
+.uv[data-theme="light"] {
+  .theme-light();
+}
+
+.uv[data-theme="hc"] {
+  .theme-hc();
+}
+
+@media (prefers-color-scheme: light) {
+  .uv[data-theme="auto"] {
+    .theme-light();
+  }
+}
+
 :root {
   --uv-grid-left-width-open: 271px;
   --uv-grid-right-width-open: 271px;
@@ -34,7 +54,7 @@
 }
 
 .uv {
-  // background-color: @body-bg;
+  background-color: @uv-body-bg;
   position: relative;
 
   // Common styles

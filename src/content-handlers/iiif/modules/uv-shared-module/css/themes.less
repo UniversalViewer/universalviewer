@@ -1,0 +1,23 @@
+// common to all theme, with minimal overrides
+.theme-base() {
+  --uv-d-font-size: 1rem;
+}
+
+.theme-dark() {
+  .theme-base();
+
+  --uv-d-color-canvas: @uv-bg;
+}
+
+.theme-hc() {
+  .theme-dark();
+
+  // hc overrides of dark here
+  --uv-d-color-canvas: @uv-bg-hc;
+}
+
+.theme-light() {
+  //.theme-base();
+
+  --uv-d-color-canvas: @uv-bg-light;
+}
