@@ -72,7 +72,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       IIIFEvents.SETTINGS_CHANGE,
       (args: ISettings) => {
         this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
-        this.viewer.controlsFadeLength = this.getControlsFadeLength();
       }
     );
 
@@ -247,8 +246,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       showFullPageControl: false,
       defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
-      controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
-      controlsFadeLength: this.getControlsFadeLength(),
       showNavigationControl: false,
       showNavigator: true,
       navigatorId: "osd-navigator-container",
@@ -263,10 +260,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         false
       ),
       blendTime: this.config.options.blendTime || 0,
-      autoHideControls: Bools.getBool(
-        this.config.options.autoHideControls,
-        true
-      ),
       prefixUrl: "",
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
@@ -758,8 +751,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const navigatorElement = this.viewer.navigator.element as HTMLElement;
     const $content = $(navigatorElement).parent().parent();
     const $controls = $content.find(".imageControlsContainer");
-
-    console.log(navigatorElement);
 
     const homeBounds = this.viewer.world.getHomeBounds();
     const contentAspectRatio = homeBounds.width / homeBounds.height;
@@ -1292,11 +1283,5 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         this.$canvas.focus();
       }
     }
-  }
-
-  getControlsFadeLength(): number {
-    return (<ISettings>this.extension.getSettings()).reducedAnimation
-      ? 0
-      : this.config.options.controlsFadeLength || 250;
   }
 }

@@ -36,7 +36,8 @@
     },
     "openSeadragonCenterPanel": {
       "options": {
-        "autoHideControls": false,
+        "autoHideControls": true,
+        "controlsFadeAfterInactive": 3000,
         "showHomeControl": false,
         "showAdjustImageControl": true
       }
