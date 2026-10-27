@@ -1,7 +1,17 @@
-:root {
-  --uv-background-color: pink;
+.uv {
+  --uv-header-background-color: rgb(112, 6, 23);
+}
 
-  @media (prefers-color-scheme: dark) {
-    --uv-background-color: aqua;
+.uv[data-theme="light"] {
+  --uv-header-background-color: rgb(66, 109, 173);
+}
+
+.uv[data-theme="hc"] {
+  --uv-header-background-color: #333;
+}
+
+@media (prefers-color-scheme: light) {
+  .uv[data-theme="auto"] {
+    --uv-header-background-color: rgb(64, 160, 160);
   }
 }
