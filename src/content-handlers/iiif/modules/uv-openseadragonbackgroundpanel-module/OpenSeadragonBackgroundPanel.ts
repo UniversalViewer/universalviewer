@@ -47,7 +47,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewerId: string;
   navigatorResizeTimeout: number;
   visibleAreaObserver: ResizeObserver;
-  lastMargins = { left: 0, right: 0 };
 
   $canvas: JQuery;
   $spinner: JQuery;
@@ -412,12 +411,13 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.$viewer.removeClass("dialogue-open");
     });
 
-    // add resize observer to the center panel content; update margins when it's resized
+    // add resize observer to the center panel content; update margins when it's resized, if keepImageInView
     // The behaviour here needs some thought. slide sideways, or slide and zoom?
     this.visibleAreaObserver = new ResizeObserver(() => {
       const viewport = this.viewer?.viewport;
       if (!viewport) return;
 
+      // static mode: do nothing
       if (!this.keepImageInView()) return;
 
       // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
@@ -503,7 +503,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.items = [];
 
     // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
-    const spinnerTimeout = setTimeout(() => {
+    const spinnerTimeout = window.setTimeout(() => {
       this.$spinner.show();
     }, 200);
 
@@ -576,11 +576,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
                     this.items.push(item);
                     loadedItems++;
                     if (loadedItems === totalItems) {
-                      clearTimeout(spinnerTimeout);
-                      this.$spinner.hide();
-                      this.openPagesHandler();
-                      this.resize();
-                      this.goHome();
+                      this.onAllLoaded(spinnerTimeout);
                     }
                   },
                 });
@@ -614,11 +610,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
                   this.items.push(item);
                   loadedItems++;
                   if (loadedItems === totalItems) {
-                    clearTimeout(spinnerTimeout);
-                    this.$spinner.hide();
-                    this.openPagesHandler();
-                    this.resize();
-                    this.goHome();
+                    this.onAllLoaded(spinnerTimeout);
                   }
                 },
               });
@@ -667,19 +659,20 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
-              clearTimeout(spinnerTimeout);
-              this.$spinner.hide();
-
-              this.openPagesHandler();
+              this.onAllLoaded(spinnerTimeout);
             }
-            this.resize();
-            this.goHome();
           },
         });
       }
     } catch {
       // do nothing
     }
+  }
+
+  onAllLoaded(spinnerTimeout: number): void {
+    clearTimeout(spinnerTimeout);
+    this.$spinner.hide();
+    this.openPagesHandler();
   }
 
   getPagePositions(
@@ -753,6 +746,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   openPagesHandler(): void {
+    // this triggers another openPagesHandler in the OSD center panel which renders the title and buttons etc.
     this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
 
     // resize navigator for continuous manifests
@@ -763,6 +757,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
 
     this.overlayAnnotations();
+
+    // call this here because the addition of the title in the center panel will have changed the visible viewport.
+    this.updateViewportMargins();
 
     this.updateBounds();
 
@@ -894,10 +891,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateBounds(): void {
+    console.log("update bounds");
     const settings: ISettings = this.extension.getSettings();
 
     // if this is the first load and there are initial bounds, fit to those.
     if (this.isFirstLoad) {
+      console.log("fist load");
       this.initialRotation = (<IOpenSeadragonExtensionData>(
         this.extension.data
       )).rotation;
@@ -911,11 +910,15 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       ).xywh;
 
       if (xywh) {
+        console.log("got xywh");
         this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
+      } else {
+        this.goHome();
       }
     } else if (settings.preserveViewport && this.currentBounds) {
+      console.log("(settings.preserveViewport && this.currentBounds)");
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
       this.fitToBounds(this.currentBounds);
     } else {
@@ -937,9 +940,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     rect.y = Number(bounds.y);
     rect.width = Number(bounds.w);
     rect.height = Number(bounds.h);
-    setTimeout(() => {
-      this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
-    }, 100);
+    this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
   }
 
   getCroppedImageBounds(): string | null {
@@ -1285,6 +1286,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateViewportMargins(): void {
+    console.log("updateViewportMargins");
     if (!this.viewer?.viewport) return;
 
     const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
@@ -1293,6 +1295,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const v = this.$viewer[0].getBoundingClientRect();
     const c = centerPanel.$content[0].getBoundingClientRect();
     if (!v.width || !v.height) return;
+
+    console.log("updateViewportMargins", c.left - v.left);
 
     this.viewer.viewport.setMargins({
       left: Math.max(0, c.left - v.left),
