@@ -10,7 +10,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs/";
 import { Bools } from "../../Utils";
-import { Thumb, TreeNode, Range } from "manifesto.js";
+import { TreeNode, Range } from "manifesto.js";
 import { createRoot, Root } from "react-dom/client";
 import { createElement } from "react";
 import { RAMPBridge } from "./RAMPBridge";
@@ -43,6 +43,9 @@ export default class Extension
   create(): void {
     super.create();
 
+
+    // breaking without these two event subscriptions but may not be necessary 
+
     this.extensionHost.subscribe(
       IIIFEvents.CANVAS_INDEX_CHANGE,
       (canvasIndex: number) => {
@@ -53,17 +56,17 @@ export default class Extension
       }
     );
 
-    this.extensionHost.subscribe(
-      IIIFEvents.TREE_NODE_SELECTED,
-      (node: TreeNode) => {
-        this.fire(IIIFEvents.TREE_NODE_SELECTED, node.data.path);
-        this.treeNodeSelected(node);
-      }
-    );
+    // this.extensionHost.subscribe(
+    //   IIIFEvents.TREE_NODE_SELECTED,
+    //   (node: TreeNode) => {
+    //     this.fire(IIIFEvents.TREE_NODE_SELECTED, node.data.path);
+    //     this.treeNodeSelected(node);
+    //   }
+    // );
 
-    this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, (thumb: Thumb) => {
-      this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, thumb.index);
-    });
+    // this.extensionHost.subscribe(IIIFEvents.THUMB_SELECTED, (thumb: Thumb) => {
+    //   this.extensionHost.publish(IIIFEvents.CANVAS_INDEX_CHANGE, thumb.index);
+    // });
 
     // Mount RAMP once media is ready to load
     this.extensionHost.subscribe(IIIFEvents.OPEN_EXTERNAL_RESOURCE, () => {
@@ -71,9 +74,17 @@ export default class Extension
     });
   }
 
+  private _mountedManifestUrl: string | null = null;
+
   private _mountRAMP(): void {
+    console.log("canvases", this.helper.getTotalCanvases(), "index", this.helper.canvasIndex);
     const manifestUrl = this.helper.manifestUri;
     if (!manifestUrl) return;
+    if (this._reactRoot && manifestUrl === this._mountedManifestUrl) return;
+    this._mountedManifestUrl = manifestUrl;
+     const startCanvasId = this.helper.getCanvasByIndex(
+     this.helper.canvasIndex
+   )?.id;
 
     const $centerContent = this.shell.$centerPanel.find(".content");
     const centerPanelEl = (
@@ -91,6 +102,7 @@ export default class Extension
     this._reactRoot.render(
       createElement(RAMPBridge, {
         manifestUrl,
+        startCanvasId,
         centerPanelEl,
         navEl: this.leftPanel.$navContent[0],
         transcriptEl: this.leftPanel.$transcriptContent[0],
@@ -200,6 +212,7 @@ export default class Extension
   dispose(): void {
     this._reactRoot?.unmount();
     this._reactRoot = null;
+    this._mountedManifestUrl = null;
     super.dispose();
   }
 }

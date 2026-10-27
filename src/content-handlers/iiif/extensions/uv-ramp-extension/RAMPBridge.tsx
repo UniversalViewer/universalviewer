@@ -14,17 +14,25 @@ interface RAMPBridgeProps {
   navEl: HTMLElement | null;
   transcriptEl: HTMLElement | null;
   extensionHost: any;
+  startCanvasId?: string;
+  startCanvasTime?: number;
 }
 
 export function RAMPBridge({
-  manifestUrl,
+  manifestUrl, 
+  startCanvasId,
+  startCanvasTime,           
   centerPanelEl,
   navEl,
   transcriptEl,
   extensionHost,
 }: RAMPBridgeProps) {
   return (
-    <IIIFPlayer manifestUrl={manifestUrl}>
+    <IIIFPlayer 
+      manifestUrl={manifestUrl}
+      startCanvasId={startCanvasId}
+      startCanvasTime={startCanvasTime}
+    >
       {/* Sync bridge lives inside the context tree but renders nothing */}
       <UVSyncBridge extensionHost={extensionHost} />
 
