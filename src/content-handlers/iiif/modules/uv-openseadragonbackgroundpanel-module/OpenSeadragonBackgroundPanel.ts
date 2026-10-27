@@ -147,10 +147,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        if (this.options.keepImageInViewEnabled) {
+        if (this.keepImageInView()) {
           this.goHome(false);
         } else {
-          // need to update margins if keepImageInViewEnabled is false, because they won't have bene updated by the resizeObserver yet
+          // need to update margins if keepImageInViewEnabled is false, because they won't have been updated by the resizeObserver yet
           this.updateViewportMargins();
           // unfortunately in this case we can't animate the return home as doing this right after updateViewportMargins causes the image to jump
           // todo: look into how to enable animation in static mode (updateViewportMargins = false)
@@ -413,16 +413,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     });
 
     // add resize observer to the center panel content; update margins when it's resized
-    // The behaviour here needs some thought. It feels more intuitive to have the image move with the panels when they open (retains content visibility), but stay still when they close.OR the image should just pan rather than zoom when the panels are oepened - need to try out different options
+    // The behaviour here needs some thought. slide sideways, or slide and zoom?
     this.visibleAreaObserver = new ResizeObserver(() => {
       const viewport = this.viewer?.viewport;
       if (!viewport) return;
 
-      const keepInView = Bools.getBool(
-        this.options.keepImageInViewEnabled,
-        true
-      );
-      if (!keepInView) return;
+      if (!this.keepImageInView()) return;
 
       // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
@@ -1304,6 +1300,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       right: Math.max(0, v.right - c.right),
       bottom: Math.max(0, v.bottom - c.bottom),
     });
+  }
+
+  keepImageInView(): boolean {
+    return Bools.getBool(this.options.keepImageInViewEnabled, true);
   }
 
   resize(): void {
