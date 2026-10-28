@@ -68,7 +68,7 @@ body {
 
     &:hover,
     &:focus {
-      border-color: currentColor;
+      border-color: currentcolor;
     }
   }
 
@@ -105,7 +105,7 @@ body {
 
     &:hover {
       box-shadow: inset 0 0 0 4px Highlight;
-      border-color: currentColor;
+      border-color: currentcolor;
     }
   }
 
