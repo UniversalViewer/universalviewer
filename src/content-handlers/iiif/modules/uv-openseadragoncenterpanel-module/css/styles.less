@@ -103,12 +103,7 @@
           }
 
           &:focus-visible {
-            outline: 2px solid @link-color;
-            outline-offset: -2px;
-            i,
-            span {
-              outline: 0;
-            }
+        		.tab-focus();
           }
         }
 
@@ -307,8 +302,7 @@
       outline: none;
     }
     &.keyboard-nav:focus-visible {
-      outline: 2px solid @link-color;
-      outline-offset: -2px;
+		  .tab-focus();
     }
   }
 }
