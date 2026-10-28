@@ -1,4 +1,3 @@
-import { Bools } from "../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
@@ -25,12 +24,7 @@ export class LeftPanel<
   init(): void {
     super.init();
 
-    const shouldOpenPanel: boolean = Bools.getBool(
-      this.extension.getSettings().leftPanelOpen,
-      this.options.panelOpen && !this.extension.isMetric("sm")
-    );
-
-    if (shouldOpenPanel) {
+    if (this.extension.shouldLeftPanelStartOpen()) {
       this.toggle(true);
     }
 

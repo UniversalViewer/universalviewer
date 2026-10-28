@@ -1,4 +1,3 @@
-import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
@@ -15,12 +14,7 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   init(): void {
     super.init();
 
-    const shouldOpenPanel: boolean = Bools.getBool(
-      this.extension.getSettings().rightPanelOpen,
-      this.options.panelOpen
-    );
-
-    if (shouldOpenPanel) {
+    if (this.extension.shouldRightPanelStartOpen()) {
       this.toggle(true);
     }
 

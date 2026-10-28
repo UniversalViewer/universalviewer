@@ -1112,6 +1112,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   shouldLeftPanelStartOpen(): boolean {
     // small screens always start closed
     if (!this.isDesktopMetric()) return false;
+
     if (!this.isLeftPanelEnabled()) return false;
 
     // the left panel's module name differs between extensions; contentLeftPanel is the OSD one
