@@ -65,17 +65,17 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.(png|jpg|gif|svg)$/i,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
-      },
+      // {
+      //   test: /\.(png|jpg|gif|svg)$/i,
+      //   use: [
+      //     {
+      //       loader: "url-loader",
+      //       options: {
+      //         limit: 8192,
+      //       },
+      //     },
+      //   ],
+      // },
     ],
   },
   devServer: {
@@ -100,6 +100,10 @@ const config = {
       devServer.app.use(
         "/uv-youtube-config.json",
         express.static(path.join(__dirname, "src", "uv-youtube-config.json"))
+      );
+      devServer.app.use(
+        "/examples.css",
+        express.static(path.join(__dirname, "src", "examples.css"))
       );
       devServer.app.use(
         "/uv.css",
