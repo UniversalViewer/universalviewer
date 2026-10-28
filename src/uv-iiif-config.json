@@ -10,7 +10,7 @@
     "preferMediaElementExtension": false,
     "rightPanelEnabled": true,
     "clickToZoomEnabled": false,
-    "saveUserSettings": false,
+    "saveUserSettings": true,
     "animationDuration": 250
   },
   "modules": {
