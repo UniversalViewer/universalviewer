@@ -75,6 +75,8 @@ export interface IExtension {
   resize(): void;
   resources: IExternalResourceData[] | null;
   shifted: boolean;
+  shouldLeftPanelStartOpen(): boolean;
+  shouldRightPanelStartOpen(): boolean;
   showMessage(
     message: string,
     acceptCallback?: any,

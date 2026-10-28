@@ -1109,6 +1109,30 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     return Bools.getBool(this.data.config!.options.rightPanelEnabled, true);
   }
 
+  shouldLeftPanelStartOpen(): boolean {
+    // small screens always start closed
+    if (!this.isDesktopMetric()) return false;
+    if (!this.isLeftPanelEnabled()) return false;
+
+    // the left panel's module name differs between extensions; contentLeftPanel is the OSD one
+    const modules = this.data.config!.modules as any;
+    const configDefault: boolean = (
+      modules.contentLeftPanel ?? modules.leftPanel
+    )?.options?.panelOpen;
+
+    return Bools.getBool(this.getSettings().leftPanelOpen, configDefault);
+  }
+
+  shouldRightPanelStartOpen(): boolean {
+    if (!this.isDesktopMetric()) return false;
+    if (!this.isRightPanelEnabled()) return false;
+
+    const configDefault: boolean =
+      this.data.config!.modules.moreInfoRightPanel?.options?.panelOpen;
+
+    return Bools.getBool(this.getSettings().rightPanelOpen, configDefault);
+  }
+
   isFooterPanelEnabled(): boolean {
     return Bools.getBool(this.data.config!.options.footerPanelEnabled, true);
   }
