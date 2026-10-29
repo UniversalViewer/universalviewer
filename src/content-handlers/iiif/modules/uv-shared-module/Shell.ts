@@ -47,10 +47,12 @@ export class Shell extends BaseView<BaseConfig> {
     this.$element.append(this.$mainPanel);
 
     // add these classes at the shell level so that the initial layout is stable
-    if (this.extension.shouldLeftPanelStartOpen())
+    if (this.extension.shouldLeftPanelStartOpen()) {
       this.$mainPanel.addClass("leftPanelOpen");
-    if (this.extension.shouldRightPanelStartOpen())
+    }
+    if (this.extension.shouldRightPanelStartOpen()) {
       this.$mainPanel.addClass("rightPanelOpen");
+    }
 
     this.$backgroundPanel = $('<div class="backgroundPanel"></div>');
     this.$mainPanel.append(this.$backgroundPanel);
