@@ -1311,6 +1311,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     });
   }
 
+  // background panel
   keepImageInView(): boolean {
     return Bools.getBool(
       this.extension.getSettings().keepImageInViewEnabled,

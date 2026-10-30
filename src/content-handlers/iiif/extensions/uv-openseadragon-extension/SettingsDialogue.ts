@@ -1,6 +1,7 @@
 const $ = require("jquery");
 import { SettingsDialogue as BaseSettingsDialogue } from "../../modules/uv-dialogues-module/SettingsDialogue";
 import config from "./config/config.json";
+import { Bools } from "../../Utils";
 
 export class SettingsDialogue extends BaseSettingsDialogue {
   $clickToZoomEnabled: JQuery;
@@ -230,12 +231,10 @@ export class SettingsDialogue extends BaseSettingsDialogue {
       this.$preserveViewportCheckbox.removeAttr("checked");
     }
 
-    if (settings.keepImageInViewEnabled) {
-      this.$keepImageInViewEnabledCheckbox.prop("checked", true);
-    } else {
-      this.$keepImageInViewEnabledCheckbox.removeAttr("checked");
-    }
-
+    this.$keepImageInViewEnabledCheckbox.prop(
+      "checked",
+      Bools.getBool(settings.keepImageInViewEnabled, true)
+    );
     if (this.$truncateThumbnailLabelsCheckbox) {
       if (settings.truncateThumbnailLabels) {
         this.$truncateThumbnailLabelsCheckbox.prop("checked", true);

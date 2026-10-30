@@ -43,7 +43,8 @@
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
-    "zoomToBoundsEnabled": true
+    "zoomToBoundsEnabled": true,
+    "keepImageInViewEnabled": false
   },
   "modules": {
     "leftPanel": {
@@ -371,8 +372,7 @@
         "visibilityRatio": 0.5,
         "zoomToInitialAnnotation": true,
         "trimAttributionCount": 150,
-        "tileTimeout": 30000,
-        "keepImageInViewEnabled": true
+        "tileTimeout": 30000
       },
       "content": {
         "attribution": "$attribution",

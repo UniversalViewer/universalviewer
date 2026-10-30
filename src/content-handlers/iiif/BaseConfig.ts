@@ -102,6 +102,9 @@ export type Options = {
 
   /** A default animation duration */
   animationDuration?: number;
+
+  /** Determines if the image stays in view when panels open */
+  keepImageInViewEnabled?: boolean;
 };
 
 type Locale = {
