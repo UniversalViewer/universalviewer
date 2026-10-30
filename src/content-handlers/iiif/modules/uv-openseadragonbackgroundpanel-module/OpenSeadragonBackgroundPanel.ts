@@ -153,11 +153,11 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
         const viewport = this.viewer.viewport;
 
-        // read before the margins change, because they change the home zoom
+        // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
         const wasHome =
           Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
-        // margins are stale in static mode, so measure the panels as they are now
+        // margins are now stale if keepImageInView disabled, so update now
         this.updateViewportMargins();
 
         // at home: the margin change moves the picture, so snap to avoid showing the jump
@@ -419,8 +419,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.$viewer.removeClass("dialogue-open");
     });
 
-    // add resize observer to the center panel content; update margins when it's resized, if keepImageInView
-    // The behaviour here needs some thought. slide sideways, or slide and zoom?
+    // add resize observer to the center panel content; update margins when it's resized and move image if keepImageInView
+    // The behaviour here needs some thought - slide and zoom (current behaviour) or just slide sideways?
     this.visibleAreaObserver = new ResizeObserver((entries) => {
       const viewport = this.viewer?.viewport;
       if (!viewport || !this.viewer.world.getItemCount()) return;
@@ -428,13 +428,13 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       // static mode: do nothing
       if (!this.keepImageInView()) return;
 
-      // // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
+      // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
       this.updateViewportMargins();
 
-      // // // without this, the image zooms in if it was at home and a panel closes.
+      // without this, the image zooms in briefly if it was at home and a panel closes.
       if (wasHome) this.goHome();
     });
 
@@ -1311,7 +1311,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     });
   }
 
-  // background panel
   keepImageInView(): boolean {
     return Bools.getBool(
       this.extension.getSettings().keepImageInViewEnabled,
