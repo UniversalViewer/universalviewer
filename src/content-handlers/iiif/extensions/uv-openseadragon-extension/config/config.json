@@ -372,7 +372,7 @@
         "zoomToInitialAnnotation": true,
         "trimAttributionCount": 150,
         "tileTimeout": 30000,
-        "keepImageInViewEnabled": false
+        "keepImageInViewEnabled": true
       },
       "content": {
         "attribution": "$attribution",
@@ -455,7 +455,8 @@
         "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
-        "website": "$uvWebsite"
+        "website": "$uvWebsite",
+        "keepImageInViewEnabled": "$keepImageInViewEnabled"
       }
     },
     "shareDialogue": {

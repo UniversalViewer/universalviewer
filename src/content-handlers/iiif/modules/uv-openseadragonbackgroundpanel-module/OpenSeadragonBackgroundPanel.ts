@@ -286,6 +286,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       },
       // The max number of milliseconds that an image job may take to complete.
       timeout: this.config.options.tileTimeout || 30_000,
+      minZoomImageRatio: 1,
     });
 
     const that = this;
@@ -1297,18 +1298,24 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     const c = centerPanel.$element[0].getBoundingClientRect();
     if (!v.width || !v.height) return;
 
-    // console.log("updateViewportMargins", c.left - v.left);
+    const pad = 0.05;
+
+    const insetX = c.width * pad;
+    const insetY = c.height * pad;
 
     this.viewer.viewport.setMargins({
-      left: Math.max(0, c.left - v.left),
-      top: Math.max(0, c.top - v.top),
-      right: Math.max(0, v.right - c.right),
-      bottom: Math.max(0, v.bottom - c.bottom),
+      left: Math.max(0, c.left - v.left) + insetX,
+      right: Math.max(0, v.right - c.right) + insetX,
+      top: Math.max(0, c.top - v.top) + insetY,
+      bottom: Math.max(0, v.bottom - c.bottom) + insetY,
     });
   }
 
   keepImageInView(): boolean {
-    return Bools.getBool(this.options.keepImageInViewEnabled, true);
+    return Bools.getBool(
+      this.extension.getSettings().keepImageInViewEnabled,
+      true
+    );
   }
 
   resize(): void {

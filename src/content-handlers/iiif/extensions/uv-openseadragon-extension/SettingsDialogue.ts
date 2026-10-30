@@ -18,6 +18,9 @@ export class SettingsDialogue extends BaseSettingsDialogue {
   $preserveViewport: JQuery;
   $preserveViewportCheckbox: JQuery;
   $preserveViewportLabel: JQuery;
+  $keepImageInViewEnabled: JQuery;
+  $keepImageInViewEnabledCheckbox: JQuery;
+  $keepImageInViewEnabledLabel: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -120,6 +123,23 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     );
     this.$preserveViewport.append(this.$preserveViewportLabel);
 
+    this.$keepImageInViewEnabled = $(
+      '<div class="setting keepImageInViewEnabled"></div>'
+    );
+    this.$scroll.append(this.$keepImageInViewEnabled);
+
+    this.$keepImageInViewEnabledCheckbox = $(
+      '<input id="keepImageInViewEnabled" type="checkbox" tabindex="0" />'
+    );
+    this.$keepImageInViewEnabled.append(this.$keepImageInViewEnabledCheckbox);
+
+    this.$keepImageInViewEnabledLabel = $(
+      '<label for="keepImageInViewEnabled">' +
+        this.content.keepImageInViewEnabled +
+        "</label>"
+    );
+    this.$keepImageInViewEnabled.append(this.$keepImageInViewEnabledLabel);
+
     this.$navigatorEnabledCheckbox.change(() => {
       const settings: ISettings = {};
 
@@ -167,6 +187,14 @@ export class SettingsDialogue extends BaseSettingsDialogue {
 
       this.updateSettings(settings);
     });
+
+    this.$keepImageInViewEnabledCheckbox.change(() => {
+      const settings: ISettings = {};
+
+      settings.keepImageInViewEnabled =
+        this.$keepImageInViewEnabledCheckbox.is(":checked");
+      this.updateSettings(settings);
+    });
   }
 
   open(): void {
@@ -200,6 +228,12 @@ export class SettingsDialogue extends BaseSettingsDialogue {
       this.$preserveViewportCheckbox.prop("checked", true);
     } else {
       this.$preserveViewportCheckbox.removeAttr("checked");
+    }
+
+    if (settings.keepImageInViewEnabled) {
+      this.$keepImageInViewEnabledCheckbox.prop("checked", true);
+    } else {
+      this.$keepImageInViewEnabledCheckbox.removeAttr("checked");
     }
 
     if (this.$truncateThumbnailLabelsCheckbox) {
