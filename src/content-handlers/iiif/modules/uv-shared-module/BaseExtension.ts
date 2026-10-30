@@ -347,6 +347,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
         this.extensionHost.publish(Events.RESIZE);
         this.fire(Events.LOAD, this.helper.getCurrentCanvas().id);
         this.$element.removeClass("loading");
+
       }, 100); // firefox needs this :-(
     });
 

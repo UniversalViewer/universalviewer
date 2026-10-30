@@ -148,14 +148,21 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.whenCreated(() => {
         if (this.keepImageInView()) {
           this.goHome(false);
-        } else {
-          // need to update margins if keepImageInViewEnabled is false, because they won't have been updated by the resizeObserver yet
-          this.updateViewportMargins();
-          // unfortunately in this case we can't animate the return home as doing this right after updateViewportMargins causes the image to jump
-          // todo: look into how to enable animation in static mode (updateViewportMargins = false)
-          // to enable animation we'd need to avoid changing the margins in static mode entirely, and have the 'home' set as bounds of the visible viewport, and move to there
-          this.goHome(true);
+          return;
         }
+
+        const viewport = this.viewer.viewport;
+
+        // read before the margins change, because they change the home zoom
+        const wasHome =
+          Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
+
+        // margins are stale in static mode, so measure the panels as they are now
+        this.updateViewportMargins();
+
+        // at home: the margin change moves the picture, so snap to avoid showing the jump
+        // zoomed in: ease home, as the change is hidden by the larger move
+        this.goHome(wasHome);
       });
     });
 
@@ -413,25 +420,27 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     // add resize observer to the center panel content; update margins when it's resized, if keepImageInView
     // The behaviour here needs some thought. slide sideways, or slide and zoom?
-    this.visibleAreaObserver = new ResizeObserver(() => {
+    this.visibleAreaObserver = new ResizeObserver((entries) => {
       const viewport = this.viewer?.viewport;
-      if (!viewport) return;
+if (!viewport || !this.viewer.world.getItemCount()) return;
 
       // static mode: do nothing
       if (!this.keepImageInView()) return;
 
-      // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
+
+      // // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
       this.updateViewportMargins();
 
-      // without this, the image zooms in if it was at home and a panel closes.
+
+      // // // without this, the image zooms in if it was at home and a panel closes.
       if (wasHome) this.goHome();
     });
 
     this.visibleAreaObserver.observe(
-      (this.extension as OpenSeadragonExtension).centerPanel.$content[0]
+      (this.extension as OpenSeadragonExtension).centerPanel.$element[0]
     );
   }
 
@@ -501,6 +510,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.viewer.close();
     this.items = [];
+
+    this.updateViewportMargins();
+
 
     // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
     const spinnerTimeout = window.setTimeout(() => {
@@ -758,9 +770,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.overlayAnnotations();
 
-    // call this here because the addition of the title in the center panel will have changed the visible viewport.
-    this.updateViewportMargins();
-
     this.updateBounds();
 
     // this only happens if prev/next search result were clicked and caused a reload
@@ -891,12 +900,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateBounds(): void {
-    console.log("update bounds");
     const settings: ISettings = this.extension.getSettings();
 
     // if this is the first load and there are initial bounds, fit to those.
     if (this.isFirstLoad) {
-      console.log("fist load");
       this.initialRotation = (<IOpenSeadragonExtensionData>(
         this.extension.data
       )).rotation;
@@ -910,7 +917,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       ).xywh;
 
       if (xywh) {
-        console.log("got xywh");
         this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
@@ -918,7 +924,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         this.goHome();
       }
     } else if (settings.preserveViewport && this.currentBounds) {
-      console.log("(settings.preserveViewport && this.currentBounds)");
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
       this.fitToBounds(this.currentBounds);
     } else {
@@ -1286,17 +1291,16 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateViewportMargins(): void {
-    console.log("updateViewportMargins");
     if (!this.viewer?.viewport) return;
 
     const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
-    if (!centerPanel?.$content?.length) return;
+    if (!centerPanel?.$element?.length) return;
 
     const v = this.$viewer[0].getBoundingClientRect();
-    const c = centerPanel.$content[0].getBoundingClientRect();
+    const c = centerPanel.$element[0].getBoundingClientRect();
     if (!v.width || !v.height) return;
 
-    console.log("updateViewportMargins", c.left - v.left);
+    // console.log("updateViewportMargins", c.left - v.left);
 
     this.viewer.viewport.setMargins({
       left: Math.max(0, c.left - v.left),
@@ -1345,5 +1349,5 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         this.$canvas.focus();
       }
     }
-  }
+  } 
 }
