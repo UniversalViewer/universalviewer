@@ -640,7 +640,7 @@ Order in which manifests are displayed.
 
 **Type**: `string`  
 **Default**: `""`  
-Excludes the field from the displayed manifest e.g "title". 
+Excludes the field from the displayed manifest e.g "title".
 
 ##### panelAnimationDuration
 
@@ -981,6 +981,12 @@ Determines if annotation is enabled.
 **Type**: `boolean`  
 **Default**: `false`  
 Determines if rendering is immediate.
+
+##### keepImageInViewEnabled
+
+**Type**: `boolean`  
+**Default**: `false`
+Determines if the viewer adjusts the image to keep it in the visible viewport.
 
 ##### maxZoomPixelRatio
 

@@ -167,5 +167,6 @@
   "$rights": "Rättigheter",
   "$layers": "Lager",
   "$canvas": "Canvas {0}",
-  "$choice": "Val {0}"
+  "$choice": "Val {0}",
+  "$keepImageInViewEnabled": "Keep Image in View"
 }

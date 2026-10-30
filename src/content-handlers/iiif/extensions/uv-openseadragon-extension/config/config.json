@@ -43,7 +43,8 @@
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
-    "zoomToBoundsEnabled": true
+    "zoomToBoundsEnabled": true,
+    "keepImageInViewEnabled": false
   },
   "modules": {
     "leftPanel": {
@@ -454,7 +455,8 @@
         "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
-        "website": "$uvWebsite"
+        "website": "$uvWebsite",
+        "keepImageInViewEnabled": "$keepImageInViewEnabled"
       }
     },
     "shareDialogue": {
