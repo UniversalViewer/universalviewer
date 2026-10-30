@@ -422,18 +422,16 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     // The behaviour here needs some thought. slide sideways, or slide and zoom?
     this.visibleAreaObserver = new ResizeObserver((entries) => {
       const viewport = this.viewer?.viewport;
-if (!viewport || !this.viewer.world.getItemCount()) return;
+      if (!viewport || !this.viewer.world.getItemCount()) return;
 
       // static mode: do nothing
       if (!this.keepImageInView()) return;
-
 
       // // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
       this.updateViewportMargins();
-
 
       // // // without this, the image zooms in if it was at home and a panel closes.
       if (wasHome) this.goHome();
@@ -512,7 +510,6 @@ if (!viewport || !this.viewer.world.getItemCount()) return;
     this.items = [];
 
     this.updateViewportMargins();
-
 
     // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
     const spinnerTimeout = window.setTimeout(() => {
@@ -1349,5 +1346,5 @@ if (!viewport || !this.viewer.world.getItemCount()) return;
         this.$canvas.focus();
       }
     }
-  } 
+  }
 }
