@@ -2098,7 +2098,9 @@ export class CanvasInstance extends BaseComponent {
 
       // As below, the clock only moves on while playing.
       const { paused } = this.timePlanPlayer.advanceToTime(
-        this._isPlaying ? minusTime(this.now(), startDate) : this._canvasClockTime
+        this._isPlaying
+          ? minusTime(this.now(), startDate)
+          : this._canvasClockTime
       );
       if (paused) {
         this.pause();

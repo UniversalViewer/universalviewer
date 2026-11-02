@@ -253,13 +253,13 @@ export class MediaElementCenterPanel extends CenterPanel<
     const firstSources = !attempts.length
       ? sources
       : attempts[0].via === "hls.js"
-      ? [
-          {
-            ...attempts[0].item,
-            type: this.isVideo() ? "video/hls" : "audio/hls",
-          },
-        ]
-      : [attempts[0].item];
+        ? [
+            {
+              ...attempts[0].item,
+              type: this.isVideo() ? "video/hls" : "audio/hls",
+            },
+          ]
+        : [attempts[0].item];
     // Every version, for the user to choose from (see source-chooser-fixed.js),
     // in the order they're tried.
     const chooserOptions = {
@@ -523,9 +523,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   //   then the browser's own player before hls.js and dash.js (each version
   //   is then played the way mediaAttempts says: see _playInTurn);
   // - hls.js only fetching renditions the player is big enough to show.
-  private _controlOptions(
-    first?: MediaAttempt<MediaSourceDescriptor>
-  ): object {
+  private _controlOptions(first?: MediaAttempt<MediaSourceDescriptor>): object {
     const renderers = ["html5", "native_hls", "native_dash"];
     const firstRenderer = first ? RENDERERS[first.via] : "html5";
     return {
@@ -557,11 +555,7 @@ export class MediaElementCenterPanel extends CenterPanel<
   // it's at. Its value is only written when it changes, which is once a
   // second while playing (it's in whole seconds), so it isn't announced more
   // often than that.
-  private _labelTimeline(
-    canvas: Canvas,
-    mediaElement: any,
-    player: any
-  ): void {
+  private _labelTimeline(canvas: Canvas, mediaElement: any, player: any): void {
     const timeline = player.controls.querySelector(".mejs__time-total");
     if (!timeline) {
       return;
@@ -590,7 +584,9 @@ export class MediaElementCenterPanel extends CenterPanel<
 
       // Each only when it differs, so the observer below isn't set off by
       // its own change.
-      if (timeline.getAttribute("aria-label") !== this.content.playbackPosition) {
+      if (
+        timeline.getAttribute("aria-label") !== this.content.playbackPosition
+      ) {
         timeline.setAttribute("aria-label", this.content.playbackPosition);
       }
       if (timeline.getAttribute("aria-valuetext") !== valueText) {
