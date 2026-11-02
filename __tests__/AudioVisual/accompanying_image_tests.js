@@ -1,6 +1,10 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
 // Audio with an accompanying image (IIIF Cookbook recipe 0014): the image is
 // shown while the audio plays, not only before, in each player.
@@ -30,20 +34,32 @@ describe.each(PLAYERS)("Audio with an accompanying image in $player", (player) =
   let browser;
   let page;
 
-  // Loading the viewer can be slow while other tests run, so it has 60s.
   beforeAll(async () => {
     puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
+  });
+
+  // Each test has its own page, as the tests run in random order, and one
+  // that's played the audio would leave it playing for the next (which would
+  // then not be testing the image before it plays). Loading the viewer can
+  // be slow while other tests run, so it has 60s.
+  beforeEach(async () => {
     page = await browser.newPage();
     await page.setViewport({ width: 1200, height: 800 });
     await page.goto(viewerUrl(fixture(player.manifest)), {
       waitUntil: "domcontentloaded",
     });
     await page.waitForSelector(player.play, { visible: true });
+    // The manifest's attribution can cover the play button and the image.
+    await closeAttribution(page);
   }, 60000);
+
+  afterEach(async () => {
+    await page.close();
+  });
 
   afterAll(async () => {
     await browser.close();
@@ -68,25 +84,11 @@ describe.each(PLAYERS)("Audio with an accompanying image in $player", (player) =
       IMAGE
     );
 
-  // Waits for an element to stop moving: the AV component's controls move
-  // down once its player is sized for the media, and a click before then
-  // lands where they were.
-  const waitUntilStill = async (selector) => {
-    const position = async () =>
-      JSON.stringify(await (await page.$(selector)).boundingBox());
-    let last = await position();
-    for (let waited = 0; waited < 10000; waited += 250) {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      const now = await position();
-      if (now === last) {
-        return;
-      }
-      last = now;
-    }
-  };
-
   it("shows the image before the audio plays", async () => {
     await page.waitForSelector(player.poster, { visible: true });
+    expect(
+      await page.$$eval(player.media, (media) => media.every((audio) => audio.paused))
+    ).toBe(true);
     expect(await imageShown()).toBe(true);
   });
 
@@ -103,7 +105,7 @@ describe.each(PLAYERS)("Audio with an accompanying image in $player", (player) =
         player.media
       );
     }
-    await waitUntilStill(player.play);
+    await waitUntilStill(page, player.play);
     await page.click(player.play);
     await page.waitForFunction(
       (media) =>
@@ -113,6 +115,6 @@ describe.each(PLAYERS)("Audio with an accompanying image in $player", (player) =
       { timeout: 20000 },
       player.media
     );
-    expect(await imageShown()).toBe(true);
+    await expect(imageShown()).resolves.toBe(true);
   }, 60000);
 });

@@ -10,6 +10,14 @@
       "As in the British Library's early AV manifests, the manifest has a posterCanvas (the name for placeholderCanvas in drafts of IIIF Presentation 3), shown before and while the audio plays. Its ranges make the AV component play it."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: \"The Weighing of the Heart\" by PharaohCrab, via Wikimedia Commons (CC0). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
+  },
   "posterCanvas": {
     "id": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/poster",
     "type": "Canvas",
@@ -50,10 +58,11 @@
               "type": "Annotation",
               "motivation": "painting",
               "body": {
-                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
                 "type": "Sound",
                 "duration": 1985.024,
-                "format": "audio/mp4"
+                "format": "audio/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               },
               "target": "http://localhost:4444/test-fixtures/ranges-poster-canvas-audio-manifest.json/canvas"
             }

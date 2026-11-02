@@ -168,6 +168,7 @@
   "$positionOfDuration": "{0} z {1}",
   "$noMediaMessage": "Brak multimediów do odtworzenia",
   "$mediaUnavailable": "Przepraszamy, nie można odtworzyć tych multimediów. Mogły zostać przeniesione lub są niedostępne.",
+  "$mediaBlockedByCors": "Ich serwer nie pozwala na odtwarzanie ich w innych witrynach (nie wysyła nagłówków CORS). Mogą zostać odtworzone w przeglądarce Chrome lub Safari, które czasami potrafią odtwarzać zasoby bez nagłówków CORS.",
   "$captions": "Podpisy",
   "$captionsOff": "Wyłączone",
   "$captionLanguages": "Języki",

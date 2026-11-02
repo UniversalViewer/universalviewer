@@ -25,6 +25,7 @@ export class AVCenterPanel extends CenterPanel<
   private _lastCanvasIndex: number | undefined;
   private _mediaReady: boolean = false;
   private _isThumbsViewOpen: boolean = false;
+  private _playerLayoutObserver: ResizeObserver | null = null;
 
   constructor($element: JQuery) {
     super($element);
@@ -51,9 +52,20 @@ export class AVCenterPanel extends CenterPanel<
         if (this._lastCanvasIndex !== canvasIndex) {
           // Another canvas chosen, rather than the first opening.
           const chosen = this._lastCanvasIndex !== undefined;
+          // Chosen while playing, it carries on playing, on that canvas (as
+          // when choosing another track of an album).
+          const wasPlaying =
+            chosen && !!this.avcomponent && this.avcomponent.isPlaying();
           this._viewCanvas(canvasIndex);
           if (chosen) {
             this._followCanvasRange(canvasIndex);
+          }
+          if (wasPlaying) {
+            this._whenMediaReady(() => {
+              if (this.avcomponent) {
+                this.avcomponent.play();
+              }
+            });
           }
         }
       }
@@ -431,5 +443,45 @@ export class AVCenterPanel extends CenterPanel<
       }
       this.avcomponent.resize();
     }
+
+    this._watchPlayerLayout();
+    this._placeAttributionAboveControls();
+  }
+
+  // The players lay themselves out once their media's size is known, which
+  // can be after the panel's own resize, moving their controls; so the
+  // attribution is placed again whenever a player's media area changes
+  // size.
+  private _watchPlayerLayout(): void {
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+    if (!this._playerLayoutObserver) {
+      this._playerLayoutObserver = new ResizeObserver(() =>
+        this._placeAttributionAboveControls()
+      );
+    }
+    const observer = this._playerLayoutObserver;
+    this.$avcomponent
+      .find(".player .canvas-container")
+      .each((_, element) => observer.observe(element));
+  }
+
+  // The attribution sits at the bottom of the content area, where the
+  // player's timeline and controls are, so it's raised above them, by
+  // however tall they are (which depends on the player's size).
+  private _placeAttributionAboveControls(): void {
+    const options = this.$avcomponent
+      .find(".player .options-container")
+      .filter((_, element) => element.offsetParent !== null)
+      .get(0);
+    const content = this.$content.get(0);
+    if (!options || !content) {
+      return;
+    }
+    const raise =
+      content.getBoundingClientRect().bottom -
+      options.getBoundingClientRect().top;
+    this.$attribution.css("bottom", Math.max(0, raise));
   }
 }

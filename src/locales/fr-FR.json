@@ -168,6 +168,7 @@
   "$positionOfDuration": "{0} sur {1}",
   "$noMediaMessage": "Aucun média disponible à lire",
   "$mediaUnavailable": "Désolé, ce média ne peut pas être lu. Il a peut-être été déplacé ou n'est plus disponible.",
+  "$mediaBlockedByCors": "Son serveur ne permet pas de le lire sur d'autres sites web (il n'envoie pas d'en-têtes CORS). Il peut être lu dans Chrome ou Safari, qui peuvent parfois lire des ressources sans en-têtes CORS.",
   "$captions": "Sous-titres",
   "$captionsOff": "Désactivé",
   "$captionLanguages": "Langues",

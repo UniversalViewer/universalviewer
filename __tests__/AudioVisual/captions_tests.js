@@ -1,6 +1,12 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, expectPanelTitle } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  expectPanelTitle,
+  waitUntilStill,
+  applyConfig,
+  closeAttribution,
+} = require("../../scripts/testViewer");
 
 // Captions in UV's two audio/video players: the mediaelement player, for
 // manifests without ranges, and the AV component, for manifests with ranges.
@@ -29,7 +35,7 @@ const PLAYERS = [
     "the AV component",
     {
       manifest: fixture("ranges-captioned-video-manifest.json"),
-      title: "Lunchroom Manners",
+      title: "Blackbird Feeding",
       panel: "avCenterPanel",
     },
   ],
@@ -101,13 +107,11 @@ const RANGES_SHORT_CANVASES_MANIFEST = fixture(
   "ranges-short-canvases-captioned-video-manifest.json"
 );
 
-const WELSH_CUE_1 =
-  "Cafwyd sioe bypedau ei pherfformio yn yr ysgol, ychydig cyn cinio.";
-const ENGLISH_CUE_1 =
-  "Just before lunch one day, a puppet show was put on at school.";
-const ENGLISH_CUE_2 = 'It was called "Mister Bungle Goes to Lunch".';
+const WELSH_CUE_1 = "Mae aderyn du yn glanio wrth y nyth gyda bwyd i'w gywion.";
+const ENGLISH_CUE_1 = "A blackbird lands at the nest with food for its chicks.";
+const ENGLISH_CUE_2 = 'It carries away a "faecal sac" to keep the nest clean.';
 const FRENCH_CUE_1 =
-  "Un jour, juste avant le déjeuner, un spectacle de marionnettes a été présenté à l'école.";
+  "Un merle se pose au nid avec de la nourriture pour ses oisillons.";
 
 describe("Captions", () => {
   let browser;
@@ -130,34 +134,51 @@ describe("Captions", () => {
   // AV component's players. The AV component keeps a player per canvas, plus
   // one for the timeline of an auto-advance manifest; only the one in use is
   // visible. Pass `virtual` to wait for the timeline's player (true) or a
-  // canvas' (false).
-  const visiblePlayer = async ({ virtual } = {}) =>
-    (
+  // canvas' (false). It waits for the player's captions button too, and for
+  // the same player to be the visible one on two checks a moment apart: the
+  // AV component can show one player briefly before another (e.g. a canvas'
+  // before an auto-advance manifest's timeline), and a player found then
+  // would be held after it's hidden.
+  const visiblePlayer = async ({ virtual } = {}) => {
+    await page.evaluate(() => (window.__visiblePlayer = null));
+    return (
       await page.waitForFunction(
-        (virtual) =>
-          [
+        (virtual) => {
+          const player = [
             ...document.querySelectorAll(
               ".mejs__container, .iiif-av-component .player"
             ),
-          ].find(
-            (player) =>
+          ].find((player) => {
+            const button = player.querySelector(".captions-button");
+            return (
               player.offsetParent !== null &&
               (virtual === undefined ||
-                player.classList.contains("virtual") === virtual)
-          ),
-        {},
+                player.classList.contains("virtual") === virtual) &&
+              !!button &&
+              button.offsetParent !== null &&
+              getComputedStyle(button).visibility !== "hidden"
+            );
+          });
+          const settled = !!player && player === window.__visiblePlayer;
+          window.__visiblePlayer = player;
+          return settled && player;
+        },
+        { polling: 250 },
         virtual
       )
     ).asElement();
+  };
 
   // Loads a manifest and waits for its player to offer captions. Captions
   // choices are remembered in the browser, so each load is a new visitor's,
   // with nothing remembered, unless it's a `revisit`. A host's `config` is
   // applied through the examples page's Configuration tab, which starts the
-  // viewer again with it.
+  // viewer again with it. The manifest's attribution, which can cover the
+  // controls, is closed, as a user would, unless it's to be kept shown
+  // (`withAttribution`), as when checking nothing covers the menu.
   const load = async (
     manifestUrl,
-    { locales, virtual, revisit, config } = {}
+    { locales, virtual, revisit, config, withAttribution } = {}
   ) => {
     if (!revisit) {
       if (context) {
@@ -173,35 +194,19 @@ describe("Captions", () => {
     });
     if (config) {
       await page.waitForSelector(".captions-button", { visible: true });
-      await page.evaluate((config) => {
-        document.querySelector(".centerPanel").classList.add("unconfigured");
-        document.getElementById("customConfig").value = JSON.stringify(config);
-        document.getElementById("setConfigButton").click();
-      }, config);
-      await page.waitForSelector(".centerPanel:not(.unconfigured)");
+      await applyConfig(page, config);
+    }
+    if (!withAttribution) {
+      await closeAttribution(page);
     }
     const player = await visiblePlayer({ virtual });
-    await player.waitForSelector(".captions-button", { visible: true });
     await waitForStillButton(player);
     return player;
   };
 
-  // Waits for the captions button to stop moving: the AV component lays its
-  // players out again as they load, and a click aimed at where the button
-  // was can miss it, especially when the machine is busy.
-  const waitForStillButton = (player) =>
-    page.waitForFunction(
-      (player) => {
-        const { x, y } = player
-          .querySelector(".captions-button")
-          .getBoundingClientRect();
-        const still = player.__lastButtonAt === `${x},${y}`;
-        player.__lastButtonAt = `${x},${y}`;
-        return still;
-      },
-      { polling: 250 },
-      player
-    );
+  // Waits for a player's captions button to stop moving (see waitUntilStill).
+  const waitForStillButton = async (player) =>
+    waitUntilStill(page, await player.$(".captions-button"));
 
   // Plays the media (muted, so headless autoplay is allowed).
   const play = (player) =>
@@ -304,6 +309,20 @@ describe("Captions", () => {
     expect(await shown()).toBe(expected);
   };
 
+  // Expects no caption to be shown, and none to appear for a second (an
+  // empty overlay is also what's seen before a cue shows).
+  const expectNoCaption = async (player) => {
+    await expectCaption(player, null);
+    for (let i = 0; i < 5; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      expect(
+        await player.$eval(".captions-overlay", (overlay) =>
+          overlay.offsetParent === null ? null : overlay.textContent
+        )
+      ).toBe(null);
+    }
+  };
+
   // THE SAME IN EVERY PLAYER
   describe.each(PLAYERS)("in %s", (_, { manifest, title, panel }) => {
     it("offers each caption track, starting with captions off", async () => {
@@ -328,7 +347,9 @@ describe("Captions", () => {
         "Welsh captions",
       ]);
       expect(await checkedLabel(player)).toBe("Off");
-      await expectCaption(player, null);
+      // The first cue is for the first 20 seconds, so would show now if
+      // captions were on.
+      await expectNoCaption(player);
 
       await expectPanelTitle(page, title);
     }, 60000);
@@ -504,7 +525,8 @@ describe("Captions", () => {
     }, 60000);
 
     it("fits the whole menu in a short player, scrolling it if it must", async () => {
-      const player = await load(manifest);
+      // With the attribution shown, as a visitor first sees it.
+      const player = await load(manifest, { withAttribution: true });
       await page.setViewport({ width: 800, height: 520 });
       await waitForStillButton(player);
 
@@ -618,6 +640,8 @@ describe("Captions", () => {
       expect(await checkedColour(player)).toBe("White on black");
 
       await chooseCaptions(player, "Welsh captions");
+      // Read once a cue shows: the overlay is hidden without one.
+      await expectCaption(player, WELSH_CUE_1);
       expect(await captionColours(player)).toEqual({
         background: "rgb(0, 0, 0)",
         color: "rgb(255, 255, 255)",
@@ -658,8 +682,10 @@ describe("Captions", () => {
       // Turning captions off is remembered too.
       await chooseCaptions(nextVisit, "Off");
       const visitAfter = await load(manifest, { revisit: true });
-      await expectCaption(visitAfter, null);
+      // The remembered choice has been applied (so no caption isn't just
+      // captions yet to load).
       expect(await checkedLabel(visitAfter)).toBe("Off");
+      await expectCaption(visitAfter, null);
       expect(await checkedColour(visitAfter)).toBe("Dark red on mint");
     }, 90000);
 
@@ -694,6 +720,8 @@ describe("Captions", () => {
       expect(await checkedColour(player)).toBe("Indigo on sand");
 
       await chooseCaptions(player, "Welsh captions");
+      // Read once a cue shows: the overlay is hidden without one.
+      await expectCaption(player, WELSH_CUE_1);
       expect(await captionColours(player)).toEqual({
         background: "rgb(250, 239, 205)",
         color: "rgb(54, 9, 110)",
@@ -814,7 +842,7 @@ describe("Captions", () => {
       const player = await load(CAPTIONED_AUDIO_MANIFEST);
 
       await chooseCaptions(player, "English captions");
-      await expectCaption(player, "[Orchestra playing]");
+      await expectCaption(player, "[Man reading aloud]");
 
       const overlay = await player.$eval(".captions-overlay", (el) =>
         el.getBoundingClientRect().toJSON()
@@ -857,7 +885,6 @@ describe("Captions", () => {
     const showView = async (view, { virtual } = {}) => {
       await page.click(`.leftPanel .${view}.tab`);
       const player = await visiblePlayer({ virtual });
-      await player.waitForSelector(".captions-button", { visible: true });
       await waitForStillButton(player);
       return player;
     };
@@ -879,7 +906,6 @@ describe("Captions", () => {
     const goToThumbnail = async (index) => {
       await page.click(`.leftPanel #thumb-${index}`);
       const player = await visiblePlayer({ virtual: false });
-      await player.waitForSelector(".captions-button", { visible: true });
       await waitForStillButton(player);
       return player;
     };
@@ -891,11 +917,56 @@ describe("Captions", () => {
       await chooseCaptions(player, "English captions");
       await expectCaption(player, ENGLISH_CUE_1);
 
+      // Moved 15s in with the timeline's keys (5s a press), then played
+      // (muted, so headless autoplay is allowed): the first cue shows until
+      // the second starts, 20.1s in.
+      await page.waitForFunction(
+        (player) => player.querySelector("video").readyState >= 1,
+        {},
+        player
+      );
+      await (
+        await player.$(".canvas-timeline-container .ui-slider-handle")
+      ).focus();
+      for (let i = 0; i < 3; i++) {
+        await page.keyboard.press("ArrowRight");
+      }
+      await expectCaption(player, ENGLISH_CUE_1);
+      await player.$$eval("video", (media) =>
+        media.forEach((m) => (m.muted = true))
+      );
+      const playButton = await player.$(
+        ".controls-container button:has(.av-icon-play)"
+      );
+      await waitUntilStill(page, playButton);
+      await playButton.click();
+      const changedAt = await (
+        await page.waitForFunction(
+          (player, cue) => {
+            const overlay = player.querySelector(".captions-overlay");
+            const video = player.querySelector("video");
+            return (
+              overlay.offsetParent !== null &&
+              overlay.textContent === cue &&
+              video.currentTime
+            );
+          },
+          { timeout: 15000 },
+          player,
+          ENGLISH_CUE_2
+        )
+      ).jsonValue();
+      // The overlay follows the player's clock, which can be a few
+      // milliseconds ahead of the video's time, so the change is seen after
+      // the first cue's end (20s), not to the millisecond.
+      expect(changedAt).toBeGreaterThanOrEqual(20);
+      expect(changedAt).toBeLessThan(21);
+
       // The second range starts 25s in, during the second cue.
-      await goToRange("Mister Bungle");
+      await goToRange("Clearing the nest");
       await expectCaption(player, ENGLISH_CUE_2);
 
-      await goToRange("The puppet show");
+      await goToRange("Feeding the chicks");
       await expectCaption(player, ENGLISH_CUE_1);
     }, 60000);
 
@@ -1007,16 +1078,19 @@ describe("Captions", () => {
         await load(manifest);
         const player = await showView("index", { virtual });
 
-        // The captions start 30s into the canvas, after the first range.
+        // The captions are for 30s to 60s into the canvas, the second
+        // range: they show there (so they've loaded)...
         await chooseCaptions(player, "English captions");
-        await expectCaption(player, null);
-
         await goToRange("Captioned");
         await expectCaption(player, ENGLISH_CUE_1);
 
-        // They end 60s in, where the third range starts.
+        // ...but not in the first range, before them...
+        await goToRange("Before the captions");
+        await expectNoCaption(player);
+
+        // ...or in the third, after them.
         await goToRange("After the captions");
-        await expectCaption(player, null);
+        await expectNoCaption(player);
       },
       90000
     );
@@ -1026,10 +1100,10 @@ describe("Captions", () => {
       const player = await showView("index");
 
       await chooseCaptions(player, "English captions");
-      await expectCaption(player, "[Orchestra playing]");
+      await expectCaption(player, "[Man reading aloud]");
 
       await goToRange("Continued");
-      await expectCaption(player, "[Horns]");
+      await expectCaption(player, "[Reading continues]");
     }, 60000);
   });
 });

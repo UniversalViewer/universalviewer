@@ -295,6 +295,7 @@
       },
       "content": {
         "mediaUnavailable": "$mediaUnavailable",
+        "mediaBlockedByCors": "$mediaBlockedByCors",
         "attribution": "$attribution",
         "audioVolume": "$audioVolume",
         "captions": "$captions",

@@ -169,6 +169,7 @@
   "$positionOfDuration": "{0} of {1}",
   "$noMediaMessage": "No media available to play",
   "$mediaUnavailable": "Sorry, this media can't be played. It may have been moved or be unavailable.",
+  "$mediaBlockedByCors": "Its server doesn't allow it to be played on other websites (it sends no CORS headers). It may play in Chrome or Safari, which can sometimes play resources without CORS headers.",
   "$captions": "Captions",
   "$captionsOff": "Off",
   "$captionLanguages": "Languages",

@@ -1,6 +1,11 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  applyConfig,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
 // The image accompanying audio in the AV component (manifests with ranges):
 // it starts collapsed in the corner of the player, or expanded to fill it
@@ -39,21 +44,13 @@ describe("AV component poster image", () => {
     await page.goto(viewerUrl(MANIFEST), { waitUntil: "domcontentloaded" });
     if (config) {
       await page.waitForSelector(POSTER, { visible: true });
-      await page.evaluate(
-        (config, selector) => {
-          document.querySelector(selector).classList.add("unconfigured");
-          document.getElementById("customConfig").value =
-            JSON.stringify(config);
-          document.getElementById("setConfigButton").click();
-        },
-        config,
-        POSTER
-      );
-      await page.waitForSelector(`${POSTER}:not(.unconfigured)`);
+      await applyConfig(page, config);
     }
     await page.waitForSelector(POSTER, { visible: true });
-    // Gives the image time to be sized for the player.
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // The manifest's attribution can cover the poster, which is clicked.
+    await closeAttribution(page);
+    // Once the image has been sized for the player (and stopped moving).
+    await waitUntilStill(page, POSTER);
   };
 
   // Whether the image fills the player, and its button's accessible name.

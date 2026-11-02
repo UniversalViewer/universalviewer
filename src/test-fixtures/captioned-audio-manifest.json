@@ -7,8 +7,16 @@
   },
   "summary": {
     "en": [
-      "Mahler's Symphony No. 3 (from IIIF Cookbook recipe 0002) with captions, which the player shows in an overlay since browsers don't draw captions for audio."
+      "A LibriVox reading of chapter 52 of The Cloud of Unknowing with captions, which the player shows in an overlay since browsers don't draw captions for audio."
     ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0)."
+      ]
+    }
   },
   "items": [
     {
@@ -26,10 +34,11 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/captioned-audio-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
                 "type": "Sound",
                 "duration": 1985.024,
-                "format": "audio/mp4"
+                "format": "audio/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

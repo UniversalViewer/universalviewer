@@ -1,6 +1,10 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
 // Both players play audio as audio and video as video, as mediaKind and
 // isVideoCanvas decide (media_kind_tests.ts covers their rules, which the
@@ -110,6 +114,22 @@ describe("The MediaElement extension's player", () => {
           )
         ).toContain(image);
       }
+
+      // And it plays: half a second in after play is pressed. (The manifest's
+      // attribution can cover the play button.)
+      const play = ".mejs__playpause-button button";
+      await closeAttribution(page);
+      await waitUntilStill(page, play);
+      await page.click(play);
+      await page.waitForFunction(
+        () => {
+          const media = document.querySelector(
+            ".mejs__container audio, .mejs__container video"
+          );
+          return !media.paused && media.currentTime > 0.5;
+        },
+        { timeout: 20000 }
+      );
     },
     60000
   );

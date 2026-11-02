@@ -12,6 +12,11 @@ import { DefaultFormat } from "../media-formats/default-format";
 import { MediaSource } from "../types/media-source";
 import { AnnotationTime } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
+import {
+  Detach,
+  MediaVersion,
+  playVersionsInTurn,
+} from "../../uv-shared-module/StreamingLibraries";
 
 export class MediaElement {
   type: string;
@@ -21,7 +26,17 @@ export class MediaElement {
   private element: HTMLMediaElement;
   instance: MediaFormat;
   mediaSyncMarginSecs: number;
-  constructor(source: MediaSource, mediaOptions: MediaOptions = {}) {
+  // Stops the media loading (see detach).
+  private _detach: Detach | null = null;
+  // Called when no version of the media can be played (see onUnplayable).
+  private _onUnplayable: ((blockedByCors: boolean) => void)[] = [];
+  // `versions`, when given, are the versions of the media to try in turn
+  // until one plays (see mediaAttempts); otherwise only `source` is played.
+  constructor(
+    source: MediaSource,
+    mediaOptions: MediaOptions = {},
+    versions?: MediaVersion[]
+  ) {
     this.source = source;
     this.mediaSource = source.mediaSource;
     this.type = source.type.toString().toLowerCase();
@@ -51,7 +66,17 @@ export class MediaElement {
     }
     this.element.classList.add("anno");
     this.element.preload = "metadata";
-    this.instance.attachTo(this.element);
+    if (versions) {
+      this._detach = playVersionsInTurn(
+        this.element,
+        versions,
+        !!mediaOptions.adaptiveAuthEnabled,
+        (blockedByCors) =>
+          this._onUnplayable.forEach((callback) => callback(blockedByCors))
+      );
+    } else {
+      this.instance.attachTo(this.element);
+    }
     this.element.currentTime = this.source.start;
 
     this.element.addEventListener("play", () => {
@@ -72,6 +97,13 @@ export class MediaElement {
 
   playWasRequested = false;
   _playElement() {
+    // A pause put off (see pause) is overtaken by this play, rather than
+    // stopping it once it's started.
+    if (this.pendingPause !== null) {
+      clearTimeout(this.pendingPause);
+      this.pendingPause = null;
+      this.isPausing = false;
+    }
     this.playWasRequested = true;
     if (this.pauseWasRequested) {
       this.pauseWasRequested = false;
@@ -173,6 +205,8 @@ export class MediaElement {
 
   lastPause = 0;
   isPausing = false;
+  // The pause put off, until it's made or a play overtakes it.
+  pendingPause: ReturnType<typeof setTimeout> | null = null;
 
   pause() {
     Logger.log(`MediaElement.pause() request - ${this.element.src}`);
@@ -182,7 +216,8 @@ export class MediaElement {
         return;
       }
       this.isPausing = true;
-      setTimeout(() => {
+      this.pendingPause = setTimeout(() => {
+        this.pendingPause = null;
         this._pauseElement();
         this.isPausing = false;
         this.lastPause = Date.now();
@@ -215,6 +250,21 @@ export class MediaElement {
 
   getRawElement() {
     return this.element;
+  }
+
+  // Calls back when no version of the media can be played, every one having
+  // been tried, with whether the last failed because its server sends no
+  // CORS headers.
+  onUnplayable(callback: (blockedByCors: boolean) => void) {
+    this._onUnplayable.push(callback);
+  }
+
+  // Stops the media loading, when the player's let go of.
+  detach() {
+    if (this._detach) {
+      this._detach();
+      this._detach = null;
+    }
   }
 
   isPaused() {

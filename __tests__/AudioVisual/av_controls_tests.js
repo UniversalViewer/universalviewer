@@ -1,6 +1,7 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const { viewerUrl, waitUntilStill } = require("../../scripts/testViewer");
+const testTiming = require("../../scripts/testTiming");
 
 // Each player's controls, held to the same accessibility checks: each control
 // named, with its tooltip, in the user's language; every control shown and in
@@ -75,6 +76,13 @@ const PLAYERS = [
         timeline: ".canvas-timeline-container",
       },
       skipForward: "button:has(.av-icon-fast-forward)",
+      // An auto-advance manifest, whose canvases it plays as one timeline,
+      // with a player of its own, shown in the index view.
+      timeline: {
+        manifest: fixture("ranges-multi-canvas-captioned-video-manifest.json"),
+        root: ".iiif-av-component .player.virtual:not([style*='none'])",
+        view: ".leftPanel .index.tab",
+      },
     },
   ],
   [
@@ -164,12 +172,19 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
   // Loads the manifest as a new visitor, in the given locales and on a device
   // of the given size (and, to be taken for a particular one, its user agent
   // and number of touch points), waits for the player's controls and their
-  // layout to settle, and returns the player in use.
+  // layout to settle, and returns the player in use. Another manifest can be
+  // given, with its player and the view to show it in; and the page's clock
+  // can tick on a millisecond each time it's read (`tickingClock`), as it
+  // can when the machine is busy.
   const load = async ({
     locales,
     viewport = SIZES[0][1],
     userAgent,
     touchPoints,
+    manifest = player.manifest,
+    root = player.root,
+    view,
+    tickingClock,
   } = {}) => {
     if (context) {
       await context.close();
@@ -186,15 +201,24 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
         });
       }, touchPoints);
     }
+    if (tickingClock) {
+      await testTiming.tickingClock(page);
+    }
     await page.setViewport({ deviceScaleFactor: 1, ...viewport });
-    await page.goto(viewerUrl(player.manifest, locales), {
+    await page.goto(viewerUrl(manifest, locales), {
       waitUntil: "domcontentloaded",
     });
-    await page.waitForSelector(`${player.root} .captions-button`, {
+    if (view) {
+      await page.waitForSelector(view, { visible: true });
+      await page.click(view);
+    }
+    await page.waitForSelector(`${root} .captions-button`, {
       visible: true,
     });
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    return page.$(player.root);
+    // The player is laid out again as it loads, moving its controls, and a
+    // click or tap aimed at where a control was can miss it.
+    await waitUntilStill(page, `${root} .captions-button`);
+    return page.$(root);
   };
 
   // What screen readers announce an element as.
@@ -213,12 +237,12 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
     return names;
   };
 
-  // The current time shown, waiting up to 2s for the one expected: the
+  // The current time shown, waiting up to 10s for the one expected: the
   // MediaElement player seeks just after a key press, and shows the new time
-  // once the media has moved there.
+  // once the media has moved there, which can be slow while other tests run.
   const expectTime = async (root, expected) => {
     const time = () => root.$eval(player.time, (el) => el.textContent);
-    for (let i = 0; i < 20 && (await time()) !== expected; i++) {
+    for (let i = 0; i < 100 && (await time()) !== expected; i++) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
     expect(await time()).toBe(expected);
@@ -339,7 +363,9 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
 
       if (player.skipForward) {
         it("skips 20 seconds for one tap", async () => {
-          const root = await load({ viewport });
+          // With the page's clock ticking on as it's read, so a clock that
+          // moved on while paused would show a second past.
+          const root = await load({ viewport, tickingClock: true });
           const forward = await root.$(player.skipForward);
           const box = await forward.boundingBox();
           await page.touchscreen.tap(
@@ -352,17 +378,12 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
             root,
             player.time
           );
+          // Time for a click the tap might also be taken as.
           await new Promise((resolve) => setTimeout(resolve, 500));
-          // 20 seconds on, not 40 (as when a tap was also taken as a click),
-          // allowing for the clock having moved on a moment since.
-          const [minutes, seconds] = (
-            await root.$eval(player.time, (el) => el.textContent)
-          )
-            .split(":")
-            .map(Number);
-          const time = minutes * 60 + seconds;
-          expect(time).toBeGreaterThanOrEqual(20);
-          expect(time).toBeLessThan(25);
+          // 20 seconds on, not 40 (as when a tap was also taken as a click).
+          expect(await root.$eval(player.time, (el) => el.textContent)).toBe(
+            "00:20"
+          );
         }, 60000);
       }
     }
@@ -405,9 +426,19 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
     });
   }, 60000);
 
-  it("moves through the media with the keyboard, 5 seconds at a time", async () => {
-    const root = await load();
+  // Moves through the media with the timeline's keys, checking the time shown
+  // after each, and the slider's value. With the page's clock ticking on as
+  // it's read (see load), the time shown is where the keys moved to, not a
+  // second past: the player's clock doesn't move on while it's paused.
+  const expectKeySteps = async (root, valuetext) => {
     const timeline = await root.$(player.sliders.timeline);
+    // The keys seek within the media's duration, so do nothing until it's
+    // known.
+    await page.waitForFunction(
+      (media) => document.querySelector(media).readyState >= 1,
+      {},
+      player.media
+    );
 
     await timeline.focus();
     await page.keyboard.press("ArrowRight");
@@ -417,11 +448,89 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
 
     await page.keyboard.press("ArrowLeft");
     await expectTime(root, "00:05");
-    expect((await slider(root, "timeline")).valuetext).toBe("00:05 of 09:32");
+    expect((await slider(root, "timeline")).valuetext).toEqual(valuetext);
 
     await page.keyboard.press("Home");
     await expectTime(root, "00:00");
+  };
+
+  it("moves through the media with the keyboard, 5 seconds at a time", async () => {
+    const root = await load({ tickingClock: true });
+    await expectKeySteps(root, "00:05 of 09:32");
   }, 60000);
+
+  if (player.timeline) {
+    it("moves through a timeline with the keyboard, 5 seconds at a time", async () => {
+      const root = await load({ ...player.timeline, tickingClock: true });
+      await expectKeySteps(root, "00:05 of 28:37");
+    }, 60000);
+
+    // A pause within a second of the last is put off half a second; play
+    // pressed meanwhile should still play. The presses are made with the
+    // page's clock held still, so the second pause is always within a
+    // second of the first, however slowly they're made.
+    it("keeps playing a timeline when play is pressed just after pause", async () => {
+      const root = await load(player.timeline);
+      const playing = () =>
+        page.evaluate(() =>
+          [...document.querySelectorAll(".iiif-av-component video")].some(
+            (video) => !video.paused
+          )
+        );
+      // Pressed by the pointer first, so the page may play media when it's
+      // pressed from within the page after.
+      await (await root.$(`.controls-container ${player.play}`)).click();
+      await page.waitForFunction(() =>
+        [...document.querySelectorAll(".iiif-av-component video")].some(
+          (video) => !video.paused
+        )
+      );
+      // The same button plays and pauses (its title says which it will do).
+      await root.evaluate(async (root) => {
+        const button = root.querySelector(
+          ".controls-container button:has(.av-icon-play)"
+        );
+        const playing = () =>
+          [...document.querySelectorAll(".iiif-av-component video")].some(
+            (video) => !video.paused
+          );
+        // Waits up to 10s for the media to be playing or paused, as wanted;
+        // fails otherwise, so a press that didn't take isn't passed over.
+        const until = async (wanted) => {
+          for (let i = 0; i < 100 && playing() !== wanted; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+          if (playing() !== wanted) {
+            throw new Error(
+              `The media was still ${wanted ? "paused" : "playing"} after 10s`
+            );
+          }
+        };
+        const now = Date.now;
+        const held = now();
+        Date.now = () => held;
+        try {
+          button.click();
+          await until(false);
+          button.click();
+          await until(true);
+          button.click();
+          button.click();
+        } finally {
+          Date.now = now;
+        }
+      });
+      // Past when a put-off pause would have taken effect.
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      expect(await playing()).toBe(true);
+      expect(
+        await root.$eval(
+          ".controls-container button:has(.av-icon-play)",
+          (button) => button.title
+        )
+      ).toBe("Pause");
+    }, 60000);
+  }
 
   it("changes the volume with the keyboard, 10% at a time", async () => {
     const root = await load();

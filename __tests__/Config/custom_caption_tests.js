@@ -1,6 +1,11 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  waitUntilStill,
+  applyConfig,
+  closeAttribution,
+} = require("../../scripts/testViewer");
 
 // A host's own caption colours (captionStyles) hold: captions are shown in
 // them, and they're named in the user's language:
@@ -82,12 +87,9 @@ describe.each(PLAYERS)("Custom caption colours in %s", (_, player) => {
       waitUntil: "domcontentloaded",
     });
     await page.waitForSelector(".captions-button", { visible: true });
-    await page.evaluate((config) => {
-      document.querySelector(".centerPanel").classList.add("unconfigured");
-      document.getElementById("customConfig").value = JSON.stringify(config);
-      document.getElementById("setConfigButton").click();
-    }, config(player.panel));
-    await page.waitForSelector(".centerPanel:not(.unconfigured)");
+    await applyConfig(page, config(player.panel));
+    // The viewer started again shows the attribution again.
+    await closeAttribution(page);
     const shown = (
       await page.waitForFunction(() =>
         [
@@ -98,18 +100,7 @@ describe.each(PLAYERS)("Custom caption colours in %s", (_, player) => {
       )
     ).asElement();
     await shown.waitForSelector(".captions-button", { visible: true });
-    await page.waitForFunction(
-      (player) => {
-        const { x, y } = player
-          .querySelector(".captions-button")
-          .getBoundingClientRect();
-        const still = player.__lastButtonAt === `${x},${y}`;
-        player.__lastButtonAt = `${x},${y}`;
-        return still;
-      },
-      { polling: 250 },
-      shown
-    );
+    await waitUntilStill(page, await shown.$(".captions-button"));
     return shown;
   };
 
@@ -131,12 +122,24 @@ describe.each(PLAYERS)("Custom caption colours in %s", (_, player) => {
     await items[typeof item === "number" ? item : names.indexOf(item)].click();
   };
 
-  // The overlay's colours, as rgb() values.
-  const overlayColours = (shown) =>
-    shown.$eval(".captions-overlay", (overlay) => {
+  // The overlay's colours, as rgb() values, once it's showing a cue (it's
+  // hidden without one).
+  const overlayColours = async (shown) => {
+    await page.waitForFunction(
+      (player) => {
+        const overlay = player.querySelector(".captions-overlay");
+        return (
+          overlay && overlay.offsetParent && overlay.textContent.trim() !== ""
+        );
+      },
+      { timeout: 10000 },
+      shown
+    );
+    return shown.$eval(".captions-overlay", (overlay) => {
       const style = getComputedStyle(overlay);
       return { background: style.backgroundColor, color: style.color };
     });
+  };
 
   it("names the host's colours from the English locale", async () => {
     expect(await colourNames(await load("en-GB"))).toEqual([

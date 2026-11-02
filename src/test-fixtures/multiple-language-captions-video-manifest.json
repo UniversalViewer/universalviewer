@@ -10,6 +10,14 @@
       "Modelled on IIIF Cookbook recipe <a href=\"https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/\">0074 Using Caption and Subtitle Files in Multiple Languages with Video Content</a>."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas",
@@ -28,12 +36,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 572.034,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

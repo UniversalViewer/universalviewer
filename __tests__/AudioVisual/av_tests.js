@@ -1,26 +1,36 @@
 let puppeteer;
-const { viewerUrl, expectPanelTitle } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/testBaseUrl");
+const {
+  viewerUrl,
+  expectPanelTitle,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
-// AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
-// AV manifest (no ranges) is rendered by the mediaelement extension.
-const AV_VIDEO_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0003-mvm-video/manifest.json";
+const fixture = (name) => `${BASE_URL}/test-fixtures/${name}`;
 
-// AV manifest WITH a table of contents (structures/ranges). When an AV manifest
-// has ranges and preferMediaElementExtension is false (the default), the viewer
-// uses uv-av-extension -> AVCenterPanel (iiif-av-component) instead of the
-// mediaelement player.
-const AV_TOC_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/manifest.json";
+// AV (audiovisual) manifest for AV-specific behaviour, as in IIIF Cookbook
+// recipe 0003, Simplest Manifest - Video (a local copy, with our own video).
+// A simple single-file AV manifest (no ranges) is rendered by the
+// mediaelement extension.
+const AV_VIDEO_MANIFEST = fixture("cookbook-0003-video-manifest.json");
+
+// AV manifest WITH a table of contents (structures/ranges), shaped as IIIF
+// Cookbook recipe 0064, Table of Contents for Multiple A/V Files on a Single
+// Canvas (a local copy, with our own video and range labels). When an AV
+// manifest has ranges and preferMediaElementExtension is false (the
+// default), the viewer uses uv-av-extension -> AVCenterPanel
+// (iiif-av-component) instead of the mediaelement player.
+const AV_TOC_MANIFEST = fixture(
+  "cookbook-0064-one-canvas-ranges-video-manifest.json"
+);
 
 // The first section of that manifest's table of contents. The AV center panel
 // titles the player with the current range's label (AVCenterPanel._setTitle),
 // so a range has to be selected for a title to appear: on a plain load there
-// is no current range and the opera's single canvas carries no label.
-const AV_TOC_RANGE =
-  "https://iiif.io/api/cookbook/recipe/0064-opera-one-canvas/range/3";
-const AV_TOC_RANGE_LABEL =
-  "Preludio e Coro d'introduzione – Bel conforto al mietitore";
+// is no current range and the manifest's single canvas carries no label.
+const AV_TOC_RANGE = `${AV_TOC_MANIFEST}/range/3`;
+const AV_TOC_RANGE_LABEL = "Il primo pasto – Il sacco fecale";
 
 describe("Universal Viewer", () => {
   let browser;
@@ -133,6 +143,10 @@ describe("Universal Viewer", () => {
       const playPauseButton = ".mejs__playpause-button button";
 
       await avPage.waitForSelector(playPauseButton, { visible: true });
+      // The manifest's attribution can cover the button, and the player is
+      // laid out again as it loads, moving it.
+      await closeAttribution(avPage);
+      await waitUntilStill(avPage, playPauseButton);
 
       await avPage.click(playPauseButton);
 
@@ -170,6 +184,12 @@ describe("Universal Viewer", () => {
       );
 
       expect(pausedTime).toBeGreaterThan(startTime + 3);
+
+      // And it stays paused: a second later, it hasn't moved on.
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      expect(
+        await avPage.$eval("video", (video) => [video.paused, video.currentTime])
+      ).toEqual([true, pausedTime]);
     }, 60000);
   });
 
@@ -256,11 +276,24 @@ describe("Universal Viewer", () => {
       );
       expect(playButton).toBeTruthy();
 
-      // Duration display.
-      const duration = await avPage.$(
-        ".iiif-av-component .time-display .canvas-duration"
+      // Duration display: the canvas's length, as minutes and seconds, not
+      // 00:00 (waited for, in case it's filled in after the controls show).
+      const duration = ".iiif-av-component .time-display .canvas-duration";
+      await avPage
+        .waitForFunction(
+          (selector) => {
+            const text = document.querySelector(selector)?.textContent.trim();
+            return !!text && text !== "00:00";
+          },
+          { timeout: 10000 },
+          duration
+        )
+        .catch(() => undefined);
+      const durationText = await avPage.$eval(duration, (el) =>
+        el.textContent.trim()
       );
-      expect(duration).toBeTruthy();
+      expect(durationText).toMatch(/^\d{2}:\d{2}$/);
+      expect(durationText).not.toBe("00:00");
     }, 60000);
   });
 });

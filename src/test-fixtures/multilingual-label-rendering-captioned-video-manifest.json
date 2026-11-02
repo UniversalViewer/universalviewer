@@ -7,6 +7,14 @@
       "Video with a multilingual caption label as a rendering (e2e test fixture)"
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/multilingual-label-rendering-captioned-video-manifest.json/canvas",
@@ -25,12 +33,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/multilingual-label-rendering-captioned-video-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 572.034,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]
@@ -38,7 +47,7 @@
       ],
       "rendering": [
         {
-          "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+          "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
           "type": "Video",
           "height": 360,
           "width": 480,
@@ -46,7 +55,8 @@
           "format": "video/mp4",
           "label": {
             "en": ["MP4"]
-          }
+          },
+          "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
         },
         {
           "id": "http://localhost:4444/test-fixtures/capsiynau.srt",

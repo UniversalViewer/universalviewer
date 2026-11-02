@@ -1,29 +1,26 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
 
-const FIRST_THUMB_SRC =
-  "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";
+const MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
+// Its first canvas' thumbnail, as the manifest gives it.
+const FIRST_THUMB_SRC = `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page-thumb.jpg`;
 
 let browser;
+let context;
 let page;
 
 // Applies custom config through the examples page's Configuration tab:
 // the #customConfig JSON is merged into the viewer config by a
 // uv.on("configure") handler when the Apply Configurations button
-// re-initialises the viewer.
-const applyCustomConfig = async (config) => {
-  await page.evaluate((cfg) => {
-    document.getElementById("customConfig").value = cfg;
-    document.getElementById("clearStorageCheckbox").checked = true;
-    document.getElementById("setConfigButton").click();
-  }, JSON.stringify(config));
-};
+// re-initialises the viewer, which this waits for.
+const applyCustomConfig = (config) =>
+  applyConfig(page, config, { clearStorage: true });
 
 describe("Configuration options", () => {
   beforeAll(async () => {
     puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
-    page = await browser.newPage();
   });
 
   afterAll(async () => {
@@ -31,8 +28,15 @@ describe("Configuration options", () => {
   });
 
   describe("thumb cache invalidation", () => {
+    // Each test opens the viewer as a new visitor, in a new browser context,
+    // whatever order they run in.
     beforeEach(async () => {
-      await page.goto(BASE_URL);
+      if (context) {
+        await context.close();
+      }
+      context = await browser.createBrowserContext();
+      page = await context.newPage();
+      await page.goto(viewerUrl(MANIFEST), { waitUntil: "domcontentloaded" });
       await page.waitForSelector("#thumb-0 img");
     });
 

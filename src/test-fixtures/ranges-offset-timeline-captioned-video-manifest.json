@@ -12,13 +12,21 @@
       "The captions target #t=30,60 of the canvas, so the caption file's 0:00 falls 30 seconds in. The auto-advance behavior plays the canvas as a timeline of its ranges."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "behavior": ["auto-advance"],
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/ranges-offset-timeline-captioned-video-manifest.json/canvas/1",
       "type": "Canvas",
       "label": {
-        "en": ["Lunchroom Manners"]
+        "en": ["Blackbird Feeding"]
       },
       "duration": 572.034,
       "items": [
@@ -32,12 +40,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/ranges-offset-timeline-captioned-video-manifest.json/canvas/1",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 572.034,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

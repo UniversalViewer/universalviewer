@@ -7,6 +7,7 @@
   "@type": "sc:Manifest",
   "label": "Video in a IIIF v2 IxIF manifest (e2e test fixture)",
   "description": "As in Wellcome Collection's IIIF v2 manifests, the video is an element of a media sequence (IxIF) rather than on a canvas, with a thumbnail given as a URL.",
+  "attribution": "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0). Images via Wikimedia Commons: \"The Weighing of the Heart\" by PharaohCrab (CC0); P. Oxy. I 29 (public domain). Pages: made for the Universal Viewer tests (MIT License).",
   "mediaSequences": [
     {
       "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/xsequence/s0",
@@ -14,15 +15,17 @@
       "label": "XSequence 0",
       "elements": [
         {
-          "@id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4#identity",
+          "@id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#identity",
           "@type": "dctypes:MovingImage",
           "format": "video/mp4",
           "label": "Video (e2e test fixture)",
           "thumbnail": "http://localhost:4444/test-fixtures/image-fixture-6-weighing-of-the-heart-scene.jpg",
           "rendering": {
-            "@id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
-            "format": "video/mp4"
-          }
+            "@id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+            "format": "video/mp4",
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          "license": "http://creativecommons.org/publicdomain/zero/1.0/"
         }
       ]
     }

@@ -41,6 +41,9 @@ type AVCenterPanelOptions = CenterPanelOptions & {
 
 type AVCenterPanelContent = CenterPanelContent & {
   delimiter: string;
+  mediaUnavailable: string;
+  /** Added to mediaUnavailable when a stream's server sends no CORS headers, in a browser without its own HLS player */
+  mediaBlockedByCors: string;
 };
 
 type AVCenterPanel = {

@@ -10,7 +10,6 @@
       "Its audio is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as many media servers are. Without ranges, the MediaElement extension plays it."
     ]
   },
-  "rights": "http://creativecommons.org/publicdomain/zero/1.0/",
   "requiredStatement": {
     "label": {
       "en": ["Attribution"]
@@ -40,7 +39,8 @@
                 "id": "http://127.0.0.1:4444/test-fixtures/whale-song.ogg",
                 "type": "Sound",
                 "format": "audio/ogg",
-                "duration": 37.9
+                "duration": 37.9,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

@@ -12,6 +12,16 @@ const { BASE_URL } = require("../../scripts/testBaseUrl");
 //   https://iiif.io/api/cookbook/recipe/0001-mvm-image/
 const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
 
+// The images on the book's first two canvases.
+const FIRST_IMAGE = `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page.jpg`;
+const SECOND_IMAGE = `${BASE_URL}/test-fixtures/image-fixture-2-euclid-papyrus.jpg`;
+
+// The URLs of everything the page has fetched.
+const fetched = (page) =>
+  page.evaluate(() =>
+    performance.getEntriesByType("resource").map((entry) => entry.name)
+  );
+
 const viewerUrl = (manifestUrl) => {
   //const separator = BASE_URL.includes("#?") ? "&" : "#?";
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
@@ -90,16 +100,26 @@ describe("Universal Viewer", () => {
     return match ? decodeURIComponent(match[1]) : null;
   };
 
-  const waitForXywhChange = async (page, previous) => {
-    await page.waitForFunction(
-      (prev) => {
-        const match = window.location.href.match(/[?&#]xywh=([^&]+)/);
-        const current = match ? decodeURIComponent(match[1]) : null;
-        return current !== null && current !== prev;
-      },
-      {},
-      previous
-    );
+  // The region shown (xywh), once it's other than `previous` and has stopped
+  // changing: the viewer updates it as it animates a zoom, and first as it
+  // opens the image.
+  const settledXywh = async (page, previous = null) => {
+    let last;
+    for (let waited = 0; waited < 15000; waited += 250) {
+      const current = getXywhValue(page.url());
+      if (current !== null && current !== previous && current === last) {
+        return current;
+      }
+      last = current;
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new Error(`The region shown didn't settle (last: ${last})`);
+  };
+
+  // A region's width and height.
+  const regionSize = (xywh) => {
+    const [, , w, h] = xywh.split(",").map(Number);
+    return { w, h };
   };
 
   // Each test opens the viewer as a new visitor: in a new browser context,
@@ -126,21 +146,32 @@ describe("Universal Viewer", () => {
     await browser.close();
   });
 
-  // Default manifest test
-  it("has the correct page title", async () => {
+  // The viewer runs on the examples page, not a page of its own, so this only
+  // shows the test server is serving that page.
+  it("opens on the examples page", async () => {
     const title = await page.title();
     expect(title).toBe("Universal Viewer Examples");
   });
 
   it("loads the viewer images", async () => {
-    // The thumbnail's <img> is attached after its #thumb-0 container.
+    // The thumbnail's <img> is attached after its #thumb-0 container. It has
+    // loaded once it's complete with a width.
     await page.waitForSelector("#thumb-0 img");
+    await page.waitForFunction(() => {
+      const img = document.querySelector("#thumb-0 img");
+      return img.complete && img.naturalWidth > 0;
+    });
     const imageSrc = await page.$eval("#thumb-0 img", (e) => e.src);
     expect(imageSrc).toEqual(
       expect.stringContaining(
         `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page-thumb.jpg`
       )
     );
+
+    // The main viewer has opened the first canvas's image: it has fetched it
+    // and shows a region of it.
+    await settledXywh(page);
+    expect(await fetched(page)).toContain(FIRST_IMAGE);
   });
 
   it("can toggle thumbnail label truncation", async () => {
@@ -171,6 +202,8 @@ describe("Universal Viewer", () => {
     );
     expect(isCheckedAfterToggle).toBe(false);
 
+    // The thumbnails are drawn again without truncation.
+    await page.waitForSelector(".thumbsView .thumbs:not(.truncate-labels)");
     const labelOverflowAfterToggle = await page.evaluate(() => {
       const label = document.querySelector(
         ".thumbsView .thumbs .thumb .info .label"
@@ -259,10 +292,6 @@ describe("Universal Viewer", () => {
       "Thumbnail size",
       "Increase thumbnail size",
     ]);
-
-    await page.evaluate(() => {
-      document.querySelector(".uv-icon-two-up").click();
-    });
   });
 
   it("settings button is visible", async () => {
@@ -287,33 +316,61 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(".btn.imageBtn.next", { visible: true });
       await page.waitForSelector(".btn.imageBtn.prev", { visible: true });
 
-      const startValue = getCanvasValue(page.url());
+      // Whether the prev button is disabled, once it's as expected (it's
+      // updated after the URL), or after 5 seconds.
+      const isPrevDisabled = async (expected) => {
+        await page
+          .waitForFunction(
+            (expected) =>
+              document.querySelector(".btn.imageBtn.prev").disabled ===
+              expected,
+            { timeout: 5000 },
+            expected
+          )
+          .catch(() => undefined);
+        return page.$eval(".btn.imageBtn.prev", (btn) => btn.disabled);
+      };
 
-      const isPrevDisabledInitially = await page.$eval(
-        ".btn.imageBtn.prev",
-        (btn) => btn.disabled
-      );
-      expect(isPrevDisabledInitially).toBe(true);
+      // Which thumbnails are selected, once they're as expected (they're
+      // updated after the URL), or after 5 seconds.
+      const selectedThumbs = async (expected) => {
+        const selected = () =>
+          page.$$eval(".thumbsView .thumb.selected", (thumbs) =>
+            thumbs.map((thumb) => thumb.closest(".thumb-container").id)
+          );
+        for (let waited = 0; waited < 5000; waited += 250) {
+          if ((await selected()).join() === expected.join()) break;
+          await new Promise((resolve) => setTimeout(resolve, 250));
+        }
+        return selected();
+      };
+
+      const startValue = getCanvasValue(page.url());
+      expect(await isPrevDisabled(true)).toBe(true);
+      expect(await selectedThumbs(["thumb-0"])).toEqual(["thumb-0"]);
+      const startXywh = await settledXywh(page);
 
       await page.click(".btn.imageBtn.next");
       await waitForCanvasValue(page, 1);
 
       const nextValue = getCanvasValue(page.url());
-      const isPrevDisabledAfterNext = await page.$eval(
-        ".btn.imageBtn.prev",
-        (btn) => btn.disabled
-      );
-      expect(isPrevDisabledAfterNext).toBe(false);
+      expect(await isPrevDisabled(false)).toBe(false);
+      // The book is "paged": its first page is shown alone, then the next
+      // two canvases side by side.
+      expect(await selectedThumbs(["thumb-1", "thumb-2"])).toEqual([
+        "thumb-1",
+        "thumb-2",
+      ]);
+      // The second canvas's image is opened, and the region shown changes
+      // from the first page's.
+      await settledXywh(page, startXywh);
+      expect(await fetched(page)).toContain(SECOND_IMAGE);
 
       await page.click(".btn.imageBtn.prev");
       await waitForCanvasValue(page, 0);
 
       const previousValue = getCanvasValue(page.url());
-      const isPrevDisabledAgain = await page.$eval(
-        ".btn.imageBtn.prev",
-        (btn) => btn.disabled
-      );
-      expect(isPrevDisabledAgain).toBe(true);
+      expect(await isPrevDisabled(true)).toBe(true);
 
       expect(startValue).toBe(0);
       expect(nextValue).toBe(1);
@@ -329,28 +386,24 @@ describe("Universal Viewer", () => {
         visible: true,
       });
 
-      const initialUrl = page.url();
-      const initialXywh = getXywhValue(initialUrl);
+      // The region shown once the image has opened, before zooming.
+      const initialXywh = await settledXywh(page);
 
       await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
-      await waitForXywhChange(page, initialXywh);
-
-      const zoomInUrl = page.url();
-      const zoomInXywh = getXywhValue(zoomInUrl);
-
-      expect(zoomInXywh).not.toBeNull();
-      expect(zoomInXywh).not.toBe(initialXywh);
+      const zoomInXywh = await settledXywh(page, initialXywh);
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
+      // Zooming in shows less of the image.
+      expect(regionSize(zoomInXywh).w).toBeLessThan(regionSize(initialXywh).w);
+      expect(regionSize(zoomInXywh).h).toBeLessThan(regionSize(initialXywh).h);
+
       await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
-      await waitForXywhChange(page, zoomInXywh);
-
-      const zoomOutUrl = page.url();
-      const zoomOutXywh = getXywhValue(zoomOutUrl);
-
-      expect(zoomOutXywh).not.toBeNull();
-      expect(zoomOutXywh).not.toBe(zoomInXywh);
+      const zoomOutXywh = await settledXywh(page, zoomInXywh);
       expect(zoomOutXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
+
+      // Zooming out shows more.
+      expect(regionSize(zoomOutXywh).w).toBeGreaterThan(regionSize(zoomInXywh).w);
+      expect(regionSize(zoomOutXywh).h).toBeGreaterThan(regionSize(zoomInXywh).h);
     });
 
     // rotate image
@@ -359,6 +412,8 @@ describe("Universal Viewer", () => {
         visible: true,
       });
 
+      // Read once the image has opened.
+      await settledXywh(page);
       const initialRot = await getRotationFromNavigator();
 
       await page.$eval(".rotate.viewportNavButton", (el) => el.click());
@@ -374,7 +429,6 @@ describe("Universal Viewer", () => {
       const btn = "button.viewportNavButton.adjustImage";
       const overlay = "div.overlay.adjustImage";
       const heading = "div.overlay.adjustImage .content .heading";
-      const closeBtn = ".btn.btn-default.close";
 
       await page.waitForSelector(btn, { visible: true });
       await page.$eval(btn, (el) => el.click());
@@ -384,20 +438,14 @@ describe("Universal Viewer", () => {
       const text = await page.$eval(heading, (el) => el.textContent.trim());
       expect(text).toBe("Adjust image");
 
-      await page.$eval(closeBtn, (el) => el.click());
-
-      const isOverlayVisible = await page.evaluate(() => {
-        const isOverlayVisible = document.querySelector(
-          "div.overlay.adjustImage"
-        );
-        const style = window.getComputedStyle(isOverlayVisible);
-
-        return (
-          style.getPropertyValue("display") === "none" ||
-          style.getPropertyValue("visibility") === "hidden"
-        );
+      // This dialogue's own Close button: every dialogue's close button has
+      // the same classes, and its Reset button is a copy of Close, before it.
+      await page.$eval(overlay, (dialogue) => {
+        const buttons = dialogue.querySelectorAll(".buttons .close");
+        buttons[buttons.length - 1].click();
       });
-      expect(isOverlayVisible).toBe(false);
+
+      await page.waitForSelector(overlay, { hidden: true });
     });
   });
 
@@ -426,6 +474,14 @@ describe("Universal Viewer", () => {
           el.classList.contains("on")
         )
       ).toBe(false);
+
+      // The index of the book's ranges shows in place of the thumbnails.
+      const index = ".leftPanel .views .treeView";
+      await page.waitForSelector(index, { visible: true });
+      await page.waitForSelector(".leftPanel .thumbsView", { hidden: true });
+      expect(await page.$eval(index, (el) => el.innerText)).toContain(
+        "Ancient sources"
+      );
     });
 
     it("can collapse content", async () => {
@@ -437,6 +493,68 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(contentExpandBtn, { visible: true });
       await page.waitForSelector(".leftPanel .tabs", { hidden: true });
     });
+
+    // The panel opens as the viewer starts, taking 300ms to. Collapsed
+    // within that time (clicked as soon as it starts opening), it ends up
+    // collapsed, says so, and stays so.
+    it("can collapse content while it's still opening", async () => {
+      const clickedWhileOpening = await page.evaluate(
+        () =>
+          new Promise((resolve) => {
+            const collapse = () => {
+              const panel = document.querySelector(".leftPanel");
+              if (!panel || !panel.classList.contains("open")) {
+                return false;
+              }
+              const opening = !panel.classList.contains("open-finished");
+              panel.querySelector(".collapseButton").click();
+              resolve(opening);
+              return true;
+            };
+            if (!collapse()) {
+              const observer = new MutationObserver(() => {
+                if (collapse()) {
+                  observer.disconnect();
+                }
+              });
+              observer.observe(document.body, {
+                subtree: true,
+                childList: true,
+                attributes: true,
+                attributeFilter: ["class"],
+              });
+            }
+          })
+      );
+      expect(clickedWhileOpening).toBe(true);
+
+      const collapsed = {
+        open: false,
+        // The viewer lays itself out for an open panel.
+        laidOutOpen: false,
+        collapseExpanded: "false",
+        expandExpanded: "false",
+      };
+      const panelState = () =>
+        page.$eval(".leftPanel", (panel) => ({
+          open: panel.classList.contains("open"),
+          laidOutOpen: panel.parentElement.classList.contains("leftPanelOpen"),
+          collapseExpanded: panel
+            .querySelector(".collapseButton")
+            .getAttribute("aria-expanded"),
+          expandExpanded: panel
+            .querySelector(".expandButton")
+            .getAttribute("aria-expanded"),
+        }));
+      await page.waitForSelector(`.leftPanel ${contentExpandBtn}`, {
+        visible: true,
+      });
+      // Gives both toggles time to finish.
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      expect(await panelState()).toEqual(collapsed);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      expect(await panelState()).toEqual(collapsed);
+    }, 30000);
   });
 
   describe("more information panel", () => {

@@ -10,8 +10,55 @@ const viewerUrl = (manifestUrl) => {
   return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
 };
 
+// The canvas the viewer draws the PDF's page on.
+const PDF_CANVAS = ".pdfContainer canvas";
+
+// A hash of the canvas's size and pixels, or null while nothing is drawn on
+// it: until a page is drawn the canvas is transparent; a drawn page is opaque.
+const drawnPage = (page) =>
+  page.evaluate((selector) => {
+    const canvas = document.querySelector(selector);
+    if (!canvas || !canvas.width || !canvas.height) return null;
+    const context = canvas.getContext("2d");
+    const [, , , alpha] = context.getImageData(
+      canvas.width / 2,
+      canvas.height / 2,
+      1,
+      1
+    ).data;
+    if (alpha === 0) return null;
+    // FNV-1a over every pixel.
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < data.length; i++) {
+      hash = Math.imul(hash ^ data[i], 0x01000193);
+    }
+    return `${canvas.width}x${canvas.height}:${hash >>> 0}`;
+  }, PDF_CANVAS);
+
+// Waits until a page is drawn on the canvas, other than the one that hashed to
+// `notHash` (if given), and returns its hash. The drawing must be the same on
+// two reads 250 ms apart, so a page part way through being drawn isn't taken
+// for a finished one.
+const waitForDrawnPage = async (page, notHash = null) => {
+  const deadline = Date.now() + 10000;
+  let previous = null;
+  while (Date.now() < deadline) {
+    const drawn = await drawnPage(page);
+    if (drawn && drawn !== notHash && drawn === previous) return drawn;
+    previous = drawn;
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error(
+    notHash
+      ? "No other page was drawn within 10 s"
+      : "No page was drawn within 10 s"
+  );
+};
+
 describe("Universal Viewer", () => {
   let browser;
+  let context;
   let page;
 
   beforeAll(async () => {
@@ -20,7 +67,6 @@ describe("Universal Viewer", () => {
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    page = await browser.newPage();
   });
 
   afterAll(async () => {
@@ -29,7 +75,15 @@ describe("Universal Viewer", () => {
 
   // PDF MANIFEST TEST
   describe("PDF manifest", () => {
+    // Each test opens the viewer as a new visitor: in a new browser context,
+    // so nothing a test does (the canvas it moved to, the panel it closed,
+    // what the viewer remembers in localStorage) carries over to another,
+    // whatever order they run in. (Going to the same page with only its hash
+    // changed wouldn't start the viewer again.)
     beforeEach(async () => {
+      if (context) await context.close();
+      context = await browser.createBrowserContext();
+      page = await context.newPage();
       await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
         waitUntil: "domcontentloaded",
       });
@@ -40,41 +94,12 @@ describe("Universal Viewer", () => {
 
       await page.waitForSelector(".uv", { visible: true });
 
-      await page.waitForFunction(() => {
-        return document.querySelectorAll("iframe").length > 0;
-      });
+      // The viewer draws the PDF's page on a canvas in the page itself.
+      await page.waitForSelector(PDF_CANVAS, { visible: true });
+      await waitForDrawnPage(page);
 
-      const viewerFrame = page.frames().find((f) => {
-        const url = f.url();
-
-        return (
-          url.includes("uv.html") ||
-          url.includes("viewer") ||
-          url.includes("manifest")
-        );
-      });
-
-      expect(viewerFrame).toBeTruthy();
-
-      await viewerFrame.waitForSelector("canvas", { visible: true });
-
-      const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector("canvas");
-
-        if (!canvas) return null;
-        return {
-          width: canvas.width,
-          height: canvas.height,
-        };
-      });
-      expect(canvasInfo).not.toBeNull();
-      expect(canvasInfo.width).toBeGreaterThan(0);
-      expect(canvasInfo.height).toBeGreaterThan(0);
-
-      const pageText = await viewerFrame.evaluate(
-        () => document.body.innerText
-      );
-
+      // Drawn, without an error said meanwhile.
+      const pageText = await page.evaluate(() => document.body.innerText);
       expect(pageText).not.toContain("Unable to load");
       expect(pageText).not.toContain("Error loading");
     });
@@ -90,11 +115,18 @@ describe("Universal Viewer", () => {
       const thumbs = await page.$$(".thumb");
 
       expect(thumbs.length).toBeGreaterThan(1);
+
+      // The first file's page is drawn before moving on, so a change can
+      // only come from the navigation.
+      const firstPage = await waitForDrawnPage(page);
       await thumbs[1].click();
 
       await page.waitForFunction(() => window.location.href.includes("cv=1"));
-
       expect(page.url()).toContain("cv=1");
+
+      // The second file's page, not the first's, is drawn.
+      const secondPage = await waitForDrawnPage(page, firstPage);
+      expect(secondPage).not.toBe(firstPage);
     });
 
     it("can collapse and re-expand the sidebar with the expand button", async () => {

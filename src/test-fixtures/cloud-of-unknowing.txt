@@ -1,0 +1,19 @@
+cloud-of-unknowing.mp4
+
+Chapter 52 of "The Cloud of Unknowing" (anonymous; 1922 translation by Evelyn
+Underhill), read by David Barnes for LibriVox
+(https://librivox.org/the-cloud-of-unknowing-by-anonymous), uploaded to
+Wikimedia Commons as Cloudofunknowing 52 anonymous 64kb.mp3:
+https://commons.wikimedia.org/wiki/File:Cloudofunknowing_52_anonymous_64kb.mp3
+
+Licence: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Made from the original upload (SHA-1 73aadb7be779bcf3775053d716b8384e9f9a7f42,
+as Wikimedia Commons gives it), MP3 audio, 151.9 seconds: looped to 1985.024
+seconds, the duration the manifests give it, and encoded as mono AAC audio
+(16 kbps, 16 kHz) in an MP4 with its index at the start, using macOS's
+AVFoundation.
+
+Used by the end-to-end tests as local audio, so they don't depend on a remote
+server.

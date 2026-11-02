@@ -7,6 +7,7 @@
   "@type": "sc:Manifest",
   "label": "Audio of a type UV doesn't list, in a IIIF v2 IxIF manifest (e2e test fixture)",
   "description": "Its media sequence element's type, ixif:Recording, isn't one UV chooses an extension by, so its format, audio/mp4, is used instead.",
+  "attribution": "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Images via Wikimedia Commons: \"The Weighing of the Heart\" by PharaohCrab (CC0); P. Oxy. I 29 (public domain). Pages: made for the Universal Viewer tests (MIT License).",
   "mediaSequences": [
     {
       "@id": "http://localhost:4444/test-fixtures/ixif-unlisted-type-audio-manifest.json/xsequence/s0",
@@ -14,15 +15,17 @@
       "label": "XSequence 0",
       "elements": [
         {
-          "@id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4#identity",
+          "@id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4#identity",
           "@type": "ixif:Recording",
           "format": "audio/mp4",
           "label": "Audio (e2e test fixture)",
           "thumbnail": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page.jpg",
           "rendering": {
-            "@id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
-            "format": "audio/mp4"
-          }
+            "@id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
+            "format": "audio/mp4",
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          "license": "http://creativecommons.org/publicdomain/zero/1.0/"
         }
       ]
     }

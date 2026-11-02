@@ -7,8 +7,16 @@
   },
   "summary": {
     "en": [
-      "Mahler's Symphony No. 3 with an accompanying image, as in IIIF Cookbook recipe 0014, which is shown while the audio plays. As in that recipe, the audio is in an MP4 file, so its format is video/mp4 though its type is Sound."
+      "A LibriVox reading of chapter 52 of The Cloud of Unknowing with an accompanying image, as in IIIF Cookbook recipe 0014, which is shown while the audio plays. As in that recipe, the audio is in an MP4 file, so its format is video/mp4 though its type is Sound."
     ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: P. Oxy. I 29, via Wikimedia Commons (public domain). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
   },
   "items": [
     {
@@ -51,10 +59,11 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
                 "type": "Sound",
                 "duration": 1985.024,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

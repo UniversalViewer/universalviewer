@@ -1,6 +1,6 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
 
 // The extension IIIFContentHandler chooses: by the first painting annotation
 // body's format, else its type (or, for a canvas without content, as in IIIF
@@ -165,17 +165,10 @@ describe("The extension chosen for audio and video", () => {
     // Configuration tab, which starts the viewer again with it.
     await page.evaluate(() => {
       window.configured = [];
-      document
-        .querySelector(".uv-iiif-extension-host")
-        .classList.add("unconfigured");
-      document.getElementById("customConfig").value = JSON.stringify({
-        options: { preferMediaElementExtension: true },
-      });
-      document.getElementById("setConfigButton").click();
     });
-    await page.waitForSelector(
-      ".uv-iiif-extension-host:not(.unconfigured).uv-mediaelement-extension"
-    );
+    await applyConfig(page, {
+      options: { preferMediaElementExtension: true },
+    });
     expect(await waitForExtension()).toBe("uv-mediaelement-extension");
     // The host's preference is only known once the AV extension is
     // configured.

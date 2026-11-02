@@ -6,7 +6,6 @@ import { MediaElementExtensionEvents } from "../../extensions/uv-mediaelement-ex
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { IMediaElementExtension } from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 import { sanitize } from "../../../../Utils";
-import { MediaType } from "@iiif/vocabulary/dist-commonjs/";
 import {
   AnnotationBody,
   Canvas,
@@ -25,14 +24,32 @@ import { CaptionLibrary } from "../uv-captions-module/CaptionLibrary";
 import { CanvasCaptions } from "../uv-captions-module/CanvasCaptions";
 import { PosterImages } from "../uv-shared-module/PosterImages";
 import { mediaKind } from "../uv-shared-module/MediaKind";
-import { loadDash, loadHls } from "../uv-shared-module/StreamingLibraries";
-import { isHLSFormat } from "../iiif-av-component-module/helpers/is-hls-format";
-import { isMpegDashFormat } from "../iiif-av-component-module/helpers/is-mpeg-dash-format";
+import {
+  loadDash,
+  loadHls,
+  mediaSupport,
+} from "../uv-shared-module/StreamingLibraries";
+import {
+  HlsErrorData,
+  isBlockedByCors,
+  MediaAttempt,
+  mediaAttempts,
+  MediaVia,
+} from "../iiif-av-component-module/helpers/media-attempts";
 
 type MediaSourceDescriptor = {
   label: string;
   type: string;
   src: string;
+};
+
+// The mediaelement renderer for each way of playing media: its HTML5
+// renderer for the browser's own player, and its hls.js and dash.js ones.
+const RENDERERS: { [via in MediaVia]: string } = {
+  native: "html5",
+  direct: "html5",
+  "hls.js": "native_hls",
+  dash: "native_dash",
 };
 
 export class MediaElementCenterPanel extends CenterPanel<
@@ -54,6 +71,10 @@ export class MediaElementCenterPanel extends CenterPanel<
       getCanvasCaptions(canvas, this.extension.getLocale())
   );
   private _captions: CanvasCaptions | undefined;
+  // Plays the version of the media the user chose (see _playInTurn).
+  private _chooseVersion: ((src: string) => void) | null = null;
+  // Stops it trying the versions in turn, when the player is let go of.
+  private _stopPlayingInTurn: (() => void) | null = null;
 
   constructor($element: JQuery) {
     super($element);
@@ -147,12 +168,17 @@ export class MediaElementCenterPanel extends CenterPanel<
 
   async openMedia(resources: IExternalResource[]) {
     const that = this;
+    // Another canvas chosen while playing carries on playing, on that canvas
+    // (as when choosing another track of an album).
+    const wasPlaying =
+      !!this.player && !!this.player.media && !this.player.media.paused;
 
     await this.extension.getExternalResources(resources);
 
     if (this._captions) {
       this._captions.destroy();
     }
+    this._stopPlayer();
     this.$container.empty();
 
     const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -210,26 +236,62 @@ export class MediaElementCenterPanel extends CenterPanel<
       }
     }
 
-    // MediaElement plays HLS and MPEG-DASH with hls.js and dash.js, which it
-    // would fetch from a CDN unless they're already loaded.
-    if (sources.some((source) => isHLSFormat(source.type as MediaType))) {
-      await loadHls();
-    }
-    if (sources.some((source) => isMpegDashFormat(source.type as MediaType))) {
-      await loadDash();
-    }
+    // The versions to try, in turn, until one plays (see mediaAttempts).
+    // mediaelement is given one at a time, so it plays them in this order,
+    // rather than its renderers' own, and each the way it's meant to be
+    // played; and so the browser doesn't load any it isn't meant to (it
+    // would load every <source> it can play itself).
+    const attempts = mediaAttempts(
+      sources,
+      (source) => source.type,
+      mediaSupport()
+    );
+    await this._loadLibraryFor(attempts[0]);
+    // HLS to be played with hls.js is given a format the browser's own HLS
+    // player (e.g. Chrome's) doesn't know, but mediaelement's hls.js renderer
+    // does, so the browser doesn't load the stream itself as well.
+    const firstSources = !attempts.length
+      ? sources
+      : attempts[0].via === "hls.js"
+      ? [
+          {
+            ...attempts[0].item,
+            type: this.isVideo() ? "video/hls" : "audio/hls",
+          },
+        ]
+      : [attempts[0].item];
+    // Every version, for the user to choose from (see source-chooser-fixed.js),
+    // in the order they're tried.
+    const chooserOptions = {
+      sourcechooserSources: attempts
+        .map(({ item }) => item)
+        .filter((item, i, items) => items.indexOf(item) === i)
+        .map(({ src, label, type }) => ({ src, title: label, type })),
+      sourcechooserChoose: (src: string) =>
+        that._chooseVersion && that._chooseVersion(src),
+    };
 
     if (this.isVideo()) {
       this.$media = $(
         '<video controls="controls" preload="metadata" style="width:100%;height:100%;" width="100%" height="100%"></video>'
       );
 
-      this.appendMediaSources(sources);
+      this.appendMediaSources(firstSources);
 
       this.$container.append(this.$media);
+      if (attempts.length) {
+        this._letPlay(
+          this.$media[0] as HTMLMediaElement,
+          RENDERERS[attempts[0].via] === "html5"
+        );
+      }
 
-      this.player = new MediaElementPlayer($("video")[0], {
-        ...this._controlOptions(),
+      // This panel's own media element (not the page's first, which may be
+      // another viewer's, or none, once this viewer's been replaced, when
+      // mediaelement gives back a player it hasn't set up).
+      this.player = new MediaElementPlayer(this.$media[0], {
+        ...this._controlOptions(attempts[0]),
+        ...chooserOptions,
         iconSprite: this.config.options.iconSprite,
         poster: poster,
         features: [
@@ -241,10 +303,13 @@ export class MediaElementCenterPanel extends CenterPanel<
           "fullscreen",
         ],
         success: function (mediaElement: any, originalNode: any, player: any) {
-          that._reportMediaErrors(mediaElement);
+          that._playInTurn(mediaElement, attempts);
           that._labelTimeline(canvas, mediaElement, player);
           that._labelVolume(mediaElement, player);
           that._showCaptions(canvas, mediaElement, player);
+          if (wasPlaying) {
+            mediaElement.play();
+          }
 
           mediaElement.addEventListener("loadstart", () => {
             // console.log("loadstart");
@@ -316,12 +381,20 @@ export class MediaElementCenterPanel extends CenterPanel<
         '<audio controls="controls" preload="metadata" style="width:100%;height:100%;" width="100%" height="100%"></audio>'
       );
 
-      this.appendMediaSources(sources);
+      this.appendMediaSources(firstSources);
 
       this.$container.append(this.$media);
+      if (attempts.length) {
+        this._letPlay(
+          this.$media[0] as HTMLMediaElement,
+          RENDERERS[attempts[0].via] === "html5"
+        );
+      }
 
-      this.player = new MediaElementPlayer($("audio")[0], {
-        ...this._controlOptions(),
+      // This panel's own media element (see the video player above).
+      this.player = new MediaElementPlayer(this.$media[0], {
+        ...this._controlOptions(attempts[0]),
+        ...chooserOptions,
         poster: poster,
         defaultAudioWidth: "auto",
         features: [
@@ -336,11 +409,14 @@ export class MediaElementCenterPanel extends CenterPanel<
         showPosterWhenPaused: true,
         showPosterWhenEnded: true,
         success: function (mediaElement: any, originalNode: any, player: any) {
-          that._reportMediaErrors(mediaElement);
+          that._playInTurn(mediaElement, attempts);
           that._labelTimeline(canvas, mediaElement, player);
           that._labelVolume(mediaElement, player);
           that._showPosterWhilePlaying(mediaElement, player, posterImages);
           that._showCaptions(canvas, mediaElement, player);
+          if (wasPlaying) {
+            mediaElement.play();
+          }
 
           mediaElement.addEventListener("play", () => {
             that.extensionHost.publish(
@@ -440,9 +516,24 @@ export class MediaElementCenterPanel extends CenterPanel<
   // - the volume controls shown on touch devices, unless configured not to
   //   be (hideVolumeOnTouchDevices);
   // - the arrow keys moving 5 seconds, as the AV component's do, rather than
-  //   5% of the media.
-  private _controlOptions(): object {
+  //   5% of the media;
+  // - the renderer for how the first version is meant to be played before
+  //   the others, so mediaelement doesn't start it another way (its html5
+  //   renderer also claims HLS where the browser has its own HLS player);
+  //   then the browser's own player before hls.js and dash.js (each version
+  //   is then played the way mediaAttempts says: see _playInTurn);
+  // - hls.js only fetching renditions the player is big enough to show.
+  private _controlOptions(
+    first?: MediaAttempt<MediaSourceDescriptor>
+  ): object {
+    const renderers = ["html5", "native_hls", "native_dash"];
+    const firstRenderer = first ? RENDERERS[first.via] : "html5";
     return {
+      renderers: [
+        firstRenderer,
+        ...renderers.filter((renderer) => renderer !== firstRenderer),
+      ],
+      hls: { capLevelToPlayerSize: true },
       playText: this.content.play,
       pauseText: this.content.pause,
       muteText: this.content.mute,
@@ -579,21 +670,230 @@ export class MediaElementCenterPanel extends CenterPanel<
     });
   }
 
-  // Tells the user when the media can't be played (e.g. its file is missing),
-  // unless configured not to (hideMediaError).
-  // The browser then also rejects requests to play it, which mediaelement
-  // leaves unhandled, so they're caught here.
-  private _reportMediaErrors(mediaElement: any): void {
+  // Loads the library a version of the media is played with, if any:
+  // mediaelement would otherwise fetch hls.js or dash.js from a CDN. Only
+  // when it's needed, so a page whose HLS the browser plays itself doesn't
+  // load hls.js at all.
+  private async _loadLibraryFor(
+    attempt: MediaAttempt<MediaSourceDescriptor> | undefined
+  ): Promise<void> {
+    if (attempt && attempt.via === "hls.js") {
+      await loadHls();
+    } else if (attempt && attempt.via === "dash") {
+      await loadDash();
+    }
+  }
+
+  // mediaelement plays with the browser's own player in the media element it
+  // replaces, but keeps that element (hidden) when it plays with hls.js or
+  // dash.js, and still sets its src, so the browser would load the media
+  // there too. While it isn't the one playing, its src is kept where the
+  // browser doesn't load from (mediaelement's hls.js still reads it).
+  private _letPlay(node: HTMLMediaElement, plays: boolean): void {
+    if (plays) {
+      Reflect.deleteProperty(node, "src");
+      return;
+    }
+    if (Object.getOwnPropertyDescriptor(node, "src")) {
+      return;
+    }
+    let kept = node.getAttribute("src") || "";
+    // Removing its src (without reloading, which would load its <source>s
+    // instead) leaves it with the version it had, paused.
+    if (node.hasAttribute("src")) {
+      node.pause();
+      node.removeAttribute("src");
+    }
+    Object.defineProperty(node, "src", {
+      configurable: true,
+      get: () => kept,
+      set: (src: string) => {
+        kept = src;
+      },
+    });
+  }
+
+  // Stops the media playing and loading, and lets go of its player and any
+  // hls.js or dash.js it was playing with, when another canvas is opened.
+  private _stopPlayer(): void {
+    if (!this.player) {
+      return;
+    }
+    const media = this.player.media;
+    if (this._stopPlayingInTurn) {
+      this._stopPlayingInTurn();
+      this._stopPlayingInTurn = null;
+    }
+    try {
+      // The browser's own player keeps loading, and telling the player being
+      // let go of, until its media is emptied; and the media element
+      // mediaelement puts back in the player's place would load it again.
+      $(this.player.container)
+        .find("audio, video")
+        .each((_, element: HTMLMediaElement) => {
+          element.pause();
+          element.setAttribute("preload", "none");
+          element.removeAttribute("src");
+          element.load();
+        });
+      if (media && media.hlsPlayer) {
+        media.hlsPlayer.destroy();
+      }
+      if (media && media.dashPlayer) {
+        media.dashPlayer.reset();
+      }
+      this.player.remove();
+    } catch (e) {
+      // It's being let go of regardless.
+    }
+    this.player = null;
+  }
+
+  // Plays the versions of the media in turn (see mediaAttempts): mediaelement
+  // is given the first, and when it can't be played, the next, each with the
+  // renderer for how it's meant to be played, carrying on playing if the user
+  // had pressed play. Only when none can be played is the user told, unless
+  // configured not to (hideMediaError); and where hls.js couldn't load the
+  // last because its server sends no CORS headers, in a browser without its
+  // own HLS player to play it without them, the message says so.
+  // The browser also rejects requests to play media that can't be played,
+  // which mediaelement leaves unhandled, so they're caught here.
+  private _playInTurn(
+    mediaElement: any,
+    attempts: MediaAttempt<MediaSourceDescriptor>[]
+  ): void {
     const play = mediaElement.play.bind(mediaElement);
     mediaElement.play = () =>
       Promise.resolve(play()).catch((err) => console.log("err", err));
 
-    mediaElement.addEventListener("error", () => {
-      if (!this.config.options.hideMediaError) {
-        this.extensionHost.publish(IIIFEvents.SHOW_MESSAGE, [
-          this.content.mediaUnavailable,
+    let index = 0;
+    let reported = false;
+    let switching = false;
+    // Whether the version being played has failed: the browser pauses it
+    // then, which isn't the user stopping it.
+    let failed = false;
+    let playRequested = false;
+    // From hls.js's own errors, which mediaelement doesn't pass on.
+    let blockedByCors = false;
+    let watchedHls: any = null;
+    let cappedDash: any = null;
+
+    // When the player is let go of: emptying its media makes it report an
+    // error, which isn't a version failing.
+    this._stopPlayingInTurn = () => {
+      reported = true;
+    };
+
+    // Plays a version with the renderer for how it's meant to be played. The
+    // first is already loading, so it only changes renderer if mediaelement
+    // chose another.
+    const use = (
+      attempt: MediaAttempt<MediaSourceDescriptor>,
+      first = false
+    ) => {
+      failed = false;
+      this._letPlay(
+        mediaElement.originalNode,
+        RENDERERS[attempt.via] === "html5"
+      );
+      if (!first || mediaElement.rendererName !== RENDERERS[attempt.via]) {
+        mediaElement.changeRenderer(RENDERERS[attempt.via], [
+          { src: attempt.item.src, type: attempt.item.type },
         ]);
       }
+    };
+
+    // The version the user chose, from the source chooser: the first way
+    // it's tried, then on as usual if it can't be played.
+    this._chooseVersion = async (src: string) => {
+      const chosen = attempts.findIndex(({ item }) => item.src === src);
+      if (chosen < 0) {
+        return;
+      }
+      switching = true;
+      index = chosen;
+      blockedByCors = false;
+      await this._loadLibraryFor(attempts[index]);
+      use(attempts[index]);
+      setTimeout(watchStreams, 0);
+      switching = false;
+    };
+
+    // Listens to the hls.js mediaelement plays with, once it has made one,
+    // and has dash.js only fetch renditions the player is big enough to show.
+    const watchStreams = () => {
+      const hls = mediaElement.hlsPlayer;
+      const Hls = (window as any).Hls;
+      if (hls && Hls && hls !== watchedHls) {
+        watchedHls = hls;
+        hls.on(Hls.Events.ERROR, (_event: string, data: HlsErrorData) => {
+          const attempt = attempts[index];
+          if (data.fatal && attempt) {
+            blockedByCors = isBlockedByCors(
+              data,
+              attempt.item.src,
+              window.location.href
+            );
+          }
+        });
+      }
+      const dash = mediaElement.dashPlayer;
+      if (dash && dash !== cappedDash) {
+        cappedDash = dash;
+        dash.setLimitBitrateByPortal(true);
+        dash.setUsePixelRatioInLimitBitrateByPortal(true);
+      }
+    };
+
+    if (attempts.length) {
+      use(attempts[0], true);
+    }
+    setTimeout(watchStreams, 0);
+    mediaElement.addEventListener("loadstart", watchStreams);
+    mediaElement.addEventListener("play", () => (playRequested = true));
+    mediaElement.addEventListener("pause", () => {
+      if (!switching && !failed) {
+        playRequested = false;
+      }
+    });
+
+    mediaElement.addEventListener("error", () => {
+      if (reported || switching) {
+        return;
+      }
+      failed = true;
+      // Once hls.js's own error listeners (mediaelement's first, which
+      // reports this error) have run.
+      setTimeout(async () => {
+        if (reported || switching) {
+          return;
+        }
+        if (index + 1 < attempts.length) {
+          switching = true;
+          index++;
+          blockedByCors = false;
+          await this._loadLibraryFor(attempts[index]);
+          use(attempts[index]);
+          setTimeout(watchStreams, 0);
+          switching = false;
+          if (playRequested) {
+            mediaElement.play();
+          }
+          return;
+        }
+        reported = true;
+        if (!this.config.options.hideMediaError) {
+          const attempt = attempts[index];
+          const message =
+            attempt &&
+            attempt.via === "hls.js" &&
+            blockedByCors &&
+            !mediaSupport().nativeHls
+              ? `${this.content.mediaUnavailable} ${this.content.mediaBlockedByCors}`
+              : this.content.mediaUnavailable;
+          this.extensionHost.publish(IIIFEvents.SHOW_MESSAGE, [message]);
+        }
+      }, 0);
     });
   }
 

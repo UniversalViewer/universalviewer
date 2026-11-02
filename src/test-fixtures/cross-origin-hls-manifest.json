@@ -10,6 +10,14 @@
       "Its HLS stream is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as the British Library's early AV streams are, so hls.js, which fetches it with a script request, can't load it. Without ranges, the MediaElement extension plays it."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/cross-origin-hls-manifest.json/canvas",
@@ -29,7 +37,8 @@
                 "id": "http://127.0.0.1:4444/test-fixtures/stream.m3u8",
                 "type": "Sound",
                 "format": "application/vnd.apple.mpegurl",
-                "duration": 10
+                "duration": 10,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

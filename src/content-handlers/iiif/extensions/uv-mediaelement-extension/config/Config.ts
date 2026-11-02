@@ -29,6 +29,8 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
 type MediaElementCenterPanelContent = CenterPanelContent &
   CaptionsContent & {
     mediaUnavailable: string;
+    /** Added to mediaUnavailable when a stream's server sends no CORS headers, in a browser without its own HLS player */
+    mediaBlockedByCors: string;
     audioVolume: string;
     fullScreen: string;
     mute: string;

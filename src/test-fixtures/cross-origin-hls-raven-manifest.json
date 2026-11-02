@@ -1,0 +1,50 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Playable HLS audio from another origin, without CORS (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "A short HLS stream served from another origin (127.0.0.1 rather than localhost) without CORS headers, so hls.js can't load it, but the browser's own HLS player, which needs no CORS, can play it. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Yellowstone sound library - Common Raven - 001\" by David Restivo, National Park Service, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 12.65,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json/canvas",
+              "body": {
+                "id": "http://127.0.0.1:4444/test-fixtures/black-sand-raven.m3u8",
+                "type": "Sound",
+                "format": "application/vnd.apple.mpegurl",
+                "duration": 12.65
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

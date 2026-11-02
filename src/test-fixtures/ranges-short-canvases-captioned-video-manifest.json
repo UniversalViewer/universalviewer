@@ -10,6 +10,14 @@
       "Two three-second canvases joined into one timeline (auto-advance), each with English captions, so playback moves from one canvas's captions to the other's within seconds."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "behavior": ["auto-advance"],
   "items": [
     {
@@ -32,12 +40,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4#t=0,3",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#t=0,3",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 3,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]
@@ -87,12 +96,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4#t=0,3",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#t=0,3",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 3,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

@@ -1,12 +1,11 @@
 import { AnnotationBody, Annotation } from "manifesto.js";
-import { MediaType } from "@iiif/vocabulary";
-import { isHLSFormat } from "./is-hls-format";
-import { isMpegDashFormat } from "./is-mpeg-dash-format";
 import { canPlayHls } from "./can-play-hls";
 import { isSafari } from "./is-safari";
+import { mediaAttempts } from "./media-attempts";
 
-// The version of the media to play, of those a painting annotation offers
-// (e.g. a Choice of formats), or null if none can be played. In order:
+// The version of the media to play first, of those a painting annotation
+// offers (e.g. a Choice of formats), or null if none can be played. In
+// order (see mediaAttempts):
 // 1. HLS, where the browser can play it (natively or with hls.js).
 // 2. MPEG-DASH, except in Safari, which plays HLS instead.
 // 3. The first of any other format (e.g. MP4).
@@ -14,18 +13,11 @@ import { isSafari } from "./is-safari";
 export function extractMediaFromAnnotationBodies(
   annotation: Annotation
 ): AnnotationBody | null {
-  const bodies: AnnotationBody[] = annotation.getBody();
-  const withFormat = (test: (format: MediaType) => boolean) =>
-    bodies.find((body) => {
-      const format = body.getFormat();
-      return !!format && test(format);
-    });
-
-  return (
-    (canPlayHls() && withFormat(isHLSFormat)) ||
-    (!isSafari() && withFormat(isMpegDashFormat)) ||
-    withFormat((format) => !isHLSFormat(format) && !isMpegDashFormat(format)) ||
-    bodies.find((body) => !body.getFormat()) ||
-    null
+  const hls = canPlayHls();
+  const [first] = mediaAttempts(
+    annotation.getBody(),
+    (body) => body.getFormat(),
+    { nativeHls: hls, hlsJs: hls, pageHlsJs: false, safari: isSafari() }
   );
+  return first ? first.item : null;
 }

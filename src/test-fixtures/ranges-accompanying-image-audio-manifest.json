@@ -7,8 +7,16 @@
   },
   "summary": {
     "en": [
-      "Mahler's Symphony No. 3 with an image accompanying the manifest, and a table of contents given by ranges, so the AV component plays it. The AV component reads the manifest's accompanyingCanvas (or posterCanvas), not a canvas'."
+      "A LibriVox reading of chapter 52 of The Cloud of Unknowing with an image accompanying the manifest, and a table of contents given by ranges, so the AV component plays it. The AV component reads the manifest's accompanyingCanvas (or posterCanvas), not a canvas'."
     ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: P. Oxy. I 29, via Wikimedia Commons (public domain). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
   },
   "accompanyingCanvas": {
     "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/accompanying",
@@ -51,10 +59,11 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
                 "type": "Sound",
                 "duration": 1985.024,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

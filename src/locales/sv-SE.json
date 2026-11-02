@@ -168,6 +168,7 @@
   "$positionOfDuration": "{0} av {1}",
   "$noMediaMessage": "Inga medier att spela upp",
   "$mediaUnavailable": "Tyvärr kan det här mediet inte spelas upp. Det kan ha flyttats eller vara otillgängligt.",
+  "$mediaBlockedByCors": "Dess server tillåter inte att det spelas upp på andra webbplatser (den skickar inga CORS-huvuden). Det kan spelas upp i Chrome eller Safari, som ibland kan spela upp resurser utan CORS-huvuden.",
   "$captions": "Undertexter",
   "$captionsOff": "Av",
   "$captionLanguages": "Språk",

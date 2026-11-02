@@ -10,6 +10,14 @@
       "With no placeholder or accompanying image, the canvas' IIIF v3 thumbnail is shown before and while the audio plays. Its ranges make the AV component play it."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: Fayum mummy portrait, British Museum EA29772, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas",
@@ -34,10 +42,11 @@
               "type": "Annotation",
               "motivation": "painting",
               "body": {
-                "id": "https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4",
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
                 "type": "Sound",
                 "duration": 1985.024,
-                "format": "audio/mp4"
+                "format": "audio/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               },
               "target": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas"
             }

@@ -10,6 +10,14 @@
       "As in IIIF Cookbook recipe 0026, the canvas has no label, so the player has no title until it plays a range, whose label it then shows."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas",
@@ -28,12 +36,13 @@
               "motivation": "painting",
               "target": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
                 "type": "Video",
                 "height": 360,
                 "width": 480,
                 "duration": 572.034,
-                "format": "video/mp4"
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]
@@ -46,14 +55,14 @@
       "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/toc",
       "type": "Range",
       "label": {
-        "en": ["Lunchroom Manners"]
+        "en": ["Blackbird Feeding"]
       },
       "items": [
         {
           "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/1",
           "type": "Range",
           "label": {
-            "en": ["The puppet show"]
+            "en": ["Feeding the chicks"]
           },
           "items": [
             {
@@ -66,7 +75,7 @@
           "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/2",
           "type": "Range",
           "label": {
-            "en": ["Mister Bungle"]
+            "en": ["Clearing the nest"]
           },
           "items": [
             {

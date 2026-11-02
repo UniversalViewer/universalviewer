@@ -48,11 +48,12 @@ import {
   toMs,
 } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
-import { isHLSFormat } from "../helpers/is-hls-format";
-import { isMpegDashFormat } from "../helpers/is-mpeg-dash-format";
+import { mediaAttempts } from "../helpers/media-attempts";
 import {
-  attachDash,
-  attachHls,
+  Detach,
+  MediaVersion,
+  mediaSupport,
+  playVersionsInTurn,
 } from "../../uv-shared-module/StreamingLibraries";
 import "waveform-panel";
 import { WaveformPanel } from "waveform-panel";
@@ -174,9 +175,11 @@ export class CanvasInstance extends BaseComponent {
           }
         );
 
-        const mediaElement = new MediaElement(mediaSource, {
-          adaptiveAuthEnabled: this._data.adaptiveAuthEnabled,
-        });
+        const mediaElement = new MediaElement(
+          mediaSource,
+          { adaptiveAuthEnabled: this._data.adaptiveAuthEnabled },
+          this._mediaVersions(annotation)
+        );
 
         mediaElement.setSize(
           this._convertToPercentage(mediaSource.x || 0, canvas.getHeight()),
@@ -225,9 +228,12 @@ export class CanvasInstance extends BaseComponent {
 
     const compositeMediaElement = new CompositeMediaElement(mediaElements);
 
-    mediaElements.forEach((mediaElement) =>
-      this._reportMediaUnavailable(mediaElement.getRawElement())
-    );
+    mediaElements.forEach((mediaElement) => {
+      mediaElement.onUnplayable((blockedByCors) =>
+        this._reportMediaUnavailable(blockedByCors)
+      );
+      this._detachMedia.push(() => mediaElement.detach());
+    });
 
     compositeMediaElement.appendTo(this.$playerElement);
 
@@ -718,6 +724,8 @@ export class CanvasInstance extends BaseComponent {
         height: percentageHeight,
         left: percentageLeft,
         source: mediaSource,
+        // Every version to try, in turn, until one plays (see mediaAttempts).
+        versions: this._mediaVersions(item),
         start: startTime,
         startOffset: offsetStart,
         top: percentageTop,
@@ -1342,6 +1350,9 @@ export class CanvasInstance extends BaseComponent {
     if (this._captions) {
       this._captions.destroy();
     }
+    // Stops the media's streams loading, now the player's let go of.
+    this._detachMedia.forEach((detach) => detach());
+    this._detachMedia = [];
     window.clearInterval(this._highPriorityInterval);
     window.clearInterval(this._lowPriorityInterval);
     window.clearInterval(this._canvasClockInterval);
@@ -1351,17 +1362,36 @@ export class CanvasInstance extends BaseComponent {
     return convertToPercentage(pixelValue, maxValue);
   }
 
+  // Stops each of the media's streams loading.
+  private _detachMedia: Detach[] = [];
+
+  // The versions of a painting annotation's media to try, in turn, until one
+  // plays (see mediaAttempts), each without its media fragment.
+  private _mediaVersions(annotation: Annotation): MediaVersion[] {
+    return mediaAttempts(
+      annotation.getBody(),
+      (body) => body.getFormat(),
+      mediaSupport()
+    ).map(({ item, via }) => ({ source: item.id.split("#")[0], via }));
+  }
+
   private _mediaUnavailableReported = false;
 
-  // Tells the user, once, when media can't be loaded (e.g. its file is
-  // missing).
-  private _reportMediaUnavailable(media: HTMLMediaElement): void {
-    media.addEventListener("error", () => {
-      if (!this._mediaUnavailableReported) {
-        this._mediaUnavailableReported = true;
-        this.fire(Events.MEDIA_ERROR, this._data.content?.mediaUnavailable);
-      }
-    });
+  // Tells the user, once, when media can't be played, every version of it
+  // having been tried (e.g. its file is missing). Where it's that a stream's
+  // server sends no CORS headers, and the browser has no HLS player of its own
+  // to play it without them, the message says so.
+  private _reportMediaUnavailable(blockedByCors: boolean): void {
+    if (this._mediaUnavailableReported) {
+      return;
+    }
+    this._mediaUnavailableReported = true;
+    const content = this._data.content;
+    const message =
+      content && blockedByCors && !mediaSupport().nativeHls
+        ? `${content.mediaUnavailable} ${content.mediaBlockedByCors}`
+        : content?.mediaUnavailable;
+    this.fire(Events.MEDIA_ERROR, message);
   }
 
   private _renderMediaElement(data: any): void {
@@ -1402,14 +1432,18 @@ export class CanvasInstance extends BaseComponent {
     // source.connect(panNode);
     // panNode.connect(audioCtx.destination);
 
-    if (data.format && isMpegDashFormat(data.format)) {
+    const versions: MediaVersion[] = data.versions;
+    if (versions.length && versions[0].via === "dash") {
       $mediaElement.attr("data-dashjs-player", "");
-      attachDash(media, data.source, this._data.adaptiveAuthEnabled);
-    } else if (data.format && isHLSFormat(data.format)) {
-      attachHls(media, data.source, this._data.adaptiveAuthEnabled);
-    } else {
-      $mediaElement.attr("src", data.source);
     }
+    this._detachMedia.push(
+      playVersionsInTurn(
+        media,
+        versions,
+        !!this._data.adaptiveAuthEnabled,
+        (blockedByCors) => this._reportMediaUnavailable(blockedByCors)
+      )
+    );
 
     $mediaElement
       .css({
@@ -1452,8 +1486,6 @@ export class CanvasInstance extends BaseComponent {
     if (this.$playerElement) {
       this._$canvasContainer.append($mediaElement);
     }
-
-    this._reportMediaUnavailable($mediaElement.get(0) as HTMLMediaElement);
 
     $mediaElement.on("loadedmetadata", async () => {
       this._readyMediaCount++;
@@ -2041,9 +2073,19 @@ export class CanvasInstance extends BaseComponent {
     return this._data.constrainNavigationToRange || false;
   }
 
+  // While the media is buffering, the clock waits with it: it's anchored
+  // again where it stands, so it carries on from there once the media does,
+  // rather than jumping on (and the media with it) by however long it waited.
+  private _holdClock(): void {
+    this._canvasClockStartDate = toMs(
+      minusTime(this.now(), this._canvasClockTime)
+    );
+  }
+
   private _canvasClockUpdater(): void {
     if (AVComponent.newRanges && this.isVirtual()) {
       if (this._buffering) {
+        this._holdClock();
         return;
       }
 
@@ -2054,8 +2096,9 @@ export class CanvasInstance extends BaseComponent {
         advanceToTime: minusTime(this.now(), startDate),
       });
 
+      // As below, the clock only moves on while playing.
       const { paused } = this.timePlanPlayer.advanceToTime(
-        minusTime(this.now(), startDate)
+        this._isPlaying ? minusTime(this.now(), startDate) : this._canvasClockTime
       );
       if (paused) {
         this.pause();
@@ -2064,10 +2107,16 @@ export class CanvasInstance extends BaseComponent {
     }
 
     if (this._buffering) {
+      this._holdClock();
       return;
     }
-    const startDate = fromMs(this._canvasClockStartDate);
-    this._canvasClockTime = minusTime(this.now(), startDate);
+    // The clock only moves on while playing: when paused (e.g. just after a
+    // seek), the time between anchoring it and updating it would otherwise
+    // move it on, and the time shown (rounded up) a second past where it is.
+    if (this._isPlaying) {
+      const startDate = fromMs(this._canvasClockStartDate);
+      this._canvasClockTime = minusTime(this.now(), startDate);
+    }
 
     let duration: Duration | undefined;
 

@@ -1,0 +1,26 @@
+pdf-fixture-3-weighing-of-the-heart.pdf and pdf-fixture-3-weighing-of-the-heart-thumb.jpg
+
+A one-page PDF made for the end-to-end tests (its header reads "Universal
+Viewer PDF test fixture 3 / 3"; its producer is given as "UV fixture
+generator"), titled "The Weighing of the Heart", with a short description
+and, as its picture, "The Weighing of the Heart" by PharaohCrab (see
+image-fixture-6-weighing-of-the-heart-scene.txt for the source and licence).
+Its footer credits the picture: "Image: "The Weighing of the Heart" by
+PharaohCrab, after the Papyrus of Ani. CC0, via Wikimedia Commons. Generated
+for the Universal Viewer e2e test suite - universalviewer.io". The same page
+is image-fixture-5-weighing-of-the-heart-page.jpg.
+
+The picture is CC0 1.0 Universal (Public Domain Dedication),
+https://creativecommons.org/publicdomain/zero/1.0/ . The page's title, text
+and layout were written for this repository, and are under its MIT License
+(see LICENSE.txt); the picture keeps its own licence. So the page as a whole
+isn't CC0: the manifest gives these files no rights (which can't give the MIT
+License), and credits the picture, and the pages as "made for the Universal
+Viewer tests (MIT License)", in its requiredStatement.
+
+pdf-fixture-3-weighing-of-the-heart.pdf has SHA-1
+3438693a83982784e178968b4a541b53467913c8; the thumbnail is 150x194 (SHA-1
+a417484a39602f71a664ebad697a6f47969aad84). They were added on 2 October
+2026; how they were made isn't recorded.
+
+Used by pdf-multi-file-manifest.json.

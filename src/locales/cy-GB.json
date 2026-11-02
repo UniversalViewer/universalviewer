@@ -169,6 +169,7 @@
   "$positionOfDuration": "{0} o {1}",
   "$noMediaMessage": "Does dim cyfryngau ar gael i'w chwarae",
   "$mediaUnavailable": "Mae'n ddrwg gennym, ni ellir chwarae'r cyfryngau hyn. Efallai eu bod wedi'u symud neu nad ydynt ar gael.",
+  "$mediaBlockedByCors": "Nid yw ei weinydd yn caniatáu iddo gael ei chwarae ar wefannau eraill (nid yw'n anfon penawdau CORS). Efallai y bydd yn chwarae yn Chrome neu Safari, sy'n gallu chwarae adnoddau heb benawdau CORS weithiau.",
   "$captions": "Capsiynau",
   "$captionsOff": "I ffwrdd",
   "$captionLanguages": "Ieithoedd",

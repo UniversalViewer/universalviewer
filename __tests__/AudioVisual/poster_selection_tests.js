@@ -1,6 +1,10 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
 // The image shown with audio and video, before and while it plays (see
 // choosePosterImages, which poster_images_tests.ts covers rule by rule), in
@@ -79,23 +83,6 @@ describe.each(PLAYERS)("The image shown with media in $player", (player) => {
     return width > 0 && height > 0 && match ? match[1] : null;
   };
 
-  // Waits for an element to stop moving: the AV component's controls move
-  // down once its player is sized for the media, and a click before then
-  // lands where they were.
-  const waitUntilStill = async (selector) => {
-    const position = async () =>
-      JSON.stringify(await (await page.$(selector)).boundingBox());
-    let last = await position();
-    for (let waited = 0; waited < 10000; waited += 250) {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      const now = await position();
-      if (now === last) {
-        return;
-      }
-      last = now;
-    }
-  };
-
   // Expects the player to show an image (or none), giving it up to 10s to.
   const expectShown = async (expected) => {
     let shown = await page.evaluate(shownImage, player.poster);
@@ -118,6 +105,8 @@ describe.each(PLAYERS)("The image shown with media in $player", (player) => {
         waitUntil: "domcontentloaded",
       });
       await page.waitForSelector(player.play, { visible: true });
+      // The manifest's attribution can cover the play button.
+      await closeAttribution(page);
       await expectShown(beforePlay);
 
       // The AV component loads its media's metadata straight away, so it's
@@ -129,14 +118,17 @@ describe.each(PLAYERS)("The image shown with media in $player", (player) => {
           ).some((media) => media.readyState >= 1)
         );
       }
-      await waitUntilStill(player.play);
+      await waitUntilStill(page, player.play);
       await page.click(player.play);
-      // Playback has started (whether or not the media has buffered enough
-      // to move on), which is when the players change images.
-      await page.waitForFunction(() =>
-        Array.from(
-          document.querySelectorAll(".centerPanel audio, .centerPanel video")
-        ).some((media) => !media.paused)
+      // Playing, half a second in, so the image is the one shown while it
+      // plays, not just as play is pressed (which, where the two are the
+      // same, wouldn't tell them apart).
+      await page.waitForFunction(
+        () =>
+          Array.from(
+            document.querySelectorAll(".centerPanel audio, .centerPanel video")
+          ).some((media) => !media.paused && media.currentTime > 0.5),
+        { timeout: 20000 }
       );
       await expectShown(whilePlaying);
     },

@@ -10,6 +10,14 @@
       "As in manifests from drafts of IIIF Presentation 3 (e.g. the British Library's early AV manifests), its canvas gives its annotation pages as content rather than items."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1",
@@ -27,12 +35,13 @@
               "type": "Annotation",
               "motivation": "painting",
               "body": {
-                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
                 "type": "Video",
                 "format": "video/mp4",
                 "width": 480,
                 "height": 360,
-                "duration": 572.034
+                "duration": 572.034,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               },
               "target": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1"
             }

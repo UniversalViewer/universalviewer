@@ -81,6 +81,16 @@ A test's name, for `-t`, is its `describe` titles and its `it` title joined with
 
 > Note: Most tests run in a browser against the built viewer in `dist/`, including the manifests in `src/test-fixtures/`, so run `npm run build` after changing anything in `src/` first. Unit tests that import from `src/` directly (the `.ts` ones, such as `__tests__/Config/locale_strings_tests.ts`) don't need a build.
 
+### Seeing the test server's requests
+
+The test server (`npm run e2eserve`, started by `jest.globalSetup.js`) doesn't log the requests the viewer makes during the tests: it would log two lines for every file every test loads, burying the tests' own output. To see them, for example to find out why a file didn't load, set `UV_E2E_REQUEST_LOG`:
+
+```
+UV_E2E_REQUEST_LOG=1 npm test -- __tests__/AudioVisual/media_error_tests.js
+```
+
+Some tests ask for files that don't exist on purpose (such as `missing-audio.mp3`), so a few `404` responses are expected.
+
 ## Project branch strategy
 
 This project's branch strategy is based on the [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). To summarize:

@@ -10,11 +10,19 @@
       "Plays the Mux HLS test stream, which needs hls.js in browsers without native support. Its ranges make the AV extension play it."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Big Buck Bunny\", (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org (CC BY 3.0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/ranges-hls-video-stream-manifest.json/canvas",
       "type": "Canvas",
-      "duration": 600,
+      "duration": 634.584,
       "width": 1280,
       "height": 720,
       "items": [
@@ -33,7 +41,8 @@
                 "format": "application/vnd.apple.mpegurl",
                 "width": 1280,
                 "height": 720,
-                "duration": 600
+                "duration": 634.584,
+                "rights": "http://creativecommons.org/licenses/by/3.0/"
               }
             }
           ]

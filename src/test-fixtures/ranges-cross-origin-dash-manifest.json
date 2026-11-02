@@ -12,6 +12,14 @@
       "Its MPEG-DASH stream is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as the British Library's early AV streams are, so dash.js, which fetches it with a script request, can't load it. Its ranges make the AV component play it."
     ]
   },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
   "items": [
     {
       "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-dash-manifest.json/canvas",
@@ -31,7 +39,8 @@
                 "id": "http://127.0.0.1:4444/test-fixtures/stream.mpd",
                 "type": "Sound",
                 "format": "application/dash+xml",
-                "duration": 10
+                "duration": 10,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               }
             }
           ]

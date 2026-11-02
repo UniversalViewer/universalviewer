@@ -1,6 +1,10 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const {
+  viewerUrl,
+  closeAttribution,
+  waitUntilStill,
+} = require("../../scripts/testViewer");
 
 // The thumbnails of audio and video canvases, in each player: the image
 // shown with the media (see mediaThumbnail), or an icon for the kind of
@@ -14,6 +18,7 @@ const PLAYERS = [
   {
     player: "mediaelement (manifests without ranges)",
     manifest: "two-canvas-audio-manifest.json",
+    play: ".mejs__playpause-button button",
     // The manifest's label, whichever canvas plays.
     titles: [
       "Audio on two canvases (e2e test fixture)",
@@ -23,12 +28,13 @@ const PLAYERS = [
   {
     player: "the AV component (manifests with ranges)",
     manifest: "ranges-two-canvas-audio-manifest.json",
+    play: ".iiif-av-component .controls-container button:has(.av-icon-play)",
     // The label of the range playing: each canvas is one.
     titles: ["Side 1", "Side 2"],
   },
 ];
 
-describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, titles }) => {
+describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, play, titles }) => {
   let browser;
   let context;
   let page;
@@ -41,7 +47,7 @@ describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, titles }) => {
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-  });
+  }, 60000);
 
   afterAll(async () => {
     await browser.close();
@@ -108,21 +114,71 @@ describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, titles }) => {
     expect(brokenImages).toEqual([]);
   }, 60000);
 
-  it("plays the canvas chosen", async () => {
+  // Chooses the second canvas (side 2) and waits for the player to have it:
+  // its thumbnail selected, the URL on it, and its audio loaded (the AV
+  // component has every canvas' audio from the start; mediaelement loads
+  // the chosen one's).
+  const chooseSideTwo = async () => {
     const thumbs = await page.$$(".leftPanel .thumb");
     await thumbs[1].click();
     await page.waitForFunction(
       () =>
+        document
+          .querySelectorAll(".leftPanel .thumb")[1]
+          .classList.contains("selected") && /[?&]cv=1\b/.test(location.hash),
+      { timeout: 10000 }
+    );
+    await page.waitForFunction(
+      () =>
         Array.from(document.querySelectorAll(".centerPanel audio")).some(
-          (audio) =>
-            /side=2/.test(
-              audio.currentSrc ||
-                audio.getAttribute("src") ||
-                (audio.querySelector("source") || {}).src
-            )
+          (audio) => /side=2/.test(audio.currentSrc) && audio.readyState >= 1
         ),
       { timeout: 10000 }
     );
+  };
+
+  // Each audio element's side, and whether it's playing (0.5 seconds in).
+  const sidesPlaying = () =>
+    page.$$eval(".centerPanel audio", (elements) =>
+      elements
+        .filter((audio) => audio.currentSrc)
+        .map((audio) => ({
+          side: (audio.currentSrc.match(/side=(\d)/) || [])[1],
+          playing: !audio.paused && audio.currentTime > 0.5,
+        }))
+    );
+
+  it("plays the canvas chosen", async () => {
+    await chooseSideTwo();
+    // Played as a user would: the attribution can cover the play button,
+    // and the player is laid out again for the canvas. The AV component
+    // has a player for each canvas, so it's the play button shown.
+    await closeAttribution(page);
+    const button = (
+      await page.waitForFunction(
+        (selector) =>
+          Array.from(document.querySelectorAll(selector)).find(
+            (button) => button.offsetParent !== null
+          ),
+        { timeout: 10000 },
+        play
+      )
+    ).asElement();
+    await waitUntilStill(page, button);
+    await button.click();
+    await page.waitForFunction(
+      () =>
+        Array.from(document.querySelectorAll(".centerPanel audio")).some(
+          (audio) =>
+            /side=2/.test(audio.currentSrc) &&
+            !audio.paused &&
+            audio.currentTime > 0.5
+        ),
+      { timeout: 20000 }
+    );
+    // Side 2 plays, and side 1 doesn't.
+    const playing = (await sidesPlaying()).filter((audio) => audio.playing);
+    expect(playing.map((audio) => audio.side)).toEqual(["2"]);
     expect(errors).toEqual([]);
   }, 60000);
 
@@ -136,8 +192,9 @@ describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, titles }) => {
       { timeout: 10000 },
       titles[0]
     );
-    const thumbs = await page.$$(".leftPanel .thumb");
-    await thumbs[1].click();
+    await chooseSideTwo();
+    // Waits for the title to be the expected one, then checks it (so a
+    // wrong title fails with what it was).
     await page
       .waitForFunction(
         (expected) =>
@@ -146,7 +203,7 @@ describe.each(PLAYERS)("Thumbnails in $player", ({ manifest, titles }) => {
         { timeout: 10000 },
         titles[1]
       )
-      .catch(() => {});
+      .catch(() => undefined);
     expect(await title()).toBe(titles[1]);
   }, 60000);
 });

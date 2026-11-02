@@ -1,6 +1,6 @@
 let puppeteer;
 const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
 
 // The MediaElement player's volume controls on touch devices
 // (mediaElementCenterPanel's hideVolumeOnTouchDevices): shown by default, on
@@ -54,12 +54,7 @@ describe.each(PLAYERS)("Volume controls in %s on touch devices", (_, manifest) =
       visible: true,
     });
     if (config) {
-      await page.evaluate((config) => {
-        document.querySelector(".centerPanel").classList.add("unconfigured");
-        document.getElementById("customConfig").value = JSON.stringify(config);
-        document.getElementById("setConfigButton").click();
-      }, config);
-      await page.waitForSelector(".centerPanel:not(.unconfigured)");
+      await applyConfig(page, config);
       await page.waitForSelector(".mejs__controls .captions-button", {
         visible: true,
       });

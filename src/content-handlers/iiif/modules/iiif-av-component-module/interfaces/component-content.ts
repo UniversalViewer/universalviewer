@@ -19,4 +19,7 @@ export interface IAVComponentContent extends CaptionsContent {
   fastRewind: string;
   noMediaMessage?: string;
   mediaUnavailable: string;
+  // Added to mediaUnavailable when a stream's server sends no CORS headers,
+  // in a browser without its own HLS player to play it without them.
+  mediaBlockedByCors: string;
 }
