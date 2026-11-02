@@ -182,7 +182,10 @@ describe.each(PLAYERS)("Streams in $player", (player) => {
     await newPage();
     const loaded = [];
     page.on("request", (request) => {
-      if (HLS_JS.test(request.url()) || /\/dashjs\.[0-9a-f]+\.js$/.test(request.url())) {
+      if (
+        HLS_JS.test(request.url()) ||
+        /\/dashjs\.[0-9a-f]+\.js$/.test(request.url())
+      ) {
         loaded.push(request.url());
       }
     });

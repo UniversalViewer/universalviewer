@@ -402,8 +402,12 @@ describe("Universal Viewer", () => {
       expect(zoomOutXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
       // Zooming out shows more.
-      expect(regionSize(zoomOutXywh).w).toBeGreaterThan(regionSize(zoomInXywh).w);
-      expect(regionSize(zoomOutXywh).h).toBeGreaterThan(regionSize(zoomInXywh).h);
+      expect(regionSize(zoomOutXywh).w).toBeGreaterThan(
+        regionSize(zoomInXywh).w
+      );
+      expect(regionSize(zoomOutXywh).h).toBeGreaterThan(
+        regionSize(zoomInXywh).h
+      );
     });
 
     // rotate image

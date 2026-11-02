@@ -125,7 +125,9 @@ describe("AV component playback", () => {
       await page.keyboard.press("PageUp");
     }
     await page.waitForFunction(
-      (player) => document.querySelector(`${player} .canvas-time`).textContent === "05:00",
+      (player) =>
+        document.querySelector(`${player} .canvas-time`).textContent ===
+        "05:00",
       {},
       player
     );
@@ -140,7 +142,10 @@ describe("AV component playback", () => {
       );
       let playedTo = video.currentTime;
       video.addEventListener("waiting", () => window.waits++);
-      video.addEventListener("timeupdate", () => (playedTo = video.currentTime));
+      video.addEventListener(
+        "timeupdate",
+        () => (playedTo = video.currentTime)
+      );
       video.addEventListener("seeking", () => {
         if (video.currentTime > playedTo + 1) {
           window.skips.push({ from: playedTo, to: video.currentTime });
@@ -203,7 +208,10 @@ describe("MediaElement playback", () => {
       { timeout: 20000 }
     );
     expect(
-      await page.$eval(".genericDialogue", (dialogue) => !!dialogue.offsetParent)
+      await page.$eval(
+        ".genericDialogue",
+        (dialogue) => !!dialogue.offsetParent
+      )
     ).toBe(false);
   }, 60000);
 });

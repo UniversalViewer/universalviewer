@@ -480,10 +480,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
   // Replaces each "$key" in the config with the locale's string for it. Run
   // on the extension's own config (loadConfig) and again once the host's
   // config is merged in, for the "$key"s the host's config uses.
-  public async readLocale(
-    config: Object,
-    locale: String
-  ): Promise<Object> {
+  public async readLocale(config: Object, locale: String): Promise<Object> {
     const loader =
       this.localeLoaders[locale as any] || this.localeLoaders["en-GB"];
     const localeStrings = (await loader()) || {};

@@ -188,7 +188,10 @@ describe("Universal Viewer", () => {
       // And it stays paused: a second later, it hasn't moved on.
       await new Promise((resolve) => setTimeout(resolve, 1000));
       expect(
-        await avPage.$eval("video", (video) => [video.paused, video.currentTime])
+        await avPage.$eval("video", (video) => [
+          video.paused,
+          video.currentTime,
+        ])
       ).toEqual([true, pausedTime]);
     }, 60000);
   });

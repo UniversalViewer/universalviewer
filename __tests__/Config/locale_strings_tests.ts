@@ -41,9 +41,9 @@ describe("readLocaleStrings", () => {
   });
 
   it("leaves a $key without a string as written", () => {
-    expect(readLocaleStrings({ label: "$unknown" }, { $close: "Close" })).toEqual(
-      { label: "$unknown" }
-    );
+    expect(
+      readLocaleStrings({ label: "$unknown" }, { $close: "Close" })
+    ).toEqual({ label: "$unknown" });
   });
 
   describe("keeps each string as written", () => {
@@ -56,9 +56,12 @@ describe("readLocaleStrings", () => {
       ["markup", "<script>alert(1)</script>"],
     ])("with %s", (_, value) => {
       expect(
-        readLocaleStrings({ label: "$label", other: "unchanged" }, {
-          $label: value,
-        })
+        readLocaleStrings(
+          { label: "$label", other: "unchanged" },
+          {
+            $label: value,
+          }
+        )
       ).toEqual({ label: value, other: "unchanged" });
     });
   });

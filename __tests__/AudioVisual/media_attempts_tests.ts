@@ -116,9 +116,7 @@ describe("mediaAttempts", () => {
   });
 
   it("tries HLS with the page's own hls.js first, even in Safari, and natively last", () => {
-    expect(
-      attempts({ ...SAFARI, pageHlsJs: true }, choice(MP4, HLS))
-    ).toEqual([
+    expect(attempts({ ...SAFARI, pageHlsJs: true }, choice(MP4, HLS))).toEqual([
       [HLS.id, "hls.js"],
       [MP4.id, "direct"],
       [HLS.id, "native"],
@@ -188,9 +186,9 @@ describe("mediaAttempts", () => {
   });
 
   it("tries a single MP4 body once", () => {
-    expect(
-      attempts(FIREFOX, paintedWith({ type: "Video", ...MP4 }))
-    ).toEqual([[MP4.id, "direct"]]);
+    expect(attempts(FIREFOX, paintedWith({ type: "Video", ...MP4 }))).toEqual([
+      [MP4.id, "direct"],
+    ]);
   });
 
   // The MediaElement extension plays a canvas' renderings instead of its
@@ -281,7 +279,11 @@ describe("isBlockedByCors", () => {
       isBlockedByCors({ ...BLOCKED, type: "mediaError" }, OTHER_SITE, PAGE)
     ).toBe(false);
     expect(
-      isBlockedByCors({ ...BLOCKED, details: "fragLoadError" }, OTHER_SITE, PAGE)
+      isBlockedByCors(
+        { ...BLOCKED, details: "fragLoadError" },
+        OTHER_SITE,
+        PAGE
+      )
     ).toBe(false);
     expect(isBlockedByCors(undefined, OTHER_SITE, PAGE)).toBe(false);
   });

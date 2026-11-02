@@ -34,7 +34,8 @@ export interface MediaSupport {
 // Chrome's own player can then play.
 export function hlsWays(support: MediaSupport): ("native" | "hls.js")[] {
   const hlsJsFirst =
-    support.pageHlsJs || (support.hlsJs && !(support.safari && support.nativeHls));
+    support.pageHlsJs ||
+    (support.hlsJs && !(support.safari && support.nativeHls));
   const ways: ("native" | "hls.js")[] = [];
   if (hlsJsFirst) {
     ways.push("hls.js");

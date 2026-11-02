@@ -33,8 +33,7 @@ const contentKeysIn = (files: string[]): string[] =>
   unique(
     files.flatMap((file) =>
       (
-        fs.readFileSync(file, "utf8").match(/(?<![\w$])content\??\.\w+/g) ||
-        []
+        fs.readFileSync(file, "utf8").match(/(?<![\w$])content\??\.\w+/g) || []
       ).map((read) => read.replace(/^content\??\./, ""))
     )
   );

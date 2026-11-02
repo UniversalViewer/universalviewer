@@ -19,7 +19,10 @@ const SIZES = [
   ["a laptop", { width: 1024, height: 768 }],
   ["a tablet", { width: 768, height: 1024, isMobile: true, hasTouch: true }],
   ["a phone", { width: 390, height: 844, isMobile: true, hasTouch: true }],
-  ["a small phone", { width: 320, height: 568, isMobile: true, hasTouch: true }],
+  [
+    "a small phone",
+    { width: 320, height: 568, isMobile: true, hasTouch: true },
+  ],
 ];
 
 const PHONE = SIZES.find(([name]) => name === "a phone")[1];
@@ -541,9 +544,10 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
     await page.keyboard.press("ArrowDown");
 
     expect((await slider(root, "volume")).valuetext).toBe("80%");
-    expect(
-      await page.$eval(player.media, (video) => video.volume)
-    ).toBeCloseTo(0.8, 5);
+    expect(await page.$eval(player.media, (video) => video.volume)).toBeCloseTo(
+      0.8,
+      5
+    );
   }, 60000);
 
   it("names the sliders in the user's language", async () => {

@@ -3,7 +3,9 @@
   "id": "http://localhost:4444/test-fixtures/cross-origin-hls-raven-manifest.json",
   "type": "Manifest",
   "label": {
-    "en": ["Playable HLS audio from another origin, without CORS (e2e test fixture)"]
+    "en": [
+      "Playable HLS audio from another origin, without CORS (e2e test fixture)"
+    ]
   },
   "summary": {
     "en": [

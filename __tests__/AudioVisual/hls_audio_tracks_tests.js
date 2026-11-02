@@ -136,8 +136,9 @@ describe.each(CASES)("HLS audio tracks in $player, $browser", (media) => {
         )
       : page.waitForFunction(
           (label) =>
-            document.querySelector(".centerPanel h1.title").textContent.trim() ===
-            label,
+            document
+              .querySelector(".centerPanel h1.title")
+              .textContent.trim() === label,
           { timeout: 20000 },
           LABELS[track - 1]
         );

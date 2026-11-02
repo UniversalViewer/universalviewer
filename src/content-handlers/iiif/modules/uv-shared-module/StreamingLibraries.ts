@@ -43,7 +43,9 @@ export const mediaSupport = (): MediaSupport => {
     hlsJs: Hls
       ? Hls.isSupported()
       : !!MediaSource &&
-        MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"'),
+        MediaSource.isTypeSupported(
+          'video/mp4; codecs="avc1.42E01E,mp4a.40.2"'
+        ),
     pageHlsJs: !!Hls && !uvLoadedHls && Hls.isSupported(),
     safari: isSafari(),
   };
@@ -239,9 +241,7 @@ export const playVersionsInTurn = (
       return;
     }
     stopped = true;
-    onUnplayable(
-      streamError && !!(event as CustomEvent).detail?.blockedByCors
-    );
+    onUnplayable(streamError && !!(event as CustomEvent).detail?.blockedByCors);
   });
 
   if (!versions.length) {
