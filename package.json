@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
-    "@eslint/js": "9.28.0",
+    "@eslint/js": "10.0.1",
     "@types/jest": "^30",
     "@types/jquery": "^3.5.14",
     "@types/node": "^22.9.0",
