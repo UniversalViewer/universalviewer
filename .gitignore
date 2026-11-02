@@ -55,6 +55,7 @@ src/extensions/*/lib/*.js
 !src/extensions/*/config.js
 !docs/assets/*.js
 !testBaseUrl.js
+!scripts/test*.js
 !jest.globalSetup.js
 !jest.globalTeardown.js
 
