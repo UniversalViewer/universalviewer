@@ -4,6 +4,8 @@ body {
   padding: 1rem;
   color-scheme: light dark;
   background-color: Canvas;
+
+  --slate: light-dark(#dee2e6, #495057);
 }
 
 /* @apply uv w-full */
@@ -45,39 +47,33 @@ body {
 }
 
 .controls-tab-content {
-  .tabs {
+  & > .tabs {
     display: flex;
-    gap: 0.2rem;
-    width: fit-content;
+    gap: 4px;
     padding-block-end: 0;
-  }
+    box-shadow: inset 0 -4px 0 var(--slate);
 
-  .tabs button {
-    padding-inline: 1.5rem;
-    padding-block: 0.75rem;
-    font-weight: 500;
-    font-size: 1rem;
-    color: ButtonText;
-    background-color: transparent;
-    border: 1px solid transparent;
-    cursor: pointer;
+    button {
+      padding-inline: 1.5rem;
+      padding-block: 0.75rem;
+      font-weight: 500;
+      font-size: 1rem;
+      color: ButtonText;
+      background-color: transparent;
+      border: 4px solid var(--slate);
+      cursor: pointer;
 
-    &.active {
-      background-color: ButtonFace;
-    }
-
-    &:hover,
-    &:focus {
-      border-color: currentcolor;
+      &.active {
+        background-color: var(--slate);
+      }
     }
   }
 
   .tabcontent {
     display: none;
-    padding-inline: 1rem;
-    padding-block: 0.5rem;
+    padding: 1rem;
     color: ButtonText;
-    background-color: ButtonFace;
+    background-color: var(--slate);
 
     &.active {
       display: block;
@@ -104,13 +100,12 @@ body {
     cursor: pointer;
 
     &:hover {
-      box-shadow: inset 0 0 0 4px Highlight;
-      border-color: currentcolor;
+      box-shadow: inset 0 0 0 2px AccentColor;
     }
   }
 
   :focus-visible {
-    outline: 0.2rem auto Highlight;
+    outline: 0.2rem auto AccentColor;
   }
 
   select {
@@ -155,14 +150,14 @@ body {
   font-size: 1.25rem;
   color: ButtonText;
   border: none;
-  background: ButtonFace;
+  background: var(--slate);
 }
 
 .controls-tab.active {
   background-color: white;
-  border-left: ButtonFace 3px solid;
-  border-top: ButtonFace 3px solid;
-  border-right: ButtonFace 3px solid;
+  border-left: var(--slate) 3px solid;
+  border-top: var(--slate) 3px solid;
+  border-right: var(--slate) 3px solid;
   font-weight: 500;
   color: black;
 }
@@ -225,10 +220,11 @@ details > summary {
   align-items: center;
   gap: 1ch;
   padding: 0.675rem;
-  background-color: ButtonFace;
+  background-color: var(--slate);
+  border: 1px solid;
 
   &:hover {
-    box-shadow: inset 0 0 0 4px Highlight;
+    box-shadow: inset 0 0 0 2px AccentColor;
   }
 }
 [open]::details-content {
