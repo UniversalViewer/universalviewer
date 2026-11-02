@@ -116,6 +116,40 @@ describe.each(PLAYERS)(
       expect(brokenImages).toEqual([]);
     }, 60000);
 
+    // Each thumbnail's box is given a height (the left panel's
+    // thumbsExtraHeight added to the thumbnail's), so the icon for its media
+    // shows whole, not cut off by a box only as tall as its border and
+    // padding.
+    it("shows each thumbnail whole", async () => {
+      const sizes = await page.$$eval(".leftPanel .thumb", (thumbs) =>
+        Promise.all(
+          thumbs.map(async (thumb) => {
+            const wrap = thumb.querySelector(".wrap");
+            const style = getComputedStyle(wrap);
+            const contentHeight =
+              wrap.clientHeight -
+              parseFloat(style.paddingTop) -
+              parseFloat(style.paddingBottom);
+            const icon = (style.backgroundImage.match(/url\("?(.*?)"?\)/) ||
+              [])[1];
+            let iconHeight = null;
+            if (icon && !wrap.querySelector("img")) {
+              const image = new Image();
+              image.src = icon;
+              await image.decode();
+              iconHeight = image.naturalHeight;
+            }
+            return {
+              height: wrap.style.height,
+              fitsIcon: iconHeight === null || contentHeight >= iconHeight,
+            };
+          })
+        )
+      );
+      sizes.forEach(({ height }) => expect(height).toMatch(/^\d+(\.\d+)?px$/));
+      expect(sizes.map(({ fitsIcon }) => fitsIcon)).toEqual([true, true]);
+    }, 60000);
+
     // Chooses the second canvas (side 2) and waits for the player to have it:
     // its thumbnail selected, the URL on it, and its audio loaded (the AV
     // component has every canvas' audio from the start; mediaelement loads
