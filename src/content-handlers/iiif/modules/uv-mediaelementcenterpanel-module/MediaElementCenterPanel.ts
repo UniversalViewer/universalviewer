@@ -937,10 +937,18 @@ export class MediaElementCenterPanel extends CenterPanel<
   }
 
   // audio/video
-  // Whether a rendering or body is audio or video (see mediaKind), with a
-  // format to offer the player.
+  // Whether a rendering or body is audio or video, with a format to offer the
+  // player: by mediaKind, or by its format alone where its type isn't a media
+  // type (e.g. renderings typed "rendering", as Villanova's are).
   isTypeMedia(element: Rendering | AnnotationBody) {
-    return element.getFormat() !== null && mediaKind(element.__jsonld) !== null;
+    const format = element.getFormat();
+    if (format === null) {
+      return false;
+    }
+    return (
+      mediaKind(element.__jsonld) !== null ||
+      /^(audio|video)\//i.test(format.toString())
+    );
   }
 
   isVideo(): boolean {

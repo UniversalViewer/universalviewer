@@ -47,6 +47,13 @@ const MEDIAELEMENT_CASES = [
     player: "video",
     image: "image-fixture-6-weighing-of-the-heart-scene.jpg",
   },
+  {
+    // As Villanova's manifests give it: the player's media come from the
+    // canvas' renderings, whose type ("rendering") isn't a media type.
+    name: "video offered as canvas renderings typed rendering",
+    manifest: "rendering-typed-rendering-video-manifest.json",
+    player: "video",
+  },
 ];
 
 const AV_COMPONENT_CASES = [
