@@ -30,7 +30,6 @@ interface AnnotationOverlayRect extends OpenSeadragon.Rect {
   chars: string;
 }
 export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
-  // JM todo: split out a new BackgroundPanel general config and OpenSeadragonBackgroundPanel config, when other extensions have been split to use background panel
   Config["modules"]["openSeadragonBackgroundPanel"]
 > {
   currentAnnotationRect: AnnotationRect;

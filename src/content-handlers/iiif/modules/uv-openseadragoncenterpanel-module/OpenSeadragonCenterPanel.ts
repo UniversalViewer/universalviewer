@@ -8,7 +8,7 @@ import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
 export class OpenSeadragonCenterPanel extends CenterPanel<
-  Config["modules"]["openSeadragonBackgroundPanel"]
+  Config["modules"]["openSeadragonCenterPanel"]
 > {
   autoHideControls: boolean;
   controlsFadeTimeout: number;
