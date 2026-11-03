@@ -349,29 +349,17 @@
     },
     "openSeadragonCenterPanel": {
       "options": {
-        "animationTime": 0.15,
         "autoHideControls": true,
-        "blendTime": 0,
-        "constrainDuringPan": false,
         "controlsFadeAfterInactive": 1500,
         "controlsFadeDelay": 250,
         "controlsFadeLength": 250,
-        "defaultZoomLevel": 0,
-        "doubleClickAnnotationEnabled": false,
-        "immediateRender": false,
-        "maxZoomPixelRatio": 1.25,
         "mostSpecificRequiredStatement": true,
         "navigatorPosition": "BOTTOM_RIGHT",
-        "pageGap": 50,
         "requiredStatementEnabled": true,
         "showHomeControl": false,
         "showAdjustImageControl": true,
         "subtitleEnabled": true,
-        "titleEnabled": true,
-        "visibilityRatio": 0.5,
-        "zoomToInitialAnnotation": true,
-        "trimAttributionCount": 150,
-        "tileTimeout": 30000
+        "titleEnabled": true
       },
       "content": {
         "attribution": "$attribution",
@@ -379,7 +367,6 @@
         "closeAttribution": "$closeAttribution",
         "goHome": "$goHome",
         "imageUnavailable": "$imageUnavailable",
-        "mediaViewer": "$mediaViewer",
         "nextImage": "$nextImage",
         "previousImage": "$previousImage",
         "rotateRight": "$rotateRight",
@@ -387,6 +374,29 @@
         "zoomOut": "$zoomOut",
         "adjustImage": "$adjustImage",
         "layers": "$layers"
+      }
+    },
+
+    "backgroundPanel": {
+      "options": {},
+      "content": {}
+    },
+    "openSeadragonBackgroundPanel": {
+      "options": {
+        "animationTime": 0.15,
+        "blendTime": 0,
+        "constrainDuringPan": false,
+        "defaultZoomLevel": 0,
+        "doubleClickAnnotationEnabled": false,
+        "immediateRender": false,
+        "maxZoomPixelRatio": 1.25,
+        "pageGap": 50,
+        "visibilityRatio": 0.5,
+        "zoomToInitialAnnotation": true,
+        "tileTimeout": 30000
+      },
+      "content": {
+        "mediaViewer": "$mediaViewer"
       }
     },
     "searchFooterPanel": {

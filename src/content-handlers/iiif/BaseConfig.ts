@@ -166,6 +166,15 @@ type CenterPanel = ModuleConfig & {
   content: CenterPanelContent;
 };
 
+export type BackgroundPanelOptions = {};
+
+export type BackgroundPanelContent = {};
+
+type BackgroundPanel = ModuleConfig & {
+  options: BackgroundPanelOptions;
+  content: BackgroundPanelContent;
+};
+
 export type FooterPanelOptions = {
   /** Determines if bookmarking is enabled */
   bookmarkEnabled: boolean;
@@ -486,6 +495,7 @@ export type BaseConfig = {
     shareDialogue: ShareDialogue;
     adjustImageDialogue: AdjustImageDialogue;
     choiceSwitchDialogue: ChoiceSwitchDialogue;
+    backgroundPanel?: BackgroundPanel;
   };
   localisation: Localisation;
   content: Content;

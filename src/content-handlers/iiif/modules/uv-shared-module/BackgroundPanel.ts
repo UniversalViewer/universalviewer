@@ -1,9 +1,7 @@
 import { BaseView } from "./BaseView";
-import { BaseConfig } from "../../BaseConfig";
+import { ModuleConfig } from "../../BaseConfig";
 
-export class BackgroundPanel<
-  T extends BaseConfig["modules"]["centerPanel"], // todo: backgroundPanel config
-> extends BaseView<T> {
+export class BackgroundPanel<T extends ModuleConfig> extends BaseView<T> {
   constructor($element: JQuery) {
     super($element);
   }
