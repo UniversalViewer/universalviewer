@@ -640,7 +640,7 @@ Order in which manifests are displayed.
 
 **Type**: `string`  
 **Default**: `""`  
-Excludes the field from the displayed manifest e.g "title". 
+Excludes the field from the displayed manifest e.g "title".
 
 ##### panelAnimationDuration
 
@@ -922,29 +922,11 @@ Determines if ranges auto advance.
 
 #### openSeadragonCenterPanel
 
-##### animationTime
-
-**Type**: `number`  
-**Default**: `0.15`  
-Duration of the animation.
-
 ##### autoHideControls
 
 **Type**: `boolean`  
 **Default**: `true`  
 Determines if controls are hidden automatically.
-
-##### blendTime
-
-**Type**: `number`  
-**Default**: `0`  
-Time taken to blend images.
-
-##### constrainDuringPan
-
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if panning is constrained.
 
 ##### controlsFadeAfterInactive
 
@@ -964,30 +946,6 @@ Delay before controls start to fade.
 **Default**: `250`  
 Duration of controls fade.
 
-##### defaultZoomLevel
-
-**Type**: `number`  
-**Default**: `0`  
-Default zoom level.
-
-##### doubleClickAnnotationEnabled
-
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if annotation is enabled.
-
-##### immediateRender
-
-**Type**: `boolean`  
-**Default**: `false`  
-Determines if rendering is immediate.
-
-##### maxZoomPixelRatio
-
-**Type**: `number`  
-**Default**: `1.25`  
-Maximum pixel ratio for zoom.
-
 ##### mostSpecificRequiredStatement
 
 **Type**: `boolean`  
@@ -999,12 +957,6 @@ Determines whether the most specific (deeply nested) requiredStatement is displa
 **Type**: `string`  
 **Default**: `"BOTTOM_RIGHT"`  
 Position of the navigator.
-
-##### pageGap
-
-**Type**: `number`  
-**Default**: `50`  
-Gap between pages.
 
 ##### requiredStatementEnabled
 
@@ -1030,17 +982,67 @@ Determines if adjust image control is shown.
 **Default**: `true`  
 Determines if the subtitle is enabled.
 
-##### tileTimeout
-
-**Type**: `number`
-**Default**: `30_000`
-Controls the maximum amount of time in milliseconds OpenSeadragon allows for any tile operation.
-
 ##### titleEnabled
 
 **Type**: `boolean`  
 **Default**: `true`  
 Determines if the title is enabled.
+
+#### openSeadragonBackgroundPanel
+
+##### animationTime
+
+**Type**: `number`  
+**Default**: `0.15`  
+Duration of the animation.
+
+##### blendTime
+
+**Type**: `number`  
+**Default**: `0`  
+Time taken to blend images.
+
+##### constrainDuringPan
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if panning is constrained.
+
+##### defaultZoomLevel
+
+**Type**: `number`  
+**Default**: `0`  
+Default zoom level.
+
+##### doubleClickAnnotationEnabled
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if annotation is enabled.
+
+##### immediateRender
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if rendering is immediate.
+
+##### maxZoomPixelRatio
+
+**Type**: `number`  
+**Default**: `1.25`  
+Maximum pixel ratio for zoom.
+
+##### pageGap
+
+**Type**: `number`  
+**Default**: `50`  
+Gap between pages.
+
+##### tileTimeout
+
+**Type**: `number`
+**Default**: `30_000`
+Controls the maximum amount of time in milliseconds OpenSeadragon allows for any tile operation.
 
 ##### visibilityRatio
 
