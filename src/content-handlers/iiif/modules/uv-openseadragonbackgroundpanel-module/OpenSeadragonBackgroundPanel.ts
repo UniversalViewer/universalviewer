@@ -55,7 +55,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   create(): void {
-    this.setConfig("openSeadragonCenterPanel");
+    this.setConfig("openSeadragonBackgroundPanel");
 
     super.create();
 

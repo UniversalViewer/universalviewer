@@ -495,7 +495,7 @@ export type BaseConfig = {
     shareDialogue: ShareDialogue;
     adjustImageDialogue: AdjustImageDialogue;
     choiceSwitchDialogue: ChoiceSwitchDialogue;
-    backgroundPanel: BackgroundPanel;
+    backgroundPanel?: BackgroundPanel;
   };
   localisation: Localisation;
   content: Content;
