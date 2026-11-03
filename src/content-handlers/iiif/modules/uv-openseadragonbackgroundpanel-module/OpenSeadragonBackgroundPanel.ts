@@ -31,7 +31,7 @@ interface AnnotationOverlayRect extends OpenSeadragon.Rect {
 }
 export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   // JM todo: split out a new BackgroundPanel general config and OpenSeadragonBackgroundPanel config, when other extensions have been split to use background panel
-  Config["modules"]["openSeadragonCenterPanel"]
+  Config["modules"]["openSeadragonBackgroundPanel"]
 > {
   currentAnnotationRect: AnnotationRect;
   currentBounds: XYWHFragment | null;

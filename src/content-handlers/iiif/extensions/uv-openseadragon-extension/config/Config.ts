@@ -17,6 +17,8 @@ import {
   SettingsDialogueOptions,
   ShareDialogueContent,
   ShareDialogueOptions,
+  BackgroundPanelContent,
+  BackgroundPanelOptions,
 } from "@/content-handlers/iiif/BaseConfig";
 
 import { ContentLeftPanel } from "../../config/ContentLeftPanel";
@@ -97,51 +99,28 @@ type PagingHeaderPanel = ModuleConfig & {
 };
 
 type OpenSeadragonCenterPanelOptions = CenterPanelOptions & {
-  /** Duration of the animation */
-  animationTime: number;
   /** Determines if controls are hidden automatically */
   autoHideControls: boolean;
   /** Determines if required statement is enabled */
   requiredStatementEnabled: boolean;
-  /** Time taken to blend images */
-  blendTime: number;
-  /** Determines if panning is constrained */
-  constrainDuringPan: boolean;
   /** Time after which controls fade after inactivity */
   controlsFadeAfterInactive: number;
   /** Delay before controls start to fade */
   controlsFadeDelay: number;
   /** Duration of controls fade */
   controlsFadeLength: number;
-  /** Default zoom level */
-  defaultZoomLevel: number;
-  /** Determines if annotation is enabled */
-  doubleClickAnnotationEnabled: boolean;
-  /** Determines if rendering is immediate */
-  immediateRender: boolean;
-  /** Maximum pixel ratio for zoom */
-  maxZoomPixelRatio: number;
   /** Position of the navigator */
   navigatorPosition: string;
-  /** Gap between pages */
-  pageGap: number;
   /** Determines if home control is shown */
   showHomeControl: boolean;
   /** Determines if adjust image control is shown */
   showAdjustImageControl: boolean;
-  /** Ratio of visibility */
-  visibilityRatio: number;
-  /** The maximum amount of time in milliseconds an image operation can take */
-  tileTimeout: number;
-  /** Whether to zoom in to first annotation on load */
-  zoomToInitialAnnotation: boolean;
 };
 
 type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   attribution: string;
   goHome: string;
   imageUnavailable: string;
-  mediaViewer: string;
   nextImage: string;
   previousImage: string;
   rotateRight: string;
@@ -154,6 +133,40 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
 type OpenSeadragonCenterPanel = ModuleConfig & {
   options: OpenSeadragonCenterPanelOptions;
   content: OpenSeadragonCenterPanelContent;
+};
+
+type OpenSeadragonBackgroundPanelOptions = BackgroundPanelOptions & {
+  /** Duration of the animation */
+  animationTime: number;
+  /** Time taken to blend images */
+  blendTime: number;
+  /** Determines if panning is constrained */
+  constrainDuringPan: boolean;
+  /** Default zoom level */
+  defaultZoomLevel: number;
+  /** Determines if annotation is enabled */
+  doubleClickAnnotationEnabled: boolean;
+  /** Determines if rendering is immediate */
+  immediateRender: boolean;
+  /** Maximum pixel ratio for zoom */
+  maxZoomPixelRatio: number;
+  /** Gap between pages */
+  pageGap: number;
+  /** Ratio of visibility */
+  visibilityRatio: number;
+  /** The maximum amount of time in milliseconds an image operation can take */
+  tileTimeout: number;
+  /** Whether to zoom in to first annotation on load */
+  zoomToInitialAnnotation: boolean;
+};
+
+type OpenSeadragonBackgroundPanelContent = BackgroundPanelContent & {
+  mediaViewer: string;
+};
+
+type OpenSeadragonBackgroundPanel = ModuleConfig & {
+  options: OpenSeadragonBackgroundPanelOptions;
+  content: OpenSeadragonBackgroundPanelContent;
 };
 
 type SearchFooterPanelOptions = FooterPanelOptions & {
@@ -296,6 +309,7 @@ type Modules = {
   settingsDialogue: OSDSettingsDialogue;
   adjustImageDialogue: AdjustImageDialogue;
   choiceSwitchDialogue: ChoiceSwitchDialogue;
+  openSeadragonBackgroundPanel: OpenSeadragonBackgroundPanel;
 };
 
 export type Config = BaseConfig & {
