@@ -102,6 +102,9 @@ export type Options = {
 
   /** A default animation duration */
   animationDuration?: number;
+
+  /** Determines if the image stays in view when panels open */
+  keepImageInViewEnabled?: boolean;
 };
 
 type Locale = {
@@ -244,6 +247,7 @@ export type SettingsDialogueContent = DialogueContent & {
   preserveViewport: string;
   title: string;
   website: string;
+  keepImageInViewEnabled?: string;
 };
 
 type SettingsDialogue = ModuleConfig & {
