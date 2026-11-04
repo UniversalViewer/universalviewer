@@ -45,7 +45,9 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewer: any;
   viewerId: string;
   navigatorResizeTimeout: number;
-  visibleAreaObserver: ResizeObserver;
+
+  private panelState = { left: false, right: false };
+  private panelObserver: MutationObserver;
 
   $canvas: JQuery;
   $spinner: JQuery;
@@ -145,19 +147,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        if (this.keepImageInView()) {
-          this.goHome(false);
-          return;
-        }
 
         const viewport = this.viewer.viewport;
 
         // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
         const wasHome =
           Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
-
-        // margins are now stale if keepImageInView disabled, so update now
-        this.updateViewportMargins();
 
         // at home: the margin change moves the picture, so snap to avoid showing the jump
         // zoomed in: ease home, as the change is hidden by the larger move
@@ -418,28 +413,29 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.$viewer.removeClass("dialogue-open");
     });
 
-    // add resize observer to the center panel content; update margins when it's resized and move image if keepImageInView
-    // The behaviour here needs some thought - slide and zoom (current behaviour) or just slide sideways?
-    this.visibleAreaObserver = new ResizeObserver((entries) => {
-      const viewport = this.viewer?.viewport;
-      if (!viewport || !this.viewer.world.getItemCount()) return;
+        const $main = this.extension.shell.$mainPanel;
+    this.panelState = {
+      left: $main.hasClass("leftPanelOpen"),
+      right: $main.hasClass("rightPanelOpen"),
+    };
 
-      // static mode: do nothing
-      if (!this.keepImageInView()) return;
+    this.panelObserver = new MutationObserver(() => {
+      const left = $main.hasClass("leftPanelOpen");
+      const right = $main.hasClass("rightPanelOpen");
 
-      // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
-      const wasHome =
-        Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
+      const leftChanged = left !== this.panelState.left;
+      const rightChanged = right !== this.panelState.right;
+      this.panelState = { left, right };
 
-      this.updateViewportMargins();
+  if (!this.keepImageInView()) return;
 
-      // without this, the image zooms in briefly if it was at home and a panel closes.
-      if (wasHome) this.goHome();
+      if (leftChanged) this.followPanel("left");
+      if (rightChanged) this.followPanel("right");
     });
-
-    this.visibleAreaObserver.observe(
-      (this.extension as OpenSeadragonExtension).centerPanel.$element[0]
-    );
+    this.panelObserver.observe($main[0], {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
   }
 
   async getGirderTileSource(): Promise<any> {
@@ -508,8 +504,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.viewer.close();
     this.items = [];
-
-    this.updateViewportMargins();
 
     // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
     const spinnerTimeout = window.setTimeout(() => {
@@ -1287,35 +1281,42 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     return newRects;
   }
 
-  updateViewportMargins(): void {
-    if (!this.viewer?.viewport) return;
+ followPanel(side: "left" | "right"): void {
+  const $panel = side === "left"
+    ? this.extension.shell.$leftPanel
+    : this.extension.shell.$rightPanel;
+  const sign = side === "left" ? 1 : -1;
 
-    const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
-    if (!centerPanel?.$element?.length) return;
+  let last = $panel[0].getBoundingClientRect().width;
+  const start = performance.now();
+  const maxMs = 600;
 
-    const v = this.$viewer[0].getBoundingClientRect();
-    const c = centerPanel.$element[0].getBoundingClientRect();
-    if (!v.width || !v.height) return;
+  const step = (now: number) => {
+    const viewport = this.viewer?.viewport;
+    if (!viewport) return;
 
-    const pad = 0.05;
+    const width = $panel[0].getBoundingClientRect().width;
+    const dx = sign * (width - last);
+    last = width;
 
-    const insetX = c.width * pad;
-    const insetY = c.height * pad;
+    if (dx) {
+      viewport.panBy(
+        viewport.deltaPointsFromPixels(new OpenSeadragon.Point(-dx, 0), true),
+        true
+      );
+    }
 
-    this.viewer.viewport.setMargins({
-      left: Math.max(0, c.left - v.left) + insetX,
-      right: Math.max(0, v.right - c.right) + insetX,
-      top: Math.max(0, c.top - v.top) + insetY,
-      bottom: Math.max(0, v.bottom - c.bottom) + insetY,
-    });
-  }
+    if (now - start < maxMs) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
-  keepImageInView(): boolean {
-    return Bools.getBool(
-      this.extension.getSettings().keepImageInViewEnabled,
-      true
-    );
-  }
+keepImageInView(): boolean {
+  return Bools.getBool(
+    this.extension.getSettings().keepImageInViewEnabled,
+    true
+  );
+}
 
   resize(): void {
     super.resize();
