@@ -147,7 +147,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-
         const viewport = this.viewer.viewport;
 
         // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
@@ -413,7 +412,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.$viewer.removeClass("dialogue-open");
     });
 
-        const $main = this.extension.shell.$mainPanel;
+    const $main = this.extension.shell.$mainPanel;
     this.panelState = {
       left: $main.hasClass("leftPanelOpen"),
       right: $main.hasClass("rightPanelOpen"),
@@ -427,7 +426,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       const rightChanged = right !== this.panelState.right;
       this.panelState = { left, right };
 
-  if (!this.keepImageInView()) return;
+      if (!this.keepImageInView()) return;
 
       if (leftChanged) this.followPanel("left");
       if (rightChanged) this.followPanel("right");
@@ -1281,42 +1280,43 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     return newRects;
   }
 
- followPanel(side: "left" | "right"): void {
-  const $panel = side === "left"
-    ? this.extension.shell.$leftPanel
-    : this.extension.shell.$rightPanel;
-  const sign = side === "left" ? 1 : -1;
+  followPanel(side: "left" | "right"): void {
+    const $panel =
+      side === "left"
+        ? this.extension.shell.$leftPanel
+        : this.extension.shell.$rightPanel;
+    const sign = side === "left" ? 1 : -1;
 
-  let last = $panel[0].getBoundingClientRect().width;
-  const start = performance.now();
-  const maxMs = 600;
+    let last = $panel[0].getBoundingClientRect().width;
+    const start = performance.now();
+    const maxMs = 600;
 
-  const step = (now: number) => {
-    const viewport = this.viewer?.viewport;
-    if (!viewport) return;
+    const step = (now: number) => {
+      const viewport = this.viewer?.viewport;
+      if (!viewport) return;
 
-    const width = $panel[0].getBoundingClientRect().width;
-    const dx = sign * (width - last);
-    last = width;
+      const width = $panel[0].getBoundingClientRect().width;
+      const dx = sign * (width - last);
+      last = width;
 
-    if (dx) {
-      viewport.panBy(
-        viewport.deltaPointsFromPixels(new OpenSeadragon.Point(-dx, 0), true),
-        true
-      );
-    }
+      if (dx) {
+        viewport.panBy(
+          viewport.deltaPointsFromPixels(new OpenSeadragon.Point(-dx, 0), true),
+          true
+        );
+      }
 
-    if (now - start < maxMs) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
+      if (now - start < maxMs) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
 
-keepImageInView(): boolean {
-  return Bools.getBool(
-    this.extension.getSettings().keepImageInViewEnabled,
-    true
-  );
-}
+  keepImageInView(): boolean {
+    return Bools.getBool(
+      this.extension.getSettings().keepImageInViewEnabled,
+      true
+    );
+  }
 
   resize(): void {
     super.resize();
