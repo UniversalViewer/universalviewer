@@ -431,6 +431,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       const wasHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
+      if (!wasHome) return;
+
       this.updateViewportMargins();
 
       // without this, the image zooms in briefly if it was at home and a panel closes.
