@@ -12,4 +12,5 @@ interface ISettings {
   saturationPercent?: number;
   rememberSettings?: boolean;
   animationDuration?: number;
+  keepImageInViewEnabled?: boolean;
 }
