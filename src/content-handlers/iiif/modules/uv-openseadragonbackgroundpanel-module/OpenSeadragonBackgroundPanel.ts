@@ -145,23 +145,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        if (this.keepImageInView()) {
-          this.goHome(false);
-          return;
-        }
-
-        const viewport = this.viewer.viewport;
-
-        // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
-        const wasHome =
-          Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
-
-        // margins are now stale if keepImageInView disabled, so update now
         this.updateViewportMargins();
-
-        // at home: the margin change moves the picture, so snap to avoid showing the jump
-        // zoomed in: ease home, as the change is hidden by the larger move
-        this.goHome(wasHome);
+        this.goHome(true);
       });
     });
 
@@ -428,15 +413,23 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       if (!this.keepImageInView()) return;
 
       // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
-      const wasHome =
+      const zoomIsHome =
         Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
 
-      if (!wasHome) return;
+      // the OSD 'home' is for zoom only so we also need to check that the user hasn't panned the image.
+      const center = viewport.getCenter(true);
+      const homeCenter = viewport.getHomeBounds().getCenter();
+      const centerIsHome =
+        Math.abs(center.x - homeCenter.x) < 0.5 &&
+        Math.abs(center.y - homeCenter.y) < 0.5;
+
+      // zoomed or panned away from home: leave the view and the margins alone
+      if (!zoomIsHome || !centerIsHome) return;
 
       this.updateViewportMargins();
 
       // without this, the image zooms in briefly if it was at home and a panel closes.
-      if (wasHome) this.goHome();
+      this.goHome();
     });
 
     this.visibleAreaObserver.observe(
