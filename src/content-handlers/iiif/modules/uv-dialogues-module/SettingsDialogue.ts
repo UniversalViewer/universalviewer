@@ -16,9 +16,9 @@ export class SettingsDialogue extends Dialogue<
   $website: JQuery;
 
   // Theme selector
-  $themeSelector:  JQuery;
-  $themeSelectorDropDown:  JQuery;
-  $themeSelectorLabel:  JQuery;
+  $themeSelector: JQuery;
+  $themeSelectorDropDown: JQuery;
+  $themeSelectorLabel: JQuery;
 
   // Accessibility elements
   $reducedAnimation: JQuery;
@@ -76,7 +76,9 @@ export class SettingsDialogue extends Dialogue<
     // Theme selector dropdown
     this.$themeSelector = $('<div class="setting color-scheme"></div>');
     this.$scroll.append(this.$themeSelector);
-    this.$themeSelectorLabel = $('<label for="theme-selection">' + "Color Scheme" + "</label>");
+    this.$themeSelectorLabel = $(
+      '<label for="theme-selection">' + "Color Scheme" + "</label>"
+    );
     this.$themeSelector.append(this.$themeSelectorLabel);
     this.$themeSelectorDropDown = $('<select id="theme-selection"></select>');
     this.$themeSelector.append(this.$themeSelectorDropDown);
@@ -130,33 +132,35 @@ export class SettingsDialogue extends Dialogue<
       this.extension.changeLocale(this.$localeDropDown.val());
     });
   }
-    
+
   private _createThemeSelectorMenu(): void {
     // @todo pull activeThemes structure into managed typed data + manage custom themes in base config properties
-    const activeThemes = [{
-      name: "dark",
-      label: "Dark"
-       },
+    const activeThemes = [
       {
-      name: "auto",
-      label: "Auto"
-       },
+        name: "dark",
+        label: "Dark",
+      },
       {
-      name: "light",
-      label: "Light"
-       },
+        name: "auto",
+        label: "Auto",
+      },
       {
-      name: "chris-purple",
-      label: "Dev Chris Purple"
-       },
+        name: "light",
+        label: "Light",
+      },
       {
-      name: "high-contrast",
-      label: "High Contrast"
-       }];
+        name: "chris-purple",
+        label: "Dev Chris Purple",
+      },
+      {
+        name: "high-contrast",
+        label: "High Contrast",
+      },
+    ];
 
-  if (activeThemes) {
-    for (let i = 0; i < activeThemes.length; i++) {
-        const theme =  activeThemes[i];
+    if (activeThemes) {
+      for (let i = 0; i < activeThemes.length; i++) {
+        const theme = activeThemes[i];
         this.$themeSelectorDropDown.append(
           '<option value="' + theme.name + '">' + theme.label + "</option>"
         );
@@ -166,13 +170,12 @@ export class SettingsDialogue extends Dialogue<
     }
 
     this.$themeSelectorDropDown.change(() => {
-      let uv = document.getElementById('uv');
-        if (uv)
-          // @todo build functional classes in IExtension.ts + BaseExtension.ts to mirror changeLocale()
-          uv.dataset.theme = this.$themeSelectorDropDown.val();
+      const uv = document.getElementById("uv");
+      if (uv)
+        // @todo build functional classes in IExtension.ts + BaseExtension.ts to mirror changeLocale()
+        uv.dataset.theme = this.$themeSelectorDropDown.val();
     });
   }
-
 
   resize(): void {
     super.resize();
