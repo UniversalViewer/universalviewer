@@ -45,6 +45,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   viewer: any;
   viewerId: string;
   navigatorResizeTimeout: number;
+  visibleAreaObserver: ResizeObserver;
 
   $canvas: JQuery;
   $spinner: JQuery;
@@ -144,7 +145,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
-        this.goHome();
+        this.updateViewportMargins();
+        this.goHome(true);
       });
     });
 
@@ -268,6 +270,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       },
       // The max number of milliseconds that an image job may take to complete.
       timeout: this.config.options.tileTimeout || 30_000,
+      minZoomImageRatio: 1,
     });
 
     const that = this;
@@ -399,6 +402,39 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
       this.$viewer.removeClass("dialogue-open");
     });
+
+    // add resize observer to the center panel content; update margins when it's resized and move image if keepImageInView
+    // The behaviour here needs some thought - slide and zoom (current behaviour) or just slide sideways?
+    this.visibleAreaObserver = new ResizeObserver((entries) => {
+      const viewport = this.viewer?.viewport;
+      if (!viewport || !this.viewer.world.getItemCount()) return;
+
+      // static mode: do nothing
+      if (!this.keepImageInView()) return;
+
+      // check before the margins change, because they change the home zoom. 1e-6 is the tolerance for equal values here.
+      const zoomIsHome =
+        Math.abs(viewport.getZoom(true) - viewport.getHomeZoom()) < 1e-6;
+
+      // the OSD 'home' is for zoom only so we also need to check that the user hasn't panned the image.
+      const center = viewport.getCenter(true);
+      const homeCenter = viewport.getHomeBounds().getCenter();
+      const centerIsHome =
+        Math.abs(center.x - homeCenter.x) < 0.5 &&
+        Math.abs(center.y - homeCenter.y) < 0.5;
+
+      // zoomed or panned away from home: leave the view and the margins alone
+      if (!zoomIsHome || !centerIsHome) return;
+
+      this.updateViewportMargins();
+
+      // without this, the image zooms in briefly if it was at home and a panel closes.
+      this.goHome();
+    });
+
+    this.visibleAreaObserver.observe(
+      (this.extension as OpenSeadragonExtension).centerPanel.$element[0]
+    );
   }
 
   async getGirderTileSource(): Promise<any> {
@@ -468,8 +504,10 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.viewer.close();
     this.items = [];
 
+    this.updateViewportMargins();
+
     // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
-    const spinnerTimeout = setTimeout(() => {
+    const spinnerTimeout = window.setTimeout(() => {
       this.$spinner.show();
     }, 200);
 
@@ -542,11 +580,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
                     this.items.push(item);
                     loadedItems++;
                     if (loadedItems === totalItems) {
-                      clearTimeout(spinnerTimeout);
-                      this.$spinner.hide();
-                      this.openPagesHandler();
-                      this.resize();
-                      this.goHome();
+                      this.onAllLoaded(spinnerTimeout);
                     }
                   },
                 });
@@ -580,11 +614,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
                   this.items.push(item);
                   loadedItems++;
                   if (loadedItems === totalItems) {
-                    clearTimeout(spinnerTimeout);
-                    this.$spinner.hide();
-                    this.openPagesHandler();
-                    this.resize();
-                    this.goHome();
+                    this.onAllLoaded(spinnerTimeout);
                   }
                 },
               });
@@ -633,19 +663,20 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
-              clearTimeout(spinnerTimeout);
-              this.$spinner.hide();
-
-              this.openPagesHandler();
+              this.onAllLoaded(spinnerTimeout);
             }
-            this.resize();
-            this.goHome();
           },
         });
       }
     } catch {
       // do nothing
     }
+  }
+
+  onAllLoaded(spinnerTimeout: number): void {
+    clearTimeout(spinnerTimeout);
+    this.$spinner.hide();
+    this.openPagesHandler();
   }
 
   getPagePositions(
@@ -719,6 +750,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   openPagesHandler(): void {
+    // this triggers another openPagesHandler in the OSD center panel which renders the title and buttons etc.
     this.extensionHost.publish(OpenSeadragonExtensionEvents.OPENSEADRAGON_OPEN);
 
     // resize navigator for continuous manifests
@@ -860,7 +892,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
   }
 
   updateBounds(): void {
-    // JM to do: update this so that the viewer is aware of the visible viewport (the dimensions of the OSD center panel now overlayed above) and centers within that
     const settings: ISettings = this.extension.getSettings();
 
     // if this is the first load and there are initial bounds, fit to those.
@@ -881,6 +912,8 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
         this.initialBounds = XYWHFragment.fromString(xywh);
         this.currentBounds = this.initialBounds;
         this.fitToBounds(this.currentBounds);
+      } else {
+        this.goHome();
       }
     } else if (settings.preserveViewport && this.currentBounds) {
       // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
@@ -890,8 +923,12 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
   }
 
-  goHome(): void {
-    this.viewer.viewport.goHome(true);
+  goHome(immediately: boolean = true): void {
+    if ((<ISettings>this.extension.getSettings()).reducedAnimation) {
+      this.viewer.viewport.goHome(true);
+    } else {
+      this.viewer.viewport.goHome(immediately);
+    }
   }
 
   fitToBounds(bounds: XYWHFragment, immediate: boolean = true): void {
@@ -900,9 +937,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     rect.y = Number(bounds.y);
     rect.width = Number(bounds.w);
     rect.height = Number(bounds.h);
-    setTimeout(() => {
-      this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
-    }, 100);
+    this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
   }
 
   getCroppedImageBounds(): string | null {
@@ -1245,6 +1280,36 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     }
 
     return newRects;
+  }
+
+  updateViewportMargins(): void {
+    if (!this.viewer?.viewport) return;
+
+    const centerPanel = (this.extension as OpenSeadragonExtension).centerPanel;
+    if (!centerPanel?.$element?.length) return;
+
+    const v = this.$viewer[0].getBoundingClientRect();
+    const c = centerPanel.$element[0].getBoundingClientRect();
+    if (!v.width || !v.height) return;
+
+    const pad = 0.05;
+
+    const insetX = c.width * pad;
+    const insetY = c.height * pad;
+
+    this.viewer.viewport.setMargins({
+      left: Math.max(0, c.left - v.left) + insetX,
+      right: Math.max(0, v.right - c.right) + insetX,
+      top: Math.max(0, c.top - v.top) + insetY,
+      bottom: Math.max(0, v.bottom - c.bottom) + insetY,
+    });
+  }
+
+  keepImageInView(): boolean {
+    return Bools.getBool(
+      this.extension.getSettings().keepImageInViewEnabled,
+      true
+    );
   }
 
   resize(): void {
