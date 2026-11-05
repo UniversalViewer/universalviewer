@@ -76,7 +76,7 @@
 
       .label {
         position: absolute;
-        color: #fff;
+        color: @text-color;
         margin: 8px @margin-large-horizontal 0;
         min-width: 160px;
 
@@ -96,7 +96,7 @@
       height: 32px;
 
       .searchTextContainer {
-        background: #fff;
+        background: @panel-light-bg;
         float: left;
         width: 270px;
         //border: 2px solid @gray;
@@ -104,7 +104,7 @@
 
         .autocomplete {
           position: absolute;
-          background: #fff;
+          background: @panel-light-bg;
           width: 270px;
           border: 2px solid @brand-primary-lighter;
           list-style-type: none;
@@ -176,7 +176,7 @@
       margin: 4px 0 0;
 
       .label {
-        color: #fff;
+        color: @text-color;
         font-weight: bold;
         padding: 0 10px 0 0;
         margin: 4px 0 0;
@@ -210,10 +210,10 @@
           float: left;
           margin: 0 @margin-medium-horizontal 0 0;
           border: 0;
-          background-color: #000;
+          background-color: @panel-light-bg;
 
           &:hover {
-            background-color: #000;
+            background-color: @panel-light-bg;
           }
 
           &.disabled {
@@ -228,10 +228,10 @@
           float: right;
           margin: 0 0 0 @margin-medium-horizontal;
           border: 0;
-          background-color: #000;
+          background-color: @panel-light-bg;
 
           &:hover {
-            background-color: #000;
+            background-color: @panel-light-bg;
           }
 
           &.disabled {
@@ -251,7 +251,7 @@
 
         .searchResultsInfo {
           margin: 4px 0 0;
-          color: #fff;
+          color: @text-color;
           text-align: center;
           font-size: 14px;
           float: left;
