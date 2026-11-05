@@ -102,6 +102,10 @@ const config = {
         express.static(path.join(__dirname, "src", "uv-youtube-config.json"))
       );
       devServer.app.use(
+        "/examples.css",
+        express.static(path.join(__dirname, "src", "examples.css"))
+      );
+      devServer.app.use(
         "/uv.css",
         express.static(path.join(__dirname, "src", "uv.css"))
       );
