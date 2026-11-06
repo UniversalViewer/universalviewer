@@ -140,4 +140,67 @@ describe("Universal Viewer", () => {
       ).toBe("true");
     });
   });
+
+  // UV loads pdf.js from cdnjs at runtime (usePdfJs defaults to true).
+  describe("pdf.js", () => {
+    const PDFJS_CDN = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174";
+    let pdfPage;
+    let requests;
+
+    beforeEach(async () => {
+      pdfPage = await browser.newPage();
+      requests = [];
+      pdfPage.on("request", (request) => requests.push(request.url()));
+      // pdf.js assigns its exports to this global; wrap them so every
+      // getDocument call's parameters are recorded.
+      await pdfPage.evaluateOnNewDocument(() => {
+        window.getDocumentCalls = [];
+        let pdfjsLib;
+        Object.defineProperty(window, "pdfjs-dist/build/pdf", {
+          configurable: true,
+          get: () => pdfjsLib,
+          set: (exports) => {
+            pdfjsLib = new Proxy(exports, {
+              get: (target, key) =>
+                key === "getDocument"
+                  ? (params) => {
+                      window.getDocumentCalls.push(params);
+                      return target.getDocument(params);
+                    }
+                  : Reflect.get(target, key),
+            });
+          },
+        });
+      });
+      await pdfPage.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+      await pdfPage.waitForFunction(() => window.getDocumentCalls.length > 0);
+    });
+
+    afterEach(async () => {
+      await pdfPage.close();
+    });
+
+    // CVE-2024-4367 (GHSA-wgrm-67xf-hhpq): pdf.js <= 4.1.392 can run
+    // JavaScript from a malicious PDF unless isEvalSupported is false.
+    it("opens PDFs with eval disabled", async () => {
+      const isEvalSupported = await pdfPage.evaluate(() =>
+        window.getDocumentCalls.map((params) => params.isEvalSupported)
+      );
+
+      expect(isEvalSupported).toEqual([false]);
+    });
+
+    it("loads pdf.js 3.11.174 and its worker from cdnjs", async () => {
+      expect(requests).toContainEqual(
+        expect.stringContaining(`${PDFJS_CDN}/pdf.min.js`)
+      );
+
+      const workerSrc = await pdfPage.evaluate(
+        () => window["pdfjs-dist/build/pdf"].GlobalWorkerOptions.workerSrc
+      );
+      expect(workerSrc).toBe(`${PDFJS_CDN}/pdf.worker.min.js`);
+    });
+  });
 });
