@@ -245,6 +245,10 @@ const DownloadDialogue = ({
 
     const canvas: Canvas = getSelectedCanvas();
 
+    if (!canvas.externalResource) {
+      return false;
+    }
+
     // if the external resource doesn't have a service descriptor or is level 0
     // only allow wholeImageHighRes
     if (
@@ -492,7 +496,7 @@ const DownloadDialogue = ({
     defaultLabel: string;
     type: DownloadOption;
   }) {
-    const renderings: Rendering[] = resource.getRenderings();
+    const renderings: Rendering[] = getSafeRenderings(resource.getRenderings());
 
     return (
       <>
@@ -535,10 +539,23 @@ const DownloadDialogue = ({
   //   return resource.getRenderings().length > 0;
   // }
 
+  function isSafeRenderingUri(uri) {
+    try {
+      const parsed = new URL(uri, window.location.href);
+      return ["http:", "https:"].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  }
+
+  function getSafeRenderings(renderings: Rendering[]): Rendering[] {
+    return renderings.filter((r: Rendering) => isSafeRenderingUri(r.id));
+  }
+
   function hasRangeRenderings(): boolean {
     const canvas: Canvas = getSelectedCanvas();
     return (canvas.ranges ?? []).some(
-      (range: Range) => range.getRenderings().length > 0
+      (range: Range) => getSafeRenderings(range.getRenderings()).length > 0
     );
   }
 
@@ -562,9 +579,9 @@ const DownloadDialogue = ({
   function hasImageRenderings() {
     const canvas: Canvas = getSelectedCanvas();
     const images: Annotation[] = canvas.getImages();
-
     return images.some(
-      (image: Annotation) => image.getResource().getRenderings().length > 0
+      (image: Annotation) =>
+        getSafeRenderings(image.getResource().getRenderings()).length > 0
     );
   }
 
@@ -588,7 +605,7 @@ const DownloadDialogue = ({
 
   function hasCanvasRenderings() {
     const canvas: Canvas = getSelectedCanvas();
-    return canvas.getRenderings().length > 0;
+    return getSafeRenderings(canvas.getRenderings()).length > 0;
   }
 
   function CanvasRenderings() {
@@ -605,7 +622,8 @@ const DownloadDialogue = ({
 
   function hasManifestRenderings(): boolean {
     return (
-      sequence.getRenderings().length > 0 || manifest.getRenderings().length > 0
+      getSafeRenderings(sequence.getRenderings()).length > 0 ||
+      getSafeRenderings(manifest.getRenderings()).length > 0
     );
   }
 

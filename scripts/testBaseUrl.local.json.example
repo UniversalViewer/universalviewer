@@ -1,0 +1,4 @@
+{
+  "comment": "Rename this file to testBaseUrl.local.json and change the setting below to use a non-default base URL in tests.",
+  "BASE_URL": "http://localhost:4444"
+}

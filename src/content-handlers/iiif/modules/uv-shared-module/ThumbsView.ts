@@ -352,7 +352,7 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     if (!this._$thumbsCache) {
       this._$thumbsCache = this.$thumbs.find(".thumb");
     }
-    return this._$thumbsCache;
+    return this._$thumbsCache as JQuery;
   }
 
   getThumbByIndex(canvasIndex: number): JQuery {

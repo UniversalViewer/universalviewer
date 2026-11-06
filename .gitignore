@@ -34,6 +34,8 @@ results
 npm-debug.log
 node_modules
 
+testBaseUrl.local.json
+
 #################
 ## JavaScript
 #################
@@ -47,10 +49,14 @@ node_modules
 !src/*/*/js/*.js
 !src/extensions/*/dependencies.js
 !jest.setup.js
+!__tests__/*.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
 !src/extensions/*/config.js
 !docs/assets/*.js
+!testBaseUrl.js
+!jest.globalSetup.js
+!jest.globalTeardown.js
 
 #################
 ## Misc

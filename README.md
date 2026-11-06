@@ -99,4 +99,4 @@ Read our [Accessibility Statement](https://github.com/UniversalViewer/universalv
 
 ## 📖 License
 
-The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
+The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/main/LICENSE.txt).

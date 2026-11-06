@@ -277,13 +277,45 @@ Width of the collapsed panel.
 **Type**: `number`  
 **Default**: `255`  
 _Repeated - edit in contentLeftPanel_.  
-Width of the collapsed panel.
+Width of the expanded panel.
 
 ##### panelOpen
 
 **Type**: `boolean`  
 **Default**: `false`  
 _Repeated - edit in contentLeftPanel_.  
+Determines if the panel is open.
+
+#### contentLeftPanel
+
+##### expandFullEnabled
+
+**Type**: `boolean`  
+**Default**: `false`  
+Determines if expand full is enabled.
+
+##### panelAnimationDuration
+
+**Type**: `number`  
+**Default**: `250`  
+Determines the duration of the panel expand/collapse animation.
+
+##### panelCollapsedWidth
+
+**Type**: `number`  
+**Default**: `30`   
+Width of the collapsed panel.
+
+##### panelExpandedWidth
+
+**Type**: `number`  
+**Default**: `255`  
+Width of the collapsed panel.
+
+##### panelOpen
+
+**Type**: `boolean`  
+**Default**: `false`  
 Determines if the panel is open.
 
 ##### autoExpandTreeEnabled
@@ -357,6 +389,12 @@ Padding for loading gallery thumbnails.
 **Type**: `number`  
 **Default**: `200`  
 Width of the gallery thumbnail.
+
+##### hideThumbsView
+
+**Type**: `boolean`  
+**Default**: `false`  
+Hides the thumbnails view within the left panel. 
 
 ##### oneColThumbHeight
 
@@ -1117,6 +1155,12 @@ Specifies the default height for the panel or content.
 **Type**: `number`  
 **Default**: `560`  
 Specifies the default width for the panel or content.
+
+##### iconSprite
+
+**Type**: `string`  
+**Default**: `mejs-controls.svg`  
+Specifies the URL of the spritesheet used by MediaElement.
 
 ##### titleEnabled
 
