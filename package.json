@@ -32,7 +32,8 @@
     "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
     "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
     "findMissingTranslations": "node scripts/validate_locale.ts missingTranslations",
-    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings"
+    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings",
+    "check-implementation-install": "node scripts/check_implementation_install.js"
   },
   "repository": {
     "type": "git",
@@ -62,8 +63,13 @@
     "@types/react-dom": "^19.0.0",
     "async": "0.9.0",
     "chai": "5.1.2",
+    "clean-css": "^5.2.2",
     "copy-webpack-plugin": "^14.0.0",
+    "copyfiles": "^2.4.1",
     "css-loader": "^7.1.4",
+    "esbuild": "^0.28.1",
+    "esbuild-plugin-less": "^1.1.5",
+    "esbuild-plugin-svg": "^0.1.0",
     "eslint": "10.8.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.4.0",
@@ -74,6 +80,7 @@
     "jest-puppeteer": "^11",
     "less": "^4.4.2",
     "less-loader": "^13.0.0",
+    "less-plugin-clean-css": "^1.5.1",
     "lodash": "4.18.1",
     "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
@@ -93,7 +100,8 @@
     "webpack": "^5.59.1",
     "webpack-bundle-analyzer": "^5.3.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "5.2.6"
+    "webpack-dev-server": "5.2.6",
+    "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
@@ -106,21 +114,14 @@
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "classnames": "^2.3.1",
-    "clean-css": "^5.2.2",
-    "copyfiles": "^2.4.1",
     "dashjs": "2.6.7",
-    "esbuild": "^0.28.1",
-    "esbuild-plugin-less": "^1.1.5",
-    "esbuild-plugin-svg": "^0.1.0",
     "jquery": "3.7.1",
     "jquery-ui-dist": "^1.13.3",
     "jsviews": "1.2.0",
-    "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.3.0",
     "mediaelement": "^5",
     "mediaelement-plugins": "^5.0.0",
     "openseadragon": "^6.0.0",
-    "pdfjs-dist": "3.11.174",
     "pdfobject": "2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -128,6 +129,9 @@
     "waveform-panel": "^1.2.0",
     "xss": "1.0.15",
     "zustand": "^5.0.3"
+  },
+  "overrides": {
+    "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "collective": {
     "type": "opencollective",
