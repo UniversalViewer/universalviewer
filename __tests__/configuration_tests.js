@@ -4,6 +4,10 @@ const { BASE_URL } = require("../scripts/testBaseUrl");
 const FIRST_THUMB_SRC =
   "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";
 
+// Local paged book of static images; see image_tests.js for its IIIF
+// Cookbook recipes.
+const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
+
 let browser;
 let page;
 
@@ -82,6 +86,98 @@ describe("Configuration options", () => {
       expect(imageSrc).toEqual(
         expect.stringContaining(`${FIRST_THUMB_SRC}#t=`)
       );
+    });
+  });
+
+  // The examples page turns on doubleClickAnnotationEnabled and adds each
+  // published double-click target to #iiif_annotations. Custom config is
+  // merged after the page's own, so it can turn the option off again.
+  describe("double-click annotation", () => {
+    const oneUpButton = ".btn.imageBtn.one-up";
+
+    const waitForOneUp = () =>
+      page.waitForFunction(
+        (sel) =>
+          document.querySelector(sel)?.getAttribute("aria-pressed") === "true",
+        {},
+        oneUpButton
+      );
+
+    const doubleClickViewer = async () => {
+      await page.waitForSelector(".openseadragon-canvas", { visible: true });
+      const box = await (await page.$(".openseadragon-canvas")).boundingBox();
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, {
+        count: 2,
+      });
+    };
+
+    const annotationTargets = () =>
+      page.$eval("#iiif_annotations", (el) =>
+        el.value ? JSON.parse(el.value).map(({ target }) => target) : []
+      );
+
+    const waitForAnnotationOn = (canvas) =>
+      page.waitForFunction(
+        (path) =>
+          document.querySelector("#iiif_annotations").value.includes(path),
+        {},
+        `/canvas/${canvas}#`
+      );
+
+    // Changing only the #hash doesn't reload the page, so start each test on
+    // a fresh one. The header hides the paging buttons below 1280px.
+    beforeEach(async () => {
+      await page.close();
+      page = await browser.newPage();
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.goto(
+        `${BASE_URL}#?manifest=${encodeURIComponent(IMAGE_BOOK_MANIFEST)}`
+      );
+      await page.waitForSelector("#thumb-0 img");
+    });
+
+    it("starts in one-up and publishes when pagingEnabled is false", async () => {
+      await applyCustomConfig({ options: { pagingEnabled: false } });
+      await waitForOneUp();
+      await doubleClickViewer();
+      await waitForAnnotationOn("p1");
+
+      const targets = await annotationTargets();
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
+    });
+
+    it("publishes nothing when doubleClickAnnotationEnabled is false", async () => {
+      // One-up on p1 with the option off: publishes nothing.
+      await applyCustomConfig({
+        options: { pagingEnabled: false },
+        modules: {
+          openSeadragonCenterPanel: {
+            options: { doubleClickAnnotationEnabled: false },
+          },
+        },
+      });
+      await waitForOneUp();
+      await doubleClickViewer();
+
+      // With the option back on, one-up on p2 publishes p2's target. A target
+      // for p1 would mean the first double-click published too. Re-applying
+      // config loads the manifest named in the URL, which no longer has it,
+      // so put it back first.
+      await page.evaluate(
+        (hash) => history.replaceState(null, "", hash),
+        `#?manifest=${encodeURIComponent(IMAGE_BOOK_MANIFEST)}`
+      );
+      await applyCustomConfig({ options: { pagingEnabled: false } });
+      await waitForOneUp();
+      await page.click(".btn.imageBtn.next");
+      await page.waitForFunction(() => /[?&#]cv=1(&|$)/.test(location.href));
+      await doubleClickViewer();
+      await waitForAnnotationOn("p2");
+
+      const targets = await annotationTargets();
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
     });
   });
 });
