@@ -139,6 +139,9 @@ const yarn4Findings = (workDir, tarball) => {
         YARN_ENABLE_SCRIPTS: "false",
         YARN_ENABLE_IMMUTABLE_INSTALLS: "false",
         YARN_ENABLE_TELEMETRY: "false",
+        // Yarn colours its output on GitHub Actions even without a terminal,
+        // which stops KNOWN_ISSUES from matching.
+        YARN_ENABLE_COLORS: "false",
       }
     );
   const install = yarn4(["install"]);
