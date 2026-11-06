@@ -1,0 +1,74 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["HLS audio with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "A short HLS stream, served from the viewer's own site, which both hls.js and the browser's own HLS player can play. Its ranges make the AV component play it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Yellowstone sound library - Common Raven - 001\" by David Restivo, National Park Service, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 12.65,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/black-sand-raven.m3u8",
+                "type": "Sound",
+                "format": "application/vnd.apple.mpegurl",
+                "duration": 12.65
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Raven"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-raven-manifest.json/canvas#t=0,12.65",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

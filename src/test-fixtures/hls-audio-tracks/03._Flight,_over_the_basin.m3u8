@@ -1,0 +1,17 @@
+#EXTM3U
+#EXT-X-VERSION:4
+#EXT-X-TARGETDURATION:4
+#EXT-X-PLAYLIST-TYPE:VOD
+#EXTINF:3.15733,
+#EXT-X-BYTERANGE:28494@0
+../black-sand-raven.aac?track=3
+#EXTINF:3.15733,
+#EXT-X-BYTERANGE:26567@28494
+../black-sand-raven.aac?track=3
+#EXTINF:3.15733,
+#EXT-X-BYTERANGE:25671@55061
+../black-sand-raven.aac?track=3
+#EXTINF:3.17867,
+#EXT-X-BYTERANGE:23693@80732
+../black-sand-raven.aac?track=3
+#EXT-X-ENDLIST

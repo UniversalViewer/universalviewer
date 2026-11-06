@@ -1,0 +1,19 @@
+image-fixture-6-weighing-of-the-heart-scene.jpg and image-fixture-6-weighing-of-the-heart-scene-thumb.jpg
+
+"The Weighing of the Heart", after the Papyrus of Ani, by PharaohCrab
+(their own work), uploaded to Wikimedia Commons on 14 February 2025 as The
+Weighing of the Heart.svg:
+https://commons.wikimedia.org/wiki/File:The_Weighing_of_the_Heart.svg
+
+Licence: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The original upload is a 2002x898 SVG (SHA-1
+6d890d706c2e46e993296a9f1a0294ac248d7b2d, as Wikimedia Commons gives it).
+image-fixture-6-weighing-of-the-heart-scene.jpg is a 960x431 JPEG of it, the
+same proportions (SHA-1 d1571a7b1a9c32a34b96aa160298335bd50623d1). The
+thumbnail is 90x40 (SHA-1 052c3a9cf2d2cbb2881761783c58645e7dfd94e7). How
+they were made isn't recorded.
+
+Used by image-paged-book-manifest.json, and as the thumbnail in
+ixif-video-manifest.json.

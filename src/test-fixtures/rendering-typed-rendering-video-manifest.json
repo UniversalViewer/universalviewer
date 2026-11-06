@@ -1,0 +1,76 @@
+{
+  "@context": [
+    "http://iiif.io/api/presentation/3/context.json",
+    "http://wellcomelibrary.org/ixif/0/context.json"
+  ],
+  "id": "http://localhost:4444/test-fixtures/rendering-typed-rendering-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Video offered as canvas renderings typed \"rendering\" (e2e test fixture)"
+    ]
+  },
+  "summary": {
+    "en": [
+      "Shaped like Villanova University's Digital Library manifests: a canvas with a size but no duration, a MovingImage painting body, and canvas renderings (the media, its captions and a text file) each typed \"rendering\", which isn't a IIIF type."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/rendering-typed-rendering-video-manifest.json/canvas",
+      "type": "Canvas",
+      "label": { "en": ["blackbird-feeding.mp4"] },
+      "height": 360,
+      "width": 480,
+      "rendering": [
+        {
+          "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+          "type": "rendering",
+          "format": "video/mp4",
+          "label": { "en": ["Original source file"] }
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/blackbird-feeding.txt",
+          "type": "rendering",
+          "format": "text/plain",
+          "label": { "en": ["Credits"] }
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/captions.vtt",
+          "type": "rendering",
+          "format": "text/vtt",
+          "label": { "en": ["VTT Transcript"] }
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/rendering-typed-rendering-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/rendering-typed-rendering-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/rendering-typed-rendering-video-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "MovingImage",
+                "format": "video/mp4",
+                "label": { "en": ["blackbird-feeding.mp4"] },
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

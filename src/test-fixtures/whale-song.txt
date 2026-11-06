@@ -1,0 +1,15 @@
+whale-song.ogg
+
+"Song of Humpback Whales" (Humpbackwhale2.ogg), by Spyrogumas, uploaded to
+Wikimedia Commons on 31 May 2010:
+https://commons.wikimedia.org/wiki/File:Humpbackwhale2.ogg
+
+Licence: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Ogg Vorbis audio, mono, 48 kHz, 37.9 seconds. The file is unchanged from the
+original upload (SHA-1 7e20b2b5305825903f912a139be789ca740ee625, as Wikimedia
+Commons gives it).
+
+Used by the end-to-end tests as local audio, so they don't depend on a remote
+server.

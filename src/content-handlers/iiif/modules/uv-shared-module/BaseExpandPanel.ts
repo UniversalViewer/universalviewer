@@ -124,7 +124,10 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
     this.$element.toggleClass("open");
 
-    if (this.isExpanded) {
+    // Collapsing: decided by the open class, which changes at once, as
+    // isExpanded only changes once the animation's finished (so is out of
+    // date for a toggle made while the panel's still opening or closing).
+    if (!this.$element.hasClass("open")) {
       this.$top.attr("aria-hidden", "true");
       this.$main.attr("aria-hidden", "true");
       this.$closed.attr("aria-hidden", "false");
@@ -164,6 +167,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$closed.attr("aria-hidden", "true");
       this.$collapseButton.attr("aria-expanded", "true");
       this.$expandButton.attr("aria-expanded", "true");
+    } else {
+      // Also set when collapsing starts, but a toggle made while the panel
+      // was opening finishes after that.
+      this.$top.attr("aria-hidden", "true");
+      this.$main.attr("aria-hidden", "true");
+      this.$closed.attr("aria-hidden", "false");
+      this.$collapseButton.attr("aria-expanded", "false");
+      this.$expandButton.attr("aria-expanded", "false");
     }
 
     this.toggleFinish();

@@ -1,0 +1,74 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with a posterCanvas (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in the British Library's early AV manifests, the manifest has a posterCanvas (the name for placeholderCanvas in drafts of IIIF Presentation 3), shown before and while the audio plays."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: \"The Weighing of the Heart\" by PharaohCrab, via Wikimedia Commons (CC0). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
+  },
+  "posterCanvas": {
+    "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/poster",
+    "type": "Canvas",
+    "width": 1000,
+    "height": 1000,
+    "items": [
+      {
+        "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/poster/page",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/poster/page/annotation",
+            "type": "Annotation",
+            "motivation": "painting",
+            "body": {
+              "id": "http://localhost:4444/test-fixtures/image-fixture-5-weighing-of-the-heart-page.jpg",
+              "type": "Image",
+              "format": "image/jpeg"
+            },
+            "target": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/poster"
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "audio/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              },
+              "target": "http://localhost:4444/test-fixtures/poster-canvas-audio-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

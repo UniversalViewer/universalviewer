@@ -1,0 +1,95 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with a canvas thumbnail with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "With no placeholder or accompanying image, the canvas' IIIF v3 thumbnail is shown before and while the audio plays. Its ranges make the AV component play it."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: Fayum mummy portrait, British Museum EA29772, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/image-fixture-4-fayum-portrait.jpg",
+          "type": "Image",
+          "format": "image/jpeg",
+          "width": 1000,
+          "height": 1000
+        }
+      ],
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "audio/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Part two"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-canvas-thumbnail-audio-manifest.json/canvas#t=60,1985.024",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

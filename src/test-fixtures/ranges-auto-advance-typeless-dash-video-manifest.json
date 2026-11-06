@@ -1,0 +1,105 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Auto-advancing MPEG-DASH with no type, on canvases with a size (e2e test fixture)"
+    ]
+  },
+  "summary": {
+    "en": [
+      "Its canvases play as one timeline (auto-advance). Their bodies have no type and a format that may be audio or video, and the canvases have a width and height, so they're played as video. The media doesn't exist: only the media elements created are tested."
+    ]
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "duration": 60,
+      "width": 640,
+      "height": 360,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/missing-media1.mpd",
+                "format": "application/dash+xml"
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/2",
+      "type": "Canvas",
+      "duration": 60,
+      "width": 640,
+      "height": 360,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/missing-media2.mpd",
+                "format": "application/dash+xml"
+              },
+              "target": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part 1"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/1#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Part 2"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-auto-advance-typeless-dash-video-manifest.json/canvas/2#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

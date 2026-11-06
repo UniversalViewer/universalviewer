@@ -184,14 +184,20 @@
   //     border-right: 8px solid transparent;
   // }
 
+  // The controls wrap onto further rows when the player is too narrow for
+  // one, so every control stays visible at any size.
   .controls-container {
-    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     margin-top: 5px;
-    height: 36px;
   }
 
+  // At least 44px square, as WCAG 2.1 success criterion 2.5.5 Target Size
+  // (Enhanced, AAA) asks.
   .controls-container .btn {
-    float: left;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .controls-container .pause-button {
@@ -199,11 +205,10 @@
   }
 
   .controls-container .time-display {
-    float: left;
-    padding: 10px 0 0 10px;
+    padding: 0 10px;
     color: rgba(255, 255, 255, 50%);
-    min-width: 150px;
     font-size: 14px;
+    white-space: nowrap;
 
     .canvas-time {
       color: #fff;
@@ -211,19 +216,12 @@
   }
 
   .controls-container .volume {
-    float: left;
-    width: 180px;
-  }
-
-  .controls-container .volume .volume-mute {
-    float: left;
-    padding-left: 0;
-    padding-right: 2px;
+    display: flex;
+    align-items: center;
   }
 
   .controls-container .volume .volume-slider {
-    float: left;
-    margin-top: 15px;
+    margin: 0 10px 0 4px;
     width: 84px;
     height: 6px;
     border: none;
@@ -301,6 +299,27 @@
     &.collapse {
       background-image: data-uri("@{img-path}collapse.png");
     }
+  }
+
+  // The captions control (see uv-captions-module) comes last, at the end
+  // of its row.
+  .controls-container .captions {
+    margin-left: auto;
+  }
+
+  // The sliders' handles are small or hidden, so show keyboard focus on the
+  // whole slider.
+  .volume-slider:focus-within,
+  .canvas-timeline-container:focus-within,
+  .range-timeline-container:focus-within {
+    outline: 2px solid @highlight-color;
+    outline-offset: 3px;
+  }
+
+  // The captions menu is positioned against the options container, above
+  // the controls.
+  .options-container {
+    position: relative;
   }
 }
 

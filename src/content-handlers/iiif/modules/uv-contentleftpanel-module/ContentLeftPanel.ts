@@ -2,6 +2,7 @@ const $ = require("jquery");
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import ThumbsView from "./ThumbsView";
+import { applyMediaThumbnails } from "../uv-shared-module/PosterImages";
 const ViewingDirectionEnum =
   require("@iiif/vocabulary/dist-commonjs/").ViewingDirection;
 // const ViewingHintEnum = require("@iiif/vocabulary/dist-commonjs/").ViewingHint;
@@ -479,6 +480,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
     // }
 
     const thumbs: Thumb[] = <Thumb[]>this.extension.helper.getThumbs(90);
+    applyMediaThumbnails(thumbs, this.extension.helper.manifest?.__jsonld);
     // this.extension.helper.getThumbs(width, height)
 
     if (

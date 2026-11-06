@@ -1,0 +1,25 @@
+pdf-fixture-2-fayum.pdf and pdf-fixture-2-fayum-thumb.jpg
+
+A one-page PDF made for the end-to-end tests (its header reads "Universal
+Viewer PDF test fixture 2 / 3"; its producer is given as "UV fixture
+generator"), titled "Fayum Mummy Portrait", with a short description and, as
+its picture, the Fayum mummy portrait British Museum EA29772 (see
+image-fixture-4-fayum-portrait.txt for the source and licence). Its footer
+credits the picture: "Image: Fayum mummy portrait, British Museum EA29772.
+Public domain, via Wikimedia Commons. Generated for the Universal Viewer e2e
+test suite - universalviewer.io". The same page is
+image-fixture-3-fayum-page.jpg.
+
+The picture is public domain, as Wikimedia Commons gives it (it gives no
+licence URI, so the manifest gives these files no rights, and credits the
+portrait in its requiredStatement). The page's title, text and layout were
+written for this repository, and are under its MIT License (see
+LICENSE.txt); the picture keeps its own licence. Rights can't give the MIT
+License, so the manifest credits the pages as "made for the Universal Viewer
+tests (MIT License)".
+
+pdf-fixture-2-fayum.pdf has SHA-1 532c5dad5c9cf408e3d13f009fa05aa4223174f2;
+the thumbnail is 150x194 (SHA-1 1e91de9cd42d301a511d6ece941e76875427022f).
+They were added on 2 October 2026; how they were made isn't recorded.
+
+Used by pdf-multi-file-manifest.json.

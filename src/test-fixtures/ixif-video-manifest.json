@@ -1,0 +1,65 @@
+{
+  "@context": [
+    "http://wellcomelibrary.org/ld/ixif/0/context.json",
+    "http://iiif.io/api/presentation/2/context.json"
+  ],
+  "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json",
+  "@type": "sc:Manifest",
+  "label": "Video in a IIIF v2 IxIF manifest (e2e test fixture)",
+  "description": "As in Wellcome Collection's IIIF v2 manifests, the video is an element of a media sequence (IxIF) rather than on a canvas, with a thumbnail given as a URL.",
+  "attribution": "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0). Images via Wikimedia Commons: \"The Weighing of the Heart\" by PharaohCrab (CC0); P. Oxy. I 29 (public domain). Pages: made for the Universal Viewer tests (MIT License).",
+  "mediaSequences": [
+    {
+      "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/xsequence/s0",
+      "@type": "ixif:MediaSequence",
+      "label": "XSequence 0",
+      "elements": [
+        {
+          "@id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#identity",
+          "@type": "dctypes:MovingImage",
+          "format": "video/mp4",
+          "label": "Video (e2e test fixture)",
+          "thumbnail": "http://localhost:4444/test-fixtures/image-fixture-6-weighing-of-the-heart-scene.jpg",
+          "rendering": {
+            "@id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+            "format": "video/mp4",
+            "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ]
+    }
+  ],
+  "sequences": [
+    {
+      "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/sequence/seq",
+      "@type": "sc:Sequence",
+      "label": "Unsupported extension. This manifest is being used as a wrapper for non-IIIF content (e.g., audio, video) and is unfortunately incompatible with IIIF viewers.",
+      "compatibilityHint": "displayIfContentUnsupported",
+      "canvases": [
+        {
+          "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/canvas/c1",
+          "@type": "sc:Canvas",
+          "label": "Placeholder image",
+          "height": 600,
+          "width": 600,
+          "images": [
+            {
+              "@id": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/canvas/c1/image",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "http://localhost:4444/test-fixtures/ixif-video-manifest.json/canvas/c1",
+              "resource": {
+                "@id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 600,
+                "width": 600
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

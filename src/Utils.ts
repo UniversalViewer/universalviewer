@@ -105,6 +105,26 @@ export const defaultLocale = {
   name: "en-GB",
 };
 
+// Replaces each "$key" in the config with its string from a locale file's
+// strings. Each string is escaped as it's written inside a JSON string, so
+// quotes and backslashes in it don't break the config, and is put in by a
+// function, so "$1" or "$&" in it is kept as written.
+export const readLocaleStrings = <T>(
+  config: T,
+  strings: Record<string, any>
+): T => {
+  let conf = JSON.stringify(config);
+
+  for (const str in strings) {
+    const replaceStr = str.replace("$", "");
+    const re = new RegExp(`\\$${replaceStr}\\b`, "g");
+    const escaped = JSON.stringify(String(strings[str])).slice(1, -1);
+    conf = conf.replace(re, () => escaped);
+  }
+
+  return JSON.parse(conf);
+};
+
 export const getUUID = () => {
   return URL.createObjectURL(new Blob()).substr(-36);
 };

@@ -45,3 +45,64 @@
     }
   }
 }
+
+// mediaelement's controls, at least 44px square, as WCAG 2.1 success
+// criterion 2.5.5 Target Size (Enhanced, AAA) asks, and as the AV
+// component's are. The bar is as tall as its buttons, and each button fills
+// its place in the bar, its icon centred.
+@mejs-control-size: 44px;
+
+.mejs__controls {
+  height: @mejs-control-size;
+
+  .mejs__button {
+    width: @mejs-control-size;
+    height: @mejs-control-size;
+  }
+
+  .mejs__button > button {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: @mejs-control-size;
+    height: @mejs-control-size;
+    margin: 0;
+  }
+
+  // The time, its text centred in the bar.
+  .mejs__time {
+    height: auto;
+    padding-top: 0;
+    line-height: @mejs-control-size;
+  }
+
+  .mejs__time-rail {
+    height: @mejs-control-size;
+    padding-top: ((@mejs-control-size - 20px) / 2);
+  }
+
+  .mejs__horizontal-volume-slider {
+    height: @mejs-control-size;
+  }
+}
+
+// The captions control (see uv-captions-module) sits among mediaelement's
+// controls, and the captions overlay just above them.
+.mejs__controls .captions {
+  display: flex;
+  align-items: center;
+
+  // Without the shared .btn padding and border, so the button is the size
+  // of the other controls.
+  .captions-button {
+    padding: 0 5px;
+    border: 0;
+    min-width: @mejs-control-size;
+    min-height: @mejs-control-size;
+  }
+}
+
+.mejs__container .captions-overlay {
+  bottom: (@mejs-control-size + 10px);
+}

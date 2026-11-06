@@ -1,0 +1,53 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/dash-video-stream-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["MPEG-DASH video (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Plays Akamai's MPEG-DASH test stream, which needs dash.js in browsers without native support. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Big Buck Bunny\", (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org (CC BY 3.0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/dash-video-stream-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 634.566,
+      "width": 1280,
+      "height": 720,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/dash-video-stream-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/dash-video-stream-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/dash-video-stream-manifest.json/canvas",
+              "body": {
+                "id": "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+                "type": "Video",
+                "format": "application/dash+xml",
+                "width": 1280,
+                "height": 720,
+                "duration": 634.566,
+                "rights": "http://creativecommons.org/licenses/by/3.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

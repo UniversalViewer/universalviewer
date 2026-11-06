@@ -1,0 +1,111 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with ranges and an accompanying image (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "A LibriVox reading of chapter 52 of The Cloud of Unknowing with an image accompanying the manifest, and a table of contents given by ranges, so the AV component plays it. The AV component reads the manifest's accompanyingCanvas (or posterCanvas), not a canvas'."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: P. Oxy. I 29, via Wikimedia Commons (public domain). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
+  },
+  "accompanyingCanvas": {
+    "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/accompanying",
+    "type": "Canvas",
+    "height": 1000,
+    "width": 1000,
+    "items": [
+      {
+        "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/accompanying/page",
+        "type": "AnnotationPage",
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/accompanying/page/annotation",
+            "type": "Annotation",
+            "motivation": "painting",
+            "body": {
+              "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+              "type": "Image",
+              "format": "image/jpeg"
+            },
+            "target": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/accompanying"
+          }
+        ]
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["First movement"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas#t=0,60",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Continued"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-accompanying-image-audio-manifest.json/canvas#t=60,1985.024",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -25,10 +25,18 @@ import { defaultLocale } from "../../Utils";
 import BaseContentHandler, { EventListener } from "../../BaseContentHandler";
 import { Events } from "../../Events";
 import { UVAdapter } from "@/UVAdapter";
+import { hlsMimeTypes } from "./modules/iiif-av-component-module/helpers/hls-media-types";
 
 interface IExtensionRegistry {
   [key: string]: ExtensionLoader;
 }
+
+// Body types that @iiif/vocabulary doesn't list, as they're read (lower
+// case): "Audio", from manifests made with drafts of IIIF Presentation 3,
+// where IIIF Presentation 3 calls audio "Sound".
+const UnlistedResourceType = {
+  AUDIO: "audio",
+};
 
 // use static paths (not based on variable) so webpack can use publicPath: "auto"
 const Extension: IExtensionRegistry = {
@@ -133,6 +141,10 @@ export default class IIIFContentHandler
       Extension.MODELVIEWER;
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
+    this._extensionRegistry[UnlistedResourceType.AUDIO] =
+      Extension.MEDIAELEMENT;
+    this._extensionRegistry[ExternalResourceType.VIDEO] =
+      Extension.MEDIAELEMENT;
     this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
     this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
@@ -153,6 +165,10 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.VIDEO_OGG] = Extension.AV;
     this._extensionRegistry[MediaType.WAV] = Extension.AV;
     this._extensionRegistry[MediaType.WEBM] = Extension.AV;
+    // HLS, in any of its formats.
+    hlsMimeTypes.forEach((format: string) => {
+      this._extensionRegistry[format] = Extension.AV;
+    });
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 
     this.on(
@@ -190,12 +206,13 @@ export default class IIIFContentHandler
     return extension;
   }
 
-  private _getExtensionByFormat(format: string): any {
-    if (!this._extensionRegistry[format]) {
-      return this._getExtensionByType(Extension.DEFAULT, format);
-    }
-
-    return this._getExtensionByType(this._extensionRegistry[format], format);
+  // The extension registered for a format or type, if any.
+  private _registeredExtension(
+    formatOrType: string | null | undefined
+  ): ExtensionLoader | undefined {
+    return formatOrType
+      ? this._extensionRegistry[formatOrType.toString()]
+      : undefined;
   }
 
   public set(data: IUVData<any>, initial?: boolean): void {
@@ -285,7 +302,12 @@ export default class IIIFContentHandler
       extension?.type.name
     );
 
-    data.config = await that.configure(config);
+    // The host's config may use "$key"s too, which are read from the locale
+    // once it's merged in.
+    data.config = await extension.readLocale(
+      await that.configure(config),
+      data.locales[0].name
+    );
   }
 
   private async _reload(data: IUVData<any>): Promise<void> {
@@ -334,73 +356,58 @@ export default class IIIFContentHandler
         return;
       }
 
-      let extension: IExtension | undefined;
-
+      // The extension for the canvas' content: by its first painting
+      // annotation body's format, else its type. A canvas without content
+      // (as in IIIF v2 IxIF manifests, whose media are offered as canvases)
+      // by its own type, else its format.
       const content: Annotation[] = canvas.getContent();
       let format: string | undefined;
+      let loader: ExtensionLoader | undefined;
 
       if (content.length) {
-        const annotation: Annotation = content[0];
-        const body: AnnotationBody[] = annotation.getBody();
+        const body: AnnotationBody | undefined = content[0].getBody()[0];
 
-        if (body && body.length) {
-          format = body[0].getFormat() as string;
-
-          if (format) {
-            extension = await that._getExtensionByFormat(format);
-
-            if (!extension) {
-              // try type
-              const type: ExternalResourceType | null = body[0].getType();
-
-              if (type) {
-                extension = await that._getExtensionByFormat(type);
-              }
-            }
-          } else {
-            const type: ExternalResourceType | null = body[0].getType();
-
-            if (type) {
-              extension = await that._getExtensionByFormat(type);
-            }
-          }
+        if (body) {
+          format = (body.getFormat() as string) || undefined;
+          loader =
+            that._registeredExtension(format) ||
+            that._registeredExtension(body.getType());
         }
       } else {
-        const canvasType: ExternalResourceType | null = canvas.getType();
-
-        if (canvasType) {
-          // try using canvasType
-          extension = await that._getExtensionByFormat(canvasType);
-        }
-
-        // if there isn't an extension for the canvasType, try the format
-        if (!extension) {
-          const format: any = canvas.getProperty("format");
-          extension = await that._getExtensionByFormat(format);
-        }
+        loader =
+          that._registeredExtension(canvas.getType()) ||
+          that._registeredExtension(canvas.getProperty("format"));
       }
 
+      // The AV extension plays manifests with ranges, which it shows as a
+      // table of contents, and canvases with more than one clip (painting
+      // annotation), which it plays in turn or together. The MediaElement
+      // extension plays the others, each a single clip.
+      if (
+        loader === Extension.AV &&
+        !helper.getRanges().length &&
+        content.length <= 1
+      ) {
+        loader = Extension.MEDIAELEMENT;
+      }
+
+      let extension: IExtension = await that._getExtensionByType(
+        loader || Extension.DEFAULT,
+        format
+      );
       await this._loadAndApplyConfigToExtension(that, data, extension);
 
-      // if using uv-av-extension and there is no structure,
-      // or the preferMediaElementExtension config is set
-      // fall back to uv-mediaelement-extension
-      const hasRanges: boolean = helper.getRanges().length > 0;
-
+      // A host may prefer the MediaElement extension for manifests with
+      // ranges too (preferMediaElementExtension), which is only known once
+      // the extension is configured.
       if (
-        extension!.type === Extension.AV &&
-        (!hasRanges || data.config.options.preferMediaElementExtension)
+        loader === Extension.AV &&
+        data.config.options.preferMediaElementExtension
       ) {
         extension = await that._getExtensionByType(
           Extension.MEDIAELEMENT,
           format
         );
-        await this._loadAndApplyConfigToExtension(that, data, extension);
-      }
-
-      // if there still isn't a matching extension, use the default extension.
-      if (!extension) {
-        extension = await that._getExtensionByFormat(Extension.DEFAULT.name);
         await this._loadAndApplyConfigToExtension(that, data, extension);
       }
 
