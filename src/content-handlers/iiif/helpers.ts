@@ -7,9 +7,7 @@ import {
 export function parseContentStateParameter(
   contentState?: ContentState | string
 ):
-  | NormalisedContentState
-  | { type: "remote-content-state"; id: string }
-  | null {
+  NormalisedContentState | { type: "remote-content-state"; id: string } | null {
   if (!contentState) {
     return null;
   }

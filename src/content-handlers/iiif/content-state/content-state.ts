@@ -34,8 +34,7 @@ export type NormalisedContentState = {
 };
 
 type ValidationResponse =
-  | readonly [false, { reason?: string }]
-  | readonly [true];
+  readonly [false, { reason?: string }] | readonly [true];
 
 export function validateContentState(
   annotation: ContentState,

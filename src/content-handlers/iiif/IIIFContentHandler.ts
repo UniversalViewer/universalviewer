@@ -35,65 +35,47 @@ const Extension: IExtensionRegistry = {
   AV: {
     name: "uv-av-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-av-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-av-extension/Extension"),
   },
   ALEPH: {
     name: "uv-aleph-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-aleph-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-aleph-extension/Extension"),
   },
   DEFAULT: {
     name: "uv-default-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-default-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-default-extension/Extension"),
   },
   EBOOK: {
     name: "uv-ebook-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-ebook-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-ebook-extension/Extension"),
   },
   MEDIAELEMENT: {
     name: "uv-mediaelement-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-mediaelement-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-mediaelement-extension/Extension"),
   },
   MODELVIEWER: {
     name: "uv-model-viewer-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-model-viewer-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-model-viewer-extension/Extension"),
   },
   OSD: {
     name: "uv-openseadragon-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-openseadragon-extension/Extension"),
   },
   PDF: {
     name: "uv-pdf-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-pdf-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-pdf-extension/Extension"),
   },
   SLIDEATLAS: {
     name: "uv-openseadragon-extension",
     loader: () =>
-      /* webpackMode: "lazy" */ import(
-        "./extensions/uv-openseadragon-extension/Extension"
-      ),
+      /* webpackMode: "lazy" */ import("./extensions/uv-openseadragon-extension/Extension"),
   },
 };
 

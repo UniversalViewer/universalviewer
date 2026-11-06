@@ -24,6 +24,4 @@ export type TemporalBoxSelector = {
 };
 
 export type SupportedSelectors =
-  | TemporalSelector
-  | BoxSelector
-  | TemporalBoxSelector;
+  TemporalSelector | BoxSelector | TemporalBoxSelector;

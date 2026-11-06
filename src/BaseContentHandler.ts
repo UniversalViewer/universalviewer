@@ -12,9 +12,9 @@ export type EventListener = {
 
 type EventListenerDictionaryItem = Pick<EventListener, "cb" | "ctx">;
 
-export default class BaseContentHandler<IUVData>
-  implements IContentHandler<IUVData>
-{
+export default class BaseContentHandler<
+  IUVData,
+> implements IContentHandler<IUVData> {
   protected _el: HTMLElement;
   private _eventListeners: {
     [key: string]: EventListenerDictionaryItem[];

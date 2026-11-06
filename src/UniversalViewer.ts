@@ -14,13 +14,9 @@ interface IContentHandlerRegistry {
 
 const ContentHandler: IContentHandlerRegistry = {
   [ContentType.IIIF]: () =>
-    /* webpackMode: "lazy" */ import(
-      "./content-handlers/iiif/IIIFContentHandler"
-    ),
+    /* webpackMode: "lazy" */ import("./content-handlers/iiif/IIIFContentHandler"),
   [ContentType.YOUTUBE]: () =>
-    /* webpackMode: "lazy" */ import(
-      "./content-handlers/youtube/YouTubeContentHandler"
-    ),
+    /* webpackMode: "lazy" */ import("./content-handlers/youtube/YouTubeContentHandler"),
 };
 
 export class UniversalViewer extends BaseContentHandler<IUVData<any>> {
