@@ -44,6 +44,7 @@ testBaseUrl.local.json
 *.js.map
 *.min.map
 /config.js
+!scripts/*.js
 !src/extensions/*/config.js
 !src/js/*.js
 !src/*/*/js/*.js
