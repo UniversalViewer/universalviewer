@@ -19,7 +19,7 @@ const config = {
   },
   resolve: {
     alias: {
-      jquery: require.resolve("jquery/dist/jquery.js"),
+      jquery: require.resolve("jquery"),
     },
     extensions: [".ts", ".tsx", ".js"],
     fallback: {
