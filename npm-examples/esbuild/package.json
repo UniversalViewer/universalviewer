@@ -5,7 +5,7 @@
     "build": "node esbuild.mjs"
   },
   "dependencies": {
-    "esbuild": "^0.13.12",
+    "esbuild": "^0.28.1",
     "create-serve": "^1.0.1",
     "universalviewer": "../../"
   }
