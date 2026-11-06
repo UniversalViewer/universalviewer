@@ -25,6 +25,12 @@ import { MediaType } from "@iiif/vocabulary/dist-commonjs";
 import { Events } from "../../../../Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
+interface AnnotationOverlayRect extends OpenSeadragon.Rect {
+  canvasIndex: number;
+  resultIndex: number;
+  chars: string;
+}
+
 export class OpenSeadragonCenterPanel extends CenterPanel<
   Config["modules"]["openSeadragonCenterPanel"]
 > {
@@ -61,6 +67,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $adjustImageButton: JQuery;
+  $choiceSwitchButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -170,6 +177,43 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         });
       }
     );
+
+    this.extensionHost.subscribe(
+      OpenSeadragonExtensionEvents.CHOICE_CHANGE,
+      ({
+        canvasId,
+        choiceIndex,
+      }: {
+        canvasId: string;
+        choiceIndex: number;
+      }) => {
+        this.whenCreated(() => {
+          const world = this.viewer.world;
+          const indices = this.extension.getPagedIndices();
+
+          let worldIndex = 0;
+          indices.forEach((index) => {
+            const canvas = this.extension.helper.getCanvasByIndex(index);
+            const numChoices = canvas.getChoices().length;
+
+            // need to count a canvas with "zero" choices as 1
+            const worldItemCount = numChoices === 0 ? 1 : numChoices;
+
+            if (canvas.id === canvasId) {
+              for (let c = 0; c < numChoices; c++) {
+                const item = world.getItemAt(worldIndex);
+                if (item) {
+                  item.setOpacity(c === choiceIndex ? 1 : 0);
+                }
+                worldIndex++;
+              }
+            } else {
+              worldIndex += worldItemCount;
+            }
+          });
+        });
+      }
+    );
   }
 
   whenCreated(cb: () => void): void {
@@ -193,7 +237,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   }
 
   rotateRight(): void {
-    this.viewer.viewport.setRotation(this.viewer.viewport.getRotation() + 90);
+    const current = this.viewer.viewport.getRotation();
+    const next = (current + 90) % 360;
+    this.viewer.viewport.setRotation(next);
   }
 
   updateResponsiveView(): void {
@@ -238,7 +284,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.viewer = OpenSeadragon({
       // id: this.viewerId,
       element: this.$viewer[0],
-      // crossOriginPolicy: "Anonymous",
+      drawer: "auto",
+      crossOriginPolicy: "Anonymous",
       showNavigationControl: true,
       showNavigator: true,
       showRotationControl: true,
@@ -251,13 +298,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
       controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
       controlsFadeLength: this.getControlsFadeLength(),
-      navigatorPosition: this.extension.helper.isContinuous()
+      navigatorPosition: (this.extension.helper.isContinuous()
         ? "BOTTOM_LEFT"
-        : this.config.options.navigatorPosition || "BOTTOM_RIGHT",
+        : this.config.options.navigatorPosition ||
+          "BOTTOM_RIGHT") as OpenSeadragon.Options["navigatorPosition"],
       navigatorHeight: "100px",
       navigatorWidth: "100px",
       navigatorMaintainSizeRatio: false,
-      navigatorAutoResize: false,
       animationTime: this.config.options.animationTime || 1.2,
       visibilityRatio: this.config.options.visibilityRatio || 0.5,
       constrainDuringPan: Bools.getBool(
@@ -273,7 +320,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         this.config.options.autoHideControls,
         true
       ),
-      prefixUrl: null,
+      prefixUrl: "",
       gestureSettingsMouse: {
         clickToZoom: Bools.getBool(
           this.extension.data.config!.options.clickToZoomEnabled,
@@ -318,6 +365,18 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           DOWN: pixel,
         },
         previous: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
+        fullpage: {
+          REST: pixel,
+          GROUP: pixel,
+          HOVER: pixel,
+          DOWN: pixel,
+        },
+        flip: {
           REST: pixel,
           GROUP: pixel,
           HOVER: pixel,
@@ -497,6 +556,10 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     this.$element.on("mouseleave", () => {
       if (!this.controlsVisible) return;
+
+      // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+      if ($(".overlay:visible").length) return;
+
       this.controlsVisible = false;
       this.viewer.setControlsEnabled(false);
     });
@@ -514,6 +577,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
         if (this.$nextButton.ismouseover()) {
           return;
         }
+        // don't hide controls if a dialog overlay (e.g. choice menu) is visible
+        if ($(".overlay:visible").length) return;
         if (!this.$viewer.find(".navigator").ismouseover()) {
           if (!this.controlsVisible) return;
           this.controlsVisible = false;
@@ -522,10 +587,6 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       },
       this.config.options.controlsFadeAfterInactive
     );
-
-    this.viewer.addHandler("tile-drawn", () => {
-      this.$spinner.hide();
-    });
 
     //this.viewer.addHandler("open-failed", () => {
     //});
@@ -577,8 +638,34 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     this.hidePrevButton();
     this.hideNextButton();
 
+    this.createChoiceSwitch();
+
     this.isCreated = true;
     //this.resize();
+
+    // check if initial interaction is keyboard navigation or mouse
+    // this prevents blue focus border from appearing on first mouse interaction
+    document.addEventListener(
+      "keydown",
+      (e: KeyboardEvent) => {
+        if (e.key === "Tab") {
+          this.$canvas?.addClass("keyboard-nav");
+        }
+      },
+      { capture: true }
+    );
+
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        this.$canvas?.removeClass("keyboard-nav");
+      },
+      { capture: true }
+    );
+
+    this.extensionHost.subscribe(IIIFEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+      this.$viewer.removeClass("dialogue-open");
+    });
   }
 
   createNavigationButtons() {
@@ -687,6 +774,23 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     });
   }
 
+  createChoiceSwitch(): void {
+    this.$choiceSwitchButton = this.$rotateButton.clone();
+    this.$choiceSwitchButton.attr("aria-label", this.content.layers);
+    this.$choiceSwitchButton.attr("title", this.content.layers);
+    this.$choiceSwitchButton.switchClass("rotate", "choiceSwitch");
+    this.$choiceSwitchButton.attr("tabindex", 0);
+
+    if (this.showAdjustImageButton && this.$adjustImageButton) {
+      this.$choiceSwitchButton.insertAfter(this.$adjustImageButton);
+    } else {
+      this.$choiceSwitchButton.insertAfter(this.$rotateButton);
+    }
+    this.onAccessibleClick(this.$choiceSwitchButton, () => {
+      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
+    });
+  }
+
   async getGirderTileSource(): Promise<any> {
     return new Promise<any>((resolve) => {
       const canvas: Canvas = this.extension.helper.getCurrentCanvas();
@@ -751,11 +855,137 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       return;
     }
 
-    this.$spinner.show();
+    this.viewer.close();
     this.items = [];
 
+    // only show spinner if loading takes longer than 200ms to avoid quick flash of spinner between images
+    const spinnerTimeout = setTimeout(() => {
+      this.$spinner.show();
+    }, 200);
+
+    // we need to do this before the choice branch even though the branch doesn't use images, because getExternalResources populates the resources needed for the download dialogue
     let images: IExternalResourceData[] =
       await this.extension.getExternalResources(resources);
+
+    // check for a choice on either of the displayed canvases if in 2-up view
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+
+    if (hasChoices) {
+      try {
+        // we need to build these objects and pass them to getPagePositions() because choice isn't currently supported on IExternalResource.
+        const canvasData = indices.map((index) => {
+          const canvas = this.extension.helper.getCanvasByIndex(index);
+          return {
+            index,
+            canvas,
+            choices: canvas.getChoices(),
+            width: canvas.getWidth(),
+            height: canvas.getHeight(),
+            x: 0,
+            y: 0,
+          };
+        });
+
+        const positioned = this.getPagePositions(canvasData as any);
+
+        let totalItems = 0;
+        for (const data of canvasData) {
+          totalItems += data.choices.length;
+        }
+
+        let loadedItems = 0;
+
+        positioned.forEach((data: any) => {
+          if (data.choices.length === 0) {
+            // no choices on this canvas, load as regular image
+            const content = data.canvas.getContent();
+            if (content.length) {
+              const body = content[0].getBody();
+              if (body.length) {
+                const services = body[0].getServices();
+                let tileSource: any;
+
+                if (services.length) {
+                  let id = services[0].id;
+                  if (!id.endsWith("/")) id += "/";
+                  tileSource = id + "info.json";
+                } else {
+                  tileSource = {
+                    type: "image",
+                    url: body[0].id,
+                    buildPyramid: false,
+                    crossOriginPolicy: false,
+                  };
+                }
+
+                totalItems++;
+                this.viewer.addTiledImage({
+                  tileSource,
+                  x: data.x,
+                  y: data.y,
+                  width: data.width,
+                  success: (item: any) => {
+                    this.items.push(item);
+                    loadedItems++;
+                    if (loadedItems === totalItems) {
+                      clearTimeout(spinnerTimeout);
+                      this.$spinner.hide();
+                      this.openPagesHandler();
+                      this.resize();
+                      this.goHome();
+                    }
+                  },
+                });
+              }
+            }
+          } else {
+            data.choices.forEach((choice: any, index: number) => {
+              const services = choice.getServices();
+              let tileSource: any;
+
+              if (services.length) {
+                let id = services[0].id;
+                if (!id.endsWith("/")) id += "/";
+                tileSource = id + "info.json";
+              } else {
+                tileSource = {
+                  type: "image",
+                  url: choice.id,
+                  buildPyramid: false,
+                  crossOriginPolicy: false,
+                };
+              }
+
+              this.viewer.addTiledImage({
+                tileSource: tileSource,
+                x: data.x,
+                y: data.y,
+                width: data.width,
+                opacity: index === 0 ? 1 : 0,
+                success: (item: any) => {
+                  this.items.push(item);
+                  loadedItems++;
+                  if (loadedItems === totalItems) {
+                    clearTimeout(spinnerTimeout);
+                    this.$spinner.hide();
+                    this.openPagesHandler();
+                    this.resize();
+                    this.goHome();
+                  }
+                },
+              });
+            });
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+      return;
+    }
 
     const isGirder: boolean = this.extension.format === MediaType.GIRDER;
 
@@ -781,6 +1011,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
             type: "image",
             url: data.id,
             buildPyramid: false,
+            crossOriginPolicy: false,
           };
         }
 
@@ -792,6 +1023,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
           success: (item: any) => {
             this.items.push(item);
             if (this.items.length === images.length) {
+              clearTimeout(spinnerTimeout);
+              this.$spinner.hide();
+
               this.openPagesHandler();
             }
             this.resize();
@@ -937,6 +1171,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     }
 
     this.isFirstLoad = false;
+
+    this.updateChoiceSwitchVisibility();
   }
 
   private resizeNavigatorForContinuous(): void {
@@ -1012,7 +1248,8 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
 
     for (let i = 0; i < annotations.length; i++) {
       const annotation: AnnotationGroup = annotations[i];
-      const rects: any[] = this.getAnnotationOverlayRects(annotation);
+      const rects: AnnotationOverlayRect[] =
+        this.getAnnotationOverlayRects(annotation);
 
       for (let k = 0; k < rects.length; k++) {
         const rect = rects[k];
@@ -1086,11 +1323,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disablePrevButton(): void {
     this.prevButtonEnabled = false;
     this.$prevButton.addClass("disabled");
+    this.$prevButton.attr("tabindex", -1);
   }
 
   enablePrevButton(): void {
     this.prevButtonEnabled = true;
     this.$prevButton.removeClass("disabled");
+    this.$prevButton.attr("tabindex", 0);
   }
 
   hidePrevButton(): void {
@@ -1106,11 +1345,13 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   disableNextButton(): void {
     this.nextButtonEnabled = false;
     this.$nextButton.addClass("disabled");
+    this.$nextButton.attr("tabindex", -1);
   }
 
   enableNextButton(): void {
     this.nextButtonEnabled = true;
     this.$nextButton.removeClass("disabled");
+    this.$nextButton.attr("tabindex", 0);
   }
 
   hideNextButton(): void {
@@ -1447,7 +1688,9 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     $(".annotationRect").not($rect).removeClass("current");
   }
 
-  getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
+  getAnnotationOverlayRects(
+    annotationGroup: AnnotationGroup
+  ): AnnotationOverlayRect[] {
     const newRects: any[] = [];
 
     if (!this.extension.resources) {
@@ -1475,7 +1718,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
       const w: number = searchRect.width;
       const h: number = searchRect.height;
 
-      const rect = new OpenSeadragon.Rect(x, y, w, h);
+      const rect = new OpenSeadragon.Rect(x, y, w, h) as AnnotationOverlayRect;
       searchRect.viewportX = x;
       searchRect.viewportY = y;
       rect.canvasIndex = searchRect.canvasIndex;
@@ -1610,5 +1853,24 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
     return (<ISettings>this.extension.getSettings()).reducedAnimation
       ? 0
       : this.config.options.controlsFadeLength || 250;
+  }
+
+  indicesIncludeChoices(indices: number[]): boolean {
+    return indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+  }
+
+  updateChoiceSwitchVisibility(): void {
+    if (!this.$choiceSwitchButton) return;
+
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = this.indicesIncludeChoices(indices);
+
+    this.$choiceSwitchButton.css(
+      "visibility",
+      hasChoices ? "visible" : "hidden"
+    );
   }
 }

@@ -2,6 +2,8 @@ const $ = require("jquery");
 import { FooterPanel as BaseFooterPanel } from "../uv-shared-module/FooterPanel";
 import { OpenSeadragonExtensionEvents } from "../../extensions/uv-openseadragon-extension/Events";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+import { IIIFEvents } from "../../IIIFEvents";
+import { Events } from "../../../../Events";
 
 export class FooterPanel extends BaseFooterPanel<
   Config["modules"]["mobileFooterPanel"]
@@ -11,6 +13,7 @@ export class FooterPanel extends BaseFooterPanel<
   $zoomInButton: JQuery;
   $zoomOutButton: JQuery;
   $helpButton: JQuery;
+  $choiceSwitchButton: JQuery;
 
   constructor($element: JQuery) {
     super($element);
@@ -20,6 +23,10 @@ export class FooterPanel extends BaseFooterPanel<
     this.setConfig("mobileFooterPanel");
 
     super.create();
+
+    this.extensionHost.subscribe(Events.LOAD, () => {
+      this.updateChoiceSwitchVisibility();
+    });
 
     // this.$spacer = $('<div class="spacer"></div>');
     // this.$options.prepend(this.$spacer);
@@ -52,6 +59,13 @@ export class FooterPanel extends BaseFooterPanel<
     `);
     this.$options.prepend(this.$helpButton);
 
+    this.$choiceSwitchButton = $(`
+      <button class="btn imageBtn choiceSwitch" title="${this.content.layers}">
+        <i class="uv-icon-layers" aria-hidden="true"></i>${this.content.layers}
+      </button>
+    `);
+    this.$mainOptions.append(this.$choiceSwitchButton);
+
     if (this.options.helpEnabled && this.options.helpUrl) {
       this.$helpButton.show();
     } else {
@@ -73,6 +87,22 @@ export class FooterPanel extends BaseFooterPanel<
     this.$rotateButton.onPressed(() => {
       this.extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE);
     });
+
+    this.$choiceSwitchButton.onPressed(() => {
+      this.extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE);
+    });
+  }
+
+  updateChoiceSwitchVisibility(): void {
+    const indices = this.extension.getPagedIndices();
+    const hasChoices = indices.some((index) => {
+      const canvas = this.extension.helper.getCanvasByIndex(index);
+      return canvas.getChoices().length > 0;
+    });
+    this.$choiceSwitchButton.css(
+      "visibility",
+      hasChoices ? "visible" : "hidden"
+    );
   }
 
   resize(): void {

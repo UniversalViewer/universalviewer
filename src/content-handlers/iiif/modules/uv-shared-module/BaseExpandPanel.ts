@@ -277,7 +277,11 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   toggleStart(): void {}
 
   toggleFinish(): void {
-    if (this.isExpanded && !this.autoToggled) {
+    if (this.autoToggled) {
+      return;
+    }
+
+    if (this.isExpanded) {
       this.focusCollapseButton();
     } else {
       this.focusExpandButton();

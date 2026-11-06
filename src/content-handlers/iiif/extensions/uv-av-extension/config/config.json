@@ -71,6 +71,7 @@
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
+        "hideThumbsView": false,
         "oneColThumbHeight": 320,
         "oneColThumbWidth": 200,
         "pageModeEnabled": true,
@@ -91,12 +92,15 @@
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "date": "$date",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
         "expand": "$expandContents",
         "expandFull": "$expandGallery",
         "index": "$index",
+        "increaseThumbnailSize": "$increaseThumbnailSize",
         "manifestRanges": "$manifestRanges",
         "searchResult": "$searchResult",
         "searchResults": "$searchResults",
+        "thumbnailSize": "$thumbnailSize",
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
@@ -250,6 +254,7 @@
         "moreAriaLabelTemplate": "$moreAriaLabelTemplate",
         "noData": "$noDataToDisplay",
         "page": "$page",
+        "rights": "$rights",
         "rangeHeader": "$aboutThisSection",
         "title": "$moreInformation"
       }
@@ -363,6 +368,16 @@
         "close": "$close",
         "reset": "$reset",
         "remember": "$remember"
+      }
+    },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close",
+        "canvas": "$canvas",
+        "choice": "$choice"
       }
     },
     "clickThroughDialogue": {

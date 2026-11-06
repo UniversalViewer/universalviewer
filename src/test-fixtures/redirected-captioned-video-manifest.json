@@ -1,0 +1,48 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/redirected-captioned-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video with captions behind a redirect (e2e test fixture)"]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/redirected-captioned-video-manifest.json/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 480,
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/redirected-captioned-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/redirected-captioned-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/redirected-captioned-video-manifest.json/canvas",
+              "body": [
+                {
+                  "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                  "type": "Video",
+                  "height": 360,
+                  "width": 480,
+                  "duration": 572.034,
+                  "format": "video/mp4"
+                },
+                {
+                  "id": "http://dlib.indiana.edu/iiif_av/lunchroom_manners/lunchroom_manners.vtt",
+                  "type": "Text",
+                  "format": "text/vtt",
+                  "label": "English captions",
+                  "language": "en"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

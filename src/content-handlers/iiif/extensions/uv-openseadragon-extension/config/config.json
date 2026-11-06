@@ -75,6 +75,7 @@
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
+        "hideThumbsView": false,
         "oneColThumbHeight": 320,
         "oneColThumbWidth": 200,
         "pageModeEnabled": true,
@@ -101,12 +102,15 @@
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "date": "$date",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
         "expand": "$expandContents",
         "expandFull": "$expandGallery",
         "index": "$index",
+        "increaseThumbnailSize": "$increaseThumbnailSize",
         "manifestRanges": "$manifestRanges",
         "searchResult": "$searchResult",
         "searchResults": "$searchResults",
+        "thumbnailSize": "$thumbnailSize",
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
@@ -128,6 +132,7 @@
         "downloadWholeImageHighResEnabled": true,
         "downloadWholeImageLowResEnabled": true,
         "maxImageWidth": 5000,
+        "minImageWidth": 0,
         "selectionEnabled": false,
         "topCloseButtonEnabled": false
       },
@@ -264,6 +269,7 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
+        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -278,8 +284,11 @@
       },
       "content": {
         "close": "$close",
+        "decreaseThumbnailSize": "$decreaseThumbnailSize",
         "download": "$download",
+        "increaseThumbnailSize": "$increaseThumbnailSize",
         "selectAll": "$selectAll",
+        "thumbnailSize": "$thumbnailSize",
         "title": "$selectPagesForDownload"
       }
     },
@@ -377,7 +386,8 @@
         "rotateRight": "$rotateRight",
         "zoomIn": "$zoomIn",
         "zoomOut": "$zoomOut",
-        "adjustImage": "$adjustImage"
+        "adjustImage": "$adjustImage",
+        "layers": "$layers"
       }
     },
     "searchFooterPanel": {
@@ -499,6 +509,16 @@
         "remember": "$remember"
       }
     },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close",
+        "canvas": "$canvas",
+        "choice": "$choice"
+      }
+    },
     "clickThroughDialogue": {
       "options": {
         "topCloseButtonEnabled": false
@@ -551,7 +571,8 @@
         "closeLeftPanel": "$closeLeftPanel",
         "openRightPanel": "$openRightPanel",
         "closeRightPanel": "$closeRightPanel",
-        "help": "$help"
+        "help": "$help",
+        "layers": "$layers"
       }
     },
     "restrictedDialogue": {

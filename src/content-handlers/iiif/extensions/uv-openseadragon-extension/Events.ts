@@ -3,6 +3,8 @@ export class OpenSeadragonExtensionEvents {
 
   static CURRENT_VIEW_URI: string =
     OpenSeadragonExtensionEvents.namespace + "currentViewUri";
+  static CHOICE_CHANGE: string =
+    OpenSeadragonExtensionEvents.namespace + "choiceChange";
   static DOUBLECLICK: string =
     OpenSeadragonExtensionEvents.namespace + "doubleClick";
   static IMAGE_SEARCH: string =

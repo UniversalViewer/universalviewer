@@ -205,6 +205,7 @@
         "noData": "$noDataToDisplay",
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
+        "rights": "$rights",
         "title": "$moreInformation"
       }
     },
@@ -354,6 +355,16 @@
         "close": "$close",
         "reset": "$reset",
         "remember": "$remember"
+      }
+    },
+    "choiceSwitchDialogue": {
+      "options": {
+        "topCloseButtonEnabled": false
+      },
+      "content": {
+        "close": "$close",
+        "canvas": "$canvas",
+        "choice": "$choice"
       }
     }
   },

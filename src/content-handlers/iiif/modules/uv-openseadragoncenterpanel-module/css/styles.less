@@ -105,6 +105,10 @@
           &:focus-visible {
             outline: 2px solid @link-color;
             outline-offset: -2px;
+            i,
+            span {
+              outline: 0;
+            }
           }
         }
 
@@ -207,6 +211,27 @@
                     });
         }
 
+        .choiceSwitch {
+          display: none !important;
+
+          .md-mediaquery({
+            display: inline-block !important;
+            cursor: pointer !important;
+            background-color: black;
+            background-image: data-uri("../img/layers.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 28px;
+            height: 28px;
+            img {
+              display: none;
+            }
+            &:focus {
+              .tab-focus();
+            }
+            });
+        }
+
         div[title="Previous page"] {
           display: none !important;
         }
@@ -248,6 +273,12 @@
         z-index: 10;
       }
 
+      .viewer.choice-dialogue-open {
+        .openseadragon-container > div > div {
+          opacity: 1 !important;
+        }
+      }
+
       .annotationPin {
         // background-color: white;
         background-image: data-uri("../img/pin.svg") !important;
@@ -275,7 +306,7 @@
     &:focus {
       outline: none;
     }
-    &:focus-visible {
+    &.keyboard-nav:focus-visible {
       outline: 2px solid @link-color;
       outline-offset: -2px;
     }
