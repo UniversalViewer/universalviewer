@@ -79,7 +79,12 @@ const config = {
     ],
   },
   devServer: {
-    static: path.join(__dirname),
+    static: {
+      directory: path.join(__dirname),
+      // chokidar 5 (webpack-dev-server 6) has no macOS fsevents support, so
+      // watching node_modules too runs out of file handles (EMFILE).
+      watch: { ignored: /[\\/]node_modules[\\/]/ },
+    },
     open: true,
     compress: true,
     port: 8080,
