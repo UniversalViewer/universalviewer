@@ -15,7 +15,7 @@
   "typings": "dist/cjs/index.d.ts",
   "web": "dist/umd/UV.js",
   "scripts": {
-    "e2eserve": "npx serve dist -p 4444",
+    "e2eserve": "serve dist -p 4444",
     "lint-code": "eslint --fix \"./{__tests__,scripts,src}/**/*.{js,jsx,ts,tsx}\"",
     "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
     "lint": "npm run lint-code && npm run lint-styles",
@@ -85,10 +85,11 @@
     "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
     "puppeteer": "^25.14.0",
+    "serve": "14.2.7",
     "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
     "stylelint": "17.16.0",
-    "stylelint-config-standard-less": "3.0.1",
+    "stylelint-config-standard-less": "4.1.0",
     "stylelint-less": "4.2.1",
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
@@ -97,10 +98,10 @@
     "typescript": "^5",
     "typescript-eslint": "8.62.1",
     "url-loader": "4.1.1",
-    "webpack": "^5.59.1",
+    "webpack": "^5.101.0",
     "webpack-bundle-analyzer": "^5.3.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "5.2.6",
+    "webpack-dev-server": "6.1.0",
     "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "dependencies": {
@@ -132,6 +133,7 @@
     "zustand": "^5.0.3"
   },
   "overrides": {
+    "compression": "^1.8.2",
     "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "collective": {
