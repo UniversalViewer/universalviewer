@@ -1,5 +1,5 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/testBaseUrl");
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
 
 const FIRST_THUMB_SRC =
   "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";

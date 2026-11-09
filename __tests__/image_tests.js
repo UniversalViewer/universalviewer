@@ -1,5 +1,6 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/testBaseUrl");
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
+const { viewerUrl } = require("../scripts/tests/testViewerUrl");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
 // on these IIIF Cookbook recipes (also credited in the manifest's summary):
@@ -17,11 +18,6 @@ const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest
 // "individuals" behavior).
 // https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
 const IMAGE_INDIVIDUALS_MANIFEST = `${BASE_URL}/test-fixtures/image-individuals-manifest.json`;
-
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-};
 
 describe("Universal Viewer", () => {
   let browser;
