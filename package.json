@@ -56,7 +56,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/jest": "^30",
-    "@types/jquery": "^3.5.14",
+    "@types/jquery": "^4.0.0",
     "@types/node": "^22.9.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.0",
@@ -112,7 +112,7 @@
     "esbuild": "^0.28.1",
     "esbuild-plugin-less": "^1.1.5",
     "esbuild-plugin-svg": "^0.1.0",
-    "jquery": "3.7.1",
+    "jquery": "4.0.0",
     "jquery-ui-dist": "^1.13.3",
     "jsviews": "1.2.0",
     "less-plugin-clean-css": "^1.5.1",
