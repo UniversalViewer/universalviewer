@@ -1,5 +1,6 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/testBaseUrl");
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
+const { viewerUrl } = require("../scripts/tests/testViewerUrl");
 
 // AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
 // AV manifest (no ranges) is rendered by the mediaelement extension.
@@ -82,11 +83,6 @@ const AV_MULTILINGUAL_LABEL_CAPTIONED_MANIFESTS = [
 // https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/
 // The options are the English VTT and the Welsh SRT.
 const AV_MULTIPLE_LANGUAGE_CAPTIONS_MANIFEST = `${BASE_URL}/test-fixtures/multiple-language-captions-video-manifest.json`;
-
-const viewerUrl = (manifestUrl, locales) => {
-  const url = `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-  return locales ? `${url}&locales=${locales}` : url;
-};
 
 // The center panel titles the player above the media. The mediaelement panel
 // uses the manifest's label (MediaElementCenterPanel.createUI), while the AV
