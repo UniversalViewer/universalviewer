@@ -126,6 +126,10 @@ const config = [
             to: resolvePath("./dist"),
           },
           {
+            from: resolvePath("./src/examples.css"),
+            to: resolvePath("./dist"),
+          },
+          {
             from: resolvePath("./src/uv.css"),
             to: resolvePath("./dist"),
           },
