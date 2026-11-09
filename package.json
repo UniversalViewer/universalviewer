@@ -105,7 +105,7 @@
     "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "dependencies": {
-    "@google/model-viewer": "^4.0.0",
+    "@google/model-viewer": "^4.4.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/manifold": "^2.3.0",
     "@iiif/presentation-3": "^2.2.4",
@@ -128,6 +128,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.13.0",
+    "three": "^0.183.0",
     "waveform-panel": "^1.2.0",
     "xss": "1.0.15",
     "zustand": "^5.0.3"

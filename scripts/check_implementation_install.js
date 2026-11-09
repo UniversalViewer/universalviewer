@@ -21,10 +21,6 @@ const KNOWN_ISSUES = [
     fix: "replace xmldom and drop stub types in @universalviewer/epubjs",
   },
   {
-    pattern: /peer dependency "three@|doesn't provide three to/,
-    fix: "provide three for @google/model-viewer",
-  },
-  {
     pattern: /deep-diff@/,
     fix: "drop redux-logger from @universalviewer/aleph",
   },
