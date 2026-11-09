@@ -26,7 +26,7 @@
     "build": "webpack -c webpack.config.js",
     "build-es": "node ./esbuild.mjs",
     "build-tsc": "tsc --skipLibCheck --module CommonJS --esModuleInterop --declarationDir ./dist/cjs --declaration --outDir ./dist/cjs -p . && npm run copy-files",
-    "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.png dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
+    "copy-files": "node scripts/copy_files.js",
     "docs": "typedoc --plugin typedoc-plugin-missing-exports ; echo docs.universalviewer.io > docs/CNAME",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
@@ -65,7 +65,6 @@
     "chai": "5.1.2",
     "clean-css": "^5.2.2",
     "copy-webpack-plugin": "^14.0.0",
-    "copyfiles": "^2.4.1",
     "css-loader": "^7.1.4",
     "esbuild": "^0.28.1",
     "esbuild-plugin-less": "^1.1.5",
@@ -134,6 +133,11 @@
   },
   "overrides": {
     "compression": "^1.8.2",
+    "glob@>=9.0.0 <14.0.2": "^14.0.4",
+    "minimatch@>=7.0.0 <11.0.1": "^11.0.5",
+    "typedoc": {
+      "minimatch": "^10.2.5"
+    },
     "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "collective": {
