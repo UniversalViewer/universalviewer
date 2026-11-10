@@ -465,8 +465,7 @@
         "truncateThumbnailLabels": "$truncateThumbnailLabels",
         "preserveViewport": "$preserveViewport",
         "title": "$settings",
-        "website": "$uvWebsite",
-        "keepImageInViewEnabled": "$keepImageInViewEnabled"
+        "website": "$uvWebsite"
       }
     },
     "shareDialogue": {
