@@ -162,6 +162,5 @@
   "$rights": "Prawa",
   "$layers": "Warstwy",
   "$canvas": "Kanwa {0}",
-  "$choice": "Opcja {0}",
-  "$keepImageInViewEnabled": "Keep Image in View"
+  "$choice": "Opcja {0}"
 }

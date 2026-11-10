@@ -165,6 +165,5 @@
   "$saturation": "Dirlawnder",
   "$layers": "Haenau",
   "$canvas": "Canfas {0}",
-  "$choice": "Dewis {0}",
-  "$keepImageInViewEnabled": "Keep Image in View"
+  "$choice": "Dewis {0}"
 }

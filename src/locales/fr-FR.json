@@ -162,6 +162,5 @@
   "$rights": "Droits",
   "$layers": "Couches",
   "$canvas": "Canvas {0}",
-  "$choice": "Choix {0}",
-  "$keepImageInViewEnabled": "Keep Image in View"
+  "$choice": "Choix {0}"
 }

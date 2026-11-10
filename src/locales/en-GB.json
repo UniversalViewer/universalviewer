@@ -167,6 +167,5 @@
   "$remember": "Remember my settings",
   "$layers": "Layers",
   "$canvas": "Canvas {0}",
-  "$choice": "Choice {0}",
-  "$keepImageInViewEnabled": "Keep Image in View"
+  "$choice": "Choice {0}"
 }

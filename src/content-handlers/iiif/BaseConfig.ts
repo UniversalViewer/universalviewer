@@ -247,7 +247,6 @@ export type SettingsDialogueContent = DialogueContent & {
   preserveViewport: string;
   title: string;
   website: string;
-  keepImageInViewEnabled?: string;
 };
 
 type SettingsDialogue = ModuleConfig & {
