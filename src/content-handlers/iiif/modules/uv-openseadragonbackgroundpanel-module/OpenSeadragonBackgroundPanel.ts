@@ -403,8 +403,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
       this.$viewer.removeClass("dialogue-open");
     });
 
-    // add resize observer to the center panel content; update margins when it's resized and move image if keepImageInView
-    // The behaviour here needs some thought - slide and zoom (current behaviour) or just slide sideways?
+    // add resize observer to the center panel content; update margins when it's resized and move image if keepImageInView and the user hasn't zoomed or panned the image
     this.visibleAreaObserver = new ResizeObserver((entries) => {
       const viewport = this.viewer?.viewport;
       if (!viewport || !this.viewer.world.getItemCount()) return;
@@ -428,7 +427,6 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
 
       this.updateViewportMargins();
 
-      // without this, the image zooms in briefly if it was at home and a panel closes.
       this.goHome();
     });
 
