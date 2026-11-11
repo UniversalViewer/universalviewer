@@ -10,6 +10,10 @@ import { Bools } from "../../Utils";
 import { isVisible } from "../../../../Utils";
 import { BaseConfig } from "../../BaseConfig";
 
+import { createRoot, Root } from "react-dom/client";
+import HeaderPanelRightOptions from "./HeaderPanelRightOptions";
+import { createElement } from "react";
+
 export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"],
 > extends BaseView<T> {
@@ -21,6 +25,7 @@ export class HeaderPanel<
   $rightOptions: JQuery;
   $settingsButton: JQuery;
   information: Information;
+  rightOptionsRoot: Root;
 
   constructor($element: JQuery) {
     super($element, false, false);
@@ -50,6 +55,8 @@ export class HeaderPanel<
 
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
+
+    this.rightOptionsRoot = createRoot(this.$rightOptions[0]);
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
@@ -95,20 +102,21 @@ export class HeaderPanel<
         String(this.$localeToggleButton.data("locale"))
       );
     });
-
-    this.$settingsButton.onPressed(() => {
-      this.extensionHost.publish(
-        IIIFEvents.SHOW_SETTINGS_DIALOGUE,
-        this.$settingsButton
-      );
-    });
+  
+    this.rightOptionsRoot.render(
+      createElement(HeaderPanelRightOptions, {
+        extensionHost: this.extensionHost,
+        options: this.options,
+        content: this.content,
+      })
+  
+  );
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
       this.$centerOptions.hide();
     }
 
     this.updateLocaleToggle();
-    this.updateSettingsButton();
   }
 
   updateLocaleToggle(): void {
@@ -123,18 +131,6 @@ export class HeaderPanel<
     this.$localeToggleButton.data("locale", alternateLocale.name);
     this.$localeToggleButton.attr("title", alternateLocale.label);
     this.$localeToggleButton.text(text);
-  }
-
-  updateSettingsButton(): void {
-    const settingsEnabled: boolean = Bools.getBool(
-      this.options.settingsButtonEnabled,
-      true
-    );
-    if (!settingsEnabled) {
-      this.$settingsButton.hide();
-    } else {
-      this.$settingsButton.show();
-    }
   }
 
   localeToggleIsVisible(): boolean {
