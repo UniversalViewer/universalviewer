@@ -3,13 +3,13 @@ import Button from "./Button";
 import { IIIFEvents } from "../../IIIFEvents";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import { HeaderPanelContent, HeaderPanelOptions } from "../../BaseConfig";
+import { Settings } from "./Icons";
 
 interface Props {
   extensionHost: IIIFExtensionHost;
   options: HeaderPanelOptions;
   content: HeaderPanelContent;
 }
-
 
 const HeaderPanelRightOptions: React.FC<Props> = ({
   extensionHost,
@@ -18,7 +18,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
 }) => {
 
   return (
-    <div>  {options.settingsButtonEnabled && (
+    <>  {options.settingsButtonEnabled && (
       <Button
         className="settings"
         label={content.settings}
@@ -27,18 +27,11 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
           extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE, el);
         }}
       >
-        S {/* icon goes here */}
+        <Settings />
       </Button>
-    )}</div>
+    )}</>
   )
 
 }
 
 export default HeaderPanelRightOptions;
-
-
-
-
-
-
-

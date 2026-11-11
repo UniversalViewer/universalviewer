@@ -8,7 +8,20 @@
         height: 30px;
         width: 30px;
       }
+
+      svg {
+        display: block;
+        fill: currentColor;
+        height: 30px;
+        width: 30px;
+      }
+
+      &:focus-visible svg {
+        outline: 1px solid @link-color;
+      }
     }
+
+
 
     &.showInformation {
       height: 80px;

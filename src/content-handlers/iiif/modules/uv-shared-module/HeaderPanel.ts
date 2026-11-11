@@ -61,14 +61,6 @@ export class HeaderPanel<
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
 
-    this.$settingsButton = $(`
-          <button class="btn imageBtn settings" tabindex="0" title="${this.content.settings}">
-            <i class="uv-icon-settings" aria-hidden="true"></i>
-          </button>
-        `);
-    this.$settingsButton.attr("title", this.content.settings);
-    this.$rightOptions.append(this.$settingsButton);
-
     this.$helpButton = $(`
       <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
         <i class="uv-icon-help" aria-hidden="true"></i>
