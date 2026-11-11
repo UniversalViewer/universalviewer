@@ -12,7 +12,6 @@ export const Settings: React.FC<IconProps> = ({
   className = "",
   width = 30,
   height = 30,
-  fill = "currentColor",
   style = {},
 }) => (
   <svg
@@ -22,7 +21,6 @@ export const Settings: React.FC<IconProps> = ({
     xmlns="http://www.w3.org/2000/svg"
     className={className}
     style={style}
-    fill={fill}
     aria-hidden="true"
     focusable="false"
   >
