@@ -162,6 +162,42 @@
       width: 100%;
     }
   }
+
+// Tooltips
+
+.btn.imageBtn {
+    position: relative; // needed to position the tooltip
+  }
+
+  .tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 6px;
+    padding: 4px 8px;
+    background-color: @panel-dark-bg;
+    color: #fff;
+    font-size: @font-size-small;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 1000;
+    visibility: hidden;
+  }
+
+  @media (hover: hover) {
+    .btn:hover > .tooltip {
+      visibility: visible;
+    }
+  }
+
+  .btn:focus-visible > .tooltip {
+    visibility: visible;
+  }
+
+
+
 }
 
 .iiif-gallery-component {
