@@ -40,7 +40,7 @@ const KNOWN_ISSUES = [
     // pdfjs-dist → canvas → @mapbox/node-pre-gyp → tar, npmlog and rimraf.
     // Only yarn 1 prints the chain, so the others are matched by version.
     pattern:
-      /> pdfjs-dist > |^(yarn 4 audit:|npm: npm warn deprecated) (pdfjs-dist@3\.11\.174|tar@6\.2\.1|npmlog@5\.0\.1|gauge@3\.0\.2|are-we-there-yet@2\.0\.0|rimraf@3\.0\.2|glob@7\.2\.3|inflight@1\.0\.6)[ :]|^audit: (pdfjs-dist|tar|@mapbox\/node-pre-gyp) |^audit: universalviewer .* via .*pdfjs-dist$/,
+      /> pdfjs-dist > |^(yarn 4 audit:|npm: npm warn deprecated) (pdfjs-dist@3\.11\.174|tar@6\.2\.1|npmlog@5\.0\.1|gauge@3\.0\.2|are-we-there-yet@2\.0\.0|rimraf@3\.0\.2|glob@7\.2\.3|inflight@1\.0\.6)[ :]|^audit: (pdfjs-dist|tar|canvas|@mapbox\/node-pre-gyp) |^audit: universalviewer .* via .*pdfjs-dist$/,
     fix: "remove the unused pdfjs-dist dependency",
   },
 ];
