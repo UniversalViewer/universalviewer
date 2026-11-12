@@ -1,6 +1,6 @@
 let puppeteer;
 const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewerUrl");
+const { expectPanelTitle, viewerUrl } = require("../scripts/tests/testViewer");
 
 // AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
 // AV manifest (no ranges) is rendered by the mediaelement extension.
@@ -83,23 +83,6 @@ const AV_MULTILINGUAL_LABEL_CAPTIONED_MANIFESTS = [
 // https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/
 // The options are the English VTT and the Welsh SRT.
 const AV_MULTIPLE_LANGUAGE_CAPTIONS_MANIFEST = `${BASE_URL}/test-fixtures/multiple-language-captions-video-manifest.json`;
-
-// The center panel titles the player above the media. The mediaelement panel
-// uses the manifest's label (MediaElementCenterPanel.createUI), while the AV
-// panel uses the current range's label, falling back to the canvas'
-// (AVCenterPanel._setTitle).
-const expectPanelTitle = async (page, expected) => {
-  await page.waitForSelector(".centerPanel h1.title", { visible: true });
-  await page.waitForFunction(() => {
-    const title = document.querySelector(".centerPanel h1.title");
-    return title && title.textContent.trim().length > 0;
-  });
-
-  const title = await page.$eval(".centerPanel h1.title", (el) =>
-    el.textContent.trim()
-  );
-  expect(title).toBe(expected);
-};
 
 describe("Universal Viewer", () => {
   let browser;

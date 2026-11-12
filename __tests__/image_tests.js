@@ -1,6 +1,12 @@
 let puppeteer;
 const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewerUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  waitForAnnotationOn,
+  doubleClickViewer,
+  viewerUrl,
+} = require("../scripts/tests/testViewer");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
 // on these IIIF Cookbook recipes (also credited in the manifest's summary):
@@ -111,29 +117,6 @@ describe("Universal Viewer", () => {
     page = await browser.newPage();
     await page.goto(viewerUrl(manifestUrl), {
       waitUntil: "domcontentloaded",
-    });
-  };
-
-  // The examples page turns on doubleClickAnnotationEnabled and adds each
-  // published double-click target to #iiif_annotations.
-  const annotationTargets = () =>
-    page.$eval("#iiif_annotations", (el) =>
-      el.value ? JSON.parse(el.value).map(({ target }) => target) : []
-    );
-
-  const waitForAnnotationOn = (canvas) =>
-    page.waitForFunction(
-      (path) =>
-        document.querySelector("#iiif_annotations").value.includes(path),
-      {},
-      `/canvas/${canvas}#`
-    );
-
-  const doubleClickViewer = async () => {
-    await page.waitForSelector(".openseadragon-canvas", { visible: true });
-    const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, {
-      count: 2,
     });
   };
 
@@ -407,28 +390,29 @@ describe("Universal Viewer", () => {
 
       // Two-up on p1: publishes nothing.
       await waitForPressed(twoUpButton);
-      await doubleClickViewer();
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
+      expect(await annotationTargets(page)).toEqual([]);
 
-      // One-up on p2: publishes p2's target. A target for p1 would mean the
-      // two-up double-click published too.
+      // One-up on p2: publishes p2's target.
       await page.click(oneUpButton);
       await waitForPressed(oneUpButton);
       await page.click(".btn.imageBtn.next");
       await waitForCanvasValue(page, 1);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p2");
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p2");
 
-      const targets = await annotationTargets();
+      const targets = await annotationTargets(page);
       expect(targets).toHaveLength(1);
       expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
     });
 
     it("publishes a double-click annotation when paging isn't available", async () => {
       await openFreshViewer(IMAGE_INDIVIDUALS_MANIFEST);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p1");
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
 
-      const targets = await annotationTargets();
+      const targets = await annotationTargets(page);
       expect(targets).toHaveLength(1);
       expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
