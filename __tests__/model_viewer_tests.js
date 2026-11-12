@@ -1,12 +1,16 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewerUrl");
+const { BASE_URL } = require("../scripts/testBaseUrl");
 
 // Local single-model manifest for the model-viewer extension. Modelled on
 // IIIF Cookbook 0608 Simplest Manifest - Single 3D Model, adapted from a
 // Presentation 4 Scene to a Presentation 3 Canvas.
 // https://iiif.io/api/cookbook/recipe/0608-mvm-3d/
 const MODEL_MANIFEST = `${BASE_URL}/test-fixtures/model-manifest.json`;
+
+const viewerUrl = (manifestUrl) => {
+  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
+  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
+};
 
 describe("Universal Viewer", () => {
   let browser;
