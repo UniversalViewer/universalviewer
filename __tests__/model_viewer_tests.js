@@ -1,6 +1,6 @@
 let puppeteer;
 const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewerUrl");
+const { viewerUrl } = require("../scripts/tests/testViewer");
 
 // Local single-model manifest for the model-viewer extension. Modelled on
 // IIIF Cookbook 0608 Simplest Manifest - Single 3D Model, adapted from a
