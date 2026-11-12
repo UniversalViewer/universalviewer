@@ -178,7 +178,9 @@
     "esbuild@0.28.2": true,
     "puppeteer@25.14.0": true,
     "@parcel/watcher": false,
+    "canvas": false,
     "es5-ext": false,
-    "fsevents": false
+    "fsevents": false,
+    "unrs-resolver": false
   }
 }
