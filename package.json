@@ -105,7 +105,7 @@
     "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "dependencies": {
-    "@google/model-viewer": "^4.4.0",
+    "@google/model-viewer": "^4.0.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/manifold": "^2.3.0",
     "@iiif/presentation-3": "^2.2.4",
