@@ -106,10 +106,24 @@ describe("Configuration options", () => {
     const doubleClickViewer = async () => {
       await page.waitForSelector(".openseadragon-canvas", { visible: true });
       const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, {
-        count: 2,
-      });
+      const x = box.x + box.width / 2;
+      const y = box.y + box.height / 2;
+      // Nothing may cover the viewer at the point we double-click.
+      const onViewer = await page.evaluate(
+        (px, py) =>
+          !!document.elementFromPoint(px, py)?.closest(".openseadragon-canvas"),
+        x,
+        y
+      );
+      expect(onViewer).toBe(true);
+      await page.mouse.click(x, y, { count: 2 });
     };
+
+    // The viewer publishes a double-click 100ms later (the debounce in
+    // OpenSeadragonCenterPanel). Browsers run timers with an equal delay in
+    // the order they were set, so this resolves after any pending publish.
+    const afterDoubleClickDebounce = () =>
+      page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
     const annotationTargets = () =>
       page.$eval("#iiif_annotations", (el) =>
@@ -136,6 +150,8 @@ describe("Configuration options", () => {
       await page.waitForSelector("#thumb-0 img");
     });
 
+    // UV defaults doubleClickAnnotationEnabled to false; the examples page
+    // turns it on.
     it("starts in one-up and publishes when pagingEnabled is false", async () => {
       await applyCustomConfig({ options: { pagingEnabled: false } });
       await waitForOneUp();
@@ -147,8 +163,10 @@ describe("Configuration options", () => {
       expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
 
+    // Same setup as the test above, which shows it publishes with the option
+    // on. Nothing reloads the viewer between the double-click and the check,
+    // because a reload drops a pending publish and clears #iiif_annotations.
     it("publishes nothing when doubleClickAnnotationEnabled is false", async () => {
-      // One-up on p1 with the option off: publishes nothing.
       await applyCustomConfig({
         options: { pagingEnabled: false },
         modules: {
@@ -159,25 +177,9 @@ describe("Configuration options", () => {
       });
       await waitForOneUp();
       await doubleClickViewer();
+      await afterDoubleClickDebounce();
 
-      // With the option back on, one-up on p2 publishes p2's target. A target
-      // for p1 would mean the first double-click published too. Re-applying
-      // config loads the manifest named in the URL, which no longer has it,
-      // so put it back first.
-      await page.evaluate(
-        (hash) => history.replaceState(null, "", hash),
-        `#?manifest=${encodeURIComponent(IMAGE_BOOK_MANIFEST)}`
-      );
-      await applyCustomConfig({ options: { pagingEnabled: false } });
-      await waitForOneUp();
-      await page.click(".btn.imageBtn.next");
-      await page.waitForFunction(() => /[?&#]cv=1(&|$)/.test(location.href));
-      await doubleClickViewer();
-      await waitForAnnotationOn("p2");
-
-      const targets = await annotationTargets();
-      expect(targets).toHaveLength(1);
-      expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
+      expect(await annotationTargets()).toEqual([]);
     });
   });
 });

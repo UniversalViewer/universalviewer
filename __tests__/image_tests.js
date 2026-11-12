@@ -136,10 +136,24 @@ describe("Universal Viewer", () => {
   const doubleClickViewer = async () => {
     await page.waitForSelector(".openseadragon-canvas", { visible: true });
     const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, {
-      count: 2,
-    });
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    // Nothing may cover the viewer at the point we double-click.
+    const onViewer = await page.evaluate(
+      (px, py) =>
+        !!document.elementFromPoint(px, py)?.closest(".openseadragon-canvas"),
+      x,
+      y
+    );
+    expect(onViewer).toBe(true);
+    await page.mouse.click(x, y, { count: 2 });
   };
+
+  // The viewer publishes a double-click 100ms later (the debounce in
+  // OpenSeadragonCenterPanel). Browsers run timers with an equal delay in
+  // the order they were set, so this resolves after any pending publish.
+  const afterDoubleClickDebounce = () =>
+    page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
   beforeAll(async () => {
     puppeteer = (await import("puppeteer")).default;
@@ -412,9 +426,10 @@ describe("Universal Viewer", () => {
       // Two-up on p1: publishes nothing.
       await waitForPressed(twoUpButton);
       await doubleClickViewer();
+      await afterDoubleClickDebounce();
+      expect(await annotationTargets()).toEqual([]);
 
-      // One-up on p2: publishes p2's target. A target for p1 would mean the
-      // two-up double-click published too.
+      // One-up on p2: publishes p2's target.
       await page.click(oneUpButton);
       await waitForPressed(oneUpButton);
       await page.click(".btn.imageBtn.next");
