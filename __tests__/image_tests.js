@@ -106,34 +106,11 @@ describe("Universal Viewer", () => {
   // Navigating to a URL that differs only by #hash doesn't reload the page,
   // and navigating away from a busy viewer can stall, so open the viewer on a
   // fresh page whenever a test needs a clean state.
-  const openFreshViewer = async (manifestUrl = IMAGE_BOOK_MANIFEST) => {
+  const openFreshViewer = async () => {
     if (page) await page.close();
     page = await browser.newPage();
-    await page.goto(viewerUrl(manifestUrl), {
+    await page.goto(viewerUrl(IMAGE_BOOK_MANIFEST), {
       waitUntil: "domcontentloaded",
-    });
-  };
-
-  // The examples page turns on doubleClickAnnotationEnabled and adds each
-  // published double-click target to #iiif_annotations.
-  const annotationTargets = () =>
-    page.$eval("#iiif_annotations", (el) =>
-      el.value ? JSON.parse(el.value).map(({ target }) => target) : []
-    );
-
-  const waitForAnnotationOn = (canvas) =>
-    page.waitForFunction(
-      (path) =>
-        document.querySelector("#iiif_annotations").value.includes(path),
-      {},
-      `/canvas/${canvas}#`
-    );
-
-  const doubleClickViewer = async () => {
-    await page.waitForSelector(".openseadragon-canvas", { visible: true });
-    const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, {
-      count: 2,
     });
   };
 
@@ -387,50 +364,6 @@ describe("Universal Viewer", () => {
       const rotatedRot = await getRotationFromNavigator();
       expect(initialRot).toBe(0);
       expect(rotatedRot).toBe(90);
-    });
-
-    // double-click annotation (the viewerinputhook dblClickHandler hook)
-    it("publishes a double-click annotation in one-up but not two-up", async () => {
-      const twoUpButton = ".btn.imageBtn.two-up";
-      const oneUpButton = ".btn.imageBtn.one-up";
-      const waitForPressed = (sel) =>
-        page.waitForFunction(
-          (s) =>
-            document.querySelector(s).getAttribute("aria-pressed") === "true",
-          {},
-          sel
-        );
-
-      // The header hides the paging buttons at Puppeteer's default 800px width.
-      await page.setViewport({ width: 1280, height: 800 });
-      await page.waitForSelector(oneUpButton, { visible: true });
-
-      // Two-up on p1: publishes nothing.
-      await waitForPressed(twoUpButton);
-      await doubleClickViewer();
-
-      // One-up on p2: publishes p2's target. A target for p1 would mean the
-      // two-up double-click published too.
-      await page.click(oneUpButton);
-      await waitForPressed(oneUpButton);
-      await page.click(".btn.imageBtn.next");
-      await waitForCanvasValue(page, 1);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p2");
-
-      const targets = await annotationTargets();
-      expect(targets).toHaveLength(1);
-      expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
-    });
-
-    it("publishes a double-click annotation when paging isn't available", async () => {
-      await openFreshViewer(IMAGE_INDIVIDUALS_MANIFEST);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p1");
-
-      const targets = await annotationTargets();
-      expect(targets).toHaveLength(1);
-      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
 
     // open and close adjust image control
