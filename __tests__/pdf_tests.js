@@ -1,6 +1,6 @@
 let puppeteer;
 const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewerUrl");
+const { viewerUrl } = require("../scripts/tests/testViewer");
 
 // Local multi-file PDF manifest (three single-page PDFs) for PDF-specific
 // behaviour, modelled on the Villanova manifest vudl:294631.
