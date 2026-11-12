@@ -4,6 +4,10 @@ const { BASE_URL } = require("../scripts/tests/testBaseUrl");
 const FIRST_THUMB_SRC =
   "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";
 
+// Local paged book of static images; see image_tests.js for its IIIF
+// Cookbook recipes.
+const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
+
 let browser;
 let page;
 
@@ -82,6 +86,100 @@ describe("Configuration options", () => {
       expect(imageSrc).toEqual(
         expect.stringContaining(`${FIRST_THUMB_SRC}#t=`)
       );
+    });
+  });
+
+  // The examples page turns on doubleClickAnnotationEnabled and adds each
+  // published double-click target to #iiif_annotations. Custom config is
+  // merged after the page's own, so it can turn the option off again.
+  describe("double-click annotation", () => {
+    const oneUpButton = ".btn.imageBtn.one-up";
+
+    const waitForOneUp = () =>
+      page.waitForFunction(
+        (sel) =>
+          document.querySelector(sel)?.getAttribute("aria-pressed") === "true",
+        {},
+        oneUpButton
+      );
+
+    const doubleClickViewer = async () => {
+      await page.waitForSelector(".openseadragon-canvas", { visible: true });
+      const box = await (await page.$(".openseadragon-canvas")).boundingBox();
+      const x = box.x + box.width / 2;
+      const y = box.y + box.height / 2;
+      // Nothing may cover the viewer at the point we double-click.
+      const onViewer = await page.evaluate(
+        (px, py) =>
+          !!document.elementFromPoint(px, py)?.closest(".openseadragon-canvas"),
+        x,
+        y
+      );
+      expect(onViewer).toBe(true);
+      await page.mouse.click(x, y, { count: 2 });
+    };
+
+    // The viewer publishes a double-click 100ms later (the debounce in
+    // OpenSeadragonCenterPanel). Browsers run timers with an equal delay in
+    // the order they were set, so this resolves after any pending publish.
+    const afterDoubleClickDebounce = () =>
+      page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 100)));
+
+    const annotationTargets = () =>
+      page.$eval("#iiif_annotations", (el) =>
+        el.value ? JSON.parse(el.value).map(({ target }) => target) : []
+      );
+
+    const waitForAnnotationOn = (canvas) =>
+      page.waitForFunction(
+        (path) =>
+          document.querySelector("#iiif_annotations").value.includes(path),
+        {},
+        `/canvas/${canvas}#`
+      );
+
+    // Changing only the #hash doesn't reload the page, so start each test on
+    // a fresh one. The header hides the paging buttons below 1280px.
+    beforeEach(async () => {
+      await page.close();
+      page = await browser.newPage();
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.goto(
+        `${BASE_URL}#?manifest=${encodeURIComponent(IMAGE_BOOK_MANIFEST)}`
+      );
+      await page.waitForSelector("#thumb-0 img");
+    });
+
+    // UV defaults doubleClickAnnotationEnabled to false; the examples page
+    // turns it on.
+    it("starts in one-up and publishes when pagingEnabled is false", async () => {
+      await applyCustomConfig({ options: { pagingEnabled: false } });
+      await waitForOneUp();
+      await doubleClickViewer();
+      await waitForAnnotationOn("p1");
+
+      const targets = await annotationTargets();
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
+    });
+
+    // Same setup as the test above, which shows it publishes with the option
+    // on. Nothing reloads the viewer between the double-click and the check,
+    // because a reload drops a pending publish and clears #iiif_annotations.
+    it("publishes nothing when doubleClickAnnotationEnabled is false", async () => {
+      await applyCustomConfig({
+        options: { pagingEnabled: false },
+        modules: {
+          openSeadragonCenterPanel: {
+            options: { doubleClickAnnotationEnabled: false },
+          },
+        },
+      });
+      await waitForOneUp();
+      await doubleClickViewer();
+      await afterDoubleClickDebounce();
+
+      expect(await annotationTargets()).toEqual([]);
     });
   });
 });
