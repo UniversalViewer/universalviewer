@@ -110,7 +110,7 @@ describe("Universal Viewer", () => {
   let page;
 
   beforeAll(async () => {
-    puppeteer = (await import("puppeteer")).default;
+    puppeteer = (await import("puppeteer")).default; 
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

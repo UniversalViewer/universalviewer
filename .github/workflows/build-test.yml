@@ -24,9 +24,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run build-es
-      - run: npm run build-tsc
+      - run: npm run build-all
       - run: npm run check-implementation-install
       # Disable AppArmor namespace behavior that breaks tests:
       - run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
