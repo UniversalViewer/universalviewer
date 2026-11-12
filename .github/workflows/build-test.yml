@@ -15,7 +15,7 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
+          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
       - name: Setup node
@@ -24,8 +24,8 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - run: npm ci
-      - run: npm run build
-      - run: npm run build-es
+      - run: npm run build-all
+      - run: npm run check-implementation-install
       # Disable AppArmor namespace behavior that breaks tests:
       - run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
       - run: npm test
