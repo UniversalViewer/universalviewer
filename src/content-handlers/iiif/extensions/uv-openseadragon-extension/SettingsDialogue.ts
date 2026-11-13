@@ -1,6 +1,7 @@
 const $ = require("jquery");
 import { SettingsDialogue as BaseSettingsDialogue } from "../../modules/uv-dialogues-module/SettingsDialogue";
 import config from "./config/config.json";
+
 export class SettingsDialogue extends BaseSettingsDialogue {
   $clickToZoomEnabled: JQuery;
   $clickToZoomEnabledCheckbox: JQuery;
