@@ -11,7 +11,7 @@ export default function Button({ label, className, children, ...rest }: ButtonPr
   return (
     <button {...rest} type="button" className={classes} aria-label={label}>
       {children}
-      <span className="tooltip" aria-hidden="true">
+      <span className="uv-tooltip" aria-hidden="true">
         {label}
       </span>
     </button>

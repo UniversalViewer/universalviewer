@@ -163,18 +163,23 @@
     }
   }
 
-// Tooltips
+  // Tooltips
 
-.btn.imageBtn {
-    position: relative; // needed to position the tooltip
+  @tooltip-gap: 8px;
+  @tooltip-delay: 300ms;
+  @tooltip-duration: 200ms;
+  @tooltip-shift: 4px;
+
+  .btn.imageBtn {
+    position: relative; // positioning context for the tooltip
   }
 
-  .tooltip {
+  .uv-tooltip {
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 6px;
+    margin-top: @tooltip-gap;
     padding: 4px 8px;
     background-color: @panel-dark-bg;
     color: #fff;
@@ -183,21 +188,58 @@
     line-height: 1.4;
     white-space: nowrap;
     z-index: 1000;
-    visibility: hidden;
-  }
 
-  @media (hover: hover) {
-    .btn:hover > .tooltip {
-      visibility: visible;
+    // Hidden
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 @tooltip-shift;
+    transition:
+      opacity @tooltip-duration ease-in-out,
+      translate @tooltip-duration ease-in-out,
+      visibility 0s linear @tooltip-duration;
+
+    // Arrow
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border: 5px solid transparent;
+      border-bottom-color: @panel-dark-bg;
+    }
+
+    // Bridge so that hovering on the tooltip counts as hovering on the button
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      height: @tooltip-gap;
     }
   }
 
-  .btn:focus-visible > .tooltip {
+  // Shown
+  .tooltip-shown() {
+    opacity: 1;
     visibility: visible;
+    translate: 0 0;
+    transition:
+      opacity @tooltip-duration ease-in-out @tooltip-delay,
+      translate @tooltip-duration ease-in-out @tooltip-delay,
+      visibility 0s linear @tooltip-delay;
   }
 
+  @media (hover: hover) {
+    .btn:hover > .uv-tooltip {
+      .tooltip-shown();
+    }
+  }
 
-
+  .btn:focus-visible > .uv-tooltip {
+    .tooltip-shown();
+  }
 }
 
 .iiif-gallery-component {
