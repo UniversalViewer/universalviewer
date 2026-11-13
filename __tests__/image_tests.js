@@ -1,5 +1,12 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/testBaseUrl");
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  waitForAnnotationOn,
+  doubleClickViewer,
+  viewerUrl,
+} = require("../scripts/tests/testViewer");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
 // on these IIIF Cookbook recipes (also credited in the manifest's summary):
@@ -17,11 +24,6 @@ const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest
 // "individuals" behavior).
 // https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
 const IMAGE_INDIVIDUALS_MANIFEST = `${BASE_URL}/test-fixtures/image-individuals-manifest.json`;
-
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-};
 
 describe("Universal Viewer", () => {
   let browser;
@@ -117,43 +119,6 @@ describe("Universal Viewer", () => {
       waitUntil: "domcontentloaded",
     });
   };
-
-  // The examples page turns on doubleClickAnnotationEnabled and adds each
-  // published double-click target to #iiif_annotations.
-  const annotationTargets = () =>
-    page.$eval("#iiif_annotations", (el) =>
-      el.value ? JSON.parse(el.value).map(({ target }) => target) : []
-    );
-
-  const waitForAnnotationOn = (canvas) =>
-    page.waitForFunction(
-      (path) =>
-        document.querySelector("#iiif_annotations").value.includes(path),
-      {},
-      `/canvas/${canvas}#`
-    );
-
-  const doubleClickViewer = async () => {
-    await page.waitForSelector(".openseadragon-canvas", { visible: true });
-    const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-    const x = box.x + box.width / 2;
-    const y = box.y + box.height / 2;
-    // Nothing may cover the viewer at the point we double-click.
-    const onViewer = await page.evaluate(
-      (px, py) =>
-        !!document.elementFromPoint(px, py)?.closest(".openseadragon-canvas"),
-      x,
-      y
-    );
-    expect(onViewer).toBe(true);
-    await page.mouse.click(x, y, { count: 2 });
-  };
-
-  // The viewer publishes a double-click 100ms later (the debounce in
-  // OpenSeadragonCenterPanel). Browsers run timers with an equal delay in
-  // the order they were set, so this resolves after any pending publish.
-  const afterDoubleClickDebounce = () =>
-    page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
   beforeAll(async () => {
     puppeteer = (await import("puppeteer")).default;
@@ -425,29 +390,29 @@ describe("Universal Viewer", () => {
 
       // Two-up on p1: publishes nothing.
       await waitForPressed(twoUpButton);
-      await doubleClickViewer();
-      await afterDoubleClickDebounce();
-      expect(await annotationTargets()).toEqual([]);
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
+      expect(await annotationTargets(page)).toEqual([]);
 
       // One-up on p2: publishes p2's target.
       await page.click(oneUpButton);
       await waitForPressed(oneUpButton);
       await page.click(".btn.imageBtn.next");
       await waitForCanvasValue(page, 1);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p2");
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p2");
 
-      const targets = await annotationTargets();
+      const targets = await annotationTargets(page);
       expect(targets).toHaveLength(1);
       expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
     });
 
     it("publishes a double-click annotation when paging isn't available", async () => {
       await openFreshViewer(IMAGE_INDIVIDUALS_MANIFEST);
-      await doubleClickViewer();
-      await waitForAnnotationOn("p1");
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
 
-      const targets = await annotationTargets();
+      const targets = await annotationTargets(page);
       expect(targets).toHaveLength(1);
       expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });

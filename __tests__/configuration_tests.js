@@ -1,6 +1,12 @@
 let puppeteer;
-const { BASE_URL } = require("../scripts/testBaseUrl");
-
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  waitForAnnotationOn,
+  doubleClickViewer,
+  waitForOneUp,
+} = require("../scripts/tests/testViewer");
 const FIRST_THUMB_SRC =
   "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg";
 
@@ -93,51 +99,6 @@ describe("Configuration options", () => {
   // published double-click target to #iiif_annotations. Custom config is
   // merged after the page's own, so it can turn the option off again.
   describe("double-click annotation", () => {
-    const oneUpButton = ".btn.imageBtn.one-up";
-
-    const waitForOneUp = () =>
-      page.waitForFunction(
-        (sel) =>
-          document.querySelector(sel)?.getAttribute("aria-pressed") === "true",
-        {},
-        oneUpButton
-      );
-
-    const doubleClickViewer = async () => {
-      await page.waitForSelector(".openseadragon-canvas", { visible: true });
-      const box = await (await page.$(".openseadragon-canvas")).boundingBox();
-      const x = box.x + box.width / 2;
-      const y = box.y + box.height / 2;
-      // Nothing may cover the viewer at the point we double-click.
-      const onViewer = await page.evaluate(
-        (px, py) =>
-          !!document.elementFromPoint(px, py)?.closest(".openseadragon-canvas"),
-        x,
-        y
-      );
-      expect(onViewer).toBe(true);
-      await page.mouse.click(x, y, { count: 2 });
-    };
-
-    // The viewer publishes a double-click 100ms later (the debounce in
-    // OpenSeadragonCenterPanel). Browsers run timers with an equal delay in
-    // the order they were set, so this resolves after any pending publish.
-    const afterDoubleClickDebounce = () =>
-      page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 100)));
-
-    const annotationTargets = () =>
-      page.$eval("#iiif_annotations", (el) =>
-        el.value ? JSON.parse(el.value).map(({ target }) => target) : []
-      );
-
-    const waitForAnnotationOn = (canvas) =>
-      page.waitForFunction(
-        (path) =>
-          document.querySelector("#iiif_annotations").value.includes(path),
-        {},
-        `/canvas/${canvas}#`
-      );
-
     // Changing only the #hash doesn't reload the page, so start each test on
     // a fresh one. The header hides the paging buttons below 1280px.
     beforeEach(async () => {
@@ -154,11 +115,11 @@ describe("Configuration options", () => {
     // turns it on.
     it("starts in one-up and publishes when pagingEnabled is false", async () => {
       await applyCustomConfig({ options: { pagingEnabled: false } });
-      await waitForOneUp();
-      await doubleClickViewer();
-      await waitForAnnotationOn("p1");
+      await waitForOneUp(page);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
 
-      const targets = await annotationTargets();
+      const targets = await annotationTargets(page);
       expect(targets).toHaveLength(1);
       expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
@@ -175,11 +136,11 @@ describe("Configuration options", () => {
           },
         },
       });
-      await waitForOneUp();
-      await doubleClickViewer();
-      await afterDoubleClickDebounce();
+      await waitForOneUp(page);
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
 
-      expect(await annotationTargets()).toEqual([]);
+      expect(await annotationTargets(page)).toEqual([]);
     });
   });
 });
