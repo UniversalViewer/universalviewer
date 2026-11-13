@@ -135,6 +135,33 @@ describe("Universal Viewer", () => {
         )
       ).toBe("true");
     });
+
+    // The paging buttons are icons named by a .sr-only label
+    // (scaffolding.less), which must be hidden on screen but not from
+    // assistive technology.
+    it("hides the paging button labels visually but keeps them as names", async () => {
+      const button = await page.waitForSelector("button.paging.next", {
+        visible: true,
+      });
+      const label = await button.$eval(".sr-only", (el) => {
+        const box = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return {
+          text: el.textContent.trim(),
+          width: box.width,
+          height: box.height,
+          display: style.display,
+          clipPath: style.clipPath,
+        };
+      });
+
+      expect(label.width).toBeLessThanOrEqual(1);
+      expect(label.height).toBeLessThanOrEqual(1);
+      expect(label.display).not.toBe("none");
+      expect(label.clipPath).toBe("inset(50%)");
+      const { name } = await page.accessibility.snapshot({ root: button });
+      expect(name).toBe(label.text);
+    });
   });
 
   // UV loads pdf.js from cdnjs at runtime (usePdfJs defaults to true).

@@ -5,7 +5,7 @@
 Before you can build the UV, we assume the following list of software is already installed in your system
 
 - Git
-- Node 18 or higher
+- Node 22.15 or higher
 - Npm 8.1.1 or higher
 
 ## Forking the repository
@@ -55,6 +55,7 @@ For more in-depth information on the application structure please see the [manua
 Before commiting your changes make sure tests are passing:
 
 ```
+npm run build
 npm test
 ```
 
