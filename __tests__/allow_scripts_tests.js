@@ -18,6 +18,8 @@ describe("allowScripts", () => {
           allowScripts[`${name}@${version}`] === undefined
       )
       .map(({ name, version }) => `${name}@${version}`);
+    // To fix: npm approve-scripts <package> or npm deny-scripts <package>
+    // (npm 11.19+); see "Install scripts" in CONTRIBUTING.md.
     expect(pending).toEqual([]);
   });
 });
