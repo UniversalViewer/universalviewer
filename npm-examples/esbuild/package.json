@@ -8,5 +8,8 @@
     "esbuild": "^0.28.1",
     "create-serve": "^1.0.1",
     "universalviewer": "../../"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
