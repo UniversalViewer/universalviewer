@@ -146,6 +146,7 @@ export class OpenSeadragonBackgroundPanel extends BackgroundPanel<
     this.extensionHost.subscribe(OpenSeadragonExtensionEvents.GO_HOME, () => {
       this.whenCreated(() => {
         this.updateViewportMargins();
+        this.viewer.viewport.setRotation(0, true);
         this.goHome(true);
       });
     });
