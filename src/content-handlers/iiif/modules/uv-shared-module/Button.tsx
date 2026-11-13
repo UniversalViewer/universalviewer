@@ -5,7 +5,12 @@ export interface ButtonProps
   label: string;
 }
 
-export default function Button({ label, className, children, ...rest }: ButtonProps) {
+export default function Button({
+  label,
+  className,
+  children,
+  ...rest
+}: ButtonProps) {
   const classes = ["btn", "imageBtn", className].filter(Boolean).join(" ");
 
   return (

@@ -94,15 +94,14 @@ export class HeaderPanel<
         String(this.$localeToggleButton.data("locale"))
       );
     });
-  
+
     this.rightOptionsRoot.render(
       createElement(HeaderPanelRightOptions, {
         extensionHost: this.extensionHost,
         options: this.options,
         content: this.content,
       })
-  
-  );
+    );
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
       this.$centerOptions.hide();
