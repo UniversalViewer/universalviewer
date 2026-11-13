@@ -150,6 +150,10 @@
           color: black;
           background-color: white;
 
+          &:focus {
+            .tab-focus();
+          }
+
           &.searching {
             background: data-uri("../img/spinner.gif");
             background-repeat: no-repeat;
@@ -166,6 +170,10 @@
           border: 0;
           float: right;
           cursor: pointer;
+
+          &:focus {
+            .tab-focus();
+          }
         }
       }
     }
