@@ -44,7 +44,7 @@
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
     "zoomToBoundsEnabled": true,
-    "keepImageInViewEnabled": true
+    "keepImageInViewEnabled": false
   },
   "modules": {
     "leftPanel": {

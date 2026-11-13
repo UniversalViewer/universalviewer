@@ -23,6 +23,8 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
         <Button
           className="settings"
           label={content.settings}
+          tooltipAlign="end"
+          tooltipPlacement="bottom"
           onClick={(e) => {
             const el = e.currentTarget;
             extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE, el);
