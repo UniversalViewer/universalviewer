@@ -38,7 +38,7 @@
       "options": {
         "autoHideControls": true,
         "controlsFadeAfterInactive": 3000,
-        "showHomeControl": false,
+        "showHomeControl": true,
         "showAdjustImageControl": true
       }
     },

@@ -43,7 +43,8 @@
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
-    "zoomToBoundsEnabled": true
+    "zoomToBoundsEnabled": true,
+    "keepImageInViewEnabled": true
   },
   "modules": {
     "leftPanel": {
