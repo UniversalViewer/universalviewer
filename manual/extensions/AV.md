@@ -33,20 +33,24 @@ Both use the shared captions module (`uv-captions-module`), so captions look and
 
 Anything else, or anything not found, is shown by the default extension, as a link to the file.
 
-`__tests__/extension_choice_tests.js` checks the extension chosen, and the extensions configured, for audio and video with and without ranges, more than one clip on a canvas, HLS, media given only by its type, a format not listed (by its type), a IIIF v2 IxIF element of a type not listed (by its format), and the host's preference.
+`__tests__/AudioVisual/extension_choice_tests.js` checks the extension chosen, and the extensions configured, for audio and video with and without ranges, more than one clip on a canvas, HLS, media given only by its type, a format not listed (by its type), a IIIF v2 IxIF element of a type not listed (by its format), and the host's preference.
 
 ## Choosing the version to play
 
-When a painting annotation offers the media in more than one version (e.g. a `Choice` of formats):
+When a painting annotation offers the media in more than one version (e.g. a `Choice` of formats), both extensions try them in turn until one plays (`mediaAttempts()` in `iiif-av-component-module/helpers/media-attempts.ts`):
 
-- **The AV component** plays the first of (`extractMediaFromAnnotationBodies()`):
-  1. HLS, where the browser can play it (natively or with hls.js);
-  2. MPEG-DASH, except in Safari, which plays HLS instead;
-  3. any other format (e.g. MP4), in the manifest's order;
-  4. a body with no format, as a last resort.
-- **The MediaElement extension** offers its player every version that's audio or video (see [Audio or video](#audio-or-video)) and has a format, in the manifest's order, and the player plays the first the browser supports.
+1. HLS, the first way the browser can play it (see [Streams](#streams-hls-and-mpeg-dash));
+2. MPEG-DASH, except in Safari, which plays HLS instead;
+3. any other format (e.g. MP4), in the manifest's order;
+4. a version with no format;
+5. HLS again, the other way, where the browser has one (e.g. Chrome's own HLS player, after hls.js).
 
-`__tests__/media_body_choice_tests.ts` covers each step of the AV component's choice, in browsers that can and can't play HLS, and Safari.
+When one can't be played, the next is tried in the same player, which carries on playing if the user had pressed play. Only when none can be played is the user told (see [Media that can't be played](#media-that-cant-be-played)).
+
+- **The AV component** plays each version itself (`playVersionsInTurn()` in `uv-shared-module/StreamingLibraries.ts`).
+- **The MediaElement extension** gives MediaElement one version at a time, with the renderer for how it's to be played, rather than every version at once (MediaElement would choose by its renderers' order, and the browser would load every `<source>` it can play). Its source chooser offers every version, in the order they're tried; the one chosen is tried first, then those after it, as usual.
+
+`__tests__/AudioVisual/media_attempts_tests.ts` covers the order, in browsers that can and can't play HLS, with and without a page's own hls.js, and Safari. `__tests__/AudioVisual/media_fallback_tests.js` checks, in both extensions, that a version that plays is played after an HLS stream that can't be, without telling the user.
 
 ## Audio or video
 
@@ -64,8 +68,8 @@ A canvas is video if any body of its painting annotations (or of a `Choice` amon
 
 Tests:
 
-- `__tests__/media_kind_tests.ts` covers each step of the rule, and of a canvas' kind.
-- `__tests__/media_type_tests.js` checks the player the MediaElement extension builds, for IIIF v3, draft IIIF Presentation 3 and IIIF v2 IxIF audio and video, and the element the AV component creates, for media given by its type or only by its size, on a canvas played on its own and on canvases played as one timeline.
+- `__tests__/AudioVisual/media_kind_tests.ts` covers each step of the rule, and of a canvas' kind.
+- `__tests__/AudioVisual/media_type_tests.js` checks the player the MediaElement extension builds, for IIIF v3, draft IIIF Presentation 3 and IIIF v2 IxIF audio and video, and the element the AV component creates, for media given by its type or only by its size, on a canvas played on its own and on canvases played as one timeline.
 
 ## Loading the media
 
@@ -77,19 +81,22 @@ The AV component loads each file's metadata as soon as it shows the canvas; the 
 
 ### Streams: HLS and MPEG-DASH
 
-- **HLS** is played natively where the browser supports it: Safari, every browser on iOS, and Chrome and Edge on Android. Elsewhere (e.g. Chrome and Edge on desktop, Firefox, and so most browsers on Linux), it's played with hls.js. A page that has loaded its own hls.js has that used, where it works, even where the browser supports HLS.
+- **HLS** is played with hls.js first where the browser can use it (e.g. Chrome, Edge and Firefox), then with the browser's own HLS player where it has one (e.g. Chrome). Safari plays it with its own player first, then with hls.js where it can. A page that has loaded its own hls.js has that tried first, where it works, in every browser (`hlsWays()`).
+  - hls.js comes first in Chrome, though Chrome has its own player, because that player stalls for about 30 seconds before failing on a stream from another server whose segments it can't tell are media (e.g. served as `application/octet-stream`, which its Opaque Response Blocking blocks), whereas hls.js fails straight away on a stream it can't load.
 - **MPEG-DASH** is played with dash.js.
 
-hls.js and dash.js fetch a stream's playlist and segments themselves, with script requests, which browsers allow from another server only with CORS headers. So a stream from a server without them can't be played, except natively (e.g. HLS in Safari).
+hls.js and dash.js fetch a stream's playlist and segments themselves, with script requests, which browsers allow from another server only with CORS headers. So a stream from a server without them can only be played by the browser's own player (e.g. HLS in Chrome or Safari), which the media element loads without CORS. Firefox has no HLS player of its own, so plays such a stream only if the manifest offers another version.
+
+Both libraries only fetch renditions the player is big enough to show (hls.js's `capLevelToPlayerSize`; dash.js's `setLimitBitrateByPortal`, by the screen's pixels), so a larger rendition is fetched in full screen.
 
 ### hls.js and dash.js
 
 UV includes hls.js (pinned in `package.json`) and dash.js, and loads each only when media needs it, as a separate file from UV's own build: never from a CDN (`uv-shared-module/StreamingLibraries.ts`). A page that has loaded its own (as `window.Hls` or `window.dashjs`) has that used instead.
 
-- The AV component plays streams with `attachHls()` and `attachDash()`.
-- The MediaElement extension plays them with MediaElement's own HLS and DASH renderers, which would otherwise fetch the libraries from a CDN (`cdn.jsdelivr.net`). So `MediaElementCenterPanel` loads UV's copies before it creates the player.
+- The AV component plays streams with `attachHls()` and `attachDash()`, each of which returns a function that stops the stream loading, used when a version fails and when the player is let go of.
+- The MediaElement extension plays them with MediaElement's own HLS and DASH renderers, which would otherwise fetch the libraries from a CDN (`cdn.jsdelivr.net`). So `MediaElementCenterPanel` loads UV's copy of whichever a version needs before it's tried. Opening another canvas stops the media loading and lets go of the player and any hls.js or dash.js it was playing with.
 
-`__tests__/streaming_tests.js` plays HLS and MPEG-DASH test streams in both extensions, checks nothing is fetched from a CDN, and checks other media loads neither library. `__tests__/av_playback_tests.js` checks both extensions play a file from a server without CORS headers.
+`__tests__/AudioVisual/streaming_tests.js` plays HLS (with hls.js, with the browser's own player as in Safari, and with the browser's own player once hls.js can't load it) and MPEG-DASH test streams in both extensions, checks each stream is requested only the ways expected, nothing is fetched from a CDN, hls.js isn't loaded where it isn't tried, and other media loads neither library. Firefox and Safari are mocked in Chrome (`scripts/tests/testHls.js`). `__tests__/AudioVisual/hls_audio_tracks_tests.js` plays HLS audio across canvases, checking that the track left stops loading (MediaElement) or playing (the AV component, which keeps every track ready in one timeline). `__tests__/AudioVisual/streaming_libraries_tests.ts` checks the libraries' size limits and that stopping a stream destroys or resets its library. `__tests__/AudioVisual/av_playback_tests.js` checks both extensions play a file from a server without CORS headers.
 
 ## Images with audio and video
 
@@ -147,10 +154,10 @@ The left panel's thumbnail for a canvas of audio or video shows its image from b
 
 ### Tests
 
-- `__tests__/poster_images_tests.ts` covers each of the rules above, and the thumbnails of canvases.
-- `__tests__/poster_selection_tests.js` checks the image shown before and while media plays in both extensions, for a placeholder with video (as in recipe 0013), placeholder and accompanying images with audio, a IIIF v3 canvas `thumbnail`, and a manifest's `posterCanvas`.
-- `__tests__/accompanying_image_tests.js` (recipe 0014) checks both extensions keep showing the accompanying image while audio plays, and `__tests__/poster_image_tests.js` (`posterImageExpanded`) covers the AV component's collapsible poster image, which the MediaElement extension doesn't have.
-- `__tests__/media_thumbnails_tests.js` checks the thumbnails of canvases in both extensions: a canvas' image, an icon for one without, and no image that can't load.
+- `__tests__/AudioVisual/poster_images_tests.ts` covers each of the rules above, and the thumbnails of canvases.
+- `__tests__/AudioVisual/poster_selection_tests.js` checks the image shown before and while media plays in both extensions, for a placeholder with video (as in recipe 0013), placeholder and accompanying images with audio, a IIIF v3 canvas `thumbnail`, and a manifest's `posterCanvas`.
+- `__tests__/AudioVisual/accompanying_image_tests.js` (recipe 0014) checks both extensions keep showing the accompanying image while audio plays, and `__tests__/AudioVisual/poster_image_tests.js` (`posterImageExpanded`) covers the AV component's collapsible poster image, which the MediaElement extension doesn't have.
+- `__tests__/AudioVisual/media_thumbnails_tests.js` checks the thumbnails of canvases in both extensions: a canvas' image, an icon for one without, and no image that can't load.
 
 ## Playing
 
@@ -216,9 +223,9 @@ The MediaElement extension titles the player with the manifest's label.
 
 Tests:
 
-- `__tests__/av_limit_to_range_tests.js` checks the timeline with and without `limitToRange`.
-- `__tests__/media_thumbnails_tests.js` checks that choosing a thumbnail plays that canvas and titles the player for it.
-- `__tests__/av_playback_tests.js` checks two clips on one canvas are played in turn.
+- `__tests__/AudioVisual/av_limit_to_range_tests.js` checks the timeline with and without `limitToRange`.
+- `__tests__/AudioVisual/media_thumbnails_tests.js` checks that choosing a thumbnail plays that canvas and titles the player for it.
+- `__tests__/AudioVisual/av_playback_tests.js` checks two clips on one canvas are played in turn.
 
 ## Captions
 
@@ -322,10 +329,14 @@ If the browser doesn't allow `localStorage`, or what's saved can't be read, capt
 
 ## Media that can't be played
 
-When media can't be played, both extensions show the `mediaUnavailable` message in the generic dialogue, in the user's language, and leave no unhandled error behind. That's whether:
+When media can't be played, every version having been tried (see [Choosing the version to play](#choosing-the-version-to-play)), both extensions show the `mediaUnavailable` message in the generic dialogue, in the user's language, and leave no unhandled error behind. That's whether:
 
 - a file can't be loaded (e.g. it's missing, or in a format the browser can't play), as the media element reports;
 - a stream can't be loaded (e.g. its server doesn't send CORS headers), as hls.js or dash.js report: their fatal errors are reported as the media element's (`attachHls()`, `attachDash()`, and MediaElement's own renderers).
+
+Where the last version tried was HLS that hls.js couldn't load because its server sends no CORS headers, in a browser with no HLS player of its own (e.g. Firefox), the `mediaBlockedByCors` message follows, saying so, and that the media may play in Chrome or Safari (`isBlockedByCors()`).
+
+When the browser rejects a request to play the media, both extensions log it in the browser console (`logPlayRejection()`). An `AbortError` or `NotSupportedError` usually follows a version being switched or failing, which the extensions handle; a `NotAllowedError` means the browser's autoplay policy blocked it.
 
 The extensions find this out when they load the media (see [Loading the media](#loading-the-media)):
 
@@ -336,7 +347,7 @@ A canvas with no media at all shows the AV extension's `noMediaMessage`.
 
 Set the center panel's `hideMediaError` option to `true` to show no message: see [CONFIG.md](../CONFIG.md#avcenterpanel-1).
 
-`__tests__/media_error_tests.js` checks, in both extensions, for a missing file and HLS and MPEG-DASH streams that can't be loaded: the message, in English and Welsh, that no uncaught error is thrown, and that `hideMediaError` hides the message.
+`__tests__/AudioVisual/media_error_tests.js` checks, in both extensions, for a missing file (including one found missing after play is pressed) and HLS and MPEG-DASH streams that can't be loaded (HLS as in Firefox, Chrome and Safari): the message, in English and Welsh, that no uncaught error is thrown, and that an HLS stream is tried every way it can be first. `__tests__/Config/hide_media_error_tests.js` checks that `hideMediaError` hides the message.
 
 ## Text
 
@@ -344,6 +355,6 @@ The AV component, the MediaElement extension's controls and the captions module 
 
 ## Known limitations
 
-- **Streams from servers without CORS headers** can't be played with hls.js or dash.js (see [Loading the media](#loading-the-media)), e.g. the British Library's early AV examples' HLS and MPEG-DASH streams.
+- **Streams from servers without CORS headers** can't be played with hls.js or dash.js (see [Loading the media](#loading-the-media)), e.g. the British Library's early AV examples' HLS and MPEG-DASH streams. HLS from such a server plays only with the browser's own player, so not in Firefox; MPEG-DASH doesn't play in any browser.
 - **Timed compositions**, which place images, text and video at times and positions on one canvas (e.g. the iiif-av-component's "Fire" example), aren't shown: neither extension plays anything but audio and video.
 - **Access control:** the IIIF Cookbook has no recipe for authentication yet (only proposals, [IIIF/cookbook-recipes#85 to #90](https://github.com/IIIF/cookbook-recipes/issues?q=is%3Aissue+auth+interaction+pattern)), and the tests don't cover media behind a login.

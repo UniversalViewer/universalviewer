@@ -3,6 +3,7 @@ import { hlsMimeTypes } from "../iiif-av-component-module/helpers/hls-media-type
 import { isSafari } from "../iiif-av-component-module/helpers/is-safari";
 import {
   HlsErrorData,
+  HlsWay,
   hlsWays,
   isBlockedByCors,
   MediaSupport,
@@ -73,9 +74,27 @@ const reportStreamError = (
   media.dispatchEvent(new CustomEvent("error", { detail: { blockedByCors } }));
 };
 
+// Logs a request to play media that the browser rejected, for developers.
+// An AbortError or NotSupportedError usually follows a version being
+// switched or failing, which the players handle (they try the next version,
+// or tell the user); a NotAllowedError means the browser's autoplay policy
+// blocked it.
+export const logPlayRejection = (err: unknown): void => {
+  console.log("UV: the media couldn't start playing", err);
+};
+
 // Stops a stream loading in a media element, so the element can play another
 // version of the media, or be let go of.
 export type Detach = () => void;
+
+// Plays a source with the media element itself (the browser's own player).
+const attachSource = (media: HTMLMediaElement, source: string): Detach => {
+  media.src = source;
+  return () => {
+    media.removeAttribute("src");
+    media.load();
+  };
+};
 
 // Plays an HLS stream in a media element: with the browser's own HLS player
 // ("native") or hls.js, as asked; by default the first way hlsWays gives.
@@ -85,15 +104,11 @@ export const attachHls = async (
   media: HTMLMediaElement,
   source: string,
   withCredentials = false,
-  via?: "native" | "hls.js"
+  via?: HlsWay
 ): Promise<Detach> => {
   const way = via || hlsWays(mediaSupport())[0] || "hls.js";
   if (way === "native") {
-    media.src = source;
-    return () => {
-      media.removeAttribute("src");
-      media.load();
-    };
+    return attachSource(media, source);
   }
   const Hls = await loadHls();
   const hls = new Hls({
@@ -137,10 +152,17 @@ const isFatalDashError = ({ error, event }: DashErrorData): boolean =>
     typeof event === "object" &&
     event.id === "manifest");
 
-// Plays an MPEG-DASH stream in a media element, with dash.js, which only
-// fetches renditions the player is big enough to show (by the screen's
-// pixels, on high-density screens). withCredentials sends cookies with its
-// manifest requests (for adaptive auth).
+// Has a dash.js player only fetch renditions the player is big enough to
+// show (by the screen's pixels, on high-density screens). Called once it's
+// initialised: dash.js 2.x makes the part these set as it does.
+export const limitDashToPlayerSize = (player: any): void => {
+  player.setLimitBitrateByPortal(true);
+  player.setUsePixelRatioInLimitBitrateByPortal(true);
+};
+
+// Plays an MPEG-DASH stream in a media element, with dash.js, limited to the
+// player's size (see limitDashToPlayerSize). withCredentials sends cookies
+// with its manifest requests (for adaptive auth).
 export const attachDash = async (
   media: HTMLMediaElement,
   source: string,
@@ -158,9 +180,7 @@ export const attachDash = async (
     player.setXHRWithCredentialsForType("MPD", true);
   }
   player.initialize(media, source, false);
-  // Once initialised: dash.js 2.x makes the part these set as it does.
-  player.setLimitBitrateByPortal(true);
-  player.setUsePixelRatioInLimitBitrateByPortal(true);
+  limitDashToPlayerSize(player);
   return () => player.reset();
 };
 
@@ -182,11 +202,7 @@ const attachVersion = (
   if (via === "dash") {
     return attachDash(media, source, withCredentials);
   }
-  media.src = source;
-  return Promise.resolve(() => {
-    media.removeAttribute("src");
-    media.load();
-  });
+  return Promise.resolve(attachSource(media, source));
 };
 
 // Plays the versions of the media in a media element, in turn: when one
@@ -218,7 +234,7 @@ export const playVersionsInTurn = (
     }
     detach = await attachVersion(media, versions[index], withCredentials);
     if (playRequested) {
-      media.play().catch(() => undefined);
+      media.play().catch(logPlayRejection);
     }
   };
 

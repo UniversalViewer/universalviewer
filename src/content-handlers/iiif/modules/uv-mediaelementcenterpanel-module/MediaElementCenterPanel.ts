@@ -25,8 +25,10 @@ import { CanvasCaptions } from "../uv-captions-module/CanvasCaptions";
 import { PosterImages } from "../uv-shared-module/PosterImages";
 import { mediaKind } from "../uv-shared-module/MediaKind";
 import {
+  limitDashToPlayerSize,
   loadDash,
   loadHls,
+  logPlayRejection,
   mediaSupport,
 } from "../uv-shared-module/StreamingLibraries";
 import {
@@ -753,14 +755,14 @@ export class MediaElementCenterPanel extends CenterPanel<
   // last because its server sends no CORS headers, in a browser without its
   // own HLS player to play it without them, the message says so.
   // The browser also rejects requests to play media that can't be played,
-  // which mediaelement leaves unhandled, so they're caught here.
+  // which mediaelement leaves unhandled, so they're caught and logged here
+  // (see logPlayRejection).
   private _playInTurn(
     mediaElement: any,
     attempts: MediaAttempt<MediaSourceDescriptor>[]
   ): void {
     const play = mediaElement.play.bind(mediaElement);
-    mediaElement.play = () =>
-      Promise.resolve(play()).catch((err) => console.log("err", err));
+    mediaElement.play = () => Promise.resolve(play()).catch(logPlayRejection);
 
     let index = 0;
     let reported = false;
@@ -803,16 +805,9 @@ export class MediaElementCenterPanel extends CenterPanel<
     // it's tried, then on as usual if it can't be played.
     this._chooseVersion = async (src: string) => {
       const chosen = attempts.findIndex(({ item }) => item.src === src);
-      if (chosen < 0) {
-        return;
+      if (chosen >= 0) {
+        await switchTo(chosen);
       }
-      switching = true;
-      index = chosen;
-      blockedByCors = false;
-      await this._loadLibraryFor(attempts[index]);
-      use(attempts[index]);
-      setTimeout(watchStreams, 0);
-      switching = false;
     };
 
     // Listens to the hls.js mediaelement plays with, once it has made one,
@@ -836,9 +831,20 @@ export class MediaElementCenterPanel extends CenterPanel<
       const dash = mediaElement.dashPlayer;
       if (dash && dash !== cappedDash) {
         cappedDash = dash;
-        dash.setLimitBitrateByPortal(true);
-        dash.setUsePixelRatioInLimitBitrateByPortal(true);
+        limitDashToPlayerSize(dash);
       }
+    };
+
+    // Plays the version at index i of the attempts, the way it's meant to be
+    // played.
+    const switchTo = async (i: number) => {
+      switching = true;
+      index = i;
+      blockedByCors = false;
+      await this._loadLibraryFor(attempts[index]);
+      use(attempts[index]);
+      setTimeout(watchStreams, 0);
+      switching = false;
     };
 
     if (attempts.length) {
@@ -865,13 +871,7 @@ export class MediaElementCenterPanel extends CenterPanel<
           return;
         }
         if (index + 1 < attempts.length) {
-          switching = true;
-          index++;
-          blockedByCors = false;
-          await this._loadLibraryFor(attempts[index]);
-          use(attempts[index]);
-          setTimeout(watchStreams, 0);
-          switching = false;
+          await switchTo(index + 1);
           if (playRequested) {
             mediaElement.play();
           }

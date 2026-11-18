@@ -4,7 +4,8 @@ import { isMpegDashFormat } from "./is-mpeg-dash-format";
 
 // How a version of the media is played: by the browser's own HLS player, by
 // hls.js, by dash.js, or by the media element itself (e.g. an MP4 file).
-export type MediaVia = "native" | "hls.js" | "dash" | "direct";
+export type HlsWay = "native" | "hls.js";
+export type MediaVia = HlsWay | "dash" | "direct";
 
 export interface MediaAttempt<T> {
   item: T;
@@ -32,11 +33,11 @@ export interface MediaSupport {
 // Blocking then blocks) before it fails, whereas hls.js fails straight away
 // on a stream it can't load (one whose server sends no CORS headers), which
 // Chrome's own player can then play.
-export function hlsWays(support: MediaSupport): ("native" | "hls.js")[] {
+export function hlsWays(support: MediaSupport): HlsWay[] {
   const hlsJsFirst =
     support.pageHlsJs ||
     (support.hlsJs && !(support.safari && support.nativeHls));
-  const ways: ("native" | "hls.js")[] = [];
+  const ways: HlsWay[] = [];
   if (hlsJsFirst) {
     ways.push("hls.js");
   }

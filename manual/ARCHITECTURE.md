@@ -164,10 +164,11 @@ For a detailed overview of how the Event system works see [Execution - Events](E
   - Values are then generally available in `this.content`.
   - Some components have no built-in text, so everything they show comes from config:
     - the AV component (`avCenterPanel`);
+    - the MediaElement player's controls (`mediaElementCenterPanel`);
     - the captions module (`avCenterPanel` and `mediaElementCenterPanel`), apart from the names of caption colours a host configures (`captionStyles`), which are shown as given;
     - the gallery (`contentLeftPanel` and `multiSelectDialogue`);
     - the metadata panel (`moreInfoRightPanel`).
   - Any text one of these components reads from `content` must be in its panel's `content` in every extension's config.json, as a `$` marker translated in every locale file. Otherwise the user sees `undefined`.
-  - `__tests__/component_content_tests.ts` checks this for the `avCenterPanel` (including the captions module), gallery and metadata panels, and fails naming any key that is missing, written in English, or untranslated.
+  - `__tests__/AudioVisual/component_content_tests.ts` checks this for the `avCenterPanel` and `mediaElementCenterPanel` (each including the captions module), gallery and metadata panels, and fails naming any key that is missing, written in English, or untranslated.
   - When a user changes locale, the selected locale is moved to the beginning of the locales array and the extension is reloaded, which causes the new locale to be the one used.
 - **Note:** Substitution of language strings into config takes place before the 'configure' event fires, so user-supplied config cannot make use of `$markers` and must provide literal values.

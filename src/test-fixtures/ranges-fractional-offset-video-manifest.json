@@ -1,0 +1,80 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video from part of its file (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "The canvas shows the video's file from 1.5 seconds in (#t=1.5,21.5 on the body), so the canvas' 0:00 is 1.5 seconds into the file."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part one"]
+      },
+      "duration": 20,
+      "height": 360,
+      "width": 480,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/canvas/1",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#t=1.5,21.5",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 20,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-fractional-offset-video-manifest.json/canvas/1#t=0,20",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

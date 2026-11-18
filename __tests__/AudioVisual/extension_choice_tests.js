@@ -49,6 +49,14 @@ const CASES = [
     configured: [MEDIAELEMENT],
   },
   {
+    // Formats are case-insensitive (RFC 6838, section 4.2); manifesto reads
+    // a body's in lower case.
+    name: "HLS given only by its format, in mixed case",
+    manifest: "typeless-hls-mixed-case-audio-manifest.json",
+    extension: "uv-mediaelement-extension",
+    configured: [MEDIAELEMENT],
+  },
+  {
     name: "media given only by the type Audio",
     manifest: "audio-type-manifest.json",
     extension: "uv-mediaelement-extension",

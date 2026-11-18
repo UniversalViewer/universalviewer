@@ -15,7 +15,6 @@ import { IAVCanvasInstanceData } from "../interfaces/canvas-instance-data";
 import { MediaElement } from "../elements/media-element";
 import { TimePlanPlayer } from "../elements/timeplan-player";
 import { VolumeEvents } from "../events/volume-events";
-import { extractMediaFromAnnotationBodies } from "../helpers/extract-media-from-annotation-bodies";
 import { AVVolumeControl } from "./volume-control";
 import { controlButton, setButtonLabel } from "../helpers/control-button";
 import { describeSlider } from "../helpers/describe-slider";
@@ -48,7 +47,7 @@ import {
   toMs,
 } from "../helpers/relative-time";
 import { Logger } from "../helpers/logger";
-import { mediaAttempts } from "../helpers/media-attempts";
+import { MediaAttempt, mediaAttempts } from "../helpers/media-attempts";
 import {
   Detach,
   MediaVersion,
@@ -158,7 +157,8 @@ export class CanvasInstance extends BaseComponent {
     for (const canvas of canvases) {
       const annotations = canvas.getContent();
       for (const annotation of annotations) {
-        const annotationBody = extractMediaFromAnnotationBodies(annotation);
+        const attempts = this._mediaAttempts(annotation);
+        const annotationBody = attempts.length ? attempts[0].item : null;
         if (
           !annotationBody ||
           !mediaKind(annotationBody.__jsonld, canvas.__jsonld)
@@ -179,17 +179,17 @@ export class CanvasInstance extends BaseComponent {
         const mediaElement = new MediaElement(
           mediaSource,
           { adaptiveAuthEnabled: this._data.adaptiveAuthEnabled },
-          this._mediaVersions(annotation)
+          this._mediaVersions(attempts)
         );
 
         mediaElement.setSize(
-          this._convertToPercentage(mediaSource.x || 0, canvas.getHeight()),
-          this._convertToPercentage(mediaSource.y || 0, canvas.getWidth()),
-          this._convertToPercentage(
+          convertToPercentage(mediaSource.y || 0, canvas.getHeight()),
+          convertToPercentage(mediaSource.x || 0, canvas.getWidth()),
+          convertToPercentage(
             mediaSource.width || canvas.getWidth(),
             canvas.getWidth()
           ),
-          this._convertToPercentage(
+          convertToPercentage(
             mediaSource.height || canvas.getHeight(),
             canvas.getHeight()
           )
@@ -642,8 +642,10 @@ export class CanvasInstance extends BaseComponent {
         return;
       }
 
-      const body: AnnotationBody | null =
-        extractMediaFromAnnotationBodies(item);
+      const attempts = this._mediaAttempts(item);
+      const body: AnnotationBody | null = attempts.length
+        ? attempts[0].item
+        : null;
 
       if (!body) {
         // if no suitable format was found for the current browser, skip this item.
@@ -682,22 +684,22 @@ export class CanvasInstance extends BaseComponent {
         positionTop = parseInt(String(xywh[1])),
         mediaWidth = parseInt(String(xywh[2])),
         mediaHeight = parseInt(String(xywh[3])),
-        startTime = parseInt(String(t[0])),
-        endTime = parseInt(String(t[1]));
+        startTime = parseFloat(String(t[0])),
+        endTime = parseFloat(String(t[1]));
 
-      const percentageTop = this._convertToPercentage(
+      const percentageTop = convertToPercentage(
           positionTop,
           this._canvasHeight
         ),
-        percentageLeft = this._convertToPercentage(
+        percentageLeft = convertToPercentage(
           positionLeft,
           this._canvasWidth
         ),
-        percentageWidth = this._convertToPercentage(
+        percentageWidth = convertToPercentage(
           mediaWidth,
           this._canvasWidth
         ),
-        percentageHeight = this._convertToPercentage(
+        percentageHeight = convertToPercentage(
           mediaHeight,
           this._canvasHeight
         );
@@ -714,8 +716,8 @@ export class CanvasInstance extends BaseComponent {
         ot = [null, null];
       }
 
-      const offsetStart = ot[0] ? parseInt(ot[0]) : ot[0],
-        offsetEnd = ot[1] ? parseInt(ot[1]) : ot[1];
+      const offsetStart = ot[0] ? parseFloat(ot[0]) : ot[0],
+        offsetEnd = ot[1] ? parseFloat(ot[1]) : ot[1];
 
       // todo: type this
       const itemData: any = {
@@ -727,7 +729,7 @@ export class CanvasInstance extends BaseComponent {
         left: percentageLeft,
         source: mediaSource,
         // Every version to try, in turn, until one plays (see mediaAttempts).
-        versions: this._mediaVersions(item),
+        versions: this._mediaVersions(attempts),
         start: startTime,
         startOffset: offsetStart,
         top: percentageTop,
@@ -1382,21 +1384,31 @@ export class CanvasInstance extends BaseComponent {
     window.clearInterval(this._canvasClockInterval);
   }
 
-  private _convertToPercentage(pixelValue: number, maxValue: number): number {
-    return convertToPercentage(pixelValue, maxValue);
-  }
-
   // Stops each of the media's streams loading.
   private _detachMedia: Detach[] = [];
 
-  // The versions of a painting annotation's media to try, in turn, until one
-  // plays (see mediaAttempts), each without its media fragment.
-  private _mediaVersions(annotation: Annotation): MediaVersion[] {
+  // The versions of the media a painting annotation offers, in the order to
+  // try them until one plays (see mediaAttempts). The first is the one the
+  // player is set up for.
+  private _mediaAttempts(
+    annotation: Annotation
+  ): MediaAttempt<AnnotationBody>[] {
     return mediaAttempts(
       annotation.getBody(),
       (body) => body.getFormat(),
       mediaSupport()
-    ).map(({ item, via }) => ({ source: item.id.split("#")[0], via }));
+    );
+  }
+
+  // Those versions, as the media element plays them: each without its media
+  // fragment.
+  private _mediaVersions(
+    attempts: MediaAttempt<AnnotationBody>[]
+  ): MediaVersion[] {
+    return attempts.map(({ item, via }) => ({
+      source: item.id.split("#")[0],
+      via,
+    }));
   }
 
   private _mediaUnavailableReported = false;
@@ -1819,11 +1831,11 @@ export class CanvasInstance extends BaseComponent {
       return;
     }
 
-    const leftPercent: number = this._convertToPercentage(
+    const leftPercent: number = convertToPercentage(
       mediaElementData.start,
       this._getDuration()
     );
-    const widthPercent: number = this._convertToPercentage(
+    const widthPercent: number = convertToPercentage(
       mediaElementData.end - mediaElementData.start,
       this._getDuration()
     );
