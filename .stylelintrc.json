@@ -22,6 +22,12 @@
     "declaration-block-no-duplicate-custom-properties": null,
     "function-linear-gradient-no-nonstandard-direction": null,
     "media-feature-name-no-unknown": null,
-    "media-feature-range-notation": "prefix"
+    "media-feature-range-notation": "prefix",
+    "declaration-property-value-disallowed-list": [
+      { "/.*/": ["/\\brgb\\(([^,()]*,){3}/"] },
+      {
+        "message": "Less drops the alpha from a four-argument rgb(); use fade(#hex, a%)"
+      }
+    ]
   }
 }
