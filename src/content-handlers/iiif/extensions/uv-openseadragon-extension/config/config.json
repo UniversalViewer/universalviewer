@@ -359,6 +359,7 @@
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
         "doubleClickAnnotationEnabled": false,
+        "drawer": "auto",
         "immediateRender": false,
         "maxZoomPixelRatio": 1.25,
         "mostSpecificRequiredStatement": true,
