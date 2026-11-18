@@ -1,0 +1,65 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/hls-fallback-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "HLS that can't be played, with audio to fall back to (e2e test fixture)"
+    ]
+  },
+  "summary": {
+    "en": [
+      "A Choice of an HLS stream that can't be played and an Ogg file that can. The stream is served from another origin (127.0.0.1 rather than localhost) without CORS headers, so hls.js (as Firefox uses) can't load it, and its segment is Ogg audio, which no HLS player can play. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/hls-fallback-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 10,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/hls-fallback-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/hls-fallback-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/hls-fallback-manifest.json/canvas",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "http://127.0.0.1:4444/test-fixtures/stream.m3u8",
+                    "type": "Sound",
+                    "format": "application/vnd.apple.mpegurl",
+                    "duration": 10,
+                    "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+                  },
+                  {
+                    "id": "http://localhost:4444/test-fixtures/whale-song.ogg?fallback",
+                    "type": "Sound",
+                    "format": "audio/ogg",
+                    "duration": 37.9,
+                    "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+image-fixture-5-weighing-of-the-heart-page.jpg and image-fixture-5-weighing-of-the-heart-page-thumb.jpg
+
+A page made for the end-to-end tests: the same page as
+pdf-fixture-3-weighing-of-the-heart.pdf (its header reads "Universal Viewer
+PDF test fixture 3 / 3"), titled "The Weighing of the Heart", with a short
+description and, as its picture, "The Weighing of the Heart" by PharaohCrab
+(see image-fixture-6-weighing-of-the-heart-scene.txt for the source and
+licence). Its footer credits the picture: "Image: "The Weighing of the Heart"
+by PharaohCrab, after the Papyrus of Ani. CC0, via Wikimedia Commons.
+Generated for the Universal Viewer e2e test suite - universalviewer.io".
+
+The picture is CC0 1.0 Universal (Public Domain Dedication),
+https://creativecommons.org/publicdomain/zero/1.0/ . The page's title, text
+and layout were written for this repository, and are under its MIT License
+(see LICENSE.txt); the picture keeps its own licence. So the page as a whole
+isn't CC0: the manifests give these files no rights (which can't give the MIT
+License), and credit the picture, and the pages as "made for the Universal
+Viewer tests (MIT License)", in their requiredStatement.
+
+image-fixture-5-weighing-of-the-heart-page.jpg is 1236x1600 (SHA-1
+b7a15a5f8ac385f9de23bb34b07ca3f3df44e905); the thumbnail is 90x117 (SHA-1
+eeb1045e2eb737be787a25f37df183cc2fd396ec). They were added on 2 October
+2026; how they were made isn't recorded.
+
+Used by image-paged-book-manifest.json, as the posterCanvas image in
+poster-canvas-audio-manifest.json and its ranges- version, and as the
+thumbnail in ixif-audio-manifest.json and ixif-unlisted-type-audio-manifest.json.

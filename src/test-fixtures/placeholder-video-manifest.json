@@ -1,0 +1,78 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video with a placeholder image (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in IIIF Cookbook recipe 0013, the canvas' placeholderCanvas is shown before the video plays."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0). Image: P. Oxy. I 29, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 572.034,
+      "width": 480,
+      "height": 360,
+      "placeholderCanvas": {
+        "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/placeholderCanvas",
+        "type": "Canvas",
+        "width": 1000,
+        "height": 1000,
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/placeholderCanvas/page",
+            "type": "AnnotationPage",
+            "items": [
+              {
+                "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/placeholderCanvas/page/annotation",
+                "type": "Annotation",
+                "motivation": "painting",
+                "body": {
+                  "id": "http://localhost:4444/test-fixtures/image-fixture-2-euclid-papyrus.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                },
+                "target": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/placeholderCanvas"
+              }
+            ]
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              },
+              "target": "http://localhost:4444/test-fixtures/placeholder-video-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -35,12 +35,14 @@
         background-position-y: 50%;
       }
 
-      /* .thumbsView .thumbs .thumb .wrap.audio {
-                background-image: data-uri("../img/audio.png");
-            }
-            .thumbsView .thumbs .thumb .wrap.video {
-                background-image: data-uri("../img/video.png");
-            } */
+      /* audio and video without an image (see ThumbsView's className) */
+      .thumbsView .thumbs .thumb.placeholder.audio .wrap {
+        background-image: data-uri("../img/audio.png");
+      }
+
+      .thumbsView .thumbs .thumb.placeholder.video .wrap {
+        background-image: data-uri("../img/video.png");
+      }
       .thumbsView .thumbs .thumb .wrap.hidden {
         /* background-image: data-uri("../img/hidden_thumb.png"); */
         background-repeat: no-repeat;

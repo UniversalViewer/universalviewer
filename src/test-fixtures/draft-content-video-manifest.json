@@ -1,0 +1,53 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video in a draft IIIF Presentation 3 manifest (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in manifests from drafts of IIIF Presentation 3 (e.g. the British Library's early AV manifests), its canvas gives its annotation pages as content rather than items."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "duration": 60,
+      "width": 480,
+      "height": 360,
+      "content": [
+        {
+          "id": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "Video",
+                "format": "video/mp4",
+                "width": 480,
+                "height": 360,
+                "duration": 572.034,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              },
+              "target": "http://localhost:4444/test-fixtures/draft-content-video-manifest.json/canvas/1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

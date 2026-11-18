@@ -1,0 +1,8 @@
+<svg width="26" height="20" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fill-rule="evenodd">
+        <rect x="1.5" y="1.5" width="23" height="17" rx="3" stroke="#fff" stroke-width="3"/>
+        <text font-family="sans-serif" font-size="9" font-weight="bold" fill="#fff">
+            <tspan x="5.5" y="13.5">CC</tspan>
+        </text>
+    </g>
+</svg>

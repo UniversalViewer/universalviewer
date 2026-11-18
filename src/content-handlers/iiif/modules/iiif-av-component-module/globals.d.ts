@@ -4,8 +4,6 @@
 // already declared in src/globals.d.ts, so only the bare globals the
 // component references are declared here.
 
-declare let dashjs: any;
-declare let Hls: any;
 declare let WaveformData: any;
 declare let jQuery: any;
 

@@ -26,7 +26,7 @@
     },
     "value": {
       "en": [
-        "Images via Wikimedia Commons: P. Oxy. I 29 (public domain); Fayum mummy portrait, British Museum EA29772 (public domain); \"The Weighing of the Heart\" by PharaohCrab (CC0)."
+        "Images via Wikimedia Commons: P. Oxy. I 29 (public domain); Fayum mummy portrait, British Museum EA29772 (public domain); \"The Weighing of the Heart\" by PharaohCrab (CC0). Pages: made for the Universal Viewer tests (MIT License)."
       ]
     }
   },
@@ -241,7 +241,8 @@
           "type": "Image",
           "format": "image/jpeg",
           "width": 90,
-          "height": 40
+          "height": 40,
+          "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
         }
       ],
       "items": [
@@ -258,7 +259,8 @@
                 "type": "Image",
                 "format": "image/jpeg",
                 "width": 960,
-                "height": 431
+                "height": 431,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
               },
               "target": "http://localhost:4444/test-fixtures/image-paged-book-manifest.json/canvas/p6"
             }

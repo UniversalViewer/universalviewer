@@ -1,0 +1,81 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video placed in part of its canvas (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "The video targets #xywh=240,0,240,180 of a 480 by 360 canvas: the top right quarter. The auto-advance behavior plays the canvas in a timeline of its own."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part one"]
+      },
+      "duration": 572.034,
+      "height": 360,
+      "width": 480,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/canvas/1#xywh=240,0,240,180",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-positioned-video-manifest.json/canvas/1#t=0,572.034",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

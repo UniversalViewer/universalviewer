@@ -1,0 +1,18 @@
+blackbird-feeding.mp4
+
+"Blackbird feeding" (Blackbird feeding.mpg), "Feeding and removing faecal
+sac", by AslakSh, uploaded to Wikimedia Commons on 23 May 2024:
+https://commons.wikimedia.org/wiki/File:Blackbird_feeding.mpg
+
+Licence: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Made from the original upload (SHA-1 f226dc61404cdb80629f0a1f2acfb7aca69042e3,
+as Wikimedia Commons gives it), 1280x720 MPEG-2 video with MPEG audio, 24.2
+seconds: looped to 572.034 seconds, the duration the manifests give it,
+cropped to 4:3 and scaled to 480x360, at 12 frames a second, and encoded as
+H.264 video (about 60 kbps) with mono AAC audio (24 kbps, 22.05 kHz) in an MP4
+with its index at the start, using macOS's AVFoundation.
+
+Used by the end-to-end tests as local video, so they don't depend on a remote
+server.

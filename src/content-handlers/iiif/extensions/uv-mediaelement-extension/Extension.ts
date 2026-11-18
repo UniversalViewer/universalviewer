@@ -14,22 +14,18 @@ import { ResourcesLeftPanel } from "../../modules/uv-resourcesleftpanel-module/R
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Bools } from "../../Utils";
-import {
-  ExternalResourceType,
-  MediaType,
-} from "@iiif/vocabulary/dist-commonjs/";
-import {
-  LanguageMap,
-  Thumb,
-  Canvas,
-  Annotation,
-  AnnotationBody,
-} from "manifesto.js";
+import { ExternalResourceType } from "@iiif/vocabulary/dist-commonjs/";
+import { LanguageMap, Thumb, Canvas } from "manifesto.js";
 import { TFragment } from "../../modules/uv-shared-module/TFragment";
 import "./theme/theme.less";
 import defaultConfig from "./config/config.json";
 import { Events } from "../../../../Events";
 import { Config } from "./config/Config";
+import {
+  choosePosterImages,
+  PosterImages,
+} from "../../modules/uv-shared-module/PosterImages";
+import { isVideoCanvas } from "../../modules/uv-shared-module/MediaKind";
 
 export default class Extension
   extends BaseExtension<Config>
@@ -256,75 +252,19 @@ export default class Extension
     return super.buildEmbedScript(template, width, height, hashParams);
   }
 
-  getPosterImageUri(): string | null {
-    let posterUri: string | null = null;
-
+  // The images shown with the current canvas' media, before and while it
+  // plays.
+  getPosterImages(): PosterImages {
     const canvas: Canvas = this.helper.getCurrentCanvas();
-
-    // if there's an accompanying canvas, use that.
-    const accompanyingCanvas: any = canvas.getProperty("accompanyingCanvas");
-
-    if (accompanyingCanvas) {
-      if (accompanyingCanvas.items && accompanyingCanvas.items.length) {
-        const annotationPage: any = accompanyingCanvas.items[0];
-        if (annotationPage.items && annotationPage.items.length) {
-          const annotation: any = annotationPage.items[0];
-          posterUri = annotation.body?.id;
-        }
-      }
-    } else {
-      const annotations: Annotation[] = canvas.getContent();
-
-      if (annotations && annotations.length) {
-        const annotationUri = annotations[0].getProperty("thumbnail");
-        if (typeof annotationUri === "string") {
-          posterUri = annotationUri;
-        } else if (
-          annotationUri?.length &&
-          typeof annotationUri[0].id === "string"
-        ) {
-          posterUri = annotationUri[0].id;
-        }
-      } else {
-        posterUri = canvas.getProperty("thumbnail");
-      }
-    }
-
-    return posterUri;
+    return choosePosterImages({
+      manifest: this.helper.manifest!.__jsonld,
+      canvas: canvas.__jsonld,
+      isVideo: this.isVideo(),
+    });
   }
 
-  isVideoFormat(type: string): boolean {
-    const videoFormats: string[] = [MediaType.VIDEO_MP4, MediaType.WEBM];
-    return videoFormats.indexOf(type) != -1;
-  }
-
+  // Whether the current canvas' media is video (see isVideoCanvas).
   isVideo(): boolean {
-    const canvas: Canvas = this.helper.getCurrentCanvas();
-    const annotations: Annotation[] = canvas.getContent();
-
-    if (annotations && annotations.length) {
-      const formats: AnnotationBody[] | null = this.getMediaFormats(canvas);
-
-      for (let i = 0; i < formats.length; i++) {
-        const format: AnnotationBody = formats[i];
-        const type: MediaType | null = format.getFormat();
-
-        if (type) {
-          if (this.isVideoFormat(type.toString())) {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    } else {
-      const type: ExternalResourceType | null = canvas.getType();
-
-      if (type) {
-        return type.toString() === ExternalResourceType.MOVING_IMAGE;
-      }
-    }
-
-    throw new Error("Unable to determine media type");
+    return isVideoCanvas(this.helper.getCurrentCanvas().__jsonld);
   }
 }

@@ -1,0 +1,21 @@
+image-fixture-2-euclid-papyrus.jpg and image-fixture-2-euclid-papyrus-thumb.jpg
+
+P. Oxy. I 29, a fragment of Euclid's Elements, Book II, on Wikimedia Commons
+as P. Oxy. I 29.jpg (author given as Euclid; its source is given as
+https://openn.library.upenn.edu/Data/0016/html/e2748.html):
+https://commons.wikimedia.org/wiki/File:P._Oxy._I_29.jpg
+
+Licence: public domain, as Wikimedia Commons gives it (it gives no licence
+URI, so the manifests give these files no rights, and credit them in their
+requiredStatement or attribution).
+
+The original upload is a 1694x1032 JPEG (SHA-1
+d320b53361e79d071fefda59e6864f8bf7b3af96, as Wikimedia Commons gives it).
+image-fixture-2-euclid-papyrus.jpg is 960x585, the same proportions, so a
+smaller copy of it (SHA-1 83c28a4b89ed391666901de38ae2285621a6f8bf). The
+thumbnail is 90x55 (SHA-1 88604f01d13c58d435a35582c125582ead7aee2d). How
+they were made isn't recorded.
+
+Used by image-paged-book-manifest.json, and as the placeholder image in
+placeholder-video-manifest.json, placeholder-accompanying-audio-manifest.json
+and their ranges- versions.

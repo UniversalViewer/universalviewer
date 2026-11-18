@@ -116,6 +116,7 @@
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "classnames": "^2.3.1",
     "dashjs": "2.6.7",
+    "hls.js": "^1.7.3",
     "jquery": "3.7.1",
     "jquery-ui-dist": "^1.13.3",
     "jsviews": "1.2.0",
@@ -148,6 +149,8 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "jest": {
+    "maxWorkers": "50%",
+    "randomize": true,
     "globalSetup": "<rootDir>/jest.globalSetup.js",
     "globalTeardown": "<rootDir>/jest.globalTeardown.js",
     "setupFilesAfterEnv": [

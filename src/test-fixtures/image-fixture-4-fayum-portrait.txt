@@ -1,0 +1,20 @@
+image-fixture-4-fayum-portrait.jpg and image-fixture-4-fayum-portrait-thumb.jpg
+
+A Fayum mummy portrait (c. 100-120 AD), British Museum EA29772, by an unknown
+artist, on Wikimedia Commons as "Fayum mummy portrait (c. 100-120 AD) -
+British museum, EA29772.jpg":
+https://commons.wikimedia.org/wiki/File:Fayum_mummy_portrait_(c._100-120_AD)_-_British_museum,_EA29772.jpg
+
+Licence: public domain, as Wikimedia Commons gives it (it gives no licence
+URI, so the manifests give these files no rights, and credit them in their
+requiredStatement).
+
+The original upload is a 434x902 JPEG (SHA-1
+84bbed9ac3629c73f3168d5ff87c059f4c501680, as Wikimedia Commons gives it).
+image-fixture-4-fayum-portrait.jpg is the same size but not the same file
+(SHA-1 64df35442006284b453bc60bee9b4876b80a1ad5), so it was saved again. The
+thumbnail is 90x187 (SHA-1 d8d4314eba7e432155b0e7ba36abb451a398e5b4). How
+they were made isn't recorded.
+
+Used by image-paged-book-manifest.json, and as the canvas thumbnail in
+canvas-thumbnail-audio-manifest.json and its ranges- version.

@@ -1,0 +1,53 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/cookbook-0003-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Simplest Video Example (IIIF Presentation 3)"]
+  },
+  "summary": {
+    "en": [
+      "IIIF Cookbook recipe 0003, Simplest Manifest - Video, with its label: one canvas painted by one MP4 video, without ranges, which UV plays with mediaelement. The video is our own (blackbird-feeding.mp4), the same length as the recipe's."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/cookbook-0003-video-manifest.json/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 480,
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/cookbook-0003-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/cookbook-0003-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              },
+              "target": "http://localhost:4444/test-fixtures/cookbook-0003-video-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

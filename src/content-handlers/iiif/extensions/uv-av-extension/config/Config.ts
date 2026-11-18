@@ -12,6 +12,7 @@ import {
   FooterPanelContent,
   FooterPanelOptions,
 } from "@/content-handlers/iiif/BaseConfig";
+import { CaptionStyle } from "../../../modules/uv-captions-module/CaptionStyle";
 
 type AVCenterPanelOptions = CenterPanelOptions & {
   /** Determines if the poster image is expanded */
@@ -34,10 +35,15 @@ type AVCenterPanelOptions = CenterPanelOptions & {
   limitToRange: boolean;
   /** Determines if ranges auto advance */
   autoAdvanceRanges: boolean;
+  /** The colours offered for captions, in place of UV's own */
+  captionStyles?: CaptionStyle[];
 };
 
 type AVCenterPanelContent = CenterPanelContent & {
   delimiter: string;
+  mediaUnavailable: string;
+  /** Added to mediaUnavailable when a stream's server sends no CORS headers, in a browser without its own HLS player */
+  mediaBlockedByCors: string;
 };
 
 type AVCenterPanel = {

@@ -199,7 +199,10 @@ export class CompositeMediaElement {
             await promise;
             clearInterval(interval);
             Logger.log("ActiveElement nudge (play)");
-            await newElement.play();
+            await newElement.play().catch((err) => {
+              console.log("err", err);
+              this.playing = false;
+            });
           }
         }
       } else {

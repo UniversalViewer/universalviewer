@@ -1,0 +1,24 @@
+pdf-fixture-1-euclid.pdf and pdf-fixture-1-euclid-thumb.jpg
+
+A one-page PDF made for the end-to-end tests (its header reads "Universal
+Viewer PDF test fixture 1 / 3"; its producer is given as "UV fixture
+generator"), titled "Euclid's Elements, Book II", with a short description
+and, as its picture, P. Oxy. I 29 (see image-fixture-2-euclid-papyrus.txt for
+the source and licence). Its footer credits the picture: "Image: P. Oxy. I
+29, Penn Museum E2748. Public domain, via Wikimedia Commons. Generated for the
+Universal Viewer e2e test suite - universalviewer.io". The same page is
+image-fixture-1-euclid-page.jpg.
+
+The picture is public domain, as Wikimedia Commons gives it (it gives no
+licence URI, so the manifest gives these files no rights, and credits P. Oxy.
+I 29 in its requiredStatement). The page's title, text and layout were
+written for this repository, and are under its MIT License (see
+LICENSE.txt); the picture keeps its own licence. Rights can't give the MIT
+License, so the manifest credits the pages as "made for the Universal Viewer
+tests (MIT License)".
+
+pdf-fixture-1-euclid.pdf has SHA-1 bf05829a89a90c7a4231f832b6fb87272376b272;
+the thumbnail is 150x194 (SHA-1 d5c55b0a347f9299125a52c7a24dfd64e25cbc79).
+They were added on 2 October 2026; how they were made isn't recorded.
+
+Used by pdf-multi-file-manifest.json.

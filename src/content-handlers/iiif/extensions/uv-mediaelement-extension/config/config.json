@@ -169,6 +169,8 @@
         "autoPlayOnSetTarget": false,
         "defaultHeight": 420,
         "defaultWidth": 560,
+        "hideMediaError": false,
+        "hideVolumeOnTouchDevices": false,
         "iconSprite": "mejs-controls.svg",
         "titleEnabled": true,
         "subtitleEnabled": true,
@@ -176,9 +178,28 @@
         "requiredStatementEnabled": true
       },
       "content": {
+        "mediaUnavailable": "$mediaUnavailable",
+        "mediaBlockedByCors": "$mediaBlockedByCors",
         "attribution": "$attribution",
+        "captions": "$captions",
+        "captionsOff": "$captionsOff",
+        "captionLanguages": "$captionLanguages",
+        "captionColours": "$captionColours",
+        "captionWhiteOnBlack": "$captionWhiteOnBlack",
+        "captionBlackOnWhite": "$captionBlackOnWhite",
+        "captionDarkBlueOnPeach": "$captionDarkBlueOnPeach",
+        "captionDarkRedOnMint": "$captionDarkRedOnMint",
+        "captionDarkPurpleOnYellow": "$captionDarkPurpleOnYellow",
         "close": "$close",
-        "closeAttribution": "$closeAttribution"
+        "closeAttribution": "$closeAttribution",
+        "audioVolume": "$audioVolume",
+        "fullScreen": "$fullScreen",
+        "mute": "$mute",
+        "pause": "$pause",
+        "play": "$play",
+        "playbackPosition": "$playbackPosition",
+        "positionOfDuration": "$positionOfDuration",
+        "unmute": "$unmute"
       }
     },
     "restrictedDialogue": {
@@ -275,7 +296,9 @@
         "page": "$page",
         "rangeHeader": "$aboutThisSection",
         "rights": "$rights",
-        "title": "$moreInformation"
+        "title": "$moreInformation",
+        "imageHeader": "$aboutTheImage",
+        "sequenceHeader": "$aboutTheSequence"
       }
     },
     "resourcesLeftPanel": {
@@ -284,7 +307,8 @@
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": true
+        "panelOpen": true,
+        "thumbsExtraHeight": 8
       },
       "content": {
         "title": "$contents"

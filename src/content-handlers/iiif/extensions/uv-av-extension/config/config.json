@@ -104,7 +104,9 @@
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
-        "volume": "$volume"
+        "volume": "$volume",
+        "selectAll": "$selectAll",
+        "download": "$download"
       }
     },
     "dialogue": {
@@ -256,7 +258,9 @@
         "page": "$page",
         "rights": "$rights",
         "rangeHeader": "$aboutThisSection",
-        "title": "$moreInformation"
+        "title": "$moreInformation",
+        "imageHeader": "$aboutTheImage",
+        "sequenceHeader": "$aboutTheSequence"
       }
     },
     "centerPanel": {
@@ -290,17 +294,37 @@
         "autoAdvanceRanges": false
       },
       "content": {
+        "mediaUnavailable": "$mediaUnavailable",
+        "mediaBlockedByCors": "$mediaBlockedByCors",
         "attribution": "$attribution",
+        "audioVolume": "$audioVolume",
+        "captions": "$captions",
+        "captionsOff": "$captionsOff",
+        "captionLanguages": "$captionLanguages",
+        "captionColours": "$captionColours",
+        "captionWhiteOnBlack": "$captionWhiteOnBlack",
+        "captionBlackOnWhite": "$captionBlackOnWhite",
+        "captionDarkBlueOnPeach": "$captionDarkBlueOnPeach",
+        "captionDarkRedOnMint": "$captionDarkRedOnMint",
+        "captionDarkPurpleOnYellow": "$captionDarkPurpleOnYellow",
         "close": "$close",
         "closeAttribution": "$closeAttribution",
         "currentTime": "$currentTime",
         "delimiter": " - ",
         "duration": "$duration",
+        "fastForward": "$fastForward",
+        "fastRewind": "$fastRewind",
         "mute": "$mute",
         "next": "$next",
+        "noMediaMessage": "$noMediaMessage",
         "pause": "$pause",
         "play": "$play",
-        "previous": "$previous"
+        "playbackPosition": "$playbackPosition",
+        "positionOfDuration": "$positionOfDuration",
+        "previous": "$previous",
+        "unmute": "$unmute",
+        "expand": "$expandPosterImage",
+        "collapse": "$collapsePosterImage"
       }
     },
     "settingsDialogue": {

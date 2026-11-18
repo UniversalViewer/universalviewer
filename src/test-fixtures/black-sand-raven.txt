@@ -1,0 +1,25 @@
+black-sand-raven.aac and black-sand-raven.m3u8
+
+"Yellowstone sound library - Common Raven - 001": as the thermal features of
+Black Sand Basin bubble in the background, a raven calls to its mate and takes
+flight. Recorded by David Restivo, National Park Service, on 23 October 2013,
+for the Yellowstone Sound Library (NPS and Montana State University's Acoustic
+Atlas):
+https://www.nps.gov/yell/learn/photosmultimedia/sounds-raven.htm
+https://commons.wikimedia.org/wiki/File:Yellowstone_sound_library_-_Common_Raven_-_001.mp3
+
+Licence: public domain, as a work of the United States federal government.
+
+The original MP3 (mono, 48 kHz, 12.6 seconds; SHA-1
+5aba13dc8d0efcddf4c1514e5d05b9532874ea5b, as Wikimedia Commons gives it) was
+converted to AAC at 64 kbps with macOS's built-in afconvert:
+
+  afconvert -f adts -d aac -b 64000 raven.mp3 black-sand-raven.aac
+
+black-sand-raven.m3u8 is a hand-written HLS playlist with the AAC file as its
+only segment.
+
+Used by the end-to-end tests as a local HLS stream that plays, both in
+browsers' own HLS players and with hls.js, so they don't depend on a remote
+server. (stream.m3u8, whose segment is Ogg audio, is the stream that can't be
+played.)

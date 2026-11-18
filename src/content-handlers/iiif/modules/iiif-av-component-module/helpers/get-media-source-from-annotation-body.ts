@@ -2,6 +2,7 @@ import { Utils, Annotation, AnnotationBody } from "manifesto.js";
 import { getSpatialComponent } from "./get-spatial-component";
 import { MediaSource } from "../types/media-source";
 import { annotationTime, canvasTime } from "./relative-time";
+import { mediaKind } from "../../uv-shared-module/MediaKind";
 
 export function getMediaSourceFromAnnotationBody(
   annotation: Annotation,
@@ -13,7 +14,8 @@ export function getMediaSourceFromAnnotationBody(
     duration: number;
   }
 ): MediaSource {
-  const type = body.getType();
+  // "audio" or "video" (see mediaKind).
+  const type = mediaKind(body.__jsonld, canvasDimensions);
   const format = body.getFormat() || undefined;
   const mediaSource = body.id.split("#")[0];
   const target = annotation.getTarget();
