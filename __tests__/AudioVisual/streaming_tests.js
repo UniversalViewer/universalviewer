@@ -11,7 +11,7 @@ const {
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/tests/testHLS");
+} = require("../../scripts/tests/testHls");
 
 // HLS and MPEG-DASH play in both players. HLS plays with UV's own hls.js
 // where it can (Chrome, the test browser, and Firefox, mocked here in

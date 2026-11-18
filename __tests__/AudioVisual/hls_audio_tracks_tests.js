@@ -10,7 +10,7 @@ const {
   asSafari,
   playsHlsNatively,
   requestKinds,
-} = require("../../scripts/tests/testHLS");
+} = require("../../scripts/tests/testHls");
 const { delayResponses } = require("../../scripts/tests/testTiming");
 
 // HLS-only audio in tracks, each its own canvas and without ranges, as many

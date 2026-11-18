@@ -11,7 +11,7 @@ const {
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/tests/testHLS");
+} = require("../../scripts/tests/testHls");
 
 // When a manifest offers its media in more than one version (a Choice), and
 // the first the player tries can't be played, it plays the next, rather than

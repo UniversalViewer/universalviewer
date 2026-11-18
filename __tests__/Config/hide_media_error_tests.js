@@ -6,7 +6,7 @@ const {
   closeAttribution,
   waitUntilStill,
 } = require("../../scripts/tests/testViewer");
-const { asFirefox } = require("../../scripts/tests/testHLS");
+const { asFirefox } = require("../../scripts/tests/testHls");
 
 // Each player's hideMediaError option: when a host configures it, the user
 // isn't told when the media can't be played (see

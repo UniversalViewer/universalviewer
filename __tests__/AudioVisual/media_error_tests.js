@@ -7,7 +7,7 @@ const {
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/tests/testHLS");
+} = require("../../scripts/tests/testHls");
 const { delayResponses } = require("../../scripts/tests/testTiming");
 
 // When a manifest's media can't be played, every way of playing it having
