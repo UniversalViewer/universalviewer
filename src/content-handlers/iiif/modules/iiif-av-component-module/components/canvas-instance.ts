@@ -691,18 +691,9 @@ export class CanvasInstance extends BaseComponent {
           positionTop,
           this._canvasHeight
         ),
-        percentageLeft = convertToPercentage(
-          positionLeft,
-          this._canvasWidth
-        ),
-        percentageWidth = convertToPercentage(
-          mediaWidth,
-          this._canvasWidth
-        ),
-        percentageHeight = convertToPercentage(
-          mediaHeight,
-          this._canvasHeight
-        );
+        percentageLeft = convertToPercentage(positionLeft, this._canvasWidth),
+        percentageWidth = convertToPercentage(mediaWidth, this._canvasWidth),
+        percentageHeight = convertToPercentage(mediaHeight, this._canvasHeight);
 
       const temporalOffsets: RegExpExecArray | null = /t=([^&]+)/g.exec(
         body.id
