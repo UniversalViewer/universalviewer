@@ -1,11 +1,11 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
-const { slowNetwork } = require("../../scripts/testTiming");
+} = require("../../scripts/tests/testViewer");
+const { slowNetwork } = require("../../scripts/tests/testTiming");
 
 // The AV component plays:
 // - media from another origin whose server doesn't send CORS headers, as

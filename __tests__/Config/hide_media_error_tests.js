@@ -1,12 +1,12 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   applyConfig,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
-const { asFirefox } = require("../../scripts/testHls");
+} = require("../../scripts/tests/testViewer");
+const { asFirefox } = require("../../scripts/tests/testHLS");
 
 // Each player's hideMediaError option: when a host configures it, the user
 // isn't told when the media can't be played (see

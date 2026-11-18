@@ -1,11 +1,11 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   applyConfig,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // The image accompanying audio in the AV component (manifests with ranges):
 // it starts collapsed in the corner of the player, or expanded to fill it

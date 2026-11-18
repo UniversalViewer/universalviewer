@@ -15,7 +15,7 @@
   "typings": "dist/cjs/index.d.ts",
   "web": "dist/umd/UV.js",
   "scripts": {
-    "e2eserve": "npx serve dist -p 4444",
+    "e2eserve": "serve dist -p 4444",
     "lint-code": "eslint --fix \"./{__tests__,scripts,src}/**/*.{js,jsx,ts,tsx}\"",
     "lint-styles": "stylelint --fix \"./src/**/*.{less,css}\"",
     "lint": "npm run lint-code && npm run lint-styles",
@@ -24,15 +24,17 @@
     "dev": "npm run start",
     "start": "npx webpack serve -c webpack.dev-server.js",
     "build": "webpack -c webpack.config.js",
+    "build-all": "npm run build && npm run build-tsc && npm run build-es",
     "build-es": "node ./esbuild.mjs",
     "build-tsc": "tsc --skipLibCheck --module CommonJS --esModuleInterop --declarationDir ./dist/cjs --declaration --outDir ./dist/cjs -p . && npm run copy-files",
-    "copy-files": "copyfiles -u 1 src/**/*.svg dist/cjs && copyfiles -u 1 src/**/*.gif dist/cjs && copyfiles -u 1 src/**/*.png dist/cjs && copyfiles -u 1 src/**/*.less dist/cjs && copyfiles -u 1 src/extensions/**/*.less dist/cjs && copyfiles -u 1 src/**/*.css dist/cjs",
+    "copy-files": "node scripts/copy_files.js",
     "docs": "typedoc --plugin typedoc-plugin-missing-exports ; echo docs.universalviewer.io > docs/CNAME",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "prepublishOnly": "npm run build && npm run build-tsc && npm run build-es",
+    "prepublishOnly": "npm run build-all",
     "checkLocaleUsage": "node scripts/validate_locale.ts checkLocaleUsage",
     "findMissingTranslations": "node scripts/validate_locale.ts missingTranslations",
-    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings"
+    "findHardCodedLocaleStrings": "node scripts/validate_locale.ts hardCodedStrings",
+    "check-implementation-install": "node scripts/check_implementation_install.js"
   },
   "repository": {
     "type": "git",
@@ -54,7 +56,7 @@
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
-    "@eslint/js": "9.28.0",
+    "@eslint/js": "10.0.1",
     "@types/jest": "^30",
     "@types/jquery": "^3.5.14",
     "@types/node": "^22.9.0",
@@ -62,8 +64,12 @@
     "@types/react-dom": "^19.0.0",
     "async": "0.9.0",
     "chai": "5.1.2",
+    "clean-css": "^5.2.2",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
+    "esbuild": "^0.28.1",
+    "esbuild-plugin-less": "^1.1.5",
+    "esbuild-plugin-svg": "^0.1.0",
     "eslint": "10.8.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.4.0",
@@ -74,14 +80,16 @@
     "jest-puppeteer": "^11",
     "less": "^4.4.2",
     "less-loader": "^13.0.0",
+    "less-plugin-clean-css": "^1.5.1",
     "lodash": "4.18.1",
     "postcss-less": "6.0.0",
     "prettier": "^3.5.3",
     "puppeteer": "^25.14.0",
+    "serve": "14.2.7",
     "source-map-loader": "^5.0.0",
     "style-loader": "4.0.0",
     "stylelint": "17.16.0",
-    "stylelint-config-standard-less": "3.0.1",
+    "stylelint-config-standard-less": "4.1.0",
     "stylelint-less": "4.2.1",
     "ts-jest": "^29",
     "ts-loader": "^9.5.1",
@@ -90,13 +98,14 @@
     "typescript": "^5",
     "typescript-eslint": "8.62.1",
     "url-loader": "4.1.1",
-    "webpack": "^5.59.1",
+    "webpack": "^5.101.0",
     "webpack-bundle-analyzer": "^5.3.0",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "5.2.6"
+    "webpack-dev-server": "6.1.0",
+    "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "dependencies": {
-    "@google/model-viewer": "^4.0.0",
+    "@google/model-viewer": "^4.4.0",
     "@iiif/base-component": "2.0.1",
     "@iiif/manifold": "^2.3.0",
     "@iiif/presentation-3": "^2.2.4",
@@ -106,8 +115,6 @@
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "classnames": "^2.3.1",
-    "clean-css": "^5.2.2",
-    "copyfiles": "^2.4.1",
     "dashjs": "2.6.7",
     "esbuild": "^0.28.1",
     "esbuild-plugin-less": "^1.1.5",
@@ -116,7 +123,6 @@
     "jquery": "3.7.1",
     "jquery-ui-dist": "^1.13.3",
     "jsviews": "1.2.0",
-    "less-plugin-clean-css": "^1.5.1",
     "manifesto.js": "^4.3.0",
     "mediaelement": "^5",
     "mediaelement-plugins": "^5.0.0",
@@ -126,9 +132,19 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.13.0",
+    "three": "^0.183.0",
     "waveform-panel": "^1.2.0",
-    "xss": "1.0.15",
+    "xss": "1.0.17",
     "zustand": "^5.0.3"
+  },
+  "overrides": {
+    "compression": "^1.8.2",
+    "glob@>=9.0.0 <14.0.2": "^14.0.4",
+    "minimatch@>=7.0.0 <11.0.1": "^11.0.5",
+    "typedoc": {
+      "minimatch": "^10.2.5"
+    },
+    "xmldom": "npm:@xmldom/xmldom@^0.8.15"
   },
   "collective": {
     "type": "opencollective",
@@ -163,5 +179,14 @@
       "json",
       "node"
     ]
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "puppeteer@25.14.0": true,
+    "@parcel/watcher": false,
+    "canvas": false,
+    "es5-ext": false,
+    "fsevents": false,
+    "unrs-resolver": false
   }
 }

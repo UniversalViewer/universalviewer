@@ -1,6 +1,6 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, waitUntilStill } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl, waitUntilStill } = require("../../scripts/tests/testViewer");
 
 // Each player's controls stay in view while it plays. In the AV component,
 // when the canvas has no label (as in IIIF Cookbook recipe 0026), the panel

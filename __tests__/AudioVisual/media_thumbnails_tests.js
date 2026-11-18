@@ -1,10 +1,10 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // The thumbnails of audio and video canvases, in each player: the image
 // shown with the media (see mediaThumbnail), or an icon for the kind of

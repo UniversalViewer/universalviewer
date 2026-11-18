@@ -1,11 +1,11 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   expectPanelTitle,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 const fixture = (name) => `${BASE_URL}/test-fixtures/${name}`;
 

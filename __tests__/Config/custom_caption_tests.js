@@ -1,11 +1,11 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   waitUntilStill,
   applyConfig,
   closeAttribution,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // A host's own caption colours (captionStyles) hold: captions are shown in
 // them, and they're named in the user's language:

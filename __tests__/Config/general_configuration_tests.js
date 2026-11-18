@@ -1,7 +1,24 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  applyConfig,
+  waitForAnnotationOn,
+  waitForOneUp,
+  doubleClickViewer,
+  viewerUrl,
+} = require("../../scripts/tests/testViewer");
 
+// Local paged book of static images, with ranges for the Index tab. Modelled
+// on these IIIF Cookbook recipes (also credited in the manifest's summary):
+// - 0031 Multiple Volumes in a Single Bound Volume (nested ranges); this
+//   fixture replaces that recipe's manifest in these tests
+//   https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/
+// - 0011 Book 'behavior' Variations (the "paged" behavior)
+//   https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
+// - 0001 Simplest Manifest - Single Image File (static images, no service)
+//   https://iiif.io/api/cookbook/recipe/0001-mvm-image/
 const MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
 // Its first canvas' thumbnail, as the manifest gives it.
 const FIRST_THUMB_SRC = `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page-thumb.jpg`;
@@ -86,6 +103,52 @@ describe("Configuration options", () => {
       expect(imageSrc).toEqual(
         expect.stringContaining(`${FIRST_THUMB_SRC}#t=`)
       );
+    });
+  });
+
+  // The examples page turns on doubleClickAnnotationEnabled and adds each
+  // published double-click target to #iiif_annotations. Custom config is
+  // merged after the page's own, so it can turn the option off again.
+  describe("double-click annotation", () => {
+    // Changing only the #hash doesn't reload the page, so start each test on
+    // a fresh one. The header hides the paging buttons below 1280px.
+    beforeEach(async () => {
+      page = await browser.newPage();
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.goto(`${BASE_URL}#?manifest=${encodeURIComponent(MANIFEST)}`);
+      await page.waitForSelector("#thumb-0 img");
+    });
+
+    // UV defaults doubleClickAnnotationEnabled to false; the examples page
+    // turns it on.
+    it("starts in one-up and publishes when pagingEnabled is false", async () => {
+      await applyCustomConfig({ options: { pagingEnabled: false } });
+      await waitForOneUp(page);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
+
+      const targets = await annotationTargets(page);
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
+    });
+
+    // Same setup as the test above, which shows it publishes with the option
+    // on. Nothing reloads the viewer between the double-click and the check,
+    // because a reload drops a pending publish and clears #iiif_annotations.
+    it("publishes nothing when doubleClickAnnotationEnabled is false", async () => {
+      await applyCustomConfig({
+        options: { pagingEnabled: false },
+        modules: {
+          openSeadragonCenterPanel: {
+            options: { doubleClickAnnotationEnabled: false },
+          },
+        },
+      });
+      await waitForOneUp(page);
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
+
+      expect(await annotationTargets(page)).toEqual([]);
     });
   });
 });

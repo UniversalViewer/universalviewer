@@ -1,6 +1,6 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl, applyConfig } = require("../../scripts/tests/testViewer");
 
 // The extension IIIFContentHandler chooses: by the first painting annotation
 // body's format, else its type (or, for a canvas without content, as in IIIF

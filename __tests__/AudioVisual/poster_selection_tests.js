@@ -1,10 +1,10 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // The image shown with audio and video, before and while it plays (see
 // choosePosterImages, which poster_images_tests.ts covers rule by rule), in

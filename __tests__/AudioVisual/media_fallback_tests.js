@@ -1,17 +1,17 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 const {
   asFirefox,
   asSafari,
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/testHls");
+} = require("../../scripts/tests/testHLS");
 
 // When a manifest offers its media in more than one version (a Choice), and
 // the first the player tries can't be played, it plays the next, rather than

@@ -1,17 +1,17 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 const {
   asFirefox,
   asSafari,
   playsHlsNatively,
   requestKinds,
-} = require("../../scripts/testHls");
-const { delayResponses } = require("../../scripts/testTiming");
+} = require("../../scripts/tests/testHLS");
+const { delayResponses } = require("../../scripts/tests/testTiming");
 
 // HLS-only audio in tracks, each its own canvas and without ranges, as many
 // digital collections give an album: its format written

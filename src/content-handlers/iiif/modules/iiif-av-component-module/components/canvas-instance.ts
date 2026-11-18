@@ -102,6 +102,7 @@ export class CanvasInstance extends BaseComponent {
   private _stallRequestedBy: any[] = []; //todo: type
   private _volume: AVVolumeControl;
   private _captions: CanvasCaptions;
+  private _optionsObserver: ResizeObserver | null = null;
   private _wasPlaying = false;
   public ranges: Range[] = [];
   public waveforms: string[] = [];
@@ -387,6 +388,7 @@ export class CanvasInstance extends BaseComponent {
     );
     this._$canvasContainer.append(this._captions.$overlay);
     this.$playerElement.append(this._$canvasContainer, this._$optionsContainer);
+    this._resizeWithOptions();
     this._captions.load(
       this.isVirtual()
         ? (this._data.canvas as VirtualCanvas).canvases
@@ -1346,7 +1348,29 @@ export class CanvasInstance extends BaseComponent {
     }
   }
 
+  // The canvas is sized to leave room below it for the timeline and
+  // controls, which can grow afterwards (e.g. the captions control appears
+  // once its tracks load, and adds a row where the controls wrap). So it's
+  // resized whenever their height changes, keeping them in view.
+  private _resizeWithOptions(): void {
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+    let height: number | undefined;
+    this._optionsObserver = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.height !== height) {
+        height = entry.contentRect.height;
+        this.resize();
+      }
+    });
+    this._optionsObserver.observe(this._$optionsContainer[0]);
+  }
+
   public destroy(): void {
+    if (this._optionsObserver) {
+      this._optionsObserver.disconnect();
+      this._optionsObserver = null;
+    }
     if (this._captions) {
       this._captions.destroy();
     }

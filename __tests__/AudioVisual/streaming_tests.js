@@ -1,17 +1,17 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 const {
   asFirefox,
   asSafari,
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/testHls");
+} = require("../../scripts/tests/testHLS");
 
 // HLS and MPEG-DASH play in both players. HLS plays with UV's own hls.js
 // where it can (Chrome, the test browser, and Firefox, mocked here in

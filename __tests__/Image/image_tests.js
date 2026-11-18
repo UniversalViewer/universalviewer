@@ -1,5 +1,12 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  waitForAnnotationOn,
+  doubleClickViewer,
+  viewerUrl,
+} = require("../../scripts/tests/testViewer");
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
 // on these IIIF Cookbook recipes (also credited in the manifest's summary):
@@ -22,10 +29,11 @@ const fetched = (page) =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
 
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-};
+// The same static images shown individually, so paging isn't available.
+// Modelled on IIIF Cookbook 0011 Book 'behavior' Variations (the
+// "individuals" behavior).
+// https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
+const IMAGE_INDIVIDUALS_MANIFEST = `${BASE_URL}/test-fixtures/image-individuals-manifest.json`;
 
 describe("Universal Viewer", () => {
   let browser;
@@ -125,12 +133,12 @@ describe("Universal Viewer", () => {
   // Each test opens the viewer as a new visitor: in a new browser context,
   // so nothing a test does (including what the viewer remembers in
   // localStorage) carries over to another, whatever order they run in.
-  const openFreshViewer = async () => {
+  const openFreshViewer = async (manifestUrl = IMAGE_BOOK_MANIFEST) => {
     if (context) await context.close();
     context = await browser.createBrowserContext();
     page = await context.newPage();
 
-    await page.goto(viewerUrl(IMAGE_BOOK_MANIFEST), {
+    await page.goto(viewerUrl(manifestUrl), {
       waitUntil: "domcontentloaded",
     });
   };
@@ -426,6 +434,51 @@ describe("Universal Viewer", () => {
       const rotatedRot = await getRotationFromNavigator();
       expect(initialRot).toBe(0);
       expect(rotatedRot).toBe(90);
+    });
+
+    // double-click annotation (the viewerinputhook dblClickHandler hook)
+    it("publishes a double-click annotation in one-up but not two-up", async () => {
+      const twoUpButton = ".btn.imageBtn.two-up";
+      const oneUpButton = ".btn.imageBtn.one-up";
+      const waitForPressed = (sel) =>
+        page.waitForFunction(
+          (s) =>
+            document.querySelector(s).getAttribute("aria-pressed") === "true",
+          {},
+          sel
+        );
+
+      // The header hides the paging buttons at Puppeteer's default 800px width.
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.waitForSelector(oneUpButton, { visible: true });
+
+      // Two-up on p1: publishes nothing.
+      await waitForPressed(twoUpButton);
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
+      expect(await annotationTargets(page)).toEqual([]);
+
+      // One-up on p2: publishes p2's target.
+      await page.click(oneUpButton);
+      await waitForPressed(oneUpButton);
+      await page.click(".btn.imageBtn.next");
+      await waitForCanvasValue(page, 1);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p2");
+
+      const targets = await annotationTargets(page);
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
+    });
+
+    it("publishes a double-click annotation when paging isn't available", async () => {
+      await openFreshViewer(IMAGE_INDIVIDUALS_MANIFEST);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
+
+      const targets = await annotationTargets(page);
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
 
     // open and close adjust image control

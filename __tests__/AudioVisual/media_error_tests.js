@@ -1,14 +1,14 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl } = require("../../scripts/tests/testViewer");
 const {
   asFirefox,
   asSafari,
   playsHlsNatively,
   requestKinds,
   requesters,
-} = require("../../scripts/testHls");
-const { delayResponses } = require("../../scripts/testTiming");
+} = require("../../scripts/tests/testHLS");
+const { delayResponses } = require("../../scripts/tests/testTiming");
 
 // When a manifest's media can't be played, every way of playing it having
 // been tried, the user is told so in a message, and the page doesn't throw an

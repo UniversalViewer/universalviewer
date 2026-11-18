@@ -1,12 +1,12 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   expectPanelTitle,
   waitUntilStill,
   applyConfig,
   closeAttribution,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // Captions in UV's two audio/video players: the mediaelement player, for
 // manifests without ranges, and the AV component, for manifests with ranges.

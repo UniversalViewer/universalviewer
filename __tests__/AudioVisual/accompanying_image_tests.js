@@ -1,10 +1,10 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
 const {
   viewerUrl,
   closeAttribution,
   waitUntilStill,
-} = require("../../scripts/testViewer");
+} = require("../../scripts/tests/testViewer");
 
 // Audio with an accompanying image (IIIF Cookbook recipe 0014): the image is
 // shown while the audio plays, not only before, in each player.

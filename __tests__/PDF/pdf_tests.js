@@ -1,14 +1,10 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl } = require("../../scripts/tests/testViewer");
 
 // Local multi-file PDF manifest (three single-page PDFs) for PDF-specific
 // behaviour, modelled on the Villanova manifest vudl:294631.
 const PDF_MULTI_FILE_MANIFEST = `${BASE_URL}/test-fixtures/pdf-multi-file-manifest.json`;
-
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-};
 
 // The canvas the viewer draws the PDF's page on.
 const PDF_CANVAS = ".pdfContainer canvas";
@@ -170,6 +166,96 @@ describe("Universal Viewer", () => {
           btn.getAttribute("aria-expanded")
         )
       ).toBe("true");
+    });
+
+    // The paging buttons are icons named by a .sr-only label
+    // (scaffolding.less), which must be hidden on screen but not from
+    // assistive technology.
+    it("hides the paging button labels visually but keeps them as names", async () => {
+      const button = await page.waitForSelector("button.paging.next", {
+        visible: true,
+      });
+      const label = await button.$eval(".sr-only", (el) => {
+        const box = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return {
+          text: el.textContent.trim(),
+          width: box.width,
+          height: box.height,
+          display: style.display,
+          clipPath: style.clipPath,
+        };
+      });
+
+      expect(label.width).toBeLessThanOrEqual(1);
+      expect(label.height).toBeLessThanOrEqual(1);
+      expect(label.display).not.toBe("none");
+      expect(label.clipPath).toBe("inset(50%)");
+      const { name } = await page.accessibility.snapshot({ root: button });
+      expect(name).toBe(label.text);
+    });
+  });
+
+  // UV loads pdf.js from cdnjs at runtime (usePdfJs defaults to true).
+  describe("pdf.js", () => {
+    const PDFJS_CDN = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174";
+    let pdfPage;
+    let requests;
+
+    beforeEach(async () => {
+      pdfPage = await browser.newPage();
+      requests = [];
+      pdfPage.on("request", (request) => requests.push(request.url()));
+      // pdf.js assigns its exports to this global; wrap them so every
+      // getDocument call's parameters are recorded.
+      await pdfPage.evaluateOnNewDocument(() => {
+        window.getDocumentCalls = [];
+        let pdfjsLib;
+        Object.defineProperty(window, "pdfjs-dist/build/pdf", {
+          configurable: true,
+          get: () => pdfjsLib,
+          set: (exports) => {
+            pdfjsLib = new Proxy(exports, {
+              get: (target, key) =>
+                key === "getDocument"
+                  ? (params) => {
+                      window.getDocumentCalls.push(params);
+                      return target.getDocument(params);
+                    }
+                  : Reflect.get(target, key),
+            });
+          },
+        });
+      });
+      await pdfPage.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
+        waitUntil: "domcontentloaded",
+      });
+      await pdfPage.waitForFunction(() => window.getDocumentCalls.length > 0);
+    });
+
+    afterEach(async () => {
+      await pdfPage.close();
+    });
+
+    // CVE-2024-4367 (GHSA-wgrm-67xf-hhpq): pdf.js <= 4.1.392 can run
+    // JavaScript from a malicious PDF unless isEvalSupported is false.
+    it("opens PDFs with eval disabled", async () => {
+      const isEvalSupported = await pdfPage.evaluate(() =>
+        window.getDocumentCalls.map((params) => params.isEvalSupported)
+      );
+
+      expect(isEvalSupported).toEqual([false]);
+    });
+
+    it("loads pdf.js 3.11.174 and its worker from cdnjs", async () => {
+      expect(requests).toContainEqual(
+        expect.stringContaining(`${PDFJS_CDN}/pdf.min.js`)
+      );
+
+      const workerSrc = await pdfPage.evaluate(
+        () => window["pdfjs-dist/build/pdf"].GlobalWorkerOptions.workerSrc
+      );
+      expect(workerSrc).toBe(`${PDFJS_CDN}/pdf.worker.min.js`);
     });
   });
 });

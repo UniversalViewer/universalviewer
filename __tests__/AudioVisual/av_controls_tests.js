@@ -1,7 +1,7 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, waitUntilStill } = require("../../scripts/testViewer");
-const testTiming = require("../../scripts/testTiming");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl, waitUntilStill } = require("../../scripts/tests/testViewer");
+const testTiming = require("../../scripts/tests/testTiming");
 
 // Each player's controls, held to the same accessibility checks: each control
 // named, with its tooltip, in the user's language; every control shown and in
@@ -178,7 +178,10 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
   // layout to settle, and returns the player in use. Another manifest can be
   // given, with its player and the view to show it in; and the page's clock
   // can tick on a millisecond each time it's read (`tickingClock`), as it
-  // can when the machine is busy.
+  // can when the machine is busy. The caption tracks can also be held back
+  // (`captionsDelay`, in ms), so the captions control, shown once they've
+  // loaded, appears after the rest of the player is laid out, as it can when
+  // the machine is busy.
   const load = async ({
     locales,
     viewport = SIZES[0][1],
@@ -188,6 +191,7 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
     root = player.root,
     view,
     tickingClock,
+    captionsDelay,
   } = {}) => {
     if (context) {
       await context.close();
@@ -206,6 +210,9 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
     }
     if (tickingClock) {
       await testTiming.tickingClock(page);
+    }
+    if (captionsDelay) {
+      await testTiming.delayResponses(page, ".vtt", captionsDelay);
     }
     await page.setViewport({ deviceScaleFactor: 1, ...viewport });
     await page.goto(viewerUrl(manifest, locales), {
@@ -343,7 +350,9 @@ describe.each(PLAYERS)("Controls in %s", (_, player) => {
 
   describe.each(SIZES)("on %s", (_, viewport) => {
     it("shows every control, uncovered and unclipped", async () => {
-      const root = await load({ viewport });
+      // Including once the captions control appears late, adding a row of
+      // controls where they wrap.
+      const root = await load({ viewport, captionsDelay: 3000 });
       const ok = Object.fromEntries(
         Object.keys(player.controls).map((name) => [name, "ok"])
       );

@@ -1,6 +1,6 @@
 let puppeteer;
-const { BASE_URL } = require("../../scripts/testBaseUrl");
-const { viewerUrl, applyConfig } = require("../../scripts/testViewer");
+const { BASE_URL } = require("../../scripts/tests/testBaseUrl");
+const { viewerUrl, applyConfig } = require("../../scripts/tests/testViewer");
 
 // The MediaElement player's volume controls on touch devices
 // (mediaElementCenterPanel's hideVolumeOnTouchDevices): shown by default, on
