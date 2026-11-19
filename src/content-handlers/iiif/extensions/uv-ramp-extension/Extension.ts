@@ -102,6 +102,7 @@ export default class Extension
     this._reactRoot.render(
       createElement(RAMPBridge, {
         manifestUrl,
+        rampConfig: this.data.config?.modules?.rampModule ?? { options: {}, content: {} },
         startCanvasId,
         centerPanelEl,
         navEl: this.leftPanel.$navContent[0],

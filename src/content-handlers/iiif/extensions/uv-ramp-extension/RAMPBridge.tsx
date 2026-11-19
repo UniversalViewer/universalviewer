@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
   IIIFPlayer,
@@ -7,9 +7,13 @@ import {
   Transcript,
 } from "@samvera/ramp";
 import { UVSyncBridge } from "./UVSyncBridge";
+import { getRampProps, RampModuleConfig } from "./getRampProps";
+
+const PLAYER_ID = "ramp-player";
 
 interface RAMPBridgeProps {
   manifestUrl: string;
+  rampConfig: RampModuleConfig; 
   centerPanelEl: HTMLElement | null;
   navEl: HTMLElement | null;
   transcriptEl: HTMLElement | null;
@@ -19,7 +23,8 @@ interface RAMPBridgeProps {
 }
 
 export function RAMPBridge({
-  manifestUrl, 
+  manifestUrl,
+  rampConfig,
   startCanvasId,
   startCanvasTime,           
   centerPanelEl,
@@ -27,6 +32,17 @@ export function RAMPBridge({
   transcriptEl,
   extensionHost,
 }: RAMPBridgeProps) {
+  const props = useMemo(
+    () =>
+      getRampProps(rampConfig, {
+        manifestUrl,
+        startCanvasId,
+        startCanvasTime,
+        playerID: PLAYER_ID,
+      }),
+    [rampConfig, manifestUrl, startCanvasId, startCanvasTime]
+  );
+
   return (
     <IIIFPlayer 
       manifestUrl={manifestUrl}
@@ -40,18 +56,19 @@ export function RAMPBridge({
       {centerPanelEl &&
         createPortal(
           <div className="ramp-player-scope">
-            <MediaPlayer />
+            <MediaPlayer {...props.mediaPlayer} />
           </div>,
           centerPanelEl
         )}
 
-      {navEl && createPortal(<StructuredNavigation />, navEl)}
+      {navEl &&
+        createPortal(
+          <StructuredNavigation {...props.structuredNavigation} />,
+          navEl
+        )}
 
       {transcriptEl &&
-        createPortal(
-          <Transcript playerID="ramp-player" manifestUrl={manifestUrl} />,
-          transcriptEl
-        )}
+        createPortal(<Transcript {...props.transcript} />, transcriptEl)}
     </IIIFPlayer>
   );
 }

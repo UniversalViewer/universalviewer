@@ -26,12 +26,12 @@ export class RAMPLeftPanel extends LeftPanel<
     this.$main.append(this.$tabs);
 
     this.$navTab = $(
-      '<a class="index tab first on" tabindex="0">' + "Index" + "</a>"
+      '<a class="index tab first on" tabindex="0">' + this.content.index + "</a>"
     );
     this.$tabs.append(this.$navTab);
 
     this.$transcriptTab = $(
-      '<a class="transcript tab" tabindex="0">' + "Transcript" + "</a>"
+      '<a class="transcript tab" tabindex="0">' + this.content.transcript + "</a>"
     );
     this.$tabs.append(this.$transcriptTab);
 

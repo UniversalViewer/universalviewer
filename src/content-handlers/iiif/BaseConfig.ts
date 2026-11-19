@@ -4,6 +4,7 @@ import {
   ExpandPanelContent,
   ExpandPanelOptions,
 } from "./extensions/config/ExpandPanel";
+import { RampModuleConfig } from "./extensions/uv-ramp-extension/getRampProps";
 export { StorageType } from "../iiif/Utils";
 
 export type MetricType = string | "sm" | "md" | "lg" | "xl";
@@ -473,6 +474,7 @@ export type BaseConfig = {
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
     adjustImageDialogue: AdjustImageDialogue;
+    rampModule?: RampModuleConfig;
   };
   localisation: Localisation;
   content: Content;

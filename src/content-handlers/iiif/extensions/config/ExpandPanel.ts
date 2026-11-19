@@ -14,10 +14,12 @@ export type ExpandPanelOptions = {
 };
 
 export type ExpandPanelContent = {
+  transcript?: string;
   collapse: string;
   collapseFull: string;
   expand: string;
   expandFull: string;
+  index?: string;
 };
 
 export type ExpandPanel = ModuleConfig & {

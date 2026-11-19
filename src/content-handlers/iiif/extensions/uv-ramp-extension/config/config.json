@@ -54,7 +54,9 @@
         "collapse": "$collapse",
         "collapseFull": "$collapseFull",
         "expand": "$expandContents",
-        "expandFull": "$expandGallery"
+        "expandFull": "$expandGallery",
+        "transcript": "$transcript",
+        "index": "$index"
       }
     },
     "contentLeftPanel": {
@@ -100,6 +102,7 @@
         "sortBy": "$sortBy",
         "thumbnails": "$thumbnails",
         "title": "$contents",
+        "transcript": "$transcript",
         "volume": "$volume"
       }
     },
@@ -425,8 +428,87 @@
         "cancel": "$cancel",
         "close": "$close"
       }
+    },
+    "rampModule": {
+      "options": {
+        "mediaPlayer": {
+          "enableFileDownload": false,
+          "enablePIP": false,
+          "enablePlaybackRate": false,
+          "enableTitleLink": false,
+          "withCredentials": false,
+          "language": "en",
+          "showWaveform": false,
+          "resumeCache": {
+            "enable": false,
+            "ttlDays": 30,
+            "maxItems": 50
+          }
+        },
+        "structuredNavigation": {
+          "showAllSectionsButton": false
+        },
+        "transcript": {
+          "showMetadata": false,
+          "showNotes": false,
+          "showMoreSettings": {
+            "enableShowMore": false,
+            "textLineLimit": 6
+          },
+          "search": {
+            "enabled": false,
+            "initialSearchQuery": null,
+            "showMarkers": true,
+            "matchesOnly": false
+          }
+        },
+        "annotations": {
+          "displayMotivations": [],
+          "showHeading": true,
+          "showMoreSettings": {
+            "enableShowMore": false,
+            "textLineLimit": 6
+          }
+        },
+        "autoAdvanceToggle": {
+          "showLabel": true
+        },
+        "metadataDisplay": {
+          "displayOnlyRangeMetadata": false,
+          "displayOnlyCanvasMetadata": false,
+          "displayAllMetadata": false,
+          "displayTitle": true,
+          "showHeading": true
+        },
+        "supplementalFiles": {
+          "showHeading": true
+        }
+      },
+    "content": {
+      "iiifPlayer": {
+        "customErrorMessage": "$rampCustomErrorMessage",
+        "emptyManifestMessage": "$rampEmptyManifestMessage"
+      },
+      "structuredNavigation": {
+        "sectionsHeading": "$rampSectionsHeading"
+      },
+      "annotations": {
+        "headingText": "$rampAnnotationsHeading"
+      },
+      "autoAdvanceToggle": {
+        "label": "$rampAutoplay"
+      },
+      "metadataDisplay": {
+        "itemHeading": "$rampItemDetails",
+        "sectionHeading": "$rampSectionDetails"
+      },
+      "supplementalFiles": {
+        "itemHeading": "$rampItemFiles",
+        "sectionHeading": "$rampSectionFiles"
+      }
     }
-  },
+  }
+},
   "localisation": {
     "label": "English (GB)",
     "locales": [
