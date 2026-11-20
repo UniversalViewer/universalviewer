@@ -24,6 +24,7 @@ export class HeaderPanel<
   $options: JQuery;
   $rightOptions: JQuery;
   information: Information;
+  $rightOptionsRoot: JQuery;
   rightOptionsRoot: Root;
 
   constructor($element: JQuery) {
@@ -52,10 +53,13 @@ export class HeaderPanel<
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
 
+    // JM todo: temporarily we have the rightOptionsRoot and the original rightOptions; move all rightOptions buttons into the react HeaderPanelRightOptions component once the button component is approved.
+    this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
+    this.$options.append(this.$rightOptionsRoot);
+    this.rightOptionsRoot = createRoot(this.$rightOptionsRoot[0]);
+
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
-
-    this.rightOptionsRoot = createRoot(this.$rightOptions[0]);
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
