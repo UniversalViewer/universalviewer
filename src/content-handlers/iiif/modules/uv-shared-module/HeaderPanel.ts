@@ -53,16 +53,16 @@ export class HeaderPanel<
     this.$centerOptions = $('<div class="centerOptions"></div>');
     this.$options.append(this.$centerOptions);
 
-    // JM todo: temporarily we have the rightOptionsRoot and the original rightOptions; move all rightOptions buttons into the react HeaderPanelRightOptions component once the button component is approved.
-    this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
-    this.$options.append(this.$rightOptionsRoot);
-    this.rightOptionsRoot = createRoot(this.$rightOptionsRoot[0]);
-
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
 
     this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
     this.$rightOptions.append(this.$localeToggleButton);
+
+    // JM todo: temporarily we have the rightOptionsRoot and the original rightOptions; move all rightOptions buttons into the react HeaderPanelRightOptions component once the button component is approved.
+    this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
+    this.$rightOptions.append(this.$rightOptionsRoot);
+    this.rightOptionsRoot = createRoot(this.$rightOptionsRoot[0]);
 
     this.$helpButton = $(`
       <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
