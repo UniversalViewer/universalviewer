@@ -23,7 +23,6 @@ export class HeaderPanel<
   $localeToggleButton: JQuery;
   $options: JQuery;
   $rightOptions: JQuery;
-  $settingsButton: JQuery;
   information: Information;
   rightOptionsRoot: Root;
 

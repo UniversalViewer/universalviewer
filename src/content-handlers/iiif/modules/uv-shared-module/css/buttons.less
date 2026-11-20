@@ -168,7 +168,7 @@
 
   @tooltip-gap: 8px;
   @tooltip-delay: 300ms;
-  @tooltip-duration: 200ms;
+  @tooltip-duration: 170ms;
   @tooltip-shift: 4px;
   @tooltip-arrow-size: 5px;
   @tooltip-arrow-inset: 10px; // this should centre the arrow on a 30px button, but is currently slightly off because the header buttons are 34 x 30 (due to padding); JM todo return to this when header buttons have been rearranged and padding removed
@@ -354,12 +354,12 @@
   }
 
   @media (hover: hover) {
-    .btn:hover > .uv-tooltip {
+    .btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
       .tooltip-shown();
     }
   }
 
-  .btn:focus-visible > .uv-tooltip {
+  .btn:focus-visible > .uv-tooltip:not(.uv-tooltip--dismissed) {
     .tooltip-shown();
   }
 
@@ -367,17 +367,6 @@
   @media (prefers-reduced-motion: reduce) {
     .uv-tooltip {
       translate: none;
-    }
-  }
-
-  // Windows High Contrast: backgrounds are removed, so outline the box and drop the arrow
-  @media (forced-colors: active) {
-    .uv-tooltip {
-      border: 1px solid CanvasText;
-
-      &::before {
-        display: none;
-      }
     }
   }
 }
