@@ -8,6 +8,23 @@
         height: 30px;
         width: 30px;
       }
+
+      &,
+      &:hover,
+      &:focus {
+        color: #fff; // the value the OSD rule uses
+      }
+
+      svg {
+        display: block;
+        fill: currentcolor;
+        height: 30px;
+        width: 30px;
+      }
+
+      &:focus-visible svg {
+        outline: 1px solid @link-color;
+      }
     }
 
     &.showInformation {
