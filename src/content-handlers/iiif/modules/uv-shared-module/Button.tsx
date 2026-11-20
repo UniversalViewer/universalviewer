@@ -20,7 +20,6 @@ export default function Button({
   onFocus,
   ...rest
 }: ButtonProps) {
-
   const [tooltipDismissed, setTooltipDismissed] = useState(false);
 
   useEffect(() => {
