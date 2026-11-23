@@ -494,31 +494,31 @@
           "showHeading": true
         }
       },
-    "content": {
-      "iiifPlayer": {
-        "customErrorMessage": "$rampCustomErrorMessage",
-        "emptyManifestMessage": "$rampEmptyManifestMessage"
-      },
-      "structuredNavigation": {
-        "sectionsHeading": "$rampSectionsHeading"
-      },
-      "annotations": {
-        "headingText": "$rampAnnotationsHeading"
-      },
-      "autoAdvanceToggle": {
-        "label": "$rampAutoplay"
-      },
-      "metadataDisplay": {
-        "itemHeading": "$rampItemDetails",
-        "sectionHeading": "$rampSectionDetails"
-      },
-      "supplementalFiles": {
-        "itemHeading": "$rampItemFiles",
-        "sectionHeading": "$rampSectionFiles"
+      "content": {
+        "iiifPlayer": {
+          "customErrorMessage": "$rampCustomErrorMessage",
+          "emptyManifestMessage": "$rampEmptyManifestMessage"
+        },
+        "structuredNavigation": {
+          "sectionsHeading": "$rampSectionsHeading"
+        },
+        "annotations": {
+          "headingText": "$rampAnnotationsHeading"
+        },
+        "autoAdvanceToggle": {
+          "label": "$rampAutoplay"
+        },
+        "metadataDisplay": {
+          "itemHeading": "$rampItemDetails",
+          "sectionHeading": "$rampSectionDetails"
+        },
+        "supplementalFiles": {
+          "itemHeading": "$rampItemFiles",
+          "sectionHeading": "$rampSectionFiles"
+        }
       }
     }
-  }
-},
+  },
   "localisation": {
     "label": "English (GB)",
     "locales": [

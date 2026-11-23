@@ -43,8 +43,7 @@ export default class Extension
   create(): void {
     super.create();
 
-
-    // breaking without these two event subscriptions but may not be necessary 
+    // breaking without these two event subscriptions but may not be necessary
 
     this.extensionHost.subscribe(
       IIIFEvents.CANVAS_INDEX_CHANGE,
@@ -77,14 +76,19 @@ export default class Extension
   private _mountedManifestUrl: string | null = null;
 
   private _mountRAMP(): void {
-    console.log("canvases", this.helper.getTotalCanvases(), "index", this.helper.canvasIndex);
+    console.log(
+      "canvases",
+      this.helper.getTotalCanvases(),
+      "index",
+      this.helper.canvasIndex
+    );
     const manifestUrl = this.helper.manifestUri;
     if (!manifestUrl) return;
     if (this._reactRoot && manifestUrl === this._mountedManifestUrl) return;
     this._mountedManifestUrl = manifestUrl;
-     const startCanvasId = this.helper.getCanvasByIndex(
-     this.helper.canvasIndex
-   )?.id;
+    const startCanvasId = this.helper.getCanvasByIndex(
+      this.helper.canvasIndex
+    )?.id;
 
     const $centerContent = this.shell.$centerPanel.find(".content");
     const centerPanelEl = (
@@ -102,7 +106,10 @@ export default class Extension
     this._reactRoot.render(
       createElement(RAMPBridge, {
         manifestUrl,
-        rampConfig: this.data.config?.modules?.rampModule ?? { options: {}, content: {} },
+        rampConfig: this.data.config?.modules?.rampModule ?? {
+          options: {},
+          content: {},
+        },
         startCanvasId,
         centerPanelEl,
         navEl: this.leftPanel.$navContent[0],

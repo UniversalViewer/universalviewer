@@ -13,14 +13,13 @@ export function stripNil<T extends Obj>(obj: T): Partial<T> {
   return out as Partial<T>;
 }
 
-
-// Runtime values 
+// Runtime values
 export interface RampRuntime {
-  manifest?: object;           
+  manifest?: object;
   manifestUrl?: string;
-  startCanvasId?: string;       
-  startCanvasTime?: number;     
-  playerID: string;             
+  startCanvasId?: string;
+  startCanvasTime?: number;
+  playerID: string;
   transcripts?: { canvasId: number; items: { title: string; url: string }[] }[];
   searchCallbacks?: { matcher?: Function; sorter?: Function };
 }
@@ -83,6 +82,5 @@ export function getRampProps(config: RampModuleConfig, rt: RampRuntime) {
       itemHeading: c.metadataDisplay?.itemHeading,
       sectionHeading: c.metadataDisplay?.sectionHeading,
     }),
-
   };
 }

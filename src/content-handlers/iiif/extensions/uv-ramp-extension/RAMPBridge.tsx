@@ -13,7 +13,7 @@ const PLAYER_ID = "ramp-player";
 
 interface RAMPBridgeProps {
   manifestUrl: string;
-  rampConfig: RampModuleConfig; 
+  rampConfig: RampModuleConfig;
   centerPanelEl: HTMLElement | null;
   navEl: HTMLElement | null;
   transcriptEl: HTMLElement | null;
@@ -26,7 +26,7 @@ export function RAMPBridge({
   manifestUrl,
   rampConfig,
   startCanvasId,
-  startCanvasTime,           
+  startCanvasTime,
   centerPanelEl,
   navEl,
   transcriptEl,
@@ -44,7 +44,7 @@ export function RAMPBridge({
   );
 
   return (
-    <IIIFPlayer 
+    <IIIFPlayer
       manifestUrl={manifestUrl}
       startCanvasId={startCanvasId}
       startCanvasTime={startCanvasTime}
