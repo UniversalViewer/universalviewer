@@ -111,7 +111,7 @@
     "@iiif/presentation-3": "^2.2.4",
     "@iiif/vocabulary": "^1.0.31",
     "@openseadragon-imaging/openseadragon-viewerinputhook": "^3.0.1",
-    "@samvera/ramp": "file:../ramp/samvera-ramp-5.1.1.tgz",
+    "@samvera/ramp": "file:vendor/samvera-ramp-5.2.0.tgz",
     "@universalviewer/aleph": "0.0.21",
     "@universalviewer/uv-ebook-components": "1.0.2",
     "@webcomponents/webcomponentsjs": "^2.4.3",
