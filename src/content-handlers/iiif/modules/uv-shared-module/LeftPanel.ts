@@ -81,7 +81,8 @@ export class LeftPanel<
   }
 
   toggle(autoToggled?: boolean): void {
-    if (this.isExpanded) {
+    // Open now (see BaseExpandPanel.toggle), so collapsing.
+    if (this.$element.hasClass("open")) {
       this.$element.parent().removeClass("leftPanelOpen");
     } else {
       this.$element.parent().addClass("leftPanelOpen");

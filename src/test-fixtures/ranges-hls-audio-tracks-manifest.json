@@ -1,0 +1,159 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["HLS audio in three tracks, with ranges (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Three tracks of HLS audio, each its own canvas, as many digital collections give an album's tracks. Their format is written application/x-mpegURL, as servers often give it, and their playlists' names have commas and apostrophes in them. Each plays the same recording, tagged with its track's number so the tests can tell which is loading. Its ranges, one per track, make the AV component play it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Yellowstone sound library - Common Raven - 001\" by David Restivo, National Park Service, via Wikimedia Commons (public domain)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["1. Black Sand Basin, morning"]
+      },
+      "duration": 12.65,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/1",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/hls-audio-tracks/01._Black_Sand_Basin,_morning.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegURL",
+                "duration": 12.65
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "en": ["2. The raven's call, l'istesso tempo"]
+      },
+      "duration": 12.65,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/2",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/hls-audio-tracks/02._The_raven's_call,_l'istesso_tempo.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegURL",
+                "duration": 12.65
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "en": ["3. Flight, over the basin"]
+      },
+      "duration": 12.65,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/3/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/3",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/hls-audio-tracks/03._Flight,_over_the_basin.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegURL",
+                "duration": 12.65
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Tracks"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["1. Black Sand Basin, morning"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/1#t=0,12.65",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["2. The raven's call, l'istesso tempo"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/2#t=0,12.65",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/range/3",
+          "type": "Range",
+          "label": {
+            "en": ["3. Flight, over the basin"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-hls-audio-tracks-manifest.json/canvas/3#t=0,12.65",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

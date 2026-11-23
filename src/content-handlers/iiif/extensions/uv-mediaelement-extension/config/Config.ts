@@ -1,3 +1,5 @@
+import { CaptionsContent } from "../../../modules/uv-captions-module/CaptionsControl";
+import { CaptionStyle } from "../../../modules/uv-captions-module/CaptionStyle";
 import {
   BaseConfig,
   CenterPanelContent,
@@ -16,9 +18,28 @@ type MediaElementCenterPanelOptions = CenterPanelOptions & {
   defaultHeight: number;
   defaultWidth: number;
   iconSprite: string;
+  /** Determines if media errors are hidden */
+  hideMediaError: boolean;
+  /** Determines if the volume controls are left out on Android and iOS */
+  hideVolumeOnTouchDevices: boolean;
+  /** The colours offered for captions, in place of UV's own */
+  captionStyles?: CaptionStyle[];
 };
 
-type MediaElementCenterPanelContent = CenterPanelContent & {};
+type MediaElementCenterPanelContent = CenterPanelContent &
+  CaptionsContent & {
+    mediaUnavailable: string;
+    /** Added to mediaUnavailable when a stream's server sends no CORS headers, in a browser without its own HLS player */
+    mediaBlockedByCors: string;
+    audioVolume: string;
+    fullScreen: string;
+    mute: string;
+    pause: string;
+    play: string;
+    playbackPosition: string;
+    positionOfDuration: string;
+    unmute: string;
+  };
 
 type MediaElementCenterPanel = {
   options: MediaElementCenterPanelOptions;

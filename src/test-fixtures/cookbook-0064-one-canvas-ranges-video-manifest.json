@@ -1,0 +1,145 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "it": ["Il merlo"],
+    "en": ["The Blackbird"]
+  },
+  "metadata": [
+    {
+      "label": { "en": ["Date Issued"] },
+      "value": { "en": ["2024"] }
+    },
+    {
+      "label": { "en": ["Publisher"] },
+      "value": { "en": ["Wikimedia Commons"] }
+    }
+  ],
+  "summary": {
+    "en": [
+      "Shaped as IIIF Cookbook recipe 0064, Table of Contents for Multiple A/V Files on a Single Canvas: one unlabelled canvas painted by two MP4 videos in turn (here our own blackbird-feeding.mp4 twice, told apart by ?part=1 and ?part=2, as the recipe's are two files), with metadata, a canvas thumbnail (a still of the video) and a table of contents of nested ranges labelled in Italian and English, as the recipe's are. With ranges, UV plays it with the AV component."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video, and its still as the thumbnail: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "width": 480,
+      "height": 360,
+      "duration": 1144.068,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1/annotation_page/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1/annotation_page/1/annotation/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1#t=0,572.034",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4?part=1",
+                "type": "Video",
+                "format": "video/mp4",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            },
+            {
+              "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1/annotation_page/1/annotation/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1#t=572.034",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4?part=2",
+                "type": "Video",
+                "format": "video/mp4",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/blackbird-feeding-thumb.png",
+          "type": "Image",
+          "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "type": "Range",
+      "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/range/1",
+      "label": {
+        "it": ["Il merlo nutre i piccoli"]
+      },
+      "items": [
+        {
+          "type": "Range",
+          "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/range/2",
+          "label": {
+            "it": ["Parte prima"]
+          },
+          "items": [
+            {
+              "type": "Range",
+              "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/range/3",
+              "label": {
+                "it": ["Il primo pasto – Il sacco fecale"]
+              },
+              "items": [
+                {
+                  "type": "Canvas",
+                  "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1#t=0,24.2"
+                }
+              ]
+            },
+            {
+              "type": "Range",
+              "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/range/4",
+              "label": {
+                "en": ["Remainder of part one"]
+              },
+              "items": [
+                {
+                  "type": "Canvas",
+                  "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1#t=24.2,572.034"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Range",
+          "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/range/5",
+          "label": {
+            "it": ["Parte seconda"]
+          },
+          "items": [
+            {
+              "type": "Canvas",
+              "id": "http://localhost:4444/test-fixtures/cookbook-0064-one-canvas-ranges-video-manifest.json/canvas/1#t=572.034,1144.068"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

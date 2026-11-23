@@ -1,0 +1,20 @@
+blackbird-feeding-thumb.png
+
+A still of blackbird-feeding.mp4 (SHA-1
+06f6adbc246f4a27787d76dcb4976c7ca873ca81), the frame at exactly 2 seconds,
+where the chicks have their beaks open to be fed. That video is made from
+"Blackbird feeding" (Blackbird feeding.mpg) by AslakSh, on Wikimedia Commons:
+https://commons.wikimedia.org/wiki/File:Blackbird_feeding.mpg
+(see blackbird-feeding.txt).
+
+Licence: CC0 1.0 Universal (Public Domain Dedication), as the video's.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+480x360 PNG, the video's size, saved with macOS's AVFoundation
+(AVAssetImageGenerator, with no time tolerance, so the exact frame) and
+ImageIO. The timestamp and "< 1/36 >" along its edges are in the original
+video.
+
+Used by the end-to-end tests as the canvas thumbnail of
+cookbook-0064-one-canvas-ranges-video-manifest.json, as IIIF Cookbook recipe
+0064's canvas has one.

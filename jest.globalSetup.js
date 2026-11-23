@@ -25,7 +25,13 @@ function waitForServer(url, timeout = 30000) {
 }
 
 module.exports = async () => {
-  const server = spawn("npm", ["run", "e2eserve"], {
+  // serve logs every request, which buries the tests' own output, so it's
+  // left out unless asked for (UV_E2E_REQUEST_LOG=1).
+  const args = ["run", "e2eserve"];
+  if (!process.env.UV_E2E_REQUEST_LOG) {
+    args.push("--", "--no-request-logging");
+  }
+  const server = spawn("npm", args, {
     shell: true,
     stdio: "inherit",
   });

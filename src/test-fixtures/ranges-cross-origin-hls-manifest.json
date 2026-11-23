@@ -1,0 +1,75 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "HLS audio from another origin, without CORS with ranges (e2e test fixture)"
+    ]
+  },
+  "summary": {
+    "en": [
+      "Its HLS stream is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as the British Library's early AV streams are, so hls.js, which fetches it with a script request, can't load it. Its ranges make the AV component play it."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 10,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/canvas",
+              "body": {
+                "id": "http://127.0.0.1:4444/test-fixtures/stream.m3u8",
+                "type": "Sound",
+                "format": "application/vnd.apple.mpegurl",
+                "duration": 10,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part 1"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-cross-origin-hls-manifest.json/canvas#t=0,10",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

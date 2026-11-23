@@ -1,0 +1,173 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Short videos on one timeline with captions (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Two three-second canvases joined into one timeline (auto-advance), each with English captions, so playback moves from one canvas's captions to the other's within seconds."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "behavior": ["auto-advance"],
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part one"]
+      },
+      "height": 360,
+      "width": 480,
+      "duration": 3,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#t=0,3",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 3,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1/captions",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1/captions/annotation",
+              "type": "Annotation",
+              "motivation": "supplementing",
+              "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/captions.vtt",
+                "type": "Text",
+                "format": "text/vtt",
+                "label": {
+                  "en": ["English captions"]
+                },
+                "language": "en"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part two"]
+      },
+      "height": 360,
+      "width": 480,
+      "duration": 3,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4#t=0,3",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 3,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2/captions",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2/captions/annotation",
+              "type": "Annotation",
+              "motivation": "supplementing",
+              "target": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/part-two-captions.vtt",
+                "type": "Text",
+                "format": "text/vtt",
+                "label": {
+                  "en": ["English captions (part two)"]
+                },
+                "language": "en"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Contents"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Part one"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/1#t=0,3",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Part two"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-short-canvases-captioned-video-manifest.json/canvas/2#t=0,3",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

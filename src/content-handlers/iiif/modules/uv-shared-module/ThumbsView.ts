@@ -9,6 +9,7 @@ import { Annotation, AnnotationBody, Canvas, Thumb } from "manifesto.js";
 import * as KeyCodes from "../../KeyCodes";
 import { Dates, Keyboard, Maths, Strings } from "../../Utils";
 import { ExtendedLeftPanel } from "../../extensions/config/ExtendedLeftPanel";
+import { applyMediaThumbnails } from "./PosterImages";
 
 export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
   private _$thumbsCache: JQuery | null;
@@ -86,6 +87,12 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
 
         if (!this.data.uri) {
           className += " placeholder";
+
+          // an icon for the kind of media, for audio and video without an
+          // image
+          if (this.data.mediaKind) {
+            className += " " + this.data.mediaKind;
+          }
         }
 
         const viewingDirection: ViewingDirection | null =
@@ -162,6 +169,8 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
     }
 
     const medianHeight: number = Maths.median(heights);
+
+    applyMediaThumbnails(this.thumbs, this.extension.helper.manifest?.__jsonld);
 
     for (let i = 0; i < this.thumbs.length; i++) {
       const thumb: Thumb = this.thumbs[i];
@@ -265,6 +274,12 @@ export class ThumbsView<T extends ExtendedLeftPanel> extends BaseView<T> {
           }
 
           let src: string = $thumb.attr("data-src");
+
+          // a thumbnail without an image (see className)
+          if (!src) {
+            $wrap.switchClass("loading", "loaded");
+            continue;
+          }
           if (
             that.config.options.thumbsCacheInvalidation &&
             that.config.options.thumbsCacheInvalidation.enabled

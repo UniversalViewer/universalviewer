@@ -202,13 +202,8 @@ export class GalleryComponent extends BaseComponent {
   public data(): IGalleryComponentData {
     return {
       chunkedResizingThreshold: 400,
-      content: <IGalleryComponentContent>{
-        decreaseThumbnailSize: "Decrease thumbnail size",
-        increaseThumbnailSize: "Increase thumbnail size",
-        searchResult: "{0} search result",
-        searchResults: "{0} search results",
-        thumbnailSize: "Thumbnail size",
-      },
+      // All text comes from the config's (localised) content.
+      content: {} as IGalleryComponentContent,
       debug: false,
       helper: null,
       imageFadeInDuration: 300,

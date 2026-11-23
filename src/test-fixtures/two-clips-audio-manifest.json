@@ -1,0 +1,64 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Two clips played in turn on one canvas (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in the iiif-av-component's gapless playback examples, one canvas has two painting annotations, each of a clip for part of its time, to be played one after the other. Without ranges, the AV extension plays it, as the MediaElement extension plays only one clip."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 20,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas/page/annotation/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas#t=0,10",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/whale-song.ogg",
+                "type": "Sound",
+                "format": "audio/ogg",
+                "duration": 37.9,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            },
+            {
+              "id": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas/page/annotation/2",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/two-clips-audio-manifest.json/canvas#t=10,20",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/whale-song.ogg",
+                "type": "Sound",
+                "format": "audio/ogg",
+                "duration": 37.9,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

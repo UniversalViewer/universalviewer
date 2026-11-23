@@ -8,8 +8,13 @@
  * This was done to:
  * 1. fix the improper use of .siblings() on line 144 (of the original).
  * 2. improve keyboard support of the source chooser button and menu (line 67).
+ * 3. let UV give it the versions of the media (sourcechooserSources: each
+ *    { src, title, type }) rather than the media element's <source>s, as UV
+ *    gives mediaelement one version at a time, and switch between them
+ *    itself (sourcechooserChoose(src)), so each is played the way it's meant
+ *    to be (UV only; not contributed upstream).
  *
- * These changes have been contributed upstream.
+ * Changes 1 and 2 have been contributed upstream.
  * Once the issues are resolved, this file should be deleted.
  * https://github.com/mediaelement/mediaelement-plugins/pull/266
  *
@@ -73,6 +78,8 @@
 
         Object.assign(mejs.MepDefaults, {
           sourcechooserText: null,
+          sourcechooserSources: null,
+          sourcechooserChoose: null,
         });
 
         Object.assign(MediaElementPlayer.prototype, {
@@ -91,13 +98,17 @@
 
             var hoverTimeout = void 0;
 
-            for (var i = 0, total = children.length; i < total; i++) {
-              var s = children[i];
+            if (Array.isArray(t.options.sourcechooserSources)) {
+              sources = t.options.sourcechooserSources.slice();
+            } else {
+              for (var i = 0, total = children.length; i < total; i++) {
+                var s = children[i];
 
-              if (t.mediaFiles) {
-                sources.push(s);
-              } else if (s.nodeName === "SOURCE") {
-                sources.push(s);
+                if (t.mediaFiles) {
+                  sources.push(s);
+                } else if (s.nodeName === "SOURCE") {
+                  sources.push(s);
+                }
               }
             }
 
@@ -137,7 +148,10 @@
                   src.src,
                   src.title,
                   src.type,
-                  media.src === src.src
+                  // The first of UV's versions is the one it plays first.
+                  Array.isArray(t.options.sourcechooserSources)
+                    ? _i === 0
+                    : media.src === src.src
                 );
               }
             }
@@ -319,8 +333,12 @@
                       };
 
                   media.pause();
-                  media.setSrc(src);
-                  media.load();
+                  if (typeof t.options.sourcechooserChoose === "function") {
+                    t.options.sourcechooserChoose(src);
+                  } else {
+                    media.setSrc(src);
+                    media.load();
+                  }
                   media.addEventListener(
                     "canplay",
                     canPlayAfterSourceSwitchHandler

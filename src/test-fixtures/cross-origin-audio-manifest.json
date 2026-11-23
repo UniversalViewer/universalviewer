@@ -1,0 +1,51 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/cross-origin-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio from another origin, without CORS (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Its audio is served from another origin (127.0.0.1 rather than localhost) without CORS headers, as many media servers are. Without ranges, the MediaElement extension plays it."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Audio: \"Song of Humpback Whales\" by Spyrogumas, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/cross-origin-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 37.9,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/cross-origin-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/cross-origin-audio-manifest.json/canvas/page/annotation/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/cross-origin-audio-manifest.json/canvas",
+              "body": {
+                "id": "http://127.0.0.1:4444/test-fixtures/whale-song.ogg",
+                "type": "Sound",
+                "format": "audio/ogg",
+                "duration": 37.9,
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

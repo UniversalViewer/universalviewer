@@ -51,17 +51,23 @@ const ThumbImage = ({
     <div
       onClick={() => onClick(thumb)}
       onKeyDown={keydownHandler}
-      className={cx("thumb", {
-        first: first,
-        placeholder: !thumb.uri,
-        twoCol:
-          paged &&
-          (viewingDirection === ViewingDirection.LEFT_TO_RIGHT ||
-            viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
-        oneCol: !paged,
-        selected: selected,
-        "truncate-labels": truncateThumbnailLabels,
-      })}
+      className={cx(
+        "thumb",
+        // an icon for the kind of media, for audio and video without an image
+        // (see applyMediaThumbnails)
+        !thumb.uri && (thumb as Thumb & { mediaKind?: string }).mediaKind,
+        {
+          first: first,
+          placeholder: !thumb.uri,
+          twoCol:
+            paged &&
+            (viewingDirection === ViewingDirection.LEFT_TO_RIGHT ||
+              viewingDirection === ViewingDirection.RIGHT_TO_LEFT),
+          oneCol: !paged,
+          selected: selected,
+          "truncate-labels": truncateThumbnailLabels,
+        }
+      )}
       tabIndex={0}
       role="option"
       aria-selected={selected}
@@ -74,7 +80,7 @@ const ThumbImage = ({
           height: thumb.height + 8 + "px",
         }}
       >
-        {inView && <img src={src} alt={thumb.label} />}
+        {inView && src && <img src={src} alt={thumb.label} />}
       </div>
       <div className="info">
         <span className="label" title={thumb.label}>

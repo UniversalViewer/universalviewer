@@ -1,0 +1,90 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video with ranges and an unlabelled canvas (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "As in IIIF Cookbook recipe 0026, the canvas has no label, so the player has no title until it plays a range, whose label it then shows."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Video: \"Blackbird feeding\" by AslakSh, via Wikimedia Commons (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 480,
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/blackbird-feeding.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/toc",
+      "type": "Range",
+      "label": {
+        "en": ["Blackbird Feeding"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/1",
+          "type": "Range",
+          "label": {
+            "en": ["Feeding the chicks"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas#t=0,25",
+              "type": "Canvas"
+            }
+          ]
+        },
+        {
+          "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/range/2",
+          "type": "Range",
+          "label": {
+            "en": ["Clearing the nest"]
+          },
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/ranges-unlabelled-canvas-video-manifest.json/canvas#t=25,572.034",
+              "type": "Canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

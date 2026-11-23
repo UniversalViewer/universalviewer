@@ -1,0 +1,25 @@
+image-fixture-3-fayum-page.jpg and image-fixture-3-fayum-page-thumb.jpg
+
+A page made for the end-to-end tests: the same page as pdf-fixture-2-fayum.pdf
+(its header reads "Universal Viewer PDF test fixture 2 / 3"), titled "Fayum
+Mummy Portrait", with a short description and, as its picture, the Fayum
+mummy portrait British Museum EA29772 (see image-fixture-4-fayum-portrait.txt
+for the source and licence). Its footer credits the picture: "Image: Fayum
+mummy portrait, British Museum EA29772. Public domain, via Wikimedia Commons.
+Generated for the Universal Viewer e2e test suite - universalviewer.io".
+
+The picture is public domain, as Wikimedia Commons gives it (it gives no
+licence URI, so the manifests give these files no rights, and credit the
+portrait in their requiredStatement). The page's title, text and layout were
+written for this repository, and are under its MIT License (see
+LICENSE.txt); the picture keeps its own licence. Rights can't give the MIT
+License, so the manifests credit the pages as "made for the Universal Viewer
+tests (MIT License)".
+
+image-fixture-3-fayum-page.jpg is 1236x1600 (SHA-1
+523ce2feeff261fbd4b1c8c7d064973713b3f38d); the thumbnail is 90x117 (SHA-1
+0beee4e91953e4fdd9e7c61e2fe96aee6f49be7d). They were added on 2 October 2026;
+how they were made isn't recorded.
+
+Used by image-paged-book-manifest.json, and as the accompanying image in
+placeholder-accompanying-audio-manifest.json and its ranges- version.

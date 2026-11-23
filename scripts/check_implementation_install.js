@@ -33,6 +33,12 @@ const KNOWN_ISSUES = [
     fix: "drop the fsevents optional dependency from @iiif/manifold",
   },
   {
+    // Yarn 4 adds node-gyp to build fsevents (from @iiif/manifold) and canvas
+    // (from pdfjs-dist), and node-gyp → tinyglobby → picomatch.
+    pattern: /^yarn 4 audit: picomatch@\S+ .* via tinyglobby@/,
+    fix: "remove node-gyp, which yarn 4 adds to build fsevents (@iiif/manifold) and canvas (pdfjs-dist)",
+  },
+  {
     // pdfjs-dist → canvas → @mapbox/node-pre-gyp → tar, npmlog and rimraf.
     // Only yarn 1 prints the chain, so the others are matched by version.
     pattern:

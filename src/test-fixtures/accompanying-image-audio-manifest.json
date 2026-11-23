@@ -1,0 +1,74 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Audio with an accompanying image (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "A LibriVox reading of chapter 52 of The Cloud of Unknowing with an accompanying image, as in IIIF Cookbook recipe 0014, which is shown while the audio plays. As in that recipe, the audio is in an MP4 file, so its format is video/mp4 though its type is Sound."
+    ]
+  },
+  "requiredStatement": {
+    "label": { "en": ["Attribution"] },
+    "value": {
+      "en": [
+        "Audio: chapter 52 of \"The Cloud of Unknowing\" (translated by Evelyn Underhill), read by David Barnes for LibriVox, via Wikimedia Commons (CC0). Image: P. Oxy. I 29, via Wikimedia Commons (public domain). Pages: made for the Universal Viewer tests (MIT License)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas",
+      "type": "Canvas",
+      "duration": 1985.024,
+      "accompanyingCanvas": {
+        "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying",
+        "type": "Canvas",
+        "height": 1000,
+        "width": 1000,
+        "items": [
+          {
+            "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying/page",
+            "type": "AnnotationPage",
+            "items": [
+              {
+                "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying/page/annotation",
+                "type": "Annotation",
+                "motivation": "painting",
+                "body": {
+                  "id": "http://localhost:4444/test-fixtures/image-fixture-1-euclid-page.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                },
+                "target": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/accompanying"
+              }
+            ]
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/accompanying-image-audio-manifest.json/canvas",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/cloud-of-unknowing.mp4",
+                "type": "Sound",
+                "duration": 1985.024,
+                "format": "video/mp4",
+                "rights": "http://creativecommons.org/publicdomain/zero/1.0/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
