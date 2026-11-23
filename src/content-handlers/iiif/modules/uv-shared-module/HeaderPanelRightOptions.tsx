@@ -2,17 +2,20 @@ import React from "react";
 import Button from "./Button";
 import { IIIFEvents } from "../../IIIFEvents";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
+import { IExtension } from "./IExtension";
 import { HeaderPanelContent, HeaderPanelOptions } from "../../BaseConfig";
 import { Settings } from "./Icons";
 
 interface Props {
   extensionHost: IIIFExtensionHost;
+  extension: IExtension;
   options: HeaderPanelOptions;
   content: HeaderPanelContent;
 }
 
 const HeaderPanelRightOptions: React.FC<Props> = ({
   extensionHost,
+  extension,
   options,
   content,
 }) => {
