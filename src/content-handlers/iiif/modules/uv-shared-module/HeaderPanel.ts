@@ -90,6 +90,18 @@ export class HeaderPanel<
       );
     });
 
+    this.renderRightOptions();
+
+    if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
+      this.$centerOptions.hide();
+    }
+
+    this.updateLocaleToggle();
+  }
+
+  renderRightOptions(): void {
+    if (!this.rightOptionsRoot) return;
+
     this.rightOptionsRoot.render(
       createElement(HeaderPanelRightOptions, {
         extensionHost: this.extensionHost,
@@ -97,12 +109,6 @@ export class HeaderPanel<
         content: this.content,
       })
     );
-
-    if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
-      this.$centerOptions.hide();
-    }
-
-    this.updateLocaleToggle();
   }
 
   updateLocaleToggle(): void {

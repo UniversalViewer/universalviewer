@@ -27,6 +27,7 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
             window.open(options.helpUrl, "_blank", "noopener,noreferrer")
           }
         >
+          {/* JM todo: replace with new Help svg icon */}
           <i className="uv-icon-help" aria-hidden="true" />
         </Button>
       )}
