@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 export type TooltipAlign = "start" | "center" | "end";
 export interface ButtonProps
+  // title and aria-label need to be omitted from the native props:
+  // we're passing the content label for the aria-label instead,
+  // and omitting title so the button doesn't create the native browser tooltip.
   extends Omit<React.ComponentPropsWithRef<"button">, "title" | "aria-label"> {
   label: string;
   tooltipPlacement?: TooltipPlacement;
