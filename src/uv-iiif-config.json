@@ -26,12 +26,18 @@
     },
     "headerPanel": {
       "options": {
-        "localeToggleEnabled": false
+        "localeToggleEnabled": true,
+        "settingsButtonEnabled": true,
+        "helpEnabled": true,
+        "helpUrl": "https://universalviewer.io"
       }
     },
     "pagingHeaderPanel": {
       "options": {
-        "pagingToggleEnabled": true
+        "pagingToggleEnabled": true,
+        "helpEnabled": true,
+        "helpUrl": "https://universalviewer.io",
+        "localeToggleEnabled": true
       }
     },
     "openSeadragonCenterPanel": {
