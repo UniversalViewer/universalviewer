@@ -1,6 +1,6 @@
-let puppeteer;
-const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { viewerUrl } = require("../scripts/tests/testViewer");
+import puppeteer from "puppeteer";
+import { BASE_URL } from "../scripts/tests/testBaseUrl.js";
+import { viewerUrl } from "../scripts/tests/testViewer.js";
 
 // Local single-model manifest for the model-viewer extension. Modelled on
 // IIIF Cookbook 0608 Simplest Manifest - Single 3D Model, adapted from a
@@ -14,7 +14,6 @@ describe("Universal Viewer", () => {
   let errors;
 
   beforeAll(async () => {
-    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
   });
 

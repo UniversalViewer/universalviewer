@@ -1,5 +1,5 @@
-const http = require("http");
-const { spawn } = require("child_process");
+import http from "node:http";
+import { spawn } from "node:child_process";
 
 function waitForServer(url, timeout = 30000) {
   return new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ function waitForServer(url, timeout = 30000) {
   });
 }
 
-module.exports = async () => {
+export default async () => {
   const server = spawn("npm", ["run", "e2eserve"], {
     shell: true,
     stdio: "inherit",

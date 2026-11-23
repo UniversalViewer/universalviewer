@@ -1,6 +1,6 @@
-const { execFileSync } = require("child_process");
+import { execFileSync } from "node:child_process";
 
-module.exports = async () => {
+export default async () => {
   const server = globalThis.__UV_E2E_SERVER__;
 
   if (!server || server.killed) {
