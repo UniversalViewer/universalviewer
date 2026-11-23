@@ -173,6 +173,7 @@ export class CaptionsControl extends BaseComponent {
 
     this._setButtonLabel(`${content.captions}: ${shown.label}`);
     this._$button.toggleClass("on", !!shownId);
+    this._$colours.toggleClass("off", !shownId);
     this._$element.toggle(tracks.length > 0);
 
     if (!tracks.length) {

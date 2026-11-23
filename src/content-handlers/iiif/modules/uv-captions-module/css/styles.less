@@ -74,6 +74,17 @@
   }
 }
 
+// Captions are off: the colours have no effect yet, so they're dimmed,
+// but still choosable ahead of turning captions on.
+.captions-colours.off [role="menuitemradio"] {
+  opacity: 0.45;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
 // Centred, as wide as its text up to 90% of the canvas.
 .captions-overlay {
   position: absolute;
