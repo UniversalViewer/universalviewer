@@ -133,6 +133,9 @@
   "$shareLink": "Link do tej strony",
   "$shareInstructions": "Aby udostępnić ten obiekt, skopiuj poniższy adres URL.",
   "$size": "Rozmiar:",
+  "$decreaseThumbnailSize": "Zmniejsz rozmiar miniatur",
+  "$thumbnailSize": "Rozmiar miniatur",
+  "$increaseThumbnailSize": "Zwiększ rozmiar miniatur",
   "$width": "Szerokość",
   "$cancel": "Anuluj",
   "$confirm": "Potwierdź",
@@ -157,5 +160,8 @@
   "$pause": "Pauza",
   "$play": "Odtwarzaj",
   "$rights": "Prawa",
+  "$layers": "Warstwy",
+  "$canvas": "Kanwa {0}",
+  "$choice": "Opcja {0}",
   "$transcript": "Transkrypcja"
 }

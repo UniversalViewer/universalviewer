@@ -1,20 +1,29 @@
-test.skip("Configuration options", () => {});
+let puppeteer;
+const { BASE_URL } = require("../scripts/tests/testBaseUrl");
+const {
+  afterDoubleClickDebounce,
+  annotationTargets,
+  waitForAnnotationOn,
+  doubleClickViewer,
+  viewerUrl,
+} = require("../scripts/tests/testViewer");
 
-const puppeteer = require("puppeteer");
-const { BASE_URL } = require("../scripts/testBaseUrl");
+// Local paged book of static images, with ranges for the Index tab. Modelled
+// on these IIIF Cookbook recipes (also credited in the manifest's summary):
+// - 0031 Multiple Volumes in a Single Bound Volume (nested ranges); this
+//   fixture replaces that recipe's manifest in these tests
+//   https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/
+// - 0011 Book 'behavior' Variations (the "paged" behavior)
+//   https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
+// - 0001 Simplest Manifest - Single Image File (static images, no service)
+//   https://iiif.io/api/cookbook/recipe/0001-mvm-image/
+const IMAGE_BOOK_MANIFEST = `${BASE_URL}/test-fixtures/image-paged-book-manifest.json`;
 
-// Cookbook manifest for viewer control tests
-const COOKBOOK_BOUND_MULTIVOLUME_MANIFEST =
-  "https://iiif.io/api/cookbook/recipe/0031-bound-multivolume/manifest.json";
-
-// PDF manifest for PDF-specific behaviour
-const PDF_MULTI_FILE_MANIFEST =
-  "https://digital.library.villanova.edu/Item/vudl:294631/Manifest";
-
-const viewerUrl = (manifestUrl) => {
-  //const separator = BASE_URL.includes("#?") ? "&" : "#?";
-  return `${BASE_URL}#?manifest=${encodeURIComponent(manifestUrl)}`;
-};
+// The same static images shown individually, so paging isn't available.
+// Modelled on IIIF Cookbook 0011 Book 'behavior' Variations (the
+// "individuals" behavior).
+// https://iiif.io/api/cookbook/recipe/0011-book-3-behavior/
+const IMAGE_INDIVIDUALS_MANIFEST = `${BASE_URL}/test-fixtures/image-individuals-manifest.json`;
 
 describe("Universal Viewer", () => {
   let browser;
@@ -88,10 +97,33 @@ describe("Universal Viewer", () => {
     return match ? decodeURIComponent(match[1]) : null;
   };
 
-  beforeAll(async () => {
-    browser = await puppeteer.launch();
+  const waitForXywhChange = async (page, previous) => {
+    await page.waitForFunction(
+      (prev) => {
+        const match = window.location.href.match(/[?&#]xywh=([^&]+)/);
+        const current = match ? decodeURIComponent(match[1]) : null;
+        return current !== null && current !== prev;
+      },
+      {},
+      previous
+    );
+  };
+
+  // Navigating to a URL that differs only by #hash doesn't reload the page,
+  // and navigating away from a busy viewer can stall, so open the viewer on a
+  // fresh page whenever a test needs a clean state.
+  const openFreshViewer = async (manifestUrl = IMAGE_BOOK_MANIFEST) => {
+    if (page) await page.close();
     page = await browser.newPage();
-    await page.goto(BASE_URL);
+    await page.goto(viewerUrl(manifestUrl), {
+      waitUntil: "domcontentloaded",
+    });
+  };
+
+  beforeAll(async () => {
+    puppeteer = (await import("puppeteer")).default;
+    browser = await puppeteer.launch();
+    await openFreshViewer();
   });
 
   afterAll(async () => {
@@ -105,11 +137,12 @@ describe("Universal Viewer", () => {
   });
 
   it("loads the viewer images", async () => {
-    await page.waitForSelector("#thumb-0");
+    // The thumbnail's <img> is attached after its #thumb-0 container.
+    await page.waitForSelector("#thumb-0 img");
     const imageSrc = await page.$eval("#thumb-0 img", (e) => e.src);
     expect(imageSrc).toEqual(
       expect.stringContaining(
-        "https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/90,/0/default.jpg"
+        `${BASE_URL}/test-fixtures/image-fixture-1-euclid-page-thumb.jpg`
       )
     );
   });
@@ -151,46 +184,86 @@ describe("Universal Viewer", () => {
   });
 
   it("can toggle gallery view", async () => {
-    // gallery view is not default view
-    const galleryViewBeforeToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewBeforeToggle).toBe("hidden");
+    const galleryButton = ".btn.imageBtn.gallery";
+    const twoUpButton = ".btn.imageBtn.two-up";
+    // The gallery view's component is only created once gallery view is
+    // first opened; the multi-select dialogue has its own hidden one.
+    const gallery = ".galleryView .iiif-gallery-component";
+    const thumbsView = ".leftPanel .thumbsView";
 
-    // gallery toggle icon is visible
-    await page.waitForSelector(".uv-icon-gallery");
-    const galleryViewToggle = await page.evaluate(() => {
-      const toggle = document.querySelector(".uv-icon-gallery");
-      return getComputedStyle(toggle).overflowX;
-    });
-    expect(galleryViewToggle).toBe("visible");
+    const ariaPressed = (selector) =>
+      page.$eval(selector, (el) => el.getAttribute("aria-pressed"));
+    const isVisible = (selector) =>
+      page.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        return !!el && el.offsetParent !== null;
+      }, selector);
 
-    // gallery view can be toggled on
+    // The header hides the gallery and paging buttons at Puppeteer's default
+    // 800px width, so use a desktop-sized viewport to click them as a user.
+    await page.setViewport({ width: 1280, height: 800 });
+
+    // Gallery view is not the default: the sidebar thumbnails show instead.
+    await page.waitForSelector(galleryButton, { visible: true });
+    await page.waitForSelector(thumbsView, { visible: true });
+    expect(await ariaPressed(galleryButton)).toBe("false");
+    expect(await isVisible(gallery)).toBe(false);
+
+    // Toggling gallery view on shows every canvas in the gallery and hides
+    // the sidebar thumbnails.
+    await page.click(galleryButton);
+    await page.waitForSelector(gallery, { visible: true });
+    await page.waitForSelector(thumbsView, { hidden: true });
+    await page.waitForFunction(
+      (sel) =>
+        document.querySelector(sel).getAttribute("aria-pressed") === "true",
+      {},
+      galleryButton
+    );
+    expect(await page.$$eval(`${gallery} .thumb`, (els) => els.length)).toBe(6);
+
+    // Choosing two-up toggles gallery view off again.
+    await page.click(twoUpButton);
+    await page.waitForSelector(gallery, { hidden: true });
+    await page.waitForSelector(thumbsView, { visible: true });
+    await page.waitForFunction(
+      (sel) =>
+        document.querySelector(sel).getAttribute("aria-pressed") === "false",
+      {},
+      galleryButton
+    );
+    expect(await ariaPressed(twoUpButton)).toBe("true");
+  });
+
+  it("labels gallery thumbnail size controls", async () => {
+    // Scope to the gallery view, which is only created once gallery view is
+    // first opened. The multi-select dialogue renders its own (hidden)
+    // gallery component with the same controls.
+    const gallery = ".galleryView .iiif-gallery-component";
     await page.evaluate(() => {
       document.querySelector(".uv-icon-gallery").click();
     });
-    const galleryViewAfterToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterToggle).toBe("visible");
+    await page.waitForSelector(`${gallery} .size-down`, { visible: true });
 
-    // gallery view can be toggled off
+    const labels = await page.$$eval(
+      [
+        `${gallery} .size-down`,
+        `${gallery} input[type='range'][name='size']`,
+        `${gallery} .size-up`,
+      ].join(", "),
+      (controls) =>
+        controls.map((control) => control.getAttribute("aria-label"))
+    );
+
+    expect(labels).toEqual([
+      "Decrease thumbnail size",
+      "Thumbnail size",
+      "Increase thumbnail size",
+    ]);
+
     await page.evaluate(() => {
       document.querySelector(".uv-icon-two-up").click();
     });
-    const galleryViewAfterTwoUpToggle = await page.evaluate(() => {
-      const galleryViewOverlay = document.querySelector(
-        ".iiif-gallery-component .header"
-      );
-      return getComputedStyle(galleryViewOverlay).overflowX;
-    });
-    expect(galleryViewAfterTwoUpToggle).toBe("hidden");
   });
 
   it("settings button is visible", async () => {
@@ -208,14 +281,9 @@ describe("Universal Viewer", () => {
     expect(isSettingsButtonVisible).toBe(true);
   });
 
-  // COOKBOOK MANIFEST TEST
+  // VIEWER CONTROLS
   describe("viewer controls", () => {
-    beforeEach(async () => {
-      await page.goto(viewerUrl(COOKBOOK_BOUND_MULTIVOLUME_MANIFEST), 
-      { 
-        waitUntil: "domcontentloaded"
-      });
-    });
+    beforeEach(openFreshViewer);
 
     // can navigate back and forth
     it("can navigate back and forth", async () => {
@@ -268,11 +336,7 @@ describe("Universal Viewer", () => {
       const initialXywh = getXywhValue(initialUrl);
 
       await page.$eval(".zoomIn.viewportNavButton", (el) => el.click());
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        initialUrl
-      );
+      await waitForXywhChange(page, initialXywh);
 
       const zoomInUrl = page.url();
       const zoomInXywh = getXywhValue(zoomInUrl);
@@ -282,11 +346,7 @@ describe("Universal Viewer", () => {
       expect(zoomInXywh).toMatch(/^-?\d+,-?\d+,\d+,\d+$/);
 
       await page.$eval(".zoomOut.viewportNavButton", (el) => el.click());
-      await page.waitForFunction(
-        (prev) => window.location.href !== prev,
-        {},
-        zoomInUrl
-      );
+      await waitForXywhChange(page, zoomInXywh);
 
       const zoomOutUrl = page.url();
       const zoomOutXywh = getXywhValue(zoomOutUrl);
@@ -310,6 +370,51 @@ describe("Universal Viewer", () => {
       const rotatedRot = await getRotationFromNavigator();
       expect(initialRot).toBe(0);
       expect(rotatedRot).toBe(90);
+    });
+
+    // double-click annotation (the viewerinputhook dblClickHandler hook)
+    it("publishes a double-click annotation in one-up but not two-up", async () => {
+      const twoUpButton = ".btn.imageBtn.two-up";
+      const oneUpButton = ".btn.imageBtn.one-up";
+      const waitForPressed = (sel) =>
+        page.waitForFunction(
+          (s) =>
+            document.querySelector(s).getAttribute("aria-pressed") === "true",
+          {},
+          sel
+        );
+
+      // The header hides the paging buttons at Puppeteer's default 800px width.
+      await page.setViewport({ width: 1280, height: 800 });
+      await page.waitForSelector(oneUpButton, { visible: true });
+
+      // Two-up on p1: publishes nothing.
+      await waitForPressed(twoUpButton);
+      await doubleClickViewer(page);
+      await afterDoubleClickDebounce(page);
+      expect(await annotationTargets(page)).toEqual([]);
+
+      // One-up on p2: publishes p2's target.
+      await page.click(oneUpButton);
+      await waitForPressed(oneUpButton);
+      await page.click(".btn.imageBtn.next");
+      await waitForCanvasValue(page, 1);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p2");
+
+      const targets = await annotationTargets(page);
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p2#xywh=\d+,\d+,1,1$/);
+    });
+
+    it("publishes a double-click annotation when paging isn't available", async () => {
+      await openFreshViewer(IMAGE_INDIVIDUALS_MANIFEST);
+      await doubleClickViewer(page);
+      await waitForAnnotationOn(page, "p1");
+
+      const targets = await annotationTargets(page);
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toMatch(/\/canvas\/p1#xywh=\d+,\d+,1,1$/);
     });
 
     // open and close adjust image control
@@ -353,9 +458,7 @@ describe("Universal Viewer", () => {
     const contentThumbnailsTab = ".thumbs.tab";
     const contentThumbnailsActiveTab = ".thumbs.tab.on";
 
-    beforeEach(async () => {
-      await page.goto(BASE_URL);
-    });
+    beforeEach(openFreshViewer);
 
     // switch content tabs and collapse content panel
     it("can switch content tabs", async () => {
@@ -391,9 +494,7 @@ describe("Universal Viewer", () => {
     const moreInfoCollapseBtn = ".rightPanel button.collapseButton";
     const moreInfoHeader = ".rightPanel div.header";
 
-    beforeEach(async () => {
-      await page.goto(BASE_URL);
-    });
+    beforeEach(openFreshViewer);
 
     it("can expand and collapse moreInformation panel", async () => {
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
@@ -412,75 +513,6 @@ describe("Universal Viewer", () => {
       await page.click(moreInfoCollapseBtn);
       await page.waitForSelector(moreInfoExpandBtn, { visible: true });
       await page.waitForSelector(moreInfoHeader, { hidden: true });
-    });
-  });
-
-  // PDF MANIFEST TEST
-  describe("PDF manifest", () => {
-    beforeEach(async () => {
-      await page.goto(viewerUrl(PDF_MULTI_FILE_MANIFEST), {
-        waitUntil: "domcontentloaded",
-      });
-    });
-
-    it("loads PDF manifest successfully", async () => {
-      expect(page.url()).toContain(encodeURIComponent(PDF_MULTI_FILE_MANIFEST));
-
-      await page.waitForSelector(".uv", { visible: true });
-
-      await page.waitForFunction(() => {
-        return document.querySelectorAll("iframe").length > 0;
-      });
-
-      const viewerFrame = page.frames().find((f) => {
-        const url = f.url();
-        
-        return (
-          url.includes("uv.html") ||
-          url.includes("viewer") ||
-          url.includes("manifest")
-        );
-      });
-
-      expect(viewerFrame).toBeTruthy();
-      
-      await viewerFrame.waitForSelector("canvas", { visible: true});
-      
-      const canvasInfo = await viewerFrame.evaluate(() => {
-        const canvas = document.querySelector(
-          "canvas"
-        );
-        
-        if (!canvas) return null;
-        return {
-          width: canvas.width,
-          height: canvas.height,
-        };
-      });
-      expect(canvasInfo).not.toBeNull();
-      expect(canvasInfo.width).toBeGreaterThan(0);
-      expect(canvasInfo.height).toBeGreaterThan(0);
-      
-      const pageText = await viewerFrame.evaluate(() => document.body.innerText);
-      
-      expect(pageText).not.toContain("Unable to load");
-      expect(pageText).not.toContain("Error loading");
-    });
-
-    it("shows multiple PDF files in the sidebar and allows navigation", async () => {
-      await page.waitForSelector("button.expandButton", { visible: true });
-      await page.click("button.expandButton");
-
-      await page.waitForSelector(".thumb", { visible: true });
-
-      const thumbs = await page.$$(".thumb");
-
-      expect(thumbs.length).toBeGreaterThan(1);
-      await thumbs[1].click();
-
-      await page.waitForFunction(() => window.location.href.includes("cv=1"));
-
-      expect(page.url()).toContain("cv=1");
     });
   });
 });

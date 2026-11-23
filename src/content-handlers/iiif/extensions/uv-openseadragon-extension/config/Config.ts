@@ -1,5 +1,6 @@
 import {
   AdjustImageDialogue,
+  ChoiceSwitchDialogue,
   BaseConfig,
   CenterPanelContent,
   CenterPanelOptions,
@@ -34,8 +35,11 @@ type MultiSelectDialogueOptions = DialogueOptions & {
 };
 
 type MultiSelectDialogueContent = DialogueContent & {
+  decreaseThumbnailSize: string;
   download: string;
+  increaseThumbnailSize: string;
   selectAll: string;
+  thumbnailSize: string;
   title: string;
 };
 
@@ -144,6 +148,7 @@ type OpenSeadragonCenterPanelContent = CenterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   adjustImage: string;
+  layers: string;
 };
 
 type OpenSeadragonCenterPanel = ModuleConfig & {
@@ -205,6 +210,7 @@ type MobileFooterPanelContent = FooterPanelContent & {
   zoomIn: string;
   zoomOut: string;
   help: string;
+  layers: string;
 };
 
 type MobileFooterPanel = ModuleConfig & {
@@ -289,6 +295,7 @@ type Modules = {
   shareDialogue: OSDShareDialogue;
   settingsDialogue: OSDSettingsDialogue;
   adjustImageDialogue: AdjustImageDialogue;
+  choiceSwitchDialogue: ChoiceSwitchDialogue;
 };
 
 export type Config = BaseConfig & {

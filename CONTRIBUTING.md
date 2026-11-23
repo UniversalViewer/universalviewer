@@ -5,8 +5,12 @@
 Before you can build the UV, we assume the following list of software is already installed in your system
 
 - Git
-- Node 18 or higher
+- Node 22.15 or higher
 - Npm 8.1.1 or higher
+
+### Install scripts (allowScripts)
+
+`allowScripts` in `package.json` lists which dependencies may run install scripts. Approvals are pinned to a version, so after a dependency bump (for example esbuild or puppeteer) `__tests__/allow_scripts_tests.js` fails and lists the package. To fix it, read the package's install script, then run `npm approve-scripts <package>` to approve the installed version, or `npm deny-scripts <package>` to block it. `npm approve-scripts --allow-scripts-pending` lists everything still pending. These commands need npm 11.19 or higher.
 
 ## Forking the repository
 
@@ -55,6 +59,7 @@ For more in-depth information on the application structure please see the [manua
 Before commiting your changes make sure tests are passing:
 
 ```
+npm run build
 npm test
 ```
 

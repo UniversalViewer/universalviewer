@@ -146,6 +146,9 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       '<a class="thumbs tab" tabindex="0">' + this.content.thumbnails + "</a>"
     );
     this.$tabs.append(this.$thumbsButton);
+    if (this.config.options.hideThumbsView) {
+      this.$thumbsButton.hide();
+    }
 
     this.$tabsContent = $('<div class="tabsContent"></div>');
     this.$main.append(this.$tabsContent);
@@ -520,6 +523,7 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
 
     this.thumbsRoot.render(
       createElement(ThumbsView, {
+        cacheInvalidation: this.config.options.thumbsCacheInvalidation,
         thumbs,
         paged,
         viewingDirection: viewingDirection || ViewingDirection.LEFT_TO_RIGHT,
@@ -645,6 +649,14 @@ export class ContentLeftPanel extends LeftPanel<ContentLeftPanelConfig> {
       this.config.options.defaultToTreeIfCollection,
       false
     );
+
+    const hideThumbsView = Bools.getBool(
+      this.config.options.hideThumbsView,
+      false
+    );
+    if (hideThumbsView) {
+      return false;
+    }
 
     const treeData: TreeNode | null = this.getTree();
 

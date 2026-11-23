@@ -334,6 +334,8 @@ export class PDFCenterPanel extends CenterPanel<
       const parameter = {
         url: mediaUri,
         withCredentials: canvas.externalResource.isAccessControlled(),
+        // Mitigates CVE-2024-4367 (GHSA-wgrm-67xf-hhpq) in pdf.js <= 4.1.392.
+        isEvalSupported: false,
       };
 
       const loadingTask = this._pdfjsLib.getDocument(parameter);

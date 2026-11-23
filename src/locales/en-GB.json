@@ -134,6 +134,9 @@
   "$shareLink": "Link to this Page",
   "$shareInstructions": "To share this item, copy the URL below.",
   "$size": "Size:",
+  "$decreaseThumbnailSize": "Decrease thumbnail size",
+  "$thumbnailSize": "Thumbnail size",
+  "$increaseThumbnailSize": "Increase thumbnail size",
   "$width": "Width",
   "$cancel": "Cancel",
   "$confirm": "Confirm",
@@ -162,5 +165,8 @@
   "$saturation": "Saturation",
   "$reset": "Reset",
   "$remember": "Remember my settings",
+  "$layers": "Layers",
+  "$canvas": "Canvas {0}",
+  "$choice": "Choice {0}",
   "$transcript": "Transcript"
 }

@@ -1,0 +1,52 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/model-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Single 3D model (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "One glTF binary model, modelled on IIIF Cookbook 0608 Simplest Manifest - Single 3D Model (https://iiif.io/api/cookbook/recipe/0608-mvm-3d/). That recipe paints the model into a Presentation 4 Scene; this fixture uses a Presentation 3 Canvas, which UV reads."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "\"Box\" from the Khronos glTF Sample Assets (https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Box), © 2017 Cesium, CC BY 4.0."
+      ]
+    }
+  },
+  "rights": "http://creativecommons.org/licenses/by/4.0/",
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/model-manifest.json/canvas/c0",
+      "type": "Canvas",
+      "label": {
+        "en": ["Box"]
+      },
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/model-manifest.json/canvas/c0/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/model-manifest.json/canvas/c0/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/model-fixture-1-box.glb",
+                "type": "Model",
+                "format": "model/gltf-binary"
+              },
+              "target": "http://localhost:4444/test-fixtures/model-manifest.json/canvas/c0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

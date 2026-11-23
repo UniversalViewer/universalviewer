@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { build, context } from 'esbuild';
 import { writeFileSync } from "fs";
 import * as path from 'path';
 import serve, { error, log } from 'create-serve';
@@ -24,20 +24,31 @@ async function main() {
     `
     );
 
-    build({
+    const options = {
         entryPoints: ["src/index.ts"],
         outfile: "dist/bundle.js",
         bundle: true,
         minify: true,
-        watch: watch && {
-            onRebuild(err) {
-                serve.update();
-                err ? error('× Failed') : log('✓ Updated');
-            }
-        },
         sourcemap: true,
         target: ["chrome58"],
-    });
+    };
+
+    if (watch) {
+        // Reloads the page after each rebuild.
+        const liveReload = {
+            name: 'live-reload',
+            setup(pluginBuild) {
+                pluginBuild.onEnd((result) => {
+                    serve.update();
+                    result.errors.length ? error('× Failed') : log('✓ Updated');
+                });
+            }
+        };
+        const ctx = await context({ ...options, plugins: [liveReload] });
+        await ctx.watch();
+    } else {
+        await build(options);
+    }
 
     serve.start({
         port: 3001,

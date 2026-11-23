@@ -1,0 +1,193 @@
+{
+  "@context": [
+    "http://iiif.io/api/presentation/3/context.json",
+    "http://wellcomelibrary.org/ixif/0/context.json"
+  ],
+  "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Multi-file PDF (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Three single-page PDFs, modelled on the Villanova multi-file PDF manifest (vudl:294631)."
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["Attribution"]
+    },
+    "value": {
+      "en": [
+        "Images via Wikimedia Commons: P. Oxy. I 29 (public domain); Fayum mummy portrait, British Museum EA29772 (public domain); \"The Weighing of the Heart\" by PharaohCrab (CC0)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p0",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part 1 (Euclid's Elements, Book II)"]
+      },
+      "rendering": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-1-euclid.pdf",
+          "type": "Text",
+          "format": "application/pdf",
+          "label": {
+            "en": ["Original source file"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-1-euclid-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "height": 792,
+      "width": 612,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p0/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p0/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/pdf-fixture-1-euclid.pdf",
+                "type": "foaf:Document",
+                "format": "application/pdf",
+                "label": {
+                  "en": ["Part 1 (Euclid's Elements, Book II)"]
+                }
+              },
+              "target": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p0",
+              "thumbnail": [
+                {
+                  "id": "http://localhost:4444/test-fixtures/pdf-fixture-1-euclid-thumb.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p1",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part 2 (Fayum Mummy Portrait)"]
+      },
+      "rendering": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-2-fayum.pdf",
+          "type": "Text",
+          "format": "application/pdf",
+          "label": {
+            "en": ["Original source file"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-2-fayum-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "height": 792,
+      "width": 612,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p1/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/pdf-fixture-2-fayum.pdf",
+                "type": "foaf:Document",
+                "format": "application/pdf",
+                "label": {
+                  "en": ["Part 2 (Fayum Mummy Portrait)"]
+                }
+              },
+              "target": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p1",
+              "thumbnail": [
+                {
+                  "id": "http://localhost:4444/test-fixtures/pdf-fixture-2-fayum-thumb.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p2",
+      "type": "Canvas",
+      "label": {
+        "en": ["Part 3 (The Weighing of the Heart)"]
+      },
+      "rendering": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-3-weighing-of-the-heart.pdf",
+          "type": "Text",
+          "format": "application/pdf",
+          "label": {
+            "en": ["Original source file"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-fixture-3-weighing-of-the-heart-thumb.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "height": 792,
+      "width": 612,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p2/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:4444/test-fixtures/pdf-fixture-3-weighing-of-the-heart.pdf",
+                "type": "foaf:Document",
+                "format": "application/pdf",
+                "label": {
+                  "en": ["Part 3 (The Weighing of the Heart)"]
+                }
+              },
+              "target": "http://localhost:4444/test-fixtures/pdf-multi-file-manifest.json/canvas/p2",
+              "thumbnail": [
+                {
+                  "id": "http://localhost:4444/test-fixtures/pdf-fixture-3-weighing-of-the-heart-thumb.jpg",
+                  "type": "Image",
+                  "format": "image/jpeg"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

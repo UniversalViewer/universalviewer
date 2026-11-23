@@ -1,0 +1,81 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": ["Video with captions in multiple languages (e2e test fixture)"]
+  },
+  "summary": {
+    "en": [
+      "Modelled on IIIF Cookbook recipe <a href=\"https://iiif.io/api/cookbook/recipe/0074-multiple-language-captions/\">0074 Using Caption and Subtitle Files in Multiple Languages with Video Content</a>."
+    ]
+  },
+  "items": [
+    {
+      "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 480,
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4"
+              }
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas/captions",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas/captions/annotation",
+              "type": "Annotation",
+              "motivation": "supplementing",
+              "body": {
+                "type": "Choice",
+                "items": [
+                  {
+                    "id": "http://localhost:4444/test-fixtures/captions.vtt",
+                    "type": "Text",
+                    "format": "text/vtt",
+                    "label": {
+                      "en": ["English captions"]
+                    },
+                    "language": "en"
+                  },
+                  {
+                    "id": "http://localhost:4444/test-fixtures/capsiynau.srt",
+                    "type": "Text",
+                    "format": "text/srt",
+                    "label": {
+                      "cy": ["Capsiynau Cymraeg"]
+                    },
+                    "language": "cy"
+                  }
+                ]
+              },
+              "target": "http://localhost:4444/test-fixtures/multiple-language-captions-video-manifest.json/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

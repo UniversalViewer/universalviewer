@@ -7,24 +7,25 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ '20' ]
+        node: [ '22' ]
 
     name: Node ${{ matrix.node }} build
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/cache@v5
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.lock') }}
+          key: ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
       - name: Setup node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
 
       - run: npm ci
-      - run: npm run build
+      - run: npm run build-all
+      - run: npm run check-implementation-install
       # Disable AppArmor namespace behavior that breaks tests:
       - run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
       - run: npm test

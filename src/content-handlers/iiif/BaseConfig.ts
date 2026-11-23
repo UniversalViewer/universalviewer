@@ -311,6 +311,18 @@ export type AdjustImageDialogue = ModuleConfig & {
   content: AdjustImageDialogueContent;
 };
 
+type ChoiceSwitchDialogueOptions = DialogueOptions & {};
+
+type ChoiceSwitchDialogueContent = DialogueContent & {
+  canvas: string;
+  choice: string;
+};
+
+export type ChoiceSwitchDialogue = ModuleConfig & {
+  options: ChoiceSwitchDialogueOptions;
+  content: ChoiceSwitchDialogueContent;
+};
+
 export type DownloadDialogueOptions = DialogueOptions & {};
 
 export type DownloadDialogueContent = DialogueContent & {
@@ -474,6 +486,7 @@ export type BaseConfig = {
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
     adjustImageDialogue: AdjustImageDialogue;
+    choiceSwitchDialogue: ChoiceSwitchDialogue;
     rampModule?: RampModuleConfig;
   };
   localisation: Localisation;

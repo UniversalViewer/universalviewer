@@ -211,6 +211,27 @@
                     });
         }
 
+        .choiceSwitch {
+          display: none !important;
+
+          .md-mediaquery({
+            display: inline-block !important;
+            cursor: pointer !important;
+            background-color: black;
+            background-image: data-uri("../img/layers.svg") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 28px;
+            height: 28px;
+            img {
+              display: none;
+            }
+            &:focus {
+              .tab-focus();
+            }
+            });
+        }
+
         div[title="Previous page"] {
           display: none !important;
         }
@@ -250,6 +271,12 @@
           background-color: saturate(@col, 80%);
         }
         z-index: 10;
+      }
+
+      .viewer.choice-dialogue-open {
+        .openseadragon-container > div > div {
+          opacity: 1 !important;
+        }
       }
 
       .annotationPin {

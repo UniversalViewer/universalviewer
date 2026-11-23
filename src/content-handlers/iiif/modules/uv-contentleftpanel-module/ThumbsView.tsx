@@ -1,10 +1,13 @@
 import { ViewingDirection, ViewingHint } from "@iiif/vocabulary";
 import cx from "classnames";
 import { Thumb } from "manifesto.js";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useInView } from "react-intersection-observer";
+import { ThumbsCacheInvalidation } from "../../extensions/config/ContentLeftPanel";
+import { Dates } from "../../Utils";
 
 const ThumbImage = ({
+  cacheInvalidation,
   first,
   onClick,
   onKeyDown,
@@ -14,6 +17,7 @@ const ThumbImage = ({
   truncateThumbnailLabels,
   viewingDirection,
 }: {
+  cacheInvalidation?: ThumbsCacheInvalidation;
   first: boolean;
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
@@ -28,6 +32,14 @@ const ThumbImage = ({
     rootMargin: "0px 0px 0px 0px",
     triggerOnce: true,
   });
+
+  // memoised so re-renders don't generate a new timestamp and re-request the image
+  const src = useMemo(() => {
+    if (thumb.uri && cacheInvalidation && cacheInvalidation.enabled) {
+      return `${thumb.uri}${cacheInvalidation.paramType}t=${Dates.getTimeStamp()}`;
+    }
+    return thumb.uri;
+  }, [thumb.uri, cacheInvalidation]);
 
   var keydownHandler = (e) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -62,7 +74,7 @@ const ThumbImage = ({
           height: thumb.height + 8 + "px",
         }}
       >
-        {inView && <img src={thumb.uri} alt={thumb.label} />}
+        {inView && <img src={src} alt={thumb.label} />}
       </div>
       <div className="info">
         <span className="label" title={thumb.label}>
@@ -77,6 +89,7 @@ const ThumbImage = ({
 };
 
 const Thumbnails = ({
+  cacheInvalidation,
   onClick,
   onKeyDown,
   paged,
@@ -86,6 +99,7 @@ const Thumbnails = ({
   viewingDirection,
   truncateThumbnailLabels,
 }: {
+  cacheInvalidation?: ThumbsCacheInvalidation;
   onClick: (thumb: Thumb) => void;
   onKeyDown: (thumb: Thumb) => void;
   paged: boolean;
@@ -149,6 +163,7 @@ const Thumbnails = ({
           className="thumb-container"
         >
           <ThumbImage
+            cacheInvalidation={cacheInvalidation}
             first={index === firstNonPagedIndex}
             onClick={onClick}
             onKeyDown={onKeyDown}
