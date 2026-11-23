@@ -1,0 +1,177 @@
+@import "../../uv-shared-module/css/iiif-tree-component.less";
+
+.uv {
+  .leftPanel {
+    .top {
+      .title {
+        text-transform: uppercase;
+      }
+    }
+
+    .tabs {
+      height: 25px;
+      border-bottom: 1px solid @panel-border-color;
+
+      .tab {
+        color: @text-color;
+        background-color: @panel-dark-bg;
+        display: inline-block;
+        text-align: center;
+        line-height: 22px;
+        height: 22px;
+        overflow: hidden;
+        width: 75px;
+        margin: 0;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &.first {
+          margin: 0 0 0 @margin-medium-horizontal;
+        }
+
+        &.on {
+          border: 1px solid @panel-border-color;
+          border-bottom: 1px solid @panel-dark-bg;
+          color: @link-color;
+          margin-bottom: -1px;
+          height: 25px;
+          line-height: 25px;
+        }
+      }
+    }
+
+    .tabsContent {
+      padding: @padding-medium;
+
+      .navContent,
+      .transcriptContent {
+        overflow: auto;
+        padding: 0 @padding-medium-horizontal 0 0;
+      }
+
+      .transcriptContent {
+        color: @text-color;
+        font-size: 0.8rem;
+        overflow-y: auto;
+        height: 100%;
+
+        // top menu bar
+        .ramp--transcript_menu {
+          padding: @padding-medium;
+          border-bottom: 1px solid @panel-border-color;
+
+          .ramp--transcript_search_input input {
+            width: 100%;
+            background: @panel-dark-bg;
+            border: 1px solid @panel-border-color;
+            color: @text-color;
+            padding: @padding-small-vertical @padding-small-horizontal;
+            font-size: 0.8rem;
+            box-sizing: border-box;
+          }
+
+          .ramp--transcript_selector {
+            margin-top: @padding-small-vertical;
+
+            select {
+              background: @panel-dark-bg;
+              border: 1px solid @panel-border-color;
+              color: @text-color;
+              font-size: 0.8rem;
+            }
+
+            // hide the download button for now
+            .ramp--transcript_downloader {
+              display: none;
+            }
+          }
+
+          .ramp--transcript_menu-info {
+            margin-top: @padding-small-vertical;
+            font-size: 0.75rem;
+            opacity: 0.7;
+          }
+        }
+
+        // transcript cue list
+        .transcript_content {
+          padding: @padding-medium;
+        }
+
+        .ramp--transcript_item {
+          display: block;
+          padding: 2px 0;
+          overflow: hidden;
+        }
+
+        // timestamp links — match structured nav item style
+        .ramp--transcript_time {
+          display: inline;
+          color: @text-color;
+          text-decoration: none;
+          cursor: pointer;
+          transition: none !important;
+          margin-right: @margin-small-horizontal;
+          font-size: 0.75rem;
+          opacity: 0.7;
+
+          &:hover {
+            color: @brand-secondary;
+            opacity: 1;
+          }
+        }
+
+        // active transcript item — matches structured nav active style
+        .ramp--transcript_item.active,
+        .ramp--transcript_item[aria-label="true"] {
+          .ramp--transcript_time {
+            color: @brand-secondary;
+            opacity: 1;
+          }
+
+          .ramp--transcript_text {
+            color: @brand-secondary;
+          }
+        }
+
+        .ramp--transcript_text {
+          display: inline;
+          color: @text-color;
+        }
+
+        .ramp--transcript_cue-texts {
+          display: inline;
+
+          p {
+            display: inline;
+            margin: 0;
+          }
+        }
+
+        .ramp--transcript_item {
+          display: grid;
+          grid-template-columns: 4.5rem 1fr;
+          gap: 0 @margin-small-horizontal;
+          padding: 2px 0;
+          align-items: baseline;
+        }
+
+        .ramp--transcript_time {
+          grid-column: 1;
+          white-space: nowrap;
+        }
+
+        .ramp--transcript_cue-texts {
+          grid-column: 2;
+          display: block;
+
+          p {
+            display: block;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,225 @@
+@import "../../../modules/uv-dialogues-module/css/styles.less";
+@import "../../../modules/uv-avcenterpanel-module/css/styles.less";
+@import "../../../modules/uv-rampleftpanel-module/css/styles.less";
+@import "../../../modules/uv-moreinforightpanel-module/css/styles.less";
+@import "../../../modules/uv-shared-module/css/styles.less";
+@import "../../../modules/uv-avmobilefooterpanel-module/css/styles.less";
+
+.iiif-av-component .canvas-timeline-container .ui-slider-range-min {
+  background-color: rgb(66 66 66 / 50%) !important;
+}
+
+// Override RAMP StructuredNavigation to match UV tree component
+.uv {
+  .centerPanel {
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ramp-player-scope {
+      width: 100%;
+    }
+  }
+
+  .ramp--structured-nav__border {
+    height: 100%;
+    overflow: auto;
+    color: @text-color;
+
+    // hide the "scroll to see more" hint
+    & > span {
+      display: none;
+    }
+  }
+
+  .ramp--structured-nav__content {
+    height: 100%;
+    outline: none;
+  }
+
+  // reset all lists
+  ul.ramp--structured-nav__tree {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    // indent nested levels like the tree component
+    ul.ramp--structured-nav__tree {
+      margin-left: @margin-large-horizontal;
+    }
+  }
+
+  .ramp--structured-nav__tree-item {
+    margin: 0;
+    padding: 2px 0;
+    overflow: hidden;
+  }
+
+  // section headings (non-clickable parent nodes)
+  .ramp--structured-nav__section {
+    all: unset;
+    display: block;
+    overflow: hidden;
+    padding: 2px 0;
+    cursor: default;
+  }
+
+  .ramp--structured-nav__section-title {
+    all: unset;
+    display: block;
+    overflow: hidden;
+    color: @text-color;
+
+    &.not-clickable {
+      cursor: default;
+    }
+  }
+
+  // intermediate non-link titles (sections without timecodes)
+  .ramp--structured-nav__item-title {
+    display: block;
+    overflow: hidden;
+    color: @text-color;
+    padding: 2px 0;
+  }
+
+  .ramp--structured-nav__title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .ramp--structured-nav__section-label {
+    color: @text-color;
+  }
+
+  .ramp--structured-nav__section-duration {
+    color: @text-color;
+    opacity: 0.6;
+    font-size: 0.9em;
+    margin-left: @margin-small-horizontal;
+  }
+
+  // clickable leaf items
+  a.ramp--structured-nav__item-link {
+    display: block;
+    overflow: hidden;
+    color: @text-color;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: @brand-secondary;
+    }
+  }
+
+  // active item — matches .selected in the tree component
+  .ramp--structured-nav__tree-item.active {
+    a.ramp--structured-nav__item-link {
+      color: @brand-secondary !important;
+    }
+  }
+
+  // section head active state
+  .ramp--structured-nav__section-head-buttons.active {
+    .ramp--structured-nav__section-title {
+      color: @brand-secondary;
+    }
+  }
+
+  // item number prefix
+  .structured-nav__item-label {
+    margin-left: 2px;
+  }
+
+  // hide the tracker div (RAMP's progress indicator element)
+  .tracker {
+    display: none;
+  }
+
+  // hide RAMP's section-level head-buttons chrome
+  .ramp--structured-nav__section-head-buttons {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+// Font size to match tree component
+.ramp--structured-nav__border {
+  font-size: 0.8rem;
+  height: 100%;
+
+  // fill the panel height
+  display: flex;
+  flex-direction: column;
+}
+
+.ramp--structured-nav__content {
+  flex: 1;
+  overflow: visible; // let the parent .main handle scrolling
+  height: auto;
+}
+
+// instant hover transition
+a.ramp--structured-nav__item-link {
+  transition: none !important;
+
+  &:hover {
+    color: @brand-secondary;
+  }
+}
+
+.ramp--structured-nav__section-title {
+  transition: none !important;
+}
+
+// Hide tracker on all items by default
+.tracker {
+  display: none;
+}
+
+// Only show on active items, as a left border accent
+.ramp--structured-nav__tree-item.active {
+  .tracker {
+    display: block;
+    float: left;
+    width: 3px;
+    height: 100%;
+    min-height: 1em;
+    background-color: @brand-secondary;
+    margin-right: @margin-small-horizontal;
+    flex-shrink: 0;
+  }
+
+  // pull the link into a flex row so tracker and text sit side by side
+  display: flex;
+  align-items: center;
+  padding-left: 0;
+
+  a.ramp--structured-nav__item-link {
+    flex: 1;
+    color: @brand-secondary !important;
+  }
+}
+
+.ramp--structured-nav__border {
+  border: none !important;
+  background: transparent !important;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ramp--structured-nav__content {
+  flex: 1;
+  min-height: 0;
+  overflow: visible;
+}
+
+.ramp-player-scope {
+  @import (less) "../../../../../../node_modules/@samvera/ramp/dist/ramp.css";
+}

@@ -95,6 +95,13 @@ const Extension: IExtensionRegistry = {
         "./extensions/uv-openseadragon-extension/Extension"
       ),
   },
+  RAMP: {
+    name: "uv-ramp-extension",
+    loader: () =>
+      /* webpackMode: "lazy" */ import(
+        "./extensions/uv-ramp-extension/Extension"
+      ),
+  },
 };
 
 export default class IIIFContentHandler
@@ -133,8 +140,8 @@ export default class IIIFContentHandler
       Extension.MODELVIEWER;
     this._extensionRegistry[ExternalResourceType.SOUND] =
       Extension.MEDIAELEMENT;
-    this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.AV;
-    this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.AV;
+    this._extensionRegistry[MediaType.AUDIO_MP4] = Extension.RAMP;
+    this._extensionRegistry[MediaType.AUDIO_OGG] = Extension.RAMP;
     this._extensionRegistry[MediaType.DICOM] = Extension.ALEPH;
     this._extensionRegistry[MediaType.DRACO] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.EPUB] = Extension.EBOOK;
@@ -142,17 +149,17 @@ export default class IIIFContentHandler
     this._extensionRegistry[MediaType.GLB] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.GLTF] = Extension.MODELVIEWER;
     this._extensionRegistry[MediaType.JPG] = Extension.OSD;
-    this._extensionRegistry[MediaType.MP3] = Extension.AV;
-    this._extensionRegistry[MediaType.MPEG] = Extension.AV;
-    this._extensionRegistry[MediaType.MPEG_DASH] = Extension.AV;
+    this._extensionRegistry[MediaType.MP3] = Extension.RAMP;
+    this._extensionRegistry[MediaType.MPEG] = Extension.RAMP;
+    this._extensionRegistry[MediaType.MPEG_DASH] = Extension.RAMP;
     this._extensionRegistry[MediaType.OPF] = Extension.EBOOK;
     this._extensionRegistry[MediaType.PDF] = Extension.PDF;
     this._extensionRegistry[MediaType.PNG] = Extension.OSD;
     this._extensionRegistry[MediaType.USDZ] = Extension.MODELVIEWER;
-    this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.AV;
-    this._extensionRegistry[MediaType.VIDEO_OGG] = Extension.AV;
-    this._extensionRegistry[MediaType.WAV] = Extension.AV;
-    this._extensionRegistry[MediaType.WEBM] = Extension.AV;
+    this._extensionRegistry[MediaType.VIDEO_MP4] = Extension.RAMP;
+    this._extensionRegistry[MediaType.VIDEO_OGG] = Extension.RAMP;
+    this._extensionRegistry[MediaType.WAV] = Extension.RAMP;
+    this._extensionRegistry[MediaType.WEBM] = Extension.RAMP;
     this._extensionRegistry[RenderingFormat.PDF] = Extension.PDF;
 
     this.on(
