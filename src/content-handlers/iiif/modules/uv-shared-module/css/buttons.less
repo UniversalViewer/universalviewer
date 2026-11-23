@@ -162,6 +162,213 @@
       width: 100%;
     }
   }
+
+  // Tooltips
+  // --------------------------------------------------
+
+  @tooltip-gap: 8px;
+  @tooltip-delay: 300ms;
+  @tooltip-duration: 170ms;
+  @tooltip-shift: 4px;
+  @tooltip-arrow-size: 5px;
+  @tooltip-arrow-inset: 10px; // this should centre the arrow on a 30px button, but is currently slightly off because the header buttons are 34 x 30 (due to padding); JM todo return to this when header buttons have been rearranged and padding removed
+
+  .btn.imageBtn {
+    position: relative;
+  }
+
+  .uv-tooltip {
+    position: absolute;
+    padding: 4px 8px;
+    background-color: @gray;
+    color: #fff;
+    font-size: @font-size-small;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 1000;
+
+    // Hidden
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity @tooltip-duration ease-in-out,
+      translate @tooltip-duration ease-in-out,
+      visibility 0s linear @tooltip-duration;
+
+    // Arrow
+    &::before {
+      content: "";
+      position: absolute;
+      border: @tooltip-arrow-size solid transparent;
+    }
+
+    // Hover bridge across the gap
+    &::after {
+      content: "";
+      position: absolute;
+    }
+  }
+
+  // Placement: which side of the button the tooltip appears on
+
+  .uv-tooltip--bottom {
+    top: 100%;
+    margin-top: @tooltip-gap;
+    translate: 0 -@tooltip-shift;
+
+    // Arrow
+    &::before {
+      bottom: 100%;
+      border-bottom-color: @gray;
+    }
+
+    // Hover bridge across the gap
+    &::after {
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      height: @tooltip-gap;
+    }
+  }
+
+  .uv-tooltip--top {
+    bottom: 100%;
+    margin-bottom: @tooltip-gap;
+    translate: 0 @tooltip-shift;
+
+    // Arrow
+    &::before {
+      top: 100%;
+      border-top-color: @gray;
+    }
+
+    // Hover bridge across the gap
+    &::after {
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: @tooltip-gap;
+    }
+  }
+
+  .uv-tooltip--left {
+    right: 100%;
+    margin-right: @tooltip-gap;
+    translate: @tooltip-shift 0;
+
+    // Arrow
+    &::before {
+      left: 100%;
+      border-left-color: @gray;
+    }
+
+    // Hover bridge across the gap
+    &::after {
+      left: 100%;
+      top: 0;
+      bottom: 0;
+      width: @tooltip-gap;
+    }
+  }
+
+  .uv-tooltip--right {
+    left: 100%;
+    margin-left: @tooltip-gap;
+    translate: -@tooltip-shift 0;
+
+    // Arrow
+    &::before {
+      right: 100%;
+      border-right-color: @gray;
+    }
+
+    // Hover bridge across the gap
+    &::after {
+      right: 100%;
+      top: 0;
+      bottom: 0;
+      width: @tooltip-gap;
+    }
+  }
+
+  // Alignment - we need this to avoid the tooltips right on the edge of UV from coming out over the edge
+
+  .uv-tooltip--top,
+  .uv-tooltip--bottom {
+    &.uv-tooltip--align-center {
+      left: 50%;
+      transform: translateX(-50%);
+      &::before {
+        left: 50%;
+        margin-left: -@tooltip-arrow-size;
+      }
+    }
+    &.uv-tooltip--align-start {
+      left: 0;
+      &::before {
+        left: @tooltip-arrow-inset;
+      }
+    }
+    &.uv-tooltip--align-end {
+      right: 0;
+      &::before {
+        right: @tooltip-arrow-inset;
+      }
+    }
+  }
+
+  .uv-tooltip--left,
+  .uv-tooltip--right {
+    &.uv-tooltip--align-center {
+      top: 50%;
+      transform: translateY(-50%);
+      &::before {
+        top: 50%;
+        margin-top: -@tooltip-arrow-size;
+      }
+    }
+    &.uv-tooltip--align-start {
+      top: 0;
+      &::before {
+        top: @tooltip-arrow-inset;
+      }
+    }
+    &.uv-tooltip--align-end {
+      bottom: 0;
+      &::before {
+        bottom: @tooltip-arrow-inset;
+      }
+    }
+  }
+
+  // Shown: after the delay, fade in and slide into place
+  .tooltip-shown() {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition:
+      opacity @tooltip-duration ease-in-out @tooltip-delay,
+      translate @tooltip-duration ease-in-out @tooltip-delay,
+      visibility 0s linear @tooltip-delay;
+  }
+
+  @media (hover: hover) {
+    .btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
+      .tooltip-shown();
+    }
+  }
+
+  .btn:focus-visible > .uv-tooltip:not(.uv-tooltip--dismissed) {
+    .tooltip-shown();
+  }
+
+  // Fade only, no slide
+  @media (prefers-reduced-motion: reduce) {
+    .uv-tooltip {
+      translate: none;
+    }
+  }
 }
 
 .iiif-gallery-component {
