@@ -18,6 +18,18 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
 }) => {
   return (
     <>
+      {options.helpEnabled && options.helpUrl && (
+        <Button
+          className="help"
+          label={content.help}
+          tooltipAlign="end"
+          onClick={() =>
+            window.open(options.helpUrl, "_blank", "noopener,noreferrer")
+          }
+        >
+          <i className="uv-icon-help" aria-hidden="true" />
+        </Button>
+      )}
       {options.settingsButtonEnabled && (
         <Button
           className="settings"

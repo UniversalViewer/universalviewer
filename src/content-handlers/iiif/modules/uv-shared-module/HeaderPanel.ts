@@ -18,7 +18,6 @@ export class HeaderPanel<
   T extends BaseConfig["modules"]["headerPanel"],
 > extends BaseView<T> {
   $centerOptions: JQuery;
-  $helpButton: JQuery;
   $informationBox: JQuery;
   $localeToggleButton: JQuery;
   $options: JQuery;
@@ -63,13 +62,6 @@ export class HeaderPanel<
     this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
     this.$rightOptions.append(this.$rightOptionsRoot);
     this.rightOptionsRoot = createRoot(this.$rightOptionsRoot[0]);
-
-    this.$helpButton = $(`
-      <a class="btn imageBtn help" tabindex="0" title="${this.content.help}" role="button">
-        <i class="uv-icon-help" aria-hidden="true"></i>
-      </a>
-    `);
-    this.$rightOptions.append(this.$helpButton);
 
     this.$informationBox = $(
       '<div class="informationBox" aria-hidden="true"> \
@@ -210,16 +202,6 @@ export class HeaderPanel<
       if (this.information) {
         $message.text(this.information.message);
       }
-    }
-
-    this.$helpButton.onPressed(() => {
-      window.open(this.options.helpUrl);
-    });
-
-    if (this.options.helpEnabled && this.options.helpUrl) {
-      this.$helpButton.show();
-    } else {
-      this.$helpButton.hide();
     }
 
     // hide toggle buttons below minimum width
