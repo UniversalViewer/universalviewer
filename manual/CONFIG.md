@@ -1014,6 +1014,12 @@ Default zoom level.
 **Default**: `false`  
 Determines if annotation is enabled.
 
+##### drawer
+
+**Type**: `string`  
+**Default**: `"auto"`  
+The OpenSeadragon drawer used to render images: `"auto"`, `"webgl"` or `"canvas"`. `"auto"` uses WebGL where the browser supports it. WebGL requires every image to be requested with an anonymous cross-origin policy, which omits cookies and fails for hosts without CORS headers. Set to `"canvas"` if your images rely on cookies (for example IIIF Authentication) or are served without CORS headers.
+
 ##### immediateRender
 
 **Type**: `boolean`  
