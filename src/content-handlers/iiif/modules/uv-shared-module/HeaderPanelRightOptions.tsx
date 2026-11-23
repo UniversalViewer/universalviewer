@@ -19,8 +19,27 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
   options,
   content,
 }) => {
+  const locales = extension.data.locales;
+  const showLocale =
+    options.localeToggleEnabled === true &&
+    !!locales &&
+    locales.length > 1 &&
+    !extension.isMobileMetric();
+  const alternateLocale = showLocale ? extension.getAlternateLocale() : null;
+  const localeCode = alternateLocale?.name.split("-")[0].toUpperCase();
+
   return (
     <>
+      {alternateLocale && (
+        <Button
+          className="localeToggle"
+          label={`${alternateLocale.label} (${localeCode})`}
+          lang={alternateLocale.name}
+          onClick={() => extension.changeLocale(alternateLocale.name)}
+        >
+          {localeCode}
+        </Button>
+      )}
       {options.helpEnabled && options.helpUrl && (
         <Button
           className="help"

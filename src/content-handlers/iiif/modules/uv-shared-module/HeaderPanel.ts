@@ -1,7 +1,6 @@
 const $ = require("jquery");
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseView } from "./BaseView";
-import { ILocale } from "./ILocale";
 import { Information } from "./Information";
 import { InformationAction } from "./InformationAction";
 import { InformationArgs } from "./InformationArgs";
@@ -19,7 +18,6 @@ export class HeaderPanel<
 > extends BaseView<T> {
   $centerOptions: JQuery;
   $informationBox: JQuery;
-  $localeToggleButton: JQuery;
   $options: JQuery;
   $rightOptions: JQuery;
   information: Information;
@@ -55,9 +53,6 @@ export class HeaderPanel<
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
 
-    this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
-    this.$rightOptions.append(this.$localeToggleButton);
-
     // JM todo: temporarily we have the rightOptionsRoot and the original rightOptions; move all rightOptions buttons into the react HeaderPanelRightOptions component once the button component is approved.
     this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
     this.$rightOptions.append(this.$rightOptionsRoot);
@@ -84,19 +79,11 @@ export class HeaderPanel<
       this.extensionHost.publish(IIIFEvents.HIDE_INFORMATION);
     });
 
-    this.$localeToggleButton.on("click", () => {
-      this.extension.changeLocale(
-        String(this.$localeToggleButton.data("locale"))
-      );
-    });
-
     this.renderRightOptions();
 
     if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
       this.$centerOptions.hide();
     }
-
-    this.updateLocaleToggle();
   }
 
   renderRightOptions(): void {
@@ -110,33 +97,6 @@ export class HeaderPanel<
         content: this.content,
       })
     );
-  }
-
-  updateLocaleToggle(): void {
-    if (!this.localeToggleIsVisible()) {
-      this.$localeToggleButton.hide();
-      return;
-    }
-
-    const alternateLocale: any = this.extension.getAlternateLocale();
-    const text: string = alternateLocale.name.split("-")[0].toUpperCase();
-
-    this.$localeToggleButton.data("locale", alternateLocale.name);
-    this.$localeToggleButton.attr("title", alternateLocale.label);
-    this.$localeToggleButton.text(text);
-  }
-
-  localeToggleIsVisible(): boolean {
-    const locales: ILocale[] | undefined = this.extension.data.locales;
-
-    if (locales) {
-      return (
-        locales.length > 1 &&
-        Bools.getBool(this.options.localeToggleEnabled, false)
-      );
-    }
-
-    return false;
   }
 
   showInformation(args: InformationArgs): void {
