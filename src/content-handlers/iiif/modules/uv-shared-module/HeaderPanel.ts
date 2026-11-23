@@ -105,6 +105,7 @@ export class HeaderPanel<
     this.rightOptionsRoot.render(
       createElement(HeaderPanelRightOptions, {
         extensionHost: this.extensionHost,
+        extension: this.extension,
         options: this.options,
         content: this.content,
       })
@@ -210,11 +211,6 @@ export class HeaderPanel<
       }
     }
 
-    // hide toggle buttons below minimum width
-    if (this.extension.isMobileMetric()) {
-      if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
-    } else {
-      if (this.localeToggleIsVisible()) this.$localeToggleButton.show();
-    }
+    this.renderRightOptions();
   }
 }
