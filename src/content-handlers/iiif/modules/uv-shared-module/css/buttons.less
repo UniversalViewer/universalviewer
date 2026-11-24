@@ -168,6 +168,7 @@
   // uv-btn = new component, btn = old component. JM todo remove old btn stylings when react conversion is complete across all buttons
 
   @uv-btn-size: 30px;
+  @uv-btn-fade: 70ms;
 
   .uv-btn {
     position: relative;
@@ -186,8 +187,14 @@
     cursor: pointer;
     color: #fff;
 
-    &:hover {
-      color: @icon-highlight;
+    transition:
+      color @uv-btn-fade ease-in-out,
+      background-color @uv-btn-fade ease-in-out;
+
+    @media (hover: hover) {
+      &:hover {
+        color: @icon-highlight;
+      }
     }
 
     > svg {
@@ -232,6 +239,7 @@
     line-height: 1.4;
     white-space: nowrap;
     z-index: 1000;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
     // Hidden
     opacity: 0;
