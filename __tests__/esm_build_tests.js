@@ -1,7 +1,7 @@
-const path = require("path");
-const { buildSync } = require("esbuild");
+import path from "node:path";
+import { buildSync } from "esbuild";
 
-const repoRoot = path.resolve(__dirname, "..");
+const repoRoot = path.resolve(import.meta.dirname, "..");
 
 // Bundles the esbuild example's entry against dist/esm (the package's
 // "module" entry), the way an implementation's esbuild build does. Run

@@ -1,8 +1,10 @@
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
-const { execFileSync } = require("child_process");
-const { copyFiles } = require("../scripts/copy_files");
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { execFileSync } from "node:child_process";
+import copyFilesModule from "../scripts/copy_files.js";
+
+const { copyFiles } = copyFilesModule;
 
 // build-tsc copies the stylesheets and images that the compiled dist/cjs
 // modules import, keeping their paths under src/.
