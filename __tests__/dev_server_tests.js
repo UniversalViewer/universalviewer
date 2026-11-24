@@ -1,6 +1,6 @@
-let puppeteer;
-const http = require("http");
-const { spawn } = require("child_process");
+import puppeteer from "puppeteer";
+import http from "node:http";
+import { spawn } from "node:child_process";
 
 // `npm start` serves the examples page through webpack-dev-server, which the
 // other specs don't use (they load the built dist/). Port 8181 keeps clear of
@@ -32,7 +32,6 @@ describe("Dev server", () => {
   let browser;
 
   beforeAll(async () => {
-    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
     // detached gives npm, npx and webpack their own process group, so
     // afterAll can stop all of them.

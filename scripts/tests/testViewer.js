@@ -1,4 +1,4 @@
-const { BASE_URL } = require("./testBaseUrl");
+import { BASE_URL } from "./testBaseUrl.js";
 
 const oneUpButton = ".btn.imageBtn.one-up";
 
@@ -71,7 +71,7 @@ const waitForOneUp = (page) =>
     oneUpButton
   );
 
-module.exports = {
+export {
   afterDoubleClickDebounce,
   annotationTargets,
   waitForAnnotationOn,

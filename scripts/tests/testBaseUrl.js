@@ -1,5 +1,8 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const localConfigPath = path.resolve(__dirname, "testBaseUrl.local.json");
 
@@ -23,4 +26,4 @@ if (fs.existsSync(localConfigPath)) {
     console.warn("Invalid testBaseUrl.local.json, using default BASE_URL");
   }
 }
-module.exports = { BASE_URL };
+export { BASE_URL };

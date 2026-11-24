@@ -1,6 +1,6 @@
-let puppeteer;
-const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const { expectPanelTitle, viewerUrl } = require("../scripts/tests/testViewer");
+import puppeteer from "puppeteer";
+import { BASE_URL } from "../scripts/tests/testBaseUrl.js";
+import { expectPanelTitle, viewerUrl } from "../scripts/tests/testViewer.js";
 
 // AV (audiovisual) manifest for AV-specific behaviour. A simple single-file
 // AV manifest (no ranges) is rendered by the mediaelement extension.
@@ -89,7 +89,6 @@ describe("Universal Viewer", () => {
   let page;
 
   beforeAll(async () => {
-    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],

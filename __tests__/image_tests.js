@@ -1,12 +1,12 @@
-let puppeteer;
-const { BASE_URL } = require("../scripts/tests/testBaseUrl");
-const {
+import puppeteer from "puppeteer";
+import { BASE_URL } from "../scripts/tests/testBaseUrl.js";
+import {
   afterDoubleClickDebounce,
   annotationTargets,
   waitForAnnotationOn,
   doubleClickViewer,
   viewerUrl,
-} = require("../scripts/tests/testViewer");
+} from "../scripts/tests/testViewer.js";
 
 // Local paged book of static images, with ranges for the Index tab. Modelled
 // on these IIIF Cookbook recipes (also credited in the manifest's summary):
@@ -121,7 +121,6 @@ describe("Universal Viewer", () => {
   };
 
   beforeAll(async () => {
-    puppeteer = (await import("puppeteer")).default;
     browser = await puppeteer.launch();
     await openFreshViewer();
   });

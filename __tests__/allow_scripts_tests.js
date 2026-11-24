@@ -1,5 +1,7 @@
-const lock = require("../package-lock.json");
-const { allowScripts = {} } = require("../package.json");
+import lock from "../package-lock.json" with { type: "json" };
+import packageJson from "../package.json" with { type: "json" };
+
+const { allowScripts = {} } = packageJson;
 
 // npm 11 lists dependencies whose install scripts aren't covered by
 // package.json's allowScripts, and a later npm will block them. CI runs an
