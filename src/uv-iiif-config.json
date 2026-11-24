@@ -26,15 +26,12 @@
     },
     "headerPanel": {
       "options": {
-        "localeToggleEnabled": false,
-        "settingsButtonEnabled": true,
-        "helpEnabled": false
+        "localeToggleEnabled": false
       }
     },
     "pagingHeaderPanel": {
       "options": {
-        "pagingToggleEnabled": true,
-        "helpEnabled": false
+        "pagingToggleEnabled": true
       }
     },
     "openSeadragonCenterPanel": {
