@@ -4,6 +4,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
+import { OneUp } from "../uv-shared-module/Icons";
 
 type PagingHeaderPanelConfig = Config["modules"]["pagingHeaderPanel"];
 
@@ -51,7 +52,7 @@ const PagingHeaderRightOptions: React.FC<Props> = ({
             aria-pressed={oneUpOn}
             onClick={() => onPagingChange(false)}
           >
-            <i className="uv-icon-one-up" aria-hidden="true" />
+            <OneUp />
           </Button>
           <Button
             className={twoUpOn ? "two-up on" : "two-up"}

@@ -8,6 +8,28 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
+export const OneUp: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g>
+      <rect x="10" y="8" width="10" height="14" />
+    </g>
+  </svg>
+);
+
 export const Settings: React.FC<IconProps> = ({
   className = "",
   width = 30,

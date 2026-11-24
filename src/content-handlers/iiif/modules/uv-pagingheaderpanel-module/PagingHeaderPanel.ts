@@ -421,8 +421,6 @@ export class PagingHeaderPanel extends HeaderPanel<
   renderPagingRightOptions(): void {
     if (!this.pagingRightOptionsRoot) return;
 
-    // JM todo: when we move the paging toggles to the OSD center panel, should be able to keep PagingHeaderRightOptions as it is here intact and use this block (but change the component name)
-
     this.pagingRightOptionsRoot.render(
       createElement(PagingHeaderRightOptions, {
         extensionHost: this.extensionHost,
