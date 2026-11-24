@@ -51,7 +51,7 @@ export default function Button({
     onFocus?.(e);
   };
 
-  const classes = ["btn", "imageBtn", className].filter(Boolean).join(" ");
+  const classes = ["uv-btn", className].filter(Boolean).join(" ");
   const tooltipClasses = [
     "uv-tooltip",
     `uv-tooltip--${tooltipPlacement}`,

@@ -163,6 +163,46 @@
     }
   }
 
+  // React button component
+  // Size and layout only. Each panel sets its own colours
+  // uv-btn = new component, btn = old component. JM todo remove old btn stylings when react conversion is complete across all buttons
+
+  @uv-btn-size: 30px;
+
+  .uv-btn {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: @uv-btn-size;
+    height: @uv-btn-size;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    line-height: 1;
+    cursor: pointer;
+
+    > svg {
+      display: block;
+      flex: none;
+      width: @uv-btn-size;
+      height: @uv-btn-size;
+      fill: currentColor;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 1px solid @link-color;
+      outline-offset: -1px;
+    }
+  }
+
   // Tooltips
   // --------------------------------------------------
 
@@ -172,10 +212,6 @@
   @tooltip-shift: 4px;
   @tooltip-arrow-size: 5px;
   @tooltip-arrow-inset: 10px; // this should centre the arrow on a 30px button, but is currently slightly off because the header buttons are 34 x 30 (due to padding); JM todo return to this when header buttons have been rearranged and padding removed
-
-  .btn.imageBtn {
-    position: relative;
-  }
 
   .uv-tooltip {
     position: absolute;
@@ -354,12 +390,12 @@
   }
 
   @media (hover: hover) {
-    .btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
+    .uv-btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
       .tooltip-shown();
     }
   }
 
-  .btn:focus-visible > .uv-tooltip:not(.uv-tooltip--dismissed) {
+  .uv-btn:focus-visible > .uv-tooltip:not(.uv-tooltip--dismissed) {
     .tooltip-shown();
   }
 
