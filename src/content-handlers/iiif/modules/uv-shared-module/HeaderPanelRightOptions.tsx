@@ -28,23 +28,31 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
   const alternateLocale = showLocale ? extension.getAlternateLocale() : null;
   const localeCode = alternateLocale?.name.split("-")[0].toUpperCase();
 
+  const showHelp = !!(options.helpEnabled && options.helpUrl);
+  const showSettings = options.settingsButtonEnabled !== false;
+
+  // The far right button gets its tooltip aligned to the end so it doesn't run off the edge of the viewer
+  const lastButton = showSettings ? "settings" : showHelp ? "help" : "locale";
+  const alignFor = (name: string) => (lastButton === name ? "end" : "center");
+
   return (
     <>
       {alternateLocale && (
         <Button
           className="localeToggle"
           label={`${alternateLocale.label} (${localeCode})`}
+          tooltipAlign={alignFor("locale")}
           lang={alternateLocale.name}
           onClick={() => extension.changeLocale(alternateLocale.name)}
         >
           {localeCode}
         </Button>
       )}
-      {options.helpEnabled && options.helpUrl && (
+      {showHelp && (
         <Button
           className="help"
           label={content.help}
-          tooltipAlign="end"
+          tooltipAlign={alignFor("help")}
           onClick={() =>
             window.open(options.helpUrl, "_blank", "noopener,noreferrer")
           }
@@ -53,11 +61,11 @@ const HeaderPanelRightOptions: React.FC<Props> = ({
           <i className="uv-icon-help" aria-hidden="true" />
         </Button>
       )}
-      {options.settingsButtonEnabled && (
+      {showSettings && (
         <Button
           className="settings"
           label={content.settings}
-          tooltipAlign="end"
+          tooltipAlign={alignFor("settings")}
           onClick={(e) => {
             const el = e.currentTarget;
             extensionHost.publish(IIIFEvents.SHOW_SETTINGS_DIALOGUE, el);
