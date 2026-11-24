@@ -4,7 +4,7 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { IIIFExtensionHost } from "../../IIIFExtensionHost";
 import OpenSeadragonExtension from "../../extensions/uv-openseadragon-extension/Extension";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
-import { OneUp } from "../uv-shared-module/Icons";
+import { OneUp, TwoUp, Gallery } from "../uv-shared-module/Icons";
 
 type PagingHeaderPanelConfig = Config["modules"]["pagingHeaderPanel"];
 
@@ -44,6 +44,7 @@ const PagingHeaderRightOptions: React.FC<Props> = ({
 
   return (
     <>
+      {/* JM todo: turn this into an actual toggle (only one icon shows at a time) when moved to bottom right of canvas */}
       {showPagingToggle && (
         <>
           <Button
@@ -60,7 +61,7 @@ const PagingHeaderRightOptions: React.FC<Props> = ({
             aria-pressed={twoUpOn}
             onClick={() => onPagingChange(true)}
           >
-            <i className="uv-icon-two-up" aria-hidden="true" />
+            <TwoUp />
           </Button>
         </>
       )}
@@ -74,7 +75,7 @@ const PagingHeaderRightOptions: React.FC<Props> = ({
             extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL)
           }
         >
-          <i className="uv-icon-gallery" aria-hidden="true" />
+          <Gallery />
         </Button>
       )}
     </>
