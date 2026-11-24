@@ -53,8 +53,7 @@ export class HeaderPanel<
     this.$rightOptions = $('<div class="rightOptions"></div>');
     this.$options.append(this.$rightOptions);
 
-    // JM todo: temporarily we have the rightOptionsRoot and the original rightOptions; move all rightOptions buttons into the react HeaderPanelRightOptions component once the button component is approved.
-    this.$rightOptionsRoot = $('<div class="rightOptions"></div>');
+    this.$rightOptionsRoot = $('<div class="rightOptionsReact"></div>');
     this.$rightOptions.append(this.$rightOptionsRoot);
     this.rightOptionsRoot = createRoot(this.$rightOptionsRoot[0]);
 
