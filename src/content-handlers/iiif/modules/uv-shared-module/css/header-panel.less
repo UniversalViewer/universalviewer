@@ -1,6 +1,13 @@
 .uv {
   .headerPanel {
     color: @text-secondary-color;
+    padding-right: 8px;
+
+    .uv-btn {
+      &:hover {
+        background-color: @gray;
+      }
+    }
 
     button.imageBtn {
       float: left;
@@ -28,20 +35,8 @@
         display: flex;
         align-items: center;
 
-        .uv-btn {
-          color: #fff;
-
-          &:hover {
-            color: #fff;
-          }
-        }
-
         .localeToggle {
           font-size: @font-size-large;
-        }
-
-        .settings {
-          margin-right: 8px;
         }
       }
     }

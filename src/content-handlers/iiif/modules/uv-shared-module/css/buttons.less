@@ -184,6 +184,11 @@
     font: inherit;
     line-height: 1;
     cursor: pointer;
+    color: #fff;
+
+    &:hover {
+      color: @icon-highlight;
+    }
 
     > svg {
       display: block;
@@ -191,6 +196,10 @@
       width: @uv-btn-size;
       height: @uv-btn-size;
       fill: currentColor;
+
+      &:hover {
+        fill: @icon-highlight;
+      }
     }
 
     &:focus {
@@ -392,6 +401,23 @@
   @media (hover: hover) {
     .uv-btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
       .tooltip-shown();
+    }
+  }
+
+  // when another tooltip has just been shown, skip the delay
+  &.uv-tooltips-warm {
+    // Swapping between buttons: the tooltip just left disappears immediately.
+    // Leaving the buttons altogether: no button is hovered, so this doesn't
+    // apply and the tooltip fades out as normal.
+    &:has(.uv-btn:hover) .uv-btn:not(:hover) > .uv-tooltip {
+      transition: none;
+    }
+
+    @media (hover: hover) {
+      .uv-btn:hover > .uv-tooltip:not(.uv-tooltip--dismissed) {
+        transition-delay: 0s;
+        transition-duration: 0s;
+      }
     }
   }
 
