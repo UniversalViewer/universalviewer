@@ -607,6 +607,10 @@
       {
         "name": "sv-SE",
         "label": "Svenska"
+      },
+      {
+        "name": "de-DE",
+        "label": "Deutsch (DE)"
       }
     ]
   },
