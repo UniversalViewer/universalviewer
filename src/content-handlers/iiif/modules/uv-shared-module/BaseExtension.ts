@@ -85,6 +85,7 @@ export class BaseExtension<T extends BaseConfig> implements IExtension {
     "fr-FR": () => import("../../../../locales/fr-FR.json"),
     "pl-PL": () => import("../../../../locales/pl-PL.json"),
     "sv-SE": () => import("../../../../locales/sv-SE.json"),
+    "de-DE": () => import("../../../../locales/de-DE.json"),
   };
 
   public create(): void {

@@ -368,6 +368,10 @@
       {
         "name": "en-GB",
         "label": "English (GB)"
+      },
+      {
+        "name": "de-DE",
+        "label": "Deutsch (DE)"
       }
     ]
   },
