@@ -2,28 +2,19 @@
   .headerPanel {
     color: @text-secondary-color;
 
+    .uv-btn {
+      @media (hover: hover) {
+        &:hover {
+          background-color: @gray;
+        }
+      }
+    }
+
     button.imageBtn {
       float: left;
       i {
         height: 30px;
         width: 30px;
-      }
-
-      &,
-      &:hover,
-      &:focus {
-        color: #fff; // the value the OSD rule uses
-      }
-
-      svg {
-        display: block;
-        fill: currentcolor;
-        height: 30px;
-        width: 30px;
-      }
-
-      &:focus-visible svg {
-        outline: 1px solid @link-color;
       }
     }
 
@@ -41,19 +32,17 @@
 
       .rightOptions {
         float: right;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin-right: 8px;
 
-        //              .help {
-        //                  margin-left: 1em;
-        //                  padding-right: 22px;
-        //                  padding-bottom: 2px;
-        //                  background: data-uri('@{img-path}sprite.png');
-        //                  background-repeat: no-repeat;
-        //                  background-position: 0 -2999px;
-        //                  margin-top: 6px;
-        //              }
+        .rightOptionsReact {
+          display: contents;
+        }
 
-        .settings {
-          margin-right: 8px;
+        .localeToggle {
+          font-size: @font-size-large;
         }
       }
     }

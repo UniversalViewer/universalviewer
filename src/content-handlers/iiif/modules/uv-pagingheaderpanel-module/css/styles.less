@@ -140,33 +140,16 @@
     }
 
     .rightOptions {
-      .pagingToggleButtons {
-        float: left;
-        .one-up {
-          .opacity(1);
-          &.on {
-            .opacity(0.75);
-          }
-        }
-        .two-up {
-          .opacity(1);
-          &.on {
-            .opacity(0.75);
-          }
-        }
+      .pagingRightOptions {
+        display: contents;
       }
+
+      .one-up,
+      .two-up,
       .gallery {
-        .opacity(1);
-        &.on {
+        &.on > i {
           .opacity(0.75);
         }
-      }
-      .localeToggle {
-        .link-color-decoration(#fff, none);
-        font-size: @font-size-large;
-        float: left;
-        margin: 4px 8px;
-        cursor: pointer;
       }
     }
 

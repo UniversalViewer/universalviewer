@@ -11,6 +11,10 @@ import { Bools, Strings } from "../../Utils";
 import { Canvas, LanguageMap, ManifestType } from "manifesto.js";
 import { Config } from "../../extensions/uv-openseadragon-extension/config/Config";
 
+import { createElement } from "react";
+import { createRoot, Root } from "react-dom/client";
+import PagingHeaderRightOptions from "./PagingHeaderRightOptions";
+
 export class PagingHeaderPanel extends HeaderPanel<
   Config["modules"]["pagingHeaderPanel"]
 > {
@@ -36,6 +40,9 @@ export class PagingHeaderPanel extends HeaderPanel<
   $selectionBoxOptions: JQuery;
   $total: JQuery;
   $twoUpButton: JQuery;
+
+  pagingRightOptionsRoot: Root;
+  galleryOpen: boolean = false;
 
   firstButtonEnabled: boolean = false;
   lastButtonEnabled: boolean = false;
@@ -263,56 +270,11 @@ export class PagingHeaderPanel extends HeaderPanel<
       this.$pageModeLabel.text(this.content.page);
     }
 
-    this.$galleryButton = $(`
-          <button class="btn imageBtn gallery" title="${this.content.gallery}" aria-pressed="false">
-            <i class="uv-icon-gallery" aria-hidden="true"></i>
-            <span class="sr-only">${this.content.gallery}</span>
-          </button>
-        `);
-    this.$rightOptions.prepend(this.$galleryButton);
-
-    this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
-    this.$rightOptions.prepend(this.$pagingToggleButtons);
-
-    this.$oneUpButton = $(`
-          <button class="btn imageBtn one-up" title="${this.content.oneUp}" aria-pressed="false">
-            <i class="uv-icon-one-up" aria-hidden="true"></i>
-            <span class="sr-only">${this.content.oneUp}</span>
-          </button>`);
-    this.$pagingToggleButtons.append(this.$oneUpButton);
-
-    this.$twoUpButton = $(`
-          <button class="btn imageBtn two-up" title="${this.content.twoUp}" aria-pressed="false">
-            <i class="uv-icon-two-up" aria-hidden="true"></i>
-            <span class="sr-only">${this.content.twoUp}</span>
-          </button>
-        `);
-    this.$pagingToggleButtons.append(this.$twoUpButton);
-
-    this.updatePagingToggle();
-    this.updateGalleryButton();
-
-    this.$oneUpButton.onPressed(() => {
-      const enabled: boolean = false;
-      this.updateSettings({ pagingEnabled: enabled });
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
-        enabled
-      );
-    });
-
-    this.$twoUpButton.onPressed(() => {
-      const enabled: boolean = true;
-      this.updateSettings({ pagingEnabled: enabled });
-      this.extensionHost.publish(
-        OpenSeadragonExtensionEvents.PAGING_TOGGLED,
-        enabled
-      );
-    });
-
-    this.$galleryButton.onPressed(() => {
-      this.extensionHost.publish(IIIFEvents.TOGGLE_EXPAND_LEFT_PANEL);
-    });
+    // React buttons get their own container, before HeaderPanel's
+    const $pagingRightOptions = $('<div class="pagingRightOptions"></div>');
+    this.$rightOptions.prepend($pagingRightOptions);
+    this.pagingRightOptionsRoot = createRoot($pagingRightOptions[0]);
+    this.renderPagingRightOptions();
 
     this.setNavigationTitles();
     this.setTotal();
@@ -454,21 +416,37 @@ export class PagingHeaderPanel extends HeaderPanel<
     //         }, 100);
     //     }
     // });
+  }
 
-    if (!Bools.getBool(this.options.pagingToggleEnabled, true)) {
-      this.$pagingToggleButtons.hide();
-    }
+  renderPagingRightOptions(): void {
+    if (!this.pagingRightOptionsRoot) return;
+
+    this.pagingRightOptionsRoot.render(
+      createElement(PagingHeaderRightOptions, {
+        extensionHost: this.extensionHost,
+        extension: <OpenSeadragonExtension>this.extension,
+        options: this.options,
+        content: this.content,
+        galleryOpen: this.galleryOpen,
+        onPagingChange: (enabled: boolean) => {
+          this.updateSettings({ pagingEnabled: enabled });
+          this.extensionHost.publish(
+            OpenSeadragonExtensionEvents.PAGING_TOGGLED,
+            enabled
+          );
+        },
+      })
+    );
   }
 
   openGallery(): void {
-    this.$oneUpButton.removeClass("on").attr("aria-pressed", "false");
-    this.$twoUpButton.removeClass("on").attr("aria-pressed", "false");
-    this.$galleryButton.addClass("on").attr("aria-pressed", "true");
+    this.galleryOpen = true;
+    this.renderPagingRightOptions();
   }
 
   closeGallery(): void {
-    this.updatePagingToggle();
-    this.$galleryButton.removeClass("on").attr("aria-pressed", "false");
+    this.galleryOpen = false;
+    this.renderPagingRightOptions();
   }
 
   isPageModeEnabled(): boolean {
@@ -524,37 +502,13 @@ export class PagingHeaderPanel extends HeaderPanel<
   }
 
   updatePagingToggle(): void {
-    if (!this.pagingToggleIsVisible()) {
-      this.$pagingToggleButtons.hide();
-      return;
-    }
-
-    if ((<OpenSeadragonExtension>this.extension).isPagingSettingEnabled()) {
-      this.$oneUpButton.removeClass("on").attr("aria-pressed", "false");
-      this.$twoUpButton.addClass("on").attr("aria-pressed", "true");
-    } else {
-      this.$twoUpButton.removeClass("on").attr("aria-pressed", "false");
-      this.$oneUpButton.addClass("on").attr("aria-pressed", "true");
-    }
+    this.renderPagingRightOptions();
   }
 
   pagingToggleIsVisible(): boolean {
     return (
       Bools.getBool(this.options.pagingToggleEnabled, true) &&
       this.extension.helper.isPagingAvailable()
-    );
-  }
-
-  updateGalleryButton(): void {
-    if (!this.galleryIsVisible()) {
-      this.$galleryButton.hide();
-    }
-  }
-
-  galleryIsVisible(): boolean {
-    return (
-      Bools.getBool(this.options.galleryButtonEnabled, true) &&
-      this.extension.isLeftPanelEnabled()
     );
   }
 
@@ -754,14 +708,6 @@ export class PagingHeaderPanel extends HeaderPanel<
 
   resize(): void {
     super.resize();
-
-    // hide toggle buttons below minimum width
-    if (this.extension.isMobileMetric()) {
-      if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
-      if (this.galleryIsVisible()) this.$galleryButton.hide();
-    } else {
-      if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.show();
-      if (this.galleryIsVisible()) this.$galleryButton.show();
-    }
+    this.renderPagingRightOptions();
   }
 }

@@ -91,6 +91,7 @@ describe("Universal Viewer", () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 800 });
     await page.goto(BASE_URL);
   });
 
@@ -161,16 +162,16 @@ describe("Universal Viewer", () => {
     expect(galleryViewBeforeToggle).toBe("hidden");
 
     // gallery toggle icon is visible
-    await page.waitForSelector(".uv-icon-gallery");
+    await page.waitForSelector(".uv-btn.gallery");
     const galleryViewToggle = await page.evaluate(() => {
-      const toggle = document.querySelector(".uv-icon-gallery");
+      const toggle = document.querySelector(".uv-btn.gallery");
       return getComputedStyle(toggle).overflowX;
     });
     expect(galleryViewToggle).toBe("visible");
 
     // gallery view can be toggled on
     await page.evaluate(() => {
-      document.querySelector(".uv-icon-gallery").click();
+      document.querySelector(".uv-btn.gallery").click();
     });
     const galleryViewAfterToggle = await page.evaluate(() => {
       const galleryViewOverlay = document.querySelector(
@@ -182,7 +183,7 @@ describe("Universal Viewer", () => {
 
     // gallery view can be toggled off
     await page.evaluate(() => {
-      document.querySelector(".uv-icon-two-up").click();
+      document.querySelector(".uv-btn.two-up").click();
     });
     const galleryViewAfterTwoUpToggle = await page.evaluate(() => {
       const galleryViewOverlay = document.querySelector(
@@ -214,10 +215,10 @@ describe("Universal Viewer", () => {
   });
 
   it("settings button is visible", async () => {
-    await page.waitForSelector(".btn.imageBtn.settings");
+    await page.waitForSelector(".uv-btn.settings");
 
     const isSettingsButtonVisible = await page.evaluate(() => {
-      const settingsButton = document.querySelector(".btn.imageBtn.settings");
+      const settingsButton = document.querySelector(".uv-btn.settings");
       const style = window.getComputedStyle(settingsButton);
       return (
         style.getPropertyValue("visibility") !== "hidden" &&

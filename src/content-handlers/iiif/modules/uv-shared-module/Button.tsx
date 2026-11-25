@@ -12,6 +12,26 @@ export interface ButtonProps
   tooltipAlign?: TooltipAlign;
 }
 
+// Tooltip warm-up: once a tooltip has been shown, the viewer gets a "warm" class and css shows the next tooltip without a delay.
+const TOOLTIP_DELAY_MS = 300;
+const WARMUP_MS = 300;
+const WARM_CLASS = "uv-tooltips-warm";
+let warmRoot: Element | null = null;
+let warmTimer: number | undefined;
+let coolTimer: number | undefined;
+
+function warmUp(root: Element) {
+  root.classList.add(WARM_CLASS);
+  warmRoot = root;
+}
+
+function coolDown() {
+  window.clearTimeout(warmTimer);
+  window.clearTimeout(coolTimer);
+  warmRoot?.classList.remove(WARM_CLASS);
+  warmRoot = null;
+}
+
 export default function Button({
   label,
   tooltipPlacement = "bottom",
@@ -20,6 +40,7 @@ export default function Button({
   children,
   onClick,
   onPointerEnter,
+  onPointerLeave,
   onFocus,
   ...rest
 }: ButtonProps) {
@@ -29,7 +50,10 @@ export default function Button({
     if (tooltipDismissed) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setTooltipDismissed(true);
+      if (e.key === "Escape") {
+        setTooltipDismissed(true);
+        coolDown();
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -43,7 +67,20 @@ export default function Button({
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
     setTooltipDismissed(false);
+    window.clearTimeout(coolTimer); // stay warm while on a button
+
+    const root = e.currentTarget.closest(".uv");
+    if (root && !root.classList.contains(WARM_CLASS)) {
+      warmTimer = window.setTimeout(() => warmUp(root), TOOLTIP_DELAY_MS);
+    }
+
     onPointerEnter?.(e);
+  };
+
+  const handlePointerLeave = (e: React.PointerEvent<HTMLButtonElement>) => {
+    window.clearTimeout(warmTimer); // left before the tooltip appeared
+    coolTimer = window.setTimeout(coolDown, WARMUP_MS);
+    onPointerLeave?.(e);
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
@@ -51,7 +88,7 @@ export default function Button({
     onFocus?.(e);
   };
 
-  const classes = ["btn", "imageBtn", className].filter(Boolean).join(" ");
+  const classes = ["uv-btn", className].filter(Boolean).join(" ");
   const tooltipClasses = [
     "uv-tooltip",
     `uv-tooltip--${tooltipPlacement}`,
@@ -69,6 +106,7 @@ export default function Button({
       aria-label={label}
       onClick={handleClick}
       onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       onFocus={handleFocus}
     >
       {children}

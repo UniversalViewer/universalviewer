@@ -8,6 +8,49 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
+export const Gallery: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M14,14H8V8h6V14z M22,8h-6v6h6V8z M14,16H8v6h6V16z M22,16h-6v6h6V16z" />
+  </svg>
+);
+
+export const OneUp: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g>
+      <rect x="10" y="8" width="10" height="14" />
+    </g>
+  </svg>
+);
+
 export const Settings: React.FC<IconProps> = ({
   className = "",
   width = 30,
@@ -31,5 +74,32 @@ export const Settings: React.FC<IconProps> = ({
 	c0.4,0.2,0.9,0.4,1.4,0.5l0.3,1.9c0.8,0,1.6,0,2.4,0l0.3-2c0.5-0.1,0.9-0.3,1.4-0.6l1.6,1.2c0.6-0.6,1.1-1.1,1.7-1.7L20,17.8
 	c0.2-0.4,0.4-0.9,0.5-1.4l1.9-0.3c0-0.8,0-1.6,0-2.4L20.5,13.5z M15,17.6c-3.3,0-3.3-5.2,0-5.2S18.3,17.6,15,17.6z"
     />
+  </svg>
+);
+
+export const TwoUp: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g>
+      <g>
+        <rect x="4" y="8" width="10" height="14" />
+      </g>
+      <g>
+        <rect x="16" y="8" width="10" height="14" />
+      </g>
+    </g>
   </svg>
 );
