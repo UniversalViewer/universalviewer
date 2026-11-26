@@ -20,55 +20,51 @@
       }
 
       .collapseButton {
-        // position: absolute;
-        // background-image: data-uri("../img/arrows_right.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin-top: 7px;
-        // display: block;
-        // left: 5px;
+        float: left;
       }
 
       .expandFullButton {
-        // position: absolute;
-        // background-image: data-uri("../img/arrows_left.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin-top: 7px;
-        // display: none;
-        // left: 5px;
+        float: left;
+        display: block;
       }
 
       .expandFull();
     }
 
     .closed {
-      width: 25px;
+      width: 30px;
+      float: left;
+      text-align: center;
 
       .title {
         .link-color-decoration(@text-color, none);
+        display: inline-block;
+        writing-mode: vertical-lr;
+        line-height: 1;
         white-space: nowrap;
-        display: block;
-        margin: 8px 3px 0 5px;
+        margin-top: 8px;
         cursor: pointer;
         text-transform: uppercase;
-        .rotate(90deg);
         letter-spacing: 0.08rem;
       }
 
       .expandButton {
-        // background-image: data-uri("../img/arrows_left.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin: 7px 0 0 5px;
-        // display: block;
+        display: flex;
+        justify-content: center;
       }
+    }
+
+    .uv-btn {
+      @media (hover: hover) {
+        &:hover {
+          background-color: @gray;
+        }
+      }
+    }
+
+    // for side panels, hide the tooltip immediately when clicked (otherwise we get a messy fade out/panel closing animation glitch)
+    .uv-tooltip--dismissed {
+      transition: none;
     }
 
     .main {
@@ -119,5 +115,12 @@
     .expandFullButton {
       display: block;
     }
+  }
+
+  // overflow: visible is necessary for the tooltip to appear over the top of .leftPanel, unclipped,
+  // but we need to leave the open/close animating state at overflow: hidden
+  .rightPanel.open.open-finished,
+  .rightPanel:not(.open):not(.open-finished) {
+    overflow: visible;
   }
 }
