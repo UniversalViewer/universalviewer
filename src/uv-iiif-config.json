@@ -49,12 +49,7 @@
     },
     "footerPanel": {
       "options": {
-        "downloadEnabled": true,
-        "bookmarkEnabled": true,
-        "embedEnabled": true,
-        "feedbackEnabled": true,
-        "openEnabled": true,
-        "printEnabled": true
+        "downloadEnabled": true
       }
     },
     "shareDialogue": {
