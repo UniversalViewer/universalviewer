@@ -65,11 +65,23 @@
         }
       }
     }
+
+    // for side panels, hide the tooltip immediately when clicked (otherwise we get a messy fade out/panel closing animation glitch)
+    .uv-tooltip--dismissed {
+      transition: none;
+    }
   }
 
   .expandFull() when (@expandFullEnabled = true) {
     .expandFullButton {
       display: block;
     }
+  }
+
+  // overflow: visible is necessary for the tooltip to appear over the top of .leftPanel, unclipped,
+  // but we need to leave the open/close animating state at overflow: hidden
+  .leftPanel.open.open-finished,
+  .leftPanel:not(.open):not(.open-finished) {
+    overflow: visible;
   }
 }
