@@ -74,6 +74,14 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
     // this can't be in the base panel class or the timeout interferes with test running even though it works fine
     setTimeout(() => {
       this.$element.toggleClass("open-finished");
+
+      if (!this.autoToggled) {
+        if (this.isExpanded) {
+          this.focusCollapseButton();
+        } else {
+          this.focusExpandButton();
+        }
+      }
     }, 100);
   }
 
