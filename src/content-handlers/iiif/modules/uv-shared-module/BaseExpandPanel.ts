@@ -6,7 +6,7 @@ import { BaseView } from "./BaseView";
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import Button, { TooltipPlacement } from "./Button";
-import { Settings } from "./Icons";
+import { ExpandLeftPanel, CollapseLeftPanel } from "./Icons";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
@@ -110,7 +110,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
             }
           },
         },
-        createElement(Settings)
+        createElement(CollapseLeftPanel)
       )
     );
 
@@ -124,7 +124,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
           "aria-expanded": expanded,
           onClick: () => this.toggle(),
         },
-        createElement(Settings)
+        createElement(ExpandLeftPanel)
       )
     );
   }

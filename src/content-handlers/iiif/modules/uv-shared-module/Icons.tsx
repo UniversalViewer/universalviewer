@@ -8,6 +8,96 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
+export const CollapseRightPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M8 8L22 8L22 22L8 22L8 8ZM20 10L18 10L18 20L20 20L20 10ZM16 10L10 10L10 20L16 20L16 10ZM12 11L15 15L12 19L12 11Z" />
+    <rect x="37" y="20" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const CollapseLeftPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM18 19L15 15L18 11V19Z" />
+    <rect x="37" y="20" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const ExpandRightPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M8 8L22 8L22 22L8 22L8 8ZM20 10L18 10L18 20L20 20L20 10ZM16 10L10 10L10 20L16 20L16 10ZM11 15L14 11L14 19L11 15Z" />
+    <rect x="30" y="22" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const ExpandLeftPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM19 15L16 19V11L19 15Z" />
+  </svg>
+);
+
 export const Gallery: React.FC<IconProps> = ({
   className = "",
   width = 30,
