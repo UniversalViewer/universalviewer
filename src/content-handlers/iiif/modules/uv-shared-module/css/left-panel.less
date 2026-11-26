@@ -24,32 +24,19 @@
       }
 
       .collapseButton {
-        // float: right;
-        // background: data-uri("../img/arrows_left.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin: 7px 5px 0 0;
-        // display: block;
+        float: right;
       }
 
       .expandFullButton {
-        // float: right;
-        // background: data-uri("../img/arrows_right.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin: 7px 5px 0 0;
-        // display: none;
+        float: right;
+        display: block;
       }
 
       .expandFull();
     }
 
     .closed {
-      width: 25px;
+      width: 30px;
       float: right;
 
       .title {
@@ -64,13 +51,16 @@
       }
 
       .expandButton {
-        // background: data-uri("../img/arrows_right.png");
-        // background-repeat: no-repeat;
-        // width: 20px;
-        // height: 20px;
-        // cursor: pointer;
-        // margin: 7px 5px 0 0;
-        // display: block;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .uv-btn {
+      @media (hover: hover) {
+        &:hover {
+          background-color: @gray;
+        }
       }
     }
   }
