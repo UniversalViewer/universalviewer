@@ -6,6 +6,7 @@ import { BaseView } from "./BaseView";
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import Button from "./Button";
+import { Settings } from "./Icons";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
@@ -50,14 +51,14 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$expandFullButton.hide();
     }
 
-    this.$collapseButton = $('<div class="collapseButtonContainer"></div>');
+    this.$collapseButton = $('<div class="collapseButton"></div>');
     this.$top.append(this.$collapseButton);
     this.collapseButtonRoot = createRoot(this.$collapseButton[0]);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
-    this.$expandButton = $('<div class="expandButtonContainer"></div>');
+    this.$expandButton = $('<div class="expandButton"></div>');
     this.$closed.append(this.$expandButton);
     this.expandButtonRoot = createRoot(this.$expandButton[0]);
 
@@ -92,27 +93,35 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   renderToggleButtons(expanded: boolean): void {
     this.collapseButtonRoot?.render(
-      createElement(Button, {
-        className: "collapseButton",
-        label: this.content.collapse,
-        "aria-expanded": expanded,
-        onClick: () => {
-          if (this.isFullyExpanded) {
-            this.collapseFull();
-          } else {
-            this.toggle();
-          }
+      createElement(
+        Button,
+        {
+          className: "collapseButton",
+          label: this.content.collapse,
+          "aria-expanded": expanded,
+          onClick: () => {
+            if (this.isFullyExpanded) {
+              this.collapseFull();
+            } else {
+              this.toggle();
+            }
+          },
         },
-      })
+        createElement(Settings)
+      )
     );
 
     this.expandButtonRoot?.render(
-      createElement(Button, {
-        className: "expandButton",
-        label: this.content.expand,
-        "aria-expanded": expanded,
-        onClick: () => this.toggle(),
-      })
+      createElement(
+        Button,
+        {
+          className: "expandButton",
+          label: this.content.expand,
+          "aria-expanded": expanded,
+          onClick: () => this.toggle(),
+        },
+        createElement(Settings)
+      )
     );
   }
 
