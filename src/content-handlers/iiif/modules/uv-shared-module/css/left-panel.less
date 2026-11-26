@@ -38,15 +38,17 @@
     .closed {
       width: 30px;
       float: right;
+      text-align: center;
 
       .title {
         .link-color-decoration(@text-color, none);
+        display: inline-block;
+        writing-mode: vertical-rl;
+        line-height: 1;
         white-space: nowrap;
-        display: block;
-        margin: 8px 8px 0 0;
+        margin-top: 8px;
         cursor: pointer;
         text-transform: uppercase;
-        .rotate(90deg);
         letter-spacing: 0.08rem;
       }
 
