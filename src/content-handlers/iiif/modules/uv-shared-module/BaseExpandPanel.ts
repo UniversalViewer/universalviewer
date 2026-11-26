@@ -323,7 +323,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   focusExpandButton(): void {
     setTimeout(() => {
-      this.$expandButton.focus();
+      this.$expandButton.find("button").trigger("focus");
     }, 1);
   }
 
@@ -335,7 +335,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   focusCollapseButton(): void {
     setTimeout(() => {
-      this.$collapseButton.focus();
+      this.$collapseButton.find("button").trigger("focus");
     }, 1);
   }
 
