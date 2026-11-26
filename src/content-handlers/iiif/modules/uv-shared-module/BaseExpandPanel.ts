@@ -5,7 +5,7 @@ import { BaseView } from "./BaseView";
 
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
-import Button from "./Button";
+import Button, { TooltipPlacement } from "./Button";
 import { Settings } from "./Icons";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
@@ -92,12 +92,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   }
 
   renderToggleButtons(expanded: boolean): void {
+    const tooltipPlacement = this.getToggleTooltipPlacement();
+
     this.collapseButtonRoot?.render(
       createElement(
         Button,
         {
           className: "collapseButton",
           label: this.content.collapse,
+          tooltipPlacement,
           "aria-expanded": expanded,
           onClick: () => {
             if (this.isFullyExpanded) {
@@ -117,6 +120,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
         {
           className: "expandButton",
           label: this.content.expand,
+          tooltipPlacement,
           "aria-expanded": expanded,
           onClick: () => this.toggle(),
         },
@@ -346,6 +350,11 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     setTimeout(() => {
       this.$collapseButton.find("button").trigger("focus");
     }, 1);
+  }
+
+  // this method gets overridden in the right panel
+  getToggleTooltipPlacement(): TooltipPlacement {
+    return "right";
   }
 
   resize(): void {

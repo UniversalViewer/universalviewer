@@ -3,6 +3,8 @@ import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 
+import { TooltipPlacement } from "./Button";
+
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
     super($element, false, false);
@@ -89,5 +91,9 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   expandFull(): void {
     super.expandFull();
+  }
+
+  getToggleTooltipPlacement(): TooltipPlacement {
+    return "left";
   }
 }
