@@ -120,7 +120,7 @@
   // overflow: visible is necessary for the tooltip to appear over the top of .leftPanel, unclipped,
   // but we need to leave the open/close animating state at overflow: hidden
   .rightPanel.open.open-finished,
-  .rightPanel:not(.open):not(.open-finished) {
+  .rightPanel:not(.open, .open-finished) {
     overflow: visible;
   }
 }
