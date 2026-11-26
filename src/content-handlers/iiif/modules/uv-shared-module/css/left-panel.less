@@ -3,6 +3,7 @@
 
   .leftPanel {
     z-index: 10;
+    position: relative; // position buttons against the panel
 
     a {
       color: @text-color;
@@ -21,10 +22,6 @@
         float: left;
         cursor: pointer;
         letter-spacing: 0.08rem;
-      }
-
-      .collapseButton {
-        float: right;
       }
 
       .expandFullButton {
@@ -46,16 +43,18 @@
         writing-mode: vertical-rl;
         line-height: 1;
         white-space: nowrap;
-        margin-top: 8px;
+        margin-top: 38px; // button + margin; solves initial layout shift on load and is needed when the buttons are absolute positioned.
         cursor: pointer;
         text-transform: uppercase;
         letter-spacing: 0.08rem;
       }
+    }
 
-      .expandButton {
-        display: flex;
-        justify-content: center;
-      }
+    .collapseButton,
+    .expandButton {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
 
     .uv-btn {
@@ -69,6 +68,22 @@
     // for side panels, hide the tooltip immediately when clicked (otherwise we get a messy fade out/panel closing animation glitch)
     .uv-tooltip--dismissed {
       transition: none;
+    }
+  }
+
+  // this makes sure the button remains visible during the close animation (but still hides the title immediately)
+  .leftPanel.open-finished:not(.open) {
+    .top {
+      display: block;
+
+      .title,
+      .expandFullButton {
+        visibility: hidden;
+      }
+    }
+
+    .closed {
+      display: none;
     }
   }
 
