@@ -3,10 +3,10 @@ import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { BaseView } from "./BaseView";
 
-import { createElement } from "react";
+import { ComponentType, createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
 import Button, { TooltipPlacement } from "./Button";
-import { ExpandLeftPanel, CollapseLeftPanel } from "./Icons";
+import { CollapseLeftPanel, ExpandLeftPanel } from "./Icons";
 
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
@@ -110,7 +110,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
             }
           },
         },
-        createElement(CollapseLeftPanel)
+        createElement(this.getCollapseIcon())
       )
     );
 
@@ -124,7 +124,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
           "aria-expanded": expanded,
           onClick: () => this.toggle(),
         },
-        createElement(ExpandLeftPanel)
+        createElement(this.getExpandIcon())
       )
     );
   }
@@ -361,5 +361,15 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     super.resize();
 
     this.$main.height(this.$element.height() - this.$top.outerHeight(true));
+  }
+
+  // overridden in the right panel
+  getExpandIcon(): ComponentType {
+    return ExpandLeftPanel;
+  }
+
+  // overridden in the right panel
+  getCollapseIcon(): ComponentType {
+    return CollapseLeftPanel;
   }
 }

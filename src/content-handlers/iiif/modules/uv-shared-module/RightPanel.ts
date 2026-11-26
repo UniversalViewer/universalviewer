@@ -4,6 +4,8 @@ import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 
 import { TooltipPlacement } from "./Button";
+import { ComponentType } from "react";
+import { CollapseRightPanel, ExpandRightPanel } from "./Icons";
 
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
@@ -93,7 +95,18 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
     super.expandFull();
   }
 
+  // override base expand panel method
   getToggleTooltipPlacement(): TooltipPlacement {
     return "left";
+  }
+
+  // override base expand panel method
+  getExpandIcon(): ComponentType {
+    return ExpandRightPanel;
+  }
+
+  // override base expand panel method
+  getCollapseIcon(): ComponentType {
+    return CollapseRightPanel;
   }
 }
