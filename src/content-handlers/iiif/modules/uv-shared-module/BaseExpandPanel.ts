@@ -320,6 +320,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
+    this.renderToggleButtons(this.isExpanded);
   }
 
   collapseFullStart(): void {}
@@ -330,7 +331,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     if (this.expandFullEnabled) {
       this.$expandFullButton.show();
     }
-
+    this.renderToggleButtons(this.isExpanded);
     this.focusExpandFullButton();
   }
 
@@ -354,7 +355,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   // this method gets overridden in the right panel
   getToggleTooltipPlacement(): TooltipPlacement {
-    return "right";
+    return this.isFullyExpanded ? "left" : "right";
   }
 
   resize(): void {
