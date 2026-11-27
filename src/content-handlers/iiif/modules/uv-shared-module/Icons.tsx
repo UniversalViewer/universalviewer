@@ -8,6 +8,28 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
+export const Choice: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g transform="translate(15 15) scale(0.0185) translate(-480 480)">
+      <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z" />
+    </g>
+  </svg>
+);
+
 export const CollapseRightPanel: React.FC<IconProps> = ({
   className = "",
   width = 30,
@@ -120,6 +142,26 @@ export const ExpandLeftPanel: React.FC<IconProps> = ({
     focusable="false"
   >
     <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM19 15L16 19V11L19 15Z" />
+  </svg>
+);
+
+export const FitImage: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M10 20H13V22H8V17H10V20ZM22 22H17V20H20V17H22V22ZM15 12C16.6569 12 18 13.3431 18 15C18 16.6569 16.6569 18 15 18C13.3431 18 12 16.6569 12 15C12 13.3431 13.3431 12 15 12ZM15 13.5C14.1716 13.5 13.5 14.1716 13.5 15C13.5 15.8284 14.1716 16.5 15 16.5C15.8284 16.5 16.5 15.8284 16.5 15C16.5 14.1716 15.8284 13.5 15 13.5ZM13 10H10V13H8V8H13V10ZM22 13H20V10H17V8H22V13Z" />
   </svg>
 );
 
