@@ -3,6 +3,11 @@ import { Bools } from "../../Utils";
 import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { BaseView } from "./BaseView";
 
+import { ComponentType, createElement } from "react";
+import { createRoot, Root } from "react-dom/client";
+import Button, { TooltipPlacement } from "./Button";
+import { CollapseLeftPanel, ExpandLeftPanel } from "./Icons";
+
 export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   isExpanded: boolean = false;
   isFullyExpanded: boolean = false;
@@ -18,6 +23,9 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   $main: JQuery;
   $title: JQuery;
   $top: JQuery;
+
+  collapseButtonRoot: Root;
+  expandButtonRoot: Root;
 
   constructor(
     $element: JQuery,
@@ -43,33 +51,22 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$expandFullButton.hide();
     }
 
-    this.$collapseButton = $(
-      '<button role="button" class="collapseButton" tabindex="0" aria-expanded="true"></button>'
-    );
-    this.$collapseButton.prop("title", this.content.collapse);
-    this.$collapseButton.attr("aria-label", this.content.collapse);
+    this.$collapseButton = $('<div class="collapseButton"></div>');
     this.$top.append(this.$collapseButton);
+    this.collapseButtonRoot = createRoot(this.$collapseButton[0]);
 
     this.$closed = $('<div class="closed"></div>');
     this.$element.append(this.$closed);
 
-    this.$expandButton = $(
-      '<button role="button" class="expandButton" tabindex="0" aria-expanded="false"></button>'
-    );
-    this.$expandButton.prop("title", this.content.expand);
-    this.$expandButton.attr("aria-label", this.content.expand);
-
+    this.$expandButton = $('<div class="expandButton"></div>');
     this.$closed.append(this.$expandButton);
+    this.expandButtonRoot = createRoot(this.$expandButton[0]);
 
     this.$closedTitle = $('<a class="title"></a>');
     this.$closed.append(this.$closedTitle);
 
     this.$main = $('<div class="main"></div>');
     this.$element.append(this.$main);
-
-    this.onAccessibleClick(this.$expandButton, () => {
-      this.toggle();
-    });
 
     this.$expandFullButton.on("click", () => {
       this.expandFull();
@@ -87,17 +84,49 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       }
     });
 
-    this.onAccessibleClick(this.$collapseButton, () => {
-      if (this.isFullyExpanded) {
-        this.collapseFull();
-      } else {
-        this.toggle();
-      }
-    });
+    this.renderToggleButtons(false);
   }
 
   init(): void {
     super.init();
+  }
+
+  renderToggleButtons(expanded: boolean): void {
+    const tooltipPlacement = this.getToggleTooltipPlacement();
+
+    this.collapseButtonRoot?.render(
+      createElement(
+        Button,
+        {
+          className: "collapseButton",
+          label: this.content.collapse,
+          tooltipPlacement,
+          "aria-expanded": expanded,
+          onClick: () => {
+            if (this.isFullyExpanded) {
+              this.collapseFull();
+            } else {
+              this.toggle();
+            }
+          },
+        },
+        createElement(this.getCollapseIcon())
+      )
+    );
+
+    this.expandButtonRoot?.render(
+      createElement(
+        Button,
+        {
+          className: "expandButton",
+          label: this.content.expand,
+          tooltipPlacement,
+          "aria-expanded": expanded,
+          onClick: () => this.toggle(),
+        },
+        createElement(this.getExpandIcon())
+      )
+    );
   }
 
   setTitle(title: string): void {
@@ -128,8 +157,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "true");
       this.$main.attr("aria-hidden", "true");
       this.$closed.attr("aria-hidden", "false");
-      this.$collapseButton.attr("aria-expanded", "false");
-      this.$expandButton.attr("aria-expanded", "false");
+      this.renderToggleButtons(false);
     }
 
     let timeout = 0;
@@ -162,8 +190,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
       this.$top.attr("aria-hidden", "false");
       this.$main.attr("aria-hidden", "false");
       this.$closed.attr("aria-hidden", "true");
-      this.$collapseButton.attr("aria-expanded", "true");
-      this.$expandButton.attr("aria-expanded", "true");
+      this.renderToggleButtons(true);
     }
 
     this.toggleFinish();
@@ -293,6 +320,7 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
   expandFullFinish(): void {
     this.isFullyExpanded = true;
     this.$expandFullButton.hide();
+    this.renderToggleButtons(this.isExpanded);
   }
 
   collapseFullStart(): void {}
@@ -303,13 +331,13 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
     if (this.expandFullEnabled) {
       this.$expandFullButton.show();
     }
-
+    this.renderToggleButtons(this.isExpanded);
     this.focusExpandFullButton();
   }
 
   focusExpandButton(): void {
     setTimeout(() => {
-      this.$expandButton.focus();
+      this.$expandButton.find("button").trigger("focus");
     }, 1);
   }
 
@@ -321,13 +349,28 @@ export class BaseExpandPanel<T extends ExpandPanel> extends BaseView<T> {
 
   focusCollapseButton(): void {
     setTimeout(() => {
-      this.$collapseButton.focus();
+      this.$collapseButton.find("button").trigger("focus");
     }, 1);
+  }
+
+  // this method gets overridden in the right panel
+  getToggleTooltipPlacement(): TooltipPlacement {
+    return this.isFullyExpanded ? "left" : "right";
   }
 
   resize(): void {
     super.resize();
 
     this.$main.height(this.$element.height() - this.$top.outerHeight(true));
+  }
+
+  // overridden in the right panel
+  getExpandIcon(): ComponentType {
+    return ExpandLeftPanel;
+  }
+
+  // overridden in the right panel
+  getCollapseIcon(): ComponentType {
+    return CollapseLeftPanel;
   }
 }

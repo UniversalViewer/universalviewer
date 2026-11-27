@@ -3,6 +3,10 @@ import { ExpandPanel } from "../../extensions/config/ExpandPanel";
 import { IIIFEvents } from "../../IIIFEvents";
 import { BaseExpandPanel } from "./BaseExpandPanel";
 
+import { TooltipPlacement } from "./Button";
+import { ComponentType } from "react";
+import { CollapseRightPanel, ExpandRightPanel } from "./Icons";
+
 export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
   constructor($element: JQuery) {
     super($element, false, false);
@@ -70,6 +74,14 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
     // this can't be in the base panel class or the timeout interferes with test running even though it works fine
     setTimeout(() => {
       this.$element.toggleClass("open-finished");
+
+      if (!this.autoToggled) {
+        if (this.isExpanded) {
+          this.focusCollapseButton();
+        } else {
+          this.focusExpandButton();
+        }
+      }
     }, 100);
   }
 
@@ -89,5 +101,20 @@ export class RightPanel<T extends ExpandPanel> extends BaseExpandPanel<T> {
 
   expandFull(): void {
     super.expandFull();
+  }
+
+  // override base expand panel method
+  getToggleTooltipPlacement(): TooltipPlacement {
+    return "left";
+  }
+
+  // override base expand panel method
+  getExpandIcon(): ComponentType {
+    return ExpandRightPanel;
+  }
+
+  // override base expand panel method
+  getCollapseIcon(): ComponentType {
+    return CollapseRightPanel;
   }
 }

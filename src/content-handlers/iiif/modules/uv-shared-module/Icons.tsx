@@ -8,6 +8,134 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
+export const AdjustImage: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+  >
+    <path d="M15 8C18.866 8 22 11.134 22 15C22 18.866 18.866 22 15 22C13.4633 22 12.0432 21.5035 10.8887 20.6641C10.8667 20.6482 10.844 20.6333 10.8223 20.6172C10.7748 20.5818 10.7291 20.5443 10.6826 20.5078C10.4615 20.3346 10.2492 20.1496 10.0498 19.9502C9.83803 19.7384 9.64208 19.5125 9.45996 19.2764C8.54553 18.0935 8 16.6108 8 15C8 13.3344 8.58238 11.8053 9.55371 10.6035C9.70911 10.4108 9.8741 10.2255 10.0498 10.0498C10.2494 9.85024 10.4613 9.66449 10.6826 9.49121C10.7291 9.45472 10.7748 9.41717 10.8223 9.38184C10.844 9.36568 10.8667 9.35086 10.8887 9.33496C12.0431 8.49569 13.4635 8 15 8ZM15 20C17.7614 20 20 17.7614 20 15C20 12.2386 17.7614 10 15 10V20Z" />
+  </svg>
+);
+
+export const CollapseRightPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M8 8L22 8L22 22L8 22L8 8ZM20 10L18 10L18 20L20 20L20 10ZM16 10L10 10L10 20L16 20L16 10ZM12 11L15 15L12 19L12 11Z" />
+    <rect x="37" y="20" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const CollapseLeftPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM18 19L15 15L18 11V19Z" />
+    <rect x="37" y="20" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const ExpandRightPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M8 8L22 8L22 22L8 22L8 8ZM20 10L18 10L18 20L20 20L20 10ZM16 10L10 10L10 20L16 20L16 10ZM11 15L14 11L14 19L11 15Z" />
+    <rect x="30" y="22" width="8" height="8" />
+    <rect x="53" y="21" width="8" height="8" />
+  </svg>
+);
+
+export const ExpandLeftPanel: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  fill = "currentColor",
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM19 15L16 19V11L19 15Z" />
+  </svg>
+);
+
+export const FitImage: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M10 20H13V22H8V17H10V20ZM22 22H17V20H20V17H22V22ZM15 12C16.6569 12 18 13.3431 18 15C18 16.6569 16.6569 18 15 18C13.3431 18 12 16.6569 12 15C12 13.3431 13.3431 12 15 12ZM15 13.5C14.1716 13.5 13.5 14.1716 13.5 15C13.5 15.8284 14.1716 16.5 15 16.5C15.8284 16.5 16.5 15.8284 16.5 15C16.5 14.1716 15.8284 13.5 15 13.5ZM13 10H10V13H8V8H13V10ZM22 13H20V10H17V8H22V13Z" />
+  </svg>
+);
+
 export const Gallery: React.FC<IconProps> = ({
   className = "",
   width = 30,
@@ -26,6 +154,29 @@ export const Gallery: React.FC<IconProps> = ({
     focusable="false"
   >
     <path d="M14,14H8V8h6V14z M22,8h-6v6h6V8z M14,16H8v6h6V16z M22,16h-6v6h6V16z" />
+  </svg>
+);
+
+export const Layers: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M15 23L7 17.1207L8.46667 16.0709L15 20.8583L21.5333 16.0709L23 17.1207L15 23ZM15 18.7585L7 12.8793L15 7L23 12.8793L15 18.7585ZM15 16.6168L20.1111 12.8793L15 9.14173L9.88889 12.8793L15 16.6168Z"
+      fill="white"
+    />
   </svg>
 );
 
@@ -48,6 +199,24 @@ export const OneUp: React.FC<IconProps> = ({
     <g>
       <rect x="10" y="8" width="10" height="14" />
     </g>
+  </svg>
+);
+
+export const Rotate: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+  >
+    <path d="M15 22C13.04 22 11.36 21.3467 10.0533 19.9467C8.74667 18.5467 8 16.96 8 15C8 13.04 8.65333 11.36 10.0533 10.0533C11.4533 8.74667 13.04 8 15 8C16.0267 8 16.96 8.18667 17.8933 8.65333C18.8267 9.12 19.5733 9.68 20.2267 10.4267V8H22V14.16H15.84V12.3867H19.48C19.0133 11.5467 18.36 10.8933 17.52 10.4267C16.8667 9.96 15.9333 9.77333 15 9.77333C13.5067 9.77333 12.2933 10.24 11.2667 11.2667C10.24 12.2933 9.77333 13.5067 9.77333 15C9.77333 16.4933 10.24 17.7067 11.2667 18.7333C12.2933 19.76 13.5067 20.2267 15 20.2267C16.12 20.2267 17.1467 19.9467 18.08 19.2933C19.0133 18.64 19.5733 17.8 19.9467 16.7733H21.8133C21.44 18.36 20.6 19.5733 19.2933 20.6C17.9867 21.6267 16.5867 22 15 22Z" />
   </svg>
 );
 
@@ -101,5 +270,41 @@ export const TwoUp: React.FC<IconProps> = ({
         <rect x="16" y="8" width="10" height="14" />
       </g>
     </g>
+  </svg>
+);
+
+export const ZoomIn: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+  >
+    <path d="M16 14H20V16H16V20H14V16H10V14H14V10H16V14Z" />
+  </svg>
+);
+
+export const ZoomOut: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+  >
+    <rect x="10" y="14" width="10" height="2" />
   </svg>
 );

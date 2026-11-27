@@ -3,6 +3,7 @@
 
   .leftPanel {
     z-index: 10;
+    position: relative; // position buttons against the panel
 
     a {
       color: @text-color;
@@ -23,55 +24,66 @@
         letter-spacing: 0.08rem;
       }
 
-      .collapseButton {
-        float: right;
-        background: data-uri("../img/arrows_left.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin: 7px 5px 0 0;
-        display: block;
-      }
-
       .expandFullButton {
         float: right;
-        background: data-uri("../img/arrows_right.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin: 7px 5px 0 0;
-        display: none;
+        display: block;
       }
 
       .expandFull();
     }
 
     .closed {
-      width: 25px;
+      width: 30px;
       float: right;
+      text-align: center;
 
       .title {
         .link-color-decoration(@text-color, none);
+        display: inline-block;
+        writing-mode: vertical-rl;
+        line-height: 1;
         white-space: nowrap;
-        display: block;
-        margin: 8px 8px 0 0;
+        margin-top: 38px; // button + margin; solves initial layout shift on load and is needed when the buttons are absolute positioned.
         cursor: pointer;
         text-transform: uppercase;
-        .rotate(90deg);
         letter-spacing: 0.08rem;
       }
+    }
 
-      .expandButton {
-        background: data-uri("../img/arrows_right.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin: 7px 5px 0 0;
-        display: block;
+    .collapseButton,
+    .expandButton {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .uv-btn {
+      @media (hover: hover) {
+        &:hover {
+          background-color: @gray;
+        }
       }
+    }
+
+    // for side panels, hide the tooltip immediately when clicked (otherwise we get a messy fade out/panel closing animation glitch)
+    .uv-tooltip--dismissed {
+      transition: none;
+    }
+  }
+
+  // this makes sure the button remains visible during the close animation (but still hides the title immediately)
+  .leftPanel.open-finished:not(.open) {
+    .top {
+      display: block;
+
+      .title,
+      .expandFullButton {
+        visibility: hidden;
+      }
+    }
+
+    .closed {
+      display: none;
     }
   }
 
@@ -79,5 +91,12 @@
     .expandFullButton {
       display: block;
     }
+  }
+
+  // overflow: visible is necessary for the tooltip to appear over the top of .leftPanel, unclipped,
+  // but we need to leave the open/close animating state at overflow: hidden
+  .leftPanel.open.open-finished,
+  .leftPanel:not(.open, .open-finished) {
+    overflow: visible;
   }
 }

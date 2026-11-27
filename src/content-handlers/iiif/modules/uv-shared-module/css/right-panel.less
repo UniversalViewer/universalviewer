@@ -3,6 +3,7 @@
 
   .rightPanel {
     z-index: 10;
+    position: relative; // position buttons against the panel
 
     .top {
       height: 35px;
@@ -19,56 +20,50 @@
         letter-spacing: 0.08rem;
       }
 
-      .collapseButton {
-        position: absolute;
-        background-image: data-uri("../img/arrows_right.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin-top: 7px;
-        display: block;
-        left: 5px;
-      }
-
       .expandFullButton {
-        position: absolute;
-        background-image: data-uri("../img/arrows_left.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin-top: 7px;
-        display: none;
-        left: 5px;
+        float: left;
+        display: block;
       }
 
       .expandFull();
     }
 
     .closed {
-      width: 25px;
+      width: 30px;
+      float: left;
+      text-align: center;
 
       .title {
         .link-color-decoration(@text-color, none);
+        display: inline-block;
+        writing-mode: vertical-lr;
+        line-height: 1;
         white-space: nowrap;
-        display: block;
-        margin: 8px 3px 0 5px;
+        margin-top: 38px; // button + margin; solves initial layout shift on load and is needed when the buttons are absolute positioned.
         cursor: pointer;
         text-transform: uppercase;
-        .rotate(90deg);
         letter-spacing: 0.08rem;
       }
+    }
 
-      .expandButton {
-        background-image: data-uri("../img/arrows_left.png");
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin: 7px 0 0 5px;
-        display: block;
+    .collapseButton,
+    .expandButton {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .uv-btn {
+      @media (hover: hover) {
+        &:hover {
+          background-color: @gray;
+        }
       }
+    }
+
+    // for side panels, hide the tooltip immediately when clicked (otherwise we get a messy fade out/panel closing animation glitch)
+    .uv-tooltip--dismissed {
+      transition: none;
     }
 
     .main {
@@ -107,17 +102,36 @@
     }
   }
 
+  // this makes sure the button remains visible during the close animation (but still hides the title immediately)
+  .rightPanel.open-finished:not(.open) {
+    .top {
+      display: block;
+
+      .title,
+      .expandFullButton {
+        visibility: hidden;
+      }
+    }
+
+    .closed {
+      display: none;
+    }
+  }
+
   .expandFull() when (@expandFullEnabled =true) {
     .title {
       left: 55px;
     }
 
-    .collapseButton {
-      left: 30px;
-    }
-
     .expandFullButton {
       display: block;
     }
+  }
+
+  // overflow: visible is necessary for the tooltip to appear over the top of .rightPanel, unclipped,
+  // but we need to leave the open/close animating state at overflow: hidden
+  .rightPanel.open.open-finished,
+  .rightPanel:not(.open, .open-finished) {
+    overflow: visible;
   }
 }
