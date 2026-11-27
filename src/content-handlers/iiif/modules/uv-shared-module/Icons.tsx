@@ -301,7 +301,7 @@ export const ZoomIn: React.FC<IconProps> = ({
     className={className}
     style={style}
   >
-    <polygon points="22,14 16,14 16,8 14,8 14,14 8,14 8,16 14,16 14,22 16,22 16,16 22,16 " />
+    <path d="M16 14H20V16H16V20H14V16H10V14H14V10H16V14Z" />
   </svg>
 );
 
@@ -319,6 +319,6 @@ export const ZoomOut: React.FC<IconProps> = ({
     className={className}
     style={style}
   >
-    <rect x="8" y="14" width="14" height="2" />
+    <rect x="10" y="14" width="10" height="2" />
   </svg>
 );
