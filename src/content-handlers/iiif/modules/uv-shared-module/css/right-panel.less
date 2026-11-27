@@ -43,6 +43,13 @@
         left: 5px;
       }
 
+      .collapseButton,
+      .expandFullButton {
+        &:focus {
+          .tab-focus();
+        }
+      }
+
       .expandFull();
     }
 
@@ -74,6 +81,10 @@
     .main {
       margin-right: @margin-medium-horizontal;
       margin-bottom: @margin-medium-vertical;
+
+      &:focus {
+        .tab-focus();
+      }
 
       .transcribed-text {
         width: 230px;

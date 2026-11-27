@@ -14,6 +14,28 @@
 
     color: @text-secondary-color;
 
+    button {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: none;
+      text-align: left;
+      color: @brand-primary;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    button,
+    input {
+      &:focus {
+        .tab-focus();
+      }
+    }
+
     &.share {
       width: 280px;
       padding: 0 0 0 8px;
@@ -155,21 +177,6 @@
             li {
               margin: 0;
               padding: 2px 0;
-
-              button {
-                width: 100%;
-                height: 100%;
-                padding: 0;
-                border: none;
-                background: none;
-                text-align: left;
-                color: @brand-primary;
-                cursor: pointer;
-
-                &:hover {
-                  text-decoration: underline;
-                }
-              }
             }
           }
         }
@@ -502,20 +509,9 @@
     /* Prevent text from wrapping */
     white-space: nowrap;
 
-    /* Remove default outline on focus */
-    outline: none;
-  }
-
-  /* Focus state styles */
-  .btn.close:focus {
-    outline: none;
-
-    /* Darker blue (ring-blue-700 equivalent) */
-
-    /* Equivalent to ring-offset-2 (creates an offset ring) */
-    box-shadow:
-      0 0 0 4px rgb(37 99 235 / 100%),
-      0 0 0 6px white;
+    &:focus {
+      .tab-focus();
+    }
   }
 }
 
