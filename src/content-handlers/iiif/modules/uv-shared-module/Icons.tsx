@@ -8,7 +8,7 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
-export const Choice: React.FC<IconProps> = ({
+export const AdjustImage: React.FC<IconProps> = ({
   className = "",
   width = 30,
   height = 30,
@@ -21,11 +21,14 @@ export const Choice: React.FC<IconProps> = ({
     xmlns="http://www.w3.org/2000/svg"
     className={className}
     style={style}
-    aria-hidden="true"
-    focusable="false"
   >
-    <g transform="translate(15 15) scale(0.0185) translate(-480 480)">
-      <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z" />
+    <g>
+      <path
+        d="M15,22.5c-1,0-2-0.2-2.9-0.6c-0.9-0.4-1.7-0.9-2.4-1.6c-0.7-0.7-1.2-1.5-1.6-2.4
+		C7.7,17,7.5,16,7.5,15s0.2-2,0.6-2.9S9,10.4,9.7,9.7c0.7-0.7,1.5-1.2,2.4-1.6C13,7.7,14,7.5,15,7.5s2,0.2,2.9,0.6s1.7,0.9,2.4,1.6
+		c0.7,0.7,1.2,1.5,1.6,2.4c0.4,0.9,0.6,1.9,0.6,2.9s-0.2,2-0.6,2.9c-0.4,0.9-0.9,1.7-1.6,2.4c-0.7,0.7-1.5,1.2-2.4,1.6
+		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
+      />
     </g>
   </svg>
 );
@@ -73,31 +76,6 @@ export const CollapseLeftPanel: React.FC<IconProps> = ({
     <path d="M22 22H8V8H22V22ZM10 20H12V10H10V20ZM14 20H20V10H14V20ZM18 19L15 15L18 11V19Z" />
     <rect x="37" y="20" width="8" height="8" />
     <rect x="53" y="21" width="8" height="8" />
-  </svg>
-);
-
-export const Contrast: React.FC<IconProps> = ({
-  className = "",
-  width = 30,
-  height = 30,
-  style = {},
-}) => (
-  <svg
-    width={width}
-    height={height}
-    viewBox="0 0 30 30"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    style={style}
-  >
-    <g>
-      <path
-        d="M15,22.5c-1,0-2-0.2-2.9-0.6c-0.9-0.4-1.7-0.9-2.4-1.6c-0.7-0.7-1.2-1.5-1.6-2.4
-		C7.7,17,7.5,16,7.5,15s0.2-2,0.6-2.9S9,10.4,9.7,9.7c0.7-0.7,1.5-1.2,2.4-1.6C13,7.7,14,7.5,15,7.5s2,0.2,2.9,0.6s1.7,0.9,2.4,1.6
-		c0.7,0.7,1.2,1.5,1.6,2.4c0.4,0.9,0.6,1.9,0.6,2.9s-0.2,2-0.6,2.9c-0.4,0.9-0.9,1.7-1.6,2.4c-0.7,0.7-1.5,1.2-2.4,1.6
-		C17,22.3,16,22.5,15,22.5z M15.8,20.9c1.5-0.2,2.7-0.8,3.7-2s1.5-2.4,1.5-4s-0.5-2.9-1.5-4s-2.3-1.8-3.7-2V20.9z"
-      />
-    </g>
   </svg>
 );
 
@@ -183,6 +161,28 @@ export const Gallery: React.FC<IconProps> = ({
     focusable="false"
   >
     <path d="M14,14H8V8h6V14z M22,8h-6v6h6V8z M14,16H8v6h6V16z M22,16h-6v6h6V16z" />
+  </svg>
+);
+
+export const Layers: React.FC<IconProps> = ({
+  className = "",
+  width = 30,
+  height = 30,
+  style = {},
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g transform="translate(15 15) scale(0.0185) translate(-480 480)">
+      <path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z" />
+    </g>
   </svg>
 );
 
