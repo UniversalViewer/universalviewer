@@ -31,7 +31,7 @@ export class OpenSeadragonCenterPanel extends CenterPanel<
   imageControlsRoot: Root;
   hasChoices: boolean = false;
 
-  // The AdjustImageDialogue and ChoiceSwitchDialogue position themselves against the old jquery buttons,
+  // The AdjustImageDialogue and ChoiceSwitchDialogue return focus to the old jquery buttons,
   // so these getters allow them access - but ultimately the dialogues should be redesigned and become part of the ImageControls react component,
   // then we can remove this workaround.
   get $adjustImageButton(): JQuery {
