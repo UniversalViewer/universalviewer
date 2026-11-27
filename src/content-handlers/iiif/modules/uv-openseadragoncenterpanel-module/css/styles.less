@@ -175,128 +175,22 @@
         top: 0;
         left: 0;
         z-index: 1;
-        display: flex;
+        display: none; // hide on small screens (mobile footer provides these buttons instead)
         flex-direction: column; // change this to 'row' for horizontal buttons
         gap: 0;
 
-        .zoomIn {
-          display: none !important;
+        box-shadow:
+          0 2px 8px rgb(0 0 0 / 15%),
+          0 8px 24px rgb(0 0 0 / 20%);
 
-          .md-mediaquery({
-            display: inline-block !important;
-            cursor: pointer !important;
-            width: 28px;
-            height: 28px;
-
-            // margin: 3px !important;
-            img {
-              display: none;
-            }
-
-            &:focus {
-              .tab-focus();
-            }
-          });
-        }
-
-        .zoomOut {
-          display: none !important;
-
-          .md-mediaquery({
-          display: inline-block !important;
-          cursor: pointer !important;
-          width: 28px;
-          height: 28px;
-
-          // margin: 3px !important;
-          img {
-            display: none;
-          }
-
-          &:focus {
-            .tab-focus();
-          }
+        .md-mediaquery({
+          display: flex;
         });
-        }
 
-        .goHome {
-          display: none !important;
-
-          .md-mediaquery({
-        display: inline-block !important;
-        cursor: pointer !important;
-        width: 28px;
-        height: 28px;
-
-        // margin: 3px !important;
-        img {
-          display: none;
-        }
-
-        &:focus {
-          .tab-focus();
-        }
-      });
-        }
-
-        .rotate {
-          display: none !important;
-
-          .md-mediaquery({
-      display: inline-block !important;
-      cursor: pointer !important;
-      width: 28px;
-      height: 28px;
-
-      // margin: 3px !important;
-      img {
-        display: none;
-      }
-
-      &:focus {
-        .tab-focus();
-      }
-    });
-        }
-
-        .adjustImage {
-          display: none !important;
-
-          .md-mediaquery({
-    display: inline-block !important;
-    cursor: pointer !important;
-    width: 28px;
-    height: 28px;
-
-    // margin: 3px !important;
-    img {
-      display: none;
-    }
-
-    &:focus {
-      .tab-focus();
-    }
-  });
-        }
-
-        .choiceSwitch {
-          display: none !important;
-
-          .md-mediaquery({
-    display: inline-block !important;
-    cursor: pointer !important;
-    width: 28px;
-    height: 28px;
-
-    // margin: 3px !important;
-    img {
-      display: none;
-    }
-
-    &:focus {
-      .tab-focus();
-    }
-  });
+        .uv-btn {
+          background: rgb(26 26 26 / 60%);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px); /* Safari */
         }
       }
     }
