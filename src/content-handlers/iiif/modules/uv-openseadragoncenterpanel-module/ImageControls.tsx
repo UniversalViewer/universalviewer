@@ -54,17 +54,6 @@ const ImageControls: React.FC<Props> = ({
         <ZoomOut />
       </Button>
 
-      <Button
-        className="rotate imageControlButton viewportNavButton"
-        label={content.rotateRight}
-        tooltipPlacement="right"
-        onClick={() =>
-          extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE)
-        }
-      >
-        <Rotate />
-      </Button>
-
       {showHomeButton && (
         <Button
           className="goHome imageControlButton viewportNavButton"
@@ -77,6 +66,17 @@ const ImageControls: React.FC<Props> = ({
           <FitImage />
         </Button>
       )}
+
+      <Button
+        className="rotate imageControlButton viewportNavButton"
+        label={content.rotateRight}
+        tooltipPlacement="right"
+        onClick={() =>
+          extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE)
+        }
+      >
+        <Rotate />
+      </Button>
 
       {showAdjustImageButton && (
         <Button
