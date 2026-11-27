@@ -35,6 +35,7 @@ const ImageControls: React.FC<Props> = ({
       <Button
         className="zoomIn imageControlButton viewportNavButton"
         label={content.zoomIn}
+        tooltipPlacement="right"
         onClick={() =>
           extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_IN)
         }
@@ -45,6 +46,7 @@ const ImageControls: React.FC<Props> = ({
       <Button
         className="zoomOut imageControlButton viewportNavButton"
         label={content.zoomOut}
+        tooltipPlacement="right"
         onClick={() =>
           extensionHost.publish(OpenSeadragonExtensionEvents.ZOOM_OUT)
         }
@@ -55,6 +57,7 @@ const ImageControls: React.FC<Props> = ({
       <Button
         className="rotate imageControlButton viewportNavButton"
         label={content.rotateRight}
+        tooltipPlacement="right"
         onClick={() =>
           extensionHost.publish(OpenSeadragonExtensionEvents.ROTATE)
         }
@@ -66,6 +69,7 @@ const ImageControls: React.FC<Props> = ({
         <Button
           className="goHome imageControlButton viewportNavButton"
           label={content.goHome}
+          tooltipPlacement="right"
           onClick={() =>
             extensionHost.publish(OpenSeadragonExtensionEvents.GO_HOME)
           }
@@ -78,6 +82,7 @@ const ImageControls: React.FC<Props> = ({
         <Button
           className="adjustImage imageControlButton viewportNavButton"
           label={content.adjustImage}
+          tooltipPlacement="right"
           onClick={() =>
             extensionHost.publish(IIIFEvents.SHOW_ADJUSTIMAGE_DIALOGUE)
           }
@@ -90,6 +95,7 @@ const ImageControls: React.FC<Props> = ({
         <Button
           className="choiceSwitch imageControlButton viewportNavButton"
           label={content.layers}
+          tooltipPlacement="right"
           onClick={() =>
             extensionHost.publish(IIIFEvents.SHOW_CHOICE_SWITCH_DIALOGUE)
           }
