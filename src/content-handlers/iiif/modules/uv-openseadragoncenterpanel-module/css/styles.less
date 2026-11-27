@@ -187,10 +187,16 @@
           display: flex;
         });
 
-        .uv-btn {
-          background: rgb(26 26 26 / 60%);
+        --uv-tooltip-bg: rgb(26 26 26 / 60%);
+
+        .uv-btn,
+        .uv-tooltip {
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px); /* Safari */
+        }
+
+        .uv-btn {
+          background: rgb(26 26 26 / 60%);
         }
       }
     }

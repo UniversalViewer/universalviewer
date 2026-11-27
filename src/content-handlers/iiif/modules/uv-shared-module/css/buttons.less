@@ -232,7 +232,7 @@
   .uv-tooltip {
     position: absolute;
     padding: 4px 8px;
-    background-color: @gray;
+    background-color: var(--uv-tooltip-bg, @gray);
     color: #fff;
     font-size: @font-size-small;
     font-weight: normal;
@@ -273,7 +273,7 @@
     // Arrow
     &::before {
       bottom: 100%;
-      border-bottom-color: @gray;
+      border-bottom-color: var(--uv-tooltip-bg, @gray);
     }
 
     // Hover bridge across the gap
@@ -293,7 +293,7 @@
     // Arrow
     &::before {
       top: 100%;
-      border-top-color: @gray;
+      border-top-color: var(--uv-tooltip-bg, @gray);
     }
 
     // Hover bridge across the gap
@@ -313,7 +313,7 @@
     // Arrow
     &::before {
       left: 100%;
-      border-left-color: @gray;
+      border-left-color: var(--uv-tooltip-bg, @gray);
     }
 
     // Hover bridge across the gap
@@ -333,7 +333,7 @@
     // Arrow
     &::before {
       right: 100%;
-      border-right-color: @gray;
+      border-right-color: var(--uv-tooltip-bg, @gray);
     }
 
     // Hover bridge across the gap
