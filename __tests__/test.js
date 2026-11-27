@@ -345,7 +345,7 @@ describe("Universal Viewer", () => {
       await page.waitForSelector(overlay, { visible: true });
 
       const text = await page.$eval(heading, (el) => el.textContent.trim());
-      expect(text).toBe("Adjust image");
+      expect(text).toBe("Adjust Image");
 
       await page.$eval(closeBtn, (el) => el.click());
 
